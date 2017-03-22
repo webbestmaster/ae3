@@ -12,5 +12,6 @@ npm-debug.log*
 node_modules
 jspm_packages
 
-/dist/
+# Dist
+_front/dist/
 
