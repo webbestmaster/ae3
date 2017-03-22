@@ -1,0 +1,9 @@
+1 - прикрутить хоть какую-нибудь идентификацию,
+например через какой-нибудь auth или типо того
+
+аутентификция через гугл+
+https://developers.google.com/identity/sign-in/web/
+
+https://developers.google.com/games/services/
+
+https://developers.google.com/games/services/common/concepts/realtimeMultiplayer
