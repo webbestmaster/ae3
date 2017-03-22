@@ -7,3 +7,6 @@ https://developers.google.com/identity/sign-in/web/
 https://developers.google.com/games/services/
 
 https://developers.google.com/games/services/common/concepts/realtimeMultiplayer
+
+можно ещё заюзать фаер бейс
+https://firebase.google.com/docs/functions/
