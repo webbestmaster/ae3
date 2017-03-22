@@ -1,0 +1,11 @@
+{
+  "name": "ae3-front",
+  "version": "0.0.1",
+  "description": "ae3 front part",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}
