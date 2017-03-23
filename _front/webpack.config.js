@@ -1,5 +1,3 @@
-'use strict';
-
 // const SERVER_URL = 'https://statlex.github.io/app/cr/';
 
 const path = require('path');

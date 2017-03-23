@@ -10,7 +10,7 @@ export default function changeLanguage(localeName) {
 
     return {
         type: CHANGE_LANGUAGE,
-        localeName: localeName
+        localeName
     };
 
 }

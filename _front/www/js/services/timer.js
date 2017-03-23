@@ -3,11 +3,7 @@ const _mark = {};
 export default {
 
     createMark(markId, time) {
-        if (time === undefined) {
-            time = Date.now();
-        }
-
-        _mark[markId] = time;
+        _mark[markId] = time === undefined ? Date.now() : time;
 
     },
 

@@ -27,18 +27,18 @@ class BaseModel {
 
     /**
      *
-     * @param {String|Object} key
-     * @param {*} [value]
-     * @return {BaseModel}
+     * @param {string|object} key of value
+     * @param {*} [value] saved value
+     * @return {BaseModel} instance
      */
     set(key, value) {
-        return typeof key === 'string' ? this._setKeyValue(key, value) : this._setObject(key);
+        return 'string' === typeof key ? this._setKeyValue(key, value) : this._setObject(key);
     }
 
     /**
      *
-     * @param {String} key
-     * @return {*}
+     * @param {String} key of value
+     * @return {*} saved value
      */
     get(key) {
         return this._attr[key];
@@ -46,9 +46,9 @@ class BaseModel {
 
     /**
      *
-     * @param {String} key
-     * @param {Number} deltaValue
-     * @return {BaseModel}
+     * @param {string} key of value
+     * @param {number} deltaValue to change current value
+     * @return {BaseModel} instance
      */
     changeBy(key, deltaValue) {
         return this._setKeyValue(key, this.get(key) + deltaValue);
@@ -56,26 +56,24 @@ class BaseModel {
 
     /**
      *
-     * @param {String|String[]} key
-     * @param {Function} action
-     * @param {*} [context]
-     * @return {BaseModel}
+     * @param {string|string[]} key of value
+     * @param {Function} action to execute
+     * @param {*} [context] of action
+     * @return {BaseModel} instance
      */
     onChange(key, action, context) {
 
-        let model = this;
+        const model = this;
 
         if (Array.isArray(key)) {
 
-            key.forEach(function (key) {
-                model.onChange(key, action, context);
-            });
+            key.forEach(keyFromList => model.onChange(keyFromList, action, context));
 
             return model;
 
         }
 
-        let listeners = model.getListenersByKey(key);
+        const listeners = model.getListenersByKey(key);
 
         listeners.push([action, context || null]);
 
@@ -85,20 +83,18 @@ class BaseModel {
 
     /**
      *
-     * @param {String|String[]} [key]
-     * @param {Function} [action]
-     * @param {*} [context]
-     * @return {BaseModel}
+     * @param {string|string[]} [key] of value
+     * @param {Function} [action] was execute
+     * @param {*} [context] of action
+     * @return {BaseModel} instance
      */
     offChange(key, action, context) {
 
-        let model = this;
+        const model = this;
 
         if (Array.isArray(key)) {
 
-            key.forEach(function (key) {
-                model.offChange(key, action, context);
-            });
+            key.forEach(keyFromList => model.offChange(keyFromList, action, context));
 
             return model;
 
@@ -110,8 +106,8 @@ class BaseModel {
             return model;
         }
 
-        let listenersByKey = model.getListenersByKey(key);
-        let allListeners = model.getAllListeners();
+        const listenersByKey = model.getListenersByKey(key);
+        const allListeners = model.getAllListeners();
 
         // action did not passed
         if (action === undefined) {
@@ -137,27 +133,21 @@ class BaseModel {
 
     /**
      *
-     * @param {String} key
-     * @param {*} [newValue]
-     * @param {*} [oldValue]
-     * @return {BaseModel}
+     * @param {string} key of value
+     * @param {*} [newValue] of instance
+     * @param {*} [oldValue] of instance
+     * @return {BaseModel} instance
      */
     trigger(key, newValue, oldValue) {
 
-        let model = this;
+        const model = this;
+        const lesteners = model.getListenersByKey(key);
 
-        let lesteners = model.getListenersByKey(key);
-
-        if (oldValue === undefined) {
-            oldValue = model.get(key);
-        }
-
-        if (newValue === undefined) {
-            newValue = oldValue;
-        }
+        const oldValueArg = oldValue === undefined ? model.get(key) : oldValue;
+        const newValueArg = newValue === undefined ? oldValueArg : newValue;
 
         lesteners.forEach(function (listenerData) {
-            listenerData[0].call(listenerData[1], newValue, oldValue);
+            listenerData[0].call(listenerData[1], newValueArg, oldValueArg);
         });
 
         return model;
@@ -166,7 +156,7 @@ class BaseModel {
 
     /**
      *
-     * @return {*}
+     * @return {*} all attributes
      */
     getAllAttributes() {
         return this._attr;
@@ -174,7 +164,7 @@ class BaseModel {
 
     /**
      *
-     * @return {*}
+     * @return {*} all listeners
      */
     getAllListeners() {
         return this._listeners;
@@ -182,15 +172,16 @@ class BaseModel {
 
     /**
      *
-     * @param {String} key
-     * @return {Array}
+     * @param {string} key of value
+     * @return {Array} of listeners filtered by key
      */
     getListenersByKey(key) {
 
-        let model = this;
+        const model = this;
 
         if (!model._listeners[key]) {
-            return model._listeners[key] = [];
+            model._listeners[key] = [];
+            return model.getListenersByKey(key);
         }
 
         return this._listeners[key];

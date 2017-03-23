@@ -6,9 +6,12 @@ const BaseModel = require('./base-model');
 
 describe('Base model', function () {
 
-    let model;
+    let model = null;
 
-    beforeEach(() => model = new BaseModel());
+    beforeEach(() => {
+        model = new BaseModel();
+        return model;
+    });
 
     afterEach(() => model.destroy());
 
@@ -38,7 +41,7 @@ describe('Base model', function () {
 
     it('onChange key/value, object', () => {
 
-        let changeMyKey = {
+        const changeMyKey = {
             key: ''
         };
 
@@ -66,7 +69,7 @@ describe('Base model', function () {
 
     it('onChange passed params', () => {
 
-        let paramNewValue, paramOldValue;
+        let paramNewValue = '', paramOldValue = '';
 
         model.set({checkParam: 'oldCheckParam'});
 
@@ -85,7 +88,7 @@ describe('Base model', function () {
 
     it('onChange list on properties', () => {
 
-        let paramNewValue, paramOldValue;
+        let paramNewValue = '', paramOldValue = '';
 
         model.set({
             prop_1: 'val_1',
@@ -144,7 +147,7 @@ describe('Base model', function () {
 
     it('offChange list on properties', () => {
 
-        let paramNewValue, paramOldValue;
+        let paramNewValue = '', paramOldValue = '';
 
         model.set({
             prop_1: 'val_1',
@@ -163,14 +166,14 @@ describe('Base model', function () {
 
         model.set('prop_2', 'new_val_2');
 
-        assert(paramNewValue === undefined);
-        assert(paramOldValue === undefined);
+        assert(paramNewValue === '');
+        assert(paramOldValue === '');
 
     });
 
     it('trigger', () => {
 
-        let paramNewValue, paramOldValue;
+        let paramNewValue = '', paramOldValue = '';
 
         model.set('triggerParam', 'triggerValue');
 

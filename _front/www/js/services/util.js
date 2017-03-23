@@ -4,12 +4,12 @@ const doc = win.document;
 const docElem = doc.documentElement;
 
 const prefix = (function () {
-    let styles = win.getComputedStyle(docElem, ''),
-        pre = (Array.prototype.slice
-                .call(styles)
-                .join('')
-                .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
-        )[1];
+    const styles = win.getComputedStyle(docElem, '');
+    const pre = (Array.prototype.slice
+            .call(styles)
+            .join('')
+            .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
+    )[1];
     return {
         lowercase: pre,
         css: '-' + pre + '-',
@@ -21,11 +21,11 @@ const util = {
 
     prefix,
 
-    copyHashMap: function (hashMap) {
+    copyHashMap (hashMap) {
         return JSON.parse(JSON.stringify(hashMap));
     },
 
-    copyArrayOfArrays: function (arrayOfArrays) {
+    copyArrayOfArrays (arrayOfArrays) {
 
         let i = arrayOfArrays.length;
         const newArray = new Array(i);
@@ -38,9 +38,9 @@ const util = {
 
     },
 
-    getXyOfCorner: function (corner, width, height, marginsArg = [0, 0, 0, 0]) {
+    getXyOfCorner (corner, width, height, marginsArg = [0, 0, 0, 0]) {
 
-        let x, y;
+        let x = 0, y = 0;
 
         const margin = util.paramsParser(marginsArg);
         const mTop = margin[0];
@@ -88,7 +88,7 @@ const util = {
                 break;
 
             default:
-                throw 'CAN NOT DEFINE CORNER'
+                throw new Error('CAN NOT DEFINE CORNER');
 
         }
 
@@ -96,7 +96,7 @@ const util = {
 
     },
 
-    paramsParser: function (arr) {
+    paramsParser (arr) {
 
         if (!Array.isArray(arr)) {
             return util.paramsParser([arr]);
@@ -126,7 +126,7 @@ const util = {
                 break;
 
             default:
-                throw 'CAN NOT PARSE PARAMS'
+                throw new Error('CAN NOT PARSE PARAMS');
 
         }
 
@@ -138,13 +138,10 @@ const util = {
     getRandom(start, end) {
 
         if (end === undefined) {
-            end = start;
-            start = 0;
+            return util.getRandom(0, start);
         }
 
-        end += 1;
-
-        return Math.floor(Math.random() * (end - start) + start);
+        return Math.floor(Math.random() * (end - start + 1) + start);
 
     },
 

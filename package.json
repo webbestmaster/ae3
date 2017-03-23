@@ -8,6 +8,7 @@
   },
   "scripts": {
     "lint": "eslint . --ignore-path .gitignore",
+    "lint-fix": "eslint . --ignore-path .gitignore --fix",
     "start": "echo start back and start front"
   },
   "repository": {
@@ -22,6 +23,7 @@
   "homepage": "https://github.com/webbestmaster/ae3#readme",
   "devDependencies": {
     "babel-eslint": "^7.2.0",
+    "chai": "^3.5.0",
     "eslint": "^3.18.0"
   }
 }

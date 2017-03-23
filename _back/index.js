@@ -8,5 +8,5 @@ const fsServerConfig = {
     // page404: 'custom-404-page/index.html' // optional, path to custom 404 page
 };
 
-const fsServer = new FsServer(fsServerConfig) // create server with config
+new FsServer(fsServerConfig) // create server with config
         .run(); // create server with config and run
