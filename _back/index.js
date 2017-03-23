@@ -1,6 +1,6 @@
 const FsServer = require('fs-server');
 
-const HTTP_PORT = process.env.PORT || 3006;
+const HTTP_PORT = process.env.PORT || 3000;
 
 const fsServerConfig = {
     root: './../_front/dist/', // path to front-end part of site

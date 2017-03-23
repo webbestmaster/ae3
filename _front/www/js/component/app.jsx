@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import * as actions from './../actions';
+import {resizeScreen, click} from './../actions';
 import {connect} from 'react-redux';
 
 class App extends Component {
@@ -29,5 +29,8 @@ export default connect(
     state => ({
         screen: state.screen
     }),
-    {...actions}
+    {
+        resizeScreen,
+        click
+    }
 )(App);

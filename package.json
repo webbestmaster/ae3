@@ -9,7 +9,8 @@
   "scripts": {
     "lint": "eslint . --ignore-path .gitignore",
     "lint-fix": "eslint . --ignore-path .gitignore --fix",
-    "start": "echo start back and start front"
+    "start-1": "echo start back and start front",
+    "start": "cd ./_back && npm start & cd ./_front && npm start"
   },
   "repository": {
     "type": "git",
