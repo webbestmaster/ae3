@@ -3,50 +3,24 @@
 
   "parser": "babel-eslint",
 
-  "parserOptions": {
-    "sourceType": "module"
-  },
   "extends": "eslint:recommended",
-  "ecmaFeatures": {
-    "modules": true,
-    "binaryLiterals": false,
-    // enable binary literals
-    "blockBindings": false,
-    // enable let and const (aka block bindings)
-    "defaultParams": false,
-    // enable default function parameters
-    "forOf": false,
-    // enable for-of loops
-    "generators": false,
-    // enable generators
-    "objectLiteralComputedProperties": false,
-    // enable computed object literal property names
-    "objectLiteralDuplicateProperties": false,
-    // enable duplicate object literal properties in strict mode
-    "objectLiteralShorthandMethods": false,
-    // enable object literal shorthand methods
-    "objectLiteralShorthandProperties": false,
-    // enable object literal shorthand properties
-    "octalLiterals": false,
-    // enable octal literals
-    "regexUFlag": false,
-    // enable the regular expression u flag
-    "regexYFlag": false,
-    // enable the regular expression y flag
-    "templateStrings": false,
-    // enable template strings
-    "unicodeCodePointEscapes": false,
-    // enable code point escapes
-    "jsx": false
-    // enable JSX
+
+  "globals": {
+    // e.g. "angular": true
   },
+
+  "plugins": [
+    // e.g. "react" (must run `npm install eslint-plugin-react` first)
+  ],
+
   "env": {
     "es6": true,
     // es6 global variables.
     "browser": false,
     // browser global variables.
-    "node": false,
+    "node": false
     // Node.js global variables and Node.js-specific rules.
+/*
     "amd": false,
     // defines require() and define() as global variables as per the amd spec.
     "mocha": false,
@@ -61,15 +35,11 @@
     // prototypejs global variables.
     "shelljs": false
     // shelljs global variables.
+*/
   },
-  "globals": {
-    // e.g. "angular": true
-  },
-  "plugins": [
-    "react"
-    // e.g. "react" (must run `npm install eslint-plugin-react` first)
-  ],
+
   "rules": {
+
     "no-case-declarations": 0,
     "no-class-assign": 0,
     "no-const-assign": 0,
