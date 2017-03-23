@@ -1,6 +1,8 @@
 {
   // http://eslint.org/docs/rules/
 
+  "parser": "babel-eslint",
+
   "parserOptions": {
     "sourceType": "module"
   },
@@ -79,6 +81,8 @@
     "no-unexpected-multiline": 0,
     "no-unused-labels": 0,
     "constructor-super": 0,
+
+
     ////////// Possible Errors //////////
 
     "no-comma-dangle": 0,
@@ -345,7 +349,7 @@
     // enforce padding within blocks (off by default)
     "quote-props": 0,
     // require quotes around object literal property names (off by default)
-    "quotes": 0,
+    "quotes": ["error", "single"],
     // specify whether double or single quotes should be used
     "semi": 0,
     // require or disallow use of semicolons instead of ASI
