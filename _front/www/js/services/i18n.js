@@ -1,4 +1,4 @@
-import * as locales from '../i18n/index';
+import * as locales from './../i18n/index';
 
 // set default language
 let language = locales.en;

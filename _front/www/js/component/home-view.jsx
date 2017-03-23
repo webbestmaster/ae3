@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import BaseView from '../core/base-view';
+import BaseView from './../core/base-view';
 import {connect} from 'react-redux';
-import {changeLanguage} from '../actions/index';
+import {changeLanguage} from './../actions/index';
 
 class HomeView extends BaseView {
 
