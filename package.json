@@ -7,7 +7,8 @@
     "example": "example"
   },
   "scripts": {
-    "start": "node ./_back/index.js",
+    "lint": "eslint ./_front/www",
+    "start": "echo start back and start front",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/webbestmaster/ae3/issues"
   },
-  "homepage": "https://github.com/webbestmaster/ae3#readme"
+  "homepage": "https://github.com/webbestmaster/ae3#readme",
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "eslint-plugin-react": "^6.10.3"
+  }
 }
