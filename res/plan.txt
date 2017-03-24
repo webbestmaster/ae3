@@ -11,6 +11,8 @@ https://developers.google.com/games/services/common/concepts/realtimeMultiplayer
 можно ещё заюзать фаер бейс
 https://firebase.google.com/docs/functions/
 
+дописать к base-model - метод валидэйт, не знаю зачем, но хочется и вынести бейс модел в npm модуль
+
 --------
 логика будет такая
 
