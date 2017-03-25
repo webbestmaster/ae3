@@ -13,14 +13,6 @@ class CreateGame extends BaseView {
         const view = this;
     }
 
-    changeSetting(key, value) {
-
-        const view = this;
-
-        view.props.setGameCreatingProperty(key, value);
-
-    }
-
     render() {
 
         const view = this;
