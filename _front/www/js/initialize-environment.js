@@ -1,6 +1,6 @@
 /*global window, document */
 
-import util from './services/util';
+import util from './service/util';
 import FastClick from 'fastclick';
 
 export default function initializeEnvironment() {
