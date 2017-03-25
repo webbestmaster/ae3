@@ -5,5 +5,8 @@ export default {
     TYPE: {
         RESIZE: 'RESIZE',
         CLICK: 'CLICK',
+    },
+    link: {
+        createGame: '/create-game'
     }
 };

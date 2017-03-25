@@ -2,7 +2,9 @@ import React, {Component, PropTypes} from 'react';
 import BaseView from './../core/base-view';
 import {connect} from 'react-redux';
 import {changeLanguage} from './../actions/index';
+import {Link} from 'react-router';
 import Login from './login/view';
+import appConst from './../const';
 
 class HomeView extends BaseView {
 
@@ -11,6 +13,7 @@ class HomeView extends BaseView {
         return <div>
             <Login />
             <h1>home view</h1>
+            <Link to={appConst.link.createGame}>__create_game__</Link>
         </div>
 
     }

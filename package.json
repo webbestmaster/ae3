@@ -1,30 +1,30 @@
 {
-  "name": "ae3",
-  "version": "0.0.1",
-  "description": "ae3",
-  "main": "index.js",
-  "directories": {
-    "example": "example"
-  },
-  "scripts": {
-    "lint": "eslint . --ignore-path .gitignore",
-    "lint-fix": "eslint . --ignore-path .gitignore --fix",
-    "start-1": "echo start back and start front",
-    "start": "cd ./_back && npm start & cd ./_front && npm start"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/webbestmaster/ae3.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/webbestmaster/ae3/issues"
-  },
-  "homepage": "https://github.com/webbestmaster/ae3#readme",
-  "devDependencies": {
-    "babel-eslint": "^7.2.0",
-    "chai": "^3.5.0",
-    "eslint": "^3.18.0"
-  }
+    "name": "ae3",
+    "version": "0.0.1",
+    "description": "ae3",
+    "main": "index.js",
+    "directories": {
+        "example": "example"
+    },
+    "scripts": {
+        "lint": "eslint . --ignore-path .gitignore",
+        "lint-fix": "eslint . --ignore-path .gitignore --fix",
+        "start-1": "echo start back and start front",
+        "start": "cd ./_back && npm start & cd ./_front && npm start"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/webbestmaster/ae3.git"
+    },
+    "author": "",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/webbestmaster/ae3/issues"
+    },
+    "homepage": "https://github.com/webbestmaster/ae3#readme",
+    "devDependencies": {
+        "babel-eslint": "^7.2.0",
+        "chai": "^3.5.0",
+        "eslint": "^3.18.0"
+    }
 }

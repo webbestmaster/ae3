@@ -30,4 +30,3 @@ ReactDOM.render(
     </Provider>,
     document.querySelector('.js-app-wrapper')
 );
-

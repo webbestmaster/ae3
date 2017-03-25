@@ -9,4 +9,4 @@ const fsServerConfig = {
 };
 
 new FsServer(fsServerConfig) // create server with config
-        .run(); // create server with config and run
+    .run(); // create server with config and run

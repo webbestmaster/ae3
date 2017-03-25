@@ -1,5 +1,3 @@
-// const SERVER_URL = 'https://statlex.github.io/app/cr/';
-
 const path = require('path');
 
 const webpack = require('webpack');
@@ -37,18 +35,18 @@ const webpackConfig = {
 
     postcss: [Autoprefixer({
         browsers: IS_MOBILE ? [
-                'last 2 Samsung versions',
-                'last 2 UCAndroid versions',
-                'Android >= 4',
-                'iOS >= 8',
-                'ChromeAndroid > 4'
-            ] : [
-                'last 5 Chrome versions',
-                'last 2 Safari versions',
-                'last 2 Edge versions',
-                'Explorer >= 10',
-                'last 5 Firefox versions'
-            ]
+            'last 2 Samsung versions',
+            'last 2 UCAndroid versions',
+            'Android >= 4',
+            'iOS >= 8',
+            'ChromeAndroid > 4'
+        ] : [
+            'last 5 Chrome versions',
+            'last 2 Safari versions',
+            'last 2 Edge versions',
+            'Explorer >= 10',
+            'last 5 Firefox versions'
+        ]
     })],
 
     module: {
