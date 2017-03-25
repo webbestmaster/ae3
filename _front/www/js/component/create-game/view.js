@@ -24,6 +24,10 @@ class CreateGame extends BaseView {
     render() {
 
         const view = this;
+        const props = view.props;
+
+        const setProperty = props.setGameCreatingProperty;
+        const {setting} = props.gameCreating;
 
         const {NAME, PASSWORD, MAP_NAME, TYPE} = viewConst.GAME_PROPERTY;
 
@@ -32,21 +36,21 @@ class CreateGame extends BaseView {
             <h1>__create_game__</h1>
 
             <hr/>
-            <input onInput={e => view.changeSetting(NAME, e.currentTarget.value)} type="text"
+            <input defaultValue={setting[NAME]} onInput={e => setProperty(NAME, e.currentTarget.value)} type="text"
                    placeholder="__game_name__"/>
 
             <hr/>
-            <input onInput={e => view.changeSetting(PASSWORD, e.currentTarget.value)} type="text"
+            <input defaultValue={setting[PASSWORD]} onInput={e => setProperty(PASSWORD, e.currentTarget.value)} type="text"
                    placeholder="__game_password__"/>
 
             <hr/>
             here is should be select with maps
-            <input onInput={e => view.changeSetting(MAP_NAME, e.currentTarget.value)} type="text"
+            <input defaultValue={setting[MAP_NAME]} onInput={e => setProperty(MAP_NAME, e.currentTarget.value)} type="text"
                    placeholder="__map_name__"/>
 
             <hr/>
             here is should be select game type
-            <input onInput={e => view.changeSetting(TYPE, e.currentTarget.value)} type="text"
+            <input defaultValue={setting[TYPE]} onInput={e => setProperty(TYPE, e.currentTarget.value)} type="text"
                    placeholder="__game_type__"/>
 
             <hr/>
