@@ -5,6 +5,7 @@ import {HomeView} from './component';
 import {App} from './component';
 import appConst from './const';
 import CreateGame from './component/create-game/view';
+import OfferGame from './component/offer-game/view';
 
 export default class AppRouter extends Component {
 
@@ -13,6 +14,7 @@ export default class AppRouter extends Component {
             <Route path="/" component={App}>
                 <IndexRoute component={HomeView}/>
                 <Route path={appConst.link.createGame} component={CreateGame}/>
+                <Route path={appConst.link.offerGame} component={OfferGame}/>
             </Route>
         </Router>;
     }

@@ -7,6 +7,7 @@ export default {
         CLICK: 'CLICK',
     },
     link: {
-        createGame: '/create-game'
+        createGame: '/create-game',
+        offerGame: '/offer-game',
     }
 };
