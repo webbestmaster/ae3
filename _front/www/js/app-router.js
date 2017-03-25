@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Router, Route, IndexRoute} from 'react-router';
 
-import {HomeView} from './component';
-import {App} from './component';
+import HomeView from './component/home-view';
+import App from './component/app';
 import appConst from './const';
 import CreateGame from './component/create-game/view';
 import OfferGame from './component/offer-game/view';

@@ -8,3 +8,8 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import {hashHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
+
+// dev tools
+import {createDevTools} from 'redux-devtools';
+import LogMonitor from 'redux-devtools-log-monitor';
+import DockMonitor from 'redux-devtools-dock-monitor';

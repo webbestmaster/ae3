@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {resizeScreen, click} from './../actions';
+import {resizeScreen, click} from './../action';
 import {connect} from 'react-redux';
 
 class App extends Component {

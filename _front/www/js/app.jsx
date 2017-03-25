@@ -1,3 +1,10 @@
+/*global NODE_ENV*/
+
+// dev tools
+import {createDevTools} from 'redux-devtools';
+import LogMonitor from 'redux-devtools-log-monitor';
+import DockMonitor from 'redux-devtools-dock-monitor';
+
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {createStore, combineReducers, applyMiddleware} from 'redux';
@@ -8,6 +15,8 @@ import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 
 import * as reducers from './reducer';
 import AppRouter from './app-router';
+
+const IS_PRODUCTION = NODE_ENV === 'production';
 
 require('style/_root.scss');
 
@@ -20,13 +29,34 @@ const reducer = combineReducers({
     routing: routerReducer
 });
 
-const store = createStore(reducer, applyMiddleware(thunk));
+
+let store = null;
+let DevTools = null;
+
+if (IS_PRODUCTION) {
+    store = createStore(reducer, applyMiddleware(thunk))
+} else {
+    DevTools = createDevTools(
+        <DockMonitor toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q">
+            <LogMonitor theme="tomorrow" preserveScrollTop={false}/>
+        </DockMonitor>);
+    store = createStore(reducer, DevTools.instrument(), applyMiddleware(thunk));
+}
 
 const history = syncHistoryWithStore(hashHistory, store);
 
 ReactDOM.render(
     <Provider store={store}>
-        <AppRouter history={history}/>
+        {
+            IS_PRODUCTION
+                ?
+                <AppRouter history={history}/>
+                :
+                <div>
+                    <AppRouter history={history}/>
+                    <DevTools />
+                </div>
+        }
     </Provider>,
     document.querySelector('.js-app-wrapper')
 );
