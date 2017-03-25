@@ -1,16 +1,19 @@
 import React, {Component, PropTypes} from 'react';
 import BaseView from './../../core/base-view';
 import {connect} from 'react-redux';
-import {Link} from 'react-router';
-import appConst from './../../const';
+// import {Link} from 'react-router';
+// import appConst from './../../const';
 
 class OfferGame extends BaseView {
 
     constructor() {
         super();
         const view = this;
-    }
 
+        // get port for ws from server
+        // create open game on server and connect current player to it
+
+    }
 
     render() {
 

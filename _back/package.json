@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "fs-server": "0.0.4"
+    "fs-server": "0.0.4",
+    "websocket.io": "^0.2.1"
   }
 }
