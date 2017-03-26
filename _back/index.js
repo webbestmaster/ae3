@@ -6,8 +6,6 @@ const mainConst = require('./../_main/const.json');
 const HTTP_PORT = process.env.PORT || 3000;
 const WS_PORT = HTTP_PORT + 1;
 
-const requestBodyParser = require('./lib/internal/request-body-parser');
-
 const fsServerConfig = {
     root: './../_front/dist/', // path to front-end part of site
     port: HTTP_PORT // optional, recommended this, or do not use this field
@@ -26,17 +24,9 @@ fsServer.bindRequest('get', mainConst.LINK.GET_SERVER_INFO, function (req, res) 
 });
 
 // initialize game
-fsServer.bindRequest('post', mainConst.LINK.INITIALIZE_OFFER_GAME, function (req, res) {
-
-    requestBodyParser(req, body => {
-
-        console.log(body);
-
-        res.end(body);
-
-    });
-
-});
+const GameOffer = require('./initialize-game-offer/');
+const gameOffer = new GameOffer();
+fsServer.bindRequest('post', mainConst.LINK.INITIALIZE_OFFER_GAME, gameOffer.initializeGameOffer);
 
 /*
  server.bindRequest('get', 'api/:class/:method', function (req, res, url, className, methodName) {

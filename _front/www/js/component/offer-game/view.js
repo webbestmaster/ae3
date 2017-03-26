@@ -2,23 +2,21 @@ import React, {Component, PropTypes} from 'react';
 import BaseView from './../../core/base-view';
 import {connect} from 'react-redux';
 import api from './../../api';
-import ajax from './../../lib/internal/ajax';
+// import ajax from './../../lib/internal/ajax';
 // import {Link} from 'react-router';
 // import appConst from './../../const';
 
 class OfferGame extends BaseView {
 
-    constructor() {
-        super();
+    componentDidMount() {
+
         const view = this;
 
-        view.initializeOfferGame();
+        const gameSetting = view.props.gameCreating.setting;
 
-    }
-
-    initializeOfferGame() {
-
-        api.initializeOfferGame({me: 42});
+        api.initializeOfferGame(gameSetting).then(gameData => {
+            api.connectToOfferGame(gameData.id)
+        });
 
     }
 
@@ -37,6 +35,8 @@ class OfferGame extends BaseView {
 OfferGame.propTypes = {};
 
 export default connect(
-    state => ({}),
+    state => ({
+        gameCreating: state.gameCreating
+    }),
     {}
 )(OfferGame);

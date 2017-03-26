@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import BaseView from './../../core/base-view';
 import {connect} from 'react-redux';
 
+import {userModel} from './../../api/user-model';
+
 class Login extends BaseView {
 
     constructor() {
@@ -41,6 +43,8 @@ class Login extends BaseView {
         // The ID token you need to pass to your backend:
         const id_token = googleUser.getAuthResponse().id_token;
         console.log('ID Token: ' + id_token);
+
+        userModel.setTokenId(id_token);
 
     }
 

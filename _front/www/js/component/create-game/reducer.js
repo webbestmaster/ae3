@@ -8,7 +8,7 @@ const {NAME, PASSWORD, MAP_NAME, TYPE} = viewConst.GAME_PROPERTY;
 const initialState = {
     [NAME]: '__default_game_name__',
     [PASSWORD]: '__default_game_password__',
-    [MAP_NAME]: '__here_is_map_with_full_data__',
+    [MAP_NAME]: '__here_is_map_name__',
     [TYPE]: '__game_type__'
 };
 

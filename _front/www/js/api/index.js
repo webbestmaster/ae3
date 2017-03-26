@@ -1,5 +1,6 @@
 const mainConst = require('./../../../../_main/const.json');
 import ajax from './../lib/internal/ajax';
+import {userModel} from './../api/user-model';
 
 const api = {
 
@@ -17,7 +18,18 @@ const api = {
 
         return ajax
             .post(mainConst.LINK.INITIALIZE_OFFER_GAME, data)
-            .then(serverData => console.log(serverData));
+            .then(JSON.parse);
+
+    },
+
+    connectToOfferGame(offerGameId) {
+
+        userModel.getTokenId();
+        debugger
+
+
+
+
 
     }
 

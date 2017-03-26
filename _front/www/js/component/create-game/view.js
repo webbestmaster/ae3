@@ -8,10 +8,10 @@ import {setGameCreatingProperty} from './action';
 
 class CreateGame extends BaseView {
 
-    constructor() {
-        super();
-        const view = this;
-    }
+    // constructor() {
+    //     super();
+    //     const view = this;
+    // }
 
     render() {
 

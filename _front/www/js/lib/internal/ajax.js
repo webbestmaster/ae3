@@ -15,15 +15,7 @@ function send(url, method, params, success, error) {
     };
 
     xhr.open(method, url, true);
-
-    const body = Object
-        .keys(params || {})
-        .map(key => key + '=' + encodeURIComponent(params[key]))
-        .join('&');
-
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-    xhr.send(body);
+    xhr.send(params ? JSON.stringify(params) : null);
 
 }
 
