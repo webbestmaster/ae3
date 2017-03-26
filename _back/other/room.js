@@ -7,7 +7,7 @@ const roomConst = {
 
 };
 
-export default class Room extends BaseModel {
+class Room extends BaseModel {
 
     constructor(gameData) {
 
@@ -21,10 +21,13 @@ export default class Room extends BaseModel {
 
     }
 
+    // addConnection
+
 }
 
 function getRoomById(gameId) {
     return rooms[gameId]
 }
 
-export {getRoomById};
+module.exports.Room = Room;
+module.exports.getRoomById = getRoomById;

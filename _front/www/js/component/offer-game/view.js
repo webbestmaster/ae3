@@ -15,7 +15,7 @@ class OfferGame extends BaseView {
         const gameSetting = view.props.gameCreating.setting;
 
         api.initializeOfferGame(gameSetting).then(gameData => {
-            api.connectToOfferGame(gameData.id)
+            return api.connectToOfferGame(gameData.id);
         });
 
     }

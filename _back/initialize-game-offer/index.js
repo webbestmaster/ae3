@@ -4,7 +4,7 @@ const requestBodyParser = require('./../lib/internal/request-body-parser');
 const FileMaster = require('./../lib/internal/file-master');
 const fileMaster = new FileMaster();
 const generateId = require('./../lib/internal/generate-id');
-const Room = require('./../other/room');
+const Room = require('./../other/room').Room;
 
 const offerGameConst = {
     file: {

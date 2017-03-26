@@ -24,12 +24,39 @@ const api = {
 
     connectToOfferGame(offerGameId) {
 
-        userModel.getTokenId();
-        debugger
+        Promise.all([
+            api.getHostName(),
+            api.getServerInfo()
+        ]).then(([hostname, serverInfo]) => {
+
+            const websocket = new WebSocket('ws://' + hostname + ':' + serverInfo.WS_PORT);
+
+            websocket.onmessage = (input => {
+                console.log(input)
+            });
+
+            // TODO: wait for available state
+            setTimeout(function () {
+                websocket.send('fffffffff')
+            }, 1000);
+
+
+        });
 
 
 
 
+
+
+
+
+
+        return ajax
+            .post(mainConst.LINK.CONNECT_TO_OFFER_GAME, {
+                userToken: userModel.getTokenId(),
+                offerGameId
+            })
+            .then(console.log('connected'));
 
     }
 

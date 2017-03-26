@@ -1,6 +1,7 @@
 {
     "LINK": {
         "GET_SERVER_INFO": "/api/link__get_port",
-        "INITIALIZE_OFFER_GAME": "/api/link__initialize_offer_game"
+        "INITIALIZE_OFFER_GAME": "/api/link__initialize_offer_game",
+        "CONNECT_TO_OFFER_GAME": "/api/link__connect_to_offer_game"
     }
 }
