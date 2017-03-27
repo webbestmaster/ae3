@@ -5,6 +5,7 @@ import api from './../../api';
 // import ajax from './../../lib/internal/ajax';
 // import {Link} from 'react-router';
 // import appConst from './../../const';
+import {userModel} from './../../api/user-model';
 
 class OfferGame extends BaseView {
 
@@ -14,12 +15,10 @@ class OfferGame extends BaseView {
 
         const gameSetting = view.props.gameCreating.setting;
 
-        api.createRoom(gameSetting).then(gameData => {
-            // TODO: here is end of current work
-            // gameData.roomId - is id of new room
-            debugger
-            return api.connectToOfferGame(gameData.id);
-        });
+        userModel
+            .setupWebSocket()
+            .then(() => api.createRoom(gameSetting))
+            .then(roomData => userModel.connectToRoom(roomData.roomId))
 
     }
 

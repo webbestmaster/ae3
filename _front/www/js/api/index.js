@@ -20,8 +20,9 @@ const api = {
             .post(mainConst.LINK.CREATE_ROOM, data)
             .then(JSON.parse);
 
-    },
+    }
 
+/*
     connectToOfferGame(offerGameId) {
 
         Promise.all([
@@ -41,6 +42,7 @@ const api = {
         });
 
     }
+*/
 
 };
 

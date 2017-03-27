@@ -1,4 +1,5 @@
 import BaseModel from './../core/base-model';
+import api from './';
 
 const userConst = {
     tokenId: 'tokenId',
@@ -23,16 +24,28 @@ export default class UserModel extends BaseModel {
         return this.get(userConst.webSocket);
     }
 
-    setupWebSocket(webSocket) {
+    setupWebSocket() {
 
         const model = this;
 
-        model.setWebSocket(webSocket);
+        const webSocket = model.getWebSocket();
 
-        return new Promise((resolve, reject) => {
-            webSocket.onopen = resolve;
-            webSocket.onmessage = input => model.onWebSocketMessage(input);
-        });
+        if (webSocket) {
+            return Promise.resolve(webSocket);
+        }
+
+        return Promise
+            .all([
+                api.getHostName(),
+                api.getServerInfo()
+            ])
+            .then(([hostname, serverInfo]) => new Promise((resolve, reject) => {
+                    const newWebSocket = new WebSocket('ws://' + hostname + ':' + serverInfo.WS_PORT);
+                    model.setWebSocket(newWebSocket);
+                    newWebSocket.onopen = resolve;
+                    newWebSocket.onmessage = input => model.onWebSocketMessage(input);
+                })
+            );
 
     }
 
@@ -51,12 +64,27 @@ export default class UserModel extends BaseModel {
 
     connectToRoom(roomId) {
 
+        this.sendMessage({
+            className: 'Room',
+            methodName: 'addConnection',
+            roomId
+        });
 
+    }
+
+    destroy() {
+
+        // TODO: destroy socket
+        super.destroy();
 
     }
 
 }
 
 const userModel = new UserModel();
+
+userModel.setupWebSocket().then(() => {
+    console.log('webSocket has been setup');
+});
 
 export {userModel};

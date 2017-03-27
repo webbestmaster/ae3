@@ -9,6 +9,7 @@
         "window": true,
         "document": true,
         "console": true,
+        "WebSocket": true,
         "fetch": true
     },
     "plugins": [

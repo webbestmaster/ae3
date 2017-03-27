@@ -1,5 +1,5 @@
 const BaseModel = require('./../core/base-model');
-// const rooms = {};
+const rooms = {};
 const generateId = require('./../lib/internal/generate-id');
 
 const roomConst = {
@@ -21,22 +21,37 @@ class Room extends BaseModel {
 
         room.set({id});
 
-        // rooms[id] = room;
+        rooms[id] = room;
 
         room.set(roomConst.connectionList, []);
 
     }
 
+    getConnections() {
+
+        return this.get(roomConst.connectionList);
+
+    }
+
+    pushConnection(ws) {
+
+        const room = this;
+        const connections = room.getConnections();
+        console.log('new connection added !!!');
+        connections.push(ws);
+
+    }
+
 }
 
-// function getRoomById(gameId) {
-//     return rooms[gameId]
-// }
+function getRoomById(gameId) {
+    return rooms[gameId]
+}
 //
 // function createRoom(data) {
 //     return new Room(data);
 // }
 
 module.exports.Room = Room;
-// module.exports.getRoomById = getRoomById;
+module.exports.getRoomById = getRoomById;
 // module.exports.createRoom = createRoom;
