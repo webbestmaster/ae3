@@ -31,32 +31,17 @@ const api = {
 
             const websocket = new WebSocket('ws://' + hostname + ':' + serverInfo.WS_PORT);
 
-            websocket.onmessage = (input => {
-                console.log(input)
+            userModel.setupWebSocket(websocket).then(() => {
+                console.log('////////////////////////');
+                console.log('---> connected to webSocket');
+                console.log('url mainConst.LINK.CONNECT_TO_OFFER_GAME');
+                console.log('send token id');
+                console.log('and offerGameId');
+                console.log('to connect to room');
+                console.log('////////////////////////');
             });
 
-            // TODO: wait for available state
-            setTimeout(function () {
-                websocket.send('fffffffff')
-            }, 1000);
-
-
         });
-
-
-
-
-
-
-
-
-
-        return ajax
-            .post(mainConst.LINK.CONNECT_TO_OFFER_GAME, {
-                userToken: userModel.getTokenId(),
-                offerGameId
-            })
-            .then(console.log('connected'));
 
     }
 

@@ -1,7 +1,8 @@
 import BaseModel from './../core/base-model';
 
 const userConst = {
-    tokenId: 'tokenId'
+    tokenId: 'tokenId',
+    webSocket: 'webSocket'
 };
 
 export default class UserModel extends BaseModel {
@@ -14,6 +15,33 @@ export default class UserModel extends BaseModel {
         return this.get(userConst.tokenId);
     }
 
+    setWebSocket(webSocket) {
+        return this.set(userConst.webSocket, webSocket);
+    }
+
+    getWebSocket() {
+        return this.get(userConst.webSocket);
+    }
+
+    setupWebSocket(webSocket) {
+
+        const model = this;
+
+        model.setWebSocket(webSocket);
+
+        return new Promise((resolve, reject) => {
+            webSocket.onopen = resolve;
+            webSocket.onmessage = input => model.onWebSocketMessage(input);
+        });
+
+    }
+
+    onWebSocketMessage(input) {
+
+        console.log('data from web socket');
+        console.log(input);
+
+    }
 
 }
 

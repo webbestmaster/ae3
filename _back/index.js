@@ -26,7 +26,7 @@ const GameOffer = require('./initialize-game-offer/');
 const gameOffer = new GameOffer();
 fsServer.bindRequest('post', mainConst.LINK.INITIALIZE_OFFER_GAME, gameOffer.initializeGameOffer);
 
-
+// FIXME NOW!!!: use websocket server to precces this LINK, need to add connection to Room
 fsServer.bindRequest('post', mainConst.LINK.CONNECT_TO_OFFER_GAME, gameOffer.connectPlayerToOfferGame);
 
 /*
