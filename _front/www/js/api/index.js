@@ -33,6 +33,7 @@ const api = {
 
             userModel.setupWebSocket(websocket).then(() => {
                 console.log('////////////////////////');
+                // send by ajax -> create room and get room id connect to room
                 console.log('---> connected to webSocket');
                 console.log('url mainConst.LINK.CONNECT_TO_OFFER_GAME');
                 console.log('send token id');

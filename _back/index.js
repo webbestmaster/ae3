@@ -45,6 +45,9 @@ const webSocketServer = new WebSocketServer({server: httpServer, port: WS_PORT})
 webSocketServer.on('connection', ws => {
 
     ws.on('message', inputStr => {
+
+
+
         console.log(inputStr);
     });
 

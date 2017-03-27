@@ -43,6 +43,12 @@ export default class UserModel extends BaseModel {
 
     }
 
+    connectToRoom(roomId) {
+
+
+
+    }
+
 }
 
 const userModel = new UserModel();
