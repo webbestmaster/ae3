@@ -14,10 +14,10 @@ const api = {
             .then(stream => stream.json())
     },
 
-    initializeOfferGame(data) {
+    createRoom(data) {
 
         return ajax
-            .post(mainConst.LINK.INITIALIZE_OFFER_GAME, data)
+            .post(mainConst.LINK.CREATE_ROOM, data)
             .then(JSON.parse);
 
     },

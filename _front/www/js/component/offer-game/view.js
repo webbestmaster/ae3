@@ -14,7 +14,10 @@ class OfferGame extends BaseView {
 
         const gameSetting = view.props.gameCreating.setting;
 
-        api.initializeOfferGame(gameSetting).then(gameData => {
+        api.createRoom(gameSetting).then(gameData => {
+            // TODO: here is end of current work
+            // gameData.roomId - is id of new room
+            debugger
             return api.connectToOfferGame(gameData.id);
         });
 

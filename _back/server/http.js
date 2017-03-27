@@ -5,10 +5,12 @@
 
 const FsServer = require('fs-server');
 
+const httpApi = require('./http-api');
+
 const mainConst = require('./../../_main/const.json');
 const backConst = require('./../const');
 
-const {HTTP_PORT, WS_PORT} = backConst;
+const {HTTP_PORT} = backConst;
 
 const fsServerConfig = {
     root: './../_front/dist/', // path to front-end part of site
@@ -24,17 +26,9 @@ const fsServer = new FsServer(fsServerConfig) // create server with config
 //////
 
 // get info about server
-fsServer.bindRequest('get', mainConst.LINK.GET_SERVER_INFO, (req, res) => {
-    res.end(JSON.stringify({
-        HTTP_PORT,
-        WS_PORT
-    }));
-});
+fsServer.bindRequest('get', mainConst.LINK.GET_SERVER_INFO, httpApi.getInfo);
 
-// initialize game
-const GameOffer = require('./../initialize-game-offer/');
-const gameOffer = new GameOffer();
-fsServer.bindRequest('post', mainConst.LINK.INITIALIZE_OFFER_GAME, gameOffer.initializeGameOffer);
+fsServer.bindRequest('post', mainConst.LINK.CREATE_ROOM, httpApi.createRoom);
 
 //////
 // Exports

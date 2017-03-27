@@ -1,6 +1,5 @@
 const path = require('path');
 
-const requestBodyParser = require('./../lib/internal/request-body-parser');
 const FileMaster = require('./../lib/internal/file-master');
 const fileMaster = new FileMaster();
 const generateId = require('./../lib/internal/generate-id');
@@ -19,21 +18,6 @@ class GameOffer {
 
     initializeGameOffer(req, res) {
 
-        requestBodyParser(req, body => {
-
-            const gameId = generateId();
-
-            const gameData = JSON.parse(body);
-
-            gameData.id = gameId;
-
-            const room = new Room(gameData);
-
-            console.log(gameData);
-
-            res.end(JSON.stringify(gameData));
-
-        });
 
     }
 
