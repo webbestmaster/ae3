@@ -32,14 +32,10 @@ const api = {
             const websocket = new WebSocket('ws://' + hostname + ':' + serverInfo.WS_PORT);
 
             userModel.setupWebSocket(websocket).then(() => {
-                console.log('////////////////////////');
-                // send by ajax -> create room and get room id connect to room
-                console.log('---> connected to webSocket');
-                console.log('url mainConst.LINK.CONNECT_TO_OFFER_GAME');
-                console.log('send token id');
-                console.log('and offerGameId');
-                console.log('to connect to room');
-                console.log('////////////////////////');
+                userModel.sendMessage({
+                    type: mainConst.MESSAGE.CONNECT_TO_OFFER_GAME,
+                    id: offerGameId
+                });
             });
 
         });

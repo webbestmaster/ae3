@@ -37,9 +37,10 @@ class GameOffer {
 
     }
 
-    connectPlayerToOfferGame(connection, gameId) {
+    connectPlayerToOfferGame(gameId) {
 
-
+        console.log('connectPlayerToOfferGame');
+        console.log(arguments);
 
     }
 

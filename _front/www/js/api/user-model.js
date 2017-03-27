@@ -43,6 +43,12 @@ export default class UserModel extends BaseModel {
 
     }
 
+    sendMessage(data) {
+        const model = this;
+        const ws = model.getWebSocket();
+        ws.send(JSON.stringify(data));
+    }
+
     connectToRoom(roomId) {
 
 
