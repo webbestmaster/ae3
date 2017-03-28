@@ -34,13 +34,18 @@ class Room extends BaseModel {
 
     }
 
-    pushConnection(ws) {
+    pushConnection(ws, data) {
 
         const room = this;
         const connections = room.getConnections();
         console.log('new connection added !!!');
-        connections.push(ws);
-        room.sendMessages({text: 'new connection added !!!'});
+        connections.push({ws, data});
+        room.sendMessages({text: 'new connection added wwwwww!!!'});
+
+        ws.onmessage = function () {
+            // listen a ws
+            // use data (see above) to identify ws
+        }
 
     }
 
@@ -57,7 +62,7 @@ class Room extends BaseModel {
         const room = this;
         const sendString = JSON.stringify(data);
 
-        each(room.getConnections(), ws => room.sendMessageRaw(ws, sendString));
+        each(room.getConnections(), item => room.sendMessageRaw(item.ws, sendString));
 
     }
 

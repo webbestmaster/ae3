@@ -2,11 +2,27 @@ import BaseModel from './../core/base-model';
 import api from './';
 
 const userConst = {
-    tokenId: 'tokenId',
-    webSocket: 'webSocket'
+    tokenId: 'const_tokenId',
+    staticId: 'const_staticId',
+    webSocket: 'const_webSocket'
 };
 
 export default class UserModel extends BaseModel {
+
+    constructor(data) {
+
+        super(data);
+
+        const user = this;
+    }
+
+    setStaticId(staticId) {
+        return this.set(userConst.staticId, staticId);
+    }
+
+    getStaticId() {
+        return this.get(userConst.staticId);
+    }
 
     setTokenId(tokenId) {
         return this.set(userConst.tokenId, tokenId);
@@ -64,7 +80,10 @@ export default class UserModel extends BaseModel {
 
     connectToRoom(roomId) {
 
-        this.sendMessage({
+        const model = this;
+
+        model.sendMessage({
+            tokenId: model.getTokenId() + '-token-' + Math.random(),
             className: 'Room',
             methodName: 'addConnection',
             roomId

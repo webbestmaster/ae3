@@ -5,7 +5,7 @@ module.exports = {
     Room: {
         addConnection(data, ws) {
             const room = getRoomById(data.roomId);
-            room.pushConnection(ws);
+            room.pushConnection(ws, data);
         }
     }
 };

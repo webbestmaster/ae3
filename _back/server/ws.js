@@ -27,8 +27,6 @@ function onMessage(inputStr) {
     const ws = this;
 
     const {className, methodName} = inputJson;
-    inputJson[className] = inputJson[methodName] = null;
-
     const neededClass = wsApi[className] || null;
 
     if (neededClass === null) {
