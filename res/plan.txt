@@ -1,3 +1,7 @@
+//sha1
+https://cdnjs.com/libraries/js-sha1
+https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.4.1/sha1.js
+
 1 - прикрутить хоть какую-нибудь идентификацию,
 например через какой-нибудь auth или типо того
 
