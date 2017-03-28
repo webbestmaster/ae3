@@ -1,6 +1,7 @@
 const BaseModel = require('./../core/base-model');
 const rooms = {};
 const generateId = require('./../lib/internal/generate-id');
+const each = require('lodash/each');
 
 const roomConst = {
 
@@ -39,6 +40,24 @@ class Room extends BaseModel {
         const connections = room.getConnections();
         console.log('new connection added !!!');
         connections.push(ws);
+        room.sendMessages({text: 'new connection added !!!'});
+
+    }
+
+    sendMessage(ws, data) {
+        ws.send(JSON.stringify(data));
+    }
+
+    sendMessageRaw(ws, data) {
+        ws.send(data);
+    }
+
+    sendMessages(data) {
+
+        const room = this;
+        const sendString = JSON.stringify(data);
+
+        each(room.getConnections(), ws => room.sendMessageRaw(ws, sendString));
 
     }
 

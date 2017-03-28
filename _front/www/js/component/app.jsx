@@ -6,7 +6,7 @@ class App extends Component {
 
     componentDidMount() {
         window.addEventListener('resize', this.props.resizeScreen, false);
-        document.body.addEventListener('click', this.props.click, false);
+        // document.body.addEventListener('click', this.props.click, false);
     }
 
     render() {
@@ -21,7 +21,7 @@ class App extends Component {
 
 App.propTypes = {
     resizeScreen: PropTypes.func.isRequired,
-    click: PropTypes.func.isRequired,
+    // click: PropTypes.func.isRequired,
     screen: PropTypes.object.isRequired
 };
 
@@ -30,7 +30,7 @@ export default connect(
         screen: state.screen
     }),
     {
-        resizeScreen,
-        click
+        resizeScreen
+        // click
     }
 )(App);
