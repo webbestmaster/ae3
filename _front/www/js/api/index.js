@@ -9,9 +9,9 @@ const api = {
     },
 
     getServerInfo() {
-        return window
-            .fetch(mainConst.LINK.GET_SERVER_INFO)
-            .then(stream => stream.json());
+        return ajax
+            .get(mainConst.LINK.GET_SERVER_INFO)
+            .then(JSON.parse);
     },
 
     createRoom(data) {
