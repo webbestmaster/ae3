@@ -59,7 +59,7 @@ class Login extends BaseView {
 
             <hr/>
 
-        </div>
+        </div>;
 
     }
 

@@ -23,4 +23,4 @@ export default {
     press_again_to_exit: 'Нажмите еще раз для выхода'
 */
 
-}
+};

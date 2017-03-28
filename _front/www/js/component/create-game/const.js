@@ -6,4 +6,4 @@ export default {
         MAP_NAME: 'GAME_PROPERTY.MAP_NAME',
         TYPE: 'GAME_PROPERTY.TYPE',
     }
-}
+};

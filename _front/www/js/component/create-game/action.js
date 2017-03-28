@@ -7,6 +7,6 @@ export function setGameCreatingProperty(key, value) {
     return {
         type: SET_GAME_CREATING_PROPERTY,
         key, value
-    }
+    };
 
 }

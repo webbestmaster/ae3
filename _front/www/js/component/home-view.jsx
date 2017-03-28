@@ -14,6 +14,8 @@ class HomeView extends BaseView {
             <Login />
             <h1>home view</h1>
             <Link to={appConst.link.createGame}>__create_game__</Link>
+            <br/>
+            <Link to={appConst.link.joinGame}>__join_game__</Link>
         </div>
 
     }

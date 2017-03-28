@@ -18,7 +18,7 @@ class OfferGame extends BaseView {
         userModel
             .setupWebSocket()
             .then(() => api.createRoom(gameSetting))
-            .then(roomData => userModel.connectToRoom(roomData.roomId))
+            .then(roomData => userModel.connectToRoom(roomData.roomId));
 
     }
 
@@ -28,7 +28,7 @@ class OfferGame extends BaseView {
 
             <h1>__offer_game__</h1>
 
-        </div>
+        </div>;
 
     }
 

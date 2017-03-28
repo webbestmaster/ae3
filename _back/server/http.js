@@ -30,6 +30,8 @@ fsServer.bindRequest('get', mainConst.LINK.GET_SERVER_INFO, httpApi.getInfo);
 
 fsServer.bindRequest('post', mainConst.LINK.CREATE_ROOM, httpApi.createRoom);
 
+fsServer.bindRequest('get', mainConst.LINK.GET_AVAILABLE_ROOMS, httpApi.getAvailableRooms);
+
 //////
 // Exports
 //////

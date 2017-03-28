@@ -9,5 +9,6 @@ export default {
     link: {
         createGame: '/create-game',
         offerGame: '/offer-game',
+        joinGame: '/join-game'
     }
 };

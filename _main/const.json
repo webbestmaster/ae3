@@ -1,7 +1,8 @@
 {
     "LINK": {
         "GET_SERVER_INFO": "/api/link__get_port",
-        "CREATE_ROOM": "/api/link__initialize_offer_game"
+        "CREATE_ROOM": "/api/link__initialize_offer_game",
+        "GET_AVAILABLE_ROOMS": "/api/link__get_available_rooms"
     },
     "MESSAGE": {
         "CONNECT_TO_OFFER_GAME": "/api/message__connect_to_offer_game"

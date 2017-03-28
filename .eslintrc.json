@@ -150,6 +150,10 @@
         "prefer-spread": 1,
         "prefer-reflect": 0,
         "require-yield": 1,
+        "semi": [
+            1,
+            "always"
+        ],
         "no-cond-assign": [
             1,
             "always"

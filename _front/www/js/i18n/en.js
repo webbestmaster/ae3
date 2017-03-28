@@ -23,4 +23,4 @@ export default {
     press_again_to_exit: 'Press again to exit'
 */
 
-}
+};

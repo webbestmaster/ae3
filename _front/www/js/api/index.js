@@ -1,6 +1,6 @@
 const mainConst = require('./../../../../_main/const.json');
 import ajax from './../lib/internal/ajax';
-import {userModel} from './../api/user-model';
+// import {userModel} from './../api/user-model';
 
 const api = {
 
@@ -11,13 +11,21 @@ const api = {
     getServerInfo() {
         return window
             .fetch(mainConst.LINK.GET_SERVER_INFO)
-            .then(stream => stream.json())
+            .then(stream => stream.json());
     },
 
     createRoom(data) {
 
         return ajax
             .post(mainConst.LINK.CREATE_ROOM, data)
+            .then(JSON.parse);
+
+    },
+
+    getAvailableRooms() {
+
+        return ajax
+            .get(mainConst.LINK.GET_AVAILABLE_ROOMS)
             .then(JSON.parse);
 
     }

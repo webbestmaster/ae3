@@ -42,10 +42,12 @@ class Room extends BaseModel {
         connections.push({ws, data});
         room.sendMessages({text: 'new connection added wwwwww!!!'});
 
+/*
         ws.onmessage = function () {
             // listen a ws
             // use data (see above) to identify ws
-        }
+        };
+*/
 
     }
 
@@ -69,8 +71,13 @@ class Room extends BaseModel {
 }
 
 function getRoomById(gameId) {
-    return rooms[gameId]
+    return rooms[gameId];
 }
+
+function getRoomIds() {
+    return Object.keys(rooms);
+}
+
 //
 // function createRoom(data) {
 //     return new Room(data);
@@ -78,4 +85,5 @@ function getRoomById(gameId) {
 
 module.exports.Room = Room;
 module.exports.getRoomById = getRoomById;
+module.exports.getRoomIds = getRoomIds;
 // module.exports.createRoom = createRoom;

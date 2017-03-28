@@ -13,5 +13,4 @@ export default {
         return language[alias];
     }
 
-}
-
+};

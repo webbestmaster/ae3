@@ -48,7 +48,7 @@ class CreateGame extends BaseView {
             <hr/>
             <Link to={appConst.link.offerGame}> __create_game__ </Link>
 
-        </div>
+        </div>;
 
     }
 

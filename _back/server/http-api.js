@@ -1,5 +1,7 @@
 const backConst = require('./../const');
-const Room = require('./../other/room').Room;
+const roomModule = require('./../other/room');
+const Room = roomModule.Room;
+const getRoomIds = roomModule.getRoomIds;
 const {HTTP_PORT, WS_PORT} = backConst;
 
 function streamBodyParser(request, succes, error) {
@@ -43,5 +45,10 @@ function getInfo(req, res) {
     res.end(serverInfoResponse);
 }
 
+function getAvailableRooms(req, res) {
+    res.end(JSON.stringify(getRoomIds()));
+}
+
 module.exports.createRoom = createRoom;
 module.exports.getInfo = getInfo;
+module.exports.getAvailableRooms = getAvailableRooms;
