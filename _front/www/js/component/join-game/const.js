@@ -1,0 +1,3 @@
+export default {
+    SHOW_AVAILABLE_ROOMS: "SHOW_AVAILABLE_ROOMS"
+};

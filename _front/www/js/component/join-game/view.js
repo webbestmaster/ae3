@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import api from './../../api';
 import {Link} from 'react-router';
 import appConst from './../../const';
+import {showAvailableRooms} from './action';
 
 // import ajax from './../../lib/internal/ajax';
 // import {Link} from 'react-router';
@@ -14,26 +15,36 @@ class JoinGame extends BaseView {
 
     componentDidMount() {
 
-        api.getAvailableRooms().then(roomIds => {
-            console.warn('rooms id is here');
+        const view = this;
 
+        view.props.showAvailableRooms();
 
+    }
 
-            userModel.connectToRoom(roomIds[0]);
+    joinToRoom(roomId) {
 
-        });
+        userModel.connectToRoom(roomId);
 
+        this.props.router.push(appConst.link.offerGame);
 
 
     }
 
     render() {
 
+        const view = this;
+
         return <div>
 
+            <div>{this.props.joinGame.availableRooms.isLoadingRooms}</div>
+            <div>{this.props.joinGame.availableRooms.roomIds.length}</div>
 
+            {this.props.joinGame.availableRooms.roomIds.map(roomId =>
+                <button key={roomId} onClick={() => view.joinToRoom(roomId)}>__room_id__{roomId}</button>
+            )}
 
             <h1>get available rooms</h1>
+
             <h1>__join_game__</h1>
 
             <Link to={appConst.link.offerGame}> __join_to_game__ </Link>
@@ -48,9 +59,11 @@ JoinGame.propTypes = {};
 
 export default connect(
     state => ({
-        // gameCreating: state.gameCreating
+        joinGame: state.joinGame
     }),
-    {}
+    {
+        showAvailableRooms
+    }
 )(JoinGame);
 
 

@@ -83,7 +83,7 @@ export default class UserModel extends BaseModel {
         const model = this;
 
         model.sendMessage({
-            tokenId: model.getTokenId() + '-token-' + Math.random(),
+            tokenId: model.getTokenId() + '-token-',
             className: 'Room',
             methodName: 'addConnection',
             roomId

@@ -1,3 +1,5 @@
+!!!!!! перенести api.createRoom(gameSetting)) из офер гейв в среате гейм
+
 //sha1
 https://cdnjs.com/libraries/js-sha1
 https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.4.1/sha1.js
