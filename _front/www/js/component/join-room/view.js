@@ -11,7 +11,7 @@ import {showAvailableRooms} from './action';
 // import appConst from './../../const';
 import {userModel} from './../../api/user-model';
 
-class JoinGame extends BaseView {
+class JoinRoom extends BaseView {
 
     componentDidMount() {
 
@@ -25,8 +25,7 @@ class JoinGame extends BaseView {
 
         userModel.connectToRoom(roomId);
 
-        this.props.router.push(appConst.link.offerGame);
-
+        this.props.router.push(appConst.link.openRoom);
 
     }
 
@@ -36,10 +35,10 @@ class JoinGame extends BaseView {
 
         return <div>
 
-            <div>{this.props.joinGame.availableRooms.isLoadingRooms}</div>
-            <div>{this.props.joinGame.availableRooms.roomIds.length}</div>
+            <div>{this.props.joinRoom.availableRooms.isLoadingRooms}</div>
+            <div>{this.props.joinRoom.availableRooms.roomIds.length}</div>
 
-            {this.props.joinGame.availableRooms.roomIds.map(roomId =>
+            {this.props.joinRoom.availableRooms.roomIds.map(roomId =>
                 <button key={roomId} onClick={() => view.joinToRoom(roomId)}>__room_id__{roomId}</button>
             )}
 
@@ -47,23 +46,21 @@ class JoinGame extends BaseView {
 
             <h1>__join_game__</h1>
 
-            <Link to={appConst.link.offerGame}> __join_to_game__ </Link>
-
         </div>;
 
     }
 
 }
 
-JoinGame.propTypes = {};
+JoinRoom.propTypes = {};
 
 export default connect(
     state => ({
-        joinGame: state.joinGame
+        joinRoom: state.joinRoom
     }),
     {
         showAvailableRooms
     }
-)(JoinGame);
+)(JoinRoom);
 
 

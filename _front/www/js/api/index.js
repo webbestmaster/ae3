@@ -42,7 +42,7 @@ const api = {
 
             userModel.setupWebSocket(websocket).then(() => {
                 userModel.sendMessage({
-                    type: mainConst.MESSAGE.CONNECT_TO_OFFER_GAME,
+                    type: mainConst.MESSAGE.CONNECT_TO_OPEN_ROOM,
                     id: offerGameId
                 });
             });

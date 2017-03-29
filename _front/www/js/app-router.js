@@ -4,9 +4,9 @@ import {Router, Route, IndexRoute} from 'react-router';
 import HomeView from './component/home-view';
 import App from './component/app';
 import appConst from './const';
-import CreateGame from './component/create-game/view';
-import OfferGame from './component/offer-game/view';
-import JoinGame from './component/join-game/view';
+import CreateRoom from './component/create-room/view';
+import OpenRoom from './component/open-room/view';
+import JoinRoom from './component/join-room/view';
 
 export default class AppRouter extends Component {
 
@@ -14,9 +14,9 @@ export default class AppRouter extends Component {
         return <Router history={this.props.history}>
             <Route path="/" component={App}>
                 <IndexRoute component={HomeView}/>
-                <Route path={appConst.link.createGame} component={CreateGame}/>
-                <Route path={appConst.link.offerGame} component={OfferGame}/>
-                <Route path={appConst.link.joinGame} component={JoinGame}/>
+                <Route path={appConst.link.createRoom} component={CreateRoom}/>
+                <Route path={appConst.link.openRoom} component={OpenRoom}/>
+                <Route path={appConst.link.joinRoom} component={JoinRoom}/>
             </Route>
         </Router>;
     }

@@ -7,8 +7,8 @@ export default {
         CLICK: 'CLICK',
     },
     link: {
-        createGame: '/create-game',
-        offerGame: '/offer-game',
-        joinGame: '/join-game'
+        createRoom: '/create-room',
+        openRoom: '/open-room',
+        joinRoom: '/join-room'
     }
 };

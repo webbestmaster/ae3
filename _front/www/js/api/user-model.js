@@ -1,10 +1,12 @@
 import BaseModel from './../core/base-model';
 import api from './';
+const mainConst = require('./../../../../_main/const.json');
 
 const userConst = {
     tokenId: 'const_tokenId',
     staticId: 'const_staticId',
-    webSocket: 'const_webSocket'
+    webSocket: 'const_webSocket',
+    awaitingMessages: 'const_awaitingMessages'
 };
 
 export default class UserModel extends BaseModel {
@@ -14,6 +16,9 @@ export default class UserModel extends BaseModel {
         super(data);
 
         const user = this;
+
+        user.set(userConst.awaitingMessages, []);
+
     }
 
     setStaticId(staticId) {
@@ -59,16 +64,41 @@ export default class UserModel extends BaseModel {
                     const newWebSocket = new WebSocket('ws://' + hostname + ':' + serverInfo.WS_PORT);
                     model.setWebSocket(newWebSocket);
                     newWebSocket.onopen = resolve;
-                    newWebSocket.onmessage = input => model.onWebSocketMessage(input);
+                    newWebSocket.onmessage = message => model.onWebSocketMessage(JSON.parse(message.data));
                 })
             );
 
     }
 
-    onWebSocketMessage(input) {
+    waitMessage(message) {
+
+        const user = this;
+        const awaitingMessages = user.get(userConst.awaitingMessages);
+
+        return new Promise((resolve, reject) => awaitingMessages.push({message, resolve, reject}));
+
+    }
+
+    onWebSocketMessage(message) {
+
+        const user = this;
+        let awaitingMessages = user.get(userConst.awaitingMessages);
+
+        awaitingMessages = awaitingMessages.filter(item => {
+
+            if (item.message.id !== message.id) {
+                return true;
+            }
+
+            item.resolve(message);
+            return false;
+
+        });
+
+        user.set(userConst.awaitingMessages, awaitingMessages);
 
         console.log('data from web socket');
-        console.log(input);
+        console.log(message);
 
     }
 
@@ -83,11 +113,13 @@ export default class UserModel extends BaseModel {
         const model = this;
 
         model.sendMessage({
-            tokenId: model.getTokenId() + '-token-',
+            tokenId: 'token-' + model.getTokenId() + '-token',
             className: 'Room',
             methodName: 'addConnection',
             roomId
         });
+
+        return model.waitMessage({id: mainConst.MESSAGE.FROM.BACK.CONNECTED_TO_ROOM});
 
     }
 
@@ -102,8 +134,10 @@ export default class UserModel extends BaseModel {
 
 const userModel = new UserModel();
 
-userModel.setupWebSocket().then(() => {
-    console.log('webSocket has been setup');
-});
+/*
+ userModel.setupWebSocket().then(() => {
+ console.log('webSocket has been setup');
+ });
+ */
 
 export {userModel};
