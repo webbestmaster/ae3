@@ -2,22 +2,22 @@ import viewConst from './const';
 
 import api from './../../api';
 
-const {SHOW_AVAILABLE_ROOMS} = viewConst;
+const {UPDATE_AVAILABLE_ROOMS} = viewConst;
 
-export function showAvailableRooms() {
+export function updateAvailableRooms() {
 
     return dispatch => {
 
         dispatch({
-            type: SHOW_AVAILABLE_ROOMS,
-            isLoadingRooms: true,
+            type: UPDATE_AVAILABLE_ROOMS,
+            isLoaded: false,
             roomIds: []
         });
 
         api.getAvailableRooms()
             .then(roomIds => dispatch({
-                type: SHOW_AVAILABLE_ROOMS,
-                isLoadingRooms: false,
+                type: UPDATE_AVAILABLE_ROOMS,
+                isLoaded: true,
                 roomIds
             }));
 

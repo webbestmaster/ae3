@@ -41,9 +41,10 @@ class Room extends BaseModel {
         const connections = room.getConnections();
         console.log('new connection added !!!');
         connections.push({ws, data});
-        ws.send(JSON.stringify({
-            id: mainConst.MESSAGE.FROM.BACK.CONNECTED_TO_ROOM
-        }));
+
+        sendMessage(ws, {
+            id: mainConst.MESSAGE.FROM.BACK.YOU_HAS_BEEN_CONNECTED_TO_ROOM
+        });
 
 /*
         ws.onmessage = function () {
@@ -54,24 +55,26 @@ class Room extends BaseModel {
 
     }
 
-    sendMessage(ws, data) {
-        ws.send(JSON.stringify(data));
-    }
-
-    sendMessageRaw(ws, data) {
-        ws.send(data);
-    }
 
     sendMessages(data) {
 
         const room = this;
         const sendString = JSON.stringify(data);
 
-        each(room.getConnections(), item => room.sendMessageRaw(item.ws, sendString));
+        each(room.getConnections(), item => sendMessageRaw(item.ws, sendString));
 
     }
 
 }
+
+function sendMessage(ws, data) {
+    ws.send(JSON.stringify(data));
+}
+
+function sendMessageRaw(ws, data) {
+    ws.send(data);
+}
+
 
 function getRoomById(gameId) {
     return rooms[gameId];

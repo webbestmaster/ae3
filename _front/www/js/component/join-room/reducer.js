@@ -2,21 +2,21 @@ import {combineReducers} from 'redux';
 
 import viewConst from './const';
 
-const {SHOW_AVAILABLE_ROOMS} = viewConst;
+const {UPDATE_AVAILABLE_ROOMS} = viewConst;
 
 const initialState = {
-    isLoadingRooms: true,
+    isLoaded: false,
     roomIds: []
 };
 
 function availableRooms(state = initialState, action) {
 
-    if (action.type === SHOW_AVAILABLE_ROOMS) {
+    if (action.type === UPDATE_AVAILABLE_ROOMS) {
         console.log('availableRooms.reducer');
         console.log(action);
         return {
             ...state,
-            isLoadingRooms: action.isLoadingRooms,
+            isLoaded: action.isLoaded,
             roomIds: action.roomIds
         };
     }

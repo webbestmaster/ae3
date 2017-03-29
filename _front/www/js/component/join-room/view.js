@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import api from './../../api';
 import {Link} from 'react-router';
 import appConst from './../../const';
-import {showAvailableRooms} from './action';
+import {updateAvailableRooms} from './action';
 
 // import ajax from './../../lib/internal/ajax';
 // import {Link} from 'react-router';
@@ -17,13 +17,15 @@ class JoinRoom extends BaseView {
 
         const view = this;
 
-        view.props.showAvailableRooms();
+        view.props.updateAvailableRooms();
 
     }
 
     joinToRoom(roomId) {
 
-        userModel.connectToRoom(roomId);
+        userModel.connectToRoom(roomId).then(() => {
+            console.log('connected to room');
+        });
 
         this.props.router.push(appConst.link.openRoom);
 
@@ -35,7 +37,7 @@ class JoinRoom extends BaseView {
 
         return <div>
 
-            <div>{this.props.joinRoom.availableRooms.isLoadingRooms}</div>
+            <div>{this.props.joinRoom.availableRooms.isLoaded}</div>
             <div>{this.props.joinRoom.availableRooms.roomIds.length}</div>
 
             {this.props.joinRoom.availableRooms.roomIds.map(roomId =>
@@ -59,7 +61,7 @@ export default connect(
         joinRoom: state.joinRoom
     }),
     {
-        showAvailableRooms
+        updateAvailableRooms
     }
 )(JoinRoom);
 

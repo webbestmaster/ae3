@@ -16,12 +16,8 @@ class CreateRoom extends BaseView {
 
         const gameSetting = view.props.gameCreating.setting;
 
-        Promise
-            .all([
-                api.createRoom(gameSetting),
-                userModel.setupWebSocket()
-            ])
-            .then(result => userModel.connectToRoom(result[0].roomId))
+        api.createRoom(gameSetting)
+            .then(data => userModel.connectToRoom(data.roomId))
             .then(message => this.props.router.push(appConst.link.openRoom));
 
     }

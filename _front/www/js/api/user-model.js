@@ -112,14 +112,16 @@ export default class UserModel extends BaseModel {
 
         const model = this;
 
-        model.sendMessage({
-            tokenId: 'token-' + model.getTokenId() + '-token',
-            className: 'Room',
-            methodName: 'addConnection',
-            roomId
-        });
+        model
+            .setupWebSocket()
+            .then(() => model.sendMessage({
+                tokenId: 'token-' + model.getTokenId() + '-token',
+                className: 'Room',
+                methodName: 'addConnection',
+                roomId
+            }));
 
-        return model.waitMessage({id: mainConst.MESSAGE.FROM.BACK.CONNECTED_TO_ROOM});
+        return model.waitMessage({id: mainConst.MESSAGE.FROM.BACK.YOU_HAS_BEEN_CONNECTED_TO_ROOM});
 
     }
 
