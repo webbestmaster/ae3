@@ -63,10 +63,31 @@ export default class UserModel extends BaseModel {
             .then(([hostname, serverInfo]) => new Promise((resolve, reject) => {
                     const newWebSocket = new WebSocket('ws://' + hostname + ':' + serverInfo.WS_PORT);
                     model.setWebSocket(newWebSocket);
-                    newWebSocket.onopen = resolve;
-                    newWebSocket.onmessage = message => model.onWebSocketMessage(JSON.parse(message.data));
+                    model.listenWs(newWebSocket);
+                    newWebSocket.onopen = () => {
+                        newWebSocket.onopen = null;
+                        resolve();
+                    };
                 })
             );
+
+    }
+
+    listenWs(ws) {
+
+        const model = this;
+
+        ws.onclose = e => {
+            console.error('ws is closed');
+            console.log(e);
+        };
+
+        ws.onerror = e => {
+            console.error('ws is error');
+            console.log(e);
+        };
+
+        ws.onmessage = message => model.onWebSocketMessage(JSON.parse(message.data));
 
     }
 

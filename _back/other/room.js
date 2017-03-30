@@ -46,15 +46,37 @@ class Room extends BaseModel {
             id: mainConst.MESSAGE.FROM.BACK.YOU_HAS_BEEN_CONNECTED_TO_ROOM
         });
 
-/*
-        ws.onmessage = function () {
-            // listen a ws
-            // use data (see above) to identify ws
-        };
-*/
+        room.listenWs(ws);
 
     }
 
+    listenWs(ws) {
+
+        const room = this;
+
+        ws.on('message', message => room.onWsMessage(message, ws));
+        ws.on('close', message => room.onWsClose(message, ws));
+        ws.on('error', message => room.onWsError(message, ws));
+
+    }
+
+    onWsMessage(message, ws) {
+
+        console.log('message from ws', message);
+
+    }
+
+    onWsClose(message, ws) {
+
+        console.log('onClose from ws', message);
+
+    }
+
+    onWsError(message, ws) {
+
+        console.log('Error from ws', message);
+
+    }
 
     sendMessages(data) {
 
