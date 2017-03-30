@@ -133,8 +133,53 @@ export default class UserModel extends BaseModel {
 
         user.set(userConst.awaitingMessages, awaitingMessages);
 
+        user.lookUpOtherForMessages(message);
+
         console.log('data from web socket');
         console.log(message);
+
+    }
+
+    rejectWaitingMessage(message) {
+
+        const user = this;
+        let awaitingMessages = user.get(userConst.awaitingMessages);
+
+        awaitingMessages = awaitingMessages.filter(item => {
+
+            if (item.message.id !== message.id) {
+                return true;
+            }
+
+            item.reject(message);
+            return false;
+
+        });
+
+        user.set(userConst.awaitingMessages, awaitingMessages);
+
+    }
+
+    lookUpOtherForMessages(message) {
+
+        const model = this;
+
+        switch (message.id) {
+
+            case mainConst.MESSAGE.FROM.BACK.ROOM_IS_NOT_EXISTS:
+                alert('room is not exist');
+
+                model.rejectWaitingMessage({id: mainConst.MESSAGE.FROM.BACK.YOU_HAS_BEEN_CONNECTED_TO_ROOM});
+
+                break;
+
+            default:
+
+                console.log('message with id', message.id, 'not found');
+
+
+        }
+
 
     }
 

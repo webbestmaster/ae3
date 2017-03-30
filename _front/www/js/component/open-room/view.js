@@ -16,7 +16,7 @@ class OpenRoom extends BaseView {
         view.props.router.setRouteLeaveHook(
             view.props.route,
             () => userModel.destroyWebSocket()
-        )
+        );
     }
 
     render() {

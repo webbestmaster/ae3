@@ -10,7 +10,8 @@
 
             },
             "BACK": {
-                "YOU_HAS_BEEN_CONNECTED_TO_ROOM": "YOU_HAS_BEEN_CONNECTED_TO_ROOM"
+                "YOU_HAS_BEEN_CONNECTED_TO_ROOM": "YOU_HAS_BEEN_CONNECTED_TO_ROOM",
+                "ROOM_IS_NOT_EXISTS": "ROOM_IS_NOT_EXISTS"
             }
         }
     }

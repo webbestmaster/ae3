@@ -23,11 +23,12 @@ class JoinRoom extends BaseView {
 
     joinToRoom(roomId) {
 
+        const view = this;
+
         userModel.connectToRoom(roomId).then(() => {
             console.log('connected to room');
+            view.props.router.push(appConst.link.openRoom);
         });
-
-        this.props.router.push(appConst.link.openRoom);
 
     }
 

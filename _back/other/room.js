@@ -108,10 +108,11 @@ class Room extends BaseModel {
     }
 
     destroyConnection(item) {
-        const {ws} = item;
+        const ws = item.ws;
         ws.close();
         ws.removeAllListeners();
         item.data = null;
+        item.ws = null;
     }
 
     destroy() {
