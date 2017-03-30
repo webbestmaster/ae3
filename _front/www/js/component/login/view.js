@@ -45,7 +45,7 @@ class Login extends BaseView {
         console.log('ID Token: ' + id_token);
 
         userModel.setTokenId(id_token);
-        userModel.setStaticId('sha1(' + profile.getEmail() + ')');
+        // userModel.setStaticId('sha1(' + profile.getEmail() + ')');
 
     }
 

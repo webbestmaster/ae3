@@ -7,6 +7,7 @@ import appConst from './const';
 import CreateRoom from './component/create-room/view';
 import OpenRoom from './component/open-room/view';
 import JoinRoom from './component/join-room/view';
+import {userModel} from './api/user-model';
 
 export default class AppRouter extends Component {
 
@@ -15,7 +16,7 @@ export default class AppRouter extends Component {
             <Route path="/" component={App}>
                 <IndexRoute component={HomeView}/>
                 <Route path={appConst.link.createRoom} component={CreateRoom}/>
-                <Route path={appConst.link.openRoom} component={OpenRoom}/>
+                <Route path={appConst.link.openRoom} component={OpenRoom} onLeave={() => userModel.destroyWebSocket()}/>
                 <Route path={appConst.link.joinRoom} component={JoinRoom}/>
             </Route>
         </Router>;

@@ -5,9 +5,19 @@ import {connect} from 'react-redux';
 // import ajax from './../../lib/internal/ajax';
 // import {Link} from 'react-router';
 // import appConst from './../../const';
-// import {userModel} from './../../api/user-model';
+import {userModel} from './../../api/user-model';
 
 class OpenRoom extends BaseView {
+
+    componentWillMount() {
+
+        const view = this;
+
+        view.props.router.setRouteLeaveHook(
+            view.props.route,
+            () => userModel.destroyWebSocket()
+        )
+    }
 
     render() {
 

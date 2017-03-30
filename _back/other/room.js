@@ -68,6 +68,26 @@ class Room extends BaseModel {
 
     onWsClose(message, ws) {
 
+        const room = this;
+
+        const connections = room.getConnections().filter(item => {
+
+            if (item.ws === ws) {
+                room.destroyConnection(item);
+                return false;
+            }
+
+            return true;
+
+        });
+
+        room.set(roomConst.connectionList, connections);
+
+        if (connections.length === 0) {
+            room.destroy();
+            return;
+        }
+
         console.log('onClose from ws', message);
 
     }
@@ -84,6 +104,31 @@ class Room extends BaseModel {
         const sendString = JSON.stringify(data);
 
         each(room.getConnections(), item => sendMessageRaw(item.ws, sendString));
+
+    }
+
+    destroyConnection(item) {
+        const {ws} = item;
+        ws.close();
+        ws.removeAllListeners();
+        item.data = null;
+    }
+
+    destroy() {
+
+        const room = this;
+
+        const connection = room.getConnections();
+
+        connection.forEach(item => room.destroyConnection);
+
+        room.set(roomConst.connectionList, []);
+
+        delete rooms[room.get('id')];
+
+        console.log(room.get('id'), 'destroyed');
+
+        super.destroy();
 
     }
 

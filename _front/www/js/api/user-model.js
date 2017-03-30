@@ -4,7 +4,7 @@ const mainConst = require('./../../../../_main/const.json');
 
 const userConst = {
     tokenId: 'const_tokenId',
-    staticId: 'const_staticId',
+    // staticId: 'const_staticId',
     webSocket: 'const_webSocket',
     awaitingMessages: 'const_awaitingMessages'
 };
@@ -21,6 +21,7 @@ export default class UserModel extends BaseModel {
 
     }
 
+/*
     setStaticId(staticId) {
         return this.set(userConst.staticId, staticId);
     }
@@ -28,6 +29,7 @@ export default class UserModel extends BaseModel {
     getStaticId() {
         return this.get(userConst.staticId);
     }
+*/
 
     setTokenId(tokenId) {
         return this.set(userConst.tokenId, tokenId);
@@ -73,12 +75,25 @@ export default class UserModel extends BaseModel {
 
     }
 
+    destroyWebSocket() {
+
+        const model = this;
+
+        const webSocket = model.getWebSocket();
+
+        if (webSocket) {
+            model.setWebSocket(null);
+            webSocket.close();
+        }
+
+    }
+
     listenWs(ws) {
 
         const model = this;
 
         ws.onclose = e => {
-            console.error('ws is closed');
+            console.warn('ws is closed');
             console.log(e);
         };
 
