@@ -5,6 +5,7 @@ const mainConst = require('./../../../../_main/const.json');
 const userConst = {
     tokenId: 'const_tokenId',
     // staticId: 'const_staticId',
+    // roomId: 'roomId', //TODO: use it for reconnect
     webSocket: 'const_webSocket',
     awaitingMessages: 'const_awaitingMessages'
 };
@@ -20,6 +21,16 @@ export default class UserModel extends BaseModel {
         user.set(userConst.awaitingMessages, []);
 
     }
+
+/*
+    setRoomId(roomId) {
+        return this.set(userConst.roomId, roomId);
+    }
+
+    getRoomId() {
+        return this.get(userConst.roomId);
+    }
+*/
 
 /*
     setStaticId(staticId) {
@@ -173,13 +184,17 @@ export default class UserModel extends BaseModel {
 
                 break;
 
+            case mainConst.MESSAGE.FROM.BACK.CHAT.YOU_GOT_NEW_CHAT_MESSAGE:
+
+                console.log(message);
+
+                break;
+
             default:
 
-                console.log('message with id', message.id, 'not found');
-
+                console.warn('message with id', message.id, 'not found');
 
         }
-
 
     }
 
@@ -202,8 +217,9 @@ export default class UserModel extends BaseModel {
                 roomId
             }));
 
-        return model.waitMessage({id: mainConst.MESSAGE.FROM.BACK.YOU_HAS_BEEN_CONNECTED_TO_ROOM});
-
+        return model
+            .waitMessage({id: mainConst.MESSAGE.FROM.BACK.YOU_HAS_BEEN_CONNECTED_TO_ROOM});
+            // .then(waitMessage => model.setRoomId(roomId));
     }
 
     destroy() {

@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 // import {Link} from 'react-router';
 // import appConst from './../../const';
 import {userModel} from './../../api/user-model';
+import {chat} from './../../api/chat';
 
 class OpenRoom extends BaseView {
 
@@ -17,6 +18,7 @@ class OpenRoom extends BaseView {
             view.props.route,
             () => userModel.destroyWebSocket()
         );
+
     }
 
     render() {
@@ -26,6 +28,12 @@ class OpenRoom extends BaseView {
             <h1>__open_room__</h1>
 
             <h2>here is a list of connection, players and etc...</h2>
+
+            <input ref="text-input" type="text" />
+            <button onClick={() => chat.sendMessage(
+                this.refs['text-input'].value,
+                userModel
+            )}> send message </button>
 
         </div>;
 

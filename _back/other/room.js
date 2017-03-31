@@ -54,13 +54,29 @@ class Room extends BaseModel {
 
         const room = this;
 
-        ws.on('message', message => room.onWsMessage(message, ws));
+        ws.on('message', message => room.onWsMessage(JSON.parse(message), ws));
         ws.on('close', message => room.onWsClose(message, ws));
         ws.on('error', message => room.onWsError(message, ws));
 
     }
 
     onWsMessage(message, ws) {
+
+        const room = this;
+
+        switch (message.id) {
+
+            case mainConst.MESSAGE.FROM.FRONT.CHAT.CHAT_MESSAGE:
+                room.sendMessages({
+                    id: mainConst.MESSAGE.FROM.BACK.CHAT.YOU_GOT_NEW_CHAT_MESSAGE,
+                    text: message.text
+                });
+                break;
+
+            default:
+                console.warn('can not detect message type', message);
+
+        }
 
         console.log('message from ws', message);
 

@@ -30,7 +30,7 @@ function onMessage(inputStr) {
     const neededClass = wsApi[className] || null;
 
     if (neededClass === null) {
-        ws.send('no needed class ' + className);
+        // ws.send('no needed class ' + className);
         console.warn('no needed class', className);
         return;
     }
@@ -38,13 +38,13 @@ function onMessage(inputStr) {
     const neededMethod = neededClass[methodName] || null;
 
     if (neededMethod === null) {
-        ws.send('no needed method of ' + className + '.' + neededMethod);
+        // ws.send('no needed method of ' + className + '.' + neededMethod);
         console.warn('no needed method of', className, '.', neededMethod);
         return;
     }
 
     if (typeof neededMethod !== 'function') {
-        ws.send('no function a method of ' + className + '.' + neededMethod);
+        // ws.send('no function a method of ' + className + '.' + neededMethod);
         console.warn('no function a method of', className, '.', neededMethod);
         return;
     }
