@@ -22,25 +22,25 @@ export default class UserModel extends BaseModel {
 
     }
 
-/*
-    setRoomId(roomId) {
-        return this.set(userConst.roomId, roomId);
-    }
+    /*
+     setRoomId(roomId) {
+     return this.set(userConst.roomId, roomId);
+     }
 
-    getRoomId() {
-        return this.get(userConst.roomId);
-    }
-*/
+     getRoomId() {
+     return this.get(userConst.roomId);
+     }
+     */
 
-/*
-    setStaticId(staticId) {
-        return this.set(userConst.staticId, staticId);
-    }
+    /*
+     setStaticId(staticId) {
+     return this.set(userConst.staticId, staticId);
+     }
 
-    getStaticId() {
-        return this.get(userConst.staticId);
-    }
-*/
+     getStaticId() {
+     return this.get(userConst.staticId);
+     }
+     */
 
     setTokenId(tokenId) {
         return this.set(userConst.tokenId, tokenId);
@@ -77,10 +77,10 @@ export default class UserModel extends BaseModel {
                     const newWebSocket = new WebSocket('ws://' + hostname + ':' + serverInfo.WS_PORT);
                     model.setWebSocket(newWebSocket);
                     model.listenWs(newWebSocket);
-                    newWebSocket.onopen = () => {
-                        newWebSocket.onopen = null;
+                    newWebSocket.addEventListener('open', function one() {
+                        this.removeEventListener('open', one, false);
                         resolve();
-                    };
+                    }, false);
                 })
             );
 
@@ -101,19 +101,9 @@ export default class UserModel extends BaseModel {
 
     listenWs(ws) {
 
-        const model = this;
-
-        ws.onclose = e => {
-            console.warn('ws is closed');
-            console.log(e);
-        };
-
-        ws.onerror = e => {
-            console.error('ws is error');
-            console.log(e);
-        };
-
-        ws.onmessage = message => model.onWebSocketMessage(JSON.parse(message.data));
+        ws.addEventListener('close', wsOnClose, false);
+        ws.addEventListener('error', wsOnError, false);
+        ws.addEventListener('message', wsOnMessage, false);
 
     }
 
@@ -219,7 +209,7 @@ export default class UserModel extends BaseModel {
 
         return model
             .waitMessage({id: mainConst.MESSAGE.FROM.BACK.YOU_HAS_BEEN_CONNECTED_TO_ROOM});
-            // .then(waitMessage => model.setRoomId(roomId));
+        // .then(waitMessage => model.setRoomId(roomId));
     }
 
     destroy() {
@@ -240,3 +230,18 @@ const userModel = new UserModel();
  */
 
 export {userModel};
+
+function wsOnClose(e) {
+    console.warn('ws is closed');
+    console.log(e);
+}
+
+function wsOnError(e) {
+    console.error('ws is error');
+    console.log(e);
+}
+
+function wsOnMessage(message) {
+    userModel.onWebSocketMessage(JSON.parse(message.data));
+}
+
