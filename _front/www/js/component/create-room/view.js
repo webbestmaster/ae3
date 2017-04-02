@@ -75,7 +75,10 @@ class CreateRoom extends BaseView {
 
 }
 
-CreateRoom.propTypes = {};
+CreateRoom.propTypes = {
+    gameCreating: PropTypes.object.isRequired,
+    setGameCreatingProperty: PropTypes.func.isRequired
+};
 
 export default connect(
     state => ({

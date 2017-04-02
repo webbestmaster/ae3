@@ -174,6 +174,7 @@ export default class UserModel extends BaseModel {
 
                 break;
 
+            case mainConst.MESSAGE.FROM.BACK.YOU_HAS_BEEN_CONNECTED_TO_ROOM:
             case mainConst.MESSAGE.FROM.BACK.CHAT.YOU_GOT_NEW_CHAT_MESSAGE:
 
                 console.log(message);

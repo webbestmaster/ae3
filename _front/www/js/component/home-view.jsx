@@ -23,8 +23,8 @@ class HomeView extends BaseView {
 }
 
 HomeView.propTypes = {
-    changeLanguageAction: PropTypes.func.isRequired,
-    currentLanguage: PropTypes.object.isRequired
+    currentLanguage: PropTypes.object.isRequired,
+    changeLanguageAction: PropTypes.func.isRequired
 };
 
 export default connect(

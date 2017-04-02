@@ -55,7 +55,10 @@ class JoinRoom extends BaseView {
 
 }
 
-JoinRoom.propTypes = {};
+JoinRoom.propTypes = {
+    joinRoom: PropTypes.object.isRequired,
+    updateAvailableRooms: PropTypes.func.isRequired
+};
 
 export default connect(
     state => ({

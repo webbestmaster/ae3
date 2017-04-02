@@ -59,7 +59,10 @@ class Chat extends BaseView {
 
 }
 
-Chat.propTypes = {};
+Chat.propTypes = {
+    chatMessages: PropTypes.object.isRequired,
+    addMessage: PropTypes.func.isRequired
+};
 
 export default connect(
     state => ({

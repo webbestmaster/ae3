@@ -37,7 +37,9 @@ class OpenRoom extends BaseView {
 
 }
 
-OpenRoom.propTypes = {};
+OpenRoom.propTypes = {
+    gameCreating: PropTypes.object.isRequired
+};
 
 export default connect(
     state => ({

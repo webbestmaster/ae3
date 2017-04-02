@@ -20,9 +20,9 @@ class App extends Component {
 }
 
 App.propTypes = {
-    resizeScreen: PropTypes.func.isRequired,
+    screen: PropTypes.object.isRequired,
+    resizeScreen: PropTypes.func.isRequired
     // click: PropTypes.func.isRequired,
-    screen: PropTypes.object.isRequired
 };
 
 export default connect(
