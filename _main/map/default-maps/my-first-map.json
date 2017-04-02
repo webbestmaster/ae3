@@ -1,0 +1,25 @@
+{
+
+    "localization": {
+        "en": {
+            "name": "my first best map"
+        }
+    },
+
+    "landscape": [
+        "ffrff",
+        "ffrff",
+        "rrrrr",
+        "ffrff",
+        "ffrff"
+    ],
+
+    "buildings": [
+        "f0f0f",
+        "0f0f0",
+        "f0f0f",
+        "0f0f0",
+        "f0f0f"
+    ]
+
+}

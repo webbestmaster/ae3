@@ -1,0 +1,39 @@
+{
+    "landscape": {
+        "r": {
+            "name": "road",
+            "defense": 0
+        },
+        "m": {
+            "name": "meadow",
+            "defense": 1
+        },
+        "f": {
+            "name": "forest",
+            "defense": 2
+        },
+        "s": {
+            "name": "stone",
+            "defense": 3
+        },
+        "w": {
+            "name": "water",
+            "defense": 0
+        },
+        "#": {
+            "name": "wall",
+            "defense": 0
+        }
+    },
+    "building": {
+        "f": "farm",
+        "c": "castle"
+    },
+    "units": {
+        "s": "soldier",
+        "a": "archer",
+        "T": "skeleton"
+
+    }
+
+}
