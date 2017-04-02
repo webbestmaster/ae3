@@ -43,10 +43,10 @@ class Login extends BaseView {
 
         // The ID token you need to pass to your backend:
         const id_token = googleUser.getAuthResponse().id_token;
-        console.log('ID Token: ' + id_token);
+        console.log('ID Token:', id_token);
 
         // userModel.setTokenId(id_token);
-        userModel.setStaticId(sha1(profile.getImageUrl()));
+        userModel.setStaticId(sha1(profile.getEmail()));
 
     }
 
