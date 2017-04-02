@@ -4,7 +4,7 @@ const mainConst = require('./../../../../_main/const.json');
 
 const userConst = {
     tokenId: 'const_tokenId',
-    // staticId: 'const_staticId',
+    staticId: 'const_staticId',
     // roomId: 'roomId', //TODO: use it for reconnect
     webSocket: 'const_webSocket',
     awaitingMessages: 'const_awaitingMessages'
@@ -32,16 +32,15 @@ export default class UserModel extends BaseModel {
      }
      */
 
-    /*
      setStaticId(staticId) {
-     return this.set(userConst.staticId, staticId);
+        return this.set(userConst.staticId, staticId);
      }
 
      getStaticId() {
-     return this.get(userConst.staticId);
+        return this.get(userConst.staticId);
      }
-     */
 
+/*
     setTokenId(tokenId) {
         return this.set(userConst.tokenId, tokenId);
     }
@@ -49,6 +48,7 @@ export default class UserModel extends BaseModel {
     getTokenId() {
         return this.get(userConst.tokenId);
     }
+ */
 
     setWebSocket(webSocket) {
         return this.set(userConst.webSocket, webSocket);
@@ -201,7 +201,8 @@ export default class UserModel extends BaseModel {
         model
             .setupWebSocket()
             .then(() => model.sendMessage({
-                tokenId: 'token-' + model.getTokenId() + '-token',
+                // tokenId: 'token-' + model.getTokenId() + '-token',
+                staticId: model.getStaticId(),
                 className: 'Room',
                 methodName: 'addConnection',
                 roomId

@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import BaseView from './../../core/base-view';
 import {connect} from 'react-redux';
+const sha1 = require('js-sha1');
 
 import {userModel} from './../../api/user-model';
 
@@ -44,8 +45,8 @@ class Login extends BaseView {
         const id_token = googleUser.getAuthResponse().id_token;
         console.log('ID Token: ' + id_token);
 
-        userModel.setTokenId(id_token);
-        // userModel.setStaticId('sha1(' + profile.getEmail() + ')');
+        // userModel.setTokenId(id_token);
+        userModel.setStaticId(sha1(profile.getImageUrl()));
 
     }
 

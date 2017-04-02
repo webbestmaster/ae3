@@ -9,7 +9,7 @@ export default class Chat extends BaseModel {
 
         ws.send(JSON.stringify({
             id: mainConst.MESSAGE.FROM.FRONT.CHAT.CHAT_MESSAGE,
-            from: model.getTokenId(),
+            staticId: model.getStaticId(),
             text
         }));
 
