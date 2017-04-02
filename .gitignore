@@ -15,3 +15,7 @@ jspm_packages
 # Dist
 _front/dist/
 
+# Coped core
+_front/www/_main
+_back/_main
+

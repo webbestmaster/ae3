@@ -8,6 +8,8 @@ import {connect} from 'react-redux';
 import {userModel} from './../../api/user-model';
 import Chat from './../chat/view';
 
+const Ggg = require('./../../../link_front_main/iir')
+
 class OpenRoom extends BaseView {
 
     componentWillMount() {
