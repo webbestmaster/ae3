@@ -1,8 +1,8 @@
-const BaseModel = require('./../core/base-model');
+const BaseModel = require('./../link_back_main/core/base-model');
 const rooms = {};
 const generateId = require('./../lib/internal/generate-id');
 const each = require('lodash/each');
-const mainConst = require('./../../_main/const.json');
+const mainConst = require('./../link_back_main/const.json');
 
 const roomConst = {
 

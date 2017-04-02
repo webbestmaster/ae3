@@ -1,6 +1,6 @@
-import BaseModel from './../core/base-model';
+import BaseModel from './../../link_front_main/core/base-model';
 import api from './';
-const mainConst = require('./../../../../_main/const.json');
+const mainConst = require('./../../link_front_main/const.json');
 
 const userConst = {
     tokenId: 'const_tokenId',

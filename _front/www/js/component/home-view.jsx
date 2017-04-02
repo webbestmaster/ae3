@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import BaseView from './../core/base-view';
 import {connect} from 'react-redux';
-import {changeLanguage} from '../action/index';
+import {changeLanguage} from './../action/index';
 import {Link} from 'react-router';
 import Login from './login/view';
 import appConst from './../const';

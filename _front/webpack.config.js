@@ -52,7 +52,7 @@ const webpackConfig = {
     module: {
         loaders: [
             {
-                test: /\.jsx?$/,
+                test: /[.]jsx?$/,
                 loader: 'babel',
                 exclude: /(node_modules|bower_components)/,
                 query: {
