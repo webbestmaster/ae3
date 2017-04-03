@@ -1,4 +1,4 @@
-const mainConst = require('./../../link_front_main/const.json');
+const mainConst = require('./../../_main/const.json');
 import ajax from './../lib/internal/ajax';
 // import {userModel} from './../api/user-model';
 

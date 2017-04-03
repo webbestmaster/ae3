@@ -7,7 +7,7 @@ const FsServer = require('fs-server');
 
 const httpApi = require('./http-api');
 
-const mainConst = require('./../link_back_main/const.json');
+const mainConst = require('./../_main/const.json');
 const backConst = require('./../const');
 
 const {HTTP_PORT} = backConst;

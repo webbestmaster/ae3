@@ -1,5 +1,5 @@
-import BaseModel from './../../link_front_main/core/base-model';
-const mainConst = require('./../../link_front_main/const.json');
+import BaseModel from './../../_main/core/base-model';
+const mainConst = require('./../../_main/const.json');
 
 export default class Chat extends BaseModel {
 
