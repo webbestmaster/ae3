@@ -26,14 +26,27 @@
         }
     },
     "building": {
-        "f": "farm",
-        "c": "castle"
+        "f": {
+            "name": "farm",
+            "defense": 2
+        },
+        "c": {
+            "name": "castle",
+            "defense": 2
+        }
     },
     "units": {
-        "s": "soldier",
-        "a": "archer",
-        "T": "skeleton"
-
+        "s": {
+            "name": "soldier",
+            "attack": 20
+        },
+        "a": {
+            "name": "archer",
+            "attack": 15
+        },
+        "t": {
+            "name": "skeleton",
+            "attack": 15
+        }
     }
-
 }
