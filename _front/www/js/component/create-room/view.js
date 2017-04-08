@@ -1,12 +1,13 @@
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes} from 'react';
 import BaseView from './../../core/base-view';
 import {connect} from 'react-redux';
-import {Link} from 'react-router';
+// import {Link} from 'react-router';
 import appConst from './../../const';
 import viewConst from './const';
 import api from './../../api';
 import {userModel} from './../../api/user-model';
 import {setGameCreatingProperty} from './action';
+const defaultMapList = require('./../../../_main/map/default-map-list.json');
 
 class CreateRoom extends BaseView {
 
@@ -30,7 +31,7 @@ class CreateRoom extends BaseView {
         const setProperty = props.setGameCreatingProperty;
         const {setting} = props.gameCreating;
 
-        const {NAME, PASSWORD, MAP_NAME, TYPE} = viewConst.GAME_PROPERTY;
+        const {NAME, PASSWORD, MAP, TYPE} = viewConst.GAME_PROPERTY;
 
         return <div>
 
@@ -52,14 +53,24 @@ class CreateRoom extends BaseView {
                    placeholder="__game_password__"/>
 
             <hr/>
-            here is should be select with maps
-            <input defaultValue={setting[MAP_NAME]}
-                   onInput={e => setProperty(MAP_NAME, e.currentTarget.value)}
-                   type="text"
-                   placeholder="__map_name__"/>
+
+            Map list:
+
+            {defaultMapList.list.map(fileName => {
+                const mapData = require('./../../../_main/map/default-maps/' + fileName + '.' + defaultMapList['file-extend']);
+                return <div key={fileName}>
+                    <input
+                        type="radio"
+                        onClick={() => setProperty(MAP, mapData)}
+                        name="default-map-list"/>
+                    {mapData.localization.en.name}
+                </div>;}
+            )}
 
             <hr/>
+
             here is should be select game type
+
             <input defaultValue={setting[TYPE]}
                    onInput={e => setProperty(TYPE, e.currentTarget.value)}
                    type="text"

@@ -6,6 +6,10 @@ const mapConst = {
 
 class Map extends BaseModel {
 
+    addRawMap(rawMap) {
+
+    }
+
     addLandscape(landscape) {
 
         return this.set(mapConst.landscape, landscape);

@@ -1,50 +1,56 @@
 {
     "landscape": {
-        "r": {
+        "road": {
             "name": "road",
+            "shortName": "r",
             "defense": 0
         },
-        "m": {
+        "meadow": {
             "name": "meadow",
+            "shortName": "m",
             "defense": 1
         },
-        "f": {
+        "forest": {
             "name": "forest",
+            "shortName": "f",
             "defense": 2
         },
-        "s": {
+        "stone": {
             "name": "stone",
+            "shortName": "s",
             "defense": 3
         },
-        "w": {
+        "water": {
             "name": "water",
+            "shortName": "w",
             "defense": 0
         },
-        "#": {
+        "wall": {
             "name": "wall",
+            "shortName": "#",
             "defense": 0
         }
     },
     "building": {
-        "f": {
+        "farm": {
             "name": "farm",
             "defense": 2
         },
-        "c": {
+        "castle": {
             "name": "castle",
             "defense": 2
         }
     },
     "units": {
-        "s": {
+        "soldier": {
             "name": "soldier",
             "attack": 20
         },
-        "a": {
+        "archer": {
             "name": "archer",
             "attack": 15
         },
-        "t": {
+        "skeleton": {
             "name": "skeleton",
             "attack": 15
         }

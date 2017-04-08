@@ -8,7 +8,6 @@
   },
   "scripts": {
     "install": "cd ./_back && npm i && cd ./../_front && npm i",
-    "link": "./link.sh",
     "lint": "eslint . --ignore-path .gitignore",
     "lint-fix": "eslint . --ignore-path .gitignore --fix",
     "start": "cd ./_back && npm start & cd ./_front && npm start"

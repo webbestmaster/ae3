@@ -3,7 +3,7 @@ export default {
     GAME_PROPERTY: {
         NAME: 'GAME_PROPERTY.NAME',
         PASSWORD: 'GAME_PROPERTY.PASSWORD',
-        MAP_NAME: 'GAME_PROPERTY.MAP_NAME',
+        MAP: 'GAME_PROPERTY.MAP',
         TYPE: 'GAME_PROPERTY.TYPE',
     }
 };

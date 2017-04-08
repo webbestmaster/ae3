@@ -1,5 +1,5 @@
 const getRoomById = require('./../other/room').getRoomById;
-const mainConst = require('./../_main/const.json');
+const mainConst = require('./../../_front/www/_main/const.json');
 
 module.exports = {
     Room: {
