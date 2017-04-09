@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import BaseView from './../../core/base-view';
+import BaseView from '../base/base-view';
 import {connect} from 'react-redux';
 // import api from './../../api';
 // import ajax from './../../lib/internal/ajax';

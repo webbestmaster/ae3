@@ -5,14 +5,10 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const Autoprefixer = require('autoprefixer');
-
 const DEVELOPMENT = 'development';
 const PRODUCTION = 'production';
 
 const NODE_ENV = process.env.NODE_ENV || DEVELOPMENT;
-
-const IS_MOBILE = false;
 
 const CWD = __dirname;
 
@@ -33,44 +29,31 @@ const webpackConfig = {
     devtool: NODE_ENV === DEVELOPMENT ? 'source-map' : null,
     // devtool: null,
 
-    postcss: [Autoprefixer({
-        browsers: IS_MOBILE ? [
-            'last 2 Samsung versions',
-            'last 2 UCAndroid versions',
-            'Android >= 4',
-            'iOS >= 8',
-            'ChromeAndroid > 4'
-        ] : [
-            'last 5 Chrome versions',
-            'last 2 Safari versions',
-            'last 2 Edge versions',
-            'Explorer >= 10',
-            'last 5 Firefox versions'
-        ]
-    })],
-
     module: {
-        loaders: [
+        rules: [
             {
                 test: /[.]jsx?$/,
-                loader: 'babel',
+                loader: 'babel-loader',
                 exclude: /(node_modules|bower_components)/,
-                query: {
-                    presets: ['es2015', 'stage-1', 'react'],
-                    compact: false
+                options: {
+                    presets: ['es2015', 'stage-1', 'react']
                 }
             },
             {
                 test: /\.json$/,
-                loader: 'json'
+                loader: 'json-loader'
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,
                 loader: 'file-loader?name=img/img-[name]-[hash:6].[ext]'
             },
             {
-                test: /\.scss$/,
-                loader: ExtractTextPlugin.extract('css!postcss!sass')
+                test: /\.(sass|scss)$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
             },
             {
                 test: /\.raw$/,
@@ -78,25 +61,26 @@ const webpackConfig = {
             },
             {
                 test: /\.(eot|ttf|otf|woff|woff2)$/,
-                loader: 'file?name=fonts/[name].[ext]'
+                loader: 'file-loader?name=fonts/[name].[ext]'
             }
         ]
     },
 
     resolve: {
-        modulesDirectories: ['', 'www', 'node_modules'],
-        extensions: ['', '.js', '.jsx']
+        modules: ['www', 'node_modules'],
+        extensions: ['.js', '.jsx']
     },
 
     plugins: [
-        new webpack.NoErrorsPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({
             NODE_ENV: JSON.stringify(NODE_ENV)
         }),
         new HtmlWebpackPlugin({
             template: 'index.html'
         }),
-        new ExtractTextPlugin('style.css', {
+        new ExtractTextPlugin({
+            filename: 'style.css',
             allChunks: true
         }),
         new webpack.optimize.CommonsChunkPlugin({

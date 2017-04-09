@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import BaseView from './../../core/base-view';
+import BaseView from '../base/base-view';
 import {connect} from 'react-redux';
 // import {Link} from 'react-router';
 import appConst from './../../const';

@@ -34,7 +34,7 @@ let store = null;
 let DevTools = null;
 
 if (IS_PRODUCTION) {
-    store = createStore(reducer, applyMiddleware(thunk))
+    store = createStore(reducer, applyMiddleware(thunk));
 } else {
     DevTools = createDevTools(
         <DockMonitor toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q">

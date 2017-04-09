@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import BaseView from './../core/base-view';
+import BaseView from './base/base-view';
 import {connect} from 'react-redux';
 import {changeLanguage} from './../action/index';
 import {Link} from 'react-router';
@@ -16,7 +16,7 @@ class HomeView extends BaseView {
             <Link to={appConst.link.createRoom}> __create_room__ </Link>
             <br/>
             <Link to={appConst.link.joinRoom}> __join_room__ </Link>
-        </div>
+        </div>;
 
     }
 

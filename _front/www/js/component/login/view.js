@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import BaseView from './../../core/base-view';
+import BaseView from '../base/base-view';
 import {connect} from 'react-redux';
 const sha1 = require('js-sha1');
 
