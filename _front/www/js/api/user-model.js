@@ -95,6 +95,9 @@ export default class UserModel extends BaseModel {
         if (webSocket) {
             model.setWebSocket(null);
             webSocket.close();
+            webSocket.removeEventListener('close', wsOnClose, false);
+            webSocket.removeEventListener('error', wsOnError, false);
+            webSocket.removeEventListener('message', wsOnMessage, false);
         }
 
     }
@@ -170,6 +173,7 @@ export default class UserModel extends BaseModel {
             case mainConst.MESSAGE.FROM.BACK.ROOM_IS_NOT_EXISTS:
                 alert('room is not exist');
 
+                model.destroyWebSocket();
                 model.rejectWaitingMessage({id: mainConst.MESSAGE.FROM.BACK.YOU_HAS_BEEN_CONNECTED_TO_ROOM});
 
                 break;

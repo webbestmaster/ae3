@@ -1,25 +1,13 @@
 const BaseModel = require('./../../_front/www/_main/core/base-model');
 const rooms = {};
-const generateId = require('./../lib/internal/generate-id');
+const generateId = require('./../lib/generate-id');
 const each = require('lodash/each');
 const mainConst = require('./../../_front/www/_main/const.json');
-const createRoomConst = require('./../../_front/www/js/component/create-room/const.json');
-const Schema = require('schema-js');
+const roomValidator = require('./../validator/room');
 
 const roomConst = {
     connectionList: 'room_connection_list'
 };
-
-const roomSchema = new Schema({
-    type: Object,
-    required:true,
-    properties: {
-        [createRoomConst.GAME_PROPERTY.NAME]: {type: String, required:true},
-        [createRoomConst.GAME_PROPERTY.MAP]: {type: String, required:true},
-        [createRoomConst.GAME_PROPERTY.PASSWORD]: {type: String, required:true},
-        [createRoomConst.GAME_PROPERTY.TYPE]: {type: String, required:true}
-    }
-});
 
 class Room extends BaseModel {
 
@@ -28,8 +16,6 @@ class Room extends BaseModel {
         super(gameData);
 
         const room = this;
-
-        roomSchema.validate(gameData);
 
         const id = generateId();
 
@@ -83,11 +69,25 @@ class Room extends BaseModel {
         switch (message.id) {
 
             case mainConst.MESSAGE.FROM.FRONT.CHAT.CHAT_MESSAGE:
-                room.sendMessages({
-                    id: mainConst.MESSAGE.FROM.BACK.CHAT.YOU_GOT_NEW_CHAT_MESSAGE,
-                    staticId: message.staticId,
-                    text: message.text
-                });
+
+                if (roomValidator.chatMessage.isValid(message)) {
+
+                    room.sendMessages({
+                        id: mainConst.MESSAGE.FROM.BACK.CHAT.YOU_GOT_NEW_CHAT_MESSAGE,
+                        staticId: message.staticId,
+                        text: message.text
+                    });
+
+                } else {
+
+                    room.sendMessages({
+                        id: mainConst.MESSAGE.FROM.BACK.CHAT.YOU_GOT_NEW_CHAT_MESSAGE,
+                        staticId: message.staticId,
+                        text: 'invalid message from ' + message.staticId
+                    });
+
+                }
+
                 break;
 
             default:

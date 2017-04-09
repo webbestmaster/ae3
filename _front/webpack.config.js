@@ -32,7 +32,7 @@ const webpackConfig = {
     module: {
         rules: [
             {
-                test: /[.]jsx?$/,
+                test: /\.jsx?$/,
                 loader: 'babel-loader',
                 exclude: /(node_modules|bower_components)/,
                 options: {

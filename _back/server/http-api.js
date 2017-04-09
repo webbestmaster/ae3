@@ -3,6 +3,7 @@ const roomModule = require('./../other/room');
 const Room = roomModule.Room;
 const getRoomIds = roomModule.getRoomIds;
 const {HTTP_PORT, WS_PORT} = backConst;
+const roomValidator = require('./../validator/room');
 
 function streamBodyParser(request, succes, error) {
 
@@ -24,9 +25,15 @@ function createRoom(req, res) {
 
     streamBodyParser(req, body => {
 
-        const room = new Room(
-            JSON.parse(body)
-        );
+        const parsedBody = JSON.parse(body);
+
+        if (roomValidator.create.isInvalid(parsedBody)) {
+            res.statusCode = 500;
+            res.end('Invalid game parameters');
+            return;
+        }
+
+        const room = new Room(parsedBody);
 
         res.end(JSON.stringify({
             roomId: room.get('id')

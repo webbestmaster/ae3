@@ -5,10 +5,12 @@ const viewConst = require('./const.json');
 const {SET_GAME_CREATING_PROPERTY} = viewConst;
 const {NAME, PASSWORD, MAP, TYPE} = viewConst.GAME_PROPERTY;
 
+const defaultMap = require('./../../../_main/map/default-maps/my-first-map.json');
+
 const initialState = {
     [NAME]: '__default_game_name__',
     [PASSWORD]: '__default_game_password__',
-    [MAP]: '__here_is_map_name__',
+    [MAP]: JSON.stringify(defaultMap),
     [TYPE]: '__game_type__'
 };
 
@@ -18,8 +20,7 @@ function setting(state = initialState, action) {
         const {key, value} = action;
         return {
             ...state,
-            key,
-            value
+            [key]: value
         };
     }
 

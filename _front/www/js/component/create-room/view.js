@@ -61,8 +61,9 @@ class CreateRoom extends BaseView {
                 const mapData = require('./../../../_main/map/default-maps/' + fileName + '.' + defaultMapList['file-extend']);
                 return <div key={fileName}>
                     <input
+                        defaultChecked={JSON.parse(view.props.gameCreating.setting[MAP]).localization.en.name === mapData.localization.en.name}
                         type="radio"
-                        onClick={() => setProperty(MAP, mapData)}
+                        onClick={() => setProperty(MAP, JSON.stringify(mapData))}
                         name="default-map-list"/>
                     {mapData.localization.en.name}
                 </div>;}

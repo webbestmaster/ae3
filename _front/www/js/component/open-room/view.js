@@ -22,7 +22,15 @@ class OpenRoom extends BaseView {
 
     }
 
+    startGame() {
+
+        console.log('start game!!!');
+
+    }
+
     render() {
+
+        const view = this;
 
         return <div>
 
@@ -31,6 +39,9 @@ class OpenRoom extends BaseView {
             <h2>here is a list of connection, players and etc...</h2>
 
             <Chat />
+
+            <hr/>
+            <button onClick={() => view.startGame()}>start game</button>
 
         </div>;
 

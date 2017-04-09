@@ -1,5 +1,5 @@
 const mainConst = require('./../../_main/const.json');
-import ajax from './../lib/internal/ajax';
+import ajax from '../lib/ajax';
 // import {userModel} from './../api/user-model';
 
 const api = {

@@ -32,6 +32,7 @@ function onMessage(inputStr) {
     if (neededClass === null) {
         // ws.send('no needed class ' + className);
         console.warn('no needed class', className);
+        console.warn(inputStr);
         return;
     }
 
@@ -40,12 +41,14 @@ function onMessage(inputStr) {
     if (neededMethod === null) {
         // ws.send('no needed method of ' + className + '.' + neededMethod);
         console.warn('no needed method of', className, '.', neededMethod);
+        console.warn(inputStr);
         return;
     }
 
     if (typeof neededMethod !== 'function') {
         // ws.send('no function a method of ' + className + '.' + neededMethod);
         console.warn('no function a method of', className, '.', neededMethod);
+        console.warn(inputStr);
         return;
     }
 
