@@ -48,12 +48,14 @@ const webpackConfig = {
                 loader: 'file-loader?name=img/img-[name]-[hash:6].[ext]'
             },
             {
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract({
+                    loader: 'css-loader?importLoaders=1',
+                }),
+            },
+            {
                 test: /\.(sass|scss)$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader'
-                ]
+                loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
             },
             {
                 test: /\.raw$/,
