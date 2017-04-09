@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import BaseView from '../base/base-view';
 import {connect} from 'react-redux';
 const sha1 = require('js-sha1');
