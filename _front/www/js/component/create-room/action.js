@@ -1,4 +1,4 @@
-import viewConst from './const';
+const viewConst = require('./const.json');
 
 const {SET_GAME_CREATING_PROPERTY} = viewConst;
 

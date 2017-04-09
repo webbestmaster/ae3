@@ -4,7 +4,7 @@ import BaseView from '../base/base-view';
 import {connect} from 'react-redux';
 // import {Link} from 'react-router';
 import appConst from './../../const';
-import viewConst from './const';
+const viewConst = require('./const.json');
 import api from './../../api';
 import {userModel} from './../../api/user-model';
 import {setGameCreatingProperty} from './action';

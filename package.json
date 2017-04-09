@@ -24,6 +24,6 @@
   "homepage": "https://github.com/webbestmaster/ae3#readme",
   "devDependencies": {
     "chai": "^3.5.0",
-    "eslint": "^3.18.0"
+    "eslint": "^3.19.0"
   }
 }

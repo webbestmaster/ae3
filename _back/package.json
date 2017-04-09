@@ -9,8 +9,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "fs-server": "0.0.4",
+    "fs-server": "^0.0.4",
     "lodash": "^4.17.4",
-    "ws": "^2.2.2"
+    "schema-js": "^1.1.0",
+    "ws": "^2.2.3"
   }
 }

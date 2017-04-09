@@ -3,14 +3,24 @@ const rooms = {};
 const generateId = require('./../lib/internal/generate-id');
 const each = require('lodash/each');
 const mainConst = require('./../../_front/www/_main/const.json');
+const createRoomConst = require('./../../_front/www/js/component/create-room/const.json');
+const Schema = require('schema-js');
 
 const roomConst = {
-
     connectionList: 'room_connection_list'
-
 };
 
-// TODO: add room destroy
+const roomSchema = new Schema({
+    type: Object,
+    required:true,
+    properties: {
+        [createRoomConst.GAME_PROPERTY.NAME]: {type: String, required:true},
+        [createRoomConst.GAME_PROPERTY.MAP]: {type: String, required:true},
+        [createRoomConst.GAME_PROPERTY.PASSWORD]: {type: String, required:true},
+        [createRoomConst.GAME_PROPERTY.TYPE]: {type: String, required:true}
+    }
+});
+
 class Room extends BaseModel {
 
     constructor(gameData) {
@@ -18,6 +28,8 @@ class Room extends BaseModel {
         super(gameData);
 
         const room = this;
+
+        roomSchema.validate(gameData);
 
         const id = generateId();
 

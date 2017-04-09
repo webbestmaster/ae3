@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
-import viewConst from './const';
+const viewConst = require('./const.json');
 
 const {SET_GAME_CREATING_PROPERTY} = viewConst;
 const {NAME, PASSWORD, MAP, TYPE} = viewConst.GAME_PROPERTY;
