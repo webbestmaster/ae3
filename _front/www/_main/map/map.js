@@ -4,7 +4,7 @@ const mapConst = {
     landscape: 'const_landscape'
 };
 
-class Map extends BaseModel {
+class GameMap extends BaseModel {
 
     addRawMap(rawMap) {
 
@@ -28,4 +28,4 @@ class Map extends BaseModel {
 
 }
 
-module.exports = Map;
+module.exports = GameMap;
