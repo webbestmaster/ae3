@@ -17,7 +17,7 @@ const webpackConfig = {
     context: path.join(CWD, 'www'),
     entry: {
         'common': './js/common.js',
-        'main': ['./js/app.jsx']
+        'main': ['./js/app.js']
     },
     output: {
         path: path.join(CWD, 'dist'),
