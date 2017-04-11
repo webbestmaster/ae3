@@ -16,9 +16,11 @@ class Schema extends SchemaJS {
             super.validate(data, options, definition);
             return true;
         } catch (e) {
-            return false;
+            console.error('---> Invalid data');
+            console.error(data);
         }
 
+        return false;
     }
 
 }
