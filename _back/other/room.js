@@ -44,6 +44,17 @@ class Room extends BaseModel {
             }
         });
 
+        //TODO:1 send to front info about game
+/*
+        {
+            game: {
+                MAP
+                GAME_NAME
+                    ... etc
+            }
+        }
+*/
+
         sendMessage(ws, {
             id: mainConst.MESSAGE.FROM.BACK.YOU_HAS_BEEN_CONNECTED_TO_ROOM
         });
