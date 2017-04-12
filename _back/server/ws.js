@@ -6,6 +6,7 @@
 const httpModule = require('./http');
 const backConst = require('./../const');
 const WebSocketServer = require('ws').Server;
+const _ = require('lodash');
 
 const webSocketServer = new WebSocketServer({server: httpModule.httpServer, port: backConst.WS_PORT});
 
@@ -52,7 +53,10 @@ function onMessage(inputStr) {
         return;
     }
 
-    neededMethod(inputJson, ws);
+    neededMethod(
+        _.omit(inputJson, 'className', 'methodName'),
+        ws
+    );
 
 }
 

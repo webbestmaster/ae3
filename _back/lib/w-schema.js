@@ -13,14 +13,13 @@ class Schema extends SchemaJS {
     validate(data, options, definition) {
 
         try {
-            super.validate(data, options, definition);
-            return true;
+            return super.validate(data, options, definition);
         } catch (e) {
             console.error('---> Invalid data');
             console.error(data);
+            return false;
         }
 
-        return false;
     }
 
 }
