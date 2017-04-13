@@ -54,7 +54,7 @@ function onMessage(inputStr) {
     }
 
     neededMethod(
-        _.omit(inputJson, 'className', 'methodName'),
+        _.omit(inputJson, ['className', 'methodName']),
         ws
     );
 
