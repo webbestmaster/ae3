@@ -1,5 +1,5 @@
 // run http server
-require('./server/http');
+require('./http');
 
 // run ws server
 // require('./server/ws');

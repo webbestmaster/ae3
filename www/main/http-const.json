@@ -1,0 +1,6 @@
+{
+    "route": {
+        "getServerInfo": "get-server-info",
+        "createRoom": "create-room"
+    }
+}

@@ -1,7 +1,7 @@
-const HTTP_PORT = process.env.PORT || 3000;
-// const WS_PORT = HTTP_PORT + 1;
+const httpPort = process.env.PORT || 3001;
+// const WS_PORT = httpPort + 1;
 
 module.exports = {
-    HTTP_PORT
+    httpPort
     // WS_PORT
 };

@@ -43,8 +43,8 @@ if (IS_PRODUCTION) {
     store = createStore(reducer, DevTools.instrument(), applyMiddleware(thunk));
 }
 
-// const history = syncHistoryWithStore(hashHistory, store);
-const history = syncHistoryWithStore(browserHistory, store);
+const history = syncHistoryWithStore(hashHistory, store);
+// const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
     <Provider store={store}>

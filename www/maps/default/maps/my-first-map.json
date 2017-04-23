@@ -1,0 +1,56 @@
+{
+    "localization": {
+        "en": {
+            "name": "my first best map"
+        }
+    },
+    "layer": {
+        "landscape": [
+            "ffrff",
+            "ffrff",
+            "rrrrr",
+            "ffrff",
+            "ffrff"
+        ],
+        "buildings": [
+            {
+                "x": 1,
+                "y": 5,
+                "type": "farm",
+                "playerId": "0"
+            },
+            {
+                "x": 2,
+                "y": 3,
+                "type": "castle",
+                "playerId": "0"
+            },
+            {
+                "x": 3,
+                "y": 2,
+                "type": "farm",
+                "playerId": "0"
+            }
+        ],
+        "units": [
+            {
+                "x": 1,
+                "y": 5,
+                "type": "soldier",
+                "playerId": "0"
+            },
+            {
+                "x": 2,
+                "y": 3,
+                "type": "archer",
+                "playerId": "0"
+            },
+            {
+                "x": 3,
+                "y": 2,
+                "type": "skeleton",
+                "playerId": "0"
+            }
+        ]
+    }
+}
