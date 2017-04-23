@@ -14,7 +14,7 @@ import {hashHistory, browserHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 
 import * as reducers from './reducer';
-import AppRouter from './app-router';
+import AppRouter from './router';
 
 const IS_PRODUCTION = NODE_ENV === 'production';
 
@@ -43,7 +43,8 @@ if (IS_PRODUCTION) {
     store = createStore(reducer, DevTools.instrument(), applyMiddleware(thunk));
 }
 
-const history = syncHistoryWithStore(hashHistory, store);
+// const history = syncHistoryWithStore(hashHistory, store);
+const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
     <Provider store={store}>
