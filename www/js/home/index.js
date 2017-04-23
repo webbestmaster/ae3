@@ -14,6 +14,7 @@ class Home extends BaseView {
             <h1>home view</h1>
             <hr/>
             <Login />
+            <hr/>
         </div>;
 
     }

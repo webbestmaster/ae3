@@ -1,5 +1,3 @@
-/* global window */
-
 const win = window;
 const doc = win.document;
 

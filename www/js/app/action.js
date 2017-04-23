@@ -1,5 +1,3 @@
-/* global window */
-
 import viewConst from './const.json';
 
 const {resize} = viewConst.type;

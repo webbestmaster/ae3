@@ -1,4 +1,3 @@
-/* global window */
 import React, {Component} from 'react';
 import viewPropTypes from './prop-types';
 import {onResizeScreen} from './action';
