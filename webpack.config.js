@@ -94,8 +94,7 @@ const webpackConfig = {
 
     resolve: {
         alias: {
-            // root: path.resolve(CWD, 'www', 'js'),
-            // mc: path.resolve(CWD, 'www', 'js', 'component', 'main')
+            root: path.resolve(CWD, 'www', 'js')
         },
         modules: ['www', 'node_modules'],
         extensions: ['.js', '.jsx']

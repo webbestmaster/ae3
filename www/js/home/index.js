@@ -1,6 +1,6 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-import BaseView from './../base/base-view';
+import BaseView from 'root/base/base-view';
 import {connect} from 'react-redux';
 // import {Link} from 'react-router';
 
