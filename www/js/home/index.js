@@ -4,19 +4,24 @@ import BaseView from 'root/base/base-view';
 import {connect} from 'react-redux';
 // import {Link} from 'react-router';
 
-class HomeView extends BaseView {
+import Login from 'root/login';
+
+class Home extends BaseView {
 
     render() {
 
         return <div>
             <h1>home view</h1>
+            <hr/>
+            <Login />
         </div>;
 
     }
 
 }
 
-HomeView.propTypes = {
+
+Home.propTypes = {
     // currentLanguage: PropTypes.object.isRequired,
     // changeLanguageAction: PropTypes.func.isRequired
 };
@@ -25,7 +30,5 @@ export default connect(
     state => ({
         // currentLanguage: state.currentLanguage
     }),
-    {
-
-    }
-)(HomeView);
+    {}
+)(Home);

@@ -21,7 +21,7 @@ const IS_PRODUCTION = NODE_ENV === 'production';
 require('style/css/_root.scss');
 
 // initialize environment
-import initializeEnvironment from './service/initialize-environment';
+import initializeEnvironment from './util/initialize-environment';
 initializeEnvironment();
 
 const reducer = combineReducers({
