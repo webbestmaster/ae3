@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Router, Route, IndexRoute} from 'react-router';
 
-import HomeView from './component/home-view';
-import App from './component/app';
+import HomeView from './home';
+import App from './app';
 
 export default class AppRouter extends Component {
 

@@ -1,4 +1,4 @@
-/*global NODE_ENV*/
+/* global NODE_ENV */
 
 // dev tools
 import {createDevTools} from 'redux-devtools';
@@ -18,10 +18,10 @@ import AppRouter from './app-router';
 
 const IS_PRODUCTION = NODE_ENV === 'production';
 
-require('style/_root.scss');
+require('style/css/_root.scss');
 
 // initialize environment
-import initializeEnvironment from './initialize-environment';
+import initializeEnvironment from './service/initialize-environment';
 initializeEnvironment();
 
 const reducer = combineReducers({

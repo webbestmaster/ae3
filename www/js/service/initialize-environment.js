@@ -1,4 +1,4 @@
-/*global window, document */
+/* global window */
 
 // import util from './service/util';
 import FastClick from 'fastclick';
