@@ -15,7 +15,6 @@ class Login extends BaseView {
     componentDidMount() {
 
         // TODO: try to incapsulate this
-        console.warn('try to incapsulate this');
         window.onSignIn = onSignIn;
         util.loadScript('https://apis.google.com/js/platform.js');
 

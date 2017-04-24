@@ -43,7 +43,7 @@ module.exports.createRoom = function (req, res) {
             console.error('Can not create room');
             console.error(e);
             Object.assign(res, {statusCode: 500});
-            res.end('Can not create room');
+            res.end(JSON.stringify({error: 'Can not create room'}));
         }
     );
 

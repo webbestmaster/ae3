@@ -4,6 +4,8 @@ import BaseView from 'root/base/base-view';
 // import defaultMaps from 'root/../maps/default/map-list.json';
 import ajax from 'root/util/ajax';
 import httpConst from 'root/../main/http-const.json';
+import viewPropTypes from './prop-types';
+import routerConst from 'root/router/const.json';
 
 const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
 
@@ -24,7 +26,8 @@ class CreateRoom extends BaseView {
 
     createRoom() {
 
-        const {refs} = this;
+        const view = this;
+        const {refs} = view;
 
         const name = refs.name.value;
         const password = refs.name.value;
@@ -36,7 +39,7 @@ class CreateRoom extends BaseView {
                 password,
                 map: mapReqContext(fileName)
             })
-            .then(e => console.log(e));
+            .then(e => view.props.router.push(routerConst.route.room));
 
     }
 
@@ -66,7 +69,7 @@ class CreateRoom extends BaseView {
 
 }
 
-// VIEW.propTypes = viewPropTypes;
+CreateRoom.propTypes = viewPropTypes;
 
 export default connect(
     state => ({}),

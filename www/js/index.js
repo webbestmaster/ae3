@@ -49,7 +49,7 @@ const history = syncHistoryWithStore(hashHistory, store);
 ReactDOM.render(
     <Provider store={store}>
         {
-            IS_PRODUCTION
+            !IS_PRODUCTION
                 ?
                 <AppRouter history={history}/>
                 :
