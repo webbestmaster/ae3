@@ -22,7 +22,7 @@ const IS_PRODUCTION = NODE_ENV === 'production';
 import styles from 'style/css/_root.scss'; // do not remove me
 
 // initialize environment
-import initializeEnvironment from './lib/initialize-environment';
+import initializeEnvironment from './util/initialize-environment';
 initializeEnvironment();
 
 const reducer = combineReducers({

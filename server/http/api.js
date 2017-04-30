@@ -7,29 +7,27 @@ const serverInfoResponse = JSON.stringify({
     httpPort
 });
 
-module.exports.getInfo = function (req, res) {
+module.exports.getInfo = (req, res) => {
     res.end(serverInfoResponse);
 };
 
 function streamBodyParser(request, success, error) {
-
     let body = '';
 
-    request.on('data', data => body += data);
+    request.on('data', data => {
+        body += data;
+    });
 
     request.on('end', () => success(body));
 
     request.on('error', error);
 
-    request.on('close', e => console.warn('WARNING: request closed', e));
-
+    request.on('close', evt => console.warn('WARNING: request closed', evt));
 }
 
-module.exports.createRoom = function (req, res) {
-
+module.exports.createRoom = (req, res) => {
     streamBodyParser(req,
         body => {
-
             const parsedBody = JSON.parse(body);
 
             const room = new Room(parsedBody);
@@ -37,16 +35,14 @@ module.exports.createRoom = function (req, res) {
             res.end(JSON.stringify({
                 roomId: room.get('id')
             }));
-
         },
-        e => {
+        evt => {
             console.error('Can not create room');
-            console.error(e);
+            console.error(evt);
             Object.assign(res, {statusCode: 500});
             res.end(JSON.stringify({error: 'Can not create room'}));
         }
     );
-
 };
 
 

@@ -15,7 +15,6 @@ const props = {
 class Room extends BaseModel {
 
     constructor(gameData) {
-
         super();
 
         const room = this;
@@ -27,22 +26,19 @@ class Room extends BaseModel {
         room.set({id});
 
         rooms[id] = room;
-
     }
 
     destroy() {
-
         const room = this;
 
         const roomId = room.get('id');
 
         rooms[roomId] = null;
-        delete rooms[roomId];
+        Reflect.deleteProperty(rooms, roomId);
 
         console.log(room.get('id'), 'destroyed');
 
         super.destroy();
-
     }
 
 }

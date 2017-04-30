@@ -1,6 +1,6 @@
 let currentId = Date.now();
 
-module.exports = function () {
+module.exports = () => {
     currentId += 1;
     return String(currentId);
 };

@@ -11,7 +11,6 @@ const mapReqContext = require.context('./../../maps/default/maps/', true, /\.jso
 
 const mapList = mapReqContext.keys()
     .map(fileName => {
-
         const map = mapReqContext(fileName);
 
         return {
@@ -19,13 +18,11 @@ const mapList = mapReqContext.keys()
             map,
             fileName
         };
-
     });
 
 class CreateRoom extends BaseView {
 
     createRoom() {
-
         const view = this;
         const {refs} = view;
 
@@ -39,12 +36,10 @@ class CreateRoom extends BaseView {
                 password,
                 map: mapReqContext(fileName)
             })
-            .then(e => view.props.router.push(routerConst.route.room));
-
+            .then(() => view.props.router.push(routerConst.route.room));
     }
 
     render() {
-
         const view = this;
 
         return <div>

@@ -1,11 +1,14 @@
+import es6Promise from 'es6-promise';
+es6Promise.polyfill();
+
 import FastClick from 'fastclick';
 
-export default function initializeEnvironment() {
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
+export default function initializeEnvironment() {
     const doc = window.document;
 
-    // doc.documentElement.style.fontSize = util.detectFontSize() + 'px';
+    injectTapEventPlugin();
 
     FastClick.attach(doc.body);
-
 }

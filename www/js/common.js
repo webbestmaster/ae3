@@ -11,7 +11,7 @@ import {hashHistory, browserHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 import _ from 'lodash';
 import classnames from 'classnames';
-import initializeEnvironment from './lib/initialize-environment';
+import initializeEnvironment from './util/initialize-environment';
 import moment from 'moment';
 import sha1 from 'sha1';
 import es6Promise from 'es6-promise';

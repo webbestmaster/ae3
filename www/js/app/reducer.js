@@ -7,7 +7,6 @@ const {resize} = viewConst.type;
 import {onResizeScreen} from './action';
 
 const screenState = (() => {
-
     const screenSize = onResizeScreen().payload;
 
     const initialState = {
@@ -15,22 +14,17 @@ const screenState = (() => {
         height: screenSize.height
     };
 
-    return function (state = initialState, action) {
-
+    return (state = initialState, action) => {
         if (action.type === resize) {
-
             return {
                 ...state,
                 width: action.payload.width,
                 height: action.payload.height
             };
-
         }
 
         return state;
-
     };
-
 })();
 
 

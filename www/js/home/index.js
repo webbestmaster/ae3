@@ -11,7 +11,6 @@ import routerConst from './../router/const.json';
 class Home extends BaseView {
 
     render() {
-
         return <div>
             <h1>home view</h1>
             <hr/>
@@ -21,7 +20,6 @@ class Home extends BaseView {
             <hr/>
             <Link to={routerConst.route.joinRoom}>join room</Link>
         </div>;
-
     }
 
 }

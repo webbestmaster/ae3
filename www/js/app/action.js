@@ -3,7 +3,6 @@ import viewConst from './const.json';
 const {resize} = viewConst.type;
 
 export function onResizeScreen() {
-
     const docElem = window.document.documentElement;
 
     return {
@@ -13,5 +12,4 @@ export function onResizeScreen() {
             height: docElem.clientHeight
         }
     };
-
 }
