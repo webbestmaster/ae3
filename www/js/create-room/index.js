@@ -27,7 +27,7 @@ class CreateRoom extends BaseView {
         const {refs} = view;
 
         const name = refs.name.value;
-        const password = refs.name.value;
+        const password = refs.password.value;
         const fileName = refs.map.value;
 
         ajax

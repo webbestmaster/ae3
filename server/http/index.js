@@ -25,6 +25,7 @@ const fsServer = new FsServer(fsServerConfig) // create server with config
 // get info about server
 fsServer.bindRequest('get', httpConst.route.getServerInfo, httpApi.getInfo);
 fsServer.bindRequest('post', httpConst.route.createRoom, httpApi.createRoom);
+fsServer.bindRequest('get', httpConst.route.getAvailableRooms, httpApi.getAvailableRooms);
 
 /*
 

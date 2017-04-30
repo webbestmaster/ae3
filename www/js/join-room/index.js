@@ -1,12 +1,35 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import BaseView from './../base/base-view';
+import ajax from './../util/ajax';
+import httpConst from './../../main/http-const.json';
 
 class JoinRoom extends BaseView {
 
+    constructor() {
+        super();
+
+        this.state = {
+            roomIds: []
+        };
+    }
+
+    componentDidMount() {
+        const view = this;
+
+        ajax
+            .get(httpConst.route.getAvailableRooms)
+            .then(roomIds => {
+                view.setState({roomIds: JSON.parse(roomIds)});
+            });
+    }
+
     render() {
+        const {roomIds} = this.state;
+
         return <div>
-            join room
+            <h1>join room</h1>
+            {roomIds.map(id => <h1 key={id}>{id}</h1>)}
         </div>;
     }
 

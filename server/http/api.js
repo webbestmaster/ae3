@@ -1,7 +1,8 @@
 const serverConst = require('./../server-const');
 const {httpPort} = serverConst;
-
-const Room = require('./../model/room').model;
+const roomModule = require('./../model/room');
+const Room = roomModule.model;
+const getRoomIds = roomModule.getRoomIds;
 
 const serverInfoResponse = JSON.stringify({
     httpPort
@@ -45,12 +46,14 @@ module.exports.createRoom = (req, res) => {
     );
 };
 
+module.exports.getAvailableRooms = (req, res) => {
+    res.end(JSON.stringify(getRoomIds()));
+};
 
 /*
  const backConst = require('./../const');
  const roomModule = require('./../other/room');
  const Room = roomModule.Room;
- const getRoomIds = roomModule.getRoomIds;
  const {httpPort, WS_PORT} = backConst;
  const roomValidator = require('./../validator/room');
 
@@ -75,11 +78,6 @@ module.exports.createRoom = (req, res) => {
 
  });
 
- }
-
-
- function getAvailableRooms(req, res) {
- res.end(JSON.stringify(getRoomIds()));
  }
 
  module.exports.createRoom = createRoom;

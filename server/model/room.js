@@ -6,7 +6,7 @@ const BaseModel = require('./../base/base-model');
 
 const rooms = {};
 const generateId = require('./../lib/generate-id');
-const each = require('lodash/each');
+const _ = require('lodash');
 
 const props = {
     initialData: 'initial-data'
@@ -19,9 +19,9 @@ class Room extends BaseModel {
 
         const room = this;
 
-        const id = generateId();
+        room.set(props.initialData, _.pick(gameData, ['name', 'password', 'map']));
 
-        room.set(props.initialData, gameData);
+        const id = generateId();
 
         room.set({id});
 
@@ -33,10 +33,9 @@ class Room extends BaseModel {
 
         const roomId = room.get('id');
 
-        rooms[roomId] = null;
         Reflect.deleteProperty(rooms, roomId);
 
-        console.log(room.get('id'), 'destroyed');
+        console.log(roomId, 'destroyed');
 
         super.destroy();
     }
