@@ -1,0 +1,13 @@
+{
+    "timing": {
+        "getAllMessagesFetchPeriod": 1e3
+    },
+    "api": {
+        "root": "https://groupmes-dot-gem-stage-1.appspot.com/_ah/api",
+        "version": "v1"
+    },
+    "db": {
+        "version": "0.1"
+    }
+
+}

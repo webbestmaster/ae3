@@ -1,0 +1,80 @@
+.group-list {
+    height: 100%;
+    box-sizing: border-box;
+    padding-top: $searchHeight;
+    background-color: #fff;
+    .search {
+        margin-top: -$searchHeight;
+    }
+}
+
+.group-list--container {
+    height: 100%;
+    overflow: auto;
+}
+
+// group item
+.group {
+    @extend .clear-self;
+    display: block;
+    padding: 13px;
+    background-color: #fff;
+    position: relative;
+    cursor: pointer;
+    border-top: 1px solid #f2f2f2;
+    text-decoration: none;
+    color: $mainTextColor;
+
+    &:hover,
+    &:focus {
+        background-color: $focusBgColor;
+    }
+
+    &.group--is-current-group {
+        background-color: $activeBgColor;
+    }
+
+}
+
+.group__avatar {
+    width: 49px;
+    height: 49px;
+    border-radius: 50%;
+    float: left;
+    margin-right: 15px;
+    @extend .no-avatar;
+}
+
+.group__name {
+    @extend .ellipsis;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 21px;
+    margin-right: 66px;
+    padding-bottom: 3px;
+}
+
+.group__last-message-time {
+    position: absolute;
+    right: 11px;
+    top: 10px;
+    font-size: 11px;
+    color: $secondaryTextColor;
+    //font-family: $monospaceFontFamily;
+}
+
+.group__last-message-text {
+    @extend .ellipsis;
+    font-size: 14px;
+    line-height: 20px;
+    background-image: url(./../i/group/tick.svg);
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    background-position: -1px 1px;
+    padding-left: 19px;
+    min-height: 20px;
+}
+
+.group__last-message-text--in-progress {
+    background-image: url(./../i/group/running-man.gif);
+}

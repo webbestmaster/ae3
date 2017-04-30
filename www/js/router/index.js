@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {Router, Route, IndexRoute} from 'react-router';
 
-import routerConst from 'root/router/const.json';
-import App from 'root/app';
-import Home from 'root/home';
-import CreateRoom from 'root/create-room';
-import JoinRoom from 'root/join-room';
-import Room from 'root/room';
+import routerConst from './const.json';
+import App from './../app';
+import Home from './../home';
+import CreateRoom from './../create-room';
+import JoinRoom from './../join-room';
+import Room from './../room';
 
 export default class AppRouter extends Component {
 

@@ -1,0 +1,11 @@
+{
+    "link": {
+        "root": "/",
+        "main": "/main",
+        "addContact": "/main/add-contact",
+        "createGroup": "/main/create-group",
+        "userContact": "/main/user-contact/:phoneNumber",
+        "userContactPrefix": "/main/user-contact",
+        "chatWithPrefix": "/main/chat-with-group"
+    }
+}

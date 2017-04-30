@@ -1,12 +1,12 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-import BaseView from 'root/base/base-view';
+import BaseView from './../base/base-view';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 
-import Login from 'root/login';
+import Login from './../login';
 
-import routerConst from 'root/router/const.json';
+import routerConst from './../router/const.json';
 
 class Home extends BaseView {
 

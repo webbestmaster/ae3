@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import BaseView from 'root/base/base-view';
+import BaseView from './../base/base-view';
 
 class Room extends BaseView {
 

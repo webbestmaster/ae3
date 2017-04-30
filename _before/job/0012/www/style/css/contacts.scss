@@ -1,0 +1,90 @@
+$addNewContactHeight: 57px;
+
+.contact-list {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: $logoPartWidth;
+    height: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+    .search {
+        z-index: 1;
+    }
+}
+
+.contact-list__header {
+    height: $headerHeight;
+    background-color: $headerBgColor;
+    position: relative;
+    z-index: 1;
+}
+
+.contact-list__name {
+    height: $headerHeight;
+    color: $buttonTextColor;
+    font-size: 20px;
+    line-height: $headerHeight;
+    float: left;
+    font-weight: bold;
+}
+
+.contact-list__back {
+    float: left;
+    background-image: url('./../i/contacts/back.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto 45%;
+    width: $headerHeight;
+    height: $headerHeight;
+    cursor: pointer;
+}
+
+.contact-list__wrapper {
+    top: 0;
+    left: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: $headerHeight + $searchHeight;
+    padding-bottom: $addNewContactHeight;
+    z-index: 0;
+}
+
+.contact-list__container {
+    display: block;
+    height: 100%;
+    overflow: auto;
+}
+
+.contact-list__add-new-contact {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    background-color: $headerBgColor;
+    left: 0;
+    bottom: 0;
+    height: $addNewContactHeight;
+    font-size: 18px;
+    color: #fff;
+    line-height: $addNewContactHeight;
+    cursor: pointer;
+}
+
+// contact
+.contact {
+    @extend .group;
+    &.contact--is-active-contact {
+        @extend .group--is-current-group;
+    }
+}
+
+.contact__avatar {
+    @extend .group__avatar;
+}
+
+.contact__name {
+    @extend .group__name;
+    padding-top: 14px;
+}

@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import BaseView from 'root/base/base-view';
+import BaseView from './../base/base-view';
 // import defaultMaps from 'root/../maps/default/map-list.json';
-import ajax from 'root/util/ajax';
-import httpConst from 'root/../main/http-const.json';
+import ajax from './../util/ajax';
+import httpConst from './../../main/http-const.json';
 import viewPropTypes from './prop-types';
-import routerConst from 'root/router/const.json';
+import routerConst from './../router/const.json';
 
 const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
 

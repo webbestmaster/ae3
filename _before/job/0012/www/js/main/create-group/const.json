@@ -1,0 +1,19 @@
+{
+    "type": {
+        "setIncludingUserInNewGroup": "setIncludingUserInNewGroup",
+        "createNewGroup": "createNewGroup",
+        "setCreateGroupViewVisible": "setCreateGroupViewVisible",
+        "toggleIncludingUserInNewGroup": "toggleIncludingUserInNewGroup",
+        "resetIncludedUserInNewGroup": "resetIncludedUserInNewGroup"
+    },
+    "group": {
+        "type": {
+            "privateUsual": "group.private",
+            "publicOpen": "group.public.open",
+            "publicClosed": "group.public.closed",
+            "privateSingle": "group.private.single",
+            "privateMarket": "group.private.market"
+        }
+    }
+
+}
