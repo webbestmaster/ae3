@@ -6,6 +6,7 @@ import ajax from './../util/ajax';
 import httpConst from './../../main/http-const.json';
 import viewPropTypes from './prop-types';
 import routerConst from './../router/const.json';
+import user from './../model/user';
 
 const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
 
@@ -35,6 +36,11 @@ class CreateRoom extends BaseView {
                 name,
                 password,
                 map: mapReqContext(fileName)
+            })
+            .then(response => {
+                const responseObj = JSON.parse(response);
+
+                user.set(user.const.roomId, responseObj.roomId);
             })
             .then(() => view.props.router.push(routerConst.route.room));
     }

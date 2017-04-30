@@ -3,6 +3,7 @@ const {httpPort} = serverConst;
 const roomModule = require('./../model/room');
 const Room = roomModule.model;
 const getRoomIds = roomModule.getRoomIds;
+const getRoomById = roomModule.getRoomById;
 
 const serverInfoResponse = JSON.stringify({
     httpPort
@@ -48,6 +49,14 @@ module.exports.createRoom = (req, res) => {
 
 module.exports.getAvailableRooms = (req, res) => {
     res.end(JSON.stringify(getRoomIds()));
+};
+
+module.exports.enterRoom = (req, res, url, roomId, userId) => {
+    const room = getRoomById(roomId);
+
+    room.addUserId(userId);
+
+    res.end('');
 };
 
 /*

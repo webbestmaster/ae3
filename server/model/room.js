@@ -9,7 +9,8 @@ const generateId = require('./../lib/generate-id');
 const _ = require('lodash');
 
 const props = {
-    initialData: 'initial-data'
+    initialData: 'initial-data',
+    userIds: 'user-ids'
 };
 
 class Room extends BaseModel {
@@ -20,12 +21,19 @@ class Room extends BaseModel {
         const room = this;
 
         room.set(props.initialData, _.pick(gameData, ['name', 'password', 'map']));
+        room.set(props.userIds, []);
 
-        const id = generateId();
+        const id = 'room-id-' + generateId();
 
         room.set({id});
 
         rooms[id] = room;
+    }
+
+    addUserId(userId) {
+        const userIds = this.get(props.userIds);
+
+        return userIds.indexOf(userId) === -1 && userIds.push(userId);
     }
 
     destroy() {
