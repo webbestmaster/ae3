@@ -14,6 +14,19 @@ export default {
             script.src = src;
             doc.head.appendChild(script);
         });
+    },
+
+    globalify(name, value) {
+        const propGlobalName = 'myGlobal';
+
+        console.log(win[propGlobalName] = win[propGlobalName] || {});
+
+        console.log(
+            '--->',
+            name,
+            '- added to global scope (window.' + propGlobalName + '[\'' + name + '\'])',
+            win[propGlobalName][name] = value
+        );
     }
 
 };
