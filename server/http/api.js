@@ -4,6 +4,14 @@ const roomModule = require('./../model/room');
 const Room = roomModule.model;
 const getRoomIds = roomModule.getRoomIds;
 const getRoomById = roomModule.getRoomById;
+const _ = require('lodash');
+
+function createError(evt, res, text) {
+    console.error(text);
+    console.error(evt);
+    Object.assign(res, {statusCode: 500});
+    res.end(JSON.stringify({error: text}));
+}
 
 const serverInfoResponse = JSON.stringify({
     httpPort
@@ -38,12 +46,7 @@ module.exports.createRoom = (req, res) => {
                 roomId: room.get('id')
             }));
         },
-        evt => {
-            console.error('Can not create room');
-            console.error(evt);
-            Object.assign(res, {statusCode: 500});
-            res.end(JSON.stringify({error: 'Can not create room'}));
-        }
+        evt => createError(evt, res, 'Can not create room')
     );
 };
 
@@ -57,6 +60,26 @@ module.exports.enterRoom = (req, res, url, roomId, userId) => {
     room.addUserId(userId);
 
     res.end('');
+};
+
+module.exports.addChatMessage = (req, res, url, roomId) => {
+    streamBodyParser(req,
+        body => {
+            const room = getRoomById(roomId);
+            const parsedBody = _.pick(JSON.parse(body), ['userId', 'text']);
+
+            room.addChatMessage(parsedBody.userId, parsedBody.text);
+
+            res.end('');
+        },
+        evt => createError(evt, res, 'Can not add chat message')
+    );
+};
+
+module.exports.getAllChatMessages = (req, res, url, roomId) => {
+    const room = getRoomById(roomId);
+
+    res.end(JSON.stringify(room.getAllChatMessages()));
 };
 
 /*

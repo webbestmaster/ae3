@@ -7,10 +7,13 @@ const BaseModel = require('./../base/base-model');
 const rooms = {};
 const generateId = require('./../lib/generate-id');
 const _ = require('lodash');
+const Chat = require('./chat').model;
+const sha1 = require('sha1');
 
 const props = {
     initialData: 'initial-data',
-    userIds: 'user-ids'
+    userIds: 'user-ids',
+    chat: 'chat'
 };
 
 class Room extends BaseModel {
@@ -22,6 +25,7 @@ class Room extends BaseModel {
 
         room.set(props.initialData, _.pick(gameData, ['name', 'password', 'map']));
         room.set(props.userIds, []);
+        room.set(props.chat, new Chat());
 
         const id = 'room-id-' + generateId();
 
@@ -36,12 +40,22 @@ class Room extends BaseModel {
         return userIds.indexOf(userId) === -1 && userIds.push(userId);
     }
 
+    addChatMessage(userId, text) {
+        return this.get(props.chat).addMessage('sha1-of-user-id-' + sha1(userId), text);
+    }
+
+    getAllChatMessages() {
+        return this.get(props.chat).getAllMessages();
+    }
+
     destroy() {
         const room = this;
 
         const roomId = room.get('id');
 
         Reflect.deleteProperty(rooms, roomId);
+
+        room.get(props.chat).destroy();
 
         console.log(roomId, 'destroyed');
 
