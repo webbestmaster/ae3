@@ -3,6 +3,7 @@
  */
 
 const BaseModel = require('./../base/base-model');
+const UserData = require('./user-data').model;
 
 const rooms = {};
 const generateId = require('./../lib/generate-id');
@@ -13,6 +14,7 @@ const sha1 = require('sha1');
 const props = {
     initialData: 'initial-data',
     userIds: 'user-ids',
+    usersData: 'users-data',
     chat: 'chat'
 };
 
@@ -23,9 +25,12 @@ class Room extends BaseModel {
 
         const room = this;
 
-        room.set(props.initialData, _.pick(gameData, ['name', 'password', 'map']));
-        room.set(props.userIds, []);
-        room.set(props.chat, new Chat());
+        room.set({
+            [props.initialData]: _.pick(gameData, ['name', 'password', 'map']),
+            [props.userIds]: [],
+            [props.usersData]: [],
+            [props.chat]: new Chat()
+        });
 
         const id = 'room-id-' + generateId();
 
@@ -35,9 +40,19 @@ class Room extends BaseModel {
     }
 
     addUserId(userId) {
-        const userIds = this.get(props.userIds);
+        const room = this;
+        const userIds = room.get(props.userIds);
 
-        return userIds.indexOf(userId) === -1 && userIds.push(userId);
+        if (userIds.indexOf(userId) !== -1) {
+            return;
+        }
+
+        userIds.push(userId);
+
+        const userData = new UserData();
+
+        userData.setUserId('sha1-of-user-id-' + sha1(userId));
+        room.get(props.usersData).push(userData);
     }
 
     destroy() {
@@ -48,6 +63,7 @@ class Room extends BaseModel {
         Reflect.deleteProperty(rooms, roomId);
 
         room.get(props.chat).destroy();
+        room.get(props.usersData).forEach(userData => userData.destroy());
 
         console.log(roomId, 'destroyed');
 
@@ -61,8 +77,11 @@ class Room extends BaseModel {
     }
 
     getState(req, res, userId, params) {
+        const room = this;
+
         res.end(JSON.stringify({
-            chatMessages: this.get(props.chat).getAllMessages()
+            chatMessages: room.get(props.chat).getAllMessages(),
+            usersData: room.get(props.usersData).map(userData => userData.toJSON())
         }));
     }
 

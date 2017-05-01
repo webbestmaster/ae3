@@ -1,4 +1,18 @@
 {
+    "settings": {
+        "moneyList": [
+            500,
+            1000,
+            2000,
+            5000
+        ],
+        "unitLimitList": [
+            10,
+            15,
+            20,
+            25
+        ]
+    },
     "landscape": {
         "road": {
             "name": "road",
