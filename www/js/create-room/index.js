@@ -4,7 +4,7 @@ import BaseView from './../base/base-view';
 // import defaultMaps from 'root/../maps/default/map-list.json';
 import ajax from './../util/ajax';
 import httpConst from './../../main/http-const.json';
-import viewPropTypes from './prop-types';
+import PropTypes from 'prop-types';
 import routerConst from './../router/const.json';
 import user from './../model/user';
 
@@ -70,7 +70,9 @@ class CreateRoom extends BaseView {
 
 }
 
-CreateRoom.propTypes = viewPropTypes;
+CreateRoom.propTypes = {
+    router: PropTypes.object.isRequired
+};
 
 export default connect(
     state => ({}),

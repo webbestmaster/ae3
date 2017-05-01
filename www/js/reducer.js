@@ -3,3 +3,4 @@
  */
 
 export appState from './app/reducer';
+export joinRoomState from './join-room/reducer';

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import viewPropTypes from './prop-types';
+import PropTypes from 'prop-types';
 import {onResizeScreen} from './action';
 import {connect} from 'react-redux';
 
@@ -20,7 +20,14 @@ class App extends Component {
 
 }
 
-App.propTypes = viewPropTypes;
+App.propTypes = {
+    screenState: PropTypes.shape({
+        width: PropTypes.number.isRequired,
+        height: PropTypes.number.isRequired
+    }),
+
+    onResizeScreen: PropTypes.func.isRequired
+};
 
 export default connect(
     state => ({
