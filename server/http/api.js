@@ -62,25 +62,55 @@ module.exports.enterRoom = (req, res, url, roomId, userId) => {
     res.end('');
 };
 
-module.exports.addChatMessage = (req, res, url, roomId) => {
+module.exports.roomApiGet = (req, res, url, userId, roomId, methodName, params) => { // eslint-disable-line max-params
+    const room = getRoomById(roomId);
+
+    if (typeof room !== 'undefined' && typeof room[methodName] === 'function') {
+        return room[methodName](req, res, userId, params);
+    }
+
+    return createError({}, res, ['Error: room has not method: ', userId, roomId, methodName, params].join(''));
+};
+
+module.exports.roomApiPost = (req, res, url, userId, roomId, methodName) => { // eslint-disable-line max-params
     streamBodyParser(req,
         body => {
+            const params = JSON.parse(body);
             const room = getRoomById(roomId);
-            const parsedBody = _.pick(JSON.parse(body), ['userId', 'text']);
 
-            room.addChatMessage(parsedBody.userId, parsedBody.text);
+            if (typeof room !== 'undefined' && typeof room[methodName] === 'function') {
+                return room[methodName](req, res, userId, params);
+            }
 
-            res.end('');
+            return createError({}, res, ['Error: room has not method: ', userId, roomId, methodName, params].join(''));
         },
-        evt => createError(evt, res, 'Can not add chat message')
+        evt => createError(evt, res, ['Can parse body', userId, roomId, methodName].join(''))
     );
 };
 
-module.exports.getAllChatMessages = (req, res, url, roomId) => {
-    const room = getRoomById(roomId);
+/*
+ module.exports.addChatMessage = (req, res, url, roomId) => {
+ streamBodyParser(req,
+ body => {
+ const room = getRoomById(roomId);
+ const parsedBody = _.pick(JSON.parse(body), ['userId', 'text']);
 
-    res.end(JSON.stringify(room.getAllChatMessages()));
-};
+ room.addChatMessage(parsedBody.userId, parsedBody.text);
+
+ res.end('');
+ },
+ evt => createError(evt, res, 'Can not add chat message')
+ );
+ };
+ */
+
+/*
+ module.exports.getAllChatMessages = (req, res, url, roomId) => {
+ const room = getRoomById(roomId);
+
+ res.end(JSON.stringify(room.getAllChatMessages()));
+ };
+ */
 
 /*
  const backConst = require('./../const');

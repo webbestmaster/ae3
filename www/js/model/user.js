@@ -23,6 +23,16 @@ class User extends BaseModel {
         this.const = userConst;
     }
 
+    getRoomApiUrl(methodName, params = '-') {
+        const model = this;
+
+        return httpConst.route.roomApi
+            .replace(':userId', model.getId())
+            .replace(':roomId', model.get(userConst.roomId))
+            .replace(':methodName', methodName)
+            .replace(':params', params);
+    }
+
     enterRoom() {
         const model = this;
         const userId = model.getId();
@@ -37,24 +47,15 @@ class User extends BaseModel {
 
     sendChatMessage(text) {
         const model = this;
-        const userId = model.getId();
-        const roomId = model.get(userConst.roomId);
 
         return ajax.post(
-            httpConst.route.addChatMessage
-                .replace(':roomId', roomId),
-            {text, userId}
+            model.getRoomApiUrl('addChatMessage'),
+            {text}
         );
     }
 
     getAllChatMessages() {
-        const model = this;
-        const roomId = model.get(userConst.roomId);
-
-        return ajax.get(
-            httpConst.route.getAllChatMessages
-                .replace(':roomId', roomId)
-        );
+        return ajax.get(this.getRoomApiUrl('getAllChatMessages'));
     }
 
     setId(email) {

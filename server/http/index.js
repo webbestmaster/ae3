@@ -27,8 +27,8 @@ fsServer.bindRequest('get', httpConst.route.getServerInfo, httpApi.getInfo);
 fsServer.bindRequest('post', httpConst.route.createRoom, httpApi.createRoom);
 fsServer.bindRequest('get', httpConst.route.getAvailableRooms, httpApi.getAvailableRooms);
 fsServer.bindRequest('get', httpConst.route.enterRoom, httpApi.enterRoom);
-fsServer.bindRequest('post', httpConst.route.addChatMessage, httpApi.addChatMessage);
-fsServer.bindRequest('get', httpConst.route.getAllChatMessages, httpApi.getAllChatMessages);
+fsServer.bindRequest('get', httpConst.route.roomApi, httpApi.roomApiGet);
+fsServer.bindRequest('post', httpConst.route.roomApi, httpApi.roomApiPost);
 
 /*
 

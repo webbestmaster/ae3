@@ -4,7 +4,6 @@
         "createRoom": "create-room",
         "getAvailableRooms": "get-available-rooms",
         "enterRoom": "enter-room/:roomId/:userId",
-        "addChatMessage": "add-chat-message/:roomId",
-        "getAllChatMessages": "get-all-messages/:roomId"
+        "roomApi": "room-api/:userId/:roomId/:methodName/:params"
     }
 }

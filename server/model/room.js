@@ -40,13 +40,17 @@ class Room extends BaseModel {
         return userIds.indexOf(userId) === -1 && userIds.push(userId);
     }
 
+/*
     addChatMessage(userId, text) {
         return this.get(props.chat).addMessage('sha1-of-user-id-' + sha1(userId), text);
     }
+*/
 
+/*
     getAllChatMessages() {
         return this.get(props.chat).getAllMessages();
     }
+*/
 
     destroy() {
         const room = this;
@@ -60,6 +64,18 @@ class Room extends BaseModel {
         console.log(roomId, 'destroyed');
 
         super.destroy();
+    }
+
+    // api methods
+    addChatMessage(req, res, userId, params) {
+        this.get(props.chat).addMessage('sha1-of-user-id-' + sha1(userId), params.text);
+        res.end();
+    }
+
+    getAllChatMessages(req, res, userId, params) {
+        res.end(JSON.stringify(
+            this.get(props.chat).getAllMessages()
+        ));
     }
 
 }
