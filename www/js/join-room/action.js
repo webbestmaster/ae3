@@ -11,8 +11,7 @@ export function getAvailableRooms() {
         dispatch({
             type: viewConst.type.getAvailableRooms,
             payload: {
-                isInProgress: true,
-                roomIds: []
+                isInProgress: true
             }
         });
 

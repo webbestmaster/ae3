@@ -10,9 +10,15 @@ const availableRoomsState = (() => {
 
     return (state = initialState, action) => {
         if (action.type === viewConst.type.getAvailableRooms) {
+            const {isInProgress} = action.payload;
+
+            if (isInProgress) {
+                return {...state, isInProgress};
+            }
+
             return {
                 ...state,
-                isInProgress: action.payload.isInProgress,
+                isInProgress,
                 roomIds: action.payload.roomIds
             };
         }

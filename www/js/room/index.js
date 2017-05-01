@@ -1,72 +1,34 @@
-/* global setTimeout, clearTimeout */
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import BaseView from './../base/base-view';
 import user from './../model/user';
 import playerInfo from './../model/player-info.json';
 import mapGuide from './../../maps/map-guide.json';
+import {setRoomWatching} from './action';
 
 class Room extends BaseView {
-
-    constructor() {
-        super();
-
-        this.state = {
-            usersData: [],
-            chatMessages: [],
-            isRoomWatching: false,
-            timeoutId: 0
-        };
-    }
 
     componentDidMount() {
         const view = this;
 
-        user.enterRoom().then(() => view.setRoomWatching(true));
+        view.props.setRoomWatching(true);
+        user.enterRoom();
     }
 
     componentWillUnmount() {
         const view = this;
 
-        clearTimeout(view.state.timeoutId);
-        view.setRoomWatching(false);
-    }
-
-    setRoomWatching(isEnable) {
-        const view = this;
-        const currentState = view.state.isRoomWatching;
-
-        if (currentState === isEnable) {
-            return false;
-        }
-
-        view.setState({isRoomWatching: isEnable});
-
-        if (!isEnable) {
-            return true;
-        }
-
-        (function watching() {
-            if (!view.state.isRoomWatching) {
-                return;
-            }
-
-            user.getRoomState()
-                .then(roomState => view.setState({
-                    usersData: roomState.usersData,
-                    chatMessages: roomState.chatMessages,
-                    timeoutId: setTimeout(watching, 1e3)
-                }));
-        }());
-
-        return true;
+        view.props.setRoomWatching(false);
     }
 
     render() {
         const view = this;
+        const {usersData, chatMessages} = view.props.getRoomsState;
 
         return <div>
-            {JSON.stringify(view.state.usersData)}
+            <div>{view.props.getRoomsState.isInProgress ? 'in progress...' : 'done'}</div>
+            {JSON.stringify(usersData)}
             <hr/>
             {JSON.stringify(playerInfo.colorList)}
             <hr/>
@@ -74,7 +36,7 @@ class Room extends BaseView {
             <hr/>
             {JSON.stringify(mapGuide.settings)}
             <hr/>
-            {view.state.chatMessages.map(message => <div key={JSON.stringify(message)}>{JSON.stringify(message)}</div>)}
+            {chatMessages.map(message => <div key={JSON.stringify(message)}>{JSON.stringify(message)}</div>)}
             <input ref="text" type="text"/>
             <button onClick={() => user.sendChatMessage(view.refs.text.value)}>send message</button>
         </div>;
@@ -82,9 +44,25 @@ class Room extends BaseView {
 
 }
 
-// VIEW.propTypes = viewPropTypes;
+Room.propTypes = {
+    getRoomsState: PropTypes.shape({
+        isInProgress: PropTypes.bool.isRequired,
+        usersData: PropTypes.arrayOf(PropTypes.object).isRequired,
+        chatMessages: PropTypes.arrayOf(PropTypes.shape({
+            userId: PropTypes.string.isRequired,
+            text: PropTypes.string.isRequired,
+            timestamp: PropTypes.number.isRequired
+        })).isRequired
+    }).isRequired,
+
+    setRoomWatching: PropTypes.func.isRequired
+};
 
 export default connect(
-    state => ({}),
-    {}
+    state => ({
+        getRoomsState: state.roomState.getRoomsState
+    }),
+    {
+        setRoomWatching
+    }
 )(Room);

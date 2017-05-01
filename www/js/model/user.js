@@ -35,14 +35,8 @@ class User extends BaseModel {
 
     enterRoom() {
         const model = this;
-        const userId = model.getId();
-        const roomId = model.get(userConst.roomId);
 
-        return ajax.get(
-            httpConst.route.enterRoom
-                .replace(':userId', userId)
-                .replace(':roomId', roomId)
-        );
+        return ajax.get(model.getRoomApiUrl('addUserId'));
     }
 
     sendChatMessage(text) {

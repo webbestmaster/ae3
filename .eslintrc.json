@@ -315,7 +315,7 @@
         "vars-on-top": 1,
         "wrap-iife": [
             1,
-            "outside"
+            "inside"
         ],
         "strict": [
             1,

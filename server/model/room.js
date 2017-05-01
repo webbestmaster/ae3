@@ -39,22 +39,6 @@ class Room extends BaseModel {
         rooms[id] = room;
     }
 
-    addUserId(userId) {
-        const room = this;
-        const userIds = room.get(props.userIds);
-
-        if (userIds.indexOf(userId) !== -1) {
-            return;
-        }
-
-        userIds.push(userId);
-
-        const userData = new UserData();
-
-        userData.setUserId('sha1-of-user-id-' + sha1(userId));
-        room.get(props.usersData).push(userData);
-    }
-
     destroy() {
         const room = this;
 
@@ -72,8 +56,8 @@ class Room extends BaseModel {
 
     // api methods
     addChatMessage(req, res, userId, params) {
-        this.get(props.chat).addMessage('sha1-of-user-id-' + sha1(userId), params.text);
         res.end();
+        this.get(props.chat).addMessage('sha1-of-user-id-' + sha1(userId), params.text);
     }
 
     getState(req, res, userId, params) {
@@ -83,6 +67,24 @@ class Room extends BaseModel {
             chatMessages: room.get(props.chat).getAllMessages(),
             usersData: room.get(props.usersData).map(userData => userData.toJSON())
         }));
+    }
+
+    addUserId(req, res, userId, params) {
+        res.end();
+
+        const room = this;
+        const userIds = room.get(props.userIds);
+
+        if (userIds.indexOf(userId) !== -1) {
+            return;
+        }
+
+        userIds.push(userId);
+
+        const userData = new UserData();
+
+        userData.setUserId('sha1-of-user-id-' + sha1(userId));
+        room.get(props.usersData).push(userData);
     }
 
 }
