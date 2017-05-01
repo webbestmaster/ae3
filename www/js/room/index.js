@@ -1,4 +1,4 @@
-/* global setInterval*/
+/* global setTimeout, clearTimeout */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import BaseView from './../base/base-view';
@@ -11,18 +11,52 @@ class Room extends BaseView {
         super();
 
         this.state = {
-            messages: []
+            chatMessages: [],
+            isRoomWatching: false,
+            timeoutId: 0
         };
     }
 
     componentDidMount() {
         const view = this;
 
-        user.enterRoom().then(() => console.log('added'));
+        user.enterRoom().then(() => view.setRoomWatching(true));
+    }
 
-        setInterval(() => {
-            user.getAllChatMessages().then(messages => view.setState({messages: JSON.parse(messages)}));
-        }, 2000);
+    componentWillUnmount() {
+        const view = this;
+
+        clearTimeout(view.state.timeoutId);
+        view.setRoomWatching(false);
+    }
+
+    setRoomWatching(isEnable) {
+        const view = this;
+        const currentState = view.state.isRoomWatching;
+
+        if (currentState === isEnable) {
+            return false;
+        }
+
+        view.setState({isRoomWatching: isEnable});
+
+        if (!isEnable) {
+            return true;
+        }
+
+        (function watching() {
+            if (!view.state.isRoomWatching) {
+                return;
+            }
+
+            user.getRoomState()
+                .then(roomState => view.setState({
+                    chatMessages: roomState.chatMessages,
+                    timeoutId: setTimeout(watching, 1e3)
+                }));
+        }());
+
+        return true;
     }
 
     render() {
@@ -30,7 +64,7 @@ class Room extends BaseView {
 
         return <div>
 
-            {view.state.messages.map(message => <div key={JSON.stringify(message)}>{JSON.stringify(message)}</div>)}
+            {view.state.chatMessages.map(message => <div key={JSON.stringify(message)}>{JSON.stringify(message)}</div>)}
             <input ref="text" type="text"/>
             <button onClick={() => user.sendChatMessage(view.refs.text.value)}>send message</button>
         </div>;

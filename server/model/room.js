@@ -40,18 +40,6 @@ class Room extends BaseModel {
         return userIds.indexOf(userId) === -1 && userIds.push(userId);
     }
 
-/*
-    addChatMessage(userId, text) {
-        return this.get(props.chat).addMessage('sha1-of-user-id-' + sha1(userId), text);
-    }
-*/
-
-/*
-    getAllChatMessages() {
-        return this.get(props.chat).getAllMessages();
-    }
-*/
-
     destroy() {
         const room = this;
 
@@ -72,10 +60,10 @@ class Room extends BaseModel {
         res.end();
     }
 
-    getAllChatMessages(req, res, userId, params) {
-        res.end(JSON.stringify(
-            this.get(props.chat).getAllMessages()
-        ));
+    getState(req, res, userId, params) {
+        res.end(JSON.stringify({
+            chatMessages: this.get(props.chat).getAllMessages()
+        }));
     }
 
 }

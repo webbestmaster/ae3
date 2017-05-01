@@ -54,8 +54,10 @@ class User extends BaseModel {
         );
     }
 
-    getAllChatMessages() {
-        return ajax.get(this.getRoomApiUrl('getAllChatMessages'));
+    getRoomState() {
+        return ajax
+            .get(this.getRoomApiUrl('getState'))
+            .then(stateStr => JSON.parse(stateStr));
     }
 
     setId(email) {
