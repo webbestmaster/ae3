@@ -22,18 +22,48 @@ class Room extends BaseView {
         view.props.setRoomWatching(false);
     }
 
+    saveUserData() {
+        const view = this;
+        const color = view.refs.color.value;
+        const teamId = view.refs.teamId.value;
+
+        user.saveUserData({
+            color,
+            teamId
+        });
+    }
+
     render() {
         const view = this;
         const {usersData, chatMessages} = view.props.getRoomsState;
 
         return <div>
             <div>{view.props.getRoomsState.isInProgress ? 'in progress...' : 'done'}</div>
-            {JSON.stringify(usersData)}
             <hr/>
-            {JSON.stringify(playerInfo.colorList)}
-            <hr/>
-            {JSON.stringify(playerInfo.teamList)}
-            <hr/>
+            <div>{user.getPublicId()}</div>
+            {usersData.map((userData, ii) => <div key={ii}>
+                <h1>{userData.userId}</h1>
+                <div>{userData.userId === user.getPublicId() ? 'you' : 'not you'}</div>
+
+                {userData.userId === user.getPublicId() ?
+                    <div>
+                        <select ref="color" onChange={() => view.saveUserData(userData.userId)}
+                                defaultValue={userData.color}>
+                            {playerInfo.colorList.map(color => <option key={color} value={color}>{color}</option>)}
+                        </select>
+                        <br/>
+                        <select ref="teamId" onChange={() => view.saveUserData(userData.userId)}
+                                defaultValue={userData.teamId}>
+                            {playerInfo.teamList.map(teamId => <option key={teamId} value={teamId}>{teamId}</option>)}
+                        </select>
+                    </div> :
+                    <div>
+                        {userData.color} - {userData.teamId}
+                    </div>
+                }
+
+                <hr/>
+            </div>)}
             {JSON.stringify(mapGuide.settings)}
             <hr/>
             {chatMessages.map(message => <div key={JSON.stringify(message)}>{JSON.stringify(message)}</div>)}

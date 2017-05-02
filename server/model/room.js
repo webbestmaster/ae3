@@ -10,6 +10,7 @@ const generateId = require('./../lib/generate-id');
 const _ = require('lodash');
 const Chat = require('./chat').model;
 const sha1 = require('sha1');
+const createError = require('./../http/api').createError;
 
 const props = {
     initialData: 'initial-data',
@@ -55,12 +56,12 @@ class Room extends BaseModel {
     }
 
     // api methods
-    addChatMessage(req, res, userId, params) {
+    addChatMessage(req, res, pubUserId, params) {
         res.end();
-        this.get(props.chat).addMessage('sha1-of-user-id-' + sha1(userId), params.text);
+        this.get(props.chat).addMessage(pubUserId, params.text);
     }
 
-    getState(req, res, userId, params) {
+    getState(req, res, pubUserId, params) {
         const room = this;
 
         res.end(JSON.stringify({
@@ -69,22 +70,37 @@ class Room extends BaseModel {
         }));
     }
 
-    addUserId(req, res, userId, params) {
+    addUserId(req, res, pubUserId, params) {
         res.end();
 
         const room = this;
         const userIds = room.get(props.userIds);
 
-        if (userIds.indexOf(userId) !== -1) {
+        if (userIds.indexOf(pubUserId) !== -1) {
             return;
         }
 
-        userIds.push(userId);
+        userIds.push(pubUserId);
 
         const userData = new UserData();
 
-        userData.setUserId('sha1-of-user-id-' + sha1(userId));
+        userData.setUserId(pubUserId);
         room.get(props.usersData).push(userData);
+    }
+
+    updateUserData(req, res, pubUserId, params) {
+        res.end();
+
+        const room = this;
+        const userData = _.find(room.get(props.usersData), item => pubUserId === item.getUserId());
+
+        if (userData) {
+            userData.set(_.pick(params, ['teamId', 'color']));
+            res.end();
+            return;
+        }
+
+        createError({}, res, 'Can not find userData with userId ' + pubUserId);
     }
 
 }

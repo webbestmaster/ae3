@@ -5,6 +5,7 @@ const Room = roomModule.model;
 const getRoomIds = roomModule.getRoomIds;
 const getRoomById = roomModule.getRoomById;
 const _ = require('lodash');
+const gpubiu = require('../../www/main/gpubui');
 
 function createError(evt, res, text) {
     console.error(text);
@@ -12,6 +13,8 @@ function createError(evt, res, text) {
     Object.assign(res, {statusCode: 500});
     res.end(JSON.stringify({error: text}));
 }
+
+module.exports.createError = createError;
 
 const serverInfoResponse = JSON.stringify({
     httpPort
@@ -54,22 +57,24 @@ module.exports.getAvailableRooms = (req, res) => {
     res.end(JSON.stringify(getRoomIds()));
 };
 
-module.exports.enterRoom = (req, res, url, roomId, userId) => {
-    const room = getRoomById(roomId);
+/*
+ module.exports.enterRoom = (req, res, url, roomId, userId) => {
+ const room = getRoomById(roomId);
 
-    room.addUserId(userId);
+ room.addUserId(gpubiu(userId));
 
-    res.end('');
-};
+ res.end('');
+ };
+ */
 
 module.exports.roomApiGet = (req, res, url, userId, roomId, methodName, params) => { // eslint-disable-line max-params
     const room = getRoomById(roomId);
 
     if (typeof room !== 'undefined' && typeof room[methodName] === 'function') {
-        return room[methodName](req, res, userId, params);
+        return room[methodName](req, res, gpubiu(userId), params);
     }
 
-    return createError({}, res, ['Error: room has not method: ', userId, roomId, methodName, params].join(''));
+    return createError({}, res, ['Error: room has not method: ', gpubiu(userId), roomId, methodName, params].join(''));
 };
 
 module.exports.roomApiPost = (req, res, url, userId, roomId, methodName) => { // eslint-disable-line max-params
@@ -79,12 +84,13 @@ module.exports.roomApiPost = (req, res, url, userId, roomId, methodName) => { //
             const room = getRoomById(roomId);
 
             if (typeof room !== 'undefined' && typeof room[methodName] === 'function') {
-                return room[methodName](req, res, userId, params);
+                return room[methodName](req, res, gpubiu(userId), params);
             }
 
-            return createError({}, res, ['Error: room has not method: ', userId, roomId, methodName, params].join(''));
+            return createError({}, res,
+                ['Error: room has not method: ', gpubiu(userId), roomId, methodName, params].join(''));
         },
-        evt => createError(evt, res, ['Can parse body', userId, roomId, methodName].join(''))
+        evt => createError(evt, res, ['Can parse body', gpubiu(userId), roomId, methodName].join(''))
     );
 };
 

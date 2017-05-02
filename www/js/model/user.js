@@ -3,17 +3,17 @@
  */
 
 import BaseModel from './../base/base-model';
-import sha1 from 'sha1';
 import util from './../util/util';
 import ajax from './../util/ajax';
-
+import gprivui from '../../main/gprivui';
+import gpubui from '../../main/gpubui';
 
 // import ajax from './../util/ajax';
 import httpConst from './../../main/http-const.json';
 // import routerConst from './../router/const.json';
-
 const userConst = {
-    roomId: 'room-id'
+    roomId: 'room-id',
+    userData: 'user-data'
 };
 
 class User extends BaseModel {
@@ -54,12 +54,33 @@ class User extends BaseModel {
             .then(stateStr => JSON.parse(stateStr));
     }
 
+    saveUserData(params) {
+        const model = this;
+
+        return ajax.post(
+            model.getRoomApiUrl('updateUserData'),
+            params
+        );
+    }
+
     setId(email) {
-        return this.set('id', 'user-id-' + sha1(email));
+        const model = this;
+        const privUI = gprivui(email);
+
+        model.setPublicId(privUI);
+        return model.set('id', privUI);
     }
 
     getId() {
         return this.get('id');
+    }
+
+    setPublicId(privUI) {
+        return this.set('public-id', gpubui(privUI));
+    }
+
+    getPublicId() {
+        return this.get('public-id');
     }
 
 }
