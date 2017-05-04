@@ -63,6 +63,15 @@ class User extends BaseModel {
         );
     }
 
+    setInitialGameData(key, value) {
+        const model = this;
+
+        return ajax.post(
+            model.getRoomApiUrl('setInitialGameData'),
+            {[key]: value}
+        );
+    }
+
     setId(email) {
         const model = this;
         const privUI = gprivui(email);

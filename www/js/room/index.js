@@ -22,6 +22,18 @@ class Room extends BaseView {
         view.props.setRoomWatching(false);
     }
 
+    componentWillReceiveProps(nextProps) {
+        const view = this;
+        const {props} = view;
+        const {defaultMoney, unitLimit} = view.props;
+
+        ['defaultMoney', 'unitLimit'].forEach(propName => {
+            if (props.getRoomsState[propName] !== nextProps.getRoomsState[propName]) {
+                view.refs[propName].value = nextProps.getRoomsState[propName];
+            }
+        });
+    }
+
     saveUserData() {
         const view = this;
         const color = view.refs.color.value;
@@ -35,7 +47,7 @@ class Room extends BaseView {
 
     render() {
         const view = this;
-        const {usersData, chatMessages} = view.props.getRoomsState;
+        const {usersData, chatMessages, unitLimit, defaultMoney} = view.props.getRoomsState;
 
         return <div>
             <div>{view.props.getRoomsState.isInProgress ? 'in progress...' : 'done'}</div>
@@ -64,11 +76,27 @@ class Room extends BaseView {
 
                 <hr/>
             </div>)}
-            {JSON.stringify(mapGuide.settings)}
+
+            start money
+            <select ref="defaultMoney"
+                    onChange={evt => user.setInitialGameData('defaultMoney', Number(evt.currentTarget.value))}
+                    defaultValue={defaultMoney}>
+                {mapGuide.settings.defaultMoneyList.map(item => <option key={item}>{item}</option>)}
+            </select>
+            <hr/>
+            unit limit
+            <select ref="unitLimit"
+                    onChange={evt => user.setInitialGameData('unitLimit', Number(evt.currentTarget.value))}
+                    defaultValue={unitLimit}>
+                {mapGuide.settings.unitLimitList.map(item => <option key={item}>{item}</option>)}
+            </select>
+
             <hr/>
             {chatMessages.map(message => <div key={JSON.stringify(message)}>{JSON.stringify(message)}</div>)}
             <input ref="text" type="text"/>
             <button onClick={() => user.sendChatMessage(view.refs.text.value)}>send message</button>
+            <hr/>
+            <button>start game</button>
         </div>;
     }
 
@@ -82,7 +110,9 @@ Room.propTypes = {
             userId: PropTypes.string.isRequired,
             text: PropTypes.string.isRequired,
             timestamp: PropTypes.number.isRequired
-        })).isRequired
+        })).isRequired,
+        unitLimit: PropTypes.number.isRequired,
+        defaultMoney: PropTypes.number.isRequired
     }).isRequired,
 
     setRoomWatching: PropTypes.func.isRequired

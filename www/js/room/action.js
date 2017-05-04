@@ -30,14 +30,18 @@ export const setRoomWatching = (() => {
                 });
 
                 user.getRoomState()
-                    .then(roomState => dispatch({
-                        type: viewConst.type.getRoomState,
-                        payload: {
-                            isInProgress: false,
-                            usersData: roomState.usersData,
-                            chatMessages: roomState.chatMessages
-                        }
-                    }))
+                    .then(roomState => {
+                        dispatch({
+                            type: viewConst.type.getRoomState,
+                            payload: {
+                                isInProgress: false,
+                                usersData: roomState.usersData,
+                                chatMessages: roomState.chatMessages,
+                                unitLimit: roomState.unitLimit,
+                                defaultMoney: roomState.defaultMoney
+                            }
+                        });
+                    })
                     .then(() => setTimeout(watch, 1e3));
             })();
         };

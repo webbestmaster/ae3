@@ -1,6 +1,6 @@
 {
     "settings": {
-        "moneyList": [
+        "defaultMoneyList": [
             500,
             1000,
             2000,

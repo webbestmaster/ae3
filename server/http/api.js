@@ -11,6 +11,7 @@ function createError(evt, res, text) {
     console.error(text);
     console.error(evt);
     Object.assign(res, {statusCode: 500});
+    res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({error: text}));
 }
 
@@ -45,6 +46,7 @@ module.exports.createRoom = (req, res) => {
 
             const room = new Room(parsedBody);
 
+            res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify({
                 roomId: room.get('id')
             }));
@@ -54,6 +56,7 @@ module.exports.createRoom = (req, res) => {
 };
 
 module.exports.getAvailableRooms = (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(getRoomIds()));
 };
 
@@ -70,6 +73,8 @@ module.exports.getAvailableRooms = (req, res) => {
 module.exports.roomApiGet = (req, res, url, userId, roomId, methodName, params) => { // eslint-disable-line max-params
     const room = getRoomById(roomId);
 
+    res.setHeader('Content-Type', 'application/json');
+
     if (typeof room !== 'undefined' && typeof room[methodName] === 'function') {
         return room[methodName](req, res, gpubiu(userId), params);
     }
@@ -82,6 +87,8 @@ module.exports.roomApiPost = (req, res, url, userId, roomId, methodName) => { //
         body => {
             const params = JSON.parse(body);
             const room = getRoomById(roomId);
+
+            res.setHeader('Content-Type', 'application/json');
 
             if (typeof room !== 'undefined' && typeof room[methodName] === 'function') {
                 return room[methodName](req, res, gpubiu(userId), params);

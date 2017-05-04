@@ -11,9 +11,11 @@ const _ = require('lodash');
 const Chat = require('./chat').model;
 const sha1 = require('sha1');
 const createError = require('./../http/api').createError;
+const mapGuide = require('./../../www/maps/map-guide.json');
 
 const props = {
     initialData: 'initial-data',
+    // gameSettings: 'game-settings',
     userIds: 'user-ids',
     usersData: 'users-data',
     chat: 'chat'
@@ -32,6 +34,9 @@ class Room extends BaseModel {
             [props.usersData]: [],
             [props.chat]: new Chat()
         });
+
+        room.get(props.initialData).unitLimit = mapGuide.settings.unitLimitList[0];
+        room.get(props.initialData).defaultMoney = mapGuide.settings.defaultMoneyList[0];
 
         const id = 'room-id-' + generateId();
 
@@ -66,7 +71,9 @@ class Room extends BaseModel {
 
         res.end(JSON.stringify({
             chatMessages: room.get(props.chat).getAllMessages(),
-            usersData: room.get(props.usersData).map(userData => userData.toJSON())
+            usersData: room.get(props.usersData).map(userData => userData.toJSON()),
+            unitLimit: room.get(props.initialData).unitLimit,
+            defaultMoney: room.get(props.initialData).defaultMoney
         }));
     }
 
@@ -101,6 +108,15 @@ class Room extends BaseModel {
         }
 
         createError({}, res, 'Can not find userData with userId ' + pubUserId);
+    }
+
+    setInitialGameData(req, res, pubUserId, params) {
+        res.end();
+
+        const newParams = _.pick(params, ['unitLimit', 'defaultMoney']);
+        const room = this;
+
+        Object.assign(room.get(props.initialData), newParams);
     }
 
 }
