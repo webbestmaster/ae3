@@ -47,7 +47,7 @@ class Room extends BaseView {
 
     render() {
         const view = this;
-        const {usersData, chatMessages, unitLimit, defaultMoney} = view.props.getRoomsState;
+        const {usersData, chatMessages, unitLimit, defaultMoney, game} = view.props.getRoomsState;
 
         return <div>
             <div>{view.props.getRoomsState.isInProgress ? 'in progress...' : 'done'}</div>
@@ -96,7 +96,11 @@ class Room extends BaseView {
             <input ref="text" type="text"/>
             <button onClick={() => user.sendChatMessage(view.refs.text.value)}>send message</button>
             <hr/>
-            <button>start game</button>
+            <button onClick={() => user.startGame()}>start game</button>
+            <hr/>
+            <h1>Game</h1>
+            <hr/>
+            <div>{JSON.stringify(game)}</div>
         </div>;
     }
 
@@ -112,7 +116,8 @@ Room.propTypes = {
             timestamp: PropTypes.number.isRequired
         })).isRequired,
         unitLimit: PropTypes.number.isRequired,
-        defaultMoney: PropTypes.number.isRequired
+        defaultMoney: PropTypes.number.isRequired,
+        game: PropTypes.object.isRequired
     }).isRequired,
 
     setRoomWatching: PropTypes.func.isRequired

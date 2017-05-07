@@ -31,6 +31,9 @@ class Login extends BaseView {
     }
 
     componentDidMount() {
+
+        user.setId(Date.now());
+
         // FIXME: try to hide onSignIn
         Reflect.defineProperty(window, 'onSignIn', {value: this.onSignIn});
         util.loadScript('https://apis.google.com/js/platform.js');

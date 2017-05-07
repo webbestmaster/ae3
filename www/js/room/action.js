@@ -38,7 +38,8 @@ export const setRoomWatching = (() => {
                                 usersData: roomState.usersData,
                                 chatMessages: roomState.chatMessages,
                                 unitLimit: roomState.unitLimit,
-                                defaultMoney: roomState.defaultMoney
+                                defaultMoney: roomState.defaultMoney,
+                                game: roomState.game,
                             }
                         });
                     })

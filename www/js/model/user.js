@@ -92,6 +92,14 @@ class User extends BaseModel {
         return this.get('public-id');
     }
 
+    startGame() {
+        const model = this;
+
+        return ajax.get(
+            model.getRoomApiUrl('startGame')
+        );
+    }
+
 }
 
 export {User};

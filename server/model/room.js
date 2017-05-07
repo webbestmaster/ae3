@@ -12,10 +12,11 @@ const Chat = require('./chat').model;
 const sha1 = require('sha1');
 const createError = require('./../http/api').createError;
 const mapGuide = require('./../../www/maps/map-guide.json');
+const GameModel = require('./../../www/main/game/').model;
 
 const props = {
     initialData: 'initial-data',
-    // gameSettings: 'game-settings',
+    game: 'game',
     userIds: 'user-ids',
     usersData: 'users-data',
     chat: 'chat'
@@ -70,6 +71,7 @@ class Room extends BaseModel {
         const room = this;
 
         res.end(JSON.stringify({
+            game: room.get(props.game) && room.get(props.game).getState(),
             chatMessages: room.get(props.chat).getAllMessages(),
             usersData: room.get(props.usersData).map(userData => userData.toJSON()),
             unitLimit: room.get(props.initialData).unitLimit,
@@ -119,6 +121,21 @@ class Room extends BaseModel {
         Object.assign(room.get(props.initialData), newParams);
     }
 
+    startGame(req, res, pubUserId, params) {
+        res.end();
+
+        const room = this;
+
+        if (room.get(props.game)) {
+            console.log('game is exists');
+            return;
+        }
+
+        const game = new GameModel();
+
+        game.setMap(room.get(props.initialData).map);
+        room.set(props.game, game);
+    }
 }
 
 function getRoomById(gameId) {
