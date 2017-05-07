@@ -61,14 +61,7 @@ var obj = {
     cc: 4
 };
 
-function checkType(schema, obj, error) {
-
-    if (!error) {
-        error = {
-            message: '',
-            path: '/'
-        }
-    }
+function checkType(schema, obj) {
 
     if (typeof schema.type === props.fnc) {
         return schema.type(obj);
@@ -90,7 +83,7 @@ function checkType(schema, obj, error) {
                 return Object.keys(schema.props).every(function (key) {
 
                     if (obj.hasOwnProperty(key)) {
-                        return checkType(schema.props[key], obj[key], error);
+                        return checkType(schema.props[key], obj[key]);
                     }
 
                     return !schema.props[key].isRequired;
@@ -110,7 +103,7 @@ function checkType(schema, obj, error) {
             }
 
             return obj.every(function (item) {
-                return checkType(schema.item, item, error);
+                return checkType(schema.item, item);
             });
 
             break;
