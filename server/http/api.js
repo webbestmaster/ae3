@@ -4,7 +4,7 @@ const roomModule = require('./../model/room');
 const Room = roomModule.model;
 const getRoomIds = roomModule.getRoomIds;
 const getRoomById = roomModule.getRoomById;
-const _ = require('lodash');
+// const _ = require('lodash');
 const gpubiu = require('../../www/main/gpubui');
 
 function createError(evt, res, text) {

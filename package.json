@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "NODE_ENV=production webpack",
     "start": "webpack --progress",
+    "server": "cd server && IS_DEVELOPMENT=1 node index.js",
+    "build": "NODE_ENV=production webpack",
     "start-dev-server": "webpack-dev-server --content-base dist/ --host 0.0.0.0 --progress --no-inline",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",

@@ -56,6 +56,10 @@ class Room extends BaseModel {
         room.get(props.chat).destroy();
         room.get(props.usersData).forEach(userData => userData.destroy());
 
+        if (room.get(props.game)) {
+            room.get(props.game).destroy();
+        }
+
         console.log(roomId, 'destroyed');
 
         super.destroy();
