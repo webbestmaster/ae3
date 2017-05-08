@@ -5,10 +5,6 @@ function canCopyAsValue(value) {
     return ['function', 'string', 'number', 'boolean'].indexOf(type) !== -1 || value instanceof RegExp;
 }
 
-function propsIsValueType(type) {
-    return ['function', 'string', 'number', 'boolean'].indexOf(type) !== -1
-}
-
 // schema, donor, receiver
 function mask(schema, donor, receiver) {
     if (!schema.props) {
@@ -32,9 +28,10 @@ function mask(schema, donor, receiver) {
         if (Array.isArray(value)) {
             const arrayItemSchemeProps = schema.props[schemaKey].props;
 
-            receiver[schemaKey] = propsIsValueType(arrayItemSchemeProps.type) ?
-                value.map(item => item) :
-                value.map(item => mask(arrayItemSchemeProps, item, {}));
+            // check if array's items is objects
+            receiver[schemaKey] = arrayItemSchemeProps.props ?
+                value.map(item => mask(arrayItemSchemeProps, item, {})) :
+                value.map(item => item);
 
             return receiver;
         }
