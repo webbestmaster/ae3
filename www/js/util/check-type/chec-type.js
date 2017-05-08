@@ -100,7 +100,7 @@ function checkType(schema, value, info) {
     }
 
     if (type === ctpArr) {
-        return checkArr(schema.item, value, info);
+        return checkArr(schema.props, value, info);
     }
 
     if ([ctpFnc, ctpObj, ctpStr, ctpNbr, ctpBln].indexOf(type) !== -1) {

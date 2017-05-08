@@ -1,16 +1,26 @@
-const {createChecker, props} = require('./index');
+const {mask, props} = require('./index');
+// props needed for array only
 
 const schema = {
-    // type: props.obj, // props.obj - is default
     props: {
         ss: {
             type: props.str,
             isRequired: true
         },
-        nn: {
-            type: props.nbr,
-            isRequired: false
+        kk: {
+            props: {
+                ll: {
+                    props: {
+                        mm: {}
+                    }
+                },
+                yy: {}
+            }
         },
+        // nn: {
+        //     type: props.nbr,
+        //     isRequired: false
+        // },
         bb: {
             type: props.bln
         },
@@ -20,7 +30,6 @@ const schema = {
         aa: {
             type: props.arr,
             isRequired: true,
-
             props: {
                 type: props.obj,
                 props: {
@@ -35,7 +44,7 @@ const schema = {
             type: props.arr,
             isRequired: true,
             props: {
-                type: props.nbr
+                type: props.nbr,
             }
         },
         cc: {
@@ -44,25 +53,33 @@ const schema = {
         re: {
             type: /my[\s\S]+rg/i
         },
+        re3: {},
         emp: {
             isRequired: true
         }
     }
 };
 
-const obj = {
+const donor = {
     ss: 'ee',
+    kk: {
+        ll: {
+            mm: {
+                dd: ''
+            }
+        },
+        yy: 1
+    },
     nn: 11,
     bb: true,
-    aa: [{gg: 1}, {gg: 2}],
-    a1: [1, '2', 3],
+    aa: [{gg: 1}, {gg: 2, cc: 1}],
+    a1: [1, 2, 3],
     fn: function func() {
 
     },
     cc: 2,
-    re: 'MY RG'
-    // emp: {}
+    re: 'MY RG',
+    re3: /\d/
 };
 
-const checker = createChecker(schema);
-console.log(checker(obj));
+console.log(mask(schema, donor, {}));
