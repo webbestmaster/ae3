@@ -1,9 +1,10 @@
 {
-    "localization": {
-        "en": {
+    "localization": [
+        {
+            "local": "en",
             "name": "my first best map"
         }
-    },
+    ],
     "layer": {
         "landscape": [
             "ffrff",
@@ -12,7 +13,7 @@
             "ffrff",
             "ffrff"
         ],
-        "buildings": [
+        "building": [
             {
                 "x": 1,
                 "y": 5,
@@ -32,7 +33,7 @@
                 "playerId": "0"
             }
         ],
-        "units": [
+        "unit": [
             {
                 "x": 1,
                 "y": 5,

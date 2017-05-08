@@ -30,7 +30,7 @@ class Room extends BaseModel {
         const room = this;
 
         room.set({
-            [props.initialData]: _.pick(gameData, ['name', 'password', 'map']),
+            [props.initialData]: gameData,
             [props.userIds]: [],
             [props.usersData]: [],
             [props.chat]: new Chat()
@@ -140,6 +140,7 @@ class Room extends BaseModel {
         game.setMap(room.get(props.initialData).map);
         room.set(props.game, game);
     }
+
 }
 
 function getRoomById(gameId) {

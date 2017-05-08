@@ -44,7 +44,7 @@ const schema = {
             type: props.arr,
             isRequired: true,
             props: {
-                type: props.nbr,
+                type: props.nbr
             }
         },
         cc: {
@@ -82,4 +82,4 @@ const donor = {
     re3: /\d/
 };
 
-console.log(mask(schema, donor, {}));
+console.log(mask(schema, donor));

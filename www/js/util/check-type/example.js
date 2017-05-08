@@ -65,4 +65,5 @@ const obj = {
 };
 
 const checker = createChecker(schema);
+
 console.log(checker(obj));

@@ -31,7 +31,6 @@ class Login extends BaseView {
     }
 
     componentDidMount() {
-
         user.setId(Date.now());
 
         // FIXME: try to hide onSignIn

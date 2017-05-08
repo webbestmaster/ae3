@@ -15,7 +15,7 @@ const mapList = mapReqContext.keys()
         const map = mapReqContext(fileName);
 
         return {
-            mapName: map.localization.en.name,
+            mapName: map.localization[0].name,
             map,
             fileName
         };
