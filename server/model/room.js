@@ -20,8 +20,6 @@ const attr = {
     chat: 'chat'
 };
 
-// ---> userIds
-
 class Room extends BaseModel {
 
     constructor(gameData) {
@@ -182,8 +180,9 @@ class Room extends BaseModel {
 
         const game = new GameModel();
 
-        game.setMap(room.get(attr.initialData).map);
         room.set(attr.game, game);
+        game.setInitialData(room.get(attr.initialData));
+        game.addPlayers(room.get(attr.usersData));
     }
 
 }

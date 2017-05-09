@@ -1,45 +1,25 @@
 const BaseModel = require('./../../js/base/base-model');
 
-const props = {
-    map: 'map',
-    localization: 'localization',
-    landscape: 'landscape',
-    buildings: 'buildings',
-    units: 'units',
-    players: 'players'
+const attr = {
+    initialData: 'initial-data',
+    unit: 'unit',
+    player: 'player'
 };
 
-
 class GameModel extends BaseModel {
-    constructor() {
-        super();
 
-        this.set({
-            [props.players]: []
-        });
-    }
-
-    setMap(mapJSON) {
+    setInitialData(initialData) {
         const game = this;
 
-        game.set({
-            [props.localization]: mapJSON.localization,
-            [props.landscape]: mapJSON.layer.landscape,
-            [props.buildings]: mapJSON.layer.buildings,
-            [props.units]: mapJSON.layer.units,
-        });
+        game.set(attr.initialData, initialData);
     }
 
-    addPlayer(player) {
-        // get id and etc.
+    addPlayers(usersData) {
+        this.set({[attr.player]: usersData});
     }
 
     getState() {
-
-        const game = this;
-
-        return game.getAllAttributes();
-
+        return this.getAllAttributes();
     }
 
 }
