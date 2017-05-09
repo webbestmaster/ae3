@@ -5,6 +5,4 @@ const serverInfoResponse = JSON.stringify({
     httpPort
 });
 
-module.exports.getInfo = (req, res) => {
-    res.end(serverInfoResponse);
-};
+module.exports.getInfo = (req, res) => res.end(serverInfoResponse);

@@ -64,6 +64,7 @@ class Info {
         if (info._errorMessage) {
             return {
                 isValid: false,
+                isInvalid: true,
                 message: info._errorMessage,
                 path: info._keys.join('/'),
                 state: info._errorState
@@ -71,7 +72,8 @@ class Info {
         }
 
         return {
-            isValid: true
+            isValid: true,
+            isInvalid: false
         };
     }
 

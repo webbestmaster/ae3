@@ -1,10 +1,9 @@
-const {mask, props} = require('./index');
-// props needed for array only
+const {createMask} = require('./index');
 
 const schema = {
     props: {
         ss: {
-            type: props.str,
+            // type: props.str,
             isRequired: true
         },
         kk: {
@@ -22,40 +21,40 @@ const schema = {
         //     isRequired: false
         // },
         bb: {
-            type: props.bln
+            // type: props.bln
         },
         fn: {
-            type: props.fnc
+            // type: props.fnc
         },
         aa: {
-            type: props.arr,
+            // type: props.arr,
             isRequired: true,
             props: {
-                type: props.obj,
+                // type: props.obj,
                 props: {
                     gg: {
-                        type: props.nbr,
+                        // type: props.nbr,
                         isRequired: true
                     }
                 }
             }
         },
         a1: {
-            type: props.arr,
-            isRequired: true,
-            props: {
-                type: props.nbr
+            // type: props.arr,
+            // isRequired: true,
+            props: { // <--- props is optional
+                // type: props.nbr
             }
         },
         cc: {
-            type: value => value < 3
+            // type: value => value < 3
         },
         re: {
-            type: /my[\s\S]+rg/i
+            // type: /my[\s\S]+rg/i
         },
         re3: {},
         emp: {
-            isRequired: true
+            // isRequired: true
         }
     }
 };
@@ -82,4 +81,4 @@ const donor = {
     re3: /\d/
 };
 
-console.log(mask(schema, donor));
+console.log(createMask(schema)(donor));

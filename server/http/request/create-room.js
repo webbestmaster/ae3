@@ -1,9 +1,8 @@
-const createError = require('./../util.js').createError;
-const streamBodyParser = require('./../util.js').streamBodyParser;
+const util = require('./../util.js');
+const {createError, streamBodyParser, mask, checkType} = util;
+const {createChecker, props} = checkType;
+const {createMask} = mask;
 const Room = require('./../../model/room.js').model;
-
-const {createChecker, props} = require('./../util.js').checkType;
-const {mask} = require('./../util.js').mask;
 
 const mapSchema = {
     props: {
@@ -104,15 +103,16 @@ const createRoomSchema = {
     }
 };
 
-const createRoomSchemaChecker = createChecker(createRoomSchema);
+const roomSchemaChecker = createChecker(createRoomSchema);
+const roomSchemaMask = createMask(createRoomSchema);
 
-module.exports.createRoom = (req, res) => {
+module.exports.createRoom = (req, res) =>
     streamBodyParser(req,
         body => {
             const parsedBody = JSON.parse(body);
-            const dryRequest = mask(createRoomSchema, parsedBody);
+            const dryRequest = roomSchemaMask(parsedBody);
 
-            if (!createRoomSchemaChecker(dryRequest).isValid) {
+            if (roomSchemaChecker(dryRequest).isInvalid) {
                 createError({}, res, 'Invalid parameters to create room');
                 return;
             }
@@ -126,4 +126,4 @@ module.exports.createRoom = (req, res) => {
         },
         evt => createError(evt, res, 'Can not create room')
     );
-};
+
