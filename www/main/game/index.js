@@ -3,10 +3,18 @@ const BaseModel = require('./../../js/base/base-model');
 const attr = {
     initialData: 'initial-data',
     unit: 'unit',
-    player: 'player'
+    players: 'players',
+    currentPlayer: 'current-payer'
 };
 
 class GameModel extends BaseModel {
+
+    start() {
+        const game = this;
+        const players = game.get(attr.players);
+
+        game.set(attr.currentPlayer, players[0]);
+    }
 
     setInitialData(initialData) {
         const game = this;
@@ -15,7 +23,7 @@ class GameModel extends BaseModel {
     }
 
     addPlayers(usersData) {
-        this.set({[attr.player]: usersData});
+        this.set({[attr.players]: usersData});
     }
 
     getState() {

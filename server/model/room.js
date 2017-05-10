@@ -183,6 +183,7 @@ class Room extends BaseModel {
         room.set(attr.game, game);
         game.setInitialData(room.get(attr.initialData));
         game.addPlayers(room.get(attr.usersData));
+        game.start();
     }
 
 }
