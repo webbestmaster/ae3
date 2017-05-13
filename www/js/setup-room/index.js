@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 import ajax from './../lib/ajax';
 import _ from 'lodash';
 const apiRouteConst = require('./../api-route.json');
-const appConst = require('./../app-const.json');
 const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
 const mapList = mapReqContext.keys()
     .map(fileName => {
@@ -32,17 +31,15 @@ class SetupRoomView extends BaseView {
         const userId = view.props.userState.idState.id;
 
         ajax
-            .post(appConst.serverUrl + apiRouteConst.route.creteRoom, {
+            .post(apiRouteConst.route.creteRoom, {
                 name,
                 password,
                 map
             })
             .then(roomId =>
-                ajax.get(appConst.serverUrl +
-                    apiRouteConst.route.joinRoom
-                        .replace(':roomId', roomId)
-                        .replace(':privateUserId', userId
-                        )
+                ajax.get(apiRouteConst.route.joinRoom
+                    .replace(':roomId', roomId)
+                    .replace(':privateUserId', userId)
                 )
             );
     }

@@ -6,7 +6,8 @@
   "scripts": {
     "build-window": "webpack",
     "build": "NODE_ENV=production webpack",
-    "start": "webpack-dev-server --content-base dist/ --host 0.0.0.0 --progress --no-inline",
+    "start": "webpack",
+    "start-dev-server": "webpack-dev-server --content-base dist/ --host 0.0.0.0 --progress --no-inline",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "test": "echo \"Error: no test specified\" && exit 1"

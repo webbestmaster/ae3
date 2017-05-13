@@ -11,6 +11,9 @@ node_modules
 /_before/
 /_before-2/
 
+# Server
+/turn-based-server/
+
 # example
 # /* eslint-disable no-unused-vars */
 # var React = require('react');
