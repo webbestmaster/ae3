@@ -58,7 +58,9 @@ ReactDOM.render(
                     <AppRouter history={history}/> :
                     <div>
                         <AppRouter history={history}/>
-                        <DevTools />
+                        <div style={{fontSize: '13px'}}>
+                            <DevTools />
+                        </div>
                     </div>
             }
         </MuiThemeProvider>

@@ -1,5 +1,6 @@
 {
     "link": {
-        "root": "/"
+        "root": "/",
+        "createRoom": "create-room"
     }
 }
