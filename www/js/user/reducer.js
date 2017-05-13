@@ -18,6 +18,24 @@ const idState = (() => {
     };
 })();
 
+const roomIdState = (() => {
+    const initialState = {
+        roomId: 'room-id-is-not-defined'
+    };
+
+    return (state = initialState, {type, payload}) => {
+        if (type === userConst.type.setRoomId) {
+            return {
+                ...state,
+                roomId: payload.roomId
+            };
+        }
+
+        return state;
+    };
+})();
+
 export default combineReducers({
-    idState
+    idState,
+    roomIdState
 });

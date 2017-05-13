@@ -6,7 +6,10 @@ import {connect} from 'react-redux';
 // const routerConst = require('./../router/const.json');
 import ajax from './../lib/ajax';
 import _ from 'lodash';
+import * as userAction from './../user/action';
 const apiRouteConst = require('./../api-route.json');
+const routerConst = require('./../router/const.json');
+
 const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
 const mapList = mapReqContext.keys()
     .map(fileName => {
@@ -36,12 +39,15 @@ class SetupRoomView extends BaseView {
                 password,
                 map
             })
-            .then(roomId =>
-                ajax.get(apiRouteConst.route.joinRoom
+            .then(roomId => {
+                view.props.setRoomId(roomId);
+
+                return ajax.get(apiRouteConst.route.joinRoom
                     .replace(':roomId', roomId)
                     .replace(':privateUserId', userId)
-                )
-            );
+                );
+            })
+            .then(() => view.props.router.push(routerConst.link.room));
     }
 
     render() {
@@ -68,12 +74,25 @@ class SetupRoomView extends BaseView {
 }
 
 SetupRoomView.propTypes = {
-    router: PropTypes.object.isRequired
+    router: PropTypes.object.isRequired,
+
+    userState: PropTypes.shape({
+        idState: PropTypes.shape({
+            id: PropTypes.string.isRequired
+        }).isRequired,
+        roomIdState: PropTypes.shape({
+            roomId: PropTypes.string.isRequired
+        }).isRequired
+    }),
+
+    setRoomId: PropTypes.func.isRequired
 };
 
 export default connect(
     state => ({
         userState: state.userState
     }),
-    {}
+    {
+        setRoomId: userAction.setRoomId
+    }
 )(SetupRoomView);

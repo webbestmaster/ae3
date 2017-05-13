@@ -9,3 +9,12 @@ export function setId(id) {
         }
     };
 }
+
+export function setRoomId(roomId) {
+    return {
+        type: userConst.type.setRoomId,
+        payload: {
+            roomId: 'user-id-' + sha1(roomId)
+        }
+    };
+}

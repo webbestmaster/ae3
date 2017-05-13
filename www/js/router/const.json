@@ -1,6 +1,7 @@
 {
     "link": {
         "root": "/",
-        "setupRoom": "setup-room"
+        "setupRoom": "setup-room",
+        "room": "room"
     }
 }
