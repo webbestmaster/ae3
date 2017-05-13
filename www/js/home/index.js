@@ -16,7 +16,7 @@ class HomeView extends BaseView {
             <h1>home view</h1>
             <hr/>
             <hr/>
-            <Link to={routerConst.link.createRoom}>crete room</Link>
+            <Link to={routerConst.link.setupRoom}>setup room</Link>
             <hr/>
         </div>;
     }
