@@ -29,7 +29,7 @@ class SetupRoomView extends BaseView {
 
         const name = refs.name.value;
         const password = refs.password.value;
-        const map = _.find(mapList, {fileName: refs.map.value});
+        const {map} = _.find(mapList, {fileName: refs.map.value});
 
         const userId = view.props.userState.idState.id;
 

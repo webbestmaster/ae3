@@ -5,6 +5,7 @@
         "joinRoom": "/api/room/join-room/:roomId/:privateUserId",
         "leaveRoom": "/api/room/leave-room/:roomId/:privateUserId",
         "getRoomState": "/api/room/get-room-state/:roomId/:key",
+        "getRoomStates": "/api/room/get-room-state/:roomId/:keys",
         "setRoomState": "/api/room/set-room-state/:roomId",
         "setUserRoomState": "/api/room/set-user-room-state/:roomId/:privateUserId",
         "pingUserRoom": "/api/room/ping-user-room/:roomId/:privateUserId"

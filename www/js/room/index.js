@@ -11,14 +11,14 @@ class RoomView extends BaseView {
     componentWillUnmount() {
         const view = this;
         const {roomIdState, idState} = view.props.userState;
-        const {pingProc} = view.state;
+        const {pingProc, roomStatesProc} = view.state;
 
         pingProc.destroy();
+        roomStatesProc.destroy();
 
         ajax.get(apiRouteConst.route.leaveRoom
             .replace(':roomId', roomIdState.roomId)
-            .replace(':privateUserId', idState.id)
-        );
+            .replace(':privateUserId', idState.id));
     }
 
     componentDidMount() {
@@ -33,7 +33,14 @@ class RoomView extends BaseView {
             );
         }, 1000);
 
-        view.setState({pingProc});
+        const roomStatesProc = new Proc(() => {
+            return ajax.get(apiRouteConst.route.getRoomStates
+                .replace(':roomId', roomIdState.roomId)
+                .replace(':keys', ['map', 'users', 'defaultMoney', 'unitLimit'].join(','))
+            );
+        }, 1000);
+
+        view.setState({pingProc, roomStatesProc});
     }
 
     render() {
@@ -43,13 +50,11 @@ class RoomView extends BaseView {
     }
 }
 
-RoomView.propTypes = {
-};
+RoomView.propTypes = {};
 
 export default connect(
     state => ({
         userState: state.userState
     }),
-    {
-    }
+    {}
 )(RoomView);
