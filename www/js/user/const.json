@@ -1,6 +1,7 @@
 {
     "type": {
         "setId": "user__set-id",
+        "setPublicId": "user__set-public-id",
         "setRoomId": "user__set-room-id"
     }
 }

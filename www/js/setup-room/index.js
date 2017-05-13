@@ -47,7 +47,12 @@ class SetupRoomView extends BaseView {
                     .replace(':privateUserId', userId)
                 );
             })
-            .then(() => view.props.router.push(routerConst.link.room));
+            .then(rawResult => {
+                const result = JSON.parse(rawResult);
+
+                view.props.setPublicId(result.publicId);
+                view.props.router.push(routerConst.link.room);
+            });
     }
 
     render() {
@@ -82,6 +87,9 @@ SetupRoomView.propTypes = {
         }).isRequired,
         roomIdState: PropTypes.shape({
             roomId: PropTypes.string.isRequired
+        }).isRequired,
+        publicIdState: PropTypes.shape({
+            publicId: PropTypes.string.isRequired
         }).isRequired
     }),
 
@@ -93,6 +101,7 @@ export default connect(
         userState: state.userState
     }),
     {
-        setRoomId: userAction.setRoomId
+        setRoomId: userAction.setRoomId,
+        setPublicId: userAction.setPublicId
     }
 )(SetupRoomView);

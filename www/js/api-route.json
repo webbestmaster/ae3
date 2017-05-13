@@ -6,6 +6,7 @@
         "leaveRoom": "/api/room/leave-room/:roomId/:privateUserId",
         "getRoomState": "/api/room/get-room-state/:roomId/:key",
         "setRoomState": "/api/room/set-room-state/:roomId",
-        "setUserRoomState": "/api/room/set-user-room-state/:roomId/:privateUserId"
+        "setUserRoomState": "/api/room/set-user-room-state/:roomId/:privateUserId",
+        "pingUserRoom": "/api/room/ping-user-room/:roomId/:privateUserId"
     }
 }

@@ -35,7 +35,25 @@ const roomIdState = (() => {
     };
 })();
 
+const publicIdState = (() => {
+    const initialState = {
+        publicId: 'public-id-is-not-defined'
+    };
+
+    return (state = initialState, {type, payload}) => {
+        if (type === userConst.type.setPublicId) {
+            return {
+                ...state,
+                publicId: payload.publicId
+            };
+        }
+
+        return state;
+    };
+})();
+
 export default combineReducers({
     idState,
-    roomIdState
+    roomIdState,
+    publicIdState
 });

@@ -10,11 +10,20 @@ export function setId(id) {
     };
 }
 
+export function setPublicId(publicId) {
+    return {
+        type: userConst.type.setPublicId,
+        payload: {
+            publicId
+        }
+    };
+}
+
 export function setRoomId(roomId) {
     return {
         type: userConst.type.setRoomId,
         payload: {
-            roomId: 'user-id-' + sha1(roomId)
+            roomId
         }
     };
 }
