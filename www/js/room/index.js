@@ -77,9 +77,22 @@ class RoomView extends BaseView {
         view.setState({pingProc, roomStatesProc});
     }
 
+    setUserProperty(key, value) {
+        const view = this;
+        const {roomIdState, idState} = view.props.userState;
+
+        ajax.post(
+            apiRouteConst.route.setUserRoomState
+                .replace(':roomId', roomIdState.roomId)
+                .replace(':privateUserId', idState.id),
+            {[key]: value}
+        );
+    }
+
     render() {
         const view = this;
         const {state} = view;
+        const userPublicId = view.props.userState.publicIdState.publicId;
 
         return <div>
             <h1>the room</h1>
@@ -90,16 +103,27 @@ class RoomView extends BaseView {
             {state.users.map(user => <div key={user.publicId}>
                 <h2>{user.publicId}</h2>
                 <p>{JSON.stringify(user)}</p>
-                <select defaultValue={user.team}>
-                    {mapGuide.teamList.map(teamId =>
-                        <option key={teamId}>{teamId}</option>
-                    )}
-                </select>
-                <select defaultValue={user.color}>
-                    {mapGuide.colorList.map(colorId =>
-                        <option key={colorId}>{colorId}</option>
-                    )}
-                </select>
+                {userPublicId === user.publicId ?
+                    <div>
+                        <select
+                            onChange={evt => view.setUserProperty('team', evt.currentTarget.value)}
+                            defaultValue={user.team}>
+                            {mapGuide.teamList.map(teamId =>
+                                <option key={teamId}>{teamId}</option>
+                            )}
+                        </select>
+                        <select
+                            onChange={evt => view.setUserProperty('color', evt.currentTarget.value)}
+                            defaultValue={user.color}>
+                            {mapGuide.colorList.map(colorId =>
+                                <option key={colorId}>{colorId}</option>
+                            )}
+                        </select>
+                    </div> :
+                    <div>
+                        {user.color}, {user.team}
+                    </div>
+                }
                 <hr/>
             </div>)}
             <hr/>
