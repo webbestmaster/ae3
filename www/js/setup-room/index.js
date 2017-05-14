@@ -27,7 +27,7 @@ class SetupRoomView extends BaseView {
         const view = this;
         const {refs} = view;
 
-        const name = refs.name.value;
+        const gameName = refs.gameName.value;
         const password = refs.password.value;
         const {map} = _.find(mapList, {fileName: refs.map.value});
 
@@ -35,9 +35,10 @@ class SetupRoomView extends BaseView {
 
         ajax
             .post(apiRouteConst.route.creteRoom, {
-                name,
+                ...map,
+                gameName,
                 password,
-                map
+                chat: []
             })
             .then(roomId => {
                 view.props.setRoomId(roomId);
@@ -60,7 +61,7 @@ class SetupRoomView extends BaseView {
 
         return <div>
             <h1>setup room</h1>
-            <input ref="name" type="text" placeholder="game name"/>
+            <input ref="gameName" type="text" placeholder="game name"/>
             <br/>
             <input ref="password" type="text" placeholder="password"/>
             <br/>

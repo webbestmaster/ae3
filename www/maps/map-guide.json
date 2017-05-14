@@ -13,6 +13,17 @@
             25
         ]
     },
+    "teamList": [
+        "team-1",
+        "team-2",
+        "team-3"
+    ],
+    "colorList": [
+        "#000",
+        "#c00",
+        "#0c0",
+        "#00c"
+    ],
     "landscape": {
         "road": {
             "name": "road",
