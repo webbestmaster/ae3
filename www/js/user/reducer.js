@@ -3,7 +3,7 @@ const userConst = require('./const.json');
 
 const idState = (() => {
     const initialState = {
-        id: 'user-id-' + Math.random()
+        id: 'user-id-' + Math.random() + '-not-defined'
     };
 
     return (state = initialState, {type, payload}) => {

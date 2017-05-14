@@ -1,5 +1,7 @@
 {
     "route": {
+        "getPublicId": "/api/other/get-public-id/:key",
+
         "creteRoom": "/api/room/create-room",
         "getRooms": "/api/room/get-rooms",
         "joinRoom": "/api/room/join-room/:roomId/:privateUserId",

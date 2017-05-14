@@ -48,10 +48,7 @@ class SetupRoomView extends BaseView {
                     .replace(':privateUserId', userId)
                 );
             })
-            .then(rawResult => {
-                const result = JSON.parse(rawResult);
-
-                view.props.setPublicId(result.publicId);
+            .then(() => {
                 view.props.router.push(routerConst.link.room);
             });
     }

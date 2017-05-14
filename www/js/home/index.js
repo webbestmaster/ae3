@@ -4,11 +4,20 @@ import BaseView from './../core/base-view';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import * as userAction from './../user/action';
+import ajax from './../lib/ajax';
 const routerConst = require('./../router/const.json');
+const apiRouteConst = require('./../api-route.json');
 
 class HomeView extends BaseView {
     componentDidMount() {
-        this.props.setUserId(Math.random());
+        const view = this;
+
+
+        const privateUserId = view.props.setUserId(Math.random()).payload.id;
+
+        ajax
+            .get(apiRouteConst.route.getPublicId.replace(':key', privateUserId))
+            .then(publicId => view.props.setPublicId(publicId));
     }
 
     render() {
@@ -17,6 +26,8 @@ class HomeView extends BaseView {
             <hr/>
             <hr/>
             <Link to={routerConst.link.setupRoom}>setup room</Link>
+            <hr/>
+            <Link to={routerConst.link.joinRoom}>join room</Link>
             <hr/>
         </div>;
     }
@@ -29,8 +40,11 @@ HomeView.propTypes = {
 };
 
 export default connect(
-    state => ({}),
+    state => ({
+        userState: state.userState
+    }),
     {
-        setUserId: userAction.setId
+        setUserId: userAction.setId,
+        setPublicId: userAction.setPublicId
     }
 )(HomeView);
