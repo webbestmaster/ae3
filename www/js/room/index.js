@@ -6,6 +6,7 @@ import {Link} from 'react-router';
 import Proc from './../lib/proc';
 import ajax from './../lib/ajax';
 import _ from 'lodash';
+import timer from './../lib/timer';
 const apiRouteConst = require('./../api-route.json');
 const mapGuide = require('./../../maps/map-guide.json');
 
@@ -29,7 +30,8 @@ class RoomView extends BaseView {
     constructor() {
         super();
         this.state = {
-            users: []
+            users: [],
+            timerCount: Infinity
         };
     }
 
@@ -70,7 +72,8 @@ class RoomView extends BaseView {
                     'unitLimit',
                     'gameName',
                     'password',
-                    'chat'
+                    'chat',
+                    'isTimerStarted'
                 ].join(','))
             ).then(rawResult => {
                 view.setState(JSON.parse(rawResult).result);
@@ -89,6 +92,13 @@ class RoomView extends BaseView {
                 if (publicId === zeroUserPublicId) {
                     view.setRoomState('defaultMoney', view.refs.defaultMoney.value);
                     view.setRoomState('unitLimit', view.refs.unitLimit.value);
+                }
+
+                if (view.state.isTimerStarted && view.state.timerCount === Infinity) {
+                    timer(10, 1e3, count => {
+                        console.log(count);
+                        view.setState({timerCount: count});
+                    });
                 }
             });
         }, 1000);
@@ -120,11 +130,6 @@ class RoomView extends BaseView {
         );
     }
 
-    startGame() {
-
-
-    }
-
     render() {
         const view = this;
         const {state} = view;
@@ -140,7 +145,7 @@ class RoomView extends BaseView {
             {state.users.map(user => <div key={user.publicId}>
                 <h2>{user.publicId}</h2>
                 <p>{JSON.stringify(user)}</p>
-                {userPublicId === user.publicId ?
+                {userPublicId === user.publicId && view.state.timerCount >= 5 ?
                     <div>
                         <select
                             ref="teamSelect"
@@ -197,9 +202,12 @@ class RoomView extends BaseView {
             <button onClick={() => view.sendMessage()}>sendMessage</button>
 
             {zeroUserPublicId === userPublicId ?
-                <button onClick={() => view.startGame()}>start game</button> :
+                <button disabled={state.isTimerStarted} onClick={() => view.setRoomState('isTimerStarted', true)}>start game</button> :
                 <button>disabled start game</button>
             }
+
+            <h1>{view.state.timerCount}</h1>
+            {view.state.timerCount === 0 && <h1>THE GAME HAS BEGUN!</h1>}
         </div>;
     }
 }
