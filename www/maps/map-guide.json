@@ -1,18 +1,16 @@
 {
-    "settings": {
-        "defaultMoneyList": [
-            500,
-            1000,
-            2000,
-            5000
-        ],
-        "unitLimitList": [
-            10,
-            15,
-            20,
-            25
-        ]
-    },
+    "defaultMoneyList": [
+        500,
+        1000,
+        2000,
+        5000
+    ],
+    "unitLimitList": [
+        10,
+        15,
+        20,
+        25
+    ],
     "teamList": [
         "team-1",
         "team-2",

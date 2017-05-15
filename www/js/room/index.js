@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import Proc from './../lib/proc';
 import ajax from './../lib/ajax';
+import _ from 'lodash';
 const apiRouteConst = require('./../api-route.json');
 const mapGuide = require('./../../maps/map-guide.json');
 
@@ -71,7 +72,25 @@ class RoomView extends BaseView {
                     'password',
                     'chat'
                 ].join(','))
-            ).then(rawResult => view.setState(JSON.parse(rawResult).result));
+            ).then(rawResult => {
+                view.setState(JSON.parse(rawResult).result);
+
+                const {users} = view.state;
+                const {publicId} = view.props.userState.publicIdState;
+                const user = _.find(users, {publicId});
+
+                if (user && !user.team) {
+                    view.setUserProperty('team', view.refs.teamSelect.value);
+                    view.setUserProperty('color', view.refs.colorSelect.value);
+                }
+
+                const zeroUserPublicId = users[0] ? users[0].publicId : null;
+
+                if (publicId === zeroUserPublicId) {
+                    view.setRoomState('defaultMoney', view.refs.defaultMoney.value);
+                    view.setRoomState('unitLimit', view.refs.unitLimit.value);
+                }
+            });
         }, 1000);
 
         view.setState({pingProc, roomStatesProc});
@@ -89,10 +108,28 @@ class RoomView extends BaseView {
         );
     }
 
+    setRoomState(key, value) {
+        const view = this;
+        const {roomIdState, idState} = view.props.userState;
+
+        ajax.post(
+            apiRouteConst.route.setRoomState
+                .replace(':roomId', roomIdState.roomId)
+                .replace(':privateUserId', idState.id),
+            {[key]: value}
+        );
+    }
+
+    startGame() {
+
+
+    }
+
     render() {
         const view = this;
         const {state} = view;
         const userPublicId = view.props.userState.publicIdState.publicId;
+        const zeroUserPublicId = state.users[0] ? state.users[0].publicId : null;
 
         return <div>
             <h1>the room</h1>
@@ -106,6 +143,7 @@ class RoomView extends BaseView {
                 {userPublicId === user.publicId ?
                     <div>
                         <select
+                            ref="teamSelect"
                             onChange={evt => view.setUserProperty('team', evt.currentTarget.value)}
                             defaultValue={user.team}>
                             {mapGuide.teamList.map(teamId =>
@@ -113,6 +151,7 @@ class RoomView extends BaseView {
                             )}
                         </select>
                         <select
+                            ref="colorSelect"
                             onChange={evt => view.setUserProperty('color', evt.currentTarget.value)}
                             defaultValue={user.color}>
                             {mapGuide.colorList.map(colorId =>
@@ -127,12 +166,40 @@ class RoomView extends BaseView {
                 <hr/>
             </div>)}
             <hr/>
+
+            {zeroUserPublicId === userPublicId ?
+                <div>
+                    <h1>money limit</h1>
+                    <select ref="defaultMoney"
+                            onChange={evt => view.setRoomState('defaultMoney', evt.currentTarget.value)}>
+                        {mapGuide.defaultMoneyList.map(money =>
+                            <option key={money} value={money}>{money}</option>
+                        )}
+                    </select>
+                    <h1>unit limit</h1>
+                    <select ref="unitLimit"
+                            onChange={evt => view.setRoomState('unitLimit', evt.currentTarget.value)}>
+                        {mapGuide.unitLimitList.map(limit =>
+                            <option key={limit} value={limit}>{limit}</option>
+                        )}
+                    </select>
+                    <hr/>
+                </div> :
+                <div>
+                    <h1>unit defaultMoney: {state.defaultMoney}</h1>
+                    <h1>unit limit: {state.unitLimit}</h1>
+                </div>
+            }
+            <hr/>
             <p>{JSON.stringify(state.chat)}</p>
 
             <input ref="chatInput" type="text"/>
             <button onClick={() => view.sendMessage()}>sendMessage</button>
 
-            <button>start game</button>
+            {zeroUserPublicId === userPublicId ?
+                <button onClick={() => view.startGame()}>start game</button> :
+                <button>disabled start game</button>
+            }
         </div>;
     }
 }
