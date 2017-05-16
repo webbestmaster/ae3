@@ -4,18 +4,15 @@ import BaseView from './../core/base-view';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import * as userAction from './../user/action';
-import ajax from './../lib/ajax';
+import api from './../user/api';
 const routerConst = require('./../router/const.json');
-const apiRouteConst = require('./../api-route.json');
 
 class HomeView extends BaseView {
     componentDidMount() {
         const view = this;
-        const privateUserId = view.props.setUserId(Math.random()).payload.id;
 
-        ajax
-            .get(apiRouteConst.route.getPublicId.replace(':key', privateUserId))
-            .then(publicId => view.props.setPublicId(publicId));
+        view.props.setUserId(Math.random());
+        api.get.getPublicId().then(publicId => view.props.setPublicId(publicId));
     }
 
     render() {

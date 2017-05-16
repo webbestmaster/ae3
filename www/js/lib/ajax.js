@@ -16,13 +16,7 @@ function send(url, method, params, success) {
 }
 
 export default {
-    send(url, method, params) {
-        return new Promise(resolve => send(url, method, params, resolve));
-    },
-    get(url, params) {
-        return this.send(url, 'GET', params);
-    },
-    post(url, params) {
-        return this.send(url, 'POST', params);
-    }
+    send: (url, method, params) => new Promise(resolve => send(url, method, params, resolve)),
+    get: (url, params) => send(url, 'GET', params),
+    post: (url, params) => send(url, 'POST', params)
 };

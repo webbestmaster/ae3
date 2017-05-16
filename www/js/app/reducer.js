@@ -1,28 +1,8 @@
 import {combineReducers} from 'redux';
-
-import viewConst from './const.json';
-
-const {resize} = viewConst.type;
-
+import createReducer from './../lib/create-reducer';
 import {onResizeScreen} from './action';
-
-const screenState = (() => {
-    const initialState = onResizeScreen().payload;
-
-    return (state = initialState, action) => {
-        if (action.type === resize) {
-            return {
-                ...state,
-                width: action.payload.width,
-                height: action.payload.height
-            };
-        }
-
-        return state;
-    };
-})();
-
+const viewConst = require('./const.json');
 
 export default combineReducers({
-    screenState
+    screenState: createReducer(onResizeScreen().payload, viewConst.type.resize)
 });
