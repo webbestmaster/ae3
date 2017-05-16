@@ -344,7 +344,7 @@
             1,
             "nofunc"
         ],
-        "callback-return": 1,
+        "callback-return": [1, []],
         "no-mixed-requires": [
             1,
             true

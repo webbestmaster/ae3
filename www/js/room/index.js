@@ -1,68 +1,57 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import BaseView from './../core/base-view';
 import {connect} from 'react-redux';
-import {Link} from 'react-router';
+// import {Link} from 'react-router';
 import Proc from './../lib/proc';
-import ajax from './../lib/ajax';
+// import ajax from './../lib/ajax';
 import _ from 'lodash';
 import timer from './../lib/timer';
-const apiRouteConst = require('./../api-route.json');
+import api from './../user/api';
 const mapGuide = require('./../../maps/map-guide.json');
+const getDefaultState = () => ({
+    users: [],
+    timerCount: Infinity
+});
 
 class RoomView extends BaseView {
     sendMessage() {
         const view = this;
-        const text = view.refs.chatInput.value;
-        const {roomIdState, publicIdState} = view.props.userState;
 
-        ajax.post(
-            apiRouteConst.route.pushToRoomKey
-                .replace(':roomId', roomIdState.roomId),
-            {
-                chat: {
-                    publicId: publicIdState.publicId,
-                    text
-                }
-            });
+        api.post.pushToRoomKey(null, {
+            chat: {
+                publicId: view.props.userState.publicIdState.publicId,
+                text: view.refs.chatInput.value
+            }
+        });
     }
 
     constructor() {
         super();
-        this.state = {
-            users: [],
-            timerCount: Infinity
-        };
+
+        this.state = getDefaultState();
     }
 
     componentWillUnmount() {
         const view = this;
-        const {roomIdState, idState} = view.props.userState;
         const {pingProc, roomStatesProc} = view.state;
+
+        view.state = getDefaultState();
+
+        api.get.leaveRoom();
 
         pingProc.destroy();
         roomStatesProc.destroy();
-
-        ajax.get(apiRouteConst.route.leaveRoom
-            .replace(':roomId', roomIdState.roomId)
-            .replace(':privateUserId', idState.id));
     }
 
     componentDidMount() {
         const view = this;
-        const {roomIdState, idState} = view.props.userState;
 
-        const pingProc = new Proc(() => {
-            return ajax.get(apiRouteConst.route.pingUserRoom
-                .replace(':roomId', roomIdState.roomId)
-                .replace(':privateUserId', idState.id)
-            );
-        }, 1000);
+        const pingProc = new Proc(api.get.pingUserRoom, 1000);
 
         const roomStatesProc = new Proc(() => {
-            return ajax.get(apiRouteConst.route.getRoomStates
-                .replace(':roomId', roomIdState.roomId)
-                .replace(':keys', [
+            api.get.getRoomStates({
+                keys: [
                     'localization',
                     'landscape',
                     'building',
@@ -73,15 +62,18 @@ class RoomView extends BaseView {
                     'gameName',
                     'password',
                     'chat',
-                    'isTimerStarted'
-                ].join(','))
-            ).then(rawResult => {
+                    'isTimerStarted',
+                    'nextGameIs'
+                ].join(',')
+            }).then(rawResult => {
                 view.setState(JSON.parse(rawResult).result);
 
-                const {users} = view.state;
+                const {state} = view;
+                const {users} = state;
                 const {publicId} = view.props.userState.publicIdState;
                 const user = _.find(users, {publicId});
 
+                // auto set 'team' and 'color'
                 if (user && !user.team) {
                     view.setUserProperty('team', view.refs.teamSelect.value);
                     view.setUserProperty('color', view.refs.colorSelect.value);
@@ -89,16 +81,17 @@ class RoomView extends BaseView {
 
                 const zeroUserPublicId = users[0] ? users[0].publicId : null;
 
-                if (publicId === zeroUserPublicId) {
+                // auto set 'defaultMoney' and 'unitLimit'
+                if (publicId === zeroUserPublicId && !state.defaultMoney) {
                     view.setRoomState('defaultMoney', view.refs.defaultMoney.value);
                     view.setRoomState('unitLimit', view.refs.unitLimit.value);
                 }
 
-                if (view.state.isTimerStarted && view.state.timerCount === Infinity) {
+                if (state.isTimerStarted && state.timerCount === Infinity) {
                     timer(7, 1e3, count => {
                         console.log(count);
                         view.setState({timerCount: count});
-                    });
+                    }, () => alert(state.nextGameIs));
                 }
             });
         }, 1000);
@@ -107,27 +100,19 @@ class RoomView extends BaseView {
     }
 
     setUserProperty(key, value) {
-        const view = this;
-        const {roomIdState, idState} = view.props.userState;
-
-        ajax.post(
-            apiRouteConst.route.setUserRoomState
-                .replace(':roomId', roomIdState.roomId)
-                .replace(':privateUserId', idState.id),
-            {[key]: value}
-        );
+        return api.post.setUserRoomState(null, {[key]: value});
     }
 
     setRoomState(key, value) {
-        const view = this;
-        const {roomIdState, idState} = view.props.userState;
+        return api.post.setRoomState(null, {[key]: value});
+    }
 
-        ajax.post(
-            apiRouteConst.route.setRoomState
-                .replace(':roomId', roomIdState.roomId)
-                .replace(':privateUserId', idState.id),
-            {[key]: value}
-        );
+    startGame() {
+        const view = this;
+
+        view.setRoomState('isTimerStarted', true).then(() => {
+            view.setRoomState('nextGameIs', '100');
+        });
     }
 
     render() {
@@ -137,11 +122,13 @@ class RoomView extends BaseView {
         const zeroUserPublicId = state.users[0] ? state.users[0].publicId : null;
 
         return <div>
+            <h1>{state.nextGameIs}</h1>
             <h1>the room</h1>
 
             <h1>localization</h1>
             <p>{JSON.stringify(state.localization)}</p>
             <hr/>
+            <h1>users part</h1>
             {state.users.map(user => <div key={user.publicId}>
                 <h2>{user.publicId}</h2>
                 <p>{JSON.stringify(user)}</p>
@@ -201,12 +188,11 @@ class RoomView extends BaseView {
             <input ref="chatInput" type="text"/>
             <button onClick={() => view.sendMessage()}>sendMessage</button>
 
-            {zeroUserPublicId === userPublicId ?
-                <button disabled={state.isTimerStarted}
-                        onClick={() => view.setRoomState('isTimerStarted', true)}>
+            {zeroUserPublicId !== userPublicId || state.isTimerStarted ?
+                <button>disabled start game</button> :
+                <button onClick={() => view.startGame()}>
                     start game
-                </button> :
-                <button>disabled start game</button>
+                </button>
             }
 
             <h1>{view.state.timerCount}</h1>
