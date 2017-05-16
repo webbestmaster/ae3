@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BaseView from './../core/base-view';
 import {connect} from 'react-redux';
-import ajax from './../lib/ajax';
 import * as userAction from './../user/action';
 import api from './../user/api';
 const routerConst = require('./../router/const.json');
@@ -34,7 +33,7 @@ class JoinRoomView extends BaseView {
 
         view.props.setRoomId(roomId);
 
-        ajax.get.joinRoom()
+        api.get.joinRoom()
             .then(() => view.props.router.push(routerConst.link.room));
     }
 

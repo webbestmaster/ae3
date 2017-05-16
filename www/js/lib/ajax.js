@@ -15,8 +15,10 @@ function send(url, method, params, success) {
     xhr.send(params ? JSON.stringify(params) : null);
 }
 
-export default {
+const ajax = {
     send: (url, method, params) => new Promise(resolve => send(url, method, params, resolve)),
-    get: (url, params) => send(url, 'GET', params),
-    post: (url, params) => send(url, 'POST', params)
+    get: (url, params) => ajax.send(url, 'GET', params),
+    post: (url, params) => ajax.send(url, 'POST', params)
 };
+
+export default ajax;

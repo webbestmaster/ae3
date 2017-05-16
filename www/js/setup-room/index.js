@@ -4,10 +4,11 @@ import BaseView from './../core/base-view';
 import {connect} from 'react-redux';
 // import {Link} from 'react-router';
 // const routerConst = require('./../router/const.json');
-import ajax from './../lib/ajax';
+// import ajax from './../lib/ajax';
 import _ from 'lodash';
 import * as userAction from './../user/action';
-const apiRouteConst = require('./../api-route.json');
+import api from './../user/api';
+// const apiRouteConst = require('./../api-route.json');
 const routerConst = require('./../router/const.json');
 
 const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
@@ -31,10 +32,8 @@ class SetupRoomView extends BaseView {
         const password = refs.password.value;
         const {map} = _.find(mapList, {fileName: refs.map.value});
 
-        const userId = view.props.userState.idState.id;
-
-        ajax
-            .post(apiRouteConst.route.creteRoom, {
+        api.post
+            .creteRoom(null, {
                 ...map,
                 gameName,
                 password,
@@ -42,11 +41,7 @@ class SetupRoomView extends BaseView {
             })
             .then(roomId => {
                 view.props.setRoomId(roomId);
-
-                return ajax.get(apiRouteConst.route.joinRoom
-                    .replace(':roomId', roomId)
-                    .replace(':privateUserId', userId)
-                );
+                return api.get.joinRoom();
             })
             .then(() => {
                 view.props.router.push(routerConst.link.room);
@@ -99,7 +94,6 @@ export default connect(
         userState: state.userState
     }),
     {
-        setRoomId: userAction.setRoomId,
-        setPublicId: userAction.setPublicId
+        setRoomId: userAction.setRoomId
     }
 )(SetupRoomView);
