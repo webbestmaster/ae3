@@ -21,6 +21,10 @@ class JoinRoomView extends BaseView {
     }
 
     componentDidMount() {
+        this.refresh();
+    }
+
+    refresh() {
         const view = this;
 
         ajax.get(apiRouteConst.route.getRooms)
@@ -51,6 +55,8 @@ class JoinRoomView extends BaseView {
             {view.state.rooms.map(roomId =>
                 <button key={roomId} onClick={() => view.joinRoom(roomId)}>{roomId}</button>
             )}
+            <hr/>
+            <button onClick={() => view.refresh()}>refresh rooms</button>
         </div>;
     }
 }

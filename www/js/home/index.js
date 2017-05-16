@@ -11,8 +11,6 @@ const apiRouteConst = require('./../api-route.json');
 class HomeView extends BaseView {
     componentDidMount() {
         const view = this;
-
-
         const privateUserId = view.props.setUserId(Math.random()).payload.id;
 
         ajax

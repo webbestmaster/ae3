@@ -95,7 +95,7 @@ class RoomView extends BaseView {
                 }
 
                 if (view.state.isTimerStarted && view.state.timerCount === Infinity) {
-                    timer(10, 1e3, count => {
+                    timer(7, 1e3, count => {
                         console.log(count);
                         view.setState({timerCount: count});
                     });
@@ -145,7 +145,7 @@ class RoomView extends BaseView {
             {state.users.map(user => <div key={user.publicId}>
                 <h2>{user.publicId}</h2>
                 <p>{JSON.stringify(user)}</p>
-                {userPublicId === user.publicId && view.state.timerCount >= 5 ?
+                {userPublicId === user.publicId && view.state.timerCount >= 3 ?
                     <div>
                         <select
                             ref="teamSelect"
@@ -202,7 +202,10 @@ class RoomView extends BaseView {
             <button onClick={() => view.sendMessage()}>sendMessage</button>
 
             {zeroUserPublicId === userPublicId ?
-                <button disabled={state.isTimerStarted} onClick={() => view.setRoomState('isTimerStarted', true)}>start game</button> :
+                <button disabled={state.isTimerStarted}
+                        onClick={() => view.setRoomState('isTimerStarted', true)}>
+                    start game
+                </button> :
                 <button>disabled start game</button>
             }
 
