@@ -31,7 +31,20 @@ class HomeView extends BaseView {
 HomeView.propTypes = {
     router: PropTypes.object.isRequired,
 
-    setUserId: PropTypes.func.isRequired
+    userState: PropTypes.shape({
+        idState: PropTypes.shape({
+            id: PropTypes.string.isRequired
+        }).isRequired,
+        publicIdState: PropTypes.shape({
+            publicId: PropTypes.string.isRequired
+        }).isRequired,
+        roomIdState: PropTypes.shape({
+            roomId: PropTypes.string.isRequired
+        }).isRequired
+    }).isRequired,
+
+    setUserId: PropTypes.func.isRequired,
+    setPublicId: PropTypes.func.isRequired
 };
 
 export default connect(

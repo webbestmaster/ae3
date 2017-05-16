@@ -2,11 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BaseView from './../core/base-view';
 import {connect} from 'react-redux';
-import {Link} from 'react-router';
-import Proc from './../lib/proc';
 import ajax from './../lib/ajax';
 import * as userAction from './../user/action';
-const apiRouteConst = require('./../api-route.json');
+import api from './../user/api';
 const routerConst = require('./../router/const.json');
 
 class JoinRoomView extends BaseView {
@@ -27,24 +25,17 @@ class JoinRoomView extends BaseView {
     refresh() {
         const view = this;
 
-        ajax.get(apiRouteConst.route.getRooms)
-            .then(rawResult => {
-                view.setState({rooms: JSON.parse(rawResult)});
-            });
+        api.get.getRooms()
+            .then(rawResult => view.setState({rooms: JSON.parse(rawResult)}));
     }
 
     joinRoom(roomId) {
         const view = this;
-        const userId = view.props.userState.idState.id;
 
         view.props.setRoomId(roomId);
 
-        ajax.get(apiRouteConst.route.joinRoom
-            .replace(':roomId', roomId)
-            .replace(':privateUserId', userId)
-        ).then(() => {
-            view.props.router.push(routerConst.link.room);
-        });
+        ajax.get.joinRoom()
+            .then(() => view.props.router.push(routerConst.link.room));
     }
 
     render() {
@@ -61,7 +52,21 @@ class JoinRoomView extends BaseView {
     }
 }
 
-JoinRoomView.propTypes = {};
+JoinRoomView.propTypes = {
+    userState: PropTypes.shape({
+        idState: PropTypes.shape({
+            id: PropTypes.string.isRequired
+        }).isRequired,
+        publicIdState: PropTypes.shape({
+            publicId: PropTypes.string.isRequired
+        }).isRequired,
+        roomIdState: PropTypes.shape({
+            roomId: PropTypes.string.isRequired
+        }).isRequired
+    }).isRequired,
+
+    setRoomId: PropTypes.func.isRequired
+};
 
 export default connect(
     state => ({
