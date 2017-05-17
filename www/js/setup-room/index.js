@@ -32,8 +32,8 @@ class SetupRoomView extends BaseView {
         const password = refs.password.value;
         const {map} = _.find(mapList, {fileName: refs.map.value});
 
-        api.post
-            .creteRoom(null, {
+        api.post.room
+            .create(null, {
                 ...map,
                 gameName,
                 password,
@@ -41,7 +41,7 @@ class SetupRoomView extends BaseView {
             })
             .then(roomId => {
                 view.props.setRoomId(roomId);
-                return api.get.joinRoom();
+                return api.get.room.join();
             })
             .then(() => {
                 view.props.router.push(routerConst.link.room);

@@ -18,7 +18,7 @@ class RoomView extends BaseView {
     sendMessage() {
         const view = this;
 
-        api.post.pushToRoomKey(null, {
+        api.post.room.pushToKey(null, {
             chat: {
                 publicId: view.props.userState.publicIdState.publicId,
                 text: view.refs.chatInput.value
@@ -38,7 +38,7 @@ class RoomView extends BaseView {
 
         view.state = getDefaultState();
 
-        api.get.leaveRoom();
+        api.get.room.leave();
 
         pingProc.destroy();
         roomStatesProc.destroy();
@@ -46,10 +46,10 @@ class RoomView extends BaseView {
 
     componentDidMount() {
         const view = this;
-        const pingProc = new Proc(api.get.pingUserRoom, 1000);
+        const pingProc = new Proc(api.get.room.pingUser, 1000);
         const roomStatesProc = new Proc(() => {
-            api.get
-                .getRoomStates({
+            api.get.room
+                .getStates({
                     keys: [
                         'localization',
                         'landscape',
@@ -102,11 +102,11 @@ class RoomView extends BaseView {
     }
 
     setUserProperty(key, value) {
-        return api.post.setUserRoomState(null, {[key]: value});
+        return api.post.room.setUserState(null, {[key]: value});
     }
 
     setRoomState(key, value) {
-        return api.post.setRoomState(null, {[key]: value});
+        return api.post.room.setState(null, {[key]: value});
     }
 
     startGame() {

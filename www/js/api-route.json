@@ -1,16 +1,20 @@
 {
     "route": {
-        "getPublicId": "/api/other/get-public-id/:privateUserId",
+        "other": {
+            "getPublicId": "/api/other/get-public-id/:privateUserId"
+        },
+        "room": {
+            "create": "/api/room/create-room",
+            "getItems": "/api/room/get-rooms",
+            "join": "/api/room/join-room/:roomId/:privateUserId",
+            "leave": "/api/room/leave-room/:roomId/:privateUserId",
+            "getState": "/api/room/get-room-state/:roomId/:key",
+            "getStates": "/api/room/get-room-state/:roomId/:keys",
+            "setState": "/api/room/set-room-state/:roomId",
+            "pushToKey": "/api/room/push-to-room-key/:roomId",
+            "setUserState": "/api/room/set-user-room-state/:roomId/:privateUserId",
+            "pingUser": "/api/room/ping-user-room/:roomId/:privateUserId"
+        }
 
-        "creteRoom": "/api/room/create-room",
-        "getRooms": "/api/room/get-rooms",
-        "joinRoom": "/api/room/join-room/:roomId/:privateUserId",
-        "leaveRoom": "/api/room/leave-room/:roomId/:privateUserId",
-        "getRoomState": "/api/room/get-room-state/:roomId/:key",
-        "getRoomStates": "/api/room/get-room-state/:roomId/:keys",
-        "setRoomState": "/api/room/set-room-state/:roomId",
-        "pushToRoomKey": "/api/room/push-to-room-key/:roomId",
-        "setUserRoomState": "/api/room/set-user-room-state/:roomId/:privateUserId",
-        "pingUserRoom": "/api/room/ping-user-room/:roomId/:privateUserId"
     }
 }

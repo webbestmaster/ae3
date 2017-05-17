@@ -24,7 +24,7 @@ class JoinRoomView extends BaseView {
     refresh() {
         const view = this;
 
-        api.get.getRooms()
+        api.get.room.getItems()
             .then(rawResult => view.setState({rooms: JSON.parse(rawResult)}));
     }
 
@@ -33,7 +33,7 @@ class JoinRoomView extends BaseView {
 
         view.props.setRoomId(roomId);
 
-        api.get.joinRoom()
+        api.get.room.join()
             .then(() => view.props.router.push(routerConst.link.room));
     }
 

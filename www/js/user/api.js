@@ -22,14 +22,22 @@ const api = {
     post: {}
 };
 
-Object.keys(api).forEach(methodName =>
-    Object.keys(apiRoute.route)
-        .forEach(path =>
-            Object.assign(
-                api[methodName],
-                {[path]: (urlKeys, data) => ajax.send(generateUrl(urlKeys, apiRoute.route[path]), methodName, data)}
-            )
-        )
-);
+Object
+    .keys(api)
+    .forEach(methodName =>
+        Object
+            .keys(apiRoute.route)
+            .forEach(apiType => {
+                api[methodName][apiType] = {};
+                Object.keys(apiRoute.route[apiType]).forEach(pathName =>
+                    Object.assign(api[methodName][apiType],
+                        {
+                            [pathName]: (urlKeys, data) =>
+                                ajax.send(generateUrl(urlKeys, apiRoute.route[apiType][pathName]), methodName, data)
+                        }
+                    )
+                );
+            })
+    );
 
 export default api;

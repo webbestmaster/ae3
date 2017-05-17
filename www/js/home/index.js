@@ -12,7 +12,7 @@ class HomeView extends BaseView {
         const view = this;
 
         view.props.setUserId(Math.random());
-        api.get.getPublicId().then(publicId => view.props.setPublicId(publicId));
+        api.get.other.getPublicId().then(publicId => view.props.setPublicId(publicId));
     }
 
     render() {
