@@ -46,57 +46,59 @@ class RoomView extends BaseView {
 
     componentDidMount() {
         const view = this;
-
         const pingProc = new Proc(api.get.pingUserRoom, 1000);
-
         const roomStatesProc = new Proc(() => {
-            api.get.getRoomStates({
-                keys: [
-                    'localization',
-                    'landscape',
-                    'building',
-                    'unit',
-                    'users',
-                    'defaultMoney',
-                    'unitLimit',
-                    'gameName',
-                    'password',
-                    'chat',
-                    'isTimerStarted',
-                    'nextGameIs'
-                ].join(',')
-            }).then(rawResult => {
-                view.setState(JSON.parse(rawResult).result);
-
-                const {state} = view;
-                const {users} = state;
-                const {publicId} = view.props.userState.publicIdState;
-                const user = _.find(users, {publicId});
-
-                // auto set 'team' and 'color'
-                if (user && !user.team) {
-                    view.setUserProperty('team', view.refs.teamSelect.value);
-                    view.setUserProperty('color', view.refs.colorSelect.value);
-                }
-
-                const zeroUserPublicId = users[0] ? users[0].publicId : null;
-
-                // auto set 'defaultMoney' and 'unitLimit'
-                if (publicId === zeroUserPublicId && !state.defaultMoney) {
-                    view.setRoomState('defaultMoney', view.refs.defaultMoney.value);
-                    view.setRoomState('unitLimit', view.refs.unitLimit.value);
-                }
-
-                if (state.isTimerStarted && state.timerCount === Infinity) {
-                    timer(7, 1e3, count => {
-                        console.log(count);
-                        view.setState({timerCount: count});
-                    }, () => alert(state.nextGameIs));
-                }
-            });
-        }, 1000);
+            api.get
+                .getRoomStates({
+                    keys: [
+                        'localization',
+                        'landscape',
+                        'building',
+                        'unit',
+                        'users',
+                        'defaultMoney',
+                        'unitLimit',
+                        'gameName',
+                        'password',
+                        'chat',
+                        'isTimerStarted',
+                        'nextGameId'
+                    ].join(',')
+                })
+                .then(rawResult => view.onRoomStateReceive(JSON.parse(rawResult).result));
+        }, 1e3);
 
         view.setState({pingProc, roomStatesProc});
+    }
+
+    onRoomStateReceive(data) {
+        const view = this;
+        const {users} = data;
+        const {publicId} = view.props.userState.publicIdState;
+        const user = _.find(users, {publicId});
+        const zeroUserPublicId = users[0] ? users[0].publicId : null;
+
+        view.setState(data);
+
+        // auto set 'team' and 'color'
+        if (user && !user.team) {
+            view.setUserProperty('team', view.refs.teamSelect.value);
+            view.setUserProperty('color', view.refs.colorSelect.value);
+        }
+
+        // auto set 'defaultMoney' and 'unitLimit'
+        if (publicId === zeroUserPublicId && !data.defaultMoney) {
+            view.setRoomState('defaultMoney', view.refs.defaultMoney.value);
+            view.setRoomState('unitLimit', view.refs.unitLimit.value);
+        }
+
+        // check preparing for game starting
+        if (data.isTimerStarted && view.state.timerCount === Infinity) {
+            timer(7, 1e3, count => {
+                console.log(count);
+                view.setState({timerCount: count});
+            }, () => alert(data.nextGameId));
+        }
     }
 
     setUserProperty(key, value) {
@@ -111,7 +113,7 @@ class RoomView extends BaseView {
         const view = this;
 
         view.setRoomState('isTimerStarted', true).then(() => {
-            view.setRoomState('nextGameIs', '100');
+            view.setRoomState('nextGameId', '100');
         });
     }
 
@@ -122,7 +124,7 @@ class RoomView extends BaseView {
         const zeroUserPublicId = state.users[0] ? state.users[0].publicId : null;
 
         return <div>
-            <h1>{state.nextGameIs}</h1>
+            <h1>{state.nextGameId}</h1>
             <h1>the room</h1>
 
             <h1>localization</h1>
