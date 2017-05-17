@@ -5,16 +5,27 @@
         },
         "room": {
             "create": "/api/room/create-room",
-            "getItems": "/api/room/get-rooms",
-            "join": "/api/room/join-room/:roomId/:privateUserId",
-            "leave": "/api/room/leave-room/:roomId/:privateUserId",
-            "getState": "/api/room/get-room-state/:roomId/:key",
-            "getStates": "/api/room/get-room-state/:roomId/:keys",
-            "setState": "/api/room/set-room-state/:roomId",
-            "pushToKey": "/api/room/push-to-room-key/:roomId",
-            "setUserState": "/api/room/set-user-room-state/:roomId/:privateUserId",
-            "pingUser": "/api/room/ping-user-room/:roomId/:privateUserId"
+            "getItems": "/api/room/get-items",
+            "join": "/api/room/join/:roomId/:privateUserId",
+            "leave": "/api/room/leave/:roomId/:privateUserId",
+            "getState": "/api/room/get-state/:roomId/:key",
+            "getStates": "/api/room/get-states/:roomId/:keys",
+            "setState": "/api/room/set-state/:roomId",
+            "pushToKey": "/api/room/push-to-key/:roomId",
+            "setUserState": "/api/room/set-user-state/:roomId/:privateUserId",
+            "pingUser": "/api/room/ping-user/:roomId/:privateUserId"
+        },
+        "game": {
+            "create": "/api/game/create",
+            "getItems": "/api/game/get-items",
+            "join": "/api/game/join/:roomId/:privateUserId",
+            "leave": "/api/game/leave/:roomId/:privateUserId",
+            "getState": "/api/game/get-state/:roomId/:key",
+            "getStates": "/api/game/get-states/:roomId/:keys",
+            "setState": "/api/game/set-state/:roomId",
+            "pushToKey": "/api/game/push-to-key/:roomId",
+            "setUserState": "/api/game/set-user-state/:roomId/:privateUserId",
+            "pingUser": "/api/game/ping-user/:roomId/:privateUserId"
         }
-
     }
 }
