@@ -37,7 +37,8 @@ class SetupRoomView extends BaseView {
                 ...map,
                 gameName,
                 password,
-                chat: []
+                chat: [],
+                turns: []
             })
             .then(instanceId => {
                 view.props.setRoomId(instanceId);

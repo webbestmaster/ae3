@@ -2,6 +2,7 @@
 
 module.exports = function timer(count, period, func, callback) {
     if (count === 0) {
+        func(count);
         if (typeof callback === 'function') {
             callback();
         }
