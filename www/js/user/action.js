@@ -19,11 +19,11 @@ export function setPublicId(publicId) {
     };
 }
 
-export function setRoomId(roomId) {
+export function setRoomId(instanceId) {
     return {
         type: userConst.type.setRoomId,
         payload: {
-            roomId
+            instanceId
         }
     };
 }

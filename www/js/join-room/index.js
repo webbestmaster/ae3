@@ -28,10 +28,10 @@ class JoinRoomView extends BaseView {
             .then(rawResult => view.setState({rooms: JSON.parse(rawResult)}));
     }
 
-    joinRoom(roomId) {
+    joinRoom(instanceId) {
         const view = this;
 
-        view.props.setRoomId(roomId);
+        view.props.setRoomId(instanceId);
 
         api.get.room.join()
             .then(() => view.props.router.push(routerConst.link.room));
@@ -42,8 +42,8 @@ class JoinRoomView extends BaseView {
 
         return <div>
             <h1>rooms:</h1>
-            {view.state.rooms.map(roomId =>
-                <button key={roomId} onClick={() => view.joinRoom(roomId)}>{roomId}</button>
+            {view.state.rooms.map(instanceId =>
+                <button key={instanceId} onClick={() => view.joinRoom(instanceId)}>{instanceId}</button>
             )}
             <hr/>
             <button onClick={() => view.refresh()}>refresh rooms</button>
@@ -60,7 +60,7 @@ JoinRoomView.propTypes = {
             publicId: PropTypes.string.isRequired
         }).isRequired,
         roomIdState: PropTypes.shape({
-            roomId: PropTypes.string.isRequired
+            instanceId: PropTypes.string.isRequired
         }).isRequired
     }).isRequired,
 

@@ -39,8 +39,8 @@ class SetupRoomView extends BaseView {
                 password,
                 chat: []
             })
-            .then(roomId => {
-                view.props.setRoomId(roomId);
+            .then(instanceId => {
+                view.props.setRoomId(instanceId);
                 return api.get.room.join();
             })
             .then(() => {
@@ -79,7 +79,7 @@ SetupRoomView.propTypes = {
             id: PropTypes.string.isRequired
         }).isRequired,
         roomIdState: PropTypes.shape({
-            roomId: PropTypes.string.isRequired
+            instanceId: PropTypes.string.isRequired
         }).isRequired,
         publicIdState: PropTypes.shape({
             publicId: PropTypes.string.isRequired

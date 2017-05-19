@@ -6,7 +6,7 @@ function generateUrl(urlKeys, rawUrl) {
     const {userState} = store.getState();
     let url = rawUrl
         .replace(':privateUserId', userState.idState.id)
-        .replace(':roomId', userState.roomIdState.roomId);
+        .replace(':instanceId', userState.roomIdState.instanceId);
 
     if (urlKeys && typeof urlKeys === 'object') {
         Object.keys(urlKeys).forEach(key => {

@@ -39,7 +39,7 @@ HomeView.propTypes = {
             publicId: PropTypes.string.isRequired
         }).isRequired,
         roomIdState: PropTypes.shape({
-            roomId: PropTypes.string.isRequired
+            instanceId: PropTypes.string.isRequired
         }).isRequired
     }).isRequired,
 

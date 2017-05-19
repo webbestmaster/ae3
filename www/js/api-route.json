@@ -6,26 +6,14 @@
         "room": {
             "create": "/api/room/create-room",
             "getItems": "/api/room/get-items",
-            "getState": "/api/room/get-state/:roomId/:key",
-            "getStates": "/api/room/get-states/:roomId/:keys",
-            "setState": "/api/room/set-state/:roomId",
-            "pushToKey": "/api/room/push-to-key/:roomId",
-            "join": "/api/room/join/:roomId/:privateUserId",
-            "leave": "/api/room/leave/:roomId/:privateUserId",
-            "setUserState": "/api/room/set-user-state/:roomId/:privateUserId",
-            "pingUser": "/api/room/ping-user/:roomId/:privateUserId"
-        },
-        "game": {
-            "create": "/api/game/create",
-            "getItems": "/api/game/get-items",
-            "join": "/api/game/join/:roomId/:privateUserId",
-            "leave": "/api/game/leave/:roomId/:privateUserId",
-            "getState": "/api/game/get-state/:roomId/:key",
-            "getStates": "/api/game/get-states/:roomId/:keys",
-            "setState": "/api/game/set-state/:roomId",
-            "pushToKey": "/api/game/push-to-key/:roomId",
-            "setUserState": "/api/game/set-user-state/:roomId/:privateUserId",
-            "pingUser": "/api/game/ping-user/:roomId/:privateUserId"
+            "getState": "/api/room/get-state/:instanceId/:key",
+            "getStates": "/api/room/get-states/:instanceId/:keys",
+            "setState": "/api/room/set-state/:instanceId",
+            "pushToKey": "/api/room/push-to-key/:instanceId",
+            "join": "/api/room/join/:instanceId/:privateUserId",
+            "leave": "/api/room/leave/:instanceId/:privateUserId",
+            "setUserState": "/api/room/set-user-state/:instanceId/:privateUserId",
+            "pingUser": "/api/room/ping-user/:instanceId/:privateUserId"
         }
     }
 }
