@@ -23,7 +23,7 @@ export function resetState() {
 export function startTimer() {
     return dispatch => timer(
         9,
-        0.4e3,
+        0.1e3,
         count => dispatch(setState({startGameTimer: count})),
         () => console.log('the game has begun')
     );
