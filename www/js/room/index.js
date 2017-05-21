@@ -9,7 +9,7 @@ import _ from 'lodash';
 // import timer from './../lib/timer';
 import api from './../user/api';
 import * as gameAction from './../game/action';
-// import GameView from './../game';
+import GameView from './../game';
 import SettingView from './../setting';
 // const mapGuide = require('./../../maps/map-guide.json');
 const getDefaultState = () => ({
@@ -83,10 +83,14 @@ class RoomView extends BaseView {
 
     render() {
         const view = this;
-        const {users} = view.props.gameState.state;
+        const {users, startGameTimer} = view.props.gameState.state;
 
         if (!users || users.length === 0) {
             return <h1>initializing...</h1>;
+        }
+
+        if (startGameTimer === 0) {
+            return <GameView/>;
         }
 
         return <SettingView/>;

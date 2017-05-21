@@ -1,3 +1,4 @@
+import timer from './../lib/timer';
 const viewConst = require('./const.json');
 
 export function setState(payload) {
@@ -13,7 +14,17 @@ export function resetState() {
     return {
         type: viewConst.type.setState,
         payload: {
-            users: []
+            users: [],
+            startGameTimer: 10
         }
     };
+}
+
+export function startTimer() {
+    return dispatch => timer(
+        9,
+        1e3,
+        count => dispatch(setState({startGameTimer: count})),
+        () => console.log('the game has begun')
+    );
 }

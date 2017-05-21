@@ -1,4 +1,3 @@
-/* global setTimeout */
 import React from 'react';
 import PropTypes from 'prop-types';
 import BaseView from './../core/base-view';
@@ -8,7 +7,7 @@ import {connect} from 'react-redux';
 // import ajax from './../lib/ajax';
 // import _ from 'lodash';
 // import timer from './../../lib/timer';
-import find from 'lodash/find';
+// import find from 'lodash/find';
 import * as gameAction from './../game/action';
 import api from './../user/api';
 const mapGuide = require('./../../maps/map-guide.json');
@@ -33,10 +32,14 @@ class SettingView extends BaseView {
         return api.post.room.setState(null, {[key]: value});
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     const view = this;
-    //
-    // }
+    componentWillReceiveProps(nextProps) {
+        const view = this;
+
+        if (nextProps.gameState.state.isTimerStarted &&
+            nextProps.gameState.state.isTimerStarted !== view.props.gameState.state.isTimerStarted) {
+            view.props.startTimer();
+        }
+    }
 
     componentDidMount() {
         const view = this;
@@ -50,16 +53,23 @@ class SettingView extends BaseView {
         }
     }
 
+    startGame() {
+        const view = this;
+
+        view.setRoomState('isTimerStarted', true);
+    }
+
     render() {
         const view = this;
         const userPublicId = view.props.userState.publicIdState.publicId;
         const {
-            users, isTimerStarted, localization, defaultMoney, unitLimit, chat
+            users, isTimerStarted, localization, defaultMoney, unitLimit, chat, startGameTimer
         } = view.props.gameState.state;
         const zeroUserPublicId = users[0] ? users[0].publicId : null;
 
         return <div>
             <h1>settings</h1>
+            <h1>startGameTimer: {startGameTimer}</h1>
 
             <h1>localization</h1>
             <p>{JSON.stringify(localization)}</p>
@@ -68,7 +78,7 @@ class SettingView extends BaseView {
             {users.map(user => <div key={user.publicId}>
                 <h2>{user.publicId}</h2>
                 <p>{JSON.stringify(user)}</p>
-                {userPublicId === user.publicId ?
+                {userPublicId === user.publicId && startGameTimer > 4 ?
                     <div>
                         <select
                             ref="teamSelect"
@@ -149,7 +159,8 @@ SettingView.propTypes = {
     gameState: PropTypes.object.isRequired,
 
     setGameState: PropTypes.func.isRequired,
-    resetGameState: PropTypes.func.isRequired
+    resetGameState: PropTypes.func.isRequired,
+    startTimer: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -159,6 +170,7 @@ export default connect(
     }),
     {
         setGameState: gameAction.setState,
-        resetGameState: gameAction.resetState
+        resetGameState: gameAction.resetState,
+        startTimer: gameAction.startTimer
     }
 )(SettingView);
