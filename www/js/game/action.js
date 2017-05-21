@@ -8,6 +8,8 @@ export function setState(payload) {
 }
 
 export function resetState() {
+    console.warn('THIS IS NOT delete all props');
+    // TODO: fix this!
     return {
         type: viewConst.type.setState,
         payload: {
