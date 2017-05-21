@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 // import _ from 'lodash';
 // import timer from './../../lib/timer';
 // import find from 'lodash/find';
+import isItMe from './../lib/is-it-me';
 import * as gameAction from './../game/action';
 import api from './../user/api';
 const mapGuide = require('./../../maps/map-guide.json');
@@ -34,9 +35,10 @@ class SettingView extends BaseView {
 
     componentWillReceiveProps(nextProps) {
         const view = this;
+        const currentTimer = view.props.gameState.state.isTimerStarted;
+        const nextTimer = nextProps.gameState.state.isTimerStarted;
 
-        if (nextProps.gameState.state.isTimerStarted &&
-            nextProps.gameState.state.isTimerStarted !== view.props.gameState.state.isTimerStarted) {
+        if (nextTimer && nextTimer !== currentTimer) {
             view.props.startTimer();
         }
     }
@@ -61,11 +63,10 @@ class SettingView extends BaseView {
 
     render() {
         const view = this;
-        const userPublicId = view.props.userState.publicIdState.publicId;
         const {
             users, isTimerStarted, localization, defaultMoney, unitLimit, chat, startGameTimer
         } = view.props.gameState.state;
-        const zeroUserPublicId = users[0] ? users[0].publicId : null;
+        const zeroUser = users[0] || null;
 
         return <div>
             <h1>settings</h1>
@@ -78,7 +79,7 @@ class SettingView extends BaseView {
             {users.map(user => <div key={user.publicId}>
                 <h2>{user.publicId}</h2>
                 <p>{JSON.stringify(user)}</p>
-                {userPublicId === user.publicId && startGameTimer > 4 ?
+                {isItMe(user) && startGameTimer > 4 ?
                     <div>
                         <select
                             ref="teamSelect"
@@ -105,7 +106,7 @@ class SettingView extends BaseView {
             </div>)}
             <hr/>
 
-            {zeroUserPublicId === userPublicId ?
+            {isItMe(zeroUser) ?
                 <div>
                     <h1>money limit</h1>
                     <select ref="defaultMoney"
@@ -134,7 +135,7 @@ class SettingView extends BaseView {
             <input ref="chatInput" type="text"/>
             <button onClick={() => view.sendMessage()}>sendMessage</button>
 
-            {zeroUserPublicId !== userPublicId || isTimerStarted ?
+            {!isItMe(zeroUser) || isTimerStarted ?
                 <button>disabled start game</button> :
                 <button onClick={() => view.startGame()}>
                     start game

@@ -17,6 +17,5 @@ GameView.propTypes = {
 
 export default connect(
     state => ({}),
-    {
-    }
+    {}
 )(GameView);
