@@ -94,7 +94,7 @@ class GameView extends BaseView {
 
         return <div>
             <FlatButton
-                label="Submit"
+                label="Leave Turn"
                 primary={true}
                 keyboardFocused={true}
                 onTouchTap={() => api.get.room.leaveTurn()}
@@ -109,6 +109,7 @@ class GameView extends BaseView {
             </Dialog>
 
             <h1>{JSON.stringify(view.props.gameState)}</h1>
+            <div id="canvas-holder" />
         </div>;
     }
 }

@@ -18,6 +18,7 @@ import es6Promise from 'es6-promise';
 import fastclick from 'fastclick';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import materialUi from 'material-ui';
+require('pixi.js');
 
 // dev tools
 import {createDevTools} from 'redux-devtools';
