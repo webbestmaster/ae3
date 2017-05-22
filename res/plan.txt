@@ -1,3 +1,7 @@
+http://kadara.ru:1017
+http://jetbrains-server.ru:1017
+http://jetbrains.tencent.click
+
 Google Play Games Services > Web
 https://developers.google.com/games/services/web/api/turnBasedMatches
 
