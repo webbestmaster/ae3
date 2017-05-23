@@ -52,7 +52,50 @@ class Render extends BaseModel {
 
         // draw angles
         landscape.forEach((line, y) => line.forEach((square, x) => {
+            if (!isAnglesNeed(square)) {
+                return;
+            }
 
+            const type = square.split('-')[0];
+            let sprite = null;
+
+            // put 2, 4, 6, 8 angle
+            const square1 = landscape[y - 1] && landscape[y - 1][x - 1];
+            const square2 = landscape[y - 1] && landscape[y - 1][x];
+            const square3 = landscape[y - 1] && landscape[y - 1][x + 1];
+            const square4 = landscape[y] && landscape[y][x - 1];
+            const square5 = landscape[y] && landscape[y][x];
+            const square6 = landscape[y] && landscape[y][x + 1];
+            const square7 = landscape[y + 1] && landscape[y + 1][x - 1];
+            const square8 = landscape[y + 1] && landscape[y + 1][x];
+            const square9 = landscape[y + 1] && landscape[y + 1][x + 1];
+
+            if (!isTheSameSquares(square, square2)) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-2.png');
+                sprite.x = x * squareSize;
+                sprite.y = y * squareSize;
+                render.addChild('landscape', sprite);
+            }
+            if (!isTheSameSquares(square, square4)) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-4.png');
+                sprite.x = x * squareSize;
+                sprite.y = y * squareSize;
+                render.addChild('landscape', sprite);
+            }
+            if (!isTheSameSquares(square, square6)) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-6.png');
+                sprite.x = (x + 0.5) * squareSize;
+                sprite.y = y * squareSize;
+                render.addChild('landscape', sprite);
+            }
+            if (!isTheSameSquares(square, square8)) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-8.png');
+                sprite.x = x * squareSize;
+                sprite.y = (y + 0.5) * squareSize;
+                render.addChild('landscape', sprite);
+            }
+
+            console.log(x, y);
 
         }));
 
@@ -61,7 +104,6 @@ class Render extends BaseModel {
     }
 
 }
-
 
 
 const loader = new PIXI.loaders.Loader();
@@ -79,3 +121,16 @@ loader.load((loader, resources) => {
 });
 
 export {Render};
+
+// helpers
+function isAnglesNeed(square) {
+    return square.indexOf('water-') === 0 || square.indexOf('road-') === 0;
+}
+
+function isTheSameSquares(square1, square2) {
+    if (!square2) {
+        return true;
+    }
+
+    return square1.split('-')[0] === square2.split('-')[0];
+}
