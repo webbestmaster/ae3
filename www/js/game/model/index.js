@@ -14,9 +14,17 @@ export class GameModel extends BaseModel {
         return api.post.room
             .setUserState(null, {money: model.get('defaultMoney')})
             .then(() => {
-                model.trigger(attr.currentUserIndex);
                 const render = new Render();
+                const landscape = model.get('landscape');
+
+                model.trigger(attr.currentUserIndex);
                 model.set(attr.render, render);
+                render.set({
+                    mapWidth: landscape[0].length,
+                    mapHeight: landscape.length,
+                    squareSize: 24
+                });
+                render.drawLandscape(model.get('landscape'))
             })
     }
 }
