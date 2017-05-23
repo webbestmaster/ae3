@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 import BaseModel from './../../core/base-model';
 const PIXI = require('pixi.js');
 
@@ -45,6 +46,7 @@ class Render extends BaseModel {
         // draw main landscape
         landscape.forEach((line, y) => line.forEach((square, x) => {
             const sprite = PIXI.Sprite.fromFrame(square + '.png');
+
             sprite.x = x * squareSize;
             sprite.y = y * squareSize;
             render.addChild('landscape', sprite);
@@ -59,57 +61,114 @@ class Render extends BaseModel {
             const type = square.split('-')[0];
             let sprite = null;
 
-            // put 2, 4, 6, 8 angle
-            const square1 = landscape[y - 1] && landscape[y - 1][x - 1];
-            const square2 = landscape[y - 1] && landscape[y - 1][x];
-            const square3 = landscape[y - 1] && landscape[y - 1][x + 1];
-            const square4 = landscape[y] && landscape[y][x - 1];
-            const square5 = landscape[y] && landscape[y][x];
-            const square6 = landscape[y] && landscape[y][x + 1];
-            const square7 = landscape[y + 1] && landscape[y + 1][x - 1];
-            const square8 = landscape[y + 1] && landscape[y + 1][x];
-            const square9 = landscape[y + 1] && landscape[y + 1][x + 1];
+            // put angles
+            const isTheSameSquare1 = isTheSameSquares(square, landscape[y - 1] && landscape[y - 1][x - 1]);
+            const isTheSameSquare2 = isTheSameSquares(square, landscape[y - 1] && landscape[y - 1][x]);
+            const isTheSameSquare3 = isTheSameSquares(square, landscape[y - 1] && landscape[y - 1][x + 1]);
+            const isTheSameSquare4 = isTheSameSquares(square, landscape[y] && landscape[y][x - 1]);
+            // const square5 = landscape[y] && landscape[y][x];
+            const isTheSameSquare6 = isTheSameSquares(square, landscape[y] && landscape[y][x + 1]);
+            const isTheSameSquare7 = isTheSameSquares(square, landscape[y + 1] && landscape[y + 1][x - 1]);
+            const isTheSameSquare8 = isTheSameSquares(square, landscape[y + 1] && landscape[y + 1][x]);
+            const isTheSameSquare9 = isTheSameSquares(square, landscape[y + 1] && landscape[y + 1][x + 1]);
 
-            if (!isTheSameSquares(square, square2)) {
+            if (!isTheSameSquare2) {
                 sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-2.png');
                 sprite.x = x * squareSize;
                 sprite.y = y * squareSize;
                 render.addChild('landscape', sprite);
             }
-            if (!isTheSameSquares(square, square4)) {
+
+            if (!isTheSameSquare4) {
                 sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-4.png');
                 sprite.x = x * squareSize;
                 sprite.y = y * squareSize;
                 render.addChild('landscape', sprite);
             }
-            if (!isTheSameSquares(square, square6)) {
+
+            if (!isTheSameSquare6) {
                 sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-6.png');
                 sprite.x = (x + 0.5) * squareSize;
                 sprite.y = y * squareSize;
                 render.addChild('landscape', sprite);
             }
-            if (!isTheSameSquares(square, square8)) {
+
+            if (!isTheSameSquare8) {
                 sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-8.png');
                 sprite.x = x * squareSize;
                 sprite.y = (y + 0.5) * squareSize;
                 render.addChild('landscape', sprite);
             }
 
-            console.log(x, y);
+            // 1st angle
+            if (!isTheSameSquare1 &&
+                isTheSameSquare2 && isTheSameSquare4) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-1-s.png');
+                sprite.x = x * squareSize;
+                sprite.y = y * squareSize;
+                render.addChild('landscape', sprite);
+            } else if (!isTheSameSquare2 && !isTheSameSquare4) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-1.png');
+                sprite.x = x * squareSize;
+                sprite.y = y * squareSize;
+                render.addChild('landscape', sprite);
+            }
 
+            // 3st angle
+            if (!isTheSameSquare3 &&
+                isTheSameSquare2 && isTheSameSquare6) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-3-s.png');
+                sprite.x = (x + 0.5) * squareSize;
+                sprite.y = y * squareSize;
+                render.addChild('landscape', sprite);
+            } else if (!isTheSameSquare2 && !isTheSameSquare6) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-3.png');
+                sprite.x = (x + 0.5) * squareSize;
+                sprite.y = y * squareSize;
+                render.addChild('landscape', sprite);
+            }
+
+            // 7st angle
+            if (!isTheSameSquare7 &&
+                isTheSameSquare4 && isTheSameSquare8) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-7-s.png');
+                sprite.x = x * squareSize;
+                sprite.y = (y + 0.5) * squareSize;
+                render.addChild('landscape', sprite);
+            } else if (!isTheSameSquare4 && !isTheSameSquare8) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-7.png');
+                sprite.x = x * squareSize;
+                sprite.y = (y + 0.5) * squareSize;
+                render.addChild('landscape', sprite);
+            }
+
+            // 9st angle
+            if (!isTheSameSquare9 &&
+                isTheSameSquare6 && isTheSameSquare8) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-9-s.png');
+                sprite.x = (x + 0.5) * squareSize;
+                sprite.y = (y + 0.5) * squareSize;
+                render.addChild('landscape', sprite);
+            } else if (!isTheSameSquare6 && !isTheSameSquare8) {
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-9.png');
+                sprite.x = (x + 0.5) * squareSize;
+                sprite.y = (y + 0.5) * squareSize;
+                render.addChild('landscape', sprite);
+            }
+
+            console.log(x, y);
         }));
 
         // cacheAsBitmap: true after render - http://pixijs.download/release/docs/PIXI.Container.html
-
     }
-
 }
 
 
 const loader = new PIXI.loaders.Loader();
+
 loader.add('assets/terrain.json');
 
-loader.load((loader, resources) => {
+loader.load(() => {
     console.log('loaded');
     // resources is an object where the key is the name of the resource loaded and the value is the resource object.
     // They have a couple default properties:

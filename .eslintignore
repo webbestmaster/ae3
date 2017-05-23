@@ -11,8 +11,8 @@ node_modules
 /_before/
 /_before-2/
 
-# Server
-/turn-based-server/
+# res
+/res/
 
 # example
 # /* eslint-disable no-unused-vars */

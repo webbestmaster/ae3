@@ -24,8 +24,8 @@ export class GameModel extends BaseModel {
                     mapHeight: landscape.length,
                     squareSize: 24
                 });
-                render.drawLandscape(model.get('landscape'))
-            })
+                render.drawLandscape(model.get('landscape'));
+            });
     }
 }
 

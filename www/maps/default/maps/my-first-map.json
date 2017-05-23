@@ -6,10 +6,10 @@
         }
     ],
     "landscape": [
-        ["hill-0", "road-0", "forest-0", "forest-0", "forest-0"],
-        ["forest-0", "road-0", "forest-0", "forest-0", "forest-0"],
-        ["forest-0", "road-0", "forest-0", "forest-0", "forest-1"],
-        ["forest-0", "road-0", "forest-0", "forest-0", "forest-1"]
+        ["hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0"],
+        ["forest-0",    "road-0",     "forest-0",     "road-0",     "forest-0"],
+        ["forest-0",    "forest-0",   "road-0",       "road-0",     "road-0"],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1"]
     ],
     "building": [
         {
