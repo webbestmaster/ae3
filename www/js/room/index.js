@@ -59,7 +59,8 @@ class RoomView extends BaseView {
                         'isTimerStarted',
                         'isGameStarted',
                         'turns',
-                        'currentUserIndex'
+                        'currentUserIndex',
+                        'startUsersState'
                     ].join(',')
                 })
                 .then(rawResult => {

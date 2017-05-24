@@ -22,9 +22,11 @@ export class GameModel extends BaseModel {
                 render.set({
                     mapWidth: landscape[0].length,
                     mapHeight: landscape.length,
-                    squareSize: 24
+                    squareSize: 24,
+                    users: model.get('startUsersState')
                 });
                 render.drawLandscape(model.get('landscape'));
+                render.drawBuildings(model.get('building'));
             });
     }
 }

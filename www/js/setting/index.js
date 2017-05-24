@@ -59,6 +59,7 @@ class SettingView extends BaseView {
         const view = this;
 
         view.setRoomState('isTimerStarted', true);
+        view.setRoomState('startUsersState', view.props.gameState.state.users);
     }
 
     render() {

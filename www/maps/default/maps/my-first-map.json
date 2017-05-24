@@ -13,22 +13,22 @@
     ],
     "building": [
         {
-            "x": 1,
-            "y": 5,
-            "type": "farm",
-            "playerId": "0"
+            "x": 0,
+            "y": 0,
+            "type": "castle",
+            "userOrder": 0
         },
         {
-            "x": 2,
-            "y": 3,
+            "x": 1,
+            "y": 1,
             "type": "castle",
-            "playerId": "0"
+            "userOrder": 0
         },
         {
             "x": 3,
             "y": 2,
             "type": "farm",
-            "playerId": "0"
+            "userOrder": 0
         }
     ],
     "unit": [

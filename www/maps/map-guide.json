@@ -17,10 +17,10 @@
         "team-3"
     ],
     "colorList": [
-        "#000",
-        "#c00",
-        "#0c0",
-        "#00c"
+        "black",
+        "blue",
+        "green",
+        "red"
     ],
     "landscape": {
         "road": {
