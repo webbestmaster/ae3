@@ -7,7 +7,7 @@ class Render extends BaseModel {
         super();
 
         const render = this;
-        const app = new PIXI.Application(800, 600, {backgroundColor: 0x000000});
+        const app = new PIXI.Application(480, 320, {backgroundColor: 0x000000});
 
         // Scale mode for all textures, will retain pixelation
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
@@ -163,29 +163,6 @@ class Render extends BaseModel {
         }));
 
         // TODO: cacheAsBitmap: true after render - http://pixijs.download/release/docs/PIXI.Container.html
-    }
-
-    drawBuildings(buildings) {
-        const render = this;
-        const users = render.get('users');
-        const squareSize = render.get('squareSize');
-
-        buildings.forEach(building => {
-            const user = users[building.userOrder];
-
-            if (user) {
-                const sprite = new PIXI.Sprite.fromFrame(building.type + '-' + user.color + '.png');
-
-                sprite.x = building.x * squareSize;
-
-                sprite.anchor.y = 1;
-                sprite.y = (building.y + 1) * squareSize;
-
-                render.addChild('building', sprite);
-            } else {
-                console.warn('add logic for no user\'s building');
-            }
-        });
     }
 }
 

@@ -59,8 +59,20 @@
             "name": "farm",
             "defense": 2
         },
+        "farm-destroyed": {
+            "name": "farm",
+            "defense": 1
+        },
         "castle": {
             "name": "castle",
+            "defense": 3
+        },
+        "temple": {
+            "name": "temple",
+            "defense": 3
+        },
+        "well": {
+            "name": "well",
             "defense": 2
         }
     },

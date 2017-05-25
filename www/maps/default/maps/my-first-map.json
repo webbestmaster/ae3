@@ -6,10 +6,15 @@
         }
     ],
     "landscape": [
-        ["hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0"],
-        ["forest-0",    "road-0",     "forest-0",     "road-0",     "forest-0"],
-        ["forest-0",    "forest-0",   "road-0",       "road-0",     "road-0"],
-        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1"]
+        ["hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "road-0",     "forest-0",     "road-0",     "forest-0", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "road-0",       "road-0",     "road-0",   "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ]
     ],
     "building": [
         {
@@ -29,6 +34,39 @@
             "y": 2,
             "type": "farm",
             "userOrder": 0
+        },
+        {
+            "x": 5,
+            "y": 5,
+            "type": "well"
+        },
+        {
+            "x": 5,
+            "y": 6,
+            "type": "temple"
+        },
+        {
+            "x": 4,
+            "y": 3,
+            "type": "farm-destroyed"
+        },
+        {
+            "x": 6,
+            "y": 5,
+            "type": "castle",
+            "userOrder": 1
+        },
+        {
+            "x": 6,
+            "y": 6,
+            "type": "castle",
+            "userOrder": 1
+        },
+        {
+            "x": 5,
+            "y": 3,
+            "type": "farm",
+            "userOrder": 1
         }
     ],
     "unit": [
