@@ -8,33 +8,6 @@ const attr = {
     render: 'render'
 };
 
-/*
-
- drawBuildings(buildings) {
- const render = this;
- const users = render.get('users');
- const squareSize = render.get('squareSize');
-
- buildings.forEach(building => {
- const user = users[building.userOrder];
-
- if (user) {
- const sprite = new PIXI.Sprite.fromFrame(building.type + '-' + user.color + '.png');
-
- sprite.x = building.x * squareSize;
-
- sprite.anchor.y = 1;
- sprite.y = (building.y + 1) * squareSize;
-
- render.addChild('building', sprite);
- } else {
- console.warn('add logic for no user\'s building');
- }
- });
- }
- */
-
-
 class Building extends BaseModel {
     constructor(props) {
         super(props);
@@ -46,8 +19,8 @@ class Building extends BaseModel {
         const {type, color} = props;
 
         const sprite = color ?
-            PIXI.Sprite.fromFrame(type + '-' + color + '.png') :
-            PIXI.Sprite.fromFrame(type + '.png');
+            PIXI.Sprite.fromFrame(type + '-' + color) :
+            PIXI.Sprite.fromFrame(type);
 
         sprite.anchor.y = 1;
         sprite.x = props.x * squareSize;

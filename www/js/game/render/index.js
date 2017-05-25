@@ -48,7 +48,7 @@ class Render extends BaseModel {
 
         // draw main landscape
         landscape.forEach((line, y) => line.forEach((square, x) => {
-            const sprite = PIXI.Sprite.fromFrame(square + '.png');
+            const sprite = PIXI.Sprite.fromFrame(square);
 
             sprite.x = x * squareSize;
             sprite.y = y * squareSize;
@@ -76,28 +76,28 @@ class Render extends BaseModel {
             const isTheSameSquare9 = isTheSameSquares(square, landscape[y + 1] && landscape[y + 1][x + 1]);
 
             if (!isTheSameSquare2) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-2.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-2');
                 sprite.x = x * squareSize;
                 sprite.y = y * squareSize;
                 render.addChild('landscape', sprite);
             }
 
             if (!isTheSameSquare4) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-4.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-4');
                 sprite.x = x * squareSize;
                 sprite.y = y * squareSize;
                 render.addChild('landscape', sprite);
             }
 
             if (!isTheSameSquare6) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-6.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-6');
                 sprite.x = (x + 0.5) * squareSize;
                 sprite.y = y * squareSize;
                 render.addChild('landscape', sprite);
             }
 
             if (!isTheSameSquare8) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-8.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-8');
                 sprite.x = x * squareSize;
                 sprite.y = (y + 0.5) * squareSize;
                 render.addChild('landscape', sprite);
@@ -106,12 +106,12 @@ class Render extends BaseModel {
             // 1st angle
             if (!isTheSameSquare1 &&
                 isTheSameSquare2 && isTheSameSquare4) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-1-s.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-1-s');
                 sprite.x = x * squareSize;
                 sprite.y = y * squareSize;
                 render.addChild('landscape', sprite);
             } else if (!isTheSameSquare2 && !isTheSameSquare4) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-1.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-1');
                 sprite.x = x * squareSize;
                 sprite.y = y * squareSize;
                 render.addChild('landscape', sprite);
@@ -120,12 +120,12 @@ class Render extends BaseModel {
             // 3st angle
             if (!isTheSameSquare3 &&
                 isTheSameSquare2 && isTheSameSquare6) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-3-s.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-3-s');
                 sprite.x = (x + 0.5) * squareSize;
                 sprite.y = y * squareSize;
                 render.addChild('landscape', sprite);
             } else if (!isTheSameSquare2 && !isTheSameSquare6) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-3.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-3');
                 sprite.x = (x + 0.5) * squareSize;
                 sprite.y = y * squareSize;
                 render.addChild('landscape', sprite);
@@ -134,12 +134,12 @@ class Render extends BaseModel {
             // 7st angle
             if (!isTheSameSquare7 &&
                 isTheSameSquare4 && isTheSameSquare8) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-7-s.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-7-s');
                 sprite.x = x * squareSize;
                 sprite.y = (y + 0.5) * squareSize;
                 render.addChild('landscape', sprite);
             } else if (!isTheSameSquare4 && !isTheSameSquare8) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-7.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-7');
                 sprite.x = x * squareSize;
                 sprite.y = (y + 0.5) * squareSize;
                 render.addChild('landscape', sprite);
@@ -148,12 +148,12 @@ class Render extends BaseModel {
             // 9st angle
             if (!isTheSameSquare9 &&
                 isTheSameSquare6 && isTheSameSquare8) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-9-s.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-9-s');
                 sprite.x = (x + 0.5) * squareSize;
                 sprite.y = (y + 0.5) * squareSize;
                 render.addChild('landscape', sprite);
             } else if (!isTheSameSquare6 && !isTheSameSquare8) {
-                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-9.png');
+                sprite = new PIXI.Sprite.fromFrame('angle-' + type + '-9');
                 sprite.x = (x + 0.5) * squareSize;
                 sprite.y = (y + 0.5) * squareSize;
                 render.addChild('landscape', sprite);
@@ -169,7 +169,7 @@ class Render extends BaseModel {
 
 const loader = new PIXI.loaders.Loader();
 
-loader.add('assets/terrain.json');
+loader.add('assets/sprite.json');
 
 loader.load(() => {
     console.log('loaded');
@@ -179,7 +179,7 @@ loader.load(() => {
     // - `error`: The error that happened when trying to load (if any)
     // - `data`: The raw data that was loaded
     // also may contain other properties based on the middleware that runs.
-    // const texture = PIXI.Texture.fromFrame("angle-road-1.png");
+    // const texture = PIXI.Texture.fromFrame("angle-road-1");
 });
 
 export {Render};
