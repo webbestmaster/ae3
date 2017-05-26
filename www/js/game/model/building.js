@@ -5,7 +5,8 @@ const attr = {
     type: 'type',
     color: 'color',
     sprite: 'sprite',
-    render: 'render'
+    render: 'render',
+    userOrder: 'userOrder'
 };
 
 class Building extends BaseModel {
@@ -16,15 +17,15 @@ class Building extends BaseModel {
         const render = building.get(attr.render);
         const squareSize = render.get('squareSize');
 
-        const {type, color} = props;
+        const {type, color, x, y} = props;
 
         const sprite = color ?
             PIXI.Sprite.fromFrame(type + '-' + color) :
             PIXI.Sprite.fromFrame(type);
 
         sprite.anchor.y = 1;
-        sprite.x = props.x * squareSize;
-        sprite.y = (props.y + 1) * squareSize;
+        sprite.x = x * squareSize;
+        sprite.y = (y + 1) * squareSize;
 
         building.set(attr.sprite, sprite);
 

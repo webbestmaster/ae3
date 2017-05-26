@@ -3,15 +3,21 @@ import api from './../../user/api';
 import {Render} from './../render';
 import {Building} from './building';
 import {Landscape} from './landscape';
+import {Unit} from './unit/';
 
 const attr = {
     currentUserIndex: 'currentUserIndex',
+    startUsersState: 'startUsersState',
     render: 'render',
+
     landscape: 'landscape',
     buildings: 'buildings',
+    units: 'units',
+
     model: {
         buildings: 'model-buildings',
-        landscape: 'landscape'
+        landscape: 'model-landscape',
+        units: 'model-units'
     }
 };
 
@@ -27,7 +33,9 @@ export class GameModel extends BaseModel {
 
                 model.trigger(attr.currentUserIndex);
                 model.set({
+                    [attr.model.landscape]: null,
                     [attr.model.buildings]: [],
+                    [attr.model.units]: [],
                     [attr.render]: render
                 });
                 render.set({
@@ -43,20 +51,22 @@ export class GameModel extends BaseModel {
                 model.set(attr.model.landscape, modelLandscape);
 
                 model.get(attr.buildings).forEach(building => model.addBuilding(building));
+                model.get(attr.units).forEach(unit => model.addUnit(unit));
             });
     }
 
     addBuilding(buildingData) {
         const model = this;
-        const users = model.get('startUsersState');
+        const users = model.get(attr.startUsersState);
         const {type} = buildingData;
 
         const buildingProps = {
             type,
             color: null,
-            render: model.get('render'),
+            render: model.get(attr.render),
             x: buildingData.x,
-            y: buildingData.y
+            y: buildingData.y,
+            userOrder: null
         };
 
         if (['well', 'temple', 'farm-destroyed'].indexOf(type) !== -1) {
@@ -64,10 +74,11 @@ export class GameModel extends BaseModel {
         }
 
         if (['farm', 'castle'].indexOf(type) !== -1) {
-            if (buildingData.hasOwnProperty('userOrder')) {
+            if (buildingData.hasOwnProperty('userOrder') && users[buildingData.userOrder]) {
                 const userData = users[buildingData.userOrder];
 
-                buildingProps.color = userData ? userData.color : 'gray';
+                buildingProps.color = userData.color;
+                buildingProps.userOrder = userData.userOrder;
             } else {
                 buildingProps.color = 'gray';
             }
@@ -76,6 +87,31 @@ export class GameModel extends BaseModel {
         const building = new Building(buildingProps);
 
         model.get(attr.model.buildings).push(building);
+    }
+
+    addUnit(unitData) {
+        const model = this;
+        const users = model.get(attr.startUsersState);
+        const {type} = unitData;
+
+        const userData = users[unitData.userOrder];
+
+        if (!userData) {
+            return;
+        }
+
+        const unitProps = {
+            type,
+            color: userData.color,
+            render: model.get(attr.render),
+            x: unitData.x,
+            y: unitData.y,
+            userOrder: userData.userOrder
+        };
+
+        const unit = new Unit(unitProps);
+
+        model.get(attr.model.units).push(unit);
     }
 }
 

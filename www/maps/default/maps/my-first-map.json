@@ -74,19 +74,37 @@
             "x": 1,
             "y": 5,
             "type": "soldier",
-            "playerId": "0"
+            "userOrder": 1
         },
         {
             "x": 2,
             "y": 3,
             "type": "archer",
-            "playerId": "0"
+            "userOrder": 1
         },
         {
             "x": 3,
             "y": 2,
             "type": "skeleton",
-            "playerId": "0"
+            "userOrder": 1
+        },
+        {
+            "x": 2,
+            "y": 6,
+            "type": "soldier",
+            "userOrder": 0
+        },
+        {
+            "x": 3,
+            "y": 4,
+            "type": "archer",
+            "userOrder": 0
+        },
+        {
+            "x": 4,
+            "y": 3,
+            "type": "skeleton",
+            "userOrder": 0
         }
     ]
 }
