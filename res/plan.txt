@@ -2,6 +2,14 @@ http://kadara.ru:1017
 http://jetbrains-server.ru:1017
 http://jetbrains.tencent.click
 
+вынести ландшафт из редерера в отдельный объект
+
+для всех объектов - план такой
+
+когда объект создаётся - он записывает себя в соответсвтующий массив в модели игры
+и свой спрайт пихает в рендерер
+потом уже обхект сам меняет положение своего спрайта
+
 Google Play Games Services > Web
 https://developers.google.com/games/services/web/api/turnBasedMatches
 
