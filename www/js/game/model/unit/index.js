@@ -1,5 +1,6 @@
 import BaseModel from './../../../core/base-model';
 const PIXI = require('pixi.js');
+const renderConfig = require('./../../render/config.json');
 
 const attr = {
     type: 'type',
@@ -28,7 +29,7 @@ class Unit extends BaseModel {
 
         unit.set(attr.animatedSprite, animatedSprite);
 
-        animatedSprite.animationSpeed = 0.1;
+        animatedSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
         animatedSprite.play();
 
         render.addChild('units', animatedSprite);
@@ -37,10 +38,8 @@ class Unit extends BaseModel {
         animatedSprite.buttonMode = true;
 
         animatedSprite.on('click', evt => {
-            console.log('unit event')
+            console.log('unit event');
         });
-
-
     }
 
     move(x, y) { // need list of coordinates to move as A*

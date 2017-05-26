@@ -3,7 +3,8 @@ const PIXI = require('pixi.js');
 
 const attr = {
     render: 'render',
-    landscape: 'landscape'
+    landscape: 'landscape',
+    game: 'game'
 };
 
 class Landscape extends BaseModel {
@@ -33,10 +34,7 @@ class Landscape extends BaseModel {
             sprite.interactive = true;
             sprite.buttonMode = true;
 
-            sprite.on('click', evt => {
-                console.log('ground event')
-            });
-
+            sprite.on('click', () => model.moveSelectMark(x, y));
         }));
 
         // draw angles
@@ -147,6 +145,10 @@ class Landscape extends BaseModel {
         }));
 
         // TODO: cacheAsBitmap: true after render - http://pixijs.download/release/docs/PIXI.Container.html
+    }
+
+    moveSelectMark(x, y) {
+        this.get(attr.game).get('ui').selectMark.moveTo(x, y);
     }
 }
 
