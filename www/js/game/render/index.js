@@ -9,9 +9,6 @@ class Render extends BaseModel {
         const render = this;
         const app = new PIXI.Application(480, 320, {backgroundColor: 0x000000});
 
-        // Scale mode for all textures, will retain pixelation
-        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-
         document.getElementById('canvas-holder').appendChild(app.view);
 
         const boxContainer = new PIXI.Container();
@@ -32,6 +29,7 @@ class Render extends BaseModel {
             boxContainer.addChild(container);
         });
 
+        // to scale all - scale stage
         app.stage.addChild(boxContainer);
 
         render.set({app});
@@ -166,7 +164,8 @@ class Render extends BaseModel {
     }
 }
 
-
+// Scale mode for all textures, will retain pixelation
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 const loader = new PIXI.loaders.Loader();
 
 loader.add('assets/sprite.json');
