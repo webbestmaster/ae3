@@ -13,7 +13,7 @@ class Building extends BaseModel {
         super(props);
 
         const building = this;
-        const render = building.get('render');
+        const render = building.get(attr.render);
         const squareSize = render.get('squareSize');
 
         const {type, color} = props;

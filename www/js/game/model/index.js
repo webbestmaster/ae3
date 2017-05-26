@@ -2,12 +2,16 @@ import BaseModel from './../../core/base-model';
 import api from './../../user/api';
 import {Render} from './../render';
 import {Building} from './building';
+import {Landscape} from './landscape';
 
 const attr = {
     currentUserIndex: 'currentUserIndex',
     render: 'render',
+    landscape: 'landscape',
+    buildings: 'buildings',
     model: {
-        buildings: 'model-buildings'
+        buildings: 'model-buildings',
+        landscape: 'landscape'
     }
 };
 
@@ -23,16 +27,22 @@ export class GameModel extends BaseModel {
 
                 model.trigger(attr.currentUserIndex);
                 model.set({
-                    [attr.render]: render,
-                    [attr.model.buildings]: []
+                    [attr.model.buildings]: [],
+                    [attr.render]: render
                 });
                 render.set({
                     mapWidth: landscape[0].length,
                     mapHeight: landscape.length
-                    // startUsersState: model.get('startUsersState')
                 });
-                render.drawLandscape(model.get('landscape'));
-                model.get('buildings').forEach(building => model.addBuilding(building));
+
+                const modelLandscape = new Landscape({
+                    [attr.landscape]: model.get(attr.landscape),
+                    [attr.render]: render
+                });
+
+                model.set(attr.model.landscape, modelLandscape);
+
+                model.get(attr.buildings).forEach(building => model.addBuilding(building));
             });
     }
 
