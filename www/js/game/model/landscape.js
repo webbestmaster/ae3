@@ -29,6 +29,14 @@ class Landscape extends BaseModel {
             sprite.x = x * squareSize;
             sprite.y = y * squareSize;
             render.addChild(attr.landscape, sprite);
+
+            sprite.interactive = true;
+            sprite.buttonMode = true;
+
+            sprite.on('click', evt => {
+                console.log('ground event')
+            });
+
         }));
 
         // draw angles

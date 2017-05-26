@@ -32,6 +32,15 @@ class Unit extends BaseModel {
         animatedSprite.play();
 
         render.addChild('units', animatedSprite);
+
+        animatedSprite.interactive = true;
+        animatedSprite.buttonMode = true;
+
+        animatedSprite.on('click', evt => {
+            console.log('unit event')
+        });
+
+
     }
 
     move(x, y) { // need list of coordinates to move as A*
