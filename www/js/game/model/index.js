@@ -7,7 +7,7 @@ const attr = {
     currentUserIndex: 'currentUserIndex',
     render: 'render',
     model: {
-        building: 'model-building'
+        buildings: 'model-buildings'
     }
 };
 
@@ -24,16 +24,15 @@ export class GameModel extends BaseModel {
                 model.trigger(attr.currentUserIndex);
                 model.set({
                     [attr.render]: render,
-                    [attr.model.building]: []
+                    [attr.model.buildings]: []
                 });
                 render.set({
                     mapWidth: landscape[0].length,
-                    mapHeight: landscape.length,
-                    squareSize: 24,
-                    users: model.get('startUsersState')
+                    mapHeight: landscape.length
+                    // startUsersState: model.get('startUsersState')
                 });
                 render.drawLandscape(model.get('landscape'));
-                model.get('building').forEach(building => model.addBuilding(building));
+                model.get('buildings').forEach(building => model.addBuilding(building));
             });
     }
 
@@ -66,7 +65,7 @@ export class GameModel extends BaseModel {
 
         const building = new Building(buildingProps);
 
-        model.get(attr.model.building).push(building);
+        model.get(attr.model.buildings).push(building);
     }
 }
 

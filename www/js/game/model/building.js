@@ -28,7 +28,7 @@ class Building extends BaseModel {
 
         building.set(attr.sprite, sprite);
 
-        render.addChild('building', sprite);
+        render.addChild('buildings', sprite);
     }
 }
 

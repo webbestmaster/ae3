@@ -9,11 +9,13 @@ class Render extends BaseModel {
         const render = this;
         const app = new PIXI.Application(480, 320, {backgroundColor: 0x000000});
 
+        render.set({squareSize: 24});
+
         document.getElementById('canvas-holder').appendChild(app.view);
 
         const boxContainer = new PIXI.Container();
 
-        const layers = ['landscape', 'building'];
+        const layers = ['landscape', 'buildings'];
 
         layers.forEach(layerName => {
             const container = new PIXI.Container();

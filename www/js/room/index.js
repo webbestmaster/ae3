@@ -48,8 +48,8 @@ class RoomView extends BaseView {
                     keys: [
                         'localization',
                         'landscape',
-                        'building',
-                        'unit',
+                        'buildings',
+                        'units',
                         'users',
                         'defaultMoney',
                         'unitLimit',
@@ -57,7 +57,7 @@ class RoomView extends BaseView {
                         'password',
                         'chat',
                         'isTimerStarted',
-                        'isGameStarted',
+                        // 'isGameStarted',
                         'turns',
                         'currentUserIndex',
                         'startUsersState'
