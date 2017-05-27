@@ -1,4 +1,5 @@
 import BaseModel from './../../../core/base-model';
+import {getPath} from './../../path-master';
 const PIXI = require('pixi.js');
 const renderConfig = require('./../../render/config.json');
 
@@ -7,7 +8,8 @@ const attr = {
     animatedSprite: 'animatedSprite',
     render: 'render',
     color: 'color',
-    userOrder: 'userOrder'
+    userOrder: 'userOrder',
+    game: 'game'
 };
 
 class Unit extends BaseModel {
@@ -37,9 +39,7 @@ class Unit extends BaseModel {
         animatedSprite.interactive = true;
         animatedSprite.buttonMode = true;
 
-        animatedSprite.on('click', evt => {
-            console.log('unit event');
-        });
+        animatedSprite.on('click', () => unit.onClick());
     }
 
     move(x, y) { // need list of coordinates to move as A*
@@ -47,6 +47,28 @@ class Unit extends BaseModel {
     }
 
     attack(x, y) {
+
+    }
+
+    onClick() {
+        // get available actions
+            // get available path
+        const unit = this;
+        const availablePath = unit.getAvailablePath();
+        console.log(availablePath);
+    }
+
+    getAvailablePath() {
+        const unit = this;
+        const game = unit.get(attr.game);
+        const landscape = game.get('model-landscape');
+        const pathMap = landscape.getPathMap();
+        const units = game.get('model-units');
+
+        units.forEach(unit => unit);
+
+        debugger
+
 
     }
 }

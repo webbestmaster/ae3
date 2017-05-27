@@ -1,10 +1,11 @@
 import BaseModel from './../../core/base-model';
 const PIXI = require('pixi.js');
-
+const mapGuide = require('./../../../maps/map-guide.json');
 const attr = {
     render: 'render',
     landscape: 'landscape',
-    game: 'game'
+    game: 'game',
+    pathMap: 'pathMap'
 };
 
 class Landscape extends BaseModel {
@@ -14,8 +15,10 @@ class Landscape extends BaseModel {
         const model = this;
         // const render = model.get(attr.render);
         // const squareSize = render.get('squareSize');
+        const landscape = model.get(attr.landscape);
 
-        model.drawLandscape(model.get(attr.landscape));
+        model.drawLandscape(landscape);
+        model.createPathMap(landscape);
     }
 
     drawLandscape(landscape) {
@@ -34,7 +37,7 @@ class Landscape extends BaseModel {
             sprite.interactive = true;
             sprite.buttonMode = true;
 
-            sprite.on('click', () => model.moveSelectMark(x, y));
+            sprite.on('click', () => model.onClick(x, y));
         }));
 
         // draw angles
@@ -147,8 +150,23 @@ class Landscape extends BaseModel {
         // TODO: cacheAsBitmap: true after render - http://pixijs.download/release/docs/PIXI.Container.html
     }
 
-    moveSelectMark(x, y) {
+    onClick(x, y) {
         this.get(attr.game).get('ui').selectMark.moveTo(x, y);
+    }
+
+    createPathMap(landscape) {
+        const pathMap = landscape.map(line => {
+            return line.map(cell => {
+                const type = cell.split('-')[0];
+                return mapGuide.landscape[type].pathReduce;
+            })
+        });
+
+        this.set(attr.pathMap, pathMap);
+    }
+
+    getPathMap() {
+        return Object.create(this.get(attr.pathMap));
     }
 }
 

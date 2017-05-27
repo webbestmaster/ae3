@@ -14,7 +14,9 @@
             "leave": "/api/room/leave/:instanceId/:privateUserId",
             "setUserState": "/api/room/set-user-state/:instanceId/:privateUserId",
             "pingUser": "/api/room/ping-user/:instanceId/:privateUserId",
-            "leaveTurn": "/api/room/leave-turn/:instanceId/:privateUserId"
+            "leaveTurn": "/api/room/leave-turn/:instanceId/:privateUserId",
+            "pushTurn": "/api/room/push-turn/:instanceId/:privateUserId",
+            "getTurns": "/api/room/get-turns/:instanceId/:hash"
         }
     }
 }

@@ -111,6 +111,7 @@ export class GameModel extends BaseModel {
         }
 
         const unitProps = {
+            game: model,
             type,
             color: userData.color,
             [attr.render]: model.get(attr.render),

@@ -25,36 +25,36 @@
     "landscape": {
         "road": {
             "name": "road",
-            "shortName": "r",
+            "pathReduce": 1,
             "defense": 0
         },
         "meadow": {
             "name": "meadow",
-            "shortName": "m",
+            "pathReduce": 1,
             "defense": 1
         },
         "forest": {
             "name": "forest",
-            "shortName": "f",
+            "pathReduce": 2,
             "defense": 2
         },
         "stone": {
             "name": "stone",
-            "shortName": "s",
+            "pathReduce": 3,
             "defense": 3
         },
         "water": {
             "name": "water",
-            "shortName": "w",
+            "pathReduce": 3,
             "defense": 0
         },
-        "wall": {
-            "name": "wall",
-            "shortName": "#",
+        "hill": {
+            "name": "hill",
+            "pathReduce": 2,
             "defense": 0
         }
     },
-    "building": {
+    "_____building": {
         "farm": {
             "name": "farm",
             "defense": 2
@@ -76,7 +76,7 @@
             "defense": 2
         }
     },
-    "units": {
+    "_____units": {
         "soldier": {
             "name": "soldier",
             "attack": 20

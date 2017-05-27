@@ -71,40 +71,100 @@
     ],
     "units": [
         {
-            "x": 1,
-            "y": 5,
-            "type": "soldier",
-            "userOrder": 1
-        },
-        {
-            "x": 2,
-            "y": 3,
-            "type": "archer",
-            "userOrder": 1
-        },
-        {
-            "x": 3,
-            "y": 2,
-            "type": "skeleton",
-            "userOrder": 1
-        },
-        {
-            "x": 2,
-            "y": 6,
+            "x": 0,
+            "y": 0,
             "type": "soldier",
             "userOrder": 0
         },
         {
-            "x": 3,
-            "y": 4,
+            "x": 1,
+            "y": 0,
             "type": "archer",
+            "userOrder": 0
+        },
+        {
+            "x": 2,
+            "y": 0,
+            "type": "elemental",
+            "userOrder": 0
+        },
+        {
+            "x": 3,
+            "y": 0,
+            "type": "sorceress",
             "userOrder": 0
         },
         {
             "x": 4,
-            "y": 3,
+            "y": 0,
+            "type": "wisp",
+            "userOrder": 0
+        },
+        {
+            "x": 5,
+            "y": 0,
+            "type": "dire-wolf",
+            "userOrder": 0
+        },
+        {
+            "x": 0,
+            "y": 1,
+            "type": "golem",
+            "userOrder": 0
+        },
+        {
+            "x": 1,
+            "y": 1,
+            "type": "catapult",
+            "userOrder": 0
+        },
+        {
+            "x": 2,
+            "y": 1,
+            "type": "dragon",
+            "userOrder": 0
+        },
+        {
+            "x": 3,
+            "y": 1,
             "type": "skeleton",
             "userOrder": 0
+        },
+        {
+            "x": 4,
+            "y": 1,
+            "type": "crystal",
+            "userOrder": 0
+        },
+        {
+            "x": 5,
+            "y": 1,
+            "type": "galamar",
+            "userOrder": 0
+        },
+        {
+            "x": 6,
+            "y": 1,
+            "type": "valadorn",
+            "userOrder": 0
+        },
+        {
+            "x": 7,
+            "y": 1,
+            "type": "demon-lord",
+            "userOrder": 0
+        },
+        {
+            "x": 8,
+            "y": 1,
+            "type": "saeth",
+            "userOrder": 0
+        },
+        {
+            "x": 4,
+            "y": 4,
+            "type": "soldier",
+            "userOrder": 1
         }
     ]
 }
