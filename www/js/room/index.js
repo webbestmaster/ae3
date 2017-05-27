@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 // import {Link} from 'react-router';
 import Proc from './../lib/proc';
 // import ajax from './../lib/ajax';
-import _ from 'lodash';
+// import _ from 'lodash';
 // import timer from './../lib/timer';
 import api from './../user/api';
 import * as gameAction from './../game/action';
@@ -13,8 +13,7 @@ import GameView from './../game';
 import SettingView from './../setting';
 // const mapGuide = require('./../../maps/map-guide.json');
 const getDefaultState = () => ({
-    pingProc: null,
-    roomStatesProc: null
+    pingProc: null
 });
 
 class RoomView extends BaseView {
@@ -26,12 +25,11 @@ class RoomView extends BaseView {
 
     componentWillUnmount() {
         const view = this;
-        const {pingProc, roomStatesProc} = view.state;
+        const {pingProc} = view.state;
 
         api.get.room.leave();
 
         pingProc.destroy();
-        roomStatesProc.destroy();
 
         view.props.resetGameState();
         view.state = getDefaultState();
@@ -39,7 +37,10 @@ class RoomView extends BaseView {
 
     componentDidMount() {
         const view = this;
-        const pingProc = new Proc(api.get.room.pingUser, 1000);
+
+        view.state.pingProc = new Proc(api.get.room.pingUser, 1000);
+
+/*
         let previousState = {};
 
         const roomStatesProc = new Proc(() => {
@@ -77,18 +78,16 @@ class RoomView extends BaseView {
                     // view.onRoomStateReceive();
                 });
         }, 1e3);
-
-        view.state.pingProc = pingProc;
-        view.state.roomStatesProc = roomStatesProc;
+*/
     }
 
     render() {
         const view = this;
         const {users, startGameTimer} = view.props.gameState.state;
 
-        if (!users || users.length === 0) {
-            return <h1>initializing...</h1>;
-        }
+        // if (!users || users.length === 0) {
+        //     return <h1>initializing...</h1>;
+        // }
 
         if (startGameTimer === 0) {
             return <GameView/>;

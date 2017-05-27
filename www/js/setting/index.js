@@ -5,15 +5,25 @@ import {connect} from 'react-redux';
 // import {Link} from 'react-router';
 // import Proc from './../../lib/proc';
 // import ajax from './../lib/ajax';
-// import _ from 'lodash';
+import {isEqual} from 'lodash';
 // import timer from './../../lib/timer';
 // import find from 'lodash/find';
 import isItMe from './../lib/is-it-me';
 import * as gameAction from './../game/action';
 import api from './../user/api';
+import Proc from './../lib/proc';
 const mapGuide = require('./../../maps/map-guide.json');
 
+const getDefaultState = () => ({
+    roomStatesProc: null
+});
+
 class SettingView extends BaseView {
+    constructor() {
+        super();
+        this.state = getDefaultState();
+    }
+
     sendMessage() {
         const view = this;
 
@@ -43,16 +53,81 @@ class SettingView extends BaseView {
         }
     }
 
+    getMainGameData() {
+        const view = this;
+
+        return api.get.room
+            .getStates({
+                keys: [
+                    'localization',
+                    'landscape',
+                    'buildings',
+                    'units',
+                    'gameName',
+                    'password'
+                ].join(',')
+            })
+            .then(rawResult =>
+                view.props.setGameState(
+                    JSON.parse(rawResult).result
+                )
+            );
+    }
+
     componentDidMount() {
         const view = this;
 
-        view.setUserProperty('color', view.refs.colorSelect.value);
-        view.setUserProperty('team', view.refs.teamSelect.value);
+        // FIXME
+        view.setUserProperty('color', 'red');
+        view.setUserProperty('team', 'team-1');
+        // view.setUserProperty('color', view.refs.colorSelect.value);
+        // view.setUserProperty('team', view.refs.teamSelect.value);
 
+        // FIXME TOO
         if (view.refs.defaultMoney) {
             view.setRoomState('defaultMoney', view.refs.defaultMoney.value);
             view.setRoomState('unitLimit', view.refs.unitLimit.value);
         }
+
+        view.getMainGameData();
+
+        let previousState = {};
+
+        view.state.roomStatesProc = new Proc(() => {
+            return api.get.room
+                .getStates({
+                    keys: [
+                        // 'localization',
+                        // 'landscape',
+                        // 'buildings',
+                        // 'units',
+                        'users',
+                        'defaultMoney',
+                        'unitLimit',
+                        // 'gameName',
+                        // 'password',
+                        'chat',
+                        'isTimerStarted',
+                        // 'isGameStarted',
+                        // 'turns',
+                        // 'currentUserIndex',
+                        'startUsersState'
+                    ].join(',')
+                })
+                .then(rawResult => {
+                    const {result} = JSON.parse(rawResult);
+
+                    if (isEqual(previousState, result)) {
+                        console.log('the same result');
+                        return;
+                    }
+
+                    previousState = result;
+
+                    view.props.setGameState(result);
+                    // view.onRoomStateReceive();
+                });
+        }, 1e3);
     }
 
     startGame() {
@@ -60,6 +135,15 @@ class SettingView extends BaseView {
 
         view.setRoomState('isTimerStarted', true);
         view.setRoomState('startUsersState', view.props.gameState.state.users);
+    }
+
+    componentWillUnmount() {
+        const view = this;
+        const {roomStatesProc} = view.state;
+
+        roomStatesProc.destroy();
+
+        view.state = getDefaultState();
     }
 
     render() {
