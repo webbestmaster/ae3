@@ -41,7 +41,7 @@ class Landscape extends BaseModel {
         }));
 
         // draw angles
-        landscape.forEach((line, y) => line.forEach((square, x) => {
+        landscape.forEach((line, y) => line.forEach((square, x) => { // eslint-disable-line complexity, max-statements
             if (!isAnglesNeed(square)) {
                 return;
             }
@@ -158,15 +158,16 @@ class Landscape extends BaseModel {
         const pathMap = landscape.map(line => {
             return line.map(cell => {
                 const type = cell.split('-')[0];
+
                 return mapGuide.landscape[type].pathReduce;
-            })
+            });
         });
 
         this.set(attr.pathMap, pathMap);
     }
 
     getPathMap() {
-        return Object.create(this.get(attr.pathMap));
+        return JSON.parse(JSON.stringify(this.get(attr.pathMap)));
     }
 }
 

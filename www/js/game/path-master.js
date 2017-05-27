@@ -4,6 +4,7 @@ function getItem(index, array) {
 
 function getCell(x, y, map) {
     const line = getItem(y, map);
+
     return line && getItem(x, line);
 }
 
@@ -32,12 +33,10 @@ function pushToCurrentProgress(x, y, currentProgress) {
  * @return {Array} - array of cells, [[3,4], [2,3], [2,1]] // first x, then y
  */
 function getAvailablePath(startX, startY, pathLength, map, currentProgress) {
-
     let ii = 0;
     const disArray = [0, -1, -1, 0, 1, 0, 0, 1];
 
     for (; ii < 8; ii += 2) {
-
         const x = startX + disArray[ii];
         const y = startY + disArray[ii + 1];
 
@@ -45,7 +44,7 @@ function getAvailablePath(startX, startY, pathLength, map, currentProgress) {
 
         if (cell !== false && pathLength >= cell) {
             pushToCurrentProgress(x, y, currentProgress);
-            getAvailablePath(x, y, pathLength - cell, map, currentProgress)
+            getAvailablePath(x, y, pathLength - cell, map, currentProgress);
         }
     }
     return currentProgress;

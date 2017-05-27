@@ -5,6 +5,7 @@ import {Building} from './building';
 import {Landscape} from './landscape';
 import {Unit} from './unit/';
 import {SelectMark} from './ui';
+const PIXI = require('pixi.js');
 
 const attr = {
     currentUserIndex: 'currentUserIndex',
@@ -18,7 +19,7 @@ const attr = {
     game: 'game',
 
     ui: 'ui',
-
+    movieSquares: 'movieSquares',
     model: {
         buildings: 'model-buildings',
         landscape: 'model-landscape',
@@ -44,6 +45,7 @@ export class GameModel extends BaseModel {
                     [attr.ui]: {
                         selectMark: null
                     },
+                    [attr.movieSquares]: [],
                     [attr.render]: render
                 });
                 render.set({
@@ -136,6 +138,35 @@ export class GameModel extends BaseModel {
         const ui = model.get(attr.ui);
 
         ui.selectMark = selectMark;
+    }
+
+    addMovieSquare(x, y, options = {}) {
+        const model = this;
+        const render = model.get(attr.render);
+        const squareSize = render.get('squareSize');
+        const sprite = PIXI.Sprite.fromFrame('smoke-type-1-1');
+
+        sprite.x = squareSize * x;
+        sprite.y = squareSize * y;
+        render.addChild('ui', sprite);
+        model.get(attr.movieSquares).push(sprite);
+
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+
+        const {events = {}} = options;
+
+        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
+    }
+
+    clearMovieSquares() {
+        const model = this;
+        const render = model.get(attr.render);
+
+        // const uiLayer = render.get('ui');
+        const movieSquares = model.get(attr.movieSquares);
+
+        movieSquares.forEach(sprite => render.removeChild('ui', sprite));
     }
 }
 

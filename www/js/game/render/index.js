@@ -40,6 +40,10 @@ class Render extends BaseModel {
     addChild(layerName, displayObject) {
         this.get(layerName).addChild(displayObject);
     }
+
+    removeChild(layerName, displayObject) {
+        this.get(layerName).removeChild(displayObject);
+    }
 }
 
 // Scale mode for all textures, will retain pixelation
