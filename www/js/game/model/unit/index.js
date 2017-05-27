@@ -1,5 +1,6 @@
 import BaseModel from './../../../core/base-model';
 import {getPath} from './../../path-master';
+import api from './../../../user/api';
 const PIXI = require('pixi.js');
 const renderConfig = require('./../../render/config.json');
 const unitGuide = require('./unit-guide.json');
@@ -32,7 +33,6 @@ class Unit extends BaseModel {
 
         unit.set(attr.animatedSprite, animatedSprite);
 
-
         animatedSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
         animatedSprite.play();
 
@@ -43,7 +43,7 @@ class Unit extends BaseModel {
 
         animatedSprite.on('click', () => unit.onClick());
 
-        unit.move(x, y);
+        unit.putTo(x, y);
     }
 
     move(x, y) { // need list of coordinates to move as A*
@@ -51,6 +51,10 @@ class Unit extends BaseModel {
         const game = unit.get(attr.game);
         const render = unit.get(attr.render);
         const squareSize = render.get('squareSize');
+
+        api.post.room.pushTurn({
+            some: 'data '
+        }).then(({result}) => console.log(result)).catch(evt => console.log(evt));
 
         unit.set({x, y});
 
@@ -60,6 +64,19 @@ class Unit extends BaseModel {
         animatedSprite.y = squareSize * y;
 
         game.clearMovieSquares();
+    }
+
+    putTo(x, y) {
+        const unit = this;
+        const render = unit.get(attr.render);
+        const squareSize = render.get('squareSize');
+
+        unit.set({x, y});
+
+        const animatedSprite = unit.get(attr.animatedSprite);
+
+        animatedSprite.x = squareSize * x;
+        animatedSprite.y = squareSize * y;
     }
 
     attack(x, y) {

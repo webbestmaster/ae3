@@ -25,7 +25,7 @@ class JoinRoomView extends BaseView {
         const view = this;
 
         api.get.room.getItems()
-            .then(rawResult => view.setState({rooms: JSON.parse(rawResult)}));
+            .then(rooms => view.setState({rooms}));
     }
 
     joinRoom(instanceId) {

@@ -1,4 +1,4 @@
-function send(url, method, params, success) {
+function send(url, method, params, resolve, reject) {
     const xhr = new window.XMLHttpRequest();
 
     xhr.onreadystatechange = () => {
@@ -7,8 +7,19 @@ function send(url, method, params, success) {
         }
 
         xhr.onreadystatechange = null;
+        if (xhr.getResponseHeader('content-type') === 'application/json') {
+            const result = JSON.parse(xhr.responseText);
 
-        success(xhr.responseText);
+            if (result.hasOwnProperty('error')) {
+                reject(result);
+            } else {
+                resolve(result);
+            }
+
+            return;
+        }
+
+        resolve(xhr.responseText);
     };
 
     xhr.open(method, url, true);
@@ -16,7 +27,9 @@ function send(url, method, params, success) {
 }
 
 const ajax = {
-    send: (url, method, params) => new Promise(resolve => send(url, method, params, resolve)),
+    send: (url, method, params) =>
+        new Promise((resolve, reject) =>
+            send(url, method, params, resolve, reject)),
     get: (url, params) => ajax.send(url, 'GET', params),
     post: (url, params) => ajax.send(url, 'POST', params)
 };

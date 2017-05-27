@@ -67,11 +67,7 @@ class SettingView extends BaseView {
                     'password'
                 ].join(',')
             })
-            .then(rawResult =>
-                view.props.setGameState(
-                    JSON.parse(rawResult).result
-                )
-            );
+            .then(({result}) => view.props.setGameState(result));
     }
 
     componentDidMount() {
@@ -114,9 +110,7 @@ class SettingView extends BaseView {
                         'startUsersState'
                     ].join(',')
                 })
-                .then(rawResult => {
-                    const {result} = JSON.parse(rawResult);
-
+                .then(({result}) => {
                     if (isEqual(previousState, result)) {
                         console.log('the same result');
                         return;
