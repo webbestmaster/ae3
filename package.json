@@ -55,6 +55,7 @@
     "html-webpack-plugin": "^2.28.0",
     "js-sha1": "^0.4.1",
     "json-loader": "^0.5.4",
+    "mocha": "^3.4.2",
     "node-sass": "^4.5.2",
     "png-crop": "0.0.1",
     "raw-loader": "^0.5.1",
