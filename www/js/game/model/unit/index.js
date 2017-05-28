@@ -42,7 +42,7 @@ class Unit extends BaseModel {
         animatedSprite.interactive = true;
         animatedSprite.buttonMode = true;
 
-        animatedSprite.on('click', () => unit.onClick());
+        animatedSprite.on('pointertap', () => unit.onClick());
 
         unit.putTo(x, y);
     }
@@ -166,7 +166,7 @@ class Unit extends BaseModel {
                 arrXY[1],
                 {
                     events: {
-                        click: () => unit.move(arrXY[0], arrXY[1])
+                        pointertap: () => unit.move(arrXY[0], arrXY[1])
                     }
                 }
             );

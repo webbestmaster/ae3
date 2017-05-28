@@ -37,7 +37,7 @@ class Landscape extends BaseModel {
             sprite.interactive = true;
             sprite.buttonMode = true;
 
-            sprite.on('click', () => model.onClick(x, y));
+            sprite.on('pointertap', () => model.onClick(x, y));
         }));
 
         // draw angles

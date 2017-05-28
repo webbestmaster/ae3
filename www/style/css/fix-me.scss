@@ -1,3 +1,10 @@
 #canvas-holder {
     padding: 10px;
+    position: relative; // try to remove, check on mobile device
+    z-index: 1; // try to remove, check on mobile device
+}
+
+canvas {
+    position: relative; // try to remove, check on mobile device
+    z-index: 1; // try to remove, check on mobile device
 }
