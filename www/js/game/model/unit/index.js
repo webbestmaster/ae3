@@ -52,16 +52,23 @@ class Unit extends BaseModel {
         const render = unit.get(attr.render);
         const squareSize = render.get('squareSize');
 
-        api.post.room.pushTurn({
-            some: 'data '
-        }).then(({result}) => console.log(result)).catch(evt => console.log(evt));
+        api.post.room.pushTurn(null, {
+            list: [
+                {
+                    type: 'move',
+                    steps: [[1, 2], [3, 2], [x, y]]
+                }
+            ]
+        }).then(({result}) => console.log(result));
 
+/*
         unit.set({x, y});
 
         const animatedSprite = unit.get(attr.animatedSprite);
 
         animatedSprite.x = squareSize * x;
         animatedSprite.y = squareSize * y;
+*/
 
         game.clearMovieSquares();
     }

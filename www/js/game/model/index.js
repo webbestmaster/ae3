@@ -5,12 +5,17 @@ import {Building} from './building';
 import {Landscape} from './landscape';
 import {Unit} from './unit/';
 import {SelectMark} from './ui';
+import {TurnMaster} from './../turn-master';
+import Proc from './../../lib/proc';
+import {isEqual} from 'lodash';
 const PIXI = require('pixi.js');
 
 const attr = {
     currentUserIndex: 'currentUserIndex',
     startUsersState: 'startUsersState',
     render: 'render',
+    turnMaster: 'turnMaster',
+    proc: 'proc',
 
     landscape: 'landscape',
     buildings: 'buildings',
@@ -31,11 +36,23 @@ export class GameModel extends BaseModel {
     start() {
         const model = this;
 
+        console.warn('Game model is global, window.gameModel', window.gameModel = model);
+
         return api.post.room
             .setUserState(null, {money: model.get('defaultMoney')})
+            .then(() => api.get.room
+                .getStates({
+                    keys: ['currentUserIndex'].join(',')
+                })
+                .then(({result}) => model.set(result))
+            )
             .then(() => {
                 const render = new Render();
                 const landscape = model.get('landscape');
+
+                model.initializeTurnMaster();
+
+                model.startListening();
 
                 model.trigger(attr.currentUserIndex);
                 model.set({
@@ -65,6 +82,42 @@ export class GameModel extends BaseModel {
                 model.get(attr.units).forEach(unit => model.addUnit(unit));
                 model.initializeUI();
             });
+    }
+
+    initializeTurnMaster() {
+        const model = this;
+        const turnMaster = new TurnMaster();
+
+        model.set(attr.turnMaster, turnMaster);
+
+        turnMaster.onNewTurns(turns => console.warn(turns));
+        turnMaster.watchTurns();
+    }
+
+    startListening() {
+        const model = this;
+        let previousState = {};
+
+        const proc = new Proc(() => {
+            return api.get.room
+                .getStates({
+                    keys: [
+                        'currentUserIndex'
+                    ].join(',')
+                })
+                .then(({result}) => {
+                    if (isEqual(previousState, result)) {
+                        console.log('the same result');
+                        return;
+                    }
+
+                    previousState = result;
+
+                    model.set(result);
+                });
+        }, 1e3);
+
+        model.set(attr.proc, proc);
     }
 
     addBuilding(buildingData) {
@@ -167,6 +220,15 @@ export class GameModel extends BaseModel {
         const movieSquares = model.get(attr.movieSquares);
 
         movieSquares.forEach(sprite => render.removeChild('ui', sprite));
+    }
+
+    destroy() {
+        const model = this;
+
+        model.get(attr.render).destroy();
+        model.get(attr.turnMaster).destroy();
+        model.get(attr.proc).destroy();
+        super.destroy();
     }
 }
 
