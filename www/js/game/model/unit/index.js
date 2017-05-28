@@ -117,9 +117,17 @@ class Unit extends BaseModel {
         // get available actions
         // get available path
         const unit = this;
+        const game = unit.get(attr.game);
+        const currentUserIndex = game.get('currentUserIndex');
         const availablePath = unit.getAvailablePath();
 
-        unit.addMoveSquares(availablePath);
+        if (game.getUserOrder() === unit.get(attr.userOrder) &&
+            currentUserIndex === unit.get(attr.userOrder)) {
+            unit.addMoveSquares(availablePath);
+            return;
+        }
+
+        console.warn('you can not touch this unit');
     }
 
     getAvailablePath() {

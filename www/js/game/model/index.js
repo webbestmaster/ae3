@@ -213,7 +213,7 @@ export class GameModel extends BaseModel {
             [attr.render]: model.get(attr.render),
             x: unitData.x,
             y: unitData.y,
-            userOrder: userData.userOrder
+            userOrder: unitData.userOrder
         };
 
         const unit = new Unit(unitProps);
@@ -269,6 +269,24 @@ export class GameModel extends BaseModel {
 
     getUserByOrder(order) {
         return this.get(attr.startUsersState)[order];
+    }
+
+    getUserOrderByPublicId(publicId) {
+        const model = this;
+        const user = model.getUserByPublicId(publicId);
+        const users = model.get(attr.startUsersState);
+
+        return users.indexOf(user);
+    }
+
+    getUserOrder() {
+        const model = this;
+
+        return model.getUserOrderByPublicId(model.getUserPublicId());
+    }
+
+    getUserPublicId() {
+        return this.get(attr.user).publicId;
     }
 
     destroy() {
