@@ -69,6 +69,9 @@ class GameView extends BaseView {
         const view = this;
         const model = new GameModel(view.props.gameState.state);
 
+        model.set({user: {
+            publicId: view.props.userState.publicIdState.publicId
+        }});
         view.state.model = model;
 
         model.onChange('currentUserIndex', view.showChangeTurnPopup, view);

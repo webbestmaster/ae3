@@ -18,6 +18,7 @@ const attr = {
     turnMaster: 'turnMaster',
     promiseMaster: 'promiseMaster',
     proc: 'proc',
+    user: 'user',
 
     landscape: 'landscape',
     buildings: 'buildings',
@@ -264,6 +265,14 @@ export class GameModel extends BaseModel {
         const moveSquares = model.get(attr.moveSquares);
 
         moveSquares.forEach(sprite => render.removeChild('ui', sprite));
+    }
+
+    getUserByPublicId(publicId) {
+        return find(this.get(attr.startUsersState), user => user.publicId === publicId);
+    }
+
+    getUserByOrder(order) {
+        return this.get(attr.startUsersState)[order];
     }
 
     destroy() {
