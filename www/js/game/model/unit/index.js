@@ -56,21 +56,21 @@ class Unit extends BaseModel {
             list: [
                 {
                     type: 'move',
-                    steps: [[1, 2], [3, 2], [x, y]]
+                    steps: [[unit.get('x'), unit.get('y')], [1, 2], [3, 2], [x, y]]
                 }
             ]
-        }).then(({result}) => console.log(result));
+        }).then(() => game.get('turnMaster').fetchTurns());
 
-/*
-        unit.set({x, y});
+        /*
+         unit.set({x, y});
 
-        const animatedSprite = unit.get(attr.animatedSprite);
+         const animatedSprite = unit.get(attr.animatedSprite);
 
-        animatedSprite.x = squareSize * x;
-        animatedSprite.y = squareSize * y;
-*/
+         animatedSprite.x = squareSize * x;
+         animatedSprite.y = squareSize * y;
+         */
 
-        game.clearMovieSquares();
+        game.clearMoveSquares();
     }
 
     putTo(x, y) {
@@ -96,7 +96,7 @@ class Unit extends BaseModel {
         const unit = this;
         const availablePath = unit.getAvailablePath();
 
-        unit.addMovieSquares(availablePath);
+        unit.addMoveSquares(availablePath);
     }
 
     getAvailablePath() {
@@ -116,21 +116,21 @@ class Unit extends BaseModel {
         return getPath(
             unit.get('x'),
             unit.get('y'),
-            unitGuide.type[unit.get('type')].movie,
+            unitGuide.type[unit.get('type')].move,
             pathMap
         );
     }
 
-    addMovieSquares(availablePath) {
+    addMoveSquares(availablePath) {
         const unit = this;
         const render = unit.get(attr.render);
         const game = unit.get(attr.game);
         const squareSize = render.get('squareSize');
 
-        unit.clearMovieSquares();
+        unit.clearMoveSquares();
 
         availablePath.forEach(arrXY => {
-            game.addMovieSquare(
+            game.addMoveSquare(
                 arrXY[0],
                 arrXY[1],
                 {
@@ -142,11 +142,11 @@ class Unit extends BaseModel {
         });
     }
 
-    clearMovieSquares() {
+    clearMoveSquares() {
         const unit = this;
         const game = unit.get(attr.game);
 
-        game.clearMovieSquares();
+        game.clearMoveSquares();
     }
 }
 

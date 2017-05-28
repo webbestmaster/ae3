@@ -34,7 +34,7 @@ class PromiseMaster {
         const first = master.list.shift();
         const result = first();
 
-        if (typeof result.then === 'function') {
+        if (result && typeof result.then === 'function') {
             result.then(() => master.runCallBack());
             return;
         }

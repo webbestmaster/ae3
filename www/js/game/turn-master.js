@@ -32,42 +32,32 @@ class TurnMaster extends BaseModel {
 
     watchTurns() {
         const model = this;
-        // const hash = model.get(attr.hash);
-
-        /*
-         () => api.get.room.getTurns({
-         hash
-         })
-         .then(({result}) => {
-         const {turns} = result;
-         if (turns.length === 0) {
-         return;
-         }
-         model.set(attr);
-         onNewTurns(result.turns);
-         })
-         */
-
-
-        const onNewTurns = model.get(attr.onNewTurns);
-        const proc = new Proc(() =>
-                api.get.room
-                    .getTurns({
-                        hash: model.get(attr.hash)
-                    })
-                    .then(({result}) => {
-                        const {turns} = result;
-                        const turnsLength = turns.length;
-
-                        if (turnsLength === 0) {
-                            return;
-                        }
-                        model.set(attr.hash, turns[turnsLength - 1].hash);
-                        onNewTurns(turns.map(({turn}) => turn));
-                    }),
-            1e3);
+        const proc = new Proc(() => model.fetchTurns(), 1e3);
 
         model.set(attr.proc, proc);
+    }
+
+    fetchTurns() {
+        const model = this;
+
+        return api.get.room
+            .getTurns({
+                hash: model.get(attr.hash)
+            })
+            .then(({result}) => {
+                const {turns} = result;
+                const turnsLength = turns.length;
+
+                if (turnsLength === 0) {
+                    return;
+                }
+
+                model.set(attr.hash, turns[turnsLength - 1].hash);
+
+                const onNewTurns = model.get(attr.onNewTurns);
+
+                onNewTurns(turns.map(({turn}) => turn));
+            });
     }
 
     destroy() {

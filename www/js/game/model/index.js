@@ -7,7 +7,8 @@ import {Unit} from './unit/';
 import {SelectMark} from './ui';
 import {TurnMaster} from './../turn-master';
 import Proc from './../../lib/proc';
-import {isEqual} from 'lodash';
+import {isEqual, find} from 'lodash';
+import {PromiseMaster} from './../../lib/promise-master';
 const PIXI = require('pixi.js');
 
 const attr = {
@@ -15,6 +16,7 @@ const attr = {
     startUsersState: 'startUsersState',
     render: 'render',
     turnMaster: 'turnMaster',
+    promiseMaster: 'promiseMaster',
     proc: 'proc',
 
     landscape: 'landscape',
@@ -24,7 +26,7 @@ const attr = {
     game: 'game',
 
     ui: 'ui',
-    movieSquares: 'movieSquares',
+    moveSquares: 'moveSquares',
     model: {
         buildings: 'model-buildings',
         landscape: 'model-landscape',
@@ -62,8 +64,9 @@ export class GameModel extends BaseModel {
                     [attr.ui]: {
                         selectMark: null
                     },
-                    [attr.movieSquares]: [],
-                    [attr.render]: render
+                    [attr.moveSquares]: [],
+                    [attr.render]: render,
+                    [attr.promiseMaster]: new PromiseMaster()
                 });
                 render.set({
                     mapWidth: landscape[0].length,
@@ -90,8 +93,49 @@ export class GameModel extends BaseModel {
 
         model.set(attr.turnMaster, turnMaster);
 
-        turnMaster.onNewTurns(turns => console.warn(turns));
+        turnMaster.onNewTurns(turns => model.onNewTurns(turns));
         turnMaster.watchTurns();
+    }
+
+    onNewTurns(turns) {
+        const model = this;
+        const promiseMaster = model.get(attr.promiseMaster);
+
+        turns.forEach(({list}) =>
+            list.forEach(action =>
+                promiseMaster.push(() => model.doAction(action))
+            ));
+    }
+
+    doAction(action) {
+        const model = this;
+
+        if (action.type === 'move') {
+            return model.doActionMove(action);
+        }
+
+        return Promise.resolve();
+    }
+
+    doActionMove(action) {
+        const model = this;
+        const {steps} = action;
+        const startX = steps[0][0];
+        const startY = steps[0][1];
+
+        const unit = model.getUnitByXY(startX, startY);
+
+        return new Promise(resolve => {
+            // setTimeout(() => unit.putTo.apply(unit, steps[0]), 1000);
+            setTimeout(() => unit.putTo(...steps[1]), 0);
+            setTimeout(() => unit.putTo(...steps[2]), 1000);
+            setTimeout(() => unit.putTo(...steps[3]), 2000);
+            setTimeout(resolve, 3000);
+        });
+    }
+
+    getUnitByXY(x, y) {
+        return find(this.get(attr.model.units), unit => unit.get('x') === x && unit.get('y') === y);
     }
 
     startListening() {
@@ -193,7 +237,7 @@ export class GameModel extends BaseModel {
         ui.selectMark = selectMark;
     }
 
-    addMovieSquare(x, y, options = {}) {
+    addMoveSquare(x, y, options = {}) {
         const model = this;
         const render = model.get(attr.render);
         const squareSize = render.get('squareSize');
@@ -202,7 +246,7 @@ export class GameModel extends BaseModel {
         sprite.x = squareSize * x;
         sprite.y = squareSize * y;
         render.addChild('ui', sprite);
-        model.get(attr.movieSquares).push(sprite);
+        model.get(attr.moveSquares).push(sprite);
 
         sprite.interactive = true;
         sprite.buttonMode = true;
@@ -212,14 +256,14 @@ export class GameModel extends BaseModel {
         Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
     }
 
-    clearMovieSquares() {
+    clearMoveSquares() {
         const model = this;
         const render = model.get(attr.render);
 
         // const uiLayer = render.get('ui');
-        const movieSquares = model.get(attr.movieSquares);
+        const moveSquares = model.get(attr.moveSquares);
 
-        movieSquares.forEach(sprite => render.removeChild('ui', sprite));
+        moveSquares.forEach(sprite => render.removeChild('ui', sprite));
     }
 
     destroy() {
