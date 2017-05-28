@@ -1,6 +1,7 @@
 import BaseModel from './../../../core/base-model';
 import {getPath} from './../../path-master';
 import api from './../../../user/api';
+import {TimelineLite} from 'gsap';
 const PIXI = require('pixi.js');
 const renderConfig = require('./../../render/config.json');
 const unitGuide = require('./unit-guide.json');
@@ -71,6 +72,28 @@ class Unit extends BaseModel {
          */
 
         game.clearMoveSquares();
+    }
+
+    animateMove(steps) {
+        const unit = this;
+        const xy = {
+            x: unit.get('x'),
+            y: unit.get('y')
+        };
+
+        return new Promise(resolve => {
+            let tl = new TimelineLite({
+                onComplete: () => {
+                    tl.kill();
+                    resolve();
+                },
+                onUpdate: () => unit.putTo(xy.x, xy.y)
+            });
+
+            steps.forEach(([x, y]) => {
+                tl = tl.to(xy, 1, {x, y});
+            });
+        });
     }
 
     putTo(x, y) {

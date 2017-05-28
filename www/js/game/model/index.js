@@ -124,15 +124,11 @@ export class GameModel extends BaseModel {
         const startX = steps[0][0];
         const startY = steps[0][1];
 
+        steps.shift(); // remove zero step, cause this is the current position
+
         const unit = model.getUnitByXY(startX, startY);
 
-        return new Promise(resolve => {
-            // setTimeout(() => unit.putTo.apply(unit, steps[0]), 1000);
-            setTimeout(() => unit.putTo(...steps[1]), 0);
-            setTimeout(() => unit.putTo(...steps[2]), 1000);
-            setTimeout(() => unit.putTo(...steps[3]), 2000);
-            setTimeout(resolve, 3000);
-        });
+        return unit.animateMove(steps);
     }
 
     getUnitByXY(x, y) {
