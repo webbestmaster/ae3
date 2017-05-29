@@ -7,7 +7,7 @@ import {Unit} from './unit/';
 import {SelectMark} from './ui';
 import {TurnMaster} from './../turn-master';
 import Proc from './../../lib/proc';
-import {isEqual, find} from 'lodash';
+import {isEqual, find, pick} from 'lodash';
 import {PromiseMaster} from './../../lib/promise-master';
 const PIXI = require('pixi.js');
 
@@ -19,6 +19,7 @@ const attr = {
     promiseMaster: 'promiseMaster',
     proc: 'proc',
     user: 'user',
+    users: 'users',
 
     landscape: 'landscape',
     buildings: 'buildings',
@@ -35,6 +36,11 @@ const attr = {
     }
 };
 
+const listenKeys = [
+    attr.currentUserIndex,
+    attr.users
+];
+
 export class GameModel extends BaseModel {
     start() {
         const model = this;
@@ -45,7 +51,7 @@ export class GameModel extends BaseModel {
             .setUserState(null, {money: model.get('defaultMoney')})
             .then(() => api.get.room
                 .getStates({
-                    keys: ['currentUserIndex'].join(',')
+                    keys: listenKeys.join(',')
                 })
                 .then(({result}) => model.set(result))
             )
@@ -57,7 +63,7 @@ export class GameModel extends BaseModel {
 
                 model.startListening();
 
-                model.trigger(attr.currentUserIndex);
+                // model.trigger(attr.currentUserIndex);
                 model.set({
                     [attr.model.landscape]: null,
                     [attr.model.buildings]: [],
@@ -137,24 +143,21 @@ export class GameModel extends BaseModel {
 
     startListening() {
         const model = this;
-        let previousState = {};
-
         const proc = new Proc(() => {
             return api.get.room
                 .getStates({
-                    keys: [
-                        'currentUserIndex'
-                    ].join(',')
+                    keys: listenKeys.join(',')
                 })
                 .then(({result}) => {
-                    if (isEqual(previousState, result)) {
-                        console.log('the same result');
-                        return;
-                    }
+                    const prevState = pick(model.getAllAttributes(), listenKeys);
 
-                    previousState = result;
+                    listenKeys.forEach(key => {
+                        if (isEqual(prevState[key], result[key])) {
+                            return;
+                        }
+                        model.set(key, result[key]);
+                    });
 
-                    model.set(result);
                 });
         }, 1e3);
 

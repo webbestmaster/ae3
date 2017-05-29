@@ -74,8 +74,10 @@ class GameView extends BaseView {
         }});
         view.state.model = model;
 
-        model.onChange('currentUserIndex', view.showChangeTurnPopup, view);
-        model.start();
+        model.start().then(() => {
+            model.onChange('currentUserIndex', view.showChangeTurnPopup, view);
+            model.onChange('users', () => alert('users changed!'), view);
+        });
     }
 
     render() {
