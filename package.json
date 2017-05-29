@@ -20,6 +20,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "a-star-finder": "0.0.2",
     "classnames": "^2.2.5",
     "es6-promise": "^4.1.0",
     "fastclick": "^1.0.6",
