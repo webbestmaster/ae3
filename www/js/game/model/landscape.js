@@ -5,7 +5,10 @@ const attr = {
     render: 'render',
     landscape: 'landscape',
     game: 'game',
-    pathMap: 'pathMap'
+    pathMap: 'pathMap',
+    width: 'width',
+    height: 'height',
+    filledMap: 'filledMap'
 };
 
 class Landscape extends BaseModel {
@@ -19,6 +22,11 @@ class Landscape extends BaseModel {
 
         model.drawLandscape(landscape);
         model.createPathMap(landscape);
+        model.set({
+            [attr.width]: landscape[0].length,
+            [attr.height]: landscape.length
+        });
+        model.createFilledMap(landscape);
     }
 
     drawLandscape(landscape) {
@@ -168,6 +176,21 @@ class Landscape extends BaseModel {
 
     getPathMap() {
         return JSON.parse(JSON.stringify(this.get(attr.pathMap)));
+    }
+
+    getFilledMap() {
+        return JSON.parse(JSON.stringify(this.get(attr.filledMap)));
+    }
+
+    createFilledMap(landscape) {
+        const model = this;
+        const width = landscape[0].length;
+        const height = landscape.length;
+
+        const line = new Array(width).fill('#');
+        const filledMap = new Array(height).fill(line);
+
+        model.set(attr.filledMap, filledMap);
     }
 }
 

@@ -19,6 +19,7 @@ import fastclick from 'fastclick';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import materialUi from 'material-ui';
 require('pixi.js');
+require('a-star-finder');
 
 // dev tools
 import {createDevTools} from 'redux-devtools';

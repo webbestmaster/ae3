@@ -1,7 +1,8 @@
 import BaseModel from './../../../core/base-model';
 import {getPath} from './../../path-master';
 import api from './../../../user/api';
-import {TimelineLite} from 'gsap';
+import {TimelineLite, Power0} from 'gsap';
+import {getPath as getStarPath} from 'a-star-finder';
 const PIXI = require('pixi.js');
 const renderConfig = require('./../../render/config.json');
 const unitGuide = require('./unit-guide.json');
@@ -47,7 +48,7 @@ class Unit extends BaseModel {
         unit.putTo(x, y);
     }
 
-    move(x, y) { // need list of coordinates to move as A*
+    move(x, y) {
         const unit = this;
         const game = unit.get(attr.game);
         const render = unit.get(attr.render);
@@ -57,21 +58,27 @@ class Unit extends BaseModel {
             list: [
                 {
                     type: 'move',
-                    steps: [[unit.get('x'), unit.get('y')], [1, 2], [3, 2], [x, y]]
+                    steps: unit.getMovePath(x, y)
                 }
             ]
         }).then(() => game.get('turnMaster').fetchTurns());
 
-        /*
-         unit.set({x, y});
-
-         const animatedSprite = unit.get(attr.animatedSprite);
-
-         animatedSprite.x = squareSize * x;
-         animatedSprite.y = squareSize * y;
-         */
-
         game.clearMoveSquares();
+    }
+
+    getMovePath(endX, endY) {
+        const unit = this;
+        const game = unit.get(attr.game);
+        const availablePath = unit.getAvailablePath();
+        const landscape = game.get('model-landscape');
+        const filledMap = landscape.getFilledMap();
+        const start = [unit.get('x'), unit.get('y')];
+
+        availablePath.forEach(([x, y]) => {
+            filledMap[y][x] = '';
+        });
+
+        return getStarPath(filledMap, start, [endX, endY]);
     }
 
     animateMove(steps) {
@@ -91,7 +98,7 @@ class Unit extends BaseModel {
             });
 
             steps.forEach(([x, y]) => {
-                tl = tl.to(xy, 1, {x, y});
+                tl = tl.to(xy, 1, {x, y, ease: Power0.easeNone});
             });
         });
     }
