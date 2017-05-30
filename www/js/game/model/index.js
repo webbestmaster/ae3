@@ -157,7 +157,6 @@ export class GameModel extends BaseModel {
                         }
                         model.set(key, result[key]);
                     });
-
                 });
         }, 1e3);
 

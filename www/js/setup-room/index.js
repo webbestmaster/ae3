@@ -43,9 +43,7 @@ class SetupRoomView extends BaseView {
                 view.props.setRoomId(instanceId);
                 return api.get.room.join();
             })
-            .then(() => {
-                view.props.router.push(routerConst.link.room);
-            });
+            .then(() => view.props.router.push(routerConst.link.room));
     }
 
     render() {

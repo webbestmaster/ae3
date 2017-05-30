@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import {GameModel, gameModelAttr} from './model';
 import {Dialog, FlatButton} from 'material-ui';
-import isItMe from './../lib/is-it-me';
+import {isItMe} from './../lib/me';
 import api from './../user/api';
 
 function getDefaultState() {

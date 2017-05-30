@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import {isEqual} from 'lodash';
 // import timer from './../../lib/timer';
 // import find from 'lodash/find';
-import isItMe from './../lib/is-it-me';
+import {isItMe, getMyOrder} from './../lib/me';
 import * as gameAction from './../game/action';
 import api from './../user/api';
 import Proc from './../lib/proc';
@@ -22,6 +22,73 @@ class SettingView extends BaseView {
     constructor() {
         super();
         this.state = getDefaultState();
+    }
+
+    componentDidMount() {
+        const view = this;
+
+        view.getMainGameData()
+            .then(({result}) => {
+                const myOrder = getMyOrder(result.users);
+                const promiseList = [
+                    view.setUserProperty('color', mapGuide.colorList[myOrder]),
+                    view.setUserProperty('team', mapGuide.teamList[myOrder])
+                ];
+
+                if (!result.defaultMoney) {
+                    promiseList.push(
+                        view.setRoomState('defaultMoney', mapGuide.defaultMoneyList[0]),
+                        view.setRoomState('unitLimit', mapGuide.unitLimitList[0])
+                    );
+                }
+
+                return Promise.all(promiseList);
+            })
+            .then(() => view.getMainGameData())
+            .then(({result}) => {
+                view.props.setGameState(result);
+                view.startListening();
+            });
+    }
+
+    startListening() {
+        const view = this;
+        let previousState = {};
+
+        view.state.roomStatesProc = new Proc(() => {
+            return api.get.room
+                .getStates({
+                    keys: [
+                        // 'localization',
+                        // 'landscape',
+                        // 'buildings',
+                        // 'units',
+                        'users',
+                        'defaultMoney',
+                        'unitLimit',
+                        // 'gameName',
+                        // 'password',
+                        'chat',
+                        'isTimerStarted',
+                        // 'isGameStarted',
+                        // 'turns',
+                        // 'currentUserIndex',
+                        'startUsersState'
+                    ].join(',')
+                })
+                .then(({result}) => {
+                    // good enough for now
+                    if (isEqual(previousState, result)) {
+                        console.log('the same result');
+                        return;
+                    }
+
+                    previousState = result;
+
+                    view.props.setGameState(result);
+                    // view.onRoomStateReceive();
+                });
+        }, 1e3);
     }
 
     sendMessage() {
@@ -54,8 +121,6 @@ class SettingView extends BaseView {
     }
 
     getMainGameData() {
-        const view = this;
-
         return api.get.room
             .getStates({
                 keys: [
@@ -64,64 +129,12 @@ class SettingView extends BaseView {
                     'buildings',
                     'units',
                     'gameName',
-                    'password'
+                    'password',
+                    'users',
+                    'defaultMoney',
+                    'unitLimit'
                 ].join(',')
-            })
-            .then(({result}) => view.props.setGameState(result));
-    }
-
-    componentDidMount() {
-        const view = this;
-
-        // FIXME
-        view.setUserProperty('color', 'red');
-        view.setUserProperty('team', 'team-1');
-        // view.setUserProperty('color', view.refs.colorSelect.value);
-        // view.setUserProperty('team', view.refs.teamSelect.value);
-
-        // FIXME TOO
-        if (view.refs.defaultMoney) {
-            view.setRoomState('defaultMoney', view.refs.defaultMoney.value);
-            view.setRoomState('unitLimit', view.refs.unitLimit.value);
-        }
-
-        view.getMainGameData();
-
-        let previousState = {};
-
-        view.state.roomStatesProc = new Proc(() => {
-            return api.get.room
-                .getStates({
-                    keys: [
-                        // 'localization',
-                        // 'landscape',
-                        // 'buildings',
-                        // 'units',
-                        'users',
-                        'defaultMoney',
-                        'unitLimit',
-                        // 'gameName',
-                        // 'password',
-                        'chat',
-                        'isTimerStarted',
-                        // 'isGameStarted',
-                        // 'turns',
-                        // 'currentUserIndex',
-                        'startUsersState'
-                    ].join(',')
-                })
-                .then(({result}) => {
-                    if (isEqual(previousState, result)) {
-                        console.log('the same result');
-                        return;
-                    }
-
-                    previousState = result;
-
-                    view.props.setGameState(result);
-                    // view.onRoomStateReceive();
-                });
-        }, 1e3);
+            });
     }
 
     startGame() {
@@ -145,7 +158,12 @@ class SettingView extends BaseView {
         const {
             users, isTimerStarted, localization, defaultMoney, unitLimit, chat, startGameTimer
         } = view.props.gameState.state;
-        const zeroUser = users[0] || null;
+
+        if (users.length === 0) {
+            return <h1>initializing...</h1>;
+        }
+
+        const zeroUser = users[0];
 
         return <div>
             <h1>settings</h1>
@@ -189,6 +207,7 @@ class SettingView extends BaseView {
                 <div>
                     <h1>money limit</h1>
                     <select ref="defaultMoney"
+                            defaultValue={defaultMoney}
                             onChange={evt => view.setRoomState('defaultMoney', evt.currentTarget.value)}>
                         {mapGuide.defaultMoneyList.map(money =>
                             <option key={money} value={money}>{money}</option>
@@ -196,6 +215,7 @@ class SettingView extends BaseView {
                     </select>
                     <h1>unit limit</h1>
                     <select ref="unitLimit"
+                            defaultValue={unitLimit}
                             onChange={evt => view.setRoomState('unitLimit', evt.currentTarget.value)}>
                         {mapGuide.unitLimitList.map(limit =>
                             <option key={limit} value={limit}>{limit}</option>
