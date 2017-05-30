@@ -215,7 +215,8 @@ export class GameModel extends BaseModel {
             // [attr.render]: model.get(attr.render),
             x: unitData.x,
             y: unitData.y,
-            ownerPublicId: userData.publicId
+            ownerPublicId: userData.publicId,
+            team: userData.team
             // userOrder: unitData.userOrder
         };
 

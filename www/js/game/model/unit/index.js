@@ -11,11 +11,12 @@ const unitGuide = require('./unit-guide.json');
 const attr = {
     type: 'type',
     animatedSprite: 'animatedSprite',
-    render: 'render',
+    // render: 'render',
     color: 'color',
     userOrder: 'userOrder',
     game: 'game',
-    ownerPublicId: 'ownerPublicId'
+    ownerPublicId: 'ownerPublicId',
+    team: 'team'
 };
 
 class Unit extends BaseModel {
@@ -101,7 +102,7 @@ class Unit extends BaseModel {
             });
 
             steps.forEach(([x, y]) => {
-                tl = tl.to(xy, 1, {x, y, ease: Power0.easeNone});
+                tl = tl.to(xy, 0.5, {x, y, ease: Power0.easeNone});
             });
         });
     }
@@ -134,10 +135,15 @@ class Unit extends BaseModel {
 
         if (getMyPublicId() === unit.get(attr.ownerPublicId)) {
             unit.addMoveSquares(availablePath);
+            unit.addAttackSquares();
             return;
         }
 
         console.warn('you can not touch this unit');
+    }
+
+    addAttackSquares() {
+        console.warn('implement me!!!')
     }
 
     getAvailablePath() {
@@ -188,6 +194,18 @@ class Unit extends BaseModel {
         const game = unit.get(attr.game);
 
         game.clearMoveSquares();
+    }
+
+    isEnemy(unit) {
+        return this.get(attr.team) !== unit.get(attr.team);
+    }
+
+    isSameTeam(unit) {
+        return this.get(attr.team) === unit.get(attr.team);
+    }
+
+    isSameOwner(unit) {
+        return this.get(attr.ownerPublicId) === unit.get(attr.ownerPublicId);
     }
 }
 
