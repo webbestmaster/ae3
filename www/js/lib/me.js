@@ -2,7 +2,7 @@ import {find} from 'lodash';
 import {store} from './../index';
 
 export function isItMe(user) {
-    return store.getState().userState.publicIdState.publicId === user.publicId;
+    return getMyPublicId() === user.publicId;
 }
 
 export function findMe(users) {
@@ -11,4 +11,8 @@ export function findMe(users) {
 
 export function getMyOrder(users) {
     return users.indexOf(findMe(users));
+}
+
+export function getMyPublicId() {
+    return store.getState().userState.publicIdState.publicId;
 }

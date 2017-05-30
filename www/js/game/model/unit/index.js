@@ -3,6 +3,7 @@ import {getPath} from './../../path-master';
 import api from './../../../user/api';
 import {TimelineLite, Power0} from 'gsap';
 import {getPath as getStarPath} from 'a-star-finder';
+import {getMyPublicId} from './../../../lib/me';
 const PIXI = require('pixi.js');
 const renderConfig = require('./../../render/config.json');
 const unitGuide = require('./unit-guide.json');
@@ -13,7 +14,8 @@ const attr = {
     render: 'render',
     color: 'color',
     userOrder: 'userOrder',
-    game: 'game'
+    game: 'game',
+    ownerPublicId: 'ownerPublicId'
 };
 
 class Unit extends BaseModel {
@@ -27,7 +29,8 @@ class Unit extends BaseModel {
             [0, 1].map(ii => PIXI.Texture.fromFrame(type + '-' + color + '-' + ii))
         );
 
-        const render = unit.get(attr.render);
+        const game = unit.get(attr.game);
+        const render = game.get('render');
         const squareSize = render.get('squareSize');
 
         // animatedSprite.x = x * squareSize;
@@ -51,7 +54,7 @@ class Unit extends BaseModel {
     move(x, y) {
         const unit = this;
         const game = unit.get(attr.game);
-        const render = unit.get(attr.render);
+        const render = game.get('render');
         const squareSize = render.get('squareSize');
 
         api.post.room.pushTurn(null, {
@@ -105,7 +108,8 @@ class Unit extends BaseModel {
 
     putTo(x, y) {
         const unit = this;
-        const render = unit.get(attr.render);
+        const game = unit.get(attr.game);
+        const render = game.get('render');
         const squareSize = render.get('squareSize');
 
         unit.set({x, y});
@@ -128,8 +132,7 @@ class Unit extends BaseModel {
         const currentUserIndex = game.get('currentUserIndex');
         const availablePath = unit.getAvailablePath();
 
-        if (game.getUserOrder() === unit.get(attr.userOrder) &&
-            currentUserIndex === unit.get(attr.userOrder)) {
+        if (getMyPublicId() === unit.get(attr.ownerPublicId)) {
             unit.addMoveSquares(availablePath);
             return;
         }
@@ -161,8 +164,8 @@ class Unit extends BaseModel {
 
     addMoveSquares(availablePath) {
         const unit = this;
-        const render = unit.get(attr.render);
         const game = unit.get(attr.game);
+        const render = game.get('render');
         const squareSize = render.get('squareSize');
 
         unit.clearMoveSquares();

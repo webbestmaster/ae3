@@ -18,7 +18,7 @@ const attr = {
     turnMaster: 'turnMaster',
     promiseMaster: 'promiseMaster',
     proc: 'proc',
-    user: 'user',
+    // user: 'user',
     users: 'users',
 
     landscape: 'landscape',
@@ -212,10 +212,11 @@ export class GameModel extends BaseModel {
             game: model,
             type,
             color: userData.color,
-            [attr.render]: model.get(attr.render),
+            // [attr.render]: model.get(attr.render),
             x: unitData.x,
             y: unitData.y,
-            userOrder: unitData.userOrder
+            ownerPublicId: userData.publicId
+            // userOrder: unitData.userOrder
         };
 
         const unit = new Unit(unitProps);
@@ -263,32 +264,6 @@ export class GameModel extends BaseModel {
         const moveSquares = model.get(attr.moveSquares);
 
         moveSquares.forEach(sprite => render.removeChild('ui', sprite));
-    }
-
-    getUserByPublicId(publicId) {
-        return find(this.get(attr.startUsersState), user => user.publicId === publicId);
-    }
-
-    getUserByOrder(order) {
-        return this.get(attr.startUsersState)[order];
-    }
-
-    getUserOrderByPublicId(publicId) {
-        const model = this;
-        const user = model.getUserByPublicId(publicId);
-        const users = model.get(attr.startUsersState);
-
-        return users.indexOf(user);
-    }
-
-    getUserOrder() {
-        const model = this;
-
-        return model.getUserOrderByPublicId(model.getUserPublicId());
-    }
-
-    getUserPublicId() {
-        return this.get(attr.user).publicId;
     }
 
     destroy() {
