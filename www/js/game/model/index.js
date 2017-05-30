@@ -242,7 +242,12 @@ export class GameModel extends BaseModel {
         const model = this;
         const render = model.get(attr.render);
         const squareSize = render.get('squareSize');
-        const sprite = PIXI.Sprite.fromFrame('smoke-type-1-1');
+        const sprite = PIXI.Sprite.fromFrame('action-move');
+
+        // TODO, FIXME
+        // fix size of 'action-move' and remove this sizing
+        sprite.width = squareSize;
+        sprite.height = squareSize;
 
         sprite.x = squareSize * x;
         sprite.y = squareSize * y;

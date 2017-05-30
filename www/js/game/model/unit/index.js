@@ -143,7 +143,7 @@ class Unit extends BaseModel {
     }
 
     addAttackSquares() {
-        console.warn('implement me!!!')
+        console.warn('implement me!!!');
     }
 
     getAvailablePath() {
