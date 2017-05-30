@@ -76,7 +76,11 @@ class GameView extends BaseView {
 
         model.start().then(() => {
             model.onChange('currentUserIndex', view.showChangeTurnPopup, view);
-            model.onChange('users', () => alert('users changed!'), view);
+            model.onChange('users', function onUsersChange() {
+                console.warn('users changed');
+                console.warn(arguments);
+            }, view);
+            view.showChangeTurnPopup();
         });
     }
 
