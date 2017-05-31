@@ -67,8 +67,7 @@ class Unit extends BaseModel {
             ]
         }).then(() => game.get('turnMaster').fetchTurns());
 
-        game.clearMoveSquares();
-        game.clearAttackSquares();
+        game.clearAllSquares();
     }
 
     getMovePath(endX, endY) {
@@ -216,7 +215,7 @@ class Unit extends BaseModel {
                 arrXY[1],
                 {
                     events: {
-                        pointertap: () => unit.move(arrXY[0], arrXY[1])
+                        pointertap: () => unit.attack(arrXY[0], arrXY[1])
                     }
                 }
             );

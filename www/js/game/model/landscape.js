@@ -164,8 +164,7 @@ class Landscape extends BaseModel {
         const model = this;
         const game = model.get(attr.game);
 
-        game.clearMoveSquares();
-        game.clearAttackSquares();
+        game.clearAllSquares();
 
         model.get(attr.game).get('ui').selectMark.moveTo(x, y);
     }

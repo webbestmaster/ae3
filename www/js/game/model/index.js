@@ -289,6 +289,13 @@ export class GameModel extends BaseModel {
         Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
     }
 
+    clearAllSquares() {
+        const model = this;
+
+        model.clearMoveSquares();
+        model.clearAttackSquares();
+    }
+
     clearMoveSquares() {
         const model = this;
         const render = model.get(attr.render);
