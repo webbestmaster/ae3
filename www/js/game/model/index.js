@@ -247,7 +247,7 @@ export class GameModel extends BaseModel {
         const squareSize = render.get('squareSize');
         const sprite = PIXI.Sprite.fromFrame('action-move');
 
-        // TODO, FIXME
+        // FIXME
         // fix size of 'action-move' and remove this sizing
         sprite.width = squareSize;
         sprite.height = squareSize;

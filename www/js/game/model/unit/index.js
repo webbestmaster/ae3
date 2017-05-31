@@ -55,13 +55,30 @@ class Unit extends BaseModel {
     move(x, y) {
         const unit = this;
         const game = unit.get(attr.game);
-        const render = game.get('render');
-        const squareSize = render.get('squareSize');
 
         api.post.room.pushTurn(null, {
             list: [
                 {
                     type: 'move',
+                    steps: unit.getMovePath(x, y)
+                }
+            ]
+        }).then(() => game.get('turnMaster').fetchTurns());
+
+        game.clearAllSquares();
+    }
+
+    attack(x, y) {
+        const unit = this;
+        const game = unit.get(attr.game);
+        const enemy = game.getUnitByXY(x, y);
+
+        // TODO: I stay here :)
+
+        api.post.room.pushTurn(null, {
+            list: [
+                {
+                    type: 'attack',
                     steps: unit.getMovePath(x, y)
                 }
             ]
@@ -119,10 +136,6 @@ class Unit extends BaseModel {
 
         animatedSprite.x = squareSize * x;
         animatedSprite.y = squareSize * y;
-    }
-
-    attack(x, y) {
-
     }
 
     onClick() {
@@ -221,7 +234,6 @@ class Unit extends BaseModel {
             );
         });
     }
-
 
     clearMoveSquares() {
         const unit = this;
