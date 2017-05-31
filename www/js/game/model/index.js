@@ -10,6 +10,7 @@ import Proc from './../../lib/proc';
 import {isEqual, find, pick} from 'lodash';
 import {PromiseMaster} from './../../lib/promise-master';
 const PIXI = require('pixi.js');
+const renderConfig = require('./../render/config.json');
 
 const attr = {
     currentUserIndex: 'currentUserIndex',
@@ -29,6 +30,7 @@ const attr = {
 
     ui: 'ui',
     moveSquares: 'moveSquares',
+    attackSquares: 'attackSquares',
     model: {
         buildings: 'model-buildings',
         landscape: 'model-landscape',
@@ -72,6 +74,7 @@ export class GameModel extends BaseModel {
                         selectMark: null
                     },
                     [attr.moveSquares]: [],
+                    [attr.attackSquares]: [],
                     [attr.render]: render,
                     [attr.promiseMaster]: new PromiseMaster()
                 });
@@ -262,14 +265,46 @@ export class GameModel extends BaseModel {
         Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
     }
 
+    addAttackSquare(x, y, options = {}) {
+        const model = this;
+        const render = model.get(attr.render);
+        const squareSize = render.get('squareSize');
+
+        const sprite = new PIXI.extras.AnimatedSprite(
+            [0, 1, 2].map(ii => PIXI.Texture.fromFrame('action-attack-' + ii))
+        );
+
+        sprite.x = squareSize * (x - 0.5);
+        sprite.y = squareSize * (y - 0.5);
+        render.addChild('ui', sprite);
+        model.get(attr.moveSquares).push(sprite);
+
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+        sprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
+        sprite.play();
+
+        const {events = {}} = options;
+
+        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
+    }
+
     clearMoveSquares() {
         const model = this;
         const render = model.get(attr.render);
 
-        // const uiLayer = render.get('ui');
         const moveSquares = model.get(attr.moveSquares);
 
         moveSquares.forEach(sprite => render.removeChild('ui', sprite));
+    }
+
+    clearAttackSquares() {
+        const model = this;
+        const render = model.get(attr.render);
+
+        const attackSquares = model.get(attr.attackSquares);
+
+        attackSquares.forEach(sprite => render.removeChild('ui', sprite));
     }
 
     destroy() {

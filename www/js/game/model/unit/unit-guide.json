@@ -1,11 +1,11 @@
 {
     "type": {
         "soldier": {
-            "atk": {
+            "attack": {
                 "min": 50,
                 "max": 55
             },
-            "atkRange": 2,
+            "attackRange": 1,
             "defence": 5,
             "move": 4,
             "____modelName": "SoldierModel",
@@ -17,11 +17,11 @@
             "cost": 150
         },
         "archer": {
-            "atk": {
+            "attack": {
                 "min": 50,
                 "max": 55
             },
-            "atkRange": 3,
+            "attackRange": 2,
             "defence": 5,
             "move": 4,
             "modelName": "ArcherModel",
@@ -30,11 +30,11 @@
             "cost": 250
         },
         "elemental": {
-            "atk": {
+            "attack": {
                 "min": 50,
                 "max": 55
             },
-            "atkRange": 2,
+            "attackRange": 1,
             "defence": 10,
             "move": 4,
             "modelName": "ElementalModel",
@@ -43,12 +43,12 @@
             "cost": 300
         },
         "sorceress": {
-            "atk": {
+            "attack": {
                 "min": 40,
                 "max": 45
             },
-            "atkRange": 2,
-            "raiseRange": 2,
+            "attackRange": 1,
+            "raiseRange": 1,
             "defence": 5,
             "move": 4,
             "modelName": "SorceressModel",
@@ -56,11 +56,11 @@
             "cost": 400
         },
         "wisp": {
-            "atk": {
+            "attack": {
                 "min": 35,
                 "max": 40
             },
-            "atkRange": 2,
+            "attackRange": 1,
             "auraRange": 3,
             "defence": 10,
             "move": 4,
@@ -70,11 +70,11 @@
             "cost": 500
         },
         "dire-wolf": {
-            "atk": {
+            "attack": {
                 "min": 60,
                 "max": 65
             },
-            "atkRange": 2,
+            "attackRange": 1,
             "defence": 15,
             "move": 5,
             "modelName": "DireWolfModel",
@@ -83,11 +83,11 @@
             "cost": 600
         },
         "golem": {
-            "atk": {
+            "attack": {
                 "min": 60,
                 "max": 70
             },
-            "atkRange": 2,
+            "attackRange": 1,
             "defence": 30,
             "move": 4,
             "modelName": "GolemModel",
@@ -95,11 +95,11 @@
             "cost": 600
         },
         "catapult": {
-            "atk": {
+            "attack": {
                 "min": 50,
                 "max": 70
             },
-            "atkRange": 5,
+            "attackRange": 4,
             "defence": 10,
             "move": 3,
             "modelName": "CatapultModel",
@@ -109,11 +109,11 @@
             "canDestroyBuilding": true
         },
         "dragon": {
-            "atk": {
+            "attack": {
                 "min": 70,
                 "max": 80
             },
-            "atkRange": 2,
+            "attackRange": 1,
             "defence": 25,
             "move": 6,
             "modelName": "DragonModel",
@@ -122,11 +122,11 @@
             "cost": 1000
         },
         "skeleton": {
-            "atk": {
+            "attack": {
                 "min": 40,
                 "max": 50
             },
-            "atkRange": 2,
+            "attackRange": 1,
             "defence": 2,
             "move": 4,
             "modelName": "SkeletonModel",
@@ -136,11 +136,11 @@
             "cost": 0
         },
         "crystal": {
-            "atk": {
+            "attack": {
                 "min": 0,
                 "max": 0
             },
-            "atkRange": 1,
+            "attackRange": 0,
             "defence": 15,
             "move": 3,
             "modelName": "CrystalModel",
@@ -149,11 +149,11 @@
             "cost": 0
         },
         "galamar": {
-            "atk": {
+            "attack": {
                 "min": 55,
                 "max": 65
             },
-            "atkRange": 2,
+            "attackRange": 1,
             "defence": 20,
             "move": 4,
             "modelName": "GalamarModel",
@@ -167,11 +167,11 @@
             "cost": 200
         },
         "valadorn": {
-            "atk": {
+            "attack": {
                 "min": 55,
                 "max": 65
             },
-            "atkRange": 2,
+            "attackRange": 1,
             "defence": 20,
             "move": 4,
             "modelName": "ValadornModel",
@@ -185,11 +185,11 @@
             "cost": 200
         },
         "demon-lord": {
-            "atk": {
+            "attack": {
                 "min": 55,
                 "max": 65
             },
-            "atkRange": 2,
+            "attackRange": 1,
             "defence": 20,
             "move": 4,
             "modelName": "DemonLordModel",
@@ -203,11 +203,11 @@
             "cost": 200
         },
         "saeth": {
-            "atk": {
+            "attack": {
                 "min": 55,
                 "max": 65
             },
-            "atkRange": 2,
+            "attackRange": 1,
             "defence": 20,
             "move": 4,
             "modelName": "SaethModel",
@@ -221,11 +221,11 @@
             "cost": 200
         },
         "saeth-heavens-fury": {
-            "atk": {
+            "attack": {
                 "min": 55,
                 "max": 65
             },
-            "atkRange": 16,
+            "attackRange": 15,
             "defence": 45,
             "move": 0,
             "modelName": "SaethHeavensFuryModel",

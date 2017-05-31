@@ -68,6 +68,7 @@ class Unit extends BaseModel {
         }).then(() => game.get('turnMaster').fetchTurns());
 
         game.clearMoveSquares();
+        game.clearAttackSquares();
     }
 
     getMovePath(endX, endY) {
@@ -132,18 +133,15 @@ class Unit extends BaseModel {
         const game = unit.get(attr.game);
         const currentUserIndex = game.get('currentUserIndex');
         const availablePath = unit.getAvailablePath();
+        const availableAttack = unit.getAvailableAttack();
 
         if (getMyPublicId() === unit.get(attr.ownerPublicId)) {
             unit.addMoveSquares(availablePath);
-            unit.addAttackSquares();
+            unit.addAttackSquares(availableAttack);
             return;
         }
 
         console.warn('you can not touch this unit');
-    }
-
-    addAttackSquares() {
-        console.warn('implement me!!!');
     }
 
     getAvailablePath() {
@@ -168,6 +166,21 @@ class Unit extends BaseModel {
         );
     }
 
+    getAvailableAttack() {
+        const unit = this;
+        const game = unit.get(attr.game);
+        const landscape = game.get('model-landscape');
+        const filledMap = landscape.getAttackFilledMap();
+        const units = game.get('model-units');
+
+        return getPath(
+            unit.get('x'),
+            unit.get('y'),
+            unitGuide.type[unit.get('type')].attackRange,
+            filledMap
+        ).filter(square => game.getUnitByXY(square[0], square[1]));
+    }
+
     addMoveSquares(availablePath) {
         const unit = this;
         const game = unit.get(attr.game);
@@ -189,11 +202,40 @@ class Unit extends BaseModel {
         });
     }
 
+    addAttackSquares(availableAttack) {
+        const unit = this;
+        const game = unit.get(attr.game);
+        const render = game.get('render');
+        const squareSize = render.get('squareSize');
+
+        unit.clearAttackSquares();
+
+        availableAttack.forEach(arrXY => {
+            game.addAttackSquare(
+                arrXY[0],
+                arrXY[1],
+                {
+                    events: {
+                        pointertap: () => unit.move(arrXY[0], arrXY[1])
+                    }
+                }
+            );
+        });
+    }
+
+
     clearMoveSquares() {
         const unit = this;
         const game = unit.get(attr.game);
 
         game.clearMoveSquares();
+    }
+
+    clearAttackSquares() {
+        const unit = this;
+        const game = unit.get(attr.game);
+
+        game.clearAttackSquares();
     }
 
     isEnemy(unit) {

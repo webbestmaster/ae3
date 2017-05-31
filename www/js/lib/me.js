@@ -2,7 +2,8 @@ import {find} from 'lodash';
 import {store} from './../index';
 
 export function isItMe(user) {
-    return getMyPublicId() === user.publicId;
+    // user && check for user needed for map wil one player
+    return user && getMyPublicId() === user.publicId;
 }
 
 export function findMe(users) {

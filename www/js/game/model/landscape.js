@@ -8,7 +8,8 @@ const attr = {
     pathMap: 'pathMap',
     width: 'width',
     height: 'height',
-    filledMap: 'filledMap'
+    filledMap: 'filledMap',
+    attackFilledMap: 'attackFilledMap'
 };
 
 class Landscape extends BaseModel {
@@ -27,6 +28,7 @@ class Landscape extends BaseModel {
             [attr.height]: landscape.length
         });
         model.createFilledMap(landscape);
+        model.createAttackFilledMap(landscape);
     }
 
     drawLandscape(landscape) {
@@ -159,7 +161,13 @@ class Landscape extends BaseModel {
     }
 
     onClick(x, y) {
-        this.get(attr.game).get('ui').selectMark.moveTo(x, y);
+        const model = this;
+        const game = model.get(attr.game);
+
+        game.clearMoveSquares();
+        game.clearAttackSquares();
+
+        model.get(attr.game).get('ui').selectMark.moveTo(x, y);
     }
 
     createPathMap(landscape) {
@@ -178,10 +186,6 @@ class Landscape extends BaseModel {
         return JSON.parse(JSON.stringify(this.get(attr.pathMap)));
     }
 
-    getFilledMap() {
-        return JSON.parse(JSON.stringify(this.get(attr.filledMap)));
-    }
-
     createFilledMap(landscape) {
         const model = this;
         const width = landscape[0].length;
@@ -191,6 +195,25 @@ class Landscape extends BaseModel {
         const filledMap = new Array(height).fill(line);
 
         model.set(attr.filledMap, filledMap);
+    }
+
+    getFilledMap() {
+        return JSON.parse(JSON.stringify(this.get(attr.filledMap)));
+    }
+
+    createAttackFilledMap(landscape) {
+        const model = this;
+        const width = landscape[0].length;
+        const height = landscape.length;
+
+        const line = new Array(width).fill(1);
+        const filledMap = new Array(height).fill(line);
+
+        model.set(attr.attackFilledMap, filledMap);
+    }
+
+    getAttackFilledMap() {
+        return JSON.parse(JSON.stringify(this.get(attr.attackFilledMap)));
     }
 }
 
