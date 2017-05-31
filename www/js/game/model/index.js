@@ -27,6 +27,7 @@ const attr = {
     units: 'units',
 
     game: 'game',
+    turnCounter: 'turnCounter',
 
     ui: 'ui',
     moveSquares: 'moveSquares',
@@ -75,6 +76,7 @@ export class GameModel extends BaseModel {
                     },
                     [attr.moveSquares]: [],
                     [attr.attackSquares]: [],
+                    [attr.turnCounter]: 0,
                     [attr.render]: render,
                     [attr.promiseMaster]: new PromiseMaster()
                 });

@@ -16,7 +16,9 @@ const attr = {
     userOrder: 'userOrder',
     game: 'game',
     ownerPublicId: 'ownerPublicId',
-    team: 'team'
+    team: 'team',
+    health: 'health',
+    level: 'level'
 };
 
 class Unit extends BaseModel {
