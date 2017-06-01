@@ -89,18 +89,41 @@ class Unit extends BaseModel {
         const game = unit.get(attr.game);
         const enemy = game.getUnitByXY(x, y);
 
-        // TODO: I stay here :)
+        // TODO: create TWO method
+        // 1st: getAvailableDamage()
+        // 2nd: getAvailableDefence()
 
         api.post.room.pushTurn(null, {
             list: [
                 {
                     type: 'attack',
-                    steps: unit.getMovePath(x, y)
+                    attacker: {
+                        x: unit.get('x'),
+                        y: unit.get('y'),
+                        health: 60
+                    },
+                    defender: {
+                        x: enemy.get('x'),
+                        y: enemy.get('y'),
+                        health: 80
+                    }
                 }
             ]
         }).then(() => game.get('turnMaster').fetchTurns());
 
         game.clearAllSquares();
+    }
+
+    getAvailableDamage(health) {
+        const unit = this;
+
+        // check health, (max-min attack, get average attack), under-wisp, under-poison, level
+    }
+
+    getAvailableDefence() {
+        const unit = this;
+
+        // check ground and building, self armor, under-wisp, under-poison, level
     }
 
     getMovePath(endX, endY) {

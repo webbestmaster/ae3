@@ -126,12 +126,15 @@ export class GameModel extends BaseModel {
             return model.doActionMove(action);
         }
 
+        if (action.type === 'attack') {
+            return model.doActionAttack(action);
+        }
+
         return Promise.resolve();
     }
 
-    doActionMove(action) {
+    doActionMove({steps}) {
         const model = this;
-        const {steps} = action;
         const startX = steps[0][0];
         const startY = steps[0][1];
 
@@ -140,6 +143,18 @@ export class GameModel extends BaseModel {
         const unit = model.getUnitByXY(startX, startY);
 
         return unit.animateMove(steps);
+    }
+
+    doActionAttack({attacker, defender}) {
+        const model = this;
+
+        const unitAttacker = model.getUnitByXY(attacker.x, attacker.y);
+
+        unitAttacker.set(attacker);
+
+        const unitDefender = model.getUnitByXY(defender.x, defender.y);
+
+        unitDefender.set(defender);
     }
 
     getUnitByXY(x, y) {
