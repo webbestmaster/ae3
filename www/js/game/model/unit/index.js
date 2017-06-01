@@ -4,6 +4,7 @@ import api from './../../../user/api';
 import {TimelineLite, Power0} from 'gsap';
 import {getPath as getStarPath} from 'a-star-finder';
 import {getMyPublicId} from './../../../lib/me';
+import HealthText from './health-text';
 const PIXI = require('pixi.js');
 const renderConfig = require('./../../render/config.json');
 const unitGuide = require('./unit-guide.json');
@@ -18,12 +19,20 @@ const attr = {
     ownerPublicId: 'ownerPublicId',
     team: 'team',
     health: 'health',
-    level: 'level'
+    level: 'level',
+    sprite: {
+        health: 'sprite-health'
+    }
+};
+
+const defaultValues = {
+    level: 0,
+    health: 100
 };
 
 class Unit extends BaseModel {
     constructor(data) {
-        super(data);
+        super(Object.assign({}, data, defaultValues));
 
         const unit = this;
         const {type, x, y, color} = data;
@@ -36,9 +45,7 @@ class Unit extends BaseModel {
         const render = game.get('render');
         const squareSize = render.get('squareSize');
 
-        // animatedSprite.x = x * squareSize;
-        // animatedSprite.y = y * squareSize;
-
+        // main sprite
         unit.set(attr.animatedSprite, animatedSprite);
 
         animatedSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
@@ -52,6 +59,13 @@ class Unit extends BaseModel {
         animatedSprite.on('pointertap', () => unit.onClick());
 
         unit.putTo(x, y);
+
+        // health
+        const healthText = new HealthText({unit});
+
+        unit.set(attr.sprite.health, healthText);
+
+        animatedSprite.addChild(healthText.get('sprite'));
     }
 
     move(x, y) {

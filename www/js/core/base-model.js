@@ -1,18 +1,21 @@
 /* global module */
 /* eslint-disable no-underscore-dangle */
 
-class BaseModel {
-    constructor(properies) {
-        console.log('Created Model ->', this.constructor.name);
-        console.log(this);
-
+/**
+ *
+ * @param {object} attributes of new MainModel instance
+ * @return {MainModel} instance
+ */
+class MainModel {
+    constructor(attributes) {
         const model = this;
 
         model._listeners = {};
         model._attr = {};
+        model._listening = [];
 
-        if (properies) {
-            model.set(properies);
+        if (attributes) {
+            model.set(attributes);
         }
     }
 
@@ -21,13 +24,14 @@ class BaseModel {
 
         model._attr = {};
         model.offChange();
+        model.stopListening();
     }
 
     /**
      *
      * @param {string|object} key of value
      * @param {*} [value] saved value
-     * @return {BaseModel} instance
+     * @return {MainModel} instance
      */
     set(key, value) {
         return typeof key === 'string' ? this._setKeyValue(key, value) : this._setObject(key);
@@ -46,52 +50,41 @@ class BaseModel {
      *
      * @param {string} key of value
      * @param {number} deltaValue to change current value
-     * @return {BaseModel} instance
+     * @return {MainModel} instance
      */
     changeBy(key, deltaValue) {
-        return this._setKeyValue(key, this.get(key) + deltaValue);
+        const model = this;
+
+        return model._setKeyValue(key, model.get(key) + deltaValue);
     }
 
     /**
      *
-     * @param {string|string[]} key of value
+     * @param {string} key of value
      * @param {Function} action to execute
      * @param {*} [context] of action
-     * @return {BaseModel} instance
+     * @return {MainModel} instance
      */
-    onChange(key, action, context) {
+    onChange(key, action, context = this) {
         const model = this;
-
-        if (Array.isArray(key)) {
-            key.forEach(keyFromList => model.onChange(keyFromList, action, context));
-
-            return model;
-        }
-
         const listeners = model.getListenersByKey(key);
 
-        listeners.push([action, context || null]);
+        listeners.push([action, context]);
 
         return model;
     }
 
     /**
      *
-     * @param {string|string[]} [key] of value
+     * @param {string} [key] of value
      * @param {Function} [action] was execute
      * @param {*} [context] of action
-     * @return {BaseModel} instance
+     * @return {MainModel} instance
      */
     offChange(key, action, context) {
         const model = this;
 
         const argsLength = arguments.length;
-
-        if (Array.isArray(key)) {
-            key.forEach(keyFromList => model.offChange(keyFromList, action, context));
-
-            return model;
-        }
 
         // key did not passed
         if (argsLength === 0) {
@@ -99,7 +92,6 @@ class BaseModel {
             return model;
         }
 
-        const listenersByKey = model.getListenersByKey(key);
         const allListeners = model.getAllListeners();
 
         // action did not passed
@@ -107,6 +99,8 @@ class BaseModel {
             allListeners[key] = [];
             return model;
         }
+
+        const listenersByKey = model.getListenersByKey(key);
 
         // context did not passed
         if (argsLength === 2) {
@@ -121,10 +115,92 @@ class BaseModel {
 
     /**
      *
+     * @param {MainModel} mainModel - other model to start listen
+     * @param {string} key of value
+     * @param {Function} action was execute
+     * @param {*} [context] of action
+     * @returns {MainModel} instance
+     */
+    listenTo(mainModel, key, action, context = this) {
+        const model = this;
+        const listening = model.getListening();
+
+        listening.push([mainModel, key, action, context]);
+        mainModel.onChange(key, action, context);
+
+        return model;
+    }
+
+    /**
+     * @param {MainModel} [mainModel] - other model to stop listen
+     * @param {string} [key] of value
+     * @param {Function} [action] was execute
+     * @param {*} [context] of action
+     * @return {MainModel} instance
+     */
+    stopListening(mainModel, key, action, context) {
+        const model = this;
+        const argsLength = arguments.length;
+        const listening = model.getListening();
+
+        if (argsLength === 0) {
+            listening.forEach(
+                ([listMainModel, listKey, listAction, listContext]) =>
+                    model.stopListening(listMainModel, listKey, listAction, listContext)
+            );
+            return model;
+        }
+
+        if (argsLength === 1) {
+            listening.forEach(
+                ([listMainModel, listKey, listAction, listContext]) =>
+                listMainModel === mainModel && model.stopListening(listMainModel, listKey, listAction, listContext)
+            );
+            return model;
+        }
+
+        if (argsLength === 2) {
+            listening.forEach(
+                ([listMainModel, listKey, listAction, listContext]) =>
+                listMainModel === mainModel && listKey === key &&
+                model.stopListening(listMainModel, listKey, listAction, listContext)
+            );
+            return model;
+        }
+
+        if (argsLength === 3) {
+            listening.forEach(
+                ([listMainModel, listKey, listAction, listContext]) =>
+                listMainModel === mainModel &&
+                listKey === key &&
+                listAction === action &&
+                model.stopListening(listMainModel, listKey, listAction, listContext)
+            );
+            return model;
+        }
+
+        model._listening = listening.filter(
+            ([listMainModel, listKey, listAction, listContext]) => {
+                if (listMainModel === mainModel &&
+                    listKey === key &&
+                    listAction === action &&
+                    listContext === context) {
+                    mainModel.offChange(listKey, listAction, listContext);
+                    return false;
+                }
+                return true;
+            }
+        );
+
+        return model;
+    }
+
+    /**
+     *
      * @param {string} key of value
      * @param {*} [newValue] of instance
      * @param {*} [oldValue] of instance
-     * @return {BaseModel} instance
+     * @return {MainModel} instance
      */
     trigger(key, newValue, oldValue) {
         const model = this;
@@ -140,8 +216,8 @@ class BaseModel {
         }
 
         if (argsLength === 2) {
-            oldValueArg = oldValue;
-            newValueArg = oldValueArg;
+            oldValueArg = model.get(key);
+            newValueArg = newValue;
         }
 
         if (argsLength === 3) {
@@ -172,18 +248,29 @@ class BaseModel {
 
     /**
      *
+     * @return {*} all listening
+     */
+    getListening() {
+        return this._listening;
+    }
+
+    /**
+     *
      * @param {string} key of value
      * @return {Array} of listeners filtered by key
      */
     getListenersByKey(key) {
         const model = this;
+        const listeners = model._listeners;
+        const listenersByKey = listeners[key];
 
-        if (!model._listeners[key]) {
-            model._listeners[key] = [];
-            return model.getListenersByKey(key);
+        if (listenersByKey) {
+            return listenersByKey;
         }
 
-        return this._listeners[key];
+        listeners[key] = [];
+
+        return listeners[key];
     }
 
     // helpers
@@ -191,7 +278,7 @@ class BaseModel {
     _setObject(obj) {
         const model = this;
 
-        Object.keys(obj).forEach(key => model.set(key, obj[key]));
+        Object.keys(obj).forEach(key => model._setKeyValue(key, obj[key]));
 
         return model;
     }
@@ -210,4 +297,4 @@ class BaseModel {
     }
 }
 
-module.exports = BaseModel;
+module.exports = MainModel;
