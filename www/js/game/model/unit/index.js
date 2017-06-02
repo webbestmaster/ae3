@@ -20,6 +20,8 @@ const attr = {
     team: 'team',
     health: 'health',
     level: 'level',
+    isActing: 'isActing',
+    isMoved: 'isMoved',
     sprite: {
         health: 'sprite-health'
     }
@@ -27,7 +29,9 @@ const attr = {
 
 const defaultValues = {
     level: 0,
-    health: 100
+    health: 100,
+    isMoved: false,
+    isActing: false
 };
 
 class Unit extends BaseModel {
@@ -44,6 +48,8 @@ class Unit extends BaseModel {
         const game = unit.get(attr.game);
         const render = game.get('render');
         const squareSize = render.get('squareSize');
+
+        unit.startListening();
 
         // main sprite
         unit.set(attr.animatedSprite, animatedSprite);
@@ -66,6 +72,17 @@ class Unit extends BaseModel {
         unit.set(attr.sprite.health, healthText);
 
         animatedSprite.addChild(healthText.get('sprite'));
+    }
+
+    startListening() {
+        const unit = this;
+        const game = unit.get(attr.game);
+
+        unit.listenTo(game, 'currentUserPublicId', () => {
+            unit.set({
+                [attr.isMoved]: false
+            });
+        });
     }
 
     move(x, y) {
@@ -178,16 +195,21 @@ class Unit extends BaseModel {
     }
 
     onClick() {
-        // get available actions
-        // get available path
         const unit = this;
+
+        if (unit.get(attr.isActing)) {
+            return;
+        }
+
         const game = unit.get(attr.game);
         const currentUserPublicId = game.get('currentUserPublicId');
         const availablePath = unit.getAvailablePath();
         const availableAttack = unit.getAvailableAttack();
 
         if (getMyPublicId() === unit.get(attr.ownerPublicId)) {
-            unit.addMoveSquares(availablePath);
+            if (!unit.get(attr.isMoved)) {
+                unit.addMoveSquares(availablePath);
+            }
             unit.addAttackSquares(availableAttack);
             return;
         }

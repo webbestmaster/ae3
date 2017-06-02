@@ -137,7 +137,13 @@ export class GameModel extends BaseModel {
 
         const unit = model.getUnitByXY(startX, startY);
 
-        return unit.animateMove(steps);
+        unit.set('isActing', true);
+
+        return unit.animateMove(steps).then(() => {
+            unit.set('isActing', false);
+            unit.set('isMoved', true);
+            unit.onClick();
+        });
     }
 
     doActionAttack({attacker, defender}) {
