@@ -106,39 +106,104 @@ class Unit extends BaseModel {
         const game = unit.get(attr.game);
         const enemy = game.getUnitByXY(x, y);
 
-        // TODO: create TWO method
-        // 1st: getAvailableDamage()
-        // 2nd: getAvailableDefence()
-
-        api.post.room.pushTurn(null, {
-            list: [
-                {
-                    type: 'attack',
-                    attacker: {
-                        x: unit.get('x'),
-                        y: unit.get('y'),
-                        health: 60
-                    },
-                    defender: {
-                        x: enemy.get('x'),
-                        y: enemy.get('y'),
-                        health: 80
+        api.post.room
+            .pushTurn(null, {
+                list: [
+                    {
+                        type: 'attack',
+                        ...unit.countBattle(unit, enemy)
                     }
-                }
-            ]
-        }).then(() => game.get('turnMaster').fetchTurns());
+                ]
+            })
+            .then(() => game.get('turnMaster').fetchTurns());
 
         game.clearAllSquares();
     }
 
+    countBattle(attacker, defender) {
+        let attackerAttack =
+            attacker.getAvailableDamage(attacker.get(attr.health)) -
+            defender.getAvailableDefence();
+
+        attackerAttack = attackerAttack < 0 ? 0 : attackerAttack;
+
+        const defenderHealth = defender.get(attr.health) - attackerAttack;
+
+        // kill defender
+        if (defenderHealth <= 0) {
+            return {
+                attacker: {
+                    attack: attackerAttack,
+                    x: attacker.get('x'),
+                    y: attacker.get('y')
+                },
+                defender: {
+                    health: 0,
+                    x: defender.get('x'),
+                    y: defender.get('y')
+                }
+            };
+        }
+
+        let defenderAttack =
+            defender.getAvailableDamage(defenderHealth) -
+            attacker.getAvailableDefence();
+
+        defenderAttack = defenderAttack < 0 ? 0 : defenderAttack;
+
+        const attackerHealth = attacker.get(attr.health) - defenderAttack;
+
+        // kill attacker
+        if (attackerHealth <= 0) {
+            return {
+                attacker: {
+                    attack: attackerAttack,
+                    health: 0,
+                    x: attacker.get('x'),
+                    y: attacker.get('y')
+                },
+                defender: {
+                    attack: defenderAttack,
+                    health: defenderHealth,
+                    x: defender.get('x'),
+                    y: defender.get('y')
+                }
+            };
+        }
+
+        return {
+            attacker: {
+                attack: attackerAttack,
+                health: attackerHealth,
+                x: attacker.get('x'),
+                y: attacker.get('y')
+            },
+            defender: {
+                attack: defenderAttack,
+                health: defenderHealth,
+                x: defender.get('x'),
+                y: defender.get('y')
+            }
+        };
+    }
+
     getAvailableDamage(health) {
         const unit = this;
+        const type = unit.get(attr.type);
+        const referenceData = unitGuide.type[type];
+        const attackMin = referenceData.attack.min;
+        const attackMax = referenceData.attack.max;
+        const attackDelta = attackMax - attackMin;
 
-        // check health, (max-min attack, get average attack), under-wisp, under-poison, level
+        return Math.round(attackMin / defaultValues.health * health + Math.random() * attackDelta);
     }
 
     getAvailableDefence() {
         const unit = this;
+        const type = unit.get(attr.type);
+        const referenceData = unitGuide.type[type];
+
+        return referenceData.defence;
 
         // check ground and building, self armor, under-wisp, under-poison, level
     }
