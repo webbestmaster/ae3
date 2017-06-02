@@ -220,6 +220,7 @@ class Unit extends BaseModel {
     getAvailableAttack() {
         const unit = this;
         const game = unit.get(attr.game);
+        const team = unit.get('team');
         const landscape = game.get('model-landscape');
         const filledMap = landscape.getAttackFilledMap();
         const units = game.get('model-units');
@@ -229,7 +230,15 @@ class Unit extends BaseModel {
             unit.get('y'),
             unitGuide.type[unit.get('type')].attackRange,
             filledMap
-        ).filter(square => game.getUnitByXY(square[0], square[1]));
+        ).filter(square => {
+            const unitCandidate = game.getUnitByXY(square[0], square[1]);
+
+            if (!unitCandidate) {
+                return false;
+            }
+
+            return unitCandidate.get('team') !== team;
+        });
     }
 
     addMoveSquares(availablePath) {
