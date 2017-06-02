@@ -60,7 +60,7 @@ class RoomView extends BaseView {
                         'isTimerStarted',
                         // 'isGameStarted',
                         'turns',
-                        'currentUserIndex',
+                        'currentUserPublicId',
                         'startUsersState'
                     ].join(',')
                 })

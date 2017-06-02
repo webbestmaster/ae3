@@ -182,7 +182,7 @@ class Unit extends BaseModel {
         // get available path
         const unit = this;
         const game = unit.get(attr.game);
-        const currentUserIndex = game.get('currentUserIndex');
+        const currentUserPublicId = game.get('currentUserPublicId');
         const availablePath = unit.getAvailablePath();
         const availableAttack = unit.getAvailableAttack();
 

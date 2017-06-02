@@ -7,6 +7,7 @@ import {GameModel, gameModelAttr} from './model';
 import {Dialog, FlatButton} from 'material-ui';
 import {isItMe} from './../lib/me';
 import api from './../user/api';
+import {find} from 'lodash';
 
 function getDefaultState() {
     return {
@@ -40,8 +41,8 @@ class GameView extends BaseView {
 
     showChangeTurnPopup() {
         const view = this;
-        const {users, currentUserIndex} = view.state.model.getAllAttributes();
-        const user = users[currentUserIndex];
+        const {users, currentUserPublicId} = view.state.model.getAllAttributes();
+        const user = find(users, {publicId: currentUserPublicId});
         const {state} = view;
 
         state.changeTurnPopup.isOpen = true;
@@ -75,9 +76,8 @@ class GameView extends BaseView {
         view.state.model = model;
 
         model.start().then(() => {
-            model.onChange('turnCounter', (now, before) => console.log('turnCounter', before, now), view);
-            model.onChange('currentUserIndex', view.showChangeTurnPopup, view);
-            model.onChange('currentUserIndex', model.changeBy('turnCounter', 1), view);
+            // model.onChange('turnCounter', (now, before) => console.log('turnCounter', before, now), view);
+            model.onChange('currentUserPublicId', view.showChangeTurnPopup, view);
             model.onChange('users', function onUsersChange() {
                 console.warn('users changed');
                 console.warn(arguments);
@@ -120,7 +120,7 @@ class GameView extends BaseView {
             </Dialog>
 
             <h1>{JSON.stringify(view.props.gameState)}</h1>
-            <div id="canvas-holder" />
+            <div id="canvas-holder"/>
         </div>;
     }
 }

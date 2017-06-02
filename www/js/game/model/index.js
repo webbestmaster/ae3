@@ -13,7 +13,7 @@ const PIXI = require('pixi.js');
 const renderConfig = require('./../render/config.json');
 
 const attr = {
-    currentUserIndex: 'currentUserIndex',
+    currentUserPublicId: 'currentUserPublicId',
     startUsersState: 'startUsersState',
     render: 'render',
     turnMaster: 'turnMaster',
@@ -27,7 +27,7 @@ const attr = {
     units: 'units',
 
     game: 'game',
-    turnCounter: 'turnCounter',
+    // turnCounter: 'turnCounter',
 
     ui: 'ui',
     moveSquares: 'moveSquares',
@@ -40,7 +40,7 @@ const attr = {
 };
 
 const listenKeys = [
-    attr.currentUserIndex,
+    attr.currentUserPublicId,
     attr.users
 ];
 
@@ -56,8 +56,11 @@ export class GameModel extends BaseModel {
                 .getStates({
                     keys: listenKeys.join(',')
                 })
-                .then(({result}) => model.set(result))
             )
+            .then(({result}) => model.set(attr.users, result.users))
+            .then(() => api.post.room.setState(null, {
+                [attr.currentUserPublicId]: model.get(attr.users)[0].publicId
+            }))
             .then(() => {
                 const render = new Render();
                 const landscape = model.get('landscape');
@@ -66,7 +69,7 @@ export class GameModel extends BaseModel {
 
                 model.startListening();
 
-                // model.trigger(attr.currentUserIndex);
+                // model.trigger(attr.currentUserPublicId);
                 model.set({
                     [attr.model.landscape]: null,
                     [attr.model.buildings]: [],
@@ -76,7 +79,7 @@ export class GameModel extends BaseModel {
                     },
                     [attr.moveSquares]: [],
                     [attr.attackSquares]: [],
-                    [attr.turnCounter]: 0,
+                    // [attr.turnCounter]: 0,
                     [attr.render]: render,
                     [attr.promiseMaster]: new PromiseMaster()
                 });
