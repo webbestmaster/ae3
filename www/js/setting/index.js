@@ -53,53 +53,45 @@ class SettingView extends BaseView {
 
     startListening() {
         const view = this;
-        let previousState = {};
 
-        view.state.roomStatesProc = new Proc(() => {
-            return api.get.room
-                .getStates({
-                    keys: [
-                        // 'localization',
-                        // 'landscape',
-                        // 'buildings',
-                        // 'units',
-                        'users',
-                        'defaultMoney',
-                        'unitLimit',
-                        // 'gameName',
-                        // 'password',
-                        'chat',
-                        'isTimerStarted',
-                        // 'isGameStarted',
-                        // 'turns',
-                        // 'currentUserPublicId',
-                        'startUsersState'
-                    ].join(',')
-                })
-                .then(({result}) => {
-                    // good enough for now
-                    if (isEqual(previousState, result)) {
-                        console.log('the same result');
-                        return;
+        view.state.roomStatesProc = new Proc(() => view.fetchData(), 1e3);
+    }
+
+    fetchData() {
+        const view = this;
+
+        return api.get.room
+            .getStates({
+                keys: [
+                    'users',
+                    'defaultMoney',
+                    'unitLimit',
+                    'chat',
+                    'isTimerStarted'
+                ].join(',')
+            })
+            .then(({result}) => {
+                const previousState = view.props.gameState.state;
+
+                Object.keys(result).forEach(key => {
+                    if (!isEqual(result[key], previousState[key])) {
+                        view.props.setGameState({[key]: result[key]});
                     }
-
-                    previousState = result;
-
-                    view.props.setGameState(result);
-                    // view.onRoomStateReceive();
                 });
-        }, 1e3);
+            });
     }
 
     sendMessage() {
         const view = this;
 
-        api.post.room.pushToKey(null, {
-            chat: {
-                publicId: view.props.userState.publicIdState.publicId,
-                text: view.refs.chatInput.value
-            }
-        });
+        api.post.room
+            .pushToKey(null, {
+                chat: {
+                    publicId: view.props.userState.publicIdState.publicId,
+                    text: view.refs.chatInput.value
+                }
+            })
+            .then(() => view.fetchData());
     }
 
     setUserProperty(key, value) {
@@ -140,8 +132,14 @@ class SettingView extends BaseView {
     startGame() {
         const view = this;
 
-        view.setRoomState('isTimerStarted', true);
-        view.setRoomState('startUsersState', view.props.gameState.state.users);
+        const {users} = view.props.gameState.state;
+
+        Promise
+            .all([
+                view.setRoomState('isTimerStarted', true),
+                view.setRoomState('currentUserPublicId', users[0].publicId)
+            ])
+            .then(() => view.fetchData());
     }
 
     componentWillUnmount() {

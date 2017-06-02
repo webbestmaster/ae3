@@ -83,7 +83,7 @@ class RoomView extends BaseView {
 
     render() {
         const view = this;
-        const {users, startGameTimer} = view.props.gameState.state;
+        const {startGameTimer} = view.props.gameState.state;
 
         // if (!users || users.length === 0) {
         //     return <h1>initializing...</h1>;

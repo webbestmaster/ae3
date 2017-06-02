@@ -6,7 +6,7 @@ const attr = {
     color: 'color',
     sprite: 'sprite',
     render: 'render',
-    userOrder: 'userOrder'
+    ownerPublicId: 'ownerPublicId'
 };
 
 class Building extends BaseModel {

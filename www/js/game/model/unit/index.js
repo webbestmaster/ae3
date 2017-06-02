@@ -14,7 +14,7 @@ const attr = {
     animatedSprite: 'animatedSprite',
     // render: 'render',
     color: 'color',
-    userOrder: 'userOrder',
+    // userOrder: 'userOrder',
     game: 'game',
     ownerPublicId: 'ownerPublicId',
     team: 'team',

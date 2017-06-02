@@ -14,7 +14,7 @@ const renderConfig = require('./../render/config.json');
 
 const attr = {
     currentUserPublicId: 'currentUserPublicId',
-    startUsersState: 'startUsersState',
+    // startUsersState: 'startUsersState',
     render: 'render',
     turnMaster: 'turnMaster',
     promiseMaster: 'promiseMaster',
@@ -52,15 +52,7 @@ export class GameModel extends BaseModel {
 
         return api.post.room
             .setUserState(null, {money: model.get('defaultMoney')})
-            .then(() => api.get.room
-                .getStates({
-                    keys: listenKeys.join(',')
-                })
-            )
-            .then(({result}) => model.set(attr.users, result.users))
-            .then(() => api.post.room.setState(null, {
-                [attr.currentUserPublicId]: model.get(attr.users)[0].publicId
-            }))
+            .then(() => model.fetchData())
             .then(() => {
                 const render = new Render();
                 const landscape = model.get('landscape');
@@ -166,29 +158,33 @@ export class GameModel extends BaseModel {
 
     startListening() {
         const model = this;
-        const proc = new Proc(() => {
-            return api.get.room
-                .getStates({
-                    keys: listenKeys.join(',')
-                })
-                .then(({result}) => {
-                    const prevState = pick(model.getAllAttributes(), listenKeys);
 
-                    listenKeys.forEach(key => {
-                        if (isEqual(prevState[key], result[key])) {
-                            return;
-                        }
-                        model.set(key, result[key]);
-                    });
-                });
-        }, 1e3);
+        const proc = new Proc(() => model.fetchData(), 1e3);
 
         model.set(attr.proc, proc);
     }
 
+    fetchData() {
+        const model = this;
+
+        return api.get.room
+            .getStates({
+                keys: listenKeys.join(',')
+            })
+            .then(({result}) => {
+                const prevState = pick(model.getAllAttributes(), listenKeys);
+
+                listenKeys.forEach(key => {
+                    if (!isEqual(prevState[key], result[key])) {
+                        model.set(key, result[key]);
+                    }
+                });
+            });
+    }
+
     addBuilding(buildingData) {
         const model = this;
-        const users = model.get(attr.startUsersState);
+        const users = model.get(attr.users);
         const {type} = buildingData;
 
         const buildingProps = {
@@ -197,7 +193,7 @@ export class GameModel extends BaseModel {
             [attr.render]: model.get(attr.render),
             x: buildingData.x,
             y: buildingData.y,
-            userOrder: null
+            ownerPublicId: null
         };
 
         if (['well', 'temple', 'farm-destroyed'].indexOf(type) !== -1) {
@@ -209,7 +205,7 @@ export class GameModel extends BaseModel {
                 const userData = users[buildingData.userOrder];
 
                 buildingProps.color = userData.color;
-                buildingProps.userOrder = userData.userOrder;
+                buildingProps.ownerPublicId = userData.publicId;
             } else {
                 buildingProps.color = 'gray';
             }
@@ -222,7 +218,7 @@ export class GameModel extends BaseModel {
 
     addUnit(unitData) {
         const model = this;
-        const users = model.get(attr.startUsersState);
+        const users = model.get(attr.users);
         const {type} = unitData;
 
         const userData = users[unitData.userOrder];
