@@ -156,6 +156,8 @@ export class GameModel extends BaseModel {
         const unitDefender = model.getUnitByXY(defender.x, defender.y);
 
         unitDefender.set(defender);
+
+        unitAttacker.set('isFinished', true);
     }
 
     getUnitByXY(x, y) {

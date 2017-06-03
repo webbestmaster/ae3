@@ -22,6 +22,7 @@ const attr = {
     level: 'level',
     isActing: 'isActing',
     isMoved: 'isMoved',
+    isFinished: 'isFinished',
     sprite: {
         health: 'sprite-health'
     }
@@ -80,8 +81,15 @@ class Unit extends BaseModel {
 
         unit.listenTo(game, 'currentUserPublicId', () => {
             unit.set({
-                [attr.isMoved]: false
+                [attr.isMoved]: false,
+                [attr.isFinished]: false
             });
+        });
+
+        unit.onChange(attr.isFinished, isFinished => {
+            const tint = isFinished ? 0x888888 : 0xffffff;
+
+            unit.get(attr.animatedSprite).tint = tint;
         });
     }
 
@@ -271,10 +279,14 @@ class Unit extends BaseModel {
         const availablePath = unit.getAvailablePath();
         const availableAttack = unit.getAvailableAttack();
 
+        if (unit.get(attr.isFinished) ||
+            availablePath.length + availableAttack.length === 0) {
+            unit.set(attr.isFinished, true);
+            return;
+        }
+
         if (getMyPublicId() === unit.get(attr.ownerPublicId)) {
-            if (!unit.get(attr.isMoved)) {
-                unit.addMoveSquares(availablePath);
-            }
+            unit.addMoveSquares(availablePath);
             unit.addAttackSquares(availableAttack);
             return;
         }
@@ -288,6 +300,10 @@ class Unit extends BaseModel {
         const landscape = game.get('model-landscape');
         const pathMap = landscape.getPathMap();
         const units = game.get('model-units');
+
+        if (unit.get(attr.isMoved)) {
+            return [];
+        }
 
         units.forEach(unitItem => {
             const x = unitItem.get('x');
