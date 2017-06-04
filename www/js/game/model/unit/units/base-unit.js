@@ -160,15 +160,20 @@ class Unit extends BaseModel {
         game.clearAllSquares();
     }
 
-    getAvailableDamage(health) {
+    getAvailableDamage(health, enemy) {
         const unit = this;
+        const availableAttack = unit.getAvailableAttack();
         const type = unit.get(attr.type);
         const referenceData = unitGuide.type[type];
         const attackMin = referenceData.attack.min;
         const attackMax = referenceData.attack.max;
         const attackDelta = attackMax - attackMin;
 
-        return Math.round(attackMin / defaultValues.health * health + Math.random() * attackDelta);
+        if (isUnitInSquares(enemy, availableAttack)) {
+            return Math.round(attackMin / defaultValues.health * health + Math.random() * attackDelta);
+        }
+
+        return null;
     }
 
     getAvailableDefence() {
@@ -321,6 +326,8 @@ class Unit extends BaseModel {
 
     getAvailableAttack() {
         const unit = this;
+        const unitX = unit.get('x');
+        const unitY = unit.get('y');
         const game = unit.get(attr.game);
         const team = unit.get('team');
         const landscape = game.get('model-landscape');
@@ -328,12 +335,18 @@ class Unit extends BaseModel {
         const units = game.get('model-units');
 
         return getPath(
-            unit.get('x'),
-            unit.get('y'),
+            unitX,
+            unitY,
             unitGuide.type[unit.get('type')].attackRange,
             filledMap
         ).filter(square => {
-            const unitCandidate = game.getUnitByXY(square[0], square[1]);
+            const [squareX, squareY] = square;
+
+            if (squareX === unitX && squareY === unitY) {
+                return false;
+            }
+
+            const unitCandidate = game.getUnitByXY(squareX, squareY);
 
             if (!unitCandidate) {
                 return false;
@@ -424,71 +437,93 @@ class Unit extends BaseModel {
 // helpers
 
 function countBattle(attacker, defender) {
+    const attackerResult = {
+        attack: null,
+        health: attacker.get(attr.health),
+        x: attacker.get('x'),
+        y: attacker.get('y')
+    };
+
+    const defenderResult = {
+        attack: null,
+        health: defender.get(attr.health),
+        x: defender.get('x'),
+        y: defender.get('y')
+    };
+
+    const minAttack = 1;
+
     let attackerAttack =
-        attacker.getAvailableDamage(attacker.get(attr.health)) -
+        attacker.getAvailableDamage(attacker.get(attr.health), defender) -
         defender.getAvailableDefence();
 
-    attackerAttack = attackerAttack < 0 ? 0 : attackerAttack;
+    attackerAttack = Math.round(Math.max(attackerAttack, minAttack));
 
     const defenderHealth = defender.get(attr.health) - attackerAttack;
 
     // kill defender
     if (defenderHealth <= 0) {
         return {
-            attacker: {
-                attack: attackerAttack,
-                x: attacker.get('x'),
-                y: attacker.get('y')
-            },
-            defender: {
-                health: 0,
-                x: defender.get('x'),
-                y: defender.get('y')
-            }
+            attacker: Object.assign(attackerResult, {
+                attack: attackerAttack
+            }),
+            defender: Object.assign(defenderResult, {
+                health: 0
+            })
         };
     }
 
-    let defenderAttack =
-        defender.getAvailableDamage(defenderHealth) -
-        attacker.getAvailableDefence();
+    let defenderAttack = defender.getAvailableDamage(defenderHealth, attacker);
 
-    defenderAttack = defenderAttack < 0 ? 0 : defenderAttack;
+    // null means attack to far for defender attack
+    if (defenderAttack === null) {
+        return {
+            attacker: Object.assign(attackerResult, {
+                attack: attackerAttack
+            }),
+            defender: Object.assign(defenderResult, {
+                health: defenderHealth
+            })
+        };
+    }
+
+    defenderAttack -= attacker.getAvailableDefence();
+
+    defenderAttack = Math.round(Math.max(defenderAttack, minAttack));
 
     const attackerHealth = attacker.get(attr.health) - defenderAttack;
 
     // kill attacker
     if (attackerHealth <= 0) {
         return {
-            attacker: {
+            attacker: Object.assign(attackerResult, {
                 attack: attackerAttack,
-                health: 0,
-                x: attacker.get('x'),
-                y: attacker.get('y')
-            },
-            defender: {
+                health: 0
+            }),
+            defender: Object.assign(defenderResult, {
                 attack: defenderAttack,
-                health: defenderHealth,
-                x: defender.get('x'),
-                y: defender.get('y')
-            }
+                health: defenderHealth
+            })
         };
     }
 
     return {
-        attacker: {
+        attacker: Object.assign(attackerResult, {
             attack: attackerAttack,
-            health: attackerHealth,
-            x: attacker.get('x'),
-            y: attacker.get('y')
-        },
-        defender: {
+            health: attackerHealth
+        }),
+        defender: Object.assign(defenderResult, {
             attack: defenderAttack,
-            health: defenderHealth,
-            x: defender.get('x'),
-            y: defender.get('y')
-        }
+            health: defenderHealth
+        })
     };
 }
 
+function isUnitInSquares(unit, squares) {
+    const x = unit.get('x');
+    const y = unit.get('y');
+
+    return squares.some(square => square[0] === x && square[1] === y);
+}
 
 export {Unit, countBattle};
