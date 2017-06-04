@@ -3,7 +3,7 @@ import api from './../../user/api';
 import {Render} from './../render';
 import {Building} from './building';
 import {Landscape} from './landscape';
-import {Unit} from './unit/';
+import {createUnit} from './unit/index';
 import {Grave} from './grave';
 import {SelectMark} from './ui';
 import {TurnMaster} from './../turn-master';
@@ -258,7 +258,7 @@ export class GameModel extends BaseModel {
             // userOrder: unitData.userOrder
         };
 
-        const unit = new Unit(unitProps);
+        const unit = createUnit(unitProps);
 
         model.get(attr.model.units).push(unit);
     }
