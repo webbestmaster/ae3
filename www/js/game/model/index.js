@@ -4,6 +4,7 @@ import {Render} from './../render';
 import {Building} from './building';
 import {Landscape} from './landscape';
 import {Unit} from './unit/';
+import {Grave} from './grave';
 import {SelectMark} from './ui';
 import {TurnMaster} from './../turn-master';
 import Proc from './../../lib/proc';
@@ -25,6 +26,7 @@ const attr = {
     landscape: 'landscape',
     buildings: 'buildings',
     units: 'units',
+    graves: 'graves',
 
     game: 'game',
     // turnCounter: 'turnCounter',
@@ -35,7 +37,8 @@ const attr = {
     model: {
         buildings: 'model-buildings',
         landscape: 'model-landscape',
-        units: 'model-units'
+        units: 'model-units',
+        graves: 'model-graves'
     }
 };
 
@@ -66,6 +69,7 @@ export class GameModel extends BaseModel {
                     [attr.model.landscape]: null,
                     [attr.model.buildings]: [],
                     [attr.model.units]: [],
+                    [attr.model.graves]: [],
                     [attr.ui]: {
                         selectMark: null
                     },
@@ -90,6 +94,7 @@ export class GameModel extends BaseModel {
 
                 model.get(attr.buildings).forEach(building => model.addBuilding(building));
                 model.get(attr.units).forEach(unit => model.addUnit(unit));
+                (model.get(attr.graves) || []).forEach(grave => model.addGrave(grave));
                 model.initializeUI();
             });
     }
@@ -164,20 +169,6 @@ export class GameModel extends BaseModel {
                 unitAttacker.set('isFinished', true);
                 unitAttacker.set(attacker);
             });
-    }
-
-    doActionAttackOld({attacker, defender}) {
-        const model = this;
-
-        const unitAttacker = model.getUnitByXY(attacker.x, attacker.y);
-
-        unitAttacker.set(attacker);
-
-        const unitDefender = model.getUnitByXY(defender.x, defender.y);
-
-        unitDefender.set(defender);
-
-        unitAttacker.set('isFinished', true);
     }
 
     getUnitByXY(x, y) {
@@ -279,6 +270,22 @@ export class GameModel extends BaseModel {
 
         remove(units, unitItem => unitItem === unit);
         render.removeChild('units', unit.get('container'));
+    }
+
+    addGrave(graveData) {
+        const model = this;
+        const grave = new Grave({game: model, ...graveData});
+
+        model.get(attr.model.graves).push(grave);
+    }
+
+    removeGrave(grave) {
+        const model = this;
+        const render = model.get(attr.render);
+        const graves = model.get(attr.model.graves);
+
+        remove(graves, graveItem => graveItem === grave);
+        render.removeChild('graves', grave.get('sprite'));
     }
 
     initializeUI() {

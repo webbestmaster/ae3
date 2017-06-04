@@ -232,5 +232,10 @@
             "langKey": "saeth",
             "canNotBeBuy": true
         }
+    },
+    "other": {
+        "grave": {
+            "liveTime": 3
+        }
     }
 }

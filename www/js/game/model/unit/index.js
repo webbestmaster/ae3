@@ -106,7 +106,11 @@ class Unit extends BaseModel {
                 return;
             }
 
-            // game.addGrave(unit.get('x'), unit.get('y'));
+            game.addGrave({
+                x: unit.get('x'),
+                y: unit.get('y'),
+                count: unitGuide.other.grave.liveTime
+            });
             unit.destroy();
         });
     }
