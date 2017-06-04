@@ -148,6 +148,26 @@ export class GameModel extends BaseModel {
 
     doActionAttack({attacker, defender}) {
         const model = this;
+        const unitAttacker = model.getUnitByXY(attacker.x, attacker.y);
+        const unitDefender = model.getUnitByXY(defender.x, defender.y);
+
+        unitAttacker
+            .animateAttack(unitDefender)
+            .then(() => {
+                unitDefender.set('health', defender.health);
+                if (defender.health > 0) {
+                    return unitDefender.animateAttack(unitAttacker).then(() => unitDefender.set(defender));
+                }
+                return null;
+            })
+            .then(() => {
+                unitAttacker.set('isFinished', true);
+                unitAttacker.set(attacker);
+            });
+    }
+
+    doActionAttackOld({attacker, defender}) {
+        const model = this;
 
         const unitAttacker = model.getUnitByXY(attacker.x, attacker.y);
 

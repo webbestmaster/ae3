@@ -1,7 +1,7 @@
 import BaseModel from './../../../core/base-model';
 import {getPath} from './../../path-master';
 import api from './../../../user/api';
-import {TimelineLite, Power0} from 'gsap';
+import {TimelineLite, Power0, Power2} from 'gsap';
 import {getPath as getStarPath} from 'a-star-finder';
 import {getMyPublicId} from './../../../lib/me';
 import HealthText from './health-text';
@@ -46,6 +46,9 @@ class Unit extends BaseModel {
             [0, 1].map(ii => PIXI.Texture.fromFrame(type + '-' + color + '-' + ii))
         );
 
+        animatedSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
+        animatedSprite.play();
+
         const game = unit.get(attr.game);
         const render = game.get('render');
         const squareSize = render.get('squareSize');
@@ -55,8 +58,6 @@ class Unit extends BaseModel {
         // main sprite
         unit.set(attr.animatedSprite, animatedSprite);
 
-        animatedSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
-        animatedSprite.play();
 
         render.addChild('units', animatedSprite);
 
@@ -249,6 +250,40 @@ class Unit extends BaseModel {
 
             steps.forEach(([x, y]) => {
                 tl = tl.to(xy, 0.5, {x, y, ease: Power0.easeNone});
+            });
+        });
+    }
+
+    animateAttack(enemy) {
+        const unit = this;
+        const render = unit.get(attr.game).get('render');
+        const squareSize = render.get('squareSize');
+
+        const animatedSprite = new PIXI.extras.AnimatedSprite(
+            [0, 1, 2, 3, 4, 5].map(ii => PIXI.Texture.fromFrame('simple-attack-animation-' + ii))
+        );
+
+        animatedSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
+        animatedSprite.play();
+
+        render.addChild('ui', animatedSprite);
+
+        animatedSprite.x = unit.get('x') * squareSize;
+        animatedSprite.y = unit.get('y') * squareSize;
+
+        return new Promise(resolve => {
+            const tl = new TimelineLite({
+                onComplete: () => {
+                    render.removeChild('ui', animatedSprite);
+                    tl.kill();
+                    resolve();
+                }
+            });
+
+            tl.to(animatedSprite, 0.5, {
+                x: enemy.get('x') * squareSize,
+                y: enemy.get('y') * squareSize,
+                ease: Power2.easeOut
             });
         });
     }

@@ -229,6 +229,12 @@
             <key type="filename">img/other/confirm-attack.png</key>
             <key type="filename">img/other/confirm-move.png</key>
             <key type="filename">img/other/open-store.png</key>
+            <key type="filename">img/other/simple-attack-animation-0.png</key>
+            <key type="filename">img/other/simple-attack-animation-1.png</key>
+            <key type="filename">img/other/simple-attack-animation-2.png</key>
+            <key type="filename">img/other/simple-attack-animation-3.png</key>
+            <key type="filename">img/other/simple-attack-animation-4.png</key>
+            <key type="filename">img/other/simple-attack-animation-5.png</key>
             <key type="filename">img/other/smoke-type-0-0.png</key>
             <key type="filename">img/other/smoke-type-0-1.png</key>
             <key type="filename">img/other/smoke-type-0-2.png</key>
