@@ -5,7 +5,7 @@ const renderConfig = require('./../render/config.json');
 const attr = {
     render: 'render',
     ui: 'ui',
-    animatedSprite: 'animatedSprite'
+    mainSprite: 'mainSprite'
 };
 
 class SelectMark extends BaseModel {
@@ -14,27 +14,27 @@ class SelectMark extends BaseModel {
 
         const mark = this;
         const render = mark.get(attr.render);
-        const animatedSprite = new PIXI.extras.AnimatedSprite(
+        const mainSprite = new PIXI.extras.AnimatedSprite(
             [0, 1].map(ii => PIXI.Texture.fromFrame('select-mark-' + ii))
         );
 
-        animatedSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
-        animatedSprite.play();
+        mainSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
+        mainSprite.play();
 
-        mark.set(attr.animatedSprite, animatedSprite);
-        render.addChild(attr.ui, animatedSprite);
+        mark.set(attr.mainSprite, mainSprite);
+        render.addChild(attr.ui, mainSprite);
 
         mark.moveTo(data.x, data.y);
     }
 
     moveTo(x, y) {
         const mark = this;
-        const animatedSprite = mark.get(attr.animatedSprite);
+        const mainSprite = mark.get(attr.mainSprite);
         const render = mark.get(attr.render);
         const squareSize = render.get('squareSize');
 
-        animatedSprite.x = (x - 0.5) * squareSize;
-        animatedSprite.y = (y - 0.5) * squareSize;
+        mainSprite.x = (x - 0.5) * squareSize;
+        mainSprite.y = (y - 0.5) * squareSize;
     }
 }
 

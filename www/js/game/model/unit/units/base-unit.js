@@ -11,7 +11,7 @@ const unitGuide = require('../unit-guide.json');
 
 const attr = {
     type: 'type',
-    animatedSprite: 'animatedSprite',
+    mainSprite: 'mainSprite',
     container: 'container',
     // render: 'render',
     color: 'color',
@@ -67,18 +67,18 @@ class Unit extends BaseModel {
         const type = unit.get(attr.type);
         const color = unit.get(attr.color);
 
-        const animatedSprite = new PIXI.extras.AnimatedSprite(
+        const mainSprite = new PIXI.extras.AnimatedSprite(
             [0, 1].map(ii => PIXI.Texture.fromFrame(type + '-' + color + '-' + ii))
         );
 
-        unit.set(attr.animatedSprite, animatedSprite);
+        unit.set(attr.mainSprite, mainSprite);
 
-        animatedSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
-        animatedSprite.play();
-        animatedSprite.interactive = true;
-        animatedSprite.buttonMode = true;
+        mainSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
+        mainSprite.play();
+        mainSprite.interactive = true;
+        mainSprite.buttonMode = true;
 
-        container.addChild(animatedSprite);
+        container.addChild(mainSprite);
     }
 
     initializeHealth() {
@@ -94,9 +94,9 @@ class Unit extends BaseModel {
     startListening() {
         const unit = this;
         const game = unit.get(attr.game);
-        const animatedSprite = unit.get(attr.animatedSprite);
+        const mainSprite = unit.get(attr.mainSprite);
 
-        animatedSprite.on('pointertap', () => unit.onClick());
+        mainSprite.on('pointertap', () => unit.onClick());
 
         unit.listenTo(game, 'currentUserPublicId', () => {
             unit.set({
@@ -108,7 +108,7 @@ class Unit extends BaseModel {
         unit.onChange(attr.isFinished, isFinished => {
             const tint = isFinished ? 0x888888 : 0xffffff;
 
-            unit.get(attr.animatedSprite).tint = tint;
+            unit.get(attr.mainSprite).tint = tint;
         });
 
         unit.onChange(attr.health, health => {
@@ -223,28 +223,28 @@ class Unit extends BaseModel {
         const render = unit.get(attr.game).get('render');
         const squareSize = render.get('squareSize');
 
-        const animatedSprite = new PIXI.extras.AnimatedSprite(
+        const mainSprite = new PIXI.extras.AnimatedSprite(
             [0, 1, 2, 3, 4, 5].map(ii => PIXI.Texture.fromFrame('simple-attack-animation-' + ii))
         );
 
-        animatedSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
-        animatedSprite.play();
+        mainSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
+        mainSprite.play();
 
-        render.addChild('ui', animatedSprite);
+        render.addChild('ui', mainSprite);
 
-        animatedSprite.x = unit.get('x') * squareSize;
-        animatedSprite.y = unit.get('y') * squareSize;
+        mainSprite.x = unit.get('x') * squareSize;
+        mainSprite.y = unit.get('y') * squareSize;
 
         return new Promise(resolve => {
             const tl = new TimelineLite({
                 onComplete: () => {
-                    render.removeChild('ui', animatedSprite);
+                    render.removeChild('ui', mainSprite);
                     tl.kill();
                     resolve();
                 }
             });
 
-            tl.to(animatedSprite, 0.5, {
+            tl.to(mainSprite, 0.5, {
                 x: enemy.get('x') * squareSize,
                 y: enemy.get('y') * squareSize,
                 ease: Power2.easeOut
