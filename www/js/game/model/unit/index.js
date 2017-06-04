@@ -12,6 +12,7 @@ const unitGuide = require('./unit-guide.json');
 const attr = {
     type: 'type',
     animatedSprite: 'animatedSprite',
+    container: 'container',
     // render: 'render',
     color: 'color',
     // userOrder: 'userOrder',
@@ -41,39 +42,44 @@ class Unit extends BaseModel {
 
         const unit = this;
         const {type, x, y, color} = data;
-
-        const animatedSprite = new PIXI.extras.AnimatedSprite(
-            [0, 1].map(ii => PIXI.Texture.fromFrame(type + '-' + color + '-' + ii))
-        );
-
-        animatedSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
-        animatedSprite.play();
-
         const game = unit.get(attr.game);
         const render = game.get('render');
         const squareSize = render.get('squareSize');
 
-        unit.startListening();
+
+        // container
+        const container = new PIXI.Container();
+
+        render.addChild('units', container);
+        unit.set(attr.container, container);
+
 
         // main sprite
+        const animatedSprite = new PIXI.extras.AnimatedSprite(
+            [0, 1].map(ii => PIXI.Texture.fromFrame(type + '-' + color + '-' + ii))
+        );
+
         unit.set(attr.animatedSprite, animatedSprite);
 
-
-        render.addChild('units', animatedSprite);
-
+        animatedSprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
+        animatedSprite.play();
         animatedSprite.interactive = true;
         animatedSprite.buttonMode = true;
-
         animatedSprite.on('pointertap', () => unit.onClick());
 
-        unit.putTo(x, y);
+        container.addChild(animatedSprite);
+
 
         // health
         const healthText = new HealthText({unit});
 
         unit.set(attr.sprite.health, healthText);
 
-        animatedSprite.addChild(healthText.get('sprite'));
+        container.addChild(healthText.get('sprite'));
+
+
+        unit.startListening();
+        unit.putTo(x, y);
     }
 
     startListening() {
@@ -296,10 +302,10 @@ class Unit extends BaseModel {
 
         unit.set({x, y});
 
-        const animatedSprite = unit.get(attr.animatedSprite);
+        const container = unit.get(attr.container);
 
-        animatedSprite.x = squareSize * x;
-        animatedSprite.y = squareSize * y;
+        container.x = squareSize * x;
+        container.y = squareSize * y;
     }
 
     onClick() {
