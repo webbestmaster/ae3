@@ -65,7 +65,6 @@ class Unit extends BaseModel {
         animatedSprite.play();
         animatedSprite.interactive = true;
         animatedSprite.buttonMode = true;
-        animatedSprite.on('pointertap', () => unit.onClick());
 
         container.addChild(animatedSprite);
 
@@ -85,6 +84,9 @@ class Unit extends BaseModel {
     startListening() {
         const unit = this;
         const game = unit.get(attr.game);
+        const animatedSprite = unit.get(attr.animatedSprite);
+
+        animatedSprite.on('pointertap', () => unit.onClick());
 
         unit.listenTo(game, 'currentUserPublicId', () => {
             unit.set({
@@ -97,6 +99,15 @@ class Unit extends BaseModel {
             const tint = isFinished ? 0x888888 : 0xffffff;
 
             unit.get(attr.animatedSprite).tint = tint;
+        });
+
+        unit.onChange(attr.health, health => {
+            if (health > 0) {
+                return;
+            }
+
+            // game.addGrave(unit.get('x'), unit.get('y'));
+            unit.destroy();
         });
     }
 
@@ -451,6 +462,15 @@ class Unit extends BaseModel {
 
     isSameOwner(unit) {
         return this.get(attr.ownerPublicId) === unit.get(attr.ownerPublicId);
+    }
+
+    destroy() {
+        const unit = this;
+        const game = unit.get(attr.game);
+
+        game.removeUnit(unit);
+
+        super.destroy();
     }
 }
 

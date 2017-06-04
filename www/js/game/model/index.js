@@ -7,7 +7,7 @@ import {Unit} from './unit/';
 import {SelectMark} from './ui';
 import {TurnMaster} from './../turn-master';
 import Proc from './../../lib/proc';
-import {isEqual, find, pick} from 'lodash';
+import {isEqual, find, pick, remove} from 'lodash';
 import {PromiseMaster} from './../../lib/promise-master';
 const PIXI = require('pixi.js');
 const renderConfig = require('./../render/config.json');
@@ -270,6 +270,15 @@ export class GameModel extends BaseModel {
         const unit = new Unit(unitProps);
 
         model.get(attr.model.units).push(unit);
+    }
+
+    removeUnit(unit) {
+        const model = this;
+        const render = model.get(attr.render);
+        const units = model.get(attr.model.units);
+
+        remove(units, unitItem => unitItem === unit);
+        render.removeChild('units', unit.get('container'));
     }
 
     initializeUI() {
