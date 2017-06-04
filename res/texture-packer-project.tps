@@ -228,6 +228,7 @@
             <key type="filename">img/other/action-occupy-building.png</key>
             <key type="filename">img/other/confirm-attack.png</key>
             <key type="filename">img/other/confirm-move.png</key>
+            <key type="filename">img/other/grave.png</key>
             <key type="filename">img/other/open-store.png</key>
             <key type="filename">img/other/simple-attack-animation-0.png</key>
             <key type="filename">img/other/simple-attack-animation-1.png</key>
@@ -451,6 +452,32 @@
                 <rect>18,3,36,6</rect>
                 <key>scale9Paddings</key>
                 <rect>18,3,36,6</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">img/other/under-poison.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>2,2,4,5</rect>
+                <key>scale9Paddings</key>
+                <rect>2,2,4,5</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">img/other/under-wisp-aura.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>2,2,4,4</rect>
+                <key>scale9Paddings</key>
+                <rect>2,2,4,4</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
