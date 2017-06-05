@@ -14,7 +14,7 @@ import {Sorceress} from './units/sorceress';
 import {Valadorn} from './units/valadorn';
 import {Wisp} from './units/wisp';
 
-const map = {
+const unitMap = {
     soldier: Soldier,
     archer: Archer,
     elemental: Elemental,
@@ -33,5 +33,5 @@ const map = {
 };
 
 export function createUnit(data) {
-    return new map[data.type](data);
+    return new unitMap[data.type](data);
 }
