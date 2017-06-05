@@ -31,6 +31,14 @@ class Building extends BaseModel {
 
         render.addChild('buildings', sprite);
     }
+
+    startListening() {
+
+    }
+
+    onClick() {
+
+    }
 }
 
 export {Building};

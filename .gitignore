@@ -8,8 +8,9 @@ logs
 *.log
 npm-debug.log*
 
-# Dependency directories
+# npm
 node_modules
+/package-lock.json
 
 # Dist
 /dist/
