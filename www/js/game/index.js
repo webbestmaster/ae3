@@ -8,6 +8,7 @@ import {Dialog, FlatButton} from 'material-ui';
 import {isItMe} from './../lib/me';
 import api from './../user/api';
 import {find} from 'lodash';
+import ShopView from './shop';
 
 function getDefaultState() {
     return {
@@ -121,6 +122,9 @@ class GameView extends BaseView {
 
             <h1>{JSON.stringify(view.props.gameState)}</h1>
             <div id="canvas-holder"/>
+
+            {view.props.shopState.visibleState.isVisible && <ShopView game={view.state.model}/>}
+
         </div>;
     }
 }
@@ -130,7 +134,8 @@ GameView.propTypes = {};
 export default connect(
     state => ({
         gameState: state.gameState,
-        userState: state.userState
+        userState: state.userState,
+        shopState: state.gameState.shopState
     }),
     {}
 )(GameView);

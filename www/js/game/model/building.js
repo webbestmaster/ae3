@@ -1,5 +1,7 @@
 import BaseModel from './../../core/base-model';
 import {getMyPublicId} from './../../lib/me';
+import {store} from './../../';
+import {setShopVisible} from './../shop/action';
 const PIXI = require('pixi.js');
 
 const attr = {
@@ -55,9 +57,7 @@ class Building extends BaseModel {
             return;
         }
 
-        // check for available squares (2, 4, 5, 6, 8) for new units - create as separate function
-
-        debugger
+        store.dispatch(setShopVisible(true));
     }
 }
 
