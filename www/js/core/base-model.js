@@ -115,6 +115,29 @@ class MainModel {
 
     /**
      *
+     * @param {string} key - of value
+     * @param {Function} test - for new value of key
+     * @param {Function} onValid - run if key right
+     * @param {Function} onInvalid - run if key wring
+     * @param {*} [context] of actions
+     * @returns {MainModel} instance
+     */
+    setValidation(key, test, onValid, onInvalid, context = this) {
+        const model = this;
+
+        model.onChange(key, (newValue, oldValue) => {
+            const args = [newValue, oldValue];
+
+            return Reflect.apply(test, context, args) ?
+                Reflect.apply(onValid, context, args) :
+                Reflect.apply(onInvalid, context, args);
+        }, context);
+
+        return model;
+    }
+
+    /**
+     *
      * @param {MainModel} mainModel - other model to start listen
      * @param {string} key of value
      * @param {Function} action was execute
