@@ -274,7 +274,14 @@ class Unit extends BaseModel {
     onClick() {
         const unit = this;
 
+        unit.clearMoveSquares();
+        unit.clearAttackSquares();
+
         if (unit.get(attr.isActing)) {
+            return;
+        }
+
+        if (unit.get(attr.isFinished)) {
             return;
         }
 
@@ -283,8 +290,7 @@ class Unit extends BaseModel {
         const availablePath = unit.getAvailablePath();
         const availableAttack = unit.getAvailableAttack();
 
-        if (unit.get(attr.isFinished) ||
-            availablePath.length + availableAttack.length === 0) {
+        if (unit.get(attr.isMoved) && availablePath.length + availableAttack.length === 0) {
             unit.set(attr.isFinished, true);
             return;
         }

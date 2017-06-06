@@ -1,4 +1,5 @@
 import BaseModel from './../../core/base-model';
+import {getMyPublicId} from './../../lib/me';
 const PIXI = require('pixi.js');
 
 const attr = {
@@ -30,14 +31,33 @@ class Building extends BaseModel {
         building.set(attr.sprite, sprite);
 
         render.addChild('buildings', sprite);
+
+        building.startListening();
     }
 
     startListening() {
+        const model = this;
+        const sprite = model.get(attr.sprite);
 
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+
+        if (model.get(attr.type) === 'castle') {
+            sprite.on('pointertap', () => model.onClick());
+        }
     }
 
     onClick() {
+        const model = this;
+        const myPublicId = getMyPublicId();
 
+        if (myPublicId !== model.get(attr.ownerPublicId)) {
+            return;
+        }
+
+        // check for available squares (2, 4, 5, 6, 8) for new units - create as separate function
+
+        debugger
     }
 }
 

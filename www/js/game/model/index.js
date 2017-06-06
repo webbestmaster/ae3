@@ -94,7 +94,7 @@ export class GameModel extends BaseModel {
 
                 model.get(attr.buildings).forEach(building => model.addBuilding(building));
                 model.get(attr.units).forEach(unit => model.addUnit(unit));
-                (model.get(attr.graves) || []).forEach(grave => model.addGrave(grave));
+                model.get(attr.graves).forEach(grave => model.addGrave(grave));
                 model.initializeUI();
             });
     }
@@ -256,7 +256,7 @@ export class GameModel extends BaseModel {
         }
 
         const unitProps = {
-            game: model,
+            [attr.game]: model,
             type,
             color: userData.color,
             // [attr.render]: model.get(attr.render),
@@ -283,7 +283,7 @@ export class GameModel extends BaseModel {
 
     addGrave(graveData) {
         const model = this;
-        const grave = new Grave({game: model, ...graveData});
+        const grave = new Grave({[attr.game]: model, ...graveData});
 
         model.get(attr.model.graves).push(grave);
     }

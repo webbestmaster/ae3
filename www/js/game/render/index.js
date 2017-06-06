@@ -15,7 +15,7 @@ class Render extends BaseModel {
 
         const boxContainer = new PIXI.Container();
 
-        const layers = ['landscape', 'graves', 'buildings', 'units', 'ui'];
+        const layers = ['landscape', 'buildings', 'graves', 'units', 'ui'];
 
         layers.forEach(layerName => {
             const container = new PIXI.Container();

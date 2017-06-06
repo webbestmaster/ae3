@@ -60,7 +60,7 @@
             "x": 6,
             "y": 6,
             "type": "castle",
-            "userOrder": 1
+            "userOrder": 0
         },
         {
             "x": 5,
@@ -165,6 +165,13 @@
             "y": 4,
             "type": "soldier",
             "userOrder": 1
+        }
+    ],
+    "graves": [
+        {
+            "x": 6,
+            "y": 6,
+            "count": 3
         }
     ]
 }

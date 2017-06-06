@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import BaseView from './../core/base-view';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
-import {GameModel, gameModelAttr} from './model';
+import {GameModel} from './model';
 import {Dialog, FlatButton} from 'material-ui';
 import {isItMe} from './../lib/me';
 import api from './../user/api';

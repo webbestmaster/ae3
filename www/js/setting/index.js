@@ -120,6 +120,7 @@ class SettingView extends BaseView {
                     'landscape',
                     'buildings',
                     'units',
+                    'graves',
                     'gameName',
                     'password',
                     'users',
