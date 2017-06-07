@@ -105,6 +105,10 @@ class GameView extends BaseView {
         ];
 
         return <div>
+            <h1>users</h1>
+            <hr/>
+            {JSON.stringify(view.props.gameState.state.users)}
+            <hr/>
             <FlatButton
                 label="Leave Turn"
                 primary={true}

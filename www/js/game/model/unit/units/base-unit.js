@@ -273,9 +273,9 @@ class Unit extends BaseModel {
 
     onClick() {
         const unit = this;
+        const game = unit.get(attr.game);
 
-        unit.clearMoveSquares();
-        unit.clearAttackSquares();
+        game.clearAllSquares();
 
         if (unit.get(attr.isActing)) {
             return;
@@ -285,7 +285,6 @@ class Unit extends BaseModel {
             return;
         }
 
-        const game = unit.get(attr.game);
         const currentUserPublicId = game.get('currentUserPublicId');
         const availablePath = unit.getAvailablePath();
         const availableAttack = unit.getAvailableAttack();

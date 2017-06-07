@@ -10,6 +10,8 @@ import {TurnMaster} from './../turn-master';
 import Proc from './../../lib/proc';
 import {isEqual, find, pick, remove} from 'lodash';
 import {PromiseMaster} from './../../lib/promise-master';
+import {store} from './../../index';
+import * as gameAction from './../../game/action';
 const PIXI = require('pixi.js');
 const renderConfig = require('./../render/config.json');
 
@@ -131,6 +133,10 @@ export class GameModel extends BaseModel {
             return model.doActionAttack(action);
         }
 
+        if (action.type === 'add-unit') {
+            return model.addUnit(action.unitData);
+        }
+
         return Promise.resolve();
     }
 
@@ -204,9 +210,13 @@ export class GameModel extends BaseModel {
                 const prevState = pick(model.getAllAttributes(), listenKeys);
 
                 listenKeys.forEach(key => {
-                    if (!isEqual(prevState[key], result[key])) {
-                        model.set(key, result[key]);
+                    if (isEqual(prevState[key], result[key])) {
+                        return;
                     }
+                    const newKeyState = {[key]: result[key]};
+
+                    model.set(newKeyState);
+                    store.dispatch(gameAction.setState(newKeyState));
                 });
             });
     }
