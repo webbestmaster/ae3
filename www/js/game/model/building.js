@@ -1,14 +1,14 @@
 import BaseModel from './../../core/base-model';
-import {getMyPublicId} from './../../lib/me';
+import {getMyPublicId, getMyOrder} from './../../lib/me';
 import {store} from './../../';
 import {setShopVisible} from './../shop/action';
 const PIXI = require('pixi.js');
 
 const attr = {
+    game: 'game',
     type: 'type',
     color: 'color',
     sprite: 'sprite',
-    render: 'render',
     ownerPublicId: 'ownerPublicId'
 };
 
@@ -17,7 +17,7 @@ class Building extends BaseModel {
         super(props);
 
         const building = this;
-        const render = building.get(attr.render);
+        const render = building.get(attr.game).get('render');
         const squareSize = render.get('squareSize');
 
         const {type, color, x, y} = props;
@@ -52,10 +52,14 @@ class Building extends BaseModel {
     onClick() {
         const model = this;
         const myPublicId = getMyPublicId();
+        const game = model.get(attr.game);
 
         if (myPublicId !== model.get(attr.ownerPublicId)) {
             return;
         }
+
+        // TODO: check for available squares for shop
+        game.set('shop', model);
 
         store.dispatch(setShopVisible(true));
     }

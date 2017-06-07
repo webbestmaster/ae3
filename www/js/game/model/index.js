@@ -30,6 +30,7 @@ const attr = {
 
     game: 'game',
     // turnCounter: 'turnCounter',
+    shop: 'shop',
 
     ui: 'ui',
     moveSquares: 'moveSquares',
@@ -218,7 +219,8 @@ export class GameModel extends BaseModel {
         const buildingProps = {
             type,
             color: null,
-            [attr.render]: model.get(attr.render),
+            [attr.game]: model,
+            // [attr.render]: model.get(attr.render),
             x: buildingData.x,
             y: buildingData.y,
             ownerPublicId: null
