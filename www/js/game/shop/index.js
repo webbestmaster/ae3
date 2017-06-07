@@ -65,9 +65,8 @@ class ShopView extends BaseView {
 
             {Object.keys(unitGuide.type).map(unitType => <div key={unitType}>
                 {JSON.stringify(unitGuide.type[unitType])}
-                <button onClick={() => {
-                    view.addUnit(unitType);
-                }}>buy unit
+                <button onClick={() => view.addUnit(unitType)}>
+                    buy unit
                 </button>
             </div>)}
 

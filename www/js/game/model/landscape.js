@@ -214,6 +214,12 @@ class Landscape extends BaseModel {
     getAttackFilledMap() {
         return JSON.parse(JSON.stringify(this.get(attr.attackFilledMap)));
     }
+
+    hasSquare(x, y) {
+        const landscape = this.get(attr.landscape);
+
+        return landscape.hasOwnProperty(y) && landscape[y].hasOwnProperty(x);
+    }
 }
 
 export {Landscape};

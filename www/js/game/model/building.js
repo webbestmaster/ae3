@@ -58,10 +58,37 @@ class Building extends BaseModel {
             return;
         }
 
-        // TODO: check for available squares for shop
+        // check place for new unit
+        if (!model.hasCrossSquares()) {
+            return;
+        }
+
         game.set('shop', model);
 
         store.dispatch(setShopVisible(true));
+    }
+
+    hasCrossSquares() {
+        const model = this;
+        const x = model.get('x');
+        const y = model.get('y');
+        const game = model.get(attr.game);
+        const units = game.get('model-units');
+        const landscape = game.get('model-landscape');
+
+        return [
+            [x, y - 1],
+            [x - 1, y],
+            [x, y],
+            [x + 1, y],
+            [x, y + 1]
+        ].some(([squareX, squareY]) => {
+            if (!landscape.hasSquare(squareX, squareY)) {
+                return false;
+            }
+
+            return !game.getUnitByXY(squareX, squareY);
+        });
     }
 }
 
