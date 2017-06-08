@@ -274,10 +274,33 @@ class Unit extends BaseModel {
     onClick() {
         const unit = this;
         const game = unit.get(attr.game);
+        const currentUserPublicId = game.get('currentUserPublicId');
+        const myPublicId = getMyPublicId();
+
+        if (myPublicId !== currentUserPublicId) {
+            return;
+        }
+
+        if (myPublicId !== unit.get(attr.ownerPublicId)) {
+            return;
+        }
 
         game.clearAllSquares();
 
         if (unit.get(attr.isActing)) {
+            return;
+        }
+
+        const availablePath = unit.getAvailablePath();
+        const availableAttack = unit.getAvailableAttack();
+        const wrongUnit = game.findWrongUnit();
+
+        if (wrongUnit) {
+            if (wrongUnit === unit) {
+                wrongUnit.addMoveSquares(availablePath);
+            } else {
+                wrongUnit.onClick();
+            }
             return;
         }
 
@@ -288,22 +311,13 @@ class Unit extends BaseModel {
             return;
         }
 
-        const currentUserPublicId = game.get('currentUserPublicId');
-        const availablePath = unit.getAvailablePath();
-        const availableAttack = unit.getAvailableAttack();
-
         if (unit.get(attr.isMoved) && availablePath.length + availableAttack.length === 0) {
             unit.set(attr.isFinished, true);
             return;
         }
 
-        if (getMyPublicId() === unit.get(attr.ownerPublicId)) {
-            unit.addMoveSquares(availablePath);
-            unit.addAttackSquares(availableAttack);
-            return;
-        }
-
-        console.warn('you can not touch this unit');
+        unit.addMoveSquares(availablePath);
+        unit.addAttackSquares(availableAttack);
     }
 
     addShopSquare() {
@@ -323,6 +337,10 @@ class Unit extends BaseModel {
 
         // check this is my building
         if (getMyPublicId() !== building.get(attr.ownerPublicId)) {
+            return;
+        }
+
+        if (!building.hasCrossSquares()) {
             return;
         }
 

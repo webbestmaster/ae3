@@ -8,7 +8,7 @@ import {Grave} from './grave';
 import {SelectMark} from './ui';
 import {TurnMaster} from './../turn-master';
 import Proc from './../../lib/proc';
-import {isEqual, find, pick, remove} from 'lodash';
+import {isEqual, find, findLast, pick, remove} from 'lodash';
 import {PromiseMaster} from './../../lib/promise-master';
 import {store} from './../../index';
 import * as gameAction from './../../game/action';
@@ -137,7 +137,11 @@ export class GameModel extends BaseModel {
         }
 
         if (action.type === 'add-unit') {
-            return model.addUnit(action.unitData);
+            model.addUnit(action.unitData);
+            const newUnit = model.getUnitByXY(action.unitData.x, action.unitData.y);
+
+            newUnit.onClick();
+            return null;
         }
 
         return Promise.resolve();
@@ -191,11 +195,29 @@ export class GameModel extends BaseModel {
     }
 
     getUnitByXY(x, y) {
-        return find(this.get(attr.model.units), unit => unit.get('x') === x && unit.get('y') === y);
+        return findLast(this.get(attr.model.units), unit => unit.get('x') === x && unit.get('y') === y);
     }
 
     getBuildingByXY(x, y) {
         return find(this.get(attr.model.buildings), building => building.get('x') === x && building.get('y') === y);
+    }
+
+    findWrongUnit() {
+        const model = this;
+        const units = model.get(attr.model.units);
+        let wrongUnit = null;
+
+        units.every(unit => {
+            const x = unit.get('x');
+            const y = unit.get('y');
+
+            wrongUnit = find(units,
+                item => item.get('x') === x && item.get('y') === y && item !== unit);
+
+            return !wrongUnit;
+        });
+
+        return wrongUnit;
     }
 
     startListening() {

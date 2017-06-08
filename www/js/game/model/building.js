@@ -41,6 +41,18 @@ class Building extends BaseModel {
         const model = this;
         const sprite = model.get(attr.sprite);
 
+        const render = model.get(attr.game).get('render');
+        const squareSize = render.get('squareSize');
+
+        if (model.get(attr.type) === 'castle') {
+            sprite.hitArea = new PIXI.Polygon([
+                new PIXI.Point(0, -squareSize),
+                new PIXI.Point(squareSize, -squareSize),
+                new PIXI.Point(squareSize, 0),
+                new PIXI.Point(0, 0)
+            ]);
+        }
+
         sprite.interactive = true;
         sprite.buttonMode = true;
 
@@ -53,6 +65,13 @@ class Building extends BaseModel {
         const game = model.get(attr.game);
 
         game.clearAllSquares();
+
+        const wrongUnit = game.findWrongUnit();
+
+        if (wrongUnit) {
+            wrongUnit.onClick();
+            return;
+        }
 
         if (model.get(attr.type) !== 'castle') {
             return;

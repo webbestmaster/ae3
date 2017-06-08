@@ -166,6 +166,13 @@ class Landscape extends BaseModel {
 
         game.clearAllSquares();
 
+        const wrongUnit = game.findWrongUnit();
+
+        if (wrongUnit) {
+            wrongUnit.onClick();
+            return;
+        }
+
         model.get(attr.game).get('ui').selectMark.moveTo(x, y);
     }
 
