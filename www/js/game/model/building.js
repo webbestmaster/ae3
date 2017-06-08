@@ -44,15 +44,19 @@ class Building extends BaseModel {
         sprite.interactive = true;
         sprite.buttonMode = true;
 
-        if (model.get(attr.type) === 'castle') {
-            sprite.on('pointertap', () => model.onClick());
-        }
+        sprite.on('pointertap', () => model.onClick());
     }
 
     onClick() {
         const model = this;
         const myPublicId = getMyPublicId();
         const game = model.get(attr.game);
+
+        game.clearAllSquares();
+
+        if (model.get(attr.type) !== 'castle') {
+            return;
+        }
 
         if (myPublicId !== model.get(attr.ownerPublicId)) {
             return;
@@ -64,7 +68,6 @@ class Building extends BaseModel {
         }
 
         game.set('shop', model);
-
         store.dispatch(setShopVisible(true));
     }
 

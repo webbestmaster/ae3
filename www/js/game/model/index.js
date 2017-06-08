@@ -37,6 +37,8 @@ const attr = {
     ui: 'ui',
     moveSquares: 'moveSquares',
     attackSquares: 'attackSquares',
+    openShopSquares: 'openShopSquares',
+
     model: {
         buildings: 'model-buildings',
         landscape: 'model-landscape',
@@ -77,6 +79,7 @@ export class GameModel extends BaseModel {
                         selectMark: null
                     },
                     [attr.moveSquares]: [],
+                    [attr.openShopSquares]: [],
                     [attr.attackSquares]: [],
                     // [attr.turnCounter]: 0,
                     [attr.render]: render,
@@ -189,6 +192,10 @@ export class GameModel extends BaseModel {
 
     getUnitByXY(x, y) {
         return find(this.get(attr.model.units), unit => unit.get('x') === x && unit.get('y') === y);
+    }
+
+    getBuildingByXY(x, y) {
+        return find(this.get(attr.model.buildings), building => building.get('x') === x && building.get('y') === y);
     }
 
     startListening() {
@@ -322,6 +329,26 @@ export class GameModel extends BaseModel {
         ui.selectMark = selectMark;
     }
 
+    addShopSquare(x, y, options = {}) {
+        const model = this;
+        const render = model.get(attr.render);
+        const squareSize = render.get('squareSize');
+        const sprite = PIXI.Sprite.fromFrame('open-shop');
+
+        sprite.x = squareSize * x;
+        sprite.y = squareSize * y;
+
+        render.addChild('ui', sprite);
+        model.get(attr.openShopSquares).push(sprite);
+
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+
+        const {events = {}} = options;
+
+        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
+    }
+
     addMoveSquare(x, y, options = {}) {
         const model = this;
         const render = model.get(attr.render);
@@ -370,6 +397,7 @@ export class GameModel extends BaseModel {
 
         model.clearMoveSquares();
         model.clearAttackSquares();
+        model.clearShopSquares();
     }
 
     clearMoveSquares() {
@@ -388,6 +416,15 @@ export class GameModel extends BaseModel {
         const attackSquares = model.get(attr.attackSquares);
 
         attackSquares.forEach(sprite => render.removeChild('ui', sprite));
+    }
+
+    clearShopSquares() {
+        const model = this;
+        const render = model.get(attr.render);
+
+        const openShopSquares = model.get(attr.openShopSquares);
+
+        openShopSquares.forEach(sprite => render.removeChild('ui', sprite));
     }
 
     destroy() {

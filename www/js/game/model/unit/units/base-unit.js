@@ -281,6 +281,9 @@ class Unit extends BaseModel {
             return;
         }
 
+        // show shop
+        unit.addShopSquare();
+
         if (unit.get(attr.isFinished)) {
             return;
         }
@@ -301,6 +304,33 @@ class Unit extends BaseModel {
         }
 
         console.warn('you can not touch this unit');
+    }
+
+    addShopSquare() {
+        const unit = this;
+        const game = unit.get(attr.game);
+        const building = game.getBuildingByXY(unit.get('x'), unit.get('y'));
+
+        // check building exist
+        if (!building) {
+            return;
+        }
+
+        // check this is castle
+        if (building.get('type') !== 'castle') {
+            return;
+        }
+
+        // check this is my building
+        if (getMyPublicId() !== building.get(attr.ownerPublicId)) {
+            return;
+        }
+
+        game.addShopSquare(unit.get('x'), unit.get('y'), {
+            events: {
+                pointertap: () => building.onClick()
+            }
+        });
     }
 
     getAvailablePath() {
