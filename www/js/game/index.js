@@ -78,7 +78,10 @@ class GameView extends BaseView {
 
         model.start().then(() => {
             // model.onChange('turnCounter', (now, before) => console.log('turnCounter', before, now), view);
-            model.onChange('currentUserPublicId', view.showChangeTurnPopup, view);
+            model.onChange('currentUserPublicId', () => {
+                model.clearAllSquares();
+                view.showChangeTurnPopup();
+            }, view);
             model.onChange('users', function onUsersChange() {
                 console.warn('users changed');
                 console.warn(arguments);
@@ -113,7 +116,7 @@ class GameView extends BaseView {
                 label="Leave Turn"
                 primary={true}
                 keyboardFocused={true}
-                onTouchTap={() => api.get.room.leaveTurn()}
+                onTouchTap={() => api.get.room.leaveTurn().then(() => view.state.model.fetchData())}
             />
             <Dialog
                 title={view.state.changeTurnPopup.title}

@@ -309,6 +309,7 @@ class Unit extends BaseModel {
         // show shop
         unit.addShopSquare();
         unit.addFixBuildingSquares(availableFixBuilding);
+        unit.addOccupyBuildingSquares(availableOccupyBuilding);
 
         if (unit.get(attr.isFinished)) {
             return;
@@ -352,7 +353,32 @@ class Unit extends BaseModel {
     }
 
     getAvailableOccupyBuilding() {
-        return [];
+        const unit = this;
+        const unitData = unitGuide.type[unit.get(attr.type)];
+        const {occupyBuildingList = null} = unitData;
+
+        if (occupyBuildingList === null) {
+            return [];
+        }
+
+        const game = unit.get(attr.game);
+        const x = unit.get('x');
+        const y = unit.get('y');
+        const building = game.getBuildingByXY(x, y);
+
+        if (!building) {
+            return [];
+        }
+
+        if (occupyBuildingList.indexOf(building.get(attr.type)) === -1) {
+            return [];
+        }
+
+        if (building.get(attr.ownerPublicId) === unit.get(attr.ownerPublicId)) {
+            return [];
+        }
+
+        return [[x, y]];
     }
 
     addShopSquare() {
@@ -397,6 +423,17 @@ class Unit extends BaseModel {
         }));
     }
 
+    addOccupyBuildingSquares(list) {
+        const unit = this;
+        const game = unit.get(attr.game);
+
+        list.forEach(([x, y]) => game.addOccupyBuildingSquare(x, y, {
+            events: {
+                pointertap: () => unit.occupyBuilding(x, y)
+            }
+        }));
+    }
+
     fixBuilding(x, y) {
         const unit = this;
         const game = unit.get(attr.game);
@@ -405,6 +442,23 @@ class Unit extends BaseModel {
             list: [
                 {
                     type: 'fix-building',
+                    x,
+                    y
+                }
+            ]
+        }).then(() => game.get('turnMaster').fetchTurns());
+
+        game.clearAllSquares();
+    }
+
+    occupyBuilding(x, y) {
+        const unit = this;
+        const game = unit.get(attr.game);
+
+        api.post.room.pushTurn(null, {
+            list: [
+                {
+                    type: 'occupy-building',
                     x,
                     y
                 }

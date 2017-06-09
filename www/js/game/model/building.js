@@ -2,6 +2,7 @@ import BaseModel from './../../core/base-model';
 import {getMyPublicId, getMyOrder} from './../../lib/me';
 import {store} from './../../';
 import {setShopVisible} from './../shop/action';
+import {find} from 'lodash';
 const PIXI = require('pixi.js');
 
 const attr = {
@@ -44,10 +45,6 @@ class Building extends BaseModel {
         const render = model.get(attr.game).get('render');
         const squareSize = render.get('squareSize');
 
-        model.onChange(attr.type, type => {
-            model.get(attr.sprite).texture = PIXI.Texture.fromFrame(type);
-        });
-
         if (model.get(attr.type) === 'castle') {
             sprite.hitArea = new PIXI.Polygon([
                 new PIXI.Point(0, -squareSize),
@@ -61,6 +58,13 @@ class Building extends BaseModel {
         sprite.buttonMode = true;
 
         sprite.on('pointertap', () => model.onClick());
+    }
+
+    fix() {
+        const model = this;
+
+        model.get(attr.sprite).texture = PIXI.Texture.fromFrame('farm-gray');
+        model.set(attr.type, 'farm');
     }
 
     onClick() {
@@ -115,6 +119,19 @@ class Building extends BaseModel {
 
             return !game.getUnitByXY(squareX, squareY);
         });
+    }
+
+    belongTo(ownerPublicId) {
+        const model = this;
+        const game = model.get(attr.game);
+        const users = game.get('users');
+        const {color} = find(users, {publicId: ownerPublicId});
+        const type = model.get(attr.type);
+
+        model.set(attr.ownerPublicId, ownerPublicId);
+        model.set(attr.color, color);
+
+        model.get(attr.sprite).texture = PIXI.Texture.fromFrame(type + '-' + color);
     }
 }
 

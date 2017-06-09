@@ -39,6 +39,7 @@ const attr = {
     attackSquares: 'attackSquares',
     openShopSquares: 'openShopSquares',
     fixBuildingSquares: 'fixBuildingSquares',
+    occupyBuildingSquares: 'occupyBuildingSquares',
 
     model: {
         buildings: 'model-buildings',
@@ -82,6 +83,7 @@ export class GameModel extends BaseModel {
                     [attr.moveSquares]: [],
                     [attr.openShopSquares]: [],
                     [attr.fixBuildingSquares]: [],
+                    [attr.occupyBuildingSquares]: [],
                     [attr.attackSquares]: [],
                     // [attr.turnCounter]: 0,
                     [attr.render]: render,
@@ -149,6 +151,11 @@ export class GameModel extends BaseModel {
 
         if (type === 'fix-building') {
             model.fixBuilding(action.x, action.y);
+            return null;
+        }
+
+        if (type === 'occupy-building') {
+            model.occupyBuilding(action.x, action.y);
             return null;
         }
 
@@ -399,11 +406,42 @@ export class GameModel extends BaseModel {
         Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
     }
 
+    addOccupyBuildingSquare(x, y, options = {}) {
+        const model = this;
+        const render = model.get(attr.render);
+        const squareSize = render.get('squareSize');
+        const sprite = PIXI.Sprite.fromFrame('action-occupy-building');
+
+        sprite.x = squareSize * x;
+        sprite.y = squareSize * y;
+
+        render.addChild('ui', sprite);
+        model.get(attr.occupyBuildingSquares).push(sprite);
+
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+
+        const {events = {}} = options;
+
+        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
+    }
+
     fixBuilding(x, y) {
         const model = this;
         const building = model.getBuildingByXY(x, y);
+        const unit = model.getUnitByXY(x, y);
 
-        building.set('type', 'farm-gray');
+        building.fix();
+        unit.set('isFinished', true);
+    }
+
+    occupyBuilding(x, y) {
+        const model = this;
+        const building = model.getBuildingByXY(x, y);
+        const unit = model.getUnitByXY(x, y);
+
+        building.belongTo(unit.get('ownerPublicId'));
+        unit.set('isFinished', true);
     }
 
     addMoveSquare(x, y, options = {}) {
@@ -456,6 +494,7 @@ export class GameModel extends BaseModel {
         model.clearAttackSquares();
         model.clearShopSquares();
         model.clearFixBuildingSquares();
+        model.clearOccupyBuildingSquares();
     }
 
     clearMoveSquares() {
@@ -490,6 +529,15 @@ export class GameModel extends BaseModel {
         const render = model.get(attr.render);
 
         const squares = model.get(attr.fixBuildingSquares);
+
+        squares.forEach(sprite => render.removeChild('ui', sprite));
+    }
+
+    clearOccupyBuildingSquares() {
+        const model = this;
+        const render = model.get(attr.render);
+
+        const squares = model.get(attr.occupyBuildingSquares);
 
         squares.forEach(sprite => render.removeChild('ui', sprite));
     }
