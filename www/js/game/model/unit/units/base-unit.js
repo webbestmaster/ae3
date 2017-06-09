@@ -129,7 +129,9 @@ class Unit extends BaseModel {
         const unit = this;
         const game = unit.get(attr.game);
 
-        api.post.room.pushTurn(null, {
+        game.clearAllSquares();
+
+        return api.post.room.pushTurn(null, {
             list: [
                 {
                     type: 'move',
@@ -137,8 +139,6 @@ class Unit extends BaseModel {
                 }
             ]
         }).then(() => game.get('turnMaster').fetchTurns());
-
-        game.clearAllSquares();
     }
 
     attack(x, y) {
@@ -146,7 +146,9 @@ class Unit extends BaseModel {
         const game = unit.get(attr.game);
         const enemy = game.getUnitByXY(x, y);
 
-        api.post.room
+        game.clearAllSquares();
+
+        return api.post.room
             .pushTurn(null, {
                 list: [
                     {
@@ -156,8 +158,6 @@ class Unit extends BaseModel {
                 ]
             })
             .then(() => game.get('turnMaster').fetchTurns());
-
-        game.clearAllSquares();
     }
 
     getAvailableDamage(health, enemy) {
