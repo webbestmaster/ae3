@@ -293,6 +293,8 @@ class Unit extends BaseModel {
 
         const availablePath = unit.getAvailablePath();
         const availableAttack = unit.getAvailableAttack();
+        const availableFixBuilding = unit.getAvailableFixBuilding();
+        const availableOccupyBuilding = unit.getAvailableOccupyBuilding();
         const wrongUnit = game.findWrongUnit();
 
         if (wrongUnit) {
@@ -306,6 +308,7 @@ class Unit extends BaseModel {
 
         // show shop
         unit.addShopSquare();
+        unit.addFixBuildingSquares(availableFixBuilding);
 
         if (unit.get(attr.isFinished)) {
             return;
@@ -318,6 +321,38 @@ class Unit extends BaseModel {
 
         unit.addMoveSquares(availablePath);
         unit.addAttackSquares(availableAttack);
+
+        // TODO: find squares with double action, for example - raise skeleton and move
+        // and create square to select needed action
+    }
+
+    getAvailableFixBuilding() {
+        const unit = this;
+        const unitData = unitGuide.type[unit.get(attr.type)];
+        const {canFixBuilding = false} = unitData;
+
+        if (!canFixBuilding) {
+            return [];
+        }
+
+        const game = unit.get(attr.game);
+        const x = unit.get('x');
+        const y = unit.get('y');
+        const building = game.getBuildingByXY(x, y);
+
+        if (!building) {
+            return [];
+        }
+
+        if (building.get(attr.type) === 'farm-destroyed') {
+            return [[x, y]];
+        }
+
+        return [];
+    }
+
+    getAvailableOccupyBuilding() {
+        return [];
     }
 
     addShopSquare() {
@@ -349,6 +384,34 @@ class Unit extends BaseModel {
                 pointertap: () => building.onClick()
             }
         });
+    }
+
+    addFixBuildingSquares(list) {
+        const unit = this;
+        const game = unit.get(attr.game);
+
+        list.forEach(([x, y]) => game.addFixBuildingSquare(x, y, {
+            events: {
+                pointertap: () => unit.fixBuilding(x, y)
+            }
+        }));
+    }
+
+    fixBuilding(x, y) {
+        const unit = this;
+        const game = unit.get(attr.game);
+
+        api.post.room.pushTurn(null, {
+            list: [
+                {
+                    type: 'fix-building',
+                    x,
+                    y
+                }
+            ]
+        }).then(() => game.get('turnMaster').fetchTurns());
+
+        game.clearAllSquares();
     }
 
     getAvailablePath() {
@@ -392,9 +455,7 @@ class Unit extends BaseModel {
             unitY,
             unitGuide.type[unit.get('type')].attackRange,
             filledMap
-        ).filter(square => {
-            const [squareX, squareY] = square;
-
+        ).filter(([squareX, squareY]) => {
             if (squareX === unitX && squareY === unitY) {
                 return false;
             }
@@ -417,13 +478,13 @@ class Unit extends BaseModel {
 
         unit.clearMoveSquares();
 
-        availablePath.forEach(arrXY => {
+        availablePath.forEach(([x, y]) => {
             game.addMoveSquare(
-                arrXY[0],
-                arrXY[1],
+                x,
+                y,
                 {
                     events: {
-                        pointertap: () => unit.move(arrXY[0], arrXY[1])
+                        pointertap: () => unit.move(x, y)
                     }
                 }
             );
@@ -438,13 +499,13 @@ class Unit extends BaseModel {
 
         unit.clearAttackSquares();
 
-        availableAttack.forEach(arrXY => {
+        availableAttack.forEach(([x, y]) => {
             game.addAttackSquare(
-                arrXY[0],
-                arrXY[1],
+                x,
+                y,
                 {
                     events: {
-                        pointertap: () => unit.attack(arrXY[0], arrXY[1])
+                        pointertap: () => unit.attack(x, y)
                     }
                 }
             );

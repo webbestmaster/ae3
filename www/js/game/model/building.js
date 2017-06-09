@@ -44,6 +44,10 @@ class Building extends BaseModel {
         const render = model.get(attr.game).get('render');
         const squareSize = render.get('squareSize');
 
+        model.onChange(attr.type, type => {
+            model.get(attr.sprite).texture = PIXI.Texture.fromFrame(type);
+        });
+
         if (model.get(attr.type) === 'castle') {
             sprite.hitArea = new PIXI.Polygon([
                 new PIXI.Point(0, -squareSize),
