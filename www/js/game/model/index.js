@@ -549,6 +549,7 @@ export class GameModel extends BaseModel {
         const moveSquares = model.get(attr.moveSquares);
 
         moveSquares.forEach(sprite => render.removeChild('ui', sprite));
+        model.set(attr.moveSquares, []);
     }
 
     clearAttackSquares() {
@@ -558,6 +559,7 @@ export class GameModel extends BaseModel {
         const attackSquares = model.get(attr.attackSquares);
 
         attackSquares.forEach(sprite => render.removeChild('ui', sprite));
+        model.set(attr.attackSquares, []);
     }
 
     clearShopSquares() {
@@ -567,6 +569,7 @@ export class GameModel extends BaseModel {
         const openShopSquares = model.get(attr.openShopSquares);
 
         openShopSquares.forEach(sprite => render.removeChild('ui', sprite));
+        model.set(attr.openShopSquares, []);
     }
 
     clearFixBuildingSquares() {
@@ -576,6 +579,7 @@ export class GameModel extends BaseModel {
         const squares = model.get(attr.fixBuildingSquares);
 
         squares.forEach(sprite => render.removeChild('ui', sprite));
+        model.set(attr.fixBuildingSquares, []);
     }
 
     clearOccupyBuildingSquares() {
@@ -585,6 +589,7 @@ export class GameModel extends BaseModel {
         const squares = model.get(attr.occupyBuildingSquares);
 
         squares.forEach(sprite => render.removeChild('ui', sprite));
+        model.set(attr.occupyBuildingSquares, []);
     }
 
     clearRaiseSkeletonSquares() {
@@ -594,6 +599,27 @@ export class GameModel extends BaseModel {
         const squares = model.get(attr.raiseSkeletonSquares);
 
         squares.forEach(sprite => render.removeChild('ui', sprite));
+        model.set(attr.raiseSkeletonSquares, []);
+    }
+
+    collectDoubleActionSquares() {
+        const model = this;
+        const landscape = model.get(attr.model.landscape);
+        const rawMap = landscape.getAttackFilledMap();
+        const squaresMap = rawMap.map(line => line.map(() => []));
+        const squares = [].concat(
+            model.get(attr.moveSquares),
+            model.get(attr.moveSquares),
+            model.get(attr.attackSquares),
+            model.get(attr.openShopSquares),
+            model.get(attr.fixBuildingSquares),
+            model.get(attr.occupyBuildingSquares),
+            model.get(attr.raiseSkeletonSquares)
+        );
+
+        // TODO: you stop here
+        // play - addAttackSquare
+        // create constructor for squares, e. g. - Square({tileName, x, y, game, options})
     }
 
     destroy() {
