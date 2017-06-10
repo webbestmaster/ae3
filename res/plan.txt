@@ -11,6 +11,10 @@ http://kadara.ru:1017
 http://jetbrains-server.ru:1017
 http://jetbrains.tencent.click
 
+http://roothat.ru:1017
+http://jetbrains.tencent.click
+http://idea.imsxm.com/
+
 для всех объектов - план такой
 
 когда объект создаётся - он записывает себя в соответсвтующий массив в модели игры

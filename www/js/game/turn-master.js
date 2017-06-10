@@ -52,7 +52,14 @@ class TurnMaster extends BaseModel {
                     return;
                 }
 
-                model.set(attr.hash, turns[turnsLength - 1].hash);
+                const {hash} = turns[turnsLength - 1];
+                const oldHash = model.get(attr.hash);
+
+                if (hash === oldHash) {
+                    return;
+                }
+
+                model.set(attr.hash, hash);
 
                 const onNewTurns = model.get(attr.onNewTurns);
 

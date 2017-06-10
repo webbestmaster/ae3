@@ -95,6 +95,12 @@
             "userOrder": 0
         },
         {
+            "x": 5,
+            "y": 6,
+            "type": "sorceress",
+            "userOrder": 0
+        },
+        {
             "x": 4,
             "y": 0,
             "type": "wisp",

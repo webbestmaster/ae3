@@ -48,7 +48,7 @@
                 "max": 45
             },
             "attackRange": 1,
-            "raiseRange": 1,
+            "raiseSkeletonRange": 1,
             "defence": 5,
             "move": 4,
             "modelName": "SorceressModel",

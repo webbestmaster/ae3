@@ -40,6 +40,7 @@ const attr = {
     openShopSquares: 'openShopSquares',
     fixBuildingSquares: 'fixBuildingSquares',
     occupyBuildingSquares: 'occupyBuildingSquares',
+    raiseSkeletonSquares: 'raiseSkeletonSquares',
 
     model: {
         buildings: 'model-buildings',
@@ -84,6 +85,7 @@ export class GameModel extends BaseModel {
                     [attr.openShopSquares]: [],
                     [attr.fixBuildingSquares]: [],
                     [attr.occupyBuildingSquares]: [],
+                    [attr.raiseSkeletonSquares]: [],
                     [attr.attackSquares]: [],
                     // [attr.turnCounter]: 0,
                     [attr.render]: render,
@@ -159,6 +161,24 @@ export class GameModel extends BaseModel {
             return null;
         }
 
+        if (type === 'raise-skeleton') {
+            console.log(action);
+            const graveX = action.x;
+            const graveY = action.y;
+            const {userOrder} = action;
+            const grave = model.getGraveByXY(graveX, graveY);
+
+            grave.destroy();
+
+            model.addUnit({
+                x: graveX,
+                y: graveY,
+                type: 'skeleton',
+                userOrder
+            });
+            return null;
+        }
+
         return Promise.resolve();
     }
 
@@ -211,6 +231,10 @@ export class GameModel extends BaseModel {
 
     getUnitByXY(x, y) {
         return findLast(this.get(attr.model.units), unit => unit.get('x') === x && unit.get('y') === y);
+    }
+
+    getGraveByXY(x, y) {
+        return findLast(this.get(attr.model.graves), grave => grave.get('x') === x && grave.get('y') === y);
     }
 
     getBuildingByXY(x, y) {
@@ -426,6 +450,26 @@ export class GameModel extends BaseModel {
         Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
     }
 
+    addRaiseSkeletonSquare(x, y, options = {}) {
+        const model = this;
+        const render = model.get(attr.render);
+        const squareSize = render.get('squareSize');
+        const sprite = PIXI.Sprite.fromFrame('skull');
+
+        sprite.x = squareSize * x;
+        sprite.y = squareSize * y;
+
+        render.addChild('ui', sprite);
+        model.get(attr.raiseSkeletonSquares).push(sprite);
+
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+
+        const {events = {}} = options;
+
+        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
+    }
+
     fixBuilding(x, y) {
         const model = this;
         const building = model.getBuildingByXY(x, y);
@@ -495,6 +539,7 @@ export class GameModel extends BaseModel {
         model.clearShopSquares();
         model.clearFixBuildingSquares();
         model.clearOccupyBuildingSquares();
+        model.clearRaiseSkeletonSquares();
     }
 
     clearMoveSquares() {
@@ -538,6 +583,15 @@ export class GameModel extends BaseModel {
         const render = model.get(attr.render);
 
         const squares = model.get(attr.occupyBuildingSquares);
+
+        squares.forEach(sprite => render.removeChild('ui', sprite));
+    }
+
+    clearRaiseSkeletonSquares() {
+        const model = this;
+        const render = model.get(attr.render);
+
+        const squares = model.get(attr.raiseSkeletonSquares);
 
         squares.forEach(sprite => render.removeChild('ui', sprite));
     }

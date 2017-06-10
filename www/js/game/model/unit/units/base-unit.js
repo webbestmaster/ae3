@@ -3,7 +3,7 @@ import {getPath} from '../../../path-master';
 import api from '../../../../user/api';
 import {TimelineLite, Power0, Power2} from 'gsap';
 import {getPath as getStarPath} from 'a-star-finder';
-import {getMyPublicId} from '../../../../lib/me';
+import {getMyPublicId, getMyOrder} from '../../../../lib/me';
 import HealthText from '../health-text';
 const PIXI = require('pixi.js');
 const renderConfig = require('../../../render/config.json');
@@ -295,6 +295,7 @@ class Unit extends BaseModel {
         const availableAttack = unit.getAvailableAttack();
         const availableFixBuilding = unit.getAvailableFixBuilding();
         const availableOccupyBuilding = unit.getAvailableOccupyBuilding();
+        const availableRaiseSkeleton = unit.getAvailableRaiseSkeleton();
         const wrongUnit = game.findWrongUnit();
 
         if (wrongUnit) {
@@ -310,12 +311,18 @@ class Unit extends BaseModel {
         unit.addShopSquare();
         unit.addFixBuildingSquares(availableFixBuilding);
         unit.addOccupyBuildingSquares(availableOccupyBuilding);
+        unit.addRaiseSkeletonSquares(availableRaiseSkeleton);
 
         if (unit.get(attr.isFinished)) {
             return;
         }
 
-        if (unit.get(attr.isMoved) && availablePath.length + availableAttack.length === 0) {
+        if (unit.get(attr.isMoved) &&
+            availablePath.length +
+            availableAttack.length +
+            availableFixBuilding.length +
+            availableOccupyBuilding.length +
+            availableRaiseSkeleton.length === 0) {
             unit.set(attr.isFinished, true);
             return;
         }
@@ -381,6 +388,33 @@ class Unit extends BaseModel {
         return [[x, y]];
     }
 
+    getAvailableRaiseSkeleton() {
+        const unit = this;
+        const unitData = unitGuide.type[unit.get(attr.type)];
+        const {raiseSkeletonRange = 0} = unitData;
+
+        if (!raiseSkeletonRange) {
+            return [];
+        }
+
+        const unitX = unit.get('x');
+        const unitY = unit.get('y');
+        const game = unit.get(attr.game);
+        const landscape = game.get('model-landscape');
+        const filledMap = landscape.getAttackFilledMap();
+
+        return getPath(
+            unitX,
+            unitY,
+            raiseSkeletonRange,
+            filledMap
+        )
+            .filter(([squareX, squareY]) =>
+                !game.getUnitByXY(squareX, squareY) &&
+                game.getGraveByXY(squareX, squareY)
+            );
+    }
+
     addShopSquare() {
         const unit = this;
         const game = unit.get(attr.game);
@@ -434,6 +468,17 @@ class Unit extends BaseModel {
         }));
     }
 
+    addRaiseSkeletonSquares(list) {
+        const unit = this;
+        const game = unit.get(attr.game);
+
+        list.forEach(([x, y]) => game.addRaiseSkeletonSquare(x, y, {
+            events: {
+                pointertap: () => unit.raiseSkeleton(x, y)
+            }
+        }));
+    }
+
     fixBuilding(x, y) {
         const unit = this;
         const game = unit.get(attr.game);
@@ -464,6 +509,28 @@ class Unit extends BaseModel {
                 }
             ]
         }).then(() => game.get('turnMaster').fetchTurns());
+
+        game.clearAllSquares();
+    }
+
+    raiseSkeleton(x, y) {
+        const unit = this;
+        const game = unit.get(attr.game);
+        const userOrder = getMyOrder(game.get('users'));
+
+        api.post.room
+            .pushTurn(null, {
+                list: [
+                    {
+                        type: 'raise-skeleton',
+                        x,
+                        y,
+                        userOrder
+                    }
+                ]
+            })
+            .then(() => game.get('turnMaster').fetchTurns())
+            .then(() => unit.set(attr.isFinished, true));
 
         game.clearAllSquares();
     }
