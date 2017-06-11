@@ -41,6 +41,7 @@ const attr = {
     fixBuildingSquares: 'fixBuildingSquares',
     occupyBuildingSquares: 'occupyBuildingSquares',
     raiseSkeletonSquares: 'raiseSkeletonSquares',
+    multiActionSquares: 'multiActionSquares',
 
     model: {
         buildings: 'model-buildings',
@@ -87,6 +88,7 @@ export class GameModel extends BaseModel {
                     [attr.occupyBuildingSquares]: [],
                     [attr.raiseSkeletonSquares]: [],
                     [attr.attackSquares]: [],
+                    [attr.multiActionSquares]: [],
                     // [attr.turnCounter]: 0,
                     [attr.render]: render,
                     [attr.promiseMaster]: new PromiseMaster()
@@ -162,7 +164,6 @@ export class GameModel extends BaseModel {
         }
 
         if (type === 'raise-skeleton') {
-            console.log(action);
             const graveX = action.x;
             const graveY = action.y;
             const {userOrder} = action;
@@ -390,85 +391,6 @@ export class GameModel extends BaseModel {
         ui.selectMark = selectMark;
     }
 
-    addShopSquare(x, y, options = {}) {
-        const model = this;
-        const render = model.get(attr.render);
-        const squareSize = render.get('squareSize');
-        const sprite = PIXI.Sprite.fromFrame('open-shop');
-
-        sprite.x = squareSize * x;
-        sprite.y = squareSize * y;
-
-        render.addChild('ui', sprite);
-        model.get(attr.openShopSquares).push(sprite);
-
-        sprite.interactive = true;
-        sprite.buttonMode = true;
-
-        const {events = {}} = options;
-
-        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
-    }
-
-    addFixBuildingSquare(x, y, options = {}) {
-        const model = this;
-        const render = model.get(attr.render);
-        const squareSize = render.get('squareSize');
-        const sprite = PIXI.Sprite.fromFrame('action-fix-building');
-
-        sprite.x = squareSize * x;
-        sprite.y = squareSize * y;
-
-        render.addChild('ui', sprite);
-        model.get(attr.fixBuildingSquares).push(sprite);
-
-        sprite.interactive = true;
-        sprite.buttonMode = true;
-
-        const {events = {}} = options;
-
-        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
-    }
-
-    addOccupyBuildingSquare(x, y, options = {}) {
-        const model = this;
-        const render = model.get(attr.render);
-        const squareSize = render.get('squareSize');
-        const sprite = PIXI.Sprite.fromFrame('action-occupy-building');
-
-        sprite.x = squareSize * x;
-        sprite.y = squareSize * y;
-
-        render.addChild('ui', sprite);
-        model.get(attr.occupyBuildingSquares).push(sprite);
-
-        sprite.interactive = true;
-        sprite.buttonMode = true;
-
-        const {events = {}} = options;
-
-        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
-    }
-
-    addRaiseSkeletonSquare(x, y, options = {}) {
-        const model = this;
-        const render = model.get(attr.render);
-        const squareSize = render.get('squareSize');
-        const sprite = PIXI.Sprite.fromFrame('skull');
-
-        sprite.x = squareSize * x;
-        sprite.y = squareSize * y;
-
-        render.addChild('ui', sprite);
-        model.get(attr.raiseSkeletonSquares).push(sprite);
-
-        sprite.interactive = true;
-        sprite.buttonMode = true;
-
-        const {events = {}} = options;
-
-        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
-    }
 
     fixBuilding(x, y) {
         const model = this;
@@ -497,7 +419,7 @@ export class GameModel extends BaseModel {
         sprite.x = squareSize * x;
         sprite.y = squareSize * y;
         render.addChild('ui', sprite);
-        model.get(attr.moveSquares).push(sprite);
+        model.get(attr.moveSquares).push({sprite, x, y, type: 'move'});
 
         sprite.interactive = true;
         sprite.buttonMode = true;
@@ -519,12 +441,92 @@ export class GameModel extends BaseModel {
         sprite.x = squareSize * (x - 0.5);
         sprite.y = squareSize * (y - 0.5);
         render.addChild('ui', sprite);
-        model.get(attr.moveSquares).push(sprite);
+        model.get(attr.moveSquares).push({sprite, x, y, type: 'attack'});
 
         sprite.interactive = true;
         sprite.buttonMode = true;
         sprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
         sprite.play();
+
+        const {events = {}} = options;
+
+        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
+    }
+
+    addShopSquare(x, y, options = {}) {
+        const model = this;
+        const render = model.get(attr.render);
+        const squareSize = render.get('squareSize');
+        const sprite = PIXI.Sprite.fromFrame('open-shop');
+
+        sprite.x = squareSize * x;
+        sprite.y = squareSize * y;
+
+        render.addChild('ui', sprite);
+        model.get(attr.openShopSquares).push({sprite, x, y, type: 'open-shop'});
+
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+
+        const {events = {}} = options;
+
+        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
+    }
+
+    addFixBuildingSquare(x, y, options = {}) {
+        const model = this;
+        const render = model.get(attr.render);
+        const squareSize = render.get('squareSize');
+        const sprite = PIXI.Sprite.fromFrame('action-fix-building');
+
+        sprite.x = squareSize * x;
+        sprite.y = squareSize * y;
+
+        render.addChild('ui', sprite);
+        model.get(attr.fixBuildingSquares).push({sprite, x, y, type: 'fix-building'});
+
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+
+        const {events = {}} = options;
+
+        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
+    }
+
+    addOccupyBuildingSquare(x, y, options = {}) {
+        const model = this;
+        const render = model.get(attr.render);
+        const squareSize = render.get('squareSize');
+        const sprite = PIXI.Sprite.fromFrame('action-occupy-building');
+
+        sprite.x = squareSize * x;
+        sprite.y = squareSize * y;
+
+        render.addChild('ui', sprite);
+        model.get(attr.occupyBuildingSquares).push({sprite, x, y, type: 'occupy-building'});
+
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+
+        const {events = {}} = options;
+
+        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
+    }
+
+    addRaiseSkeletonSquare(x, y, options = {}) {
+        const model = this;
+        const render = model.get(attr.render);
+        const squareSize = render.get('squareSize');
+        const sprite = PIXI.Sprite.fromFrame('skull');
+
+        sprite.x = squareSize * x;
+        sprite.y = squareSize * y;
+
+        render.addChild('ui', sprite);
+        model.get(attr.raiseSkeletonSquares).push({sprite, x, y, type: 'raise-skeleton'});
+
+        sprite.interactive = true;
+        sprite.buttonMode = true;
 
         const {events = {}} = options;
 
@@ -540,6 +542,7 @@ export class GameModel extends BaseModel {
         model.clearFixBuildingSquares();
         model.clearOccupyBuildingSquares();
         model.clearRaiseSkeletonSquares();
+        model.clearMultiActionSquares();
     }
 
     clearMoveSquares() {
@@ -548,7 +551,7 @@ export class GameModel extends BaseModel {
 
         const moveSquares = model.get(attr.moveSquares);
 
-        moveSquares.forEach(sprite => render.removeChild('ui', sprite));
+        moveSquares.forEach(({sprite}) => render.removeChild('ui', sprite));
         model.set(attr.moveSquares, []);
     }
 
@@ -558,7 +561,7 @@ export class GameModel extends BaseModel {
 
         const attackSquares = model.get(attr.attackSquares);
 
-        attackSquares.forEach(sprite => render.removeChild('ui', sprite));
+        attackSquares.forEach(({sprite}) => render.removeChild('ui', sprite));
         model.set(attr.attackSquares, []);
     }
 
@@ -568,7 +571,7 @@ export class GameModel extends BaseModel {
 
         const openShopSquares = model.get(attr.openShopSquares);
 
-        openShopSquares.forEach(sprite => render.removeChild('ui', sprite));
+        openShopSquares.forEach(({sprite}) => render.removeChild('ui', sprite));
         model.set(attr.openShopSquares, []);
     }
 
@@ -578,7 +581,7 @@ export class GameModel extends BaseModel {
 
         const squares = model.get(attr.fixBuildingSquares);
 
-        squares.forEach(sprite => render.removeChild('ui', sprite));
+        squares.forEach(({sprite}) => render.removeChild('ui', sprite));
         model.set(attr.fixBuildingSquares, []);
     }
 
@@ -588,7 +591,7 @@ export class GameModel extends BaseModel {
 
         const squares = model.get(attr.occupyBuildingSquares);
 
-        squares.forEach(sprite => render.removeChild('ui', sprite));
+        squares.forEach(({sprite}) => render.removeChild('ui', sprite));
         model.set(attr.occupyBuildingSquares, []);
     }
 
@@ -598,17 +601,26 @@ export class GameModel extends BaseModel {
 
         const squares = model.get(attr.raiseSkeletonSquares);
 
-        squares.forEach(sprite => render.removeChild('ui', sprite));
+        squares.forEach(({sprite}) => render.removeChild('ui', sprite));
         model.set(attr.raiseSkeletonSquares, []);
     }
 
-    collectDoubleActionSquares() {
+    clearMultiActionSquares() {
+        const model = this;
+        const render = model.get(attr.render);
+
+        const squares = model.get(attr.multiActionSquares);
+
+        squares.forEach(({sprite}) => render.removeChild('ui', sprite));
+        model.set(attr.multiActionSquares, []);
+    }
+
+    collectMultiActionSquares() {
         const model = this;
         const landscape = model.get(attr.model.landscape);
         const rawMap = landscape.getAttackFilledMap();
         const squaresMap = rawMap.map(line => line.map(() => []));
         const squares = [].concat(
-            model.get(attr.moveSquares),
             model.get(attr.moveSquares),
             model.get(attr.attackSquares),
             model.get(attr.openShopSquares),
@@ -617,9 +629,62 @@ export class GameModel extends BaseModel {
             model.get(attr.raiseSkeletonSquares)
         );
 
-        // TODO: you stop here
-        // play - addAttackSquare
-        // create constructor for squares, e. g. - Square({tileName, x, y, game, options})
+        squares.forEach(square => {
+            const x = square.x;
+            const y = square.y;
+
+            squaresMap[y][x].push(square);
+        });
+
+        squaresMap.forEach(line => line.forEach(item => item.length >= 2 && model.createMultiActionSquare(item)));
+    }
+
+    createMultiActionSquare(list) {
+        const model = this;
+        const render = model.get(attr.render);
+
+        // remove from ui
+        list.forEach(item => render.removeChild('ui', item.sprite));
+
+        const squareSize = render.get('squareSize');
+        const sprite = PIXI.Sprite.fromFrame('well');
+        const {x, y} = list[0];
+
+        sprite.x = x * squareSize;
+        sprite.y = y * squareSize;
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+
+        sprite.on('pointertap', () => {
+            render.removeChild('ui', sprite);
+
+            const graphics = new PIXI.Graphics();
+            const listLength = list.length;
+
+            graphics.x = squareSize * (x - listLength / 2 + 0.5);
+            graphics.y = squareSize * y;
+
+            graphics.beginFill(0x000000, 1);
+            graphics.drawRect(0, 0, listLength * squareSize, squareSize);
+
+            graphics.interactive = true;
+
+            list.forEach((item, ii) => {
+                Object.assign(item.sprite, {
+                    y: 0,
+                    x: ii * squareSize
+                });
+                graphics.addChild(item.sprite);
+            });
+
+            render.addChild('ui', graphics);
+
+            model.get(attr.multiActionSquares).push({sprite: graphics, x, y, type: 'multi-action'});
+        });
+
+        render.addChild('ui', sprite);
+
+        model.get(attr.multiActionSquares).push({sprite, x, y, type: 'multi-action'});
     }
 
     destroy() {

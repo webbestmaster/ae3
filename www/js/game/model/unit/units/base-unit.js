@@ -330,7 +330,7 @@ class Unit extends BaseModel {
         unit.addMoveSquares(availablePath);
         unit.addAttackSquares(availableAttack);
 
-        game.collectDoubleActionSquares();
+        game.collectMultiActionSquares();
 
         // TODO: find squares with double action, for example - raise skeleton and move
         // and create square to select needed action
