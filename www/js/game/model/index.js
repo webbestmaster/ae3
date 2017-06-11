@@ -656,23 +656,36 @@ export class GameModel extends BaseModel {
         sprite.buttonMode = true;
 
         sprite.on('pointertap', () => {
-            render.removeChild('ui', sprite);
-
+            // render.removeChild('ui', sprite);
+            const padding = squareSize / 6;
             const graphics = new PIXI.Graphics();
+
+            // add close button
+            const closeSprite = PIXI.Sprite.fromFrame('well');
+
+            closeSprite.interactive = true;
+            closeSprite.buttonMode = true;
+            closeSprite.on('pointertap', () => {
+                remove(list, {sprite: closeSprite});
+                render.removeChild('ui', graphics);
+            });
+
+            list.push({sprite: closeSprite});
+
             const listLength = list.length;
 
-            graphics.x = squareSize * (x - listLength / 2 + 0.5);
-            graphics.y = squareSize * y;
+            graphics.x = squareSize * (x - listLength / 2 + 0.5) - padding;
+            graphics.y = squareSize * y - padding;
 
-            graphics.beginFill(0x000000, 1);
-            graphics.drawRect(0, 0, listLength * squareSize, squareSize);
+            graphics.beginFill(0xf2f2f2, 1);
+            graphics.drawRect(0, 0, listLength * squareSize + padding * 2, squareSize + padding * 2);
 
             graphics.interactive = true;
 
             list.forEach((item, ii) => {
                 Object.assign(item.sprite, {
-                    y: 0,
-                    x: ii * squareSize
+                    y: padding,
+                    x: ii * squareSize + padding
                 });
                 graphics.addChild(item.sprite);
             });
