@@ -113,6 +113,12 @@
             "userOrder": 0
         },
         {
+            "x": 5,
+            "y": 2,
+            "type": "dire-wolf",
+            "userOrder": 0
+        },
+        {
             "x": 0,
             "y": 1,
             "type": "golem",
@@ -167,9 +173,21 @@
             "userOrder": 0
         },
         {
+            "x": 3,
+            "y": 4,
+            "type": "soldier",
+            "userOrder": 1
+        },
+        {
             "x": 4,
             "y": 4,
             "type": "soldier",
+            "userOrder": 1
+        },
+        {
+            "x": 5,
+            "y": 4,
+            "type": "dire-wolf",
             "userOrder": 1
         }
     ],

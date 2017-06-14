@@ -366,7 +366,8 @@ export class GameModel extends BaseModel {
             x: unitData.x,
             y: unitData.y,
             ownerPublicId: userData.publicId,
-            team: userData.team
+            team: userData.team,
+            poisonedCounter: unitData.poisonedCounter || 0
             // userOrder: unitData.userOrder
         };
 

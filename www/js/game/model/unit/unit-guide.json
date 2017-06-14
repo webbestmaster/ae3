@@ -79,7 +79,7 @@
             "move": 5,
             "modelName": "DireWolfModel",
             "langKey": "dire-wolf",
-            "poisonPeriod": 2,
+            "poisonAttack": 2,
             "cost": 600
         },
         "golem": {

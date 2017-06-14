@@ -24,8 +24,10 @@ const attr = {
     isActing: 'isActing',
     isMoved: 'isMoved',
     isFinished: 'isFinished',
+    poisonedCounter: 'poisonedCounter',
     sprite: {
-        health: 'sprite-health'
+        health: 'sprite-health',
+        poison: 'sprite-poison'
     }
 };
 
@@ -33,12 +35,13 @@ const defaultValues = {
     level: 0,
     health: 100,
     isMoved: false,
-    isActing: false
+    isActing: false,
+    poisonedCounter: 0
 };
 
 class Unit extends BaseModel {
     constructor(data) {
-        super(Object.assign({}, data, defaultValues));
+        super(Object.assign({}, defaultValues, data));
 
         const unit = this;
         const {x, y} = data;
@@ -52,12 +55,39 @@ class Unit extends BaseModel {
         render.addChild('units', container);
         unit.set(attr.container, container);
 
-
         unit.initializeMainSprite();
         unit.initializeHealth();
+        unit.initializePoison();
+        unit.setPoisonVisual(unit.get(attr.poisonedCounter) > 0);
 
         unit.startListening();
         unit.putTo(x, y);
+    }
+
+    initializePoison() {
+        const unit = this;
+        const sprite = PIXI.Sprite.fromFrame('under-poison');
+        const game = unit.get(attr.game);
+        const render = game.get('render');
+        const squareSize = render.get('squareSize');
+
+        sprite.anchor.set(1, 0);
+        sprite.x = squareSize;
+
+        unit.set(attr.sprite.poison, sprite);
+    }
+
+    setPoisonVisual(isPoisoned) {
+        const unit = this;
+        const container = unit.get(attr.container);
+        const poisonSprite = unit.get(attr.sprite.poison);
+
+        if (isPoisoned) {
+            container.addChild(poisonSprite);
+            return;
+        }
+
+        container.removeChild(poisonSprite);
     }
 
     initializeMainSprite() {
@@ -99,9 +129,12 @@ class Unit extends BaseModel {
         mainSprite.on('pointertap', () => unit.onClick());
 
         unit.listenTo(game, 'currentUserPublicId', () => {
+            const poisonedCounter = Math.max(unit.get(attr.poisonedCounter) - 1, 0);
+
             unit.set({
                 [attr.isMoved]: false,
-                [attr.isFinished]: false
+                [attr.isFinished]: false,
+                [attr.poisonedCounter]: poisonedCounter
             });
         });
 
@@ -123,6 +156,8 @@ class Unit extends BaseModel {
             });
             unit.destroy();
         });
+
+        unit.onChange(attr.poisonedCounter, newValue => unit.setPoisonVisual(newValue > 0));
     }
 
     move(x, y) {
@@ -764,18 +799,23 @@ class Unit extends BaseModel {
 // helpers
 
 function countBattle(attacker, defender) {
+    const attackerUnitData = unitGuide.type[attacker.get(attr.type)];
+    const defenderUnitData = unitGuide.type[defender.get(attr.type)];
+
     const attackerResult = {
         attack: null,
         health: attacker.get(attr.health),
         x: attacker.get('x'),
-        y: attacker.get('y')
+        y: attacker.get('y'),
+        poisonedCounter: attacker.get(attr.poisonedCounter)
     };
 
     const defenderResult = {
         attack: null,
         health: defender.get(attr.health),
         x: defender.get('x'),
-        y: defender.get('y')
+        y: defender.get('y'),
+        poisonedCounter: defender.get(attr.poisonedCounter)
     };
 
     const minAttack = 1;
@@ -829,7 +869,8 @@ function countBattle(attacker, defender) {
             }),
             defender: Object.assign(defenderResult, {
                 attack: defenderAttack,
-                health: defenderHealth
+                health: defenderHealth,
+                poisonedCounter: Math.max(defenderResult.poisonedCounter, attackerUnitData.poisonAttack || 0)
             })
         };
     }
@@ -837,11 +878,13 @@ function countBattle(attacker, defender) {
     return {
         attacker: Object.assign(attackerResult, {
             attack: attackerAttack,
-            health: attackerHealth
+            health: attackerHealth,
+            poisonedCounter: Math.max(attackerResult.poisonedCounter, defenderUnitData.poisonAttack || 0)
         }),
         defender: Object.assign(defenderResult, {
             attack: defenderAttack,
-            health: defenderHealth
+            health: defenderHealth,
+            poisonedCounter: Math.max(defenderResult.poisonedCounter, attackerUnitData.poisonAttack || 0)
         })
     };
 }
