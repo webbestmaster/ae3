@@ -41,6 +41,7 @@ const attr = {
     fixBuildingSquares: 'fixBuildingSquares',
     occupyBuildingSquares: 'occupyBuildingSquares',
     raiseSkeletonSquares: 'raiseSkeletonSquares',
+    destroyBuildingSquares: 'destroyBuildingSquares',
     multiActionSquares: 'multiActionSquares',
 
     model: {
@@ -88,6 +89,7 @@ export class GameModel extends BaseModel {
                     [attr.occupyBuildingSquares]: [],
                     [attr.raiseSkeletonSquares]: [],
                     [attr.attackSquares]: [],
+                    [attr.destroyBuildingSquares]: [],
                     [attr.multiActionSquares]: [],
                     // [attr.turnCounter]: 0,
                     [attr.render]: render,
@@ -180,6 +182,10 @@ export class GameModel extends BaseModel {
             return null;
         }
 
+        if (type === 'destroy-building') {
+            return model.doActionDestroyBuilding(action);
+        }
+
         return Promise.resolve();
     }
 
@@ -209,7 +215,7 @@ export class GameModel extends BaseModel {
         unitAttacker.set('isActing', true);
         unitDefender.set('isActing', true);
 
-        unitAttacker
+        return unitAttacker
             .animateAttack(unitDefender)
             .then(() => {
                 unitDefender.set('health', defender.health);
@@ -227,6 +233,22 @@ export class GameModel extends BaseModel {
                 unitAttacker.set('isActing', false);
                 unitAttacker.set('isFinished', true);
                 unitAttacker.set(attacker);
+            });
+    }
+
+    doActionDestroyBuilding({attacker, building}) {
+        const model = this;
+        const unitAttacker = model.getUnitByXY(attacker.x, attacker.y);
+        const buildingToDestroy = model.getBuildingByXY(building.x, building.y);
+
+        unitAttacker.set('isActing', true);
+
+        return unitAttacker
+            .animateAttack(buildingToDestroy)
+            .then(() => {
+                unitAttacker.set('isActing', false);
+                unitAttacker.set('isFinished', true);
+                buildingToDestroy.gameDestroy();
             });
     }
 
@@ -453,6 +475,31 @@ export class GameModel extends BaseModel {
         Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
     }
 
+    addDestroyBuildingSquare(x, y, options = {}) {
+        const model = this;
+        const render = model.get(attr.render);
+        const squareSize = render.get('squareSize');
+
+        const sprite = new PIXI.extras.AnimatedSprite(
+            [0, 1, 2].map(ii => PIXI.Texture.fromFrame('action-attack-' + ii))
+        );
+
+        sprite.x = squareSize * (x - 0.5);
+        sprite.y = squareSize * (y - 0.5);
+        render.addChild('ui', sprite);
+
+        model.get(attr.destroyBuildingSquares).push({sprite, x, y, type: 'destroy-building'});
+
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+        sprite.animationSpeed = renderConfig.timing.shotAnimatedSpriteSpeed;
+        sprite.play();
+
+        const {events = {}} = options;
+
+        Object.keys(events).forEach(eventName => sprite.on(eventName, events[eventName]));
+    }
+
     addShopSquare(x, y, options = {}) {
         const model = this;
         const render = model.get(attr.render);
@@ -542,6 +589,7 @@ export class GameModel extends BaseModel {
         model.clearFixBuildingSquares();
         model.clearOccupyBuildingSquares();
         model.clearRaiseSkeletonSquares();
+        model.clearDestroyBuildingSquares();
         model.clearMultiActionSquares();
     }
 
@@ -615,6 +663,16 @@ export class GameModel extends BaseModel {
         model.set(attr.multiActionSquares, []);
     }
 
+    clearDestroyBuildingSquares() {
+        const model = this;
+        const render = model.get(attr.render);
+
+        const squares = model.get(attr.destroyBuildingSquares);
+
+        squares.forEach(({sprite}) => render.removeChild('ui', sprite));
+        model.set(attr.destroyBuildingSquares, []);
+    }
+
     collectMultiActionSquares() {
         const model = this;
         const landscape = model.get(attr.model.landscape);
@@ -626,7 +684,8 @@ export class GameModel extends BaseModel {
             model.get(attr.openShopSquares),
             model.get(attr.fixBuildingSquares),
             model.get(attr.occupyBuildingSquares),
-            model.get(attr.raiseSkeletonSquares)
+            model.get(attr.raiseSkeletonSquares),
+            model.get(attr.destroyBuildingSquares),
         );
 
         squares.forEach(square => {

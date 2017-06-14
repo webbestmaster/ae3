@@ -67,6 +67,20 @@ class Building extends BaseModel {
         model.set(attr.type, 'farm');
     }
 
+    gameDestroy() {
+        const building = this;
+
+        building.set({
+            [attr.ownerPublicId]: null,
+            [attr.color]: null,
+            [attr.type]: 'farm-destroyed'
+        });
+
+        const sprite = building.get(attr.sprite);
+
+        sprite.texture = PIXI.Texture.fromFrame('farm-destroyed');
+    }
+
     onClick() {
         const model = this;
         const myPublicId = getMyPublicId();

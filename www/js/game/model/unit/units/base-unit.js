@@ -160,6 +160,31 @@ class Unit extends BaseModel {
             .then(() => game.get('turnMaster').fetchTurns());
     }
 
+    destroyBuilding(x, y) {
+        const unit = this;
+        const game = unit.get(attr.game);
+
+        game.clearAllSquares();
+
+        return api.post.room
+            .pushTurn(null, {
+                list: [
+                    {
+                        type: 'destroy-building',
+                        attacker: {
+                            x: unit.get('x'),
+                            y: unit.get('y')
+                        },
+                        building: {
+                            x,
+                            y
+                        }
+                    }
+                ]
+            })
+            .then(() => game.get('turnMaster').fetchTurns());
+    }
+
     getAvailableDamage(health, enemy) {
         const unit = this;
         const availableAttack = unit.getAvailableAttack();
@@ -296,6 +321,8 @@ class Unit extends BaseModel {
         const availableFixBuilding = unit.getAvailableFixBuilding();
         const availableOccupyBuilding = unit.getAvailableOccupyBuilding();
         const availableRaiseSkeleton = unit.getAvailableRaiseSkeleton();
+        const availableDestroyBuilding = unit.getAvailableDestroyBuilding();
+
         const wrongUnit = game.findWrongUnit();
 
         if (wrongUnit) {
@@ -319,7 +346,8 @@ class Unit extends BaseModel {
             availableAttack.length +
             availableFixBuilding.length +
             availableOccupyBuilding.length +
-            availableRaiseSkeleton.length === 0) {
+            availableRaiseSkeleton.length +
+            availableDestroyBuilding.length === 0) {
             unit.set(attr.isFinished, true);
             return;
         }
@@ -329,6 +357,7 @@ class Unit extends BaseModel {
         unit.addRaiseSkeletonSquares(availableRaiseSkeleton);
         unit.addMoveSquares(availablePath);
         unit.addAttackSquares(availableAttack);
+        unit.addDestroyBuildingSquares(availableDestroyBuilding);
 
         game.collectMultiActionSquares();
 
@@ -415,6 +444,46 @@ class Unit extends BaseModel {
                 !game.getUnitByXY(squareX, squareY) &&
                 game.getGraveByXY(squareX, squareY)
             );
+    }
+
+    getAvailableDestroyBuilding() {
+        const unit = this;
+        const unitData = unitGuide.type[unit.get(attr.type)];
+        const {destroyBuildingList = []} = unitData;
+
+        if (destroyBuildingList.length === 0) {
+            return [];
+        }
+
+        const game = unit.get(attr.game);
+
+
+        const unitX = unit.get('x');
+        const unitY = unit.get('y');
+        const team = unit.get('team');
+        const landscape = game.get('model-landscape');
+        const filledMap = landscape.getAttackFilledMap();
+
+        const attackSquares = getPath(
+            unitX,
+            unitY,
+            unitData.attackRange,
+            filledMap
+        );
+
+        return attackSquares.filter(([x, y]) => {
+            const building = game.getBuildingByXY(x, y);
+
+            if (!building) {
+                return false;
+            }
+
+            if (destroyBuildingList.indexOf(building.get('type')) === -1) {
+                return false;
+            }
+
+            return building.get(attr.ownerPublicId) !== unit.get(attr.ownerPublicId);
+        });
     }
 
     addShopSquare() {
@@ -558,7 +627,7 @@ class Unit extends BaseModel {
         return getPath(
             unit.get('x'),
             unit.get('y'),
-            unitGuide.type[unit.get('type')].move,
+            unitGuide.type[unit.get(attr.type)].move,
             pathMap
         );
     }
@@ -576,7 +645,7 @@ class Unit extends BaseModel {
         return getPath(
             unitX,
             unitY,
-            unitGuide.type[unit.get('type')].attackRange,
+            unitGuide.type[unit.get(attr.type)].attackRange,
             filledMap
         ).filter(([squareX, squareY]) => {
             if (squareX === unitX && squareY === unitY) {
@@ -596,10 +665,10 @@ class Unit extends BaseModel {
     addMoveSquares(availablePath) {
         const unit = this;
         const game = unit.get(attr.game);
-        const render = game.get('render');
-        const squareSize = render.get('squareSize');
+        // const render = game.get('render');
+        // const squareSize = render.get('squareSize');
 
-        unit.clearMoveSquares();
+        // unit.clearMoveSquares();
 
         availablePath.forEach(([x, y]) => {
             game.addMoveSquare(
@@ -617,10 +686,10 @@ class Unit extends BaseModel {
     addAttackSquares(availableAttack) {
         const unit = this;
         const game = unit.get(attr.game);
-        const render = game.get('render');
-        const squareSize = render.get('squareSize');
+        // const render = game.get('render');
+        // const squareSize = render.get('squareSize');
 
-        unit.clearAttackSquares();
+        // unit.clearAttackSquares();
 
         availableAttack.forEach(([x, y]) => {
             game.addAttackSquare(
@@ -635,19 +704,40 @@ class Unit extends BaseModel {
         });
     }
 
-    clearMoveSquares() {
+    addDestroyBuildingSquares(availableDestroyBuilding) {
         const unit = this;
         const game = unit.get(attr.game);
+        // const render = game.get('render');
+        // const squareSize = render.get('squareSize');
 
-        game.clearMoveSquares();
+        availableDestroyBuilding.forEach(([x, y]) => {
+            game.addDestroyBuildingSquare(
+                x,
+                y,
+                {
+                    events: {
+                        pointertap: () => unit.destroyBuilding(x, y)
+                    }
+                }
+            );
+        });
     }
 
-    clearAttackSquares() {
-        const unit = this;
-        const game = unit.get(attr.game);
+    /*
+     clearMoveSquares() {
+     const unit = this;
+     const game = unit.get(attr.game);
 
-        game.clearAttackSquares();
-    }
+     game.clearMoveSquares();
+     }
+
+     clearAttackSquares() {
+     const unit = this;
+     const game = unit.get(attr.game);
+
+     game.clearAttackSquares();
+     }
+     */
 
     isEnemy(unit) {
         return this.get(attr.team) !== unit.get(attr.team);

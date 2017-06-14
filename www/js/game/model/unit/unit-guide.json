@@ -105,8 +105,7 @@
             "modelName": "CatapultModel",
             "langKey": "catapult",
             "cost": 700,
-            "canNotActionAfterMove": true,
-            "canDestroyBuilding": true
+            "destroyBuildingList": ["farm"]
         },
         "dragon": {
             "attack": {
