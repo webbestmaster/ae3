@@ -44,6 +44,8 @@ const attr = {
     destroyBuildingSquares: 'destroyBuildingSquares',
     multiActionSquares: 'multiActionSquares',
 
+    checkAura: 'checkAura',
+
     model: {
         buildings: 'model-buildings',
         landscape: 'model-landscape',
@@ -130,14 +132,16 @@ export class GameModel extends BaseModel {
         const promiseMaster = model.get(attr.promiseMaster);
 
         turns.forEach(({list}) =>
-            list.forEach(action =>
-                promiseMaster.push(() => model.doAction(action))
-            ));
+            list.forEach(action => {
+                promiseMaster.push(() => model.doAction(action));
+                promiseMaster.push(() => model.trigger(attr.checkAura));
+            }));
     }
 
     doAction(action) {
         const model = this;
         const {type} = action;
+        const resolved = Promise.resolve();
 
         if (type === 'move') {
             return model.doActionMove(action);
@@ -152,17 +156,17 @@ export class GameModel extends BaseModel {
             const newUnit = model.getUnitByXY(action.unitData.x, action.unitData.y);
 
             newUnit.onClick();
-            return null;
+            return resolved;
         }
 
         if (type === 'fix-building') {
             model.fixBuilding(action.x, action.y);
-            return null;
+            return resolved;
         }
 
         if (type === 'occupy-building') {
             model.occupyBuilding(action.x, action.y);
-            return null;
+            return resolved;
         }
 
         if (type === 'raise-skeleton') {
@@ -179,14 +183,14 @@ export class GameModel extends BaseModel {
                 type: 'skeleton',
                 userOrder
             });
-            return null;
+            return resolved;
         }
 
         if (type === 'destroy-building') {
             return model.doActionDestroyBuilding(action);
         }
 
-        return Promise.resolve();
+        return resolved;
     }
 
     doActionMove({steps}) {
@@ -374,6 +378,8 @@ export class GameModel extends BaseModel {
         const unit = createUnit(unitProps);
 
         model.get(attr.model.units).push(unit);
+
+        model.trigger(attr.checkAura);
     }
 
     removeUnit(unit) {
@@ -383,6 +389,8 @@ export class GameModel extends BaseModel {
 
         remove(units, unitItem => unitItem === unit);
         render.removeChild('units', unit.get('container'));
+
+        model.trigger(attr.checkAura);
     }
 
     addGrave(graveData) {

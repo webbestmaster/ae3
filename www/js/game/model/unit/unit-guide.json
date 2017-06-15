@@ -61,7 +61,7 @@
                 "max": 40
             },
             "attackRange": 1,
-            "auraRange": 3,
+            "auraRange": 2,
             "defence": 10,
             "move": 4,
             "modelName": "WispModel",

@@ -34,7 +34,7 @@ class ShopView extends BaseView {
 
         view.props.setShopVisible(false);
 
-        Promise
+        return Promise
             .all([
                 api.post.room.setUserState(null, {money: money - unitData.cost}),
                 api.post.room.pushTurn(null, {
@@ -51,10 +51,10 @@ class ShopView extends BaseView {
                     ]
                 })
             ])
-            .then(() => {
-                game.fetchData();
-                game.get('turnMaster').fetchTurns();
-            });
+            .then(() => Promise.all([
+                game.fetchData(),
+                game.get('turnMaster').fetchTurns()
+            ]));
     }
 
     render() {

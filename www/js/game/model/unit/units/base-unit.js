@@ -25,18 +25,25 @@ const attr = {
     isMoved: 'isMoved',
     isFinished: 'isFinished',
     poisonedCounter: 'poisonedCounter',
+    underAuraList: 'underAuraList',
     sprite: {
         health: 'sprite-health',
-        poison: 'sprite-poison'
+        poison: 'sprite-poison',
+        aura: {
+            wisp: 'sprite-aura-wisp'
+        }
     }
 };
+
+const availableAuraList = ['wisp'];
 
 const defaultValues = {
     level: 0,
     health: 100,
     isMoved: false,
     isActing: false,
-    poisonedCounter: 0
+    poisonedCounter: 0,
+    underAuraList: []
 };
 
 class Unit extends BaseModel {
@@ -58,6 +65,7 @@ class Unit extends BaseModel {
         unit.initializeMainSprite();
         unit.initializeHealth();
         unit.initializePoison();
+        unit.initializeAuraWisp();
         unit.setPoisonVisual(unit.get(attr.poisonedCounter) > 0);
 
         unit.startListening();
@@ -77,6 +85,19 @@ class Unit extends BaseModel {
         unit.set(attr.sprite.poison, sprite);
     }
 
+    initializeAuraWisp() {
+        const unit = this;
+        const sprite = PIXI.Sprite.fromFrame('under-wisp-aura');
+        const game = unit.get(attr.game);
+        const render = game.get('render');
+        const squareSize = render.get('squareSize');
+
+        sprite.anchor.set(0.5, 0);
+        sprite.x = squareSize / 2;
+
+        unit.set(attr.sprite.aura.wisp, sprite);
+    }
+
     setPoisonVisual(isPoisoned) {
         const unit = this;
         const container = unit.get(attr.container);
@@ -88,6 +109,19 @@ class Unit extends BaseModel {
         }
 
         container.removeChild(poisonSprite);
+    }
+
+    setWispAuraVisual(isUnderWispAura) {
+        const unit = this;
+        const container = unit.get(attr.container);
+        const wispAuraSprite = unit.get(attr.sprite.aura.wisp);
+
+        if (isUnderWispAura) {
+            container.addChild(wispAuraSprite);
+            return;
+        }
+
+        container.removeChild(wispAuraSprite);
     }
 
     initializeMainSprite() {
@@ -158,6 +192,73 @@ class Unit extends BaseModel {
         });
 
         unit.onChange(attr.poisonedCounter, newValue => unit.setPoisonVisual(newValue > 0));
+
+        unit.listenTo(game, 'checkAura', () => unit.checkAura());
+        unit.onChange(attr.underAuraList, currentAuraList => availableAuraList.forEach(auraType =>
+            unit.drawAuraType(auraType, currentAuraList.indexOf(auraType) !== -1)));
+    }
+
+    checkAura() {
+        availableAuraList.forEach(unitAuraType => {
+            const unit = this;
+            const aura = unit.getAuraArea(unitAuraType, unit.get('team'));
+
+            const unitX = unit.get('x');
+            const unitY = unit.get('y');
+            const hasAura = aura.some(([x, y]) => unitX === x && unitY === y);
+
+            unit.setAura(unitAuraType, hasAura);
+        });
+    }
+
+    getAuraArea(neededUnitType, team) {
+        const unit = this;
+        const unitType = unit.get(attr.type);
+
+        // do not aura for own self
+        if (unitType === neededUnitType) {
+            return [];
+        }
+
+        const game = unit.get(attr.game);
+        const neededUnits = game.get('model-units')
+            .filter(unitItem => unitItem.get(attr.team) === team && unitItem.get(attr.type) === neededUnitType);
+        const landscape = game.get('model-landscape');
+        const attackFiledMap = landscape.getAttackFilledMap();
+        const area = [];
+
+        neededUnits.forEach(unitWithAura => Reflect.apply(area.push, area, getPath(
+            unitWithAura.get('x'),
+            unitWithAura.get('y'),
+            unitGuide.type[neededUnitType].auraRange,
+            attackFiledMap
+        )));
+
+        return area;
+    }
+
+    setAura(auraType, isExist) {
+        const unit = this;
+        const underAuraList = unit.get(attr.underAuraList);
+        const index = underAuraList.indexOf(auraType);
+
+        if (isExist) {
+            if (index === -1) {
+                underAuraList.push(auraType);
+            }
+        } else if (index !== -1) {
+            underAuraList.splice(index, 1);
+        }
+
+        unit.set(attr.underAuraList, JSON.parse(JSON.stringify(underAuraList)));
+    }
+
+    drawAuraType(auraType, isExist) {
+        const unit = this;
+
+        if (auraType === 'wisp') {
+            unit.setWispAuraVisual(isExist);
+        }
     }
 
     move(x, y) {
