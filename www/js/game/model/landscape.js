@@ -9,7 +9,9 @@ const attr = {
     width: 'width',
     height: 'height',
     filledMap: 'filledMap',
-    attackFilledMap: 'attackFilledMap'
+    attackFilledMap: 'attackFilledMap',
+    flyFilledMap: 'flyFilledMap',
+    flowFilledMap: 'flowFilledMap'
 };
 
 class Landscape extends BaseModel {
@@ -29,6 +31,8 @@ class Landscape extends BaseModel {
         });
         model.createFilledMap(landscape);
         model.createAttackFilledMap(landscape);
+        model.createFlyFilledMap(landscape);
+        model.createFlowFilledMap(landscape);
     }
 
     drawLandscape(landscape) {
@@ -203,6 +207,7 @@ class Landscape extends BaseModel {
         model.set(attr.filledMap, filledMap);
     }
 
+    // return like [[#,#,#], [#,#,#]]
     getFilledMap() {
         return JSON.parse(JSON.stringify(this.get(attr.filledMap)));
     }
@@ -218,8 +223,46 @@ class Landscape extends BaseModel {
         model.set(attr.attackFilledMap, filledMap);
     }
 
+    // return like [[1,1,1], [1,1,1]]
     getAttackFilledMap() {
         return JSON.parse(JSON.stringify(this.get(attr.attackFilledMap)));
+    }
+
+    createFlyFilledMap(landscape) {
+        const model = this;
+        const width = landscape[0].length;
+        const height = landscape.length;
+
+        const line = new Array(width).fill(1);
+        const filledMap = new Array(height).fill(line);
+
+        model.set(attr.flyFilledMap, filledMap);
+    }
+
+    getFlyFilledMap() {
+        return JSON.parse(JSON.stringify(this.get(attr.flyFilledMap)));
+    }
+
+    createFlowFilledMap(landscape) {
+        const model = this;
+        const waterPathReduce = 1;
+        const filledMap = landscape.map(line => {
+            return line.map(cell => {
+                const type = cell.split('-')[0];
+
+                if (type === 'water') {
+                    return waterPathReduce;
+                }
+
+                return mapGuide.landscape[type].pathReduce;
+            });
+        });
+
+        model.set(attr.flowFilledMap, filledMap);
+    }
+
+    getFlowFilledMap() {
+        return JSON.parse(JSON.stringify(this.get(attr.flowFilledMap)));
     }
 
     hasSquare(x, y) {

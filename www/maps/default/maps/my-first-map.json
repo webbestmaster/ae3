@@ -14,7 +14,13 @@
         ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
         ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
         ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
-        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ]
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["water-0",     "water-0",    "water-0",      "water-0",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ],
+        ["water-0",     "water-1",    "water-1",      "water-1",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ],
+        ["water-0",     "water-0",    "water-0",      "water-2",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ],
+        ["water-0",     "water-0",    "water-0",      "water-2",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ],
+        ["water-0",     "water-0",    "water-0",      "water-2",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ],
+        ["water-0",     "water-0",    "water-0",      "water-0",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ]
     ],
     "buildings": [
         {
@@ -89,6 +95,12 @@
             "userOrder": 0
         },
         {
+            "x": 2,
+            "y": 9,
+            "type": "elemental",
+            "userOrder": 0
+        },
+        {
             "x": 3,
             "y": 0,
             "type": "sorceress",
@@ -133,6 +145,12 @@
         {
             "x": 2,
             "y": 1,
+            "type": "dragon",
+            "userOrder": 0
+        },
+        {
+            "x": 7,
+            "y": 7,
             "type": "dragon",
             "userOrder": 0
         },

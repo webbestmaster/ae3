@@ -745,8 +745,8 @@ class Unit extends BaseModel {
     getAvailablePath() {
         const unit = this;
         const game = unit.get(attr.game);
-        const landscape = game.get('model-landscape');
-        const pathMap = landscape.getPathMap();
+        // const landscape = game.get('model-landscape');
+        const pathMap = unit.getPathMap();
         const units = game.get('model-units');
 
         if (unit.get(attr.isMoved)) {
@@ -766,6 +766,23 @@ class Unit extends BaseModel {
             unitGuide.type[unit.get(attr.type)].move,
             pathMap
         );
+    }
+
+    getPathMap() {
+        const unit = this;
+        const game = unit.get(attr.game);
+        const landscape = game.get('model-landscape');
+        const {moveType} = unitGuide.type[unit.get(attr.type)];
+
+        if (moveType === 'fly') {
+            return landscape.getFlyFilledMap();
+        }
+
+        if (moveType === 'flow') {
+            return landscape.getFlowFilledMap();
+        }
+
+        return landscape.getPathMap();
     }
 
     getAvailableAttack() {
