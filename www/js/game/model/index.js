@@ -12,6 +12,7 @@ import {isEqual, find, findLast, pick, remove} from 'lodash';
 import {PromiseMaster} from './../../lib/promise-master';
 import {store} from './../../index';
 import * as gameAction from './../../game/action';
+import {DisableScreen} from './../disable-screen';
 const PIXI = require('pixi.js');
 const renderConfig = require('./../render/config.json');
 
@@ -45,6 +46,8 @@ const attr = {
     multiActionSquares: 'multiActionSquares',
 
     checkAura: 'checkAura',
+
+    disableScreen: 'disableScreen',
 
     model: {
         buildings: 'model-buildings',
@@ -95,7 +98,8 @@ export class GameModel extends BaseModel {
                     [attr.multiActionSquares]: [],
                     // [attr.turnCounter]: 0,
                     [attr.render]: render,
-                    [attr.promiseMaster]: new PromiseMaster()
+                    [attr.promiseMaster]: new PromiseMaster(),
+                    [attr.disableScreen]: new DisableScreen({game: model})
                 });
                 render.set({
                     mapWidth: landscape[0].length,
@@ -129,13 +133,18 @@ export class GameModel extends BaseModel {
 
     onNewTurns(turns) {
         const model = this;
+        const disableScreen = model.get(attr.disableScreen);
         const promiseMaster = model.get(attr.promiseMaster);
+
+        disableScreen.increase();
 
         turns.forEach(({list}) =>
             list.forEach(action => {
                 promiseMaster.push(() => model.doAction(action));
                 promiseMaster.push(() => model.trigger(attr.checkAura));
             }));
+
+        promiseMaster.push(() => disableScreen.decrease());
     }
 
     doAction(action) {
@@ -283,7 +292,21 @@ export class GameModel extends BaseModel {
             return !wrongUnit;
         });
 
+        console.log('---> wrongUnit', wrongUnit);
+
         return wrongUnit;
+    }
+
+    leaveTurn() {
+        const model = this;
+        const wrongUnit = model.findWrongUnit();
+
+        if (wrongUnit) {
+            wrongUnit.onClick();
+            return Promise.resolve();
+        }
+
+        return api.get.room.leaveTurn().then(() => model.fetchData());
     }
 
     startListening() {
@@ -774,6 +797,7 @@ export class GameModel extends BaseModel {
         model.get(attr.render).destroy();
         model.get(attr.turnMaster).destroy();
         model.get(attr.proc).destroy();
+        model.get(attr.disableScreen).destroy();
         super.destroy();
     }
 }

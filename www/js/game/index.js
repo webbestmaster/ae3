@@ -116,7 +116,7 @@ class GameView extends BaseView {
                 label="Leave Turn"
                 primary={true}
                 keyboardFocused={true}
-                onTouchTap={() => api.get.room.leaveTurn().then(() => view.state.model.fetchData())}
+                onTouchTap={() => view.state.model.leaveTurn()}
             />
             <Dialog
                 title={view.state.changeTurnPopup.title}
