@@ -8,13 +8,13 @@
             "attackRange": 1,
             "defence": 5,
             "move": 4,
-            "____modelName": "SoldierModel",
             "langKey": "soldier",
+            "cost": 150,
+
             "canFixBuilding": true,
             "occupyBuildingList": [
                 "farm"
-            ],
-            "cost": 150
+            ]
         },
         "archer": {
             "attack": {
@@ -24,10 +24,10 @@
             "attackRange": 2,
             "defence": 5,
             "move": 4,
-            "modelName": "ArcherModel",
             "langKey": "archer",
-            "bonusAtkAgainstFly": 30,
-            "cost": 250
+            "cost": 250,
+
+            "bonusAtkAgainstFly": 30
         },
         "elemental": {
             "attack": {
@@ -37,10 +37,10 @@
             "attackRange": 1,
             "defence": 10,
             "move": 4,
-            "modelName": "ElementalModel",
             "langKey": "elemental",
-            "moveType": "flow",
-            "cost": 300
+            "cost": 300,
+
+            "moveType": "flow"
         },
         "sorceress": {
             "attack": {
@@ -48,12 +48,12 @@
                 "max": 45
             },
             "attackRange": 1,
-            "raiseSkeletonRange": 1,
             "defence": 5,
             "move": 4,
-            "modelName": "SorceressModel",
             "langKey": "sorceress",
-            "cost": 400
+            "cost": 400,
+
+            "raiseSkeletonRange": 1
         },
         "wisp": {
             "attack": {
@@ -61,13 +61,13 @@
                 "max": 40
             },
             "attackRange": 1,
-            "auraRange": 2,
             "defence": 10,
             "move": 4,
-            "modelName": "WispModel",
             "langKey": "wisp",
-            "bonusAtkAgainstSkeleton": 30,
-            "cost": 500
+            "cost": 500,
+
+            "auraRange": 2,
+            "bonusAtkAgainstSkeleton": 30
         },
         "dire-wolf": {
             "attack": {
@@ -77,10 +77,10 @@
             "attackRange": 1,
             "defence": 15,
             "move": 5,
-            "modelName": "DireWolfModel",
             "langKey": "dire-wolf",
-            "poisonAttack": 2,
-            "cost": 600
+            "cost": 600,
+
+            "poisonAttack": 2
         },
         "golem": {
             "attack": {
@@ -90,7 +90,6 @@
             "attackRange": 1,
             "defence": 30,
             "move": 4,
-            "modelName": "GolemModel",
             "langKey": "golem",
             "cost": 600
         },
@@ -102,9 +101,9 @@
             "attackRange": 4,
             "defence": 10,
             "move": 3,
-            "modelName": "CatapultModel",
             "langKey": "catapult",
             "cost": 700,
+
             "destroyBuildingList": ["farm"]
         },
         "dragon": {
@@ -115,10 +114,10 @@
             "attackRange": 1,
             "defence": 25,
             "move": 6,
-            "modelName": "DragonModel",
             "langKey": "dragon",
-            "moveType": "fly",
-            "cost": 1000
+            "cost": 1000,
+
+            "moveType": "fly"
         },
         "skeleton": {
             "attack": {
@@ -128,11 +127,11 @@
             "attackRange": 1,
             "defence": 2,
             "move": 4,
-            "modelName": "SkeletonModel",
             "langKey": "skeleton",
+            "cost": 0,
+
             "withoutGrave": true,
-            "canNotBeBuy": true,
-            "cost": 0
+            "canNotBeBuy": true
         },
         "crystal": {
             "attack": {
@@ -142,10 +141,10 @@
             "attackRange": 0,
             "defence": 15,
             "move": 3,
-            "modelName": "CrystalModel",
             "langKey": "crystal",
-            "canNotBeBuy": true,
-            "cost": 0
+            "cost": 0,
+
+            "canNotBeBuy": true
         },
         "galamar": {
             "attack": {
@@ -155,15 +154,15 @@
             "attackRange": 1,
             "defence": 20,
             "move": 4,
-            "modelName": "GalamarModel",
             "langKey": "galamar",
-            "canFixBuilding": true,
+            "cost": 200,
+
             "withoutGrave": true,
+            "canFixBuilding": true,
             "occupyBuildingList": [
                 "farm",
                 "castle"
-            ],
-            "cost": 200
+            ]
         },
         "valadorn": {
             "attack": {
@@ -173,15 +172,15 @@
             "attackRange": 1,
             "defence": 20,
             "move": 4,
-            "modelName": "ValadornModel",
             "langKey": "valadorn",
-            "canFixBuilding": true,
+            "cost": 200,
+
             "withoutGrave": true,
+            "canFixBuilding": true,
             "occupyBuildingList": [
                 "farm",
                 "castle"
-            ],
-            "cost": 200
+            ]
         },
         "demon-lord": {
             "attack": {
@@ -191,15 +190,15 @@
             "attackRange": 1,
             "defence": 20,
             "move": 4,
-            "modelName": "DemonLordModel",
             "langKey": "demon-lord",
-            "canFixBuilding": true,
+            "cost": 200,
+
             "withoutGrave": true,
+            "canFixBuilding": true,
             "occupyBuildingList": [
                 "farm",
                 "castle"
-            ],
-            "cost": 200
+            ]
         },
         "saeth": {
             "attack": {
@@ -209,15 +208,15 @@
             "attackRange": 1,
             "defence": 20,
             "move": 4,
-            "modelName": "SaethModel",
             "langKey": "saeth",
-            "canFixBuilding": true,
+            "cost": 200,
+
             "withoutGrave": true,
+            "canFixBuilding": true,
             "occupyBuildingList": [
                 "farm",
                 "castle"
-            ],
-            "cost": 200
+            ]
         },
         "saeth-heavens-fury": {
             "attack": {
@@ -227,9 +226,10 @@
             "attackRange": 15,
             "defence": 45,
             "move": 0,
-            "modelName": "SaethHeavensFuryModel",
             "langKey": "saeth",
-            "canNotBeBuy": true
+
+            "canNotBeBuy": true,
+            "withoutGrave": true
         }
     },
     "other": {

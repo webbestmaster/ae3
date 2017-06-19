@@ -24,11 +24,6 @@ class ShopView extends BaseView {
         const {game} = view.props;
         const shop = game.get('shop');
         const unitData = unitGuide.type[unitType];
-        // TODO: here is should be send to server
-        // decrease players money
-        // action: add new unit
-        // exit from store to move unit
-
         const user = findMe(game.get('users'));
         const {money} = user;
 
@@ -59,17 +54,34 @@ class ShopView extends BaseView {
 
     render() {
         const view = this;
+        const {game} = view.props;
+        const shop = game.get('shop');
+        const user = findMe(game.get('users'));
+        const {money} = user;
 
         return <div>
             <h1>SHOP</h1>
+            {Object.keys(unitGuide.type).map(unitType => {
+                const unitData = unitGuide.type[unitType];
 
-            {Object.keys(unitGuide.type).map(unitType => <div key={unitType}>
-                {JSON.stringify(unitGuide.type[unitType])}
-                <button onClick={() => view.addUnit(unitType)}>
-                    buy unit
-                </button>
-            </div>)}
+                if (unitData.canNotBeBuy) {
+                    return null;
+                }
 
+                const {cost} = unitData;
+
+                if (cost <= money) {
+                    return <div key={unitType}>
+                        {JSON.stringify(unitGuide.type[unitType])}
+                        <button onClick={() => view.addUnit(unitType)}>buy unit</button>
+                    </div>;
+                }
+
+                return <div key={unitType} style={{opacity: 0.5}}>
+                    {JSON.stringify(unitGuide.type[unitType])}
+                    <button>not enough money</button>
+                </div>;
+            })}
         </div>;
     }
 }

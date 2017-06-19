@@ -192,6 +192,10 @@ export class GameModel extends BaseModel {
                 type: 'skeleton',
                 userOrder
             });
+            const newUnit = model.getUnitByXY(graveX, graveY);
+
+            newUnit.set('isFinished', true);
+
             return resolved;
         }
 

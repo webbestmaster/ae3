@@ -6,7 +6,7 @@ import Proc from './../lib/proc';
 // import {Landscape} from './landscape';
 // import {Unit} from './unit/';
 // import {SelectMark} from './ui';
-const PIXI = require('pixi.js');
+// const PIXI = require('pixi.js');
 
 const attr = {
     hash: 'hash',

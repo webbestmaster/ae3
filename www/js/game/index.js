@@ -53,7 +53,7 @@ class GameView extends BaseView {
             state.changeTurnPopup.body = 'Good luck!';
         } else {
             state.changeTurnPopup.title = 'Not your turn!';
-            state.changeTurnPopup.body = 'Good luck!';
+            state.changeTurnPopup.body = 'Wait for other player!';
         }
 
         view.setState(state);
@@ -110,7 +110,9 @@ class GameView extends BaseView {
         return <div>
             <h1>users</h1>
             <hr/>
-            {JSON.stringify(view.props.gameState.state.users)}
+            {view.props.gameState.state.users.map((user, ii) => <div key={ii}>
+                {isItMe(user) ? <h1>{JSON.stringify(user)}</h1> : <p>{JSON.stringify(user)}</p>}
+            </div>)}
             <hr/>
             <FlatButton
                 label="Leave Turn"
@@ -127,7 +129,7 @@ class GameView extends BaseView {
                 {view.state.changeTurnPopup.body}
             </Dialog>
 
-            <h1>{JSON.stringify(view.props.gameState)}</h1>
+            <h1 style={{display: 'none'}}>{JSON.stringify(view.props.gameState)}</h1>
             <div id="canvas-holder"/>
 
             {view.props.shopState.visibleState.isVisible && <ShopView game={view.state.model}/>}

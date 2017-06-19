@@ -183,12 +183,19 @@ class Unit extends BaseModel {
                 return;
             }
 
-            game.addGrave({
-                x: unit.get('x'),
-                y: unit.get('y'),
-                count: unitGuide.other.grave.liveTime
-            });
+            const unitData = unitGuide.type[unit.get(attr.type)];
+            const unitX = unit.get('x');
+            const unitY = unit.get('y');
+
             unit.destroy();
+
+            if (!unitData.withoutGrave) {
+                game.addGrave({
+                    x: unitX,
+                    y: unitY,
+                    count: unitGuide.other.grave.liveTime
+                });
+            }
         });
 
         unit.onChange(attr.poisonedCounter, newValue => unit.setPoisonVisual(newValue > 0));
@@ -329,12 +336,32 @@ class Unit extends BaseModel {
         const attackMin = referenceData.attack.min;
         const attackMax = referenceData.attack.max;
         const attackDelta = attackMax - attackMin;
+        const attackBonus = unit.getAttackBonus(enemy);
 
         if (isUnitInSquares(enemy, availableAttack)) {
-            return Math.round(attackMin / defaultValues.health * health + Math.random() * attackDelta);
+            return Math.round((attackBonus + attackMin) / defaultValues.health * health + Math.random() * attackDelta);
         }
 
         return null;
+    }
+
+    getAttackBonus(enemy) {
+        const unit = this;
+        const unitType = unit.get(attr.type);
+        const enemyType = enemy.get(attr.type);
+        const unitReferenceData = unitGuide.type[unitType];
+        const enemyReferenceData = unitGuide.type[enemyType];
+        let attackBonus = 0;
+
+        if (unitReferenceData.bonusAtkAgainstFly && enemyReferenceData.moveType === 'fly') {
+            attackBonus += unitReferenceData.bonusAtkAgainstFly;
+        }
+
+        if (unitReferenceData.bonusAtkAgainstSkeleton && enemyType === 'skeleton') {
+            attackBonus += unitReferenceData.bonusAtkAgainstSkeleton;
+        }
+
+        return attackBonus;
     }
 
     getAvailableDefence() {
