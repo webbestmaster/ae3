@@ -13,6 +13,8 @@ import {PromiseMaster} from './../../lib/promise-master';
 import {store} from './../../index';
 import * as gameAction from './../../game/action';
 import {DisableScreen} from './../disable-screen';
+import {isItNotMe, findMe} from './../../lib/me';
+const buildingGuide = require('./building-guide.json');
 const PIXI = require('pixi.js');
 const renderConfig = require('./../render/config.json');
 
@@ -78,8 +80,6 @@ export class GameModel extends BaseModel {
 
                 model.initializeTurnMaster();
 
-                model.startListening();
-
                 // model.trigger(attr.currentUserPublicId);
                 model.initializeUsersGameData();
 
@@ -121,6 +121,8 @@ export class GameModel extends BaseModel {
                 model.get(attr.units).forEach(unit => model.addUnit(unit));
                 model.get(attr.graves).forEach(grave => model.addGrave(grave));
                 model.initializeUI();
+
+                model.startListening();
             });
     }
 
@@ -813,6 +815,37 @@ export class GameModel extends BaseModel {
         render.addChild('ui', sprite);
 
         model.get(attr.multiActionSquares).push({sprite, x, y, type: 'multi-action'});
+    }
+
+    defineRevenue(publicId) {
+        const model = this;
+
+        if (isItNotMe({publicId})) {
+            return Promise.resolve();
+        }
+
+        const users = model.get(attr.users);
+        const user = findMe(users);
+        const revenue = model.getRevenue(publicId);
+
+        return api.post.room
+            .setUserState(null, {
+                money: user.money + revenue
+            })
+            .then(() => revenue);
+    }
+
+    getRevenue(publicId) {
+        const model = this;
+        let revenue = 0;
+
+        model.get(attr.model.buildings)
+            .filter(building => building.get('ownerPublicId') === publicId)
+            .forEach(building => {
+                revenue += buildingGuide.type[building.get('type')].revenue;
+            });
+
+        return revenue;
     }
 
     destroy() {

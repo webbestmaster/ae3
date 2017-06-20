@@ -40,7 +40,8 @@ class GameView extends BaseView {
         this.state.model.set(nextProps.gameState.state);
     }
 
-    showChangeTurnPopup() {
+    showChangeTurnPopup(data = {}) {
+        const {revenue = 0} = data;
         const view = this;
         const {users, currentUserPublicId} = view.state.model.getAllAttributes();
         const user = find(users, {publicId: currentUserPublicId});
@@ -50,7 +51,7 @@ class GameView extends BaseView {
 
         if (isItMe(user)) {
             state.changeTurnPopup.title = 'Your turn!';
-            state.changeTurnPopup.body = 'Good luck!';
+            state.changeTurnPopup.body = 'Good luck! revenue: ' + revenue;
         } else {
             state.changeTurnPopup.title = 'Not your turn!';
             state.changeTurnPopup.body = 'Wait for other player!';
@@ -78,9 +79,9 @@ class GameView extends BaseView {
 
         model.start().then(() => {
             // model.onChange('turnCounter', (now, before) => console.log('turnCounter', before, now), view);
-            model.onChange('currentUserPublicId', () => {
+            model.onChange('currentUserPublicId', currentUserPublicId => {
                 model.clearAllSquares();
-                view.showChangeTurnPopup();
+                model.defineRevenue(currentUserPublicId).then(revenue => view.showChangeTurnPopup({revenue}));
             }, view);
             model.onChange('users', function onUsersChange() {
                 console.warn('users changed');

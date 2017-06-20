@@ -25,70 +25,28 @@
     ],
     "landscape": {
         "road": {
-            "name": "road",
             "pathReduce": 1,
             "defense": 0
         },
         "meadow": {
-            "name": "meadow",
             "pathReduce": 1,
             "defense": 1
         },
         "forest": {
-            "name": "forest",
             "pathReduce": 2,
             "defense": 2
         },
         "stone": {
-            "name": "stone",
             "pathReduce": 3,
             "defense": 3
         },
         "water": {
-            "name": "water",
             "pathReduce": 3,
             "defense": 0
         },
         "hill": {
-            "name": "hill",
             "pathReduce": 2,
             "defense": 0
-        }
-    },
-    "_____building": {
-        "farm": {
-            "name": "farm",
-            "defense": 2
-        },
-        "farm-destroyed": {
-            "name": "farm",
-            "defense": 1
-        },
-        "castle": {
-            "name": "castle",
-            "defense": 3
-        },
-        "temple": {
-            "name": "temple",
-            "defense": 3
-        },
-        "well": {
-            "name": "well",
-            "defense": 2
-        }
-    },
-    "_____units": {
-        "soldier": {
-            "name": "soldier",
-            "attack": 20
-        },
-        "archer": {
-            "name": "archer",
-            "attack": 15
-        },
-        "skeleton": {
-            "name": "skeleton",
-            "attack": 15
         }
     }
 }

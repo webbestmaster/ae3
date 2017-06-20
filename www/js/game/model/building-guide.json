@@ -1,0 +1,21 @@
+{
+    "type": {
+        "farm": {
+            "defense": 2,
+            "revenue": 20
+        },
+        "farm-destroyed": {
+            "defense": 1
+        },
+        "castle": {
+            "defense": 3,
+            "revenue": 30
+        },
+        "temple": {
+            "defense": 3
+        },
+        "well": {
+            "defense": 2
+        }
+    }
+}
