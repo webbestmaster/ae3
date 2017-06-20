@@ -54,7 +54,8 @@ const attr = {
         landscape: 'model-landscape',
         units: 'model-units',
         graves: 'model-graves'
-    }
+    },
+    usersGameData: 'usersGameData'
 };
 
 const listenKeys = [
@@ -80,6 +81,8 @@ export class GameModel extends BaseModel {
                 model.startListening();
 
                 // model.trigger(attr.currentUserPublicId);
+                model.initializeUsersGameData();
+
                 model.set({
                     [attr.model.landscape]: null,
                     [attr.model.buildings]: [],
@@ -121,6 +124,20 @@ export class GameModel extends BaseModel {
             });
     }
 
+    initializeUsersGameData() {
+        const model = this;
+        const users = model.get(attr.users);
+        const usersGameData = {};
+
+        users.forEach(user => Object.assign(usersGameData, {
+            [user.publicId]: {
+                commanders: []
+            }
+        }));
+
+        model.set(attr.usersGameData, usersGameData);
+    }
+
     initializeTurnMaster() {
         const model = this;
         const turnMaster = new TurnMaster();
@@ -157,7 +174,8 @@ export class GameModel extends BaseModel {
         }
 
         if (type === 'attack') {
-            return model.doActionAttack(action);
+            return model.doActionAttack(action)
+                .then(() => model.get(attr.model.units).forEach(unit => unit.checkLevel()));
         }
 
         if (type === 'add-unit') {
@@ -235,6 +253,7 @@ export class GameModel extends BaseModel {
         return unitAttacker
             .animateAttack(unitDefender)
             .then(() => {
+                unitAttacker.changeBy('givenDamage', attacker.attack);
                 unitDefender.set('health', defender.health);
                 if (defender.attack === null || defender.health === 0) {
                     unitDefender.set('isActing', false);
@@ -243,6 +262,7 @@ export class GameModel extends BaseModel {
 
                 return unitDefender.animateAttack(unitAttacker).then(() => {
                     unitDefender.set('isActing', false);
+                    unitDefender.changeBy('givenDamage', defender.attack);
                     unitDefender.set(defender);
                 });
             })

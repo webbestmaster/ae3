@@ -162,7 +162,8 @@
             "occupyBuildingList": [
                 "farm",
                 "castle"
-            ]
+            ],
+            "isCommander": true
         },
         "valadorn": {
             "attack": {
@@ -180,7 +181,8 @@
             "occupyBuildingList": [
                 "farm",
                 "castle"
-            ]
+            ],
+            "isCommander": true
         },
         "demon-lord": {
             "attack": {
@@ -198,7 +200,8 @@
             "occupyBuildingList": [
                 "farm",
                 "castle"
-            ]
+            ],
+            "isCommander": true
         },
         "saeth": {
             "attack": {
@@ -216,7 +219,8 @@
             "occupyBuildingList": [
                 "farm",
                 "castle"
-            ]
+            ],
+            "isCommander": true
         },
         "saeth-heavens-fury": {
             "attack": {

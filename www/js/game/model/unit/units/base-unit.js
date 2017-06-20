@@ -5,6 +5,8 @@ import {TimelineLite, Power0, Power2} from 'gsap';
 import {getPath as getStarPath} from 'a-star-finder';
 import {getMyPublicId, getMyOrder} from '../../../../lib/me';
 import HealthText from '../health-text';
+import LevelText from '../level-text';
+import {find} from 'lodash';
 const PIXI = require('pixi.js');
 const renderConfig = require('../../../render/config.json');
 const unitGuide = require('../unit-guide.json');
@@ -21,12 +23,16 @@ const attr = {
     team: 'team',
     health: 'health',
     level: 'level',
+    givenDamage: 'givenDamage',
+    isAlive: 'isAlive',
     isActing: 'isActing',
     isMoved: 'isMoved',
     isFinished: 'isFinished',
     poisonedCounter: 'poisonedCounter',
     underAuraList: 'underAuraList',
+    deathCounter: 'deathCounter',
     sprite: {
+        level: 'sprite-level',
         health: 'sprite-health',
         poison: 'sprite-poison',
         aura: {
@@ -38,6 +44,7 @@ const attr = {
 const availableAuraList = ['wisp'];
 
 const defaultValues = {
+    givenDamage: 0,
     level: 0,
     health: 100,
     isMoved: false,
@@ -64,12 +71,61 @@ class Unit extends BaseModel {
 
         unit.initializeMainSprite();
         unit.initializeHealth();
+        unit.initializeLevel();
         unit.initializePoison();
         unit.initializeAuraWisp();
         unit.setPoisonVisual(unit.get(attr.poisonedCounter) > 0);
 
+        unit.initializeAsCommander();
+
         unit.startListening();
         unit.putTo(x, y);
+    }
+
+    initializeAsCommander() {
+        const unit = this;
+        const type = unit.get(attr.type);
+        const referenceData = unitGuide.type[type];
+
+        if (!referenceData.isCommander) {
+            return;
+        }
+
+        const game = unit.get(attr.game);
+        const usersGameData = game.get('usersGameData');
+        const publicId = unit.get(attr.ownerPublicId);
+        const {commanders} = usersGameData[publicId];
+        const commander = find(commanders, {type});
+
+        if (commander) {
+            commander[attr.isAlive] = true;
+            commander[attr.deathCounter] += 1;
+            unit.set(attr.givenDamage, commander[attr.givenDamage]);
+            unit.checkLevel();
+            return;
+        }
+
+        commanders.push({
+            type,
+            [attr.givenDamage]: 0,
+            [attr.deathCounter]: 0,
+            [attr.isAlive]: true
+        });
+    }
+
+    checkLevel() {
+        const levelList = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140];
+        const unit = this;
+        const givenDamage = unit.get(attr.givenDamage);
+
+        levelList.every((levelValue, index) => {
+            if (givenDamage >= levelValue) {
+                return true;
+            }
+
+            unit.set(attr.level, index);
+            return false;
+        });
     }
 
     initializePoison() {
@@ -155,6 +211,16 @@ class Unit extends BaseModel {
         container.addChild(healthText.get('sprite'));
     }
 
+    initializeLevel() {
+        const unit = this;
+        const container = unit.get(attr.container);
+        const levelText = new LevelText({unit});
+
+        unit.set(attr.sprite.level, levelText);
+
+        container.addChild(levelText.get('sprite'));
+    }
+
     startListening() {
         const unit = this;
         const game = unit.get(attr.game);
@@ -187,8 +253,6 @@ class Unit extends BaseModel {
             const unitX = unit.get('x');
             const unitY = unit.get('y');
 
-            unit.destroy();
-
             if (!unitData.withoutGrave) {
                 game.addGrave({
                     x: unitX,
@@ -196,6 +260,17 @@ class Unit extends BaseModel {
                     count: unitGuide.other.grave.liveTime
                 });
             }
+
+            if (unitData.isCommander) {
+                const usersGameData = game.get('usersGameData');
+                const publicId = unit.get(attr.ownerPublicId);
+                const commanders = usersGameData[publicId].commanders;
+                const commander = find(commanders, {type: unit.get(attr.type)});
+
+                commander[attr.isAlive] = false;
+            }
+
+            unit.destroy();
         });
 
         unit.onChange(attr.poisonedCounter, newValue => unit.setPoisonVisual(newValue > 0));
@@ -203,6 +278,23 @@ class Unit extends BaseModel {
         unit.listenTo(game, 'checkAura', () => unit.checkAura());
         unit.onChange(attr.underAuraList, currentAuraList => availableAuraList.forEach(auraType =>
             unit.drawAuraType(auraType, currentAuraList.indexOf(auraType) !== -1)));
+
+        unit.onChange(attr.level, newLevel => console.log('NEW LEVEL!!!', unit, newLevel));
+        unit.onChange(attr.givenDamage, givenDamage => {
+            const type = unit.get(attr.type);
+            const referenceData = unitGuide.type[type];
+
+            if (!referenceData.isCommander) {
+                return;
+            }
+
+            const usersGameData = game.get('usersGameData');
+            const publicId = unit.get(attr.ownerPublicId);
+            const commanders = usersGameData[publicId].commanders;
+            const commander = find(commanders, {type});
+
+            commander[attr.givenDamage] = givenDamage;
+        });
     }
 
     checkAura() {

@@ -175,19 +175,22 @@
         {
             "x": 6,
             "y": 1,
-            "type": "valadorn",
+            "__type": "valadorn",
+            "type": "soldier",
             "userOrder": 0
         },
         {
             "x": 7,
             "y": 1,
-            "type": "demon-lord",
+            "__type": "demon-lord",
+            "type": "soldier",
             "userOrder": 0
         },
         {
             "x": 8,
             "y": 1,
-            "type": "saeth",
+            "__type": "saeth",
+            "type": "soldier",
             "userOrder": 0
         },
         {
