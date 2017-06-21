@@ -125,7 +125,8 @@ class SettingView extends BaseView {
                     'password',
                     'users',
                     'defaultMoney',
-                    'unitLimit'
+                    'unitLimit',
+                    'gameType'
                 ].join(',')
             });
     }
@@ -155,7 +156,7 @@ class SettingView extends BaseView {
     render() {
         const view = this;
         const {
-            users, isTimerStarted, localization, defaultMoney, unitLimit, chat, startGameTimer
+            users, isTimerStarted, localization, defaultMoney, unitLimit, chat, startGameTimer, gameType
         } = view.props.gameState.state;
 
         if (users.length === 0) {
@@ -167,6 +168,7 @@ class SettingView extends BaseView {
         return <div>
             <h1>settings</h1>
             <h1>startGameTimer: {startGameTimer}</h1>
+            <h1>gameType: {gameType}</h1>
 
             <h1>localization</h1>
             <p>{JSON.stringify(localization)}</p>

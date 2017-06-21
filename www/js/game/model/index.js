@@ -34,6 +34,7 @@ const attr = {
     graves: 'graves',
 
     game: 'game',
+    gameType: 'gameType',
     // turnCounter: 'turnCounter',
     shop: 'shop',
 
@@ -121,6 +122,13 @@ export class GameModel extends BaseModel {
                 model.get(attr.units).forEach(unit => model.addUnit(unit));
                 model.get(attr.graves).forEach(grave => model.addGrave(grave));
                 model.initializeUI();
+
+                // remove extra fields
+                model.unset(attr.units);
+                model.unset(attr.buildings);
+                model.unset(attr.landscape);
+                model.unset(attr.graves);
+                model.unset('startGameTimer');
 
                 model.startListening();
             });

@@ -10,7 +10,7 @@ import * as userAction from './../user/action';
 import api from './../user/api';
 // const apiRouteConst = require('./../api-route.json');
 const routerConst = require('./../router/const.json');
-
+const gameSetup = require('./../game/model/game-setup.json');
 const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
 const mapList = mapReqContext.keys()
     .map(fileName => {
@@ -29,6 +29,7 @@ class SetupRoomView extends BaseView {
         const {refs} = view;
 
         const gameName = refs.gameName.value;
+        const gameType = refs.gameType.value;
         const password = refs.password.value;
         const {map} = _.find(mapList, {fileName: refs.map.value});
 
@@ -37,6 +38,7 @@ class SetupRoomView extends BaseView {
                 ...map,
                 gameName,
                 password,
+                gameType,
                 chat: []
             })
             .then(instanceId => {
@@ -55,6 +57,13 @@ class SetupRoomView extends BaseView {
             <br/>
             <input ref="password" type="text" placeholder="password"/>
             <br/>
+            <select ref="gameType">
+                {Object
+                    .keys(gameSetup.gameType)
+                    .map(gameType => <option value={gameType} key={gameType}>{gameType}</option>)
+                }
+            </select>
+            <hr/>
             <select ref="map">
                 {mapList.map(mapData =>
                     <option value={mapData.fileName} key={mapData.fileName}>
