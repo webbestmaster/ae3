@@ -10,6 +10,7 @@ import {find} from 'lodash';
 const PIXI = require('pixi.js');
 const renderConfig = require('../../../render/config.json');
 const unitGuide = require('../unit-guide.json');
+const buildingGuide = require('../../building-guide.json');
 
 const attr = {
     type: 'type',
@@ -236,6 +237,8 @@ class Unit extends BaseModel {
                 [attr.isFinished]: false,
                 [attr.poisonedCounter]: poisonedCounter
             });
+
+            unit.updateHealth();
         });
 
         unit.onChange(attr.isFinished, isFinished => {
@@ -295,6 +298,45 @@ class Unit extends BaseModel {
 
             commander[attr.givenDamage] = givenDamage;
         });
+    }
+
+    updateHealth() {
+        const unit = this;
+        const ownerPublicId = unit.get(attr.ownerPublicId);
+        const game = unit.get(attr.game);
+        const currentUserPublicId = game.get('currentUserPublicId');
+
+        if (currentUserPublicId !== ownerPublicId) {
+            return;
+        }
+
+        const building = game.getBuildingByXY(unit.get('x'), unit.get('y'));
+
+        if (!building) {
+            return;
+        }
+
+        const buildingType = building.get('type');
+        const buildingReferenceData = buildingGuide.type[buildingType];
+        const buildingTeam = game.getTeamByPublicId(building.get('ownerPublicId'));
+
+        if (['temple', 'well'].indexOf(buildingType) !== -1) {
+            unit.addHealth(buildingReferenceData.healthAddition);
+            return;
+        }
+
+        if (['farm', 'castle'].indexOf(buildingType) !== -1 && buildingTeam === unit.get(attr.team)) {
+            unit.addHealth(buildingReferenceData.healthAddition);
+            // return;
+        }
+    }
+
+    addHealth(health) {
+        const unit = this;
+        const unitHealth = unit.get(attr.health);
+        const additionalHealth = Math.min(health, defaultValues.health - unitHealth);
+
+        unit.changeBy(attr.health, additionalHealth);
     }
 
     checkAura() {

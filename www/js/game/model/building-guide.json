@@ -2,20 +2,24 @@
     "type": {
         "farm": {
             "defense": 2,
-            "revenue": 20
+            "revenue": 20,
+            "healthAddition": 30
         },
         "farm-destroyed": {
             "defense": 1
         },
         "castle": {
             "defense": 3,
-            "revenue": 30
+            "revenue": 30,
+            "healthAddition": 30
         },
         "temple": {
-            "defense": 3
+            "defense": 3,
+            "healthAddition": 30
         },
         "well": {
-            "defense": 2
+            "defense": 2,
+            "healthAddition": 30
         }
     }
 }

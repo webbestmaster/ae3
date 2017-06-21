@@ -875,6 +875,7 @@ export class GameModel extends BaseModel {
             }
 
             if (Object.keys(teams).length === 1) {
+                history.back();
                 alert('you win');
                 console.warn('leave room!!!!!');
             }
@@ -932,6 +933,18 @@ export class GameModel extends BaseModel {
         });
 
         return teams;
+    }
+
+    getTeamByPublicId(publicId) {
+        const model = this;
+        const users = model.get(attr.users);
+        const user = find(users, {publicId});
+
+        if (!user) {
+            return null;
+        }
+
+        return user.team;
     }
 
     destroy() {
