@@ -1,5 +1,7 @@
 {
     "gameType": {
-        "deathmatch" : {}
+        "deathmatch" : {
+            "type": "deathmatch"
+        }
     }
 }

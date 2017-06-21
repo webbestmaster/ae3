@@ -82,9 +82,11 @@ class GameView extends BaseView {
             model.onChange('currentUserPublicId', currentUserPublicId => {
                 model.clearAllSquares();
                 model.defineRevenue(currentUserPublicId).then(revenue => view.showChangeTurnPopup({revenue}));
+                model.checkForWin();
             }, view);
             model.onChange('users', function onUsersChange() {
                 console.warn('users changed');
+                model.checkForWin();
                 console.warn(arguments);
             }, view);
             view.showChangeTurnPopup();

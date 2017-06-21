@@ -15,6 +15,8 @@ import * as gameAction from './../../game/action';
 import {DisableScreen} from './../disable-screen';
 import {isItNotMe, findMe} from './../../lib/me';
 const buildingGuide = require('./building-guide.json');
+const gameSetup = require('./game-setup.json');
+const unitGuide = require('./unit/unit-guide.json');
 const PIXI = require('pixi.js');
 const renderConfig = require('./../render/config.json');
 
@@ -172,6 +174,7 @@ export class GameModel extends BaseModel {
             }));
 
         promiseMaster.push(() => disableScreen.decrease());
+        promiseMaster.push(() => model.checkForWin());
     }
 
     doAction(action) {
@@ -854,6 +857,81 @@ export class GameModel extends BaseModel {
             });
 
         return revenue;
+    }
+
+    checkForWin() {
+        const model = this;
+        const user = findMe(model.get(attr.users));
+        const gameType = model.get(attr.gameType);
+
+        if (gameType === gameSetup.gameType.deathmatch.type) {
+            const teams = model.checkWinForDeathmatch();
+
+            if (teams[user.team].isDefeat) {
+                console.warn('leave room!!!!!');
+                history.back();
+                alert('you defeat');
+                return;
+            }
+
+            if (Object.keys(teams).length === 1) {
+                alert('you win');
+                console.warn('leave room!!!!!');
+            }
+
+            return;
+        }
+
+        console.error('unknow game type!!');
+    }
+
+    checkWinForDeathmatch() {
+        // if team has no commanders and castles - they fail
+        const model = this;
+        const teams = {};
+
+        model.get(attr.users).forEach(user => {
+            const userTeam = user.team;
+
+            if (teams.hasOwnProperty(userTeam)) {
+                return;
+            }
+
+            teams[userTeam] = {
+                hasCastle: false,
+                hasCommander: false,
+                isDefeat: false
+            };
+        });
+
+        Object.keys(teams).forEach(teamName => {
+            const teammatePublicIds = model
+                .get(attr.users)
+                .filter(user => user.team === teamName)
+                .map(({publicId}) => publicId);
+
+            const team = teams[teamName];
+
+            // check for castle
+            team.hasCastle = model
+                .get(attr.model.buildings)
+                .some(building =>
+                    building.get('type') === 'castle' &&
+                    teammatePublicIds.indexOf(building.get('ownerPublicId')) !== -1
+                );
+
+            // check for commander
+            team.hasCommander = model
+                .get(attr.model.units)
+                .some(unit =>
+                    unitGuide.type[unit.get('type')].isCommander &&
+                    teammatePublicIds.indexOf(unit.get('ownerPublicId')) !== -1
+                );
+
+            team.isDefeat = !team.hasCastle && !team.hasCommander;
+        });
+
+        return teams;
     }
 
     destroy() {
