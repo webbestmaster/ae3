@@ -239,6 +239,16 @@
     "other": {
         "grave": {
             "liveTime": 3
+        },
+        "aura": {
+            "wisp": {
+                "addAttack": 10
+            }
+        },
+        "isPoisoned": {
+            "reduceAttack": 15,
+            "reduceDefence": 10,
+            "reduceMove": 1
         }
     }
 }

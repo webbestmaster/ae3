@@ -471,9 +471,12 @@ class Unit extends BaseModel {
         const attackMax = referenceData.attack.max;
         const attackDelta = attackMax - attackMin;
         const attackBonus = unit.getAttackBonus(enemy);
+        const minAvailableAttack = 1;
 
         if (isUnitInSquares(enemy, availableAttack)) {
-            return Math.round((attackBonus + attackMin) / defaultValues.health * health + Math.random() * attackDelta);
+            const attack = (attackBonus + attackMin) / defaultValues.health * health + Math.random() * attackDelta;
+
+            return Math.round(Math.max(attack, minAvailableAttack));
         }
 
         return null;
@@ -486,6 +489,15 @@ class Unit extends BaseModel {
         const unitReferenceData = unitGuide.type[unitType];
         const enemyReferenceData = unitGuide.type[enemyType];
         let attackBonus = 0;
+        const underAuraList = unit.get(attr.underAuraList);
+
+        underAuraList.forEach(auraType => {
+            attackBonus += unitGuide.other.aura[auraType].addAttack;
+        });
+
+        if (unit.isPoisoned()) {
+            attackBonus -= unitGuide.other.isPoisoned.reduceAttack;
+        }
 
         if (unitReferenceData.bonusAtkAgainstFly && enemyReferenceData.moveType === 'fly') {
             attackBonus += unitReferenceData.bonusAtkAgainstFly;
@@ -498,14 +510,19 @@ class Unit extends BaseModel {
         return attackBonus;
     }
 
+    // check ground and building, self armor, under-wisp, under-poison, level
     getAvailableDefence() {
         const unit = this;
         const type = unit.get(attr.type);
         const referenceData = unitGuide.type[type];
+        const minAvailableDefence = 0;
+        let {defence} = referenceData;
 
-        return referenceData.defence;
+        if (unit.isPoisoned()) {
+            defence -= unitGuide.other.isPoisoned.reduceDefence;
+        }
 
-        // check ground and building, self armor, under-wisp, under-poison, level
+        return Math.round(Math.max(defence, minAvailableDefence));
     }
 
     getMovePath(endX, endY) {
@@ -657,9 +674,6 @@ class Unit extends BaseModel {
         unit.addDestroyBuildingSquares(availableDestroyBuilding);
 
         game.collectMultiActionSquares();
-
-        // TODO: find squares with double action, for example - raise skeleton and move
-        // and create square to select needed action
     }
 
     getAvailableFixBuilding() {
@@ -921,12 +935,19 @@ class Unit extends BaseModel {
             pathMap[y][x] = 100; // 100 is just big number
         });
 
+        const defaultMoveSize = unitGuide.type[unit.get(attr.type)].move;
+        const moveSize = unit.isPoisoned() ? defaultMoveSize - unitGuide.other.isPoisoned.reduceMove : defaultMoveSize;
+
         return getPath(
             unit.get('x'),
             unit.get('y'),
-            unitGuide.type[unit.get(attr.type)].move,
+            moveSize,
             pathMap
         );
+    }
+
+    isPoisoned() {
+        return this.get(attr.poisonedCounter) > 0;
     }
 
     getPathMap() {
