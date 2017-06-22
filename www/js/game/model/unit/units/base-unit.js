@@ -114,17 +114,19 @@ class Unit extends BaseModel {
         });
     }
 
-    countLevel(value) {
+    countLevel() {
+        const unit = this;
+        let givenDamage = unit.get(attr.givenDamage);
         let start = 50;
-        let levelDelta = 10;
+        const levelDelta = 10;
         let levelCounter = 0;
         const maxLevel = 9;
 
-        value -= start;
+        givenDamage -= start;
 
-        while (value > 0) {
+        while (givenDamage > 0) {
             levelCounter += 1;
-            value -= start;
+            givenDamage -= start;
             start += levelDelta;
         }
 
@@ -133,7 +135,7 @@ class Unit extends BaseModel {
 
     checkLevel() {
         const unit = this;
-        const givenDamage = unit.get(attr.givenDamage);
+        const givenDamage = unit.countLevel();
 
         unit.set(attr.level, unit.countLevel(givenDamage));
     }
@@ -497,7 +499,7 @@ class Unit extends BaseModel {
         const enemyType = enemy.get(attr.type);
         const unitReferenceData = unitGuide.type[unitType];
         const enemyReferenceData = unitGuide.type[enemyType];
-        let attackBonus = 0;
+        let attackBonus = unit.get(attr.level) * unitGuide.other.levelBonus.attack;
         const underAuraList = unit.get(attr.underAuraList);
 
         underAuraList.forEach(auraType => {
@@ -545,7 +547,7 @@ class Unit extends BaseModel {
         const game = unit.get(attr.game);
         const landscape = game.get('model-landscape');
         const building = game.getBuildingByXY(unitX, unitY);
-        let armor = 0;
+        let armor = unit.get(attr.level) * unitGuide.other.levelBonus.armor;
 
         // check for building
         if (building) {
@@ -804,8 +806,6 @@ class Unit extends BaseModel {
         }
 
         const game = unit.get(attr.game);
-
-
         const unitX = unit.get('x');
         const unitY = unit.get('y');
         const team = unit.get('team');
