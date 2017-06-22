@@ -270,6 +270,16 @@ class Landscape extends BaseModel {
 
         return landscape.hasOwnProperty(y) && landscape[y].hasOwnProperty(x);
     }
+
+    getSquareTypeByXY(x, y) {
+        const model = this;
+
+        if (model.hasSquare(x, y)) {
+            return model.get(attr.landscape)[y][x].split('-')[0];
+        }
+
+        return null;
+    }
 }
 
 export {Landscape};

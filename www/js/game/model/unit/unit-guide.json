@@ -6,7 +6,7 @@
                 "max": 55
             },
             "attackRange": 1,
-            "defence": 5,
+            "armor": 5,
             "move": 4,
             "langKey": "soldier",
             "cost": 150,
@@ -22,7 +22,7 @@
                 "max": 55
             },
             "attackRange": 2,
-            "defence": 5,
+            "armor": 5,
             "move": 4,
             "langKey": "archer",
             "cost": 250,
@@ -35,7 +35,7 @@
                 "max": 55
             },
             "attackRange": 1,
-            "defence": 10,
+            "armor": 10,
             "move": 4,
             "langKey": "elemental",
             "cost": 300,
@@ -48,7 +48,7 @@
                 "max": 45
             },
             "attackRange": 1,
-            "defence": 5,
+            "armor": 5,
             "move": 4,
             "langKey": "sorceress",
             "cost": 400,
@@ -61,7 +61,7 @@
                 "max": 40
             },
             "attackRange": 1,
-            "defence": 10,
+            "armor": 10,
             "move": 4,
             "langKey": "wisp",
             "cost": 500,
@@ -75,7 +75,7 @@
                 "max": 65
             },
             "attackRange": 1,
-            "defence": 15,
+            "armor": 15,
             "move": 5,
             "langKey": "dire-wolf",
             "cost": 600,
@@ -88,7 +88,7 @@
                 "max": 70
             },
             "attackRange": 1,
-            "defence": 30,
+            "armor": 30,
             "move": 4,
             "langKey": "golem",
             "cost": 600
@@ -99,7 +99,7 @@
                 "max": 70
             },
             "attackRange": 4,
-            "defence": 10,
+            "armor": 10,
             "move": 3,
             "langKey": "catapult",
             "cost": 700,
@@ -112,7 +112,7 @@
                 "max": 80
             },
             "attackRange": 1,
-            "defence": 25,
+            "armor": 25,
             "move": 6,
             "langKey": "dragon",
             "cost": 1000,
@@ -125,7 +125,7 @@
                 "max": 50
             },
             "attackRange": 1,
-            "defence": 2,
+            "armor": 2,
             "move": 4,
             "langKey": "skeleton",
             "cost": 0,
@@ -139,7 +139,7 @@
                 "max": 0
             },
             "attackRange": 0,
-            "defence": 15,
+            "armor": 15,
             "move": 3,
             "langKey": "crystal",
             "cost": 0,
@@ -152,7 +152,7 @@
                 "max": 65
             },
             "attackRange": 1,
-            "defence": 20,
+            "armor": 20,
             "move": 4,
             "langKey": "galamar",
             "cost": 200,
@@ -171,7 +171,7 @@
                 "max": 65
             },
             "attackRange": 1,
-            "defence": 20,
+            "armor": 20,
             "move": 4,
             "langKey": "valadorn",
             "cost": 200,
@@ -190,7 +190,7 @@
                 "max": 65
             },
             "attackRange": 1,
-            "defence": 20,
+            "armor": 20,
             "move": 4,
             "langKey": "demon-lord",
             "cost": 200,
@@ -209,7 +209,7 @@
                 "max": 65
             },
             "attackRange": 1,
-            "defence": 20,
+            "armor": 20,
             "move": 4,
             "langKey": "saeth",
             "cost": 200,
@@ -228,7 +228,7 @@
                 "max": 65
             },
             "attackRange": 15,
-            "defence": 45,
+            "armor": 45,
             "move": 0,
             "langKey": "saeth",
 
@@ -247,8 +247,13 @@
         },
         "isPoisoned": {
             "reduceAttack": 15,
-            "reduceDefence": 10,
+            "reduceArmor": 10,
             "reduceMove": 1
+        },
+        "waterExtraArmor": 3,
+        "levelBonus": {
+            "attack": 10,
+            "armor": 10
         }
     }
 }

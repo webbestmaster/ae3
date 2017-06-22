@@ -511,18 +511,46 @@ class Unit extends BaseModel {
     }
 
     // check ground and building, self armor, under-wisp, under-poison, level
-    getAvailableDefence() {
+    getAvailableArmor() {
         const unit = this;
         const type = unit.get(attr.type);
         const referenceData = unitGuide.type[type];
-        const minAvailableDefence = 0;
-        let {defence} = referenceData;
+        const minAvailableArmor = 0;
+        let {armor} = referenceData;
+
+        armor += unit.getArmorBonus();
 
         if (unit.isPoisoned()) {
-            defence -= unitGuide.other.isPoisoned.reduceDefence;
+            armor -= unitGuide.other.isPoisoned.reduceArmor;
         }
 
-        return Math.round(Math.max(defence, minAvailableDefence));
+        return Math.round(Math.max(armor, minAvailableArmor));
+    }
+
+    getArmorBonus() {
+        const unit = this;
+        const unitX = unit.get('x');
+        const unitY = unit.get('y');
+        const unitType = unit.get(attr.type);
+        const unitReferenceData = unitGuide.type[unitType];
+        const game = unit.get(attr.game);
+        const landscape = game.get('model-landscape');
+        const building = game.getBuildingByXY(unitX, unitY);
+        let armor = 0;
+
+        // check for building
+        if (building) {
+            armor += buildingGuide.type[building.get('type')].armor;
+        }
+
+        // check for elemental
+        if (!building &&
+            unitReferenceData.moveType === 'flow' &&
+            landscape.getSquareTypeByXY(unitX, unitY) === 'water') {
+            armor += unitGuide.other.waterExtraArmor;
+        }
+
+        return armor;
     }
 
     getMovePath(endX, endY) {
@@ -1122,7 +1150,7 @@ function countBattle(attacker, defender) {
 
     let attackerAttack =
         attacker.getAvailableDamage(attacker.get(attr.health), defender) -
-        defender.getAvailableDefence();
+        defender.getAvailableArmor();
 
     attackerAttack = Math.round(Math.max(attackerAttack, minAttack));
 
@@ -1154,7 +1182,7 @@ function countBattle(attacker, defender) {
         };
     }
 
-    defenderAttack -= attacker.getAvailableDefence();
+    defenderAttack -= attacker.getAvailableArmor();
 
     defenderAttack = Math.round(Math.max(defenderAttack, minAttack));
 

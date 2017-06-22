@@ -26,27 +26,27 @@
     "landscape": {
         "road": {
             "pathReduce": 1,
-            "defense": 0
+            "armor": 0
         },
         "meadow": {
             "pathReduce": 1,
-            "defense": 1
+            "armor": 1
         },
         "forest": {
             "pathReduce": 2,
-            "defense": 2
+            "armor": 2
         },
         "stone": {
             "pathReduce": 3,
-            "defense": 3
+            "armor": 3
         },
         "water": {
             "pathReduce": 3,
-            "defense": 0
+            "armor": 0
         },
         "hill": {
             "pathReduce": 2,
-            "defense": 0
+            "armor": 0
         }
     }
 }
