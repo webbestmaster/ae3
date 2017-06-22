@@ -266,7 +266,7 @@ export class GameModel extends BaseModel {
         return unitAttacker
             .animateAttack(unitDefender)
             .then(() => {
-                unitAttacker.changeBy('givenDamage', attacker.attack);
+                unitAttacker.changeBy('givenDamage', Math.min(attacker.attack, unitDefender.get('health')));
                 unitDefender.set('health', defender.health);
                 if (defender.attack === null || defender.health === 0) {
                     unitDefender.set('isActing', false);
@@ -275,7 +275,7 @@ export class GameModel extends BaseModel {
 
                 return unitDefender.animateAttack(unitAttacker).then(() => {
                     unitDefender.set('isActing', false);
-                    unitDefender.changeBy('givenDamage', defender.attack);
+                    unitDefender.changeBy('givenDamage', Math.min(defender.attack, unitAttacker.get('health')));
                     unitDefender.set(defender);
                 });
             })

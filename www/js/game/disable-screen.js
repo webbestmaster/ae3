@@ -44,6 +44,17 @@ export class DisableScreen extends BaseModel {
         const node = model.get(attr.node);
 
         model.onChange(attr.counter, counter => {
+            if (counter < 0) {
+                /*
+                when it happen when user get a turn
+                but previous action still in progress
+                TODO: try to fix it
+                 */
+                console.warn('DisableScreen counter < 0');
+                model.set(attr.counter, 0);
+                return;
+            }
+
             if (counter === 0) {
                 console.log('---- hide screen');
                 node.style.display = 'none';

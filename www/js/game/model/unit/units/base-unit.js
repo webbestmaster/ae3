@@ -114,19 +114,28 @@ class Unit extends BaseModel {
         });
     }
 
+    countLevel(value) {
+        let start = 50;
+        let levelDelta = 10;
+        let levelCounter = 0;
+        const maxLevel = 9;
+
+        value -= start;
+
+        while (value > 0) {
+            levelCounter += 1;
+            value -= start;
+            start += levelDelta;
+        }
+
+        return Math.min(levelCounter, maxLevel);
+    }
+
     checkLevel() {
-        const levelList = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140];
         const unit = this;
         const givenDamage = unit.get(attr.givenDamage);
 
-        levelList.every((levelValue, index) => {
-            if (givenDamage >= levelValue) {
-                return true;
-            }
-
-            unit.set(attr.level, index);
-            return false;
-        });
+        unit.set(attr.level, unit.countLevel(givenDamage));
     }
 
     initializePoison() {
