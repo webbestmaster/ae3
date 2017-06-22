@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>4.4.0</string>
         <key>fileName</key>
-        <string>/home/dim/master-git/ae3/res/texture-packer-project.tps</string>
+        <string>C:/Users/dmitry.turovtsov/user/master-git/ae3/res/texture-packer-project.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -224,12 +224,19 @@
             <key type="filename">img/building/farm-red.png</key>
             <key type="filename">img/building/temple.png</key>
             <key type="filename">img/building/well.png</key>
+            <key type="filename">img/other/action-attack-3.png</key>
+            <key type="filename">img/other/action-destroy-building-0.png</key>
+            <key type="filename">img/other/action-destroy-building-1.png</key>
+            <key type="filename">img/other/action-destroy-building-2.png</key>
+            <key type="filename">img/other/action-destroy-building-3.png</key>
             <key type="filename">img/other/action-fix-building.png</key>
             <key type="filename">img/other/action-occupy-building.png</key>
+            <key type="filename">img/other/close.png</key>
             <key type="filename">img/other/confirm-attack.png</key>
             <key type="filename">img/other/confirm-move.png</key>
             <key type="filename">img/other/grave.png</key>
             <key type="filename">img/other/open-shop.png</key>
+            <key type="filename">img/other/question.png</key>
             <key type="filename">img/other/simple-attack-animation-0.png</key>
             <key type="filename">img/other/simple-attack-animation-1.png</key>
             <key type="filename">img/other/simple-attack-animation-2.png</key>
@@ -424,8 +431,11 @@
                 <false/>
             </struct>
             <key type="filename">img/other/action-attack-0.png</key>
+            <key type="filename">img/other/action-attack-0_old.png</key>
             <key type="filename">img/other/action-attack-1.png</key>
+            <key type="filename">img/other/action-attack-1_old.png</key>
             <key type="filename">img/other/action-attack-2.png</key>
+            <key type="filename">img/other/action-attack-2_old.png</key>
             <key type="filename">img/other/action-move.png</key>
             <key type="filename">img/other/available-attack-square.png</key>
             <key type="filename">img/other/available-path-and-attack.png</key>

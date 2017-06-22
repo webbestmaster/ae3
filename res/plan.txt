@@ -1,3 +1,9 @@
+icons
+attack - done
+destroy building - done
+close collection squares - done
+collection squares - done
+
  - добавить добавление хелсов если юнит на здании - done
  - учитывать виспа при атаке - done
  - учитывать волка при ходьбе(done) и обороне(done) и атаке(done)

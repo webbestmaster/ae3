@@ -526,11 +526,11 @@ export class GameModel extends BaseModel {
         const squareSize = render.get('squareSize');
 
         const sprite = new PIXI.extras.AnimatedSprite(
-            [0, 1, 2].map(ii => PIXI.Texture.fromFrame('action-attack-' + ii))
+            [0, 1, 2, 3].map(ii => PIXI.Texture.fromFrame('action-attack-' + ii))
         );
 
-        sprite.x = squareSize * (x - 0.5);
-        sprite.y = squareSize * (y - 0.5);
+        sprite.x = squareSize * x;
+        sprite.y = squareSize * y;
         render.addChild('ui', sprite);
         model.get(attr.moveSquares).push({sprite, x, y, type: 'attack'});
 
@@ -550,11 +550,11 @@ export class GameModel extends BaseModel {
         const squareSize = render.get('squareSize');
 
         const sprite = new PIXI.extras.AnimatedSprite(
-            [0, 1, 2].map(ii => PIXI.Texture.fromFrame('action-attack-' + ii))
+            [0, 1, 2, 3].map(ii => PIXI.Texture.fromFrame('action-destroy-building-' + ii))
         );
 
-        sprite.x = squareSize * (x - 0.5);
-        sprite.y = squareSize * (y - 0.5);
+        sprite.x = squareSize * x;
+        sprite.y = squareSize * y;
         render.addChild('ui', sprite);
 
         model.get(attr.destroyBuildingSquares).push({sprite, x, y, type: 'destroy-building'});
@@ -775,7 +775,7 @@ export class GameModel extends BaseModel {
         list.forEach(item => render.removeChild('ui', item.sprite));
 
         const squareSize = render.get('squareSize');
-        const sprite = PIXI.Sprite.fromFrame('well');
+        const sprite = PIXI.Sprite.fromFrame('question');
         const {x, y} = list[0];
 
         sprite.x = x * squareSize;
@@ -789,7 +789,7 @@ export class GameModel extends BaseModel {
             const graphics = new PIXI.Graphics();
 
             // add close button
-            const closeSprite = PIXI.Sprite.fromFrame('well');
+            const closeSprite = PIXI.Sprite.fromFrame('close');
 
             closeSprite.interactive = true;
             closeSprite.buttonMode = true;

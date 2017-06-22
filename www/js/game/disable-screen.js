@@ -33,7 +33,7 @@ export class DisableScreen extends BaseModel {
         node.style.position = 'fixed';
         node.style.zIndex = 10;
         node.style.display = 'none';
-        node.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        node.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
 
         model.set(attr.node, node);
         document.querySelector('.js-app-wrapper').appendChild(node);
