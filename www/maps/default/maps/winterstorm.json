@@ -1,0 +1,306 @@
+{
+    "localization": [
+        {
+            "local": "en",
+            "name": "Winterstorm"
+        }
+    ],
+    "landscape": [
+        [
+            "stone-0",
+            "stone-0",
+            "stone-0",
+            "hill-0",
+            "terra-0",
+            "forest-0",
+            "terra-0",
+            "forest-0",
+            "terra-0",
+            "hill-0",
+            "stone-0",
+            "stone-0",
+            "stone-0"
+        ],
+        [
+            "stone-0",
+            "hill-0",
+            "forest-0",
+            "forest-0",
+            "hill-0",
+            "terra-0",
+            "road-0",
+            "terra-0",
+            "hill-0",
+            "forest-0",
+            "forest-0",
+            "hill-0",
+            "stone-0"
+        ],
+        [
+            "stone-0",
+            "forest-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "stone-0",
+            "road-0",
+            "terra-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "forest-0",
+            "stone-0"
+        ],
+        [
+            "hill-0",
+            "forest-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "forest-0",
+            "road-0",
+            "forest-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "forest-0",
+            "hill-0"
+        ],
+        [
+            "terra-0",
+            "hill-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "hill-0",
+            "road-0",
+            "stone-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "hill-0",
+            "terra-0"
+        ],
+        [
+            "forest-0",
+            "terra-0",
+            "terra-0",
+            "forest-0",
+            "stone-0",
+            "terra-0",
+            "road-0",
+            "terra-0",
+            "hill-0",
+            "forest-0",
+            "stone-0",
+            "terra-0",
+            "forest-0"
+        ],
+        [
+            "hill-0",
+            "road-0",
+            "road-0",
+            "road-0",
+            "road-0",
+            "road-0",
+            "road-0",
+            "road-0",
+            "road-0",
+            "road-0",
+            "road-0",
+            "road-0",
+            "hill-0"
+        ],
+        [
+            "forest-0",
+            "terra-0",
+            "stone-0",
+            "forest-0",
+            "hill-0",
+            "terra-0",
+            "road-0",
+            "terra-0",
+            "stone-0",
+            "forest-0",
+            "terra-0",
+            "terra-0",
+            "forest-0"
+        ],
+        [
+            "terra-0",
+            "hill-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "stone-0",
+            "road-0",
+            "hill-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "hill-0",
+            "terra-0"
+        ],
+        [
+            "hill-0",
+            "forest-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "forest-0",
+            "road-0",
+            "forest-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "forest-0",
+            "hill-0"
+        ],
+        [
+            "stone-0",
+            "forest-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "terra-0",
+            "road-0",
+            "stone-0",
+            "water-0",
+            "water-0",
+            "water-0",
+            "forest-0",
+            "stone-0"
+        ],
+        [
+            "stone-0",
+            "hill-0",
+            "forest-0",
+            "forest-0",
+            "hill-0",
+            "terra-0",
+            "road-0",
+            "terra-0",
+            "hill-0",
+            "forest-0",
+            "forest-0",
+            "hill-0",
+            "stone-0"
+        ],
+        [
+            "stone-0",
+            "stone-0",
+            "stone-0",
+            "hill-0",
+            "terra-0",
+            "forest-0",
+            "hill-0",
+            "forest-0",
+            "terra-0",
+            "hill-0",
+            "stone-0",
+            "stone-0",
+            "stone-0"
+        ]
+    ],
+    "buildings": [
+        {
+            "x": 4,
+            "y": 0,
+            "type": "farm"
+        },
+        {
+            "x": 8,
+            "y": 0,
+            "type": "farm"
+        },
+        {
+            "x": 0,
+            "y": 4,
+            "type": "farm"
+        },
+        {
+            "x": 12,
+            "y": 4,
+            "type": "farm"
+        },
+        {
+            "x": 0,
+            "y": 8,
+            "type": "farm"
+        },
+        {
+            "x": 12,
+            "y": 8,
+            "type": "farm"
+        },
+        {
+            "x": 4,
+            "y": 12,
+            "type": "farm"
+        },
+        {
+            "x": 8,
+            "y": 12,
+            "type": "farm"
+        },
+        {
+            "x": 5,
+            "y": 5,
+            "type": "farm-destroyed"
+        },
+        {
+            "x": 7,
+            "y": 7,
+            "type": "farm-destroyed"
+        },
+        {
+            "x": 7,
+            "y": 5,
+            "type": "farm-destroyed"
+        },
+        {
+            "x": 5,
+            "y": 7,
+            "type": "farm-destroyed"
+        },
+        {
+            "x": 6,
+            "y": 1,
+            "type": "castle",
+            "userOrder": 0
+        },
+        {
+            "x": 6,
+            "y": 11,
+            "type": "castle",
+            "userOrder": 1
+        },
+        {
+            "x": 11,
+            "y": 6,
+            "type": "castle",
+            "userOrder": 2
+        },
+        {
+            "x": 1,
+            "y": 6,
+            "type": "castle",
+            "userOrder": 3
+        }
+    ],
+    "units": [
+        {
+            "x": 6,
+            "y": 1,
+            "type": "galamar",
+            "userOrder": 0
+        },
+        {
+            "x": 6,
+            "y": 11,
+            "type": "valadorn",
+            "userOrder": 1
+        }
+    ],
+    "graves": []
+}

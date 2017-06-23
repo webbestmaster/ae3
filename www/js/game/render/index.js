@@ -7,7 +7,7 @@ class Render extends BaseModel {
         super();
 
         const render = this;
-        const app = new PIXI.Application(480, 320, {backgroundColor: 0x000000});
+        const app = new PIXI.Application(480, 380, {backgroundColor: 0x000000});
 
         render.set({squareSize: 24});
 
