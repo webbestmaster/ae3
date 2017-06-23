@@ -104,13 +104,15 @@ class ShopView extends BaseView {
 
                 if (cost <= money) {
                     return <div key={unitType}>
-                        {JSON.stringify(unitGuide.type[unitType])}
+                        <p>unit: {unitData.langKey}, cost: {unitData.cost}</p>
+                        <div style={{display: 'none'}}>{JSON.stringify(unitData)}</div>
                         <button onClick={() => view.addUnit(unitType)}>buy unit</button>
                     </div>;
                 }
 
                 return <div key={unitType} style={{opacity: 0.5}}>
-                    {JSON.stringify(unitGuide.type[unitType])}
+                    <p>unit: {unitData.langKey}, cost: {unitData.cost}</p>
+                    <div style={{display: 'none'}}>{JSON.stringify(unitData)}</div>
                     <button>not enough money</button>
                 </div>;
             })}
