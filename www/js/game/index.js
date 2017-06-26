@@ -9,6 +9,7 @@ import {isItMe} from './../lib/me';
 import api from './../user/api';
 import {find} from 'lodash';
 import ShopView from './shop';
+import * as shopAction from './shop/action';
 
 function getDefaultState() {
     return {
@@ -83,6 +84,7 @@ class GameView extends BaseView {
                 model.clearAllSquares();
                 model.defineRevenue(currentUserPublicId).then(revenue => view.showChangeTurnPopup({revenue}));
                 model.checkForWin();
+                view.props.setShopVisible(false);
             }, view);
             model.onChange('users', function onUsersChange() {
                 console.warn('users changed');
@@ -96,6 +98,7 @@ class GameView extends BaseView {
     render() {
         const view = this;
 
+{/*
         const actions = [
             <FlatButton
                 label="Cancel"
@@ -109,6 +112,7 @@ class GameView extends BaseView {
                 onTouchTap={() => view.handleCloseChangeTurnPopup()}
             />
         ];
+*/}
 
         return <div>
             <h1>users</h1>
@@ -125,7 +129,7 @@ class GameView extends BaseView {
             />
             <Dialog
                 title={view.state.changeTurnPopup.title}
-                actions={actions}
+                // actions={actions}
                 modal={false}
                 open={view.state.changeTurnPopup.isOpen}
                 onRequestClose={() => view.handleCloseChangeTurnPopup()}>
@@ -149,5 +153,7 @@ export default connect(
         userState: state.userState,
         shopState: state.gameState.shopState
     }),
-    {}
+    {
+        setShopVisible: shopAction.setShopVisible
+    }
 )(GameView);

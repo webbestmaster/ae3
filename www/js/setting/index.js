@@ -209,7 +209,7 @@ class SettingView extends BaseView {
                     <h1>money limit</h1>
                     <select ref="defaultMoney"
                             defaultValue={defaultMoney}
-                            onChange={evt => view.setRoomState('defaultMoney', evt.currentTarget.value)}>
+                            onChange={evt => view.setRoomState('defaultMoney', Number(evt.currentTarget.value))}>
                         {mapGuide.defaultMoneyList.map(money =>
                             <option key={money} value={money}>{money}</option>
                         )}
@@ -217,7 +217,7 @@ class SettingView extends BaseView {
                     <h1>unit limit</h1>
                     <select ref="unitLimit"
                             defaultValue={unitLimit}
-                            onChange={evt => view.setRoomState('unitLimit', evt.currentTarget.value)}>
+                            onChange={evt => view.setRoomState('unitLimit', Number(evt.currentTarget.value))}>
                         {mapGuide.unitLimitList.map(limit =>
                             <option key={limit} value={limit}>{limit}</option>
                         )}
