@@ -13,7 +13,7 @@ import {PromiseMaster} from './../../lib/promise-master';
 import {store} from './../../index';
 import * as gameAction from './../../game/action';
 import {DisableScreen} from './../disable-screen';
-import {isItNotMe, findMe} from './../../lib/me';
+import {isItNotMe, findMe, getMyPublicId} from './../../lib/me';
 const buildingGuide = require('./building-guide.json');
 const gameSetup = require('./game-setup.json');
 const unitGuide = require('./unit/unit-guide.json');
@@ -64,7 +64,7 @@ const attr = {
 };
 
 const listenKeys = [
-    attr.currentUserPublicId,
+    // attr.currentUserPublicId,
     attr.users
 ];
 
@@ -76,7 +76,10 @@ export class GameModel extends BaseModel {
 
         return api.post.room
             .setUserState(null, {money: model.get('defaultMoney')})
-            .then(() => model.fetchData())
+            .then(() => Promise.all([
+                model.fetchData(),
+                model.updateCurrentUserPublicId()
+            ]))
             .then(() => {
                 const render = new Render();
                 const landscape = model.get('landscape');
@@ -165,15 +168,17 @@ export class GameModel extends BaseModel {
         const disableScreen = model.get(attr.disableScreen);
         const promiseMaster = model.get(attr.promiseMaster);
 
-        disableScreen.increase();
-
         turns.forEach(({list}) =>
             list.forEach(action => {
+                promiseMaster.push(() => disableScreen.increase());
                 promiseMaster.push(() => model.doAction(action));
                 promiseMaster.push(() => model.trigger(attr.checkAura));
+
+                if (action.type !== 'leave-turn') {
+                    promiseMaster.push(() => disableScreen.decrease());
+                }
             }));
 
-        promiseMaster.push(() => disableScreen.decrease());
         promiseMaster.push(() => model.checkForWin());
     }
 
@@ -181,6 +186,8 @@ export class GameModel extends BaseModel {
         const model = this;
         const {type} = action;
         const resolved = Promise.resolve();
+
+        console.log('do-action --->', type, action);
 
         if (type === 'move') {
             return model.doActionMove(action);
@@ -232,6 +239,27 @@ export class GameModel extends BaseModel {
 
         if (type === 'destroy-building') {
             return model.doActionDestroyBuilding(action);
+        }
+
+        if (type === 'leave-turn') {
+            const leaveTurnPublicId = action.publicId;
+
+            if (leaveTurnPublicId === getMyPublicId()) {
+                return api.get.room.leaveTurn().then(() => model.updateCurrentUserPublicId());
+            }
+
+            const currentUserPublicId = model.get(attr.currentUserPublicId);
+
+            return new Promise(resolve => {
+                (function wait() {
+                    model.updateCurrentUserPublicId()
+                        .then(nextUserPublicId => {
+                            console.log('---wait---');
+                            console.log(nextUserPublicId);
+                            return currentUserPublicId === nextUserPublicId ? wait() : resolve();
+                        });
+                })();
+            });
         }
 
         return resolved;
@@ -343,7 +371,14 @@ export class GameModel extends BaseModel {
             return Promise.resolve();
         }
 
-        return api.get.room.leaveTurn().then(() => model.fetchData());
+        return api.post.room.pushTurn(null, {
+            list: [
+                {
+                    type: 'leave-turn',
+                    publicId: getMyPublicId()
+                }
+            ]
+        });
     }
 
     startListening() {
@@ -373,6 +408,22 @@ export class GameModel extends BaseModel {
                     model.set(newKeyState);
                     store.dispatch(gameAction.setState(newKeyState));
                 });
+            });
+    }
+
+    updateCurrentUserPublicId() {
+        console.log('---> updateCurrentUserPublicId');
+        const model = this;
+
+        return api.get.room
+            .getState({key: attr.currentUserPublicId})
+            .then(({result}) => {
+                const data = {[attr.currentUserPublicId]: result};
+
+                model.set(data);
+                store.dispatch(gameAction.setState(data));
+
+                return result;
             });
     }
 

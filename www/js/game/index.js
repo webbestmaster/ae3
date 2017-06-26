@@ -41,8 +41,7 @@ class GameView extends BaseView {
         this.state.model.set(nextProps.gameState.state);
     }
 
-    showChangeTurnPopup(data = {}) {
-        const {revenue = 0} = data;
+    showChangeTurnPopup({revenue}) {
         const view = this;
         const {users, currentUserPublicId} = view.state.model.getAllAttributes();
         const user = find(users, {publicId: currentUserPublicId});
@@ -80,7 +79,9 @@ class GameView extends BaseView {
 
         model.start().then(() => {
             // model.onChange('turnCounter', (now, before) => console.log('turnCounter', before, now), view);
-            model.onChange('currentUserPublicId', currentUserPublicId => {
+            model.onChange('currentUserPublicId', (currentUserPublicId, prev) => {
+                console.log(currentUserPublicId, prev);
+
                 model.clearAllSquares();
                 model.defineRevenue(currentUserPublicId).then(revenue => view.showChangeTurnPopup({revenue}));
                 model.checkForWin();
@@ -91,28 +92,13 @@ class GameView extends BaseView {
                 model.checkForWin();
                 console.warn(arguments);
             }, view);
-            view.showChangeTurnPopup();
+
+            view.showChangeTurnPopup({revenue: 0});
         });
     }
 
     render() {
         const view = this;
-
-{/*
-        const actions = [
-            <FlatButton
-                label="Cancel"
-                primary={true}
-                onTouchTap={() => view.handleCloseChangeTurnPopup()}
-            />,
-            <FlatButton
-                label="Submit"
-                primary={true}
-                keyboardFocused={true}
-                onTouchTap={() => view.handleCloseChangeTurnPopup()}
-            />
-        ];
-*/}
 
         return <div>
             <h1>users</h1>
@@ -125,7 +111,21 @@ class GameView extends BaseView {
                 label="Leave Turn"
                 primary={true}
                 keyboardFocused={true}
-                onTouchTap={() => view.state.model.leaveTurn()}
+                onTouchTap={() => {
+                    const {model} = view.state;
+
+                    const wrongUnit = model.findWrongUnit();
+
+                    if (wrongUnit) {
+                        wrongUnit.onClick();
+                        return;
+                    }
+
+                    model.get('disableScreen').increase();
+                    model.get('promiseMaster')
+                        .push(() => model.leaveTurn()
+                            .catch(() => model.get('disableScreen').reset()));
+                }}
             />
             <Dialog
                 title={view.state.changeTurnPopup.title}

@@ -45,14 +45,7 @@ export class DisableScreen extends BaseModel {
 
         model.onChange(attr.counter, counter => {
             if (counter < 0) {
-                /*
-                when it happen when user get a turn
-                but previous action still in progress
-                TODO: try to fix it
-                 */
                 console.warn('DisableScreen counter < 0');
-                model.set(attr.counter, 0);
-                return;
             }
 
             if (counter === 0) {
@@ -75,6 +68,8 @@ export class DisableScreen extends BaseModel {
 
     onChangeCurrentUserPublicId(currentUserPublicId) {
         const model = this;
+
+        console.log('currentUserPublicId', currentUserPublicId);
 
         model.reset();
         if (isItNotMe({publicId: currentUserPublicId})) {
