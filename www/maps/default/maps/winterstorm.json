@@ -300,6 +300,18 @@
             "y": 11,
             "type": "valadorn",
             "userOrder": 1
+        },
+        {
+            "x": 11,
+            "y": 6,
+            "type": "saeth",
+            "userOrder": 2
+        },
+        {
+            "x": 1,
+            "y": 6,
+            "type": "demon-lord",
+            "userOrder": 3
         }
     ],
     "graves": []
