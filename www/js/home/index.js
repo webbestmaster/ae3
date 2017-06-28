@@ -16,14 +16,14 @@ class HomeView extends BaseView {
     }
 
     render() {
-        return <div>
-            <h1>home view</h1>
-            <hr/>
-            <hr/>
-            <Link to={routerConst.link.setupRoom}>setup room</Link>
-            <hr/>
-            <Link to={routerConst.link.joinRoom}>join room</Link>
-            <hr/>
+        return <div className="view view--home">
+            <div className="wh50">
+                <h1 className="home-title">AE:Live</h1>
+            </div>
+            <div className="wh50">
+                <Link className="view__button" to={routerConst.link.setupRoom}>__create__game__</Link>
+                <Link className="view__button" to={routerConst.link.joinRoom}>__join__game__</Link>
+            </div>
         </div>;
     }
 }

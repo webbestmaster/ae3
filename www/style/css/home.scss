@@ -1,0 +1,15 @@
+@import "var";
+.view--home {
+    background-image: url('./../i/bg/1.jpg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: contain;
+}
+
+.home-title {
+    @extend .center;
+    font-size: 50px;
+    background-color: #191919;
+    color: #efefef;
+    padding: 95px 10px 93px;
+}

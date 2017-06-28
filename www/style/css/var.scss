@@ -1,0 +1,15 @@
+$mainFontFamily: "Lucida Console", monospace;
+$mainTextColor: #212121;
+$uiBgColor: #e9bb97;
+
+.wh50 {
+    height: 50%;
+    position: relative;
+}
+
+.center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
