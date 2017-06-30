@@ -1,6 +1,8 @@
-$mainFontFamily: "Lucida Console", monospace;
 $mainTextColor: #212121;
 $uiBgColor: #e9bb97;
+
+$mainFontFamily: Roboto, sans-serif;
+$monospaceFontFamily: "Lucida Console", monospace;
 
 .wh50 {
     height: 50%;
@@ -12,4 +14,8 @@ $uiBgColor: #e9bb97;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+}
+
+.ta-center {
+    text-align: center;
 }

@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import * as userAction from './../user/action';
 import api from './../user/api';
+import {RaisedButton} from 'material-ui';
 const routerConst = require('./../router/const.json');
 
 class HomeView extends BaseView {
@@ -20,9 +21,15 @@ class HomeView extends BaseView {
             <div className="wh50">
                 <h1 className="home-title">AE:Live</h1>
             </div>
-            <div className="wh50">
-                <Link className="view__button" to={routerConst.link.setupRoom}>__create__game__</Link>
-                <Link className="view__button" to={routerConst.link.joinRoom}>__join__game__</Link>
+            <div className="wh50 ta-center">
+                <Link to={routerConst.link.setupRoom}>
+                    <RaisedButton label="__create__game__"/>
+                </Link>
+                <br/>
+                <br/>
+                <Link to={routerConst.link.joinRoom}>
+                    <RaisedButton label="__join__game__"/>
+                </Link>
             </div>
         </div>;
     }

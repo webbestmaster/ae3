@@ -9,7 +9,5 @@
 .home-title {
     @extend .center;
     font-size: 50px;
-    background-color: #191919;
-    color: #efefef;
-    padding: 95px 10px 93px;
+    font-family: $monospaceFontFamily;
 }
