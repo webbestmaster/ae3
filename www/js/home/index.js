@@ -22,14 +22,8 @@ class HomeView extends BaseView {
                 <h1 className="home-title">AE:Live</h1>
             </div>
             <div className="wh50 ta-center">
-                <Link to={routerConst.link.setupRoom}>
-                    <RaisedButton label="__create__game__"/>
-                </Link>
-                <br/>
-                <br/>
-                <Link to={routerConst.link.joinRoom}>
-                    <RaisedButton label="__join__game__"/>
-                </Link>
+                <Link className="view-button" to={routerConst.link.setupRoom}>__create__game__</Link>
+                <Link className="view-button" to={routerConst.link.joinRoom}>__join__game__</Link>
             </div>
         </div>;
     }
