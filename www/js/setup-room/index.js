@@ -51,29 +51,30 @@ class SetupRoomView extends BaseView {
     render() {
         const view = this;
 
-        return <div>
-            <h1>setup room</h1>
-            <input ref="gameName" type="text" placeholder="game name"/>
-            <br/>
-            <input ref="password" type="text" placeholder="password"/>
-            <br/>
-            <select ref="gameType">
-                {Object
-                    .keys(gameSetup.gameType)
-                    .map(gameType => <option value={gameType} key={gameType}>{gameType}</option>)
-                }
-            </select>
-            <hr/>
+        return <div className="view">
+            <h1 className="view-header">
+                <div onClick={() => history.back()} className="view-header-back"/>
+                __setup__room__
+            </h1>
+            <div className="hidden">
+                <input ref="gameName" type="text" placeholder="game name"/>
+                <input ref="password" type="text" placeholder="password"/>
+                <select ref="gameType">
+                    {Object
+                        .keys(gameSetup.gameType)
+                        .map(gameType => <option value={gameType} key={gameType}>{gameType}</option>)
+                    }
+                </select>
+            </div>
+
             <select ref="map">
                 {mapList.map(mapData =>
                     <option value={mapData.fileName} key={mapData.fileName}>
                         {mapData.mapName}
                     </option>)}
             </select>
-            <hr/>
 
-            <button onClick={() => view.createRoom()}>create room</button>
-            <hr/>
+            <div className="big-bottom-button" onClick={() => view.createRoom()}>__create__room__</div>
         </div>;
     }
 }

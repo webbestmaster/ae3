@@ -8,11 +8,11 @@
         "module": true,
         "window": true,
         "document": true,
+        "history": true,
         "console": true,
         "WebSocket": true,
         "Notification": true,
-        "fetch": true,
-        "gapi": true
+        "fetch": true
     },
     "plugins": [
     ],

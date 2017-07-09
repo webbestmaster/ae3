@@ -48,16 +48,16 @@ if (IS_PRODUCTION) {
     store = createStore(reducer, DevTools.instrument(), applyMiddleware(thunk));
 }
 
-const history = syncHistoryWithStore(hashHistory, store);
+const historyStore = syncHistoryWithStore(hashHistory, store);
 
 ReactDOM.render(
     <Provider store={store}>
         <MuiThemeProvider>
             {
                 IS_PRODUCTION ?
-                    <AppRouter history={history}/> :
+                    <AppRouter history={historyStore}/> :
                     <div>
-                        <AppRouter history={history}/>
+                        <AppRouter history={historyStore}/>
                         <div style={{fontSize: '13px'}}>
                             <DevTools />
                         </div>
