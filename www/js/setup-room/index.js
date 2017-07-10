@@ -24,14 +24,14 @@ const mapList = mapReqContext.keys()
     });
 
 class SetupRoomView extends BaseView {
-    createRoom() {
+    createRoom(fileName) {
         const view = this;
         const {refs} = view;
 
         const gameName = refs.gameName.value;
         const gameType = refs.gameType.value;
         const password = refs.password.value;
-        const {map} = _.find(mapList, {fileName: refs.map.value});
+        const {map} = _.find(mapList, {fileName});
 
         api.post.room
             .create(null, {
@@ -48,6 +48,10 @@ class SetupRoomView extends BaseView {
             .then(() => view.props.router.push(routerConst.link.room));
     }
 
+    getPlayersNumber(mapData) {
+        return 2;
+    }
+
     render() {
         const view = this;
 
@@ -56,6 +60,7 @@ class SetupRoomView extends BaseView {
                 <div onClick={() => history.back()} className="view-header-back"/>
                 __setup__room__
             </h1>
+
             <div className="hidden">
                 <input ref="gameName" type="text" placeholder="game name"/>
                 <input ref="password" type="text" placeholder="password"/>
@@ -67,14 +72,17 @@ class SetupRoomView extends BaseView {
                 </select>
             </div>
 
-            <select ref="map">
-                {mapList.map(mapData =>
-                    <option value={mapData.fileName} key={mapData.fileName}>
-                        {mapData.mapName}
-                    </option>)}
-            </select>
+            {mapList.map(mapData =>
+                <div key={mapData.fileName}>
+                    <div>
+                        <h3>players: {view.getPlayersNumber(mapData)}</h3>
+                        <h3>{mapData.mapName}</h3>
+                        <button onClick={() => view.createRoom(mapData.fileName)}>__create__game__</button>
+                    </div>
+                    <hr/>
+                </div>
+            )}
 
-            <div className="big-bottom-button" onClick={() => view.createRoom()}>__create__room__</div>
         </div>;
     }
 }
