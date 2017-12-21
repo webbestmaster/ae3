@@ -1,0 +1,10 @@
+$ff: Helvetica, sans-serif;
+
+.header {
+    height: 200px;
+    background-image: url('./spinner.gif');
+    //background-image: url('./spinner.gif');
+    font-family: $ff;
+    background-color: #c00;
+    box-sizing: border-box;
+}

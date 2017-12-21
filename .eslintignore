@@ -1,0 +1,28 @@
+# IDE
+/.idea/
+
+# npm
+node_modules
+
+
+# before
+_before
+_before-2
+_before-3
+
+# dist
+/dist/
+/prod/
+
+# polyfill
+/www/js/lib/
+
+# res
+
+/_res
+
+# example
+# /* eslint-disable no-unused-vars */
+# var React = require('react');
+# /* eslint-enable no-unused-vars */
+# var React = require('react'); // eslint-disable-line no-unused-vars

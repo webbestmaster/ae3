@@ -1,0 +1,41 @@
+$mainFontFamily: Tahoma, sans-serif;
+
+.hidden {
+    display: none !important;
+}
+
+.disabled {
+    opacity: 0.2;
+    pointer-events: none; // see Can I Use
+}
+
+.clear {
+    clear: both;
+}
+
+.clear-self {
+    &:after {
+        display: block;
+        content: '';
+        clear: both;
+    }
+}
+
+.clear-full {
+    clear: both;
+    &:after {
+        display: block;
+        content: '';
+        clear: both;
+    }
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.ta-center {
+    text-align: center;
+}
