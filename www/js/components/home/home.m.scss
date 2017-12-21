@@ -1,6 +1,9 @@
 $ff: Helvetica, sans-serif;
 
 .header {
+    position: relative;
+    top: 20px;
+    left: 20px;
     height: 200px;
     background-image: url('./spinner.gif');
     //background-image: url('./spinner.gif');

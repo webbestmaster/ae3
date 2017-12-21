@@ -11,7 +11,7 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 
-import styles from 'style/css/_root.css'; // do not remove me
+import styles from 'style/css/_root.scss'; // do not remove me
 require('./lib/initialize-environment');
 
 // import * as reducers from './reducer';

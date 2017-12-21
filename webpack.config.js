@@ -53,20 +53,20 @@ const webpackConfig = {
         rules: [
             // css module
             {
-                test: /\.scss$/,
+                test: /\.m\.scss$/,
                 use: [
                     {loader: 'style-loader', options: {sourceMap: IS_DEVELOPMENT}},
                     {
                         loader: 'css-loader', options: {
                             sourceMap: IS_DEVELOPMENT,
-                            modules: IS_DEVELOPMENT, // true,
+                            modules: true,
                             localIdentName: '[path]___[name]__[local]___[hash:base64:5]'
                         }
                     },
                     {loader: 'resolve-url-loader'},
                     {
                         loader: 'postcss-loader', options: {
-                            sourceMap: IS_DEVELOPMENT,
+                            sourceMap: true,
                             config: {
                                 path: './postcss.config.js'
                             }
@@ -78,13 +78,13 @@ const webpackConfig = {
 
             // global styles
             {
-                test: /_root\.css$/,
+                test: /_root\.scss$/,
                 use: [
                     {loader: 'style-loader', options: {sourceMap: IS_DEVELOPMENT}},
                     {
                         loader: 'css-loader', options: {
                             sourceMap: IS_DEVELOPMENT,
-                            modules: IS_DEVELOPMENT, // true,
+                            modules: IS_DEVELOPMENT,
                             localIdentName: '[local]'
                         }
                     },
