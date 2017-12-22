@@ -14,7 +14,6 @@ module.exports = ({file, options, env}) => ({
                 'Explorer 8',
                 'Firefox 15'
             ]
-        },
-        cssnano: true // env === 'production' ? options.cssnano : false
+        }
     }
 });
