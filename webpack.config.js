@@ -60,7 +60,7 @@ const webpackConfig = {
                         loader: 'css-loader', options: {
                             sourceMap: IS_DEVELOPMENT,
                             modules: true,
-                            localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
+                            localIdentName: '[local]___[path]___[name]___[hash:base64:5]',
                             minimize: IS_PRODUCTION
                         }
                     },
