@@ -1,4 +1,5 @@
-/* global window, document */
+// @flow
+/* global window, document, HTMLElement */
 import React, {Component} from 'react';
 import {Switch, Route} from 'react-router-dom';
 import Home from './../home';
@@ -7,7 +8,18 @@ import cnx from './../../helper/cnx';
 
 const appConst = require('./../../app-const.json');
 
-export default class App extends Component {
+type Props = { /* ... */ };
+
+type State = {
+    count: number,
+};
+
+type Attr = {
+    wrapper: HTMLElement | null
+}
+
+export default class App extends Component<Props, State> {
+    attr: Attr
     constructor() {
         super();
 
@@ -33,6 +45,11 @@ export default class App extends Component {
         const docElem = window.document.documentElement;
         const screenWidth = docElem.clientWidth;
         const {wrapper} = view.attr;
+
+        if (wrapper === null) {
+            return;
+        }
+
         const currentClassName = wrapper.className;
         const newClassName = 'js-app-wrapper ' + cnx({
             'desktop-width': screenWidth >= appConst.size.desktopWidth,
