@@ -1,3 +1,6 @@
+// @flow
+/* global window */
+
 // polyfill
 // require('./polyfill/es5-shim');
 require('./polyfill/es5-sham');
@@ -6,13 +9,11 @@ require('./polyfill/es6-shim');
 require('./polyfill/es6-sham.min');
 require('./polyfill/es7-shim');
 
-/* global window */
-import es6Promise from 'es6-promise';
-es6Promise.polyfill();
+require('es6-promise').polyfill();
 
 import FastClick from 'fastclick';
 
-function initializeEnvironment() {
+function initializeEnvironment():void {
     const doc = window.document;
 
     FastClick.attach(doc.body);
