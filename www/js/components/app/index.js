@@ -5,6 +5,7 @@ import {Switch, Route} from 'react-router-dom';
 import Home from './../home';
 import Page from './../page';
 import cnx from './../../helper/cnx';
+import {user} from './../../module/user';
 
 const appConst = require('./../../app-const.json');
 
@@ -34,13 +35,13 @@ export default class App extends Component<Props, State> {
         view.updateWrapperClassName();
     }
 
-    bindEventListeners() {
+    bindEventListeners():void {
         const view = this;
 
         window.addEventListener('resize', () => view.onResize(), false);
     }
 
-    updateWrapperClassName() {
+    updateWrapperClassName():void {
         const view = this;
         const docElem = window.document.documentElement;
         const screenWidth = docElem.clientWidth;
@@ -62,7 +63,7 @@ export default class App extends Component<Props, State> {
         }
     }
 
-    onResize() {
+    onResize():void {
         const view = this;
 
         view.updateWrapperClassName();

@@ -8,6 +8,8 @@ export default class Home extends Component {
         return <div>
             <h1 className={homeStyle.header + ' disabled'}>Home</h1>
 
+            <Link to="/make-room">make-room</Link>
+
             <Link to="/page">to page</Link>
         </div>;
     }
