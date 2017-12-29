@@ -1,6 +1,5 @@
 // @flow
-
-/* global localStorage */
+/* global localStorage, KeyValue */
 
 type userAttr = {
     id: string
@@ -9,7 +8,7 @@ type userAttr = {
 const userLocalStorageField = 'user-data-v.0.1';
 
 export default class User {
-    attr: userAttr
+    attr: userAttr;
 
     constructor() {
         this.attr = {id: 'no-user-id'};
@@ -29,7 +28,7 @@ export default class User {
         return this;
     }
 
-    static saveData<T>(data: T): T {
+    static saveData(data: KeyValue): KeyValue {
         const savedData = User.getData();
 
         Object.assign(savedData, data);
