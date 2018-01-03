@@ -3,7 +3,8 @@
 import React, {Component} from 'react';
 import {Switch, Route} from 'react-router-dom';
 import Home from './../home';
-import Page from './../page';
+// import Page from './../page';
+import CreatingGame from './../creating-game';
 import cnx from './../../helper/cnx';
 import {user} from './../../module/user';
 import {store} from './../../index';
@@ -13,9 +14,7 @@ const appGlobalConst = require('./../../app-const.json');
 
 type Props = { /* ... */ };
 
-type State = {
-    count: number,
-};
+type State = { /* ... */ };
 
 type Attr = {
     wrapper: HTMLElement | null
@@ -72,9 +71,13 @@ export default class App extends Component<Props, State> {
     }
 
     render() {
+        console.log('---> user:');
+        console.log(user);
+
         return <Switch>
             <Route path='/' component={Home} exact/>
-            <Route path='/page' component={Page}/>
+            <Route path='/creating-game' component={CreatingGame} exact/>
+            {/* <Route path='/page' component={Page}/> */}
         </Switch>;
     }
 }

@@ -6,11 +6,17 @@ import {Link} from 'react-router-dom';
 export default class Home extends Component {
     render() {
         return <div>
-            <h1 className={homeStyle.header}>Home</h1>
+            <h1 className={homeStyle.header}>__text__home-page</h1>
+            <br/>
+            <br/>
+            <Link to="/creating-game">__text__create-game</Link>
+            <br/>
+            <br/>
+            <Link to="/join-game">__text__join-game</Link>
+            <br/>
+            <br/>
+            <Link to="/settings">__text__settings</Link>
 
-            <Link to="/make-room">make-room</Link>
-
-            <Link to="/page">to page</Link>
         </div>;
     }
 }
