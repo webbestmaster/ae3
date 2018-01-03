@@ -11,11 +11,13 @@ export default class User {
     attr: userAttr;
 
     constructor() {
-        this.attr = {id: 'no-user-id'};
+        const user = this; // eslint-disable-line consistent-this
 
-        const userId: string = User.getData().id || String(Math.random()).substr(2);
+        user.attr = {id: 'no-user-id'};
 
-        this.setId(userId);
+        const userId: string = User.getData().id || 'user-id-' + String(Math.random()).substr(2);
+
+        user.setId(userId);
     }
 
     getId(): string {
@@ -43,6 +45,6 @@ export default class User {
     }
 }
 
-const user = new User();
+const userModel = new User();
 
-export {user};
+export {userModel as user};

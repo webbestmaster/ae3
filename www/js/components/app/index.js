@@ -7,6 +7,7 @@ import Home from './../home';
 import CreatingGame from './../creating-game';
 import cnx from './../../helper/cnx';
 import {user} from './../../module/user';
+import {socket} from './../../module/socket';
 import {store} from './../../index';
 import * as appAction from './action';
 
