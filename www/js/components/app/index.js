@@ -6,8 +6,10 @@ import Home from './../home';
 import Page from './../page';
 import cnx from './../../helper/cnx';
 import {user} from './../../module/user';
+import {store} from './../../index';
+import * as appAction from './action';
 
-const appConst = require('./../../app-const.json');
+const appGlobalConst = require('./../../app-const.json');
 
 type Props = { /* ... */ };
 
@@ -32,7 +34,7 @@ export default class App extends Component<Props, State> {
 
         view.bindEventListeners();
 
-        view.updateWrapperClassName();
+        view.onResize();
     }
 
     bindEventListeners():void {
@@ -41,32 +43,32 @@ export default class App extends Component<Props, State> {
         window.addEventListener('resize', () => view.onResize(), false);
     }
 
-    updateWrapperClassName():void {
+    onResize():void {
         const view = this;
+
         const docElem = window.document.documentElement;
         const screenWidth = docElem.clientWidth;
+        const screenHeight = docElem.clientHeight;
         const {wrapper} = view.attr;
 
         if (wrapper === null) {
             return;
         }
 
+        // set wrapper class name
         const currentClassName = wrapper.className;
         const newClassName = 'js-app-wrapper ' + cnx({
-            'desktop-width': screenWidth >= appConst.size.desktopWidth,
-            'lt-desktop-width': screenWidth < appConst.size.desktopWidth,
-            'lt-tablet-width': screenWidth < appConst.size.tabletWidth
+            'desktop-width': screenWidth >= appGlobalConst.size.desktopWidth,
+            'lt-desktop-width': screenWidth < appGlobalConst.size.desktopWidth,
+            'lt-tablet-width': screenWidth < appGlobalConst.size.tabletWidth
         }).className;
 
         if (currentClassName !== newClassName) {
             wrapper.className = newClassName;
         }
-    }
 
-    onResize():void {
-        const view = this;
-
-        view.updateWrapperClassName();
+        // store window size
+        store.dispatch(appAction.setScreenSize(screenWidth, screenHeight));
     }
 
     render() {
