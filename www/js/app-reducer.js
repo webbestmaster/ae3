@@ -8,7 +8,10 @@ import trainingsCatalog from './components/trainings-catalog/reducer';
 import auth from './components/auth/reducer';
 */
 
+import system from './components/system/reducer';
+
 export {
+    system
 
 /*
     app,
@@ -18,3 +21,12 @@ export {
     auth
 */
 };
+
+export type GlobalStateType = {|
+    system: {|
+        screen: {|
+            width: number,
+            height: number
+        |}
+    |}
+|};

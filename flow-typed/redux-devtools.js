@@ -3,7 +3,7 @@
 import React, {Component} from 'react';
 
 declare module 'redux-devtools' {
-    declare export var createDevTools: (component: Component<{}>) => Component<{}>;
+    declare export var createDevTools: (component: Component) => Component;
     // declare export var VKShareButton: Component<void, {url: string}>;
     // declare export var OKShareButton: Component<void, {url: string}>;
     //
