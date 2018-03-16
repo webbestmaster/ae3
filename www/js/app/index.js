@@ -6,8 +6,9 @@ import {Switch, Route, Link, BrowserRouter} from 'react-router-dom';
 
 import Index from './../page/index';
 
-export default (): Node => <div>
-    <Switch key="switch">
-        <Route path='/' component={Index} exact/>
-    </Switch>
-</div>;
+export default (): Node[] =>
+    [
+        <Switch key="switch">
+            <Route path='/' component={Index} exact/>
+        </Switch>
+    ];
