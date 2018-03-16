@@ -1,0 +1,51 @@
+.hidden {
+    display: none !important;
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none; // see Can I Use
+}
+
+.clear_self {
+    &:after {
+        display: block;
+        content: '';
+        clear: both;
+    }
+}
+
+.clear_full {
+    clear: both;
+    &:after {
+        display: block;
+        content: '';
+        clear: both;
+    }
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.ta_c {
+    text-align: center;
+}
+
+.fl_l {
+    float: left;
+}
+
+.fl_r {
+    float: right;
+}
+
+.fl_n {
+    float: none;
+}
+
+.json {
+    word-break: break-all;
+}

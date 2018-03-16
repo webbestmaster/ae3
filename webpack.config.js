@@ -39,7 +39,11 @@ const webpackConfig = {
     context: path.join(CWD, 'www'),
     entry: {
         // common: './js/common.js',
-        main: ['babel-polyfill', './js/index.js']
+        main: [
+            'babel-polyfill',
+            './css/reset.scss',
+            './js/index.js'
+        ]
     },
     output: Object.assign(
         {filename: '[name].js'},
@@ -76,7 +80,7 @@ const webpackConfig = {
 
             // css module
             {
-                test: /\.m\.scss$/,
+                test: /\.scss$/,
                 use: [
                     {loader: 'css-hot-loader'},
                     {loader: 'style-loader', options: {sourceMap: IS_DEVELOPMENT}},
@@ -101,10 +105,9 @@ const webpackConfig = {
                 ]
             },
 
-            /*
             // global styles and libraries
             {
-                test: /(_root\.scss|\.css)$/,
+                test: /(\.css)$/,
                 use: [
                     {loader: 'css-hot-loader'},
                     {loader: 'style-loader', options: {sourceMap: IS_DEVELOPMENT}},
@@ -128,7 +131,7 @@ const webpackConfig = {
                     {loader: 'sass-loader', options: {sourceMap: IS_DEVELOPMENT}}
                 ]
             },
-*/
+
             {
                 test: /\.raw$/,
                 loader: 'raw-loader'

@@ -16,5 +16,5 @@
 all=warn
 
 [options]
-module.name_mapper='.*\(.s?css\)' -> 'empty/object'
+module.name_mapper='^.*\.s?css$' -> 'css-module-flow'
 include_warnings=true
