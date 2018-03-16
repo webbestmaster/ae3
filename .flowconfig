@@ -1,0 +1,20 @@
+[ignore]
+# .*/dist/.*
+.*/_before/.*
+.*/_before-2/.*
+.*/_before-3/.*
+.*/_before-4/.*
+
+[include]
+./flow-typed/**/
+
+[libs]
+# .*/node_modules/.*
+# .*/www/js/lib/.*
+
+[lints]
+all=warn
+
+[options]
+module.name_mapper='.*\(.s?css\)' -> 'empty/object'
+include_warnings=true
