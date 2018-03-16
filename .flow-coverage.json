@@ -7,10 +7,10 @@
     "flowCommandPath": "flow",
     "includeGlob": [
         "./www/js/**/*.js",
-        "./www/js/flow-typed/**/*.js"
+        "./flow-typed/**/*.js"
     ],
     "outputDir": "./flow-coverage/report",
     "projectDir": "./",
-    "threshold": 30,
+    "threshold": 50,
     "type": "html"
 }

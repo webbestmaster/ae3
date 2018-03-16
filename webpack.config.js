@@ -48,8 +48,8 @@ const webpackConfig = {
     output: Object.assign(
         {filename: '[name].js'},
         IS_PRODUCTION ?
-            {path: path.join(CWD, './../public/assets'), publicPath: '/assets/'} :
-            {path: path.join(CWD, 'dist'), publicPath: '/'}
+            {path: path.join(CWD, './dist/assets/'), publicPath: '/assets/'} :
+            {path: path.join(CWD, './dist/'), publicPath: '/'}
     ),
 
     watch: IS_DEVELOPMENT,
@@ -164,7 +164,7 @@ const webpackConfig = {
                 minifyJS: IS_PRODUCTION
             },
             hash: true,
-            filename: IS_PRODUCTION ? './../../public/index.html' : './index.html'
+            filename: IS_PRODUCTION ? './../index.html' : './index.html'
         }),
         new ScriptExtHtmlWebpackPlugin({
             defaultAttribute: IS_PRODUCTION ? 'async' : 'defer'
@@ -205,7 +205,7 @@ if (IS_DEVELOPMENT) {
     );
 }
 
-if (IS_PRODUCTION) {
+if (!IS_PRODUCTION) {
     webpackConfig.plugins.push(
         new webpack.optimize.UglifyJsPlugin({
             compress: {
