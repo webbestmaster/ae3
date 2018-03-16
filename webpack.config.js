@@ -205,7 +205,7 @@ if (IS_DEVELOPMENT) {
     );
 }
 
-if (!IS_PRODUCTION) {
+if (IS_PRODUCTION) {
     webpackConfig.plugins.push(
         new webpack.optimize.UglifyJsPlugin({
             compress: {
