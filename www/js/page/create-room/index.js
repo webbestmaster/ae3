@@ -15,6 +15,7 @@ class CreateRoom extends Component<void, void> {
             <h1>CreateRoom</h1>
             <br/>
             <br/>
+            <h1>select map</h1>
             <br/>
         </div>;
     }
