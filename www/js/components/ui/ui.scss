@@ -1,5 +1,8 @@
+@import "./../../../css/var";
+
 .button {
     display: inline-block;
+    color: $mainTextColor;
     text-decoration: none;
     text-align: center;
     padding: 10px;
