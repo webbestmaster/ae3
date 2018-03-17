@@ -7,6 +7,8 @@ import System from './../components/system';
 
 import Index from './../page/index';
 import MultiPlayer from './../page/multi-player';
+import CreateRoom from './../page/create-room';
+import JoinRoom from './../page/join-room';
 
 import routes from './routes';
 
@@ -16,5 +18,7 @@ export default (): Node[] =>
         <Switch key="switch">
             <Route path={routes.index} component={Index} exact/>
             <Route path={routes.multiPlayer} component={MultiPlayer} exact/>
+            <Route path={routes.createRoom} component={CreateRoom} exact/>
+            <Route path={routes.joinRoom} component={JoinRoom} exact/>
         </Switch>
     ];
