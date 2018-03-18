@@ -11,6 +11,12 @@
         20,
         25
     ],
+    "playerIdList": [
+        "player-0",
+        "player-1",
+        "player-2",
+        "player-3"
+    ],
     "teamIdList": [
         "team-0",
         "team-1",

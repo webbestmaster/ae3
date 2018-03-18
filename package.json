@@ -18,8 +18,8 @@
     "build-nix": "NODE_ENV=production webpack --progress",
     "__build-win": "SET NODE_ENV=production& rmdir /s /q dist && webpack",
     "__start": "webpack --progress",
-    "start-server-hot-css": "webpack-dev-server --inline --hot --content-base dist/ --host 0.0.0.0 --port 8181 --progress --history-api-fallback",
-    "start-server": "webpack-dev-server --content-base dist/ --host 0.0.0.0 --port 8181 --progress --no-inline --history-api-fallback",
+    "start-dev-server-hot-css": "webpack-dev-server --inline --hot --content-base dist/ --host 0.0.0.0 --port 8181 --progress --history-api-fallback",
+    "start-dev-server": "webpack-dev-server --content-base dist/ --host 0.0.0.0 --port 8181 --progress --no-inline --history-api-fallback",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "flow": "flow",
@@ -35,7 +35,8 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "socket.io-client": "^2.0.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

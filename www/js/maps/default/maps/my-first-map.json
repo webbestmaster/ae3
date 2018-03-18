@@ -1,0 +1,223 @@
+{
+    "meta": {
+        "en": {
+            "local": "en",
+            "name": "my first map"
+        },
+        "ru": {
+            "local": "ru",
+            "name": "моя первая карта"
+        }
+    },
+    "landscape": [
+        ["hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "road-0",     "forest-0",     "road-0",     "forest-0", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "road-0",       "road-0",     "road-0",   "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["forest-0",    "forest-0",   "forest-0",     "road-0",     "forest-1", "hill-0",      "forest-0",   "forest-0",     "road-0",     "forest-0" ],
+        ["water-0",     "water-0",    "water-0",      "water-0",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ],
+        ["water-0",     "water-1",    "water-1",      "water-1",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ],
+        ["water-0",     "water-0",    "water-0",      "water-2",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ],
+        ["water-0",     "water-0",    "water-0",      "water-2",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ],
+        ["water-0",     "water-0",    "water-0",      "water-2",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ],
+        ["water-0",     "water-0",    "water-0",      "water-0",    "water-1",  "water-0",     "water-0",     "water-0",     "water-0",     "water-0" ]
+    ],
+    "buildings": [
+        {
+            "x": 0,
+            "y": 0,
+            "type": "castle",
+            "playerId": "player-0"
+        },
+        {
+            "x": 1,
+            "y": 1,
+            "type": "castle",
+            "playerId": "player-0"
+        },
+        {
+            "x": 3,
+            "y": 2,
+            "type": "farm",
+            "playerId": "player-0"
+        },
+        {
+            "x": 5,
+            "y": 5,
+            "type": "well"
+        },
+        {
+            "x": 5,
+            "y": 6,
+            "type": "temple"
+        },
+        {
+            "x": 4,
+            "y": 3,
+            "type": "farm-destroyed"
+        },
+        {
+            "x": 6,
+            "y": 5,
+            "type": "castle",
+            "playerId": "player-1"
+        },
+        {
+            "x": 6,
+            "y": 6,
+            "type": "castle",
+            "playerId": "player-1"
+        },
+        {
+            "x": 5,
+            "y": 3,
+            "type": "farm",
+            "playerId": "player-1"
+        }
+    ],
+    "units": [
+        {
+            "x": 0,
+            "y": 0,
+            "type": "soldier",
+            "playerId": "player-0"
+        },
+        {
+            "x": 1,
+            "y": 0,
+            "type": "archer",
+            "playerId": "player-0"
+        },
+        {
+            "x": 2,
+            "y": 0,
+            "type": "elemental",
+            "playerId": "player-0"
+        },
+        {
+            "x": 2,
+            "y": 9,
+            "type": "elemental",
+            "playerId": "player-0"
+        },
+        {
+            "x": 3,
+            "y": 0,
+            "type": "sorceress",
+            "playerId": "player-0"
+        },
+        {
+            "x": 5,
+            "y": 6,
+            "type": "sorceress",
+            "playerId": "player-0"
+        },
+        {
+            "x": 4,
+            "y": 0,
+            "type": "wisp",
+            "playerId": "player-0"
+        },
+        {
+            "x": 5,
+            "y": 0,
+            "type": "dire-wolf",
+            "playerId": "player-0"
+        },
+        {
+            "x": 5,
+            "y": 2,
+            "type": "dire-wolf",
+            "playerId": "player-0"
+        },
+        {
+            "x": 0,
+            "y": 1,
+            "type": "golem",
+            "playerId": "player-0"
+        },
+        {
+            "x": 1,
+            "y": 1,
+            "type": "catapult",
+            "playerId": "player-0"
+        },
+        {
+            "x": 2,
+            "y": 1,
+            "type": "dragon",
+            "playerId": "player-0"
+        },
+        {
+            "x": 7,
+            "y": 7,
+            "type": "dragon",
+            "playerId": "player-0"
+        },
+        {
+            "x": 3,
+            "y": 1,
+            "type": "skeleton",
+            "playerId": "player-0"
+        },
+        {
+            "x": 4,
+            "y": 1,
+            "type": "crystal",
+            "playerId": "player-0"
+        },
+        {
+            "x": 5,
+            "y": 1,
+            "type": "galamar",
+            "playerId": "player-0"
+        },
+        {
+            "x": 6,
+            "y": 1,
+            "type": "soldier",
+            "playerId": "player-0"
+        },
+        {
+            "x": 7,
+            "y": 1,
+            "type": "soldier",
+            "playerId": "player-0"
+        },
+        {
+            "x": 8,
+            "y": 1,
+            "type": "soldier",
+            "playerId": "player-0"
+        },
+        {
+            "x": 3,
+            "y": 4,
+            "type": "soldier",
+            "playerId": "player-1"
+        },
+        {
+            "x": 4,
+            "y": 4,
+            "type": "soldier",
+            "playerId": "player-1"
+        },
+        {
+            "x": 5,
+            "y": 4,
+            "type": "dire-wolf",
+            "playerId": "player-1"
+        }
+    ],
+    "graves": [
+        {
+            "x": 6,
+            "y": 6,
+            "countdown": 3
+        }
+    ]
+}
