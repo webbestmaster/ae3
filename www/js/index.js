@@ -61,4 +61,4 @@ render(
     window.document.querySelector('.js-app-wrapper')
 );
 
-// export {store};
+export {store};

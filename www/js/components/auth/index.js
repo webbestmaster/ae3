@@ -9,9 +9,11 @@ import {setUser} from './action';
 import User from './../../module/user';
 import type {GlobalStateType} from './../../app-reducer';
 import type {AuthType, UserType} from './reducer';
+import {store} from '../../index';
 
 type PropsType = {|
-    setUser: (userState: UserType) => void,
+    // setUser: (userState: UserType) => void,
+    // setUser: $Call<{}, setUser>,
     auth: AuthType
 |};
 
@@ -27,9 +29,9 @@ class Auth extends Component<PropsType, StateType> {
 
         const user = new User();
 
-        props.setUser({
+        store.dispatch(setUser({
             id: user.getId()
-        });
+        }));
     }
 
     render(): Node {
@@ -47,6 +49,6 @@ export default connect(
         auth: state.auth
     }),
     {
-        setUser
+        // setUser
     }
 )(Auth);
