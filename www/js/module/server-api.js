@@ -7,14 +7,14 @@ const {api} = appConst;
 const {url} = api;
 
 export type CreateRoomType = {|
-    roomId: string
+    roomId: string | null
 |};
 
 export function createRoom(): Promise<CreateRoomType> {
     return fetch(url + '/api/room/create')
         .then((blob: Response): Promise<CreateRoomType> => blob.json())
         .then((result: CreateRoomType): CreateRoomType => ({
-            roomId: result.roomId || ''
+            roomId: typeof result.roomId === 'string' ? result.roomId : null
         }));
 }
 
