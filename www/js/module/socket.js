@@ -26,7 +26,7 @@ export default class Socket {
     initSocket(): Promise<Socket> {
         const socket = this; // eslint-disable-line consistent-this
 
-        if (socket.attr.socket) {
+        if (socket.attr && socket.attr.socket) {
             return Promise.resolve(socket);
         }
 
@@ -50,12 +50,12 @@ export default class Socket {
         });
     }
 
-    getId(): string | null {
+    getId(): string {
         const socket = this; // eslint-disable-line consistent-this
         const {attr} = socket;
 
         if (attr.socket === null) {
-            return null;
+            return '';
         }
 
         return attr.socket.id;

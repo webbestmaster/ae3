@@ -5,8 +5,9 @@
 import React, {Component} from 'react';
 import type {Node} from 'react';
 import {connect} from 'react-redux';
-import {setUser} from './action';
+import {setUser, setSocket} from './action';
 import User from './../../module/user';
+import Socket from './../../module/socket';
 import type {GlobalStateType} from './../../app-reducer';
 import type {AuthType, UserType} from './reducer';
 import {store} from '../../index';
@@ -32,6 +33,14 @@ class Auth extends Component<PropsType, StateType> {
         store.dispatch(setUser({
             id: user.getId()
         }));
+
+        const socket = new Socket();
+
+        socket.attr.initialPromise.then(() => {
+            store.dispatch(setSocket({
+                id: socket.getId()
+            }));
+        });
     }
 
     render(): Node {
