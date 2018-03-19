@@ -11,7 +11,11 @@ export type CreateRoomType = {|
 |};
 
 export function createRoom(): Promise<CreateRoomType> {
-    return fetch(url + '/api/room/create').then(blob => blob.json());
+    return fetch(url + '/api/room/create')
+        .then((blob: Response): Promise<CreateRoomType> => blob.json())
+        .then((result: CreateRoomType): CreateRoomType => ({
+            roomId: result.roomId || ''
+        }));
 }
 
 /*
