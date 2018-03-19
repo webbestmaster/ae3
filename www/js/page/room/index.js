@@ -9,10 +9,14 @@ import uiStyle from './../../components/ui/ui.scss';
 import serviceStyle from './../../../css/service.scss';
 import type {AuthType} from '../../components/auth/reducer';
 import * as serverApi from './../../module/server-api';
+import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
 
 import routes, {type HistoryType, type MatchType} from './../../app/routes';
 
-type StateType = {||};
+type StateType = {|
+    settings: AllRoomSettingsType,
+    userList: Array<ServerUserType>
+|};
 
 type PropsType = {|
     match: MatchType
@@ -33,8 +37,12 @@ class Room extends Component<PropsType, StateType> {
         }
 
         const settings = await serverApi.getAllRoomSettings(roomId);
+        const users = await serverApi.getAllRoomUsers(roomId);
 
-        console.log(settings);
+        view.setState({
+            settings: settings.settings,
+            userList: users.users
+        });
 
         return roomId;
     }
@@ -46,6 +54,10 @@ class Room extends Component<PropsType, StateType> {
         return <div>
             <h1>Room</h1>
             <h2>wait for other players</h2>
+
+            <div className="json">
+                {JSON.stringify(state)}
+            </div>
 
         </div>;
     }

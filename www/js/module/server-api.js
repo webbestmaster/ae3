@@ -64,3 +64,18 @@ export function getAllRoomSettings(roomId: string): Promise<GetAllRoomSettingsTy
     return fetch(url + '/api/room/get-all-settings/' + roomId)
         .then((blob: Response): Promise<GetAllRoomSettingsType> => blob.json());
 }
+
+export type ServerUserType = {|
+    socketId: string,
+    userId: string
+|};
+
+export type GetAllRoomUsersType = {|
+    roomId: string,
+    users: Array<ServerUserType>
+|};
+
+export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
+    return fetch(url + '/api/room/get-users/' + roomId)
+        .then((blob: Response): Promise<GetAllRoomUsersType> => blob.json());
+}
