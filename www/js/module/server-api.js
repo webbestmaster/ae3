@@ -79,3 +79,12 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
     return fetch(url + '/api/room/get-users/' + roomId)
         .then((blob: Response): Promise<GetAllRoomUsersType> => blob.json());
 }
+
+export type GetAllRoomIdsType = {|
+    roomIds: Array<string>
+|};
+
+export function getAllRoomIds(): Promise<GetAllRoomIdsType> {
+    return fetch(url + '/api/room/get-ids')
+        .then((blob: Response): Promise<GetAllRoomIdsType> => blob.json());
+}
