@@ -8,6 +8,7 @@ import mapGuide from './../../maps/map-guide';
 import * as serverApi from './../../module/server-api';
 import type {GlobalStateType} from '../../app-reducer';
 import type {AuthType} from '../../components/auth/reducer';
+import routes, {type HistoryType} from './../../app/routes';
 
 const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
 const mapList: Array<MapType> = mapReqContext.keys()
@@ -25,7 +26,8 @@ type StateType = {|
 |};
 
 type PropsType = {|
-    auth: AuthType
+    auth: AuthType,
+    history: HistoryType
 |};
 
 class CreateRoom extends Component<PropsType, StateType> {
@@ -59,14 +61,7 @@ class CreateRoom extends Component<PropsType, StateType> {
         const socketId = props.auth.socket.id;
         const userId = props.auth.user.id;
 
-
-        const joinRoomResult = await serverApi.joinRoom(createRoomResult.roomId, userId, socketId);
-
-        if (joinRoomResult.roomId === null) {
-            return null;
-        }
-
-        const setAllRoomSettingsResult = await serverApi.setAllRoomSettings(joinRoomResult.roomId, {
+        const setAllRoomSettingsResult = await serverApi.setAllRoomSettings(createRoomResult.roomId, {
             map,
             defaultMoney,
             unitLimit
@@ -74,6 +69,17 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         console.log('setAllRoomSettingsResult', setAllRoomSettingsResult);
 
+        const joinRoomResult = await serverApi.joinRoom(createRoomResult.roomId, userId, socketId);
+
+        if (joinRoomResult.roomId === null) {
+            return null;
+        }
+
+        props.history.push(routes.room.replace(':roomId', joinRoomResult.roomId));
+
+        return joinRoomResult.roomId;
+
+        /*
         const getAllRoomSettingsResult = await serverApi.getAllRoomSettings(joinRoomResult.roomId);
 
         console.log('getAllRoomSettingsResult');
@@ -81,6 +87,7 @@ class CreateRoom extends Component<PropsType, StateType> {
         console.log(getAllRoomSettingsResult.roomId);
 
         return joinRoomResult.roomId;
+*/
     }
 
     render(): Node {
