@@ -71,7 +71,7 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         const joinRoomResult = await serverApi.joinRoom(createRoomResult.roomId, userId, socketId);
 
-        if (joinRoomResult.roomId === null) {
+        if (joinRoomResult.roomId === '') {
             return null;
         }
 
