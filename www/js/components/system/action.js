@@ -1,18 +1,15 @@
 // @flow
 
-export type OnResizePayloadType = {|
-    width: number,
-    height: number
-|};
+import type {ScreenType} from './reducer';
 
 export type OnResizeType = {|
-    type: 'resize',
-    payload: OnResizePayloadType
+    type: 'system--resize',
+    payload: ScreenType
 |};
 
 export function onResize(width: number, height: number): OnResizeType {
     return {
-        type: 'resize',
+        type: 'system--resize',
         payload: {
             width,
             height

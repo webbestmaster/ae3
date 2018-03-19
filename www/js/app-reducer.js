@@ -9,9 +9,14 @@ import auth from './components/auth/reducer';
 */
 
 import system from './components/system/reducer';
+import type {SystemType} from './components/system/reducer';
+
+import auth from './components/auth/reducer';
+import type {AuthType} from './components/auth/reducer';
 
 export {
-    system
+    system,
+    auth
 
 /*
     app,
@@ -23,10 +28,6 @@ export {
 };
 
 export type GlobalStateType = {|
-    system: {|
-        screen: {|
-            width: number,
-            height: number
-        |}
-    |}
+    system: SystemType,
+    auth: AuthType
 |};

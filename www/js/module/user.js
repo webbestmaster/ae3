@@ -17,6 +17,12 @@ export default class User {
     constructor() {
         const user = this; // eslint-disable-line consistent-this
 
+        const attr: UserAttrType = {
+            id: ''
+        };
+
+        user.attr = attr;
+
         const userId: string = User.getData().id || 'user-id-' + String(Math.random()).substr(2);
 
         user.setId(userId);
