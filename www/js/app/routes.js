@@ -19,7 +19,7 @@ const routes: RoutesType = {
 export default routes;
 
 export type HistoryType = {|
-    push: (string) => void
+    push: (route: string) => void
 |};
 
 export type MatchType = {|

@@ -94,7 +94,7 @@ class Room extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {model} = state;
 
-        model.listenTo(socket.attr.model, 'message', async (message: SocketMessageType) => {
+        model.listenTo(socket.attr.model, 'message', async (message: SocketMessageType): Promise<void> => {
             await view.onMessage(message);
         });
     }
