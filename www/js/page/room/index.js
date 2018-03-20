@@ -3,7 +3,7 @@
 import React, {Component} from 'react';
 import type {Node} from 'react';
 import {connect} from 'react-redux';
-import MainModel from './../../lib/main-model';
+import MainModel from './../../lib/main-model/index';
 
 import {Link} from 'react-router-dom';
 
@@ -11,9 +11,9 @@ import {user} from './../../module/user';
 import {socket, type SocketMessageType} from './../../module/socket';
 import Game from './../../components/game';
 
-import uiStyle from './../../components/ui/ui.scss';
-import serviceStyle from './../../../css/service.scss';
-import type {AuthType} from '../../components/auth/reducer';
+// import uiStyle from './../../components/ui/ui.scss';
+// import serviceStyle from './../../../css/service.scss';
+// import type {AuthType} from '../../components/auth/reducer';
 import * as serverApi from './../../module/server-api';
 import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
 
@@ -94,8 +94,8 @@ class Room extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {model} = state;
 
-        model.listenTo(socket.attr.model, 'message', (message: SocketMessageType) => {
-            view.onMessage(message).then(() => {});
+        model.listenTo(socket.attr.model, 'message', async (message: SocketMessageType) => {
+            await view.onMessage(message);
         });
     }
 

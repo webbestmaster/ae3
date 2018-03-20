@@ -3,7 +3,7 @@
 const socketIoClient = require('socket.io-client');
 
 import appConst from './../app-const';
-import MainModel from './../lib/main-model';
+import MainModel from './../lib/main-model/index';
 
 type AttrType = {|
     initialPromise: Promise<Socket>, // eslint-disable-line no-use-before-define
