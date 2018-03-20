@@ -5,6 +5,9 @@ import type {Node} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 
+import {user} from './../../module/user';
+import {socket} from './../../module/socket';
+
 import uiStyle from './../../components/ui/ui.scss';
 import serviceStyle from './../../../css/service.scss';
 import type {AuthType} from '../../components/auth/reducer';
@@ -42,6 +45,14 @@ class Room extends Component<PropsType, StateType> {
         view.setState({
             settings: settings.settings,
             userList: users.users
+        });
+
+        // FIXME:
+        // 1 - use pages' own model
+        // 2 - use listenTo
+        // 3 - use componentWillUnmount and stopListening
+        socket.attr.model.onChange('message', (message: string) => {
+            console.log('!!! message from socket', message);
         });
 
         return roomId;

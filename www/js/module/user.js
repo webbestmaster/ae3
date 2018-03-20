@@ -69,6 +69,6 @@ export default class User {
     }
 }
 
-// const userModel = new User();
+const userModel = new User();
 
-// export {userModel as user};
+export {userModel as user};

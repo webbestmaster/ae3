@@ -3,10 +3,12 @@
 const socketIoClient = require('socket.io-client');
 
 import appConst from './../app-const';
+import MainModel from './../lib/main-model';
 
 type AttrType = {|
     initialPromise: Promise<Socket>, // eslint-disable-line no-use-before-define
-    socket: { id: string } | null
+    socket: { id: string } | null,
+    model: MainModel
 |};
 
 export default class Socket {
@@ -19,7 +21,8 @@ export default class Socket {
 
         socket.attr = {
             initialPromise,
-            socket: null
+            socket: null,
+            model: new MainModel()
         };
     }
 
@@ -40,11 +43,14 @@ export default class Socket {
 
             socketIo.on('message', (message: string | void) => {
                 console.log('from server', message);
+
+                socket.attr.model.trigger('message', message);
             });
 
             socketIo.on('connect', () => {
                 console.log('socket connected');
                 socket.attr.socket = socketIo;
+                socket.attr.model.trigger('connect');
                 resolve(socket);
             });
         });
@@ -63,8 +69,6 @@ export default class Socket {
 }
 
 // const socket = '';
-/*
 const socketModel = new Socket();
 
 export {socketModel as socket};
-*/
