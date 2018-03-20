@@ -7,6 +7,7 @@ import type {MapType} from '../maps/type';
 const {api} = appConst;
 const {url} = api;
 
+
 export type CreateRoomType = {|
     roomId: string
 |};
@@ -18,6 +19,7 @@ export function createRoom(): Promise<CreateRoomType> {
             roomId: typeof result.roomId === 'string' ? result.roomId : ''
         }));
 }
+
 
 export type JoinRoomType = {|
     roomId: string
@@ -31,6 +33,7 @@ export function joinRoom(roomId: string, userId: string, socketId: string): Prom
         }));
 }
 
+
 export type LeaveRoomType = {|
     roomId: string
 |};
@@ -42,6 +45,7 @@ export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType
             roomId: typeof result.roomId === 'string' ? result.roomId : ''
         }));
 }
+
 
 export type AllRoomSettingsType = {|
     map: MapType,
@@ -66,6 +70,7 @@ export function setAllRoomSettings(roomId: string,
         }));
 }
 
+
 export type GetAllRoomSettingsType = {|
     roomId: string,
     settings: AllRoomSettingsType
@@ -75,6 +80,7 @@ export function getAllRoomSettings(roomId: string): Promise<GetAllRoomSettingsTy
     return fetch(url + '/api/room/get-all-settings/' + roomId)
         .then((blob: Response): Promise<GetAllRoomSettingsType> => blob.json());
 }
+
 
 export type ServerUserType = {|
     socketId: string,
@@ -91,6 +97,7 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
         .then((blob: Response): Promise<GetAllRoomUsersType> => blob.json());
 }
 
+
 export type GetAllRoomIdsType = {|
     roomIds: Array<string>
 |};
@@ -99,3 +106,44 @@ export function getAllRoomIds(): Promise<GetAllRoomIdsType> {
     return fetch(url + '/api/room/get-ids')
         .then((blob: Response): Promise<GetAllRoomIdsType> => blob.json());
 }
+
+
+export type PushStateType = {|
+    roomId: string,
+    type: 'room__push-state',
+    states: {
+        last: {},
+        length: number
+    }
+|};
+
+export type PushedStateType = {|
+    type: 'room__push-state',
+    state?: {}
+|};
+
+export function pushState(roomId: string,
+                          userId: string,
+                          pushedState: PushedStateType): Promise<PushStateType> {
+    return fetch(url + '/api/room/push-state/' + [roomId, userId].join('/'), {
+        method: 'POST',
+        body: JSON.stringify(pushedState),
+        headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
+    })
+        .then((blob: Response): Promise<PushStateType> => blob.json())
+        .then((result: PushStateType): PushStateType => {
+            return result;
+        });
+}
+
+export type TakeTurnType = {|
+    roomId: string
+|};
+
+export function takeTurn(roomId: string,
+                         userId: string): Promise<TakeTurnType> {
+    return fetch(url + '/api/room/take-turn/' + [roomId, userId].join('/'))
+        .then((blob: Response): Promise<TakeTurnType> => blob.json());
+}
+
+

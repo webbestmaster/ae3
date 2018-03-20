@@ -83,7 +83,7 @@ class Room extends Component<PropsType, StateType> {
         });
     }
 
-    async onMessage(message: SocketMessageType): Promise<void> {
+    async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
         const {model} = state;
@@ -115,14 +115,22 @@ class Room extends Component<PropsType, StateType> {
 
                 break;
 
+            case 'room__push-state':
+
+                console.log('push - state');
+                console.log(message);
+
+                break;
+
             default:
                 console.log('unsupported message type: ' + message.type);
         }
     }
 
-    render(): Node {
+    render(): Node { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
+        const roomId = props.match.params.roomId || '';
 
         return <div>
             <h1>Room</h1>
@@ -137,6 +145,23 @@ class Room extends Component<PropsType, StateType> {
             <div className="json">
                 {state && state.settings && JSON.stringify(state.settings)}
             </div>
+
+            <button onClick={async (): Promise<void> => {
+                const takeTurnResult = await serverApi.takeTurn(roomId, user.getId());
+
+                console.log(takeTurnResult);
+
+                const pushStateResult = await serverApi.pushState(roomId, user.getId(), {
+                    type: 'room__push-state',
+                    state: {
+                        isGameStart: true
+                    }
+                });
+
+                console.log(pushStateResult);
+            }}>
+                start
+            </button>
 
         </div>;
     }
