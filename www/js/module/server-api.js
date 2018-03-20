@@ -31,6 +31,17 @@ export function joinRoom(roomId: string, userId: string, socketId: string): Prom
         }));
 }
 
+export type LeaveRoomType = {|
+    roomId: string
+|};
+
+export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType> {
+    return fetch(url + '/api/room/leave/' + [roomId, userId].join('/'))
+        .then((blob: Response): Promise<LeaveRoomType> => blob.json())
+        .then((result: LeaveRoomType): LeaveRoomType => ({
+            roomId: typeof result.roomId === 'string' ? result.roomId : ''
+        }));
+}
 
 export type AllRoomSettingsType = {|
     map: MapType,
