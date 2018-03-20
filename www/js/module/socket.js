@@ -74,10 +74,17 @@ const socketModel = new Socket();
 export {socketModel as socket};
 
 export type SocketMessageType = {|
-    type: 'room__join-into-room' |
+    +type: 'room__join-into-room' |
         'room__leave-from-room' |
         'room__user-disconnected' |
         'room__take-turn' |
         'room__drop-turn' |
-        'room__push-state'
+        'room__push-state',
+    +states: {
+        +last: {
+            +state: {
+                +isGameStart: boolean
+            }
+        }
+    }
 |};

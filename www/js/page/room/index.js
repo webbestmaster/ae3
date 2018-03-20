@@ -9,6 +9,7 @@ import {Link} from 'react-router-dom';
 
 import {user} from './../../module/user';
 import {socket, type SocketMessageType} from './../../module/socket';
+import Game from './../../components/game';
 
 import uiStyle from './../../components/ui/ui.scss';
 import serviceStyle from './../../../css/service.scss';
@@ -19,9 +20,10 @@ import type {AllRoomSettingsType, ServerUserType} from './../../module/server-ap
 import routes, {type HistoryType, type MatchType} from './../../app/routes';
 
 type StateType = {|
-    settings: AllRoomSettingsType,
+    settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
-    model: MainModel
+    model: MainModel,
+    isGameStart: boolean
 |};
 
 type PropsType = {|
@@ -31,6 +33,20 @@ type PropsType = {|
 class Room extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
+
+    constructor() {
+        super();
+
+        const view = this;
+
+        const state: StateType = {
+            userList: [],
+            model: new MainModel(),
+            isGameStart: false
+        };
+
+        view.state = state;
+    }
 
     async componentDidMount(): Promise<string> {
         const view = this;
@@ -78,8 +94,8 @@ class Room extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {model} = state;
 
-        model.listenTo(socket.attr.model, 'message', async (message: SocketMessageType): Promise<void> => {
-            const result = await view.onMessage(message);
+        model.listenTo(socket.attr.model, 'message', (message: SocketMessageType) => {
+            view.onMessage(message).then(() => {});
         });
     }
 
@@ -118,6 +134,12 @@ class Room extends Component<PropsType, StateType> {
             case 'room__push-state':
 
                 console.log('push - state');
+
+                if (message.states.last.state.isGameStart === true) {
+                    view.setState({isGameStart: true});
+                    return;
+                }
+
                 console.log(message);
 
                 break;
@@ -131,6 +153,10 @@ class Room extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
         const roomId = props.match.params.roomId || '';
+
+        if (state.isGameStart === true) {
+            return <Game/>;
+        }
 
         return <div>
             <h1>Room</h1>

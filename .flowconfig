@@ -18,3 +18,4 @@ all=warn
 [options]
 module.name_mapper='^.*\.s?css$' -> 'css-module-flow'
 include_warnings=true
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
