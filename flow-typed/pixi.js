@@ -24,6 +24,9 @@ declare module 'pixi.js' {
     declare class Application {
         constructor(width: number, height: number, options?: ApplicationOptionsType): Application;
         view: HTMLElement;
-        stage: Stage
+        stage: Stage;
+        renderer: {
+            resize(width: number, height: number): void
+        }
     }
 }

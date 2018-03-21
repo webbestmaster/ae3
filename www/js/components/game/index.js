@@ -30,6 +30,13 @@ class GameView extends Component<PropsType, StateType> {
     state: StateType;
     refs: RefsType;
 
+    componentDidUpdate() {
+        const view = this;
+        const {props, state} = view;
+
+        state.game.setCanvasSize(props.system.screen.width, props.system.screen.height);
+    }
+
     async componentDidMount(): Promise<void> {
         const view = this;
         const {props, state, refs} = view;

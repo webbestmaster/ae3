@@ -36,6 +36,8 @@ export default class Game {
     }
 
     setCanvasSize(width: number, height: number) {
+        const game = this; // eslint-disable-line consistent-this
 
+        game.app.renderer.resize(width, height);
     }
 }
