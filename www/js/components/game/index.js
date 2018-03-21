@@ -50,7 +50,11 @@ class GameView extends Component<PropsType, StateType> {
 
         return <div>
             <h1>game</h1>
-            <canvas style={{display: 'block'}} ref="canvas"/>
+            <canvas style={{
+                width: props.system.screen.width,
+                height: props.system.screen.height,
+                display: 'block'
+            }} ref="canvas"/>
         </div>;
     }
 }

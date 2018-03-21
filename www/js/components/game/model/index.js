@@ -1,5 +1,7 @@
 // @flow
 
+/* global window */
+
 import * as PIXI from 'pixi.js';
 
 type InitializeConfigType = {|
@@ -19,12 +21,13 @@ export default class Game {
     initialize(setting: InitializeConfigType) {
         const game = this; // eslint-disable-line consistent-this
 
-        const app = new PIXI.Application(setting.width - 100, setting.height - 100, {
+        const app = new PIXI.Application(setting.width, setting.height, {
             view: setting.view,
             clearBeforeRender: false,
             sharedTicker: true,
             sharedLoader: true,
-            backgroundColor: 0x1099bb
+            backgroundColor: 0x1099bb,
+            resolution: window.devicePixelRatio || 1
         });
 
         game.app = app;
