@@ -64,7 +64,12 @@ class CreateRoom extends Component<PropsType, StateType> {
         const setAllRoomSettingsResult = await serverApi.setAllRoomSettings(createRoomResult.roomId, {
             map,
             defaultMoney,
-            unitLimit
+            unitLimit,
+            userList: [{
+                userId,
+                socketId,
+                teamId: mapGuide.teamIdList[0]
+            }]
         });
 
         console.log('setAllRoomSettingsResult', setAllRoomSettingsResult);

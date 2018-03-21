@@ -3,10 +3,16 @@
 
 import appConst from './../app-const';
 import type {MapType} from '../maps/type';
+import mapGuide from './../maps/map-guide';
 
 const {api} = appConst;
 const {url} = api;
 
+export type ServerUserType = {|
+    socketId: string,
+    userId: string,
+    teamId: string
+|};
 
 export type CreateRoomType = {|
     roomId: string
@@ -50,7 +56,8 @@ export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType
 export type AllRoomSettingsType = {|
     map: MapType,
     defaultMoney: number,
-    unitLimit: number
+    unitLimit: number,
+    userList: Array<ServerUserType>
 |};
 
 export type SetAllRoomSettingsType = {|
@@ -71,6 +78,28 @@ export function setAllRoomSettings(roomId: string,
 }
 
 
+export type RoomSettingType = {|
+    userList?: Array<ServerUserType>
+|};
+
+export type SetRoomSettingType = {|
+    roomId: string
+|};
+
+export function setRoomSetting(roomId: string,
+                               roomSetting: RoomSettingType): Promise<SetRoomSettingType> {
+    return fetch(url + '/api/room/set-setting/' + roomId, {
+        method: 'POST',
+        body: JSON.stringify(roomSetting),
+        headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
+    })
+        .then((blob: Response): Promise<SetRoomSettingType> => blob.json())
+        .then((result: SetRoomSettingType): SetRoomSettingType => ({
+            roomId: typeof result.roomId === 'string' ? result.roomId : ''
+        }));
+}
+
+
 export type GetAllRoomSettingsType = {|
     roomId: string,
     settings: AllRoomSettingsType
@@ -82,11 +111,6 @@ export function getAllRoomSettings(roomId: string): Promise<GetAllRoomSettingsTy
 }
 
 
-export type ServerUserType = {|
-    socketId: string,
-    userId: string
-|};
-
 export type GetAllRoomUsersType = {|
     roomId: string,
     users: Array<ServerUserType>
@@ -94,7 +118,21 @@ export type GetAllRoomUsersType = {|
 
 export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
     return fetch(url + '/api/room/get-users/' + roomId)
-        .then((blob: Response): Promise<GetAllRoomUsersType> => blob.json());
+        .then((blob: Response): Promise<GetAllRoomUsersType> => blob.json())
+        .then((result: GetAllRoomUsersType): GetAllRoomUsersType => {
+            const users = result.users.map((user: ServerUserType, userIndex: number): ServerUserType => {
+                return {
+                    socketId: user.socketId,
+                    userId: user.userId,
+                    teamId: user.teamId || mapGuide.teamIdList[userIndex]
+                };
+            });
+
+            return {
+                roomId: result.roomId,
+                users
+            };
+        });
 }
 
 

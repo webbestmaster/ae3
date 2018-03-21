@@ -16,6 +16,7 @@ import Game from './../../components/game';
 // import type {AuthType} from '../../components/auth/reducer';
 import * as serverApi from './../../module/server-api';
 import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
+import mapGuide from './../../maps/map-guide';
 
 import routes, {type HistoryType, type MatchType} from './../../app/routes';
 
@@ -139,11 +140,18 @@ class Room extends Component<PropsType, StateType> {
 
                 console.log('push - state');
 
-                if (message.states.last.state.isGameStart === true) {
-                    // TODO: save colors and team-id for users here
-                    console.warn('!!!!!!!!! -> ', 'save colors and team-id for users here');
-
+                if (message.states.last.state.isGameStart === true && state.isGameStart !== true) {
+                    console.warn('The game has begun!!!');
                     view.setState({isGameStart: true});
+
+                    const settings = await serverApi.getAllRoomSettings(roomId);
+
+                    console.log(settings);
+
+                    view.setState({
+                        settings: settings.settings
+                    });
+
                     return;
                 }
 
@@ -180,6 +188,16 @@ class Room extends Component<PropsType, StateType> {
             </div>
 
             <button onClick={async (): Promise<void> => {
+                const setSettingResult = await serverApi.setRoomSetting(roomId, {
+                    userList: state.userList.map((userItem: ServerUserType, userIndex: number): ServerUserType => {
+                        return {
+                            socketId: userItem.socketId,
+                            userId: userItem.userId,
+                            teamId: mapGuide.teamIdList[userIndex]
+                        };
+                    })
+                });
+
                 const takeTurnResult = await serverApi.takeTurn(roomId, user.getId());
 
                 console.log(takeTurnResult);
