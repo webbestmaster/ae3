@@ -140,6 +140,9 @@ class Room extends Component<PropsType, StateType> {
                 console.log('push - state');
 
                 if (message.states.last.state.isGameStart === true) {
+                    // TODO: save colors and team-id for users here
+                    console.warn('!!!!!!!!! -> ', 'save colors and team-id for users here');
+
                     view.setState({isGameStart: true});
                     return;
                 }
