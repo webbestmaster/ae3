@@ -142,7 +142,6 @@ class Room extends Component<PropsType, StateType> {
 
                 if (message.states.last.state.isGameStart === true && state.isGameStart !== true) {
                     console.warn('The game has begun!!!');
-                    view.setState({isGameStart: true});
 
                     const settings = await serverApi.getAllRoomSettings(roomId);
 
@@ -151,6 +150,8 @@ class Room extends Component<PropsType, StateType> {
                     view.setState({
                         settings: settings.settings
                     });
+
+                    view.setState({isGameStart: true});
 
                     return;
                 }
