@@ -107,33 +107,44 @@ export function getAllRoomIds(): Promise<GetAllRoomIdsType> {
         .then((blob: Response): Promise<GetAllRoomIdsType> => blob.json());
 }
 
+export type PushedStatePayloadType = {|
+    isGameStart?: boolean
+|};
 
 export type PushStateType = {|
     roomId: string,
     type: 'room__push-state',
     states: {
-        last: {},
+        last: {
+            state: PushedStatePayloadType,
+            type: 'room__push-state'
+        },
         length: number
     }
 |};
 
 export type PushedStateType = {|
     type: 'room__push-state',
-    state?: {}
+    state: PushedStatePayloadType
 |};
+
+const lastPushedState = {};
 
 export function pushState(roomId: string,
                           userId: string,
                           pushedState: PushedStateType): Promise<PushStateType> {
+    const stateToPush = Object.assign({}, lastPushedState, pushedState);
+
+    // update last pushed state
+    Object.assign(lastPushedState, pushedState);
+
     return fetch(url + '/api/room/push-state/' + [roomId, userId].join('/'), {
         method: 'POST',
-        body: JSON.stringify(pushedState),
+        body: JSON.stringify(stateToPush),
         headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
     })
-        .then((blob: Response): Promise<PushStateType> => blob.json())
-        .then((result: PushStateType): PushStateType => {
-            return result;
-        });
+        .then((blob: Response): Promise<PushStateType> => blob.json());
+    // .then((result: PushStateType): PushStateType => result);
 }
 
 export type TakeTurnType = {|

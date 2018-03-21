@@ -4,6 +4,7 @@ const socketIoClient = require('socket.io-client');
 
 import appConst from './../app-const';
 import MainModel from './../lib/main-model/index';
+import type {PushedStatePayloadType} from './server-api';
 
 type AttrType = {|
     initialPromise: Promise<Socket>, // eslint-disable-line no-use-before-define
@@ -82,9 +83,7 @@ export type SocketMessageType = {|
         'room__push-state',
     +states: {
         +last: {
-            +state: {
-                +isGameStart: boolean
-            }
+            +state: PushedStatePayloadType
         }
     }
 |};

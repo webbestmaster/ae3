@@ -107,6 +107,10 @@ class Room extends Component<PropsType, StateType> {
         let users = null;
 
         switch (message.type) {
+            case 'room__take-turn':
+                console.log('room__take-turn', message);
+                break;
+
             case 'room__join-into-room':
                 users = await serverApi.getAllRoomUsers(roomId);
                 view.setState({
