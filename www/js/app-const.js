@@ -1,4 +1,5 @@
 // @flow
+/* global window */
 
 export type AppConstType = {|
     api: {
@@ -6,9 +7,10 @@ export type AppConstType = {|
     }
 |};
 
+
 const appConst: AppConstType = {
     api: {
-        url: 'http://localhost:3001'
+        url: 'http://' + window.location.hostname + ':3001'
     }
 };
 
