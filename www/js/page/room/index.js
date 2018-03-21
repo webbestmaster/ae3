@@ -184,7 +184,8 @@ class Room extends Component<PropsType, StateType> {
                 const pushStateResult = await serverApi.pushState(roomId, user.getId(), {
                     type: 'room__push-state',
                     state: {
-                        isGameStart: true
+                        isGameStart: true,
+                        activeUserId: user.getId()
                     }
                 });
 
