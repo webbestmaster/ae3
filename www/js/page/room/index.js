@@ -20,7 +20,7 @@ import type {AllRoomSettingsType, ServerUserType} from './../../module/server-ap
 import mapGuide from './../../maps/map-guide';
 
 import routes, {type HistoryType, type MatchType} from './../../app/routes';
-import type {MapType} from '../../maps/type';
+import type {BuildingType, MapType, UnitType} from '../../maps/type';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -191,15 +191,15 @@ class Room extends Component<PropsType, StateType> {
             </div>
 
             <button onClick={async (): Promise<void> => {
-                const setSettingResult = await serverApi.setRoomSetting(roomId, {
-                    userList: state.userList.map((userItem: ServerUserType, userIndex: number): ServerUserType => {
+                const userList: Array<ServerUserType> = state.userList
+                    .map((userItem: ServerUserType, userIndex: number): ServerUserType => {
                         return {
                             socketId: userItem.socketId,
                             userId: userItem.userId,
                             teamId: mapGuide.teamIdList[userIndex]
                         };
-                    })
-                });
+                    });
+
 
                 const takeTurnResult = await serverApi.takeTurn(roomId, user.getId());
 
@@ -210,6 +210,34 @@ class Room extends Component<PropsType, StateType> {
                 if (!map) {
                     return;
                 }
+
+                [].concat(map.buildings, map.units).forEach((userItem: BuildingType | UnitType) => {
+                    const userItemUserId = typeof userItem.userId === 'string' ? userItem.userId : '';
+
+                    if (userItemUserId === '') {
+                        return;
+                    }
+
+                    const userIndex = parseInt(userItemUserId.replace(/\D/g, ''), 10) || 0;
+
+                    const userData: ServerUserType | void = userList[userIndex];
+
+                    if (!userData) {
+                        Reflect.deleteProperty(userItem, 'userId');
+                        return;
+                    }
+
+                    Object.assign(userItem, {userId: userData.userId});
+                });
+
+                const setSettingResult = await serverApi.setRoomSetting(roomId, {
+                    userList
+                });
+
+                const setSettingResult1 = await serverApi.setRoomSetting(roomId, {
+                    map
+                });
+
 
                 const newState: PushedStatePayloadType = {
                     isGameStart: true,

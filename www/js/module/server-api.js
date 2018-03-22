@@ -79,7 +79,8 @@ export function setAllRoomSettings(roomId: string,
 
 
 export type RoomSettingType = {|
-    userList?: Array<ServerUserType>
+    userList?: Array<ServerUserType>,
+    map?: MapType
 |};
 
 export type SetRoomSettingType = {|

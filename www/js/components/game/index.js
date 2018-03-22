@@ -74,6 +74,7 @@ class GameView extends Component<PropsType, StateType> {
         });
 
         state.game.drawLandscape(settings.settings.map);
+        state.game.drawBuildings(settings.settings.map, users.users);
 
         view.bindEventListeners();
 

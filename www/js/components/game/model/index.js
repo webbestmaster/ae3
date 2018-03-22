@@ -3,9 +3,11 @@
 /* global window */
 
 import * as PIXI from 'pixi.js';
-import type {MapType, LandscapeType} from '../../../maps/type';
-import mapGuide from '../../../maps/map-guide';
+import type {MapType, LandscapeType, BuildingType} from './../../../maps/type';
+import type {ServerUserType} from './../../../module/server-api';
+import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
+import {getUserColor} from './helper';
 
 type InitializeConfigType = {|
     width: number,
@@ -18,14 +20,16 @@ type InitializeConfigType = {|
 export default class Game {
     app: PIXI.Application;
     layer: {|
-        landscape: PIXI.Container
+        landscape: PIXI.Container,
+        buildings: PIXI.Container
     |}
 
     constructor() {
         const game = this; // eslint-disable-line consistent-this
 
         game.layer = {
-            landscape: new PIXI.Container()
+            landscape: new PIXI.Container(),
+            buildings: new PIXI.Container()
         };
     }
 
@@ -48,6 +52,7 @@ export default class Game {
         // app.stage.addChild(PIXI.Sprite.fromImage(sprite));
 
         app.stage.addChild(game.layer.landscape);
+        app.stage.addChild(game.layer.buildings);
 
         app.stage.position.set(100, 100);
 
@@ -73,6 +78,37 @@ export default class Game {
 
                 landscape.addChild(sprite);
             });
+        });
+    }
+
+    getBuildingColor(buildingData: BuildingType, userList: Array<ServerUserType>) {
+
+    }
+
+    drawBuildings(map: MapType, userList: Array<ServerUserType>) {
+        const game = this; // eslint-disable-line consistent-this
+
+        const {buildings} = game.layer;
+
+        map.buildings.forEach((buildingData: BuildingType) => {
+            if (['castle', 'farm'].includes(buildingData.type)) {
+                const color = typeof buildingData.userId === 'string' ?
+                    getUserColor(buildingData.userId, userList) :
+                    'gray';
+                const sprite = PIXI.Sprite.fromImage(imageMap.building[buildingData.type + '-' + color]);
+
+                sprite.position.set(buildingData.x * mapGuide.size.square, buildingData.y * mapGuide.size.square);
+
+                buildings.addChild(sprite);
+            }
+
+            if (['well', 'temple', 'farm-destroyed'].includes(buildingData.type)) {
+                const sprite = PIXI.Sprite.fromImage(imageMap.building[buildingData.type]);
+
+                sprite.position.set(buildingData.x * mapGuide.size.square, buildingData.y * mapGuide.size.square);
+
+                buildings.addChild(sprite);
+            }
         });
     }
 }

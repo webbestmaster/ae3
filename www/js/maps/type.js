@@ -1,6 +1,6 @@
 // @flow
 
-export type PlayerIdType = 'player-0' | 'player-1' | 'player-2' | 'player-3';
+export type UserIdType = string;
 
 export type LandscapeType =
     'bridge-0' |
@@ -24,7 +24,7 @@ export type BuildingType = {|
     x: number,
     y: number,
     type: 'castle' | 'farm' | 'farm-destroyed' | 'well' | 'temple',
-    playerId?: PlayerIdType
+    userId?: UserIdType
 |};
 
 export type UnitType = {|
@@ -49,7 +49,7 @@ export type UnitType = {|
         'saeth',
     hitPoint?: number,
     level?: number,
-    playerId?: PlayerIdType
+    userId?: UserIdType
 |};
 
 export type GraveType = {|
