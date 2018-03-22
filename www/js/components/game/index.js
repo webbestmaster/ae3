@@ -112,7 +112,7 @@ class GameView extends Component<PropsType, StateType> {
             case 'room__take-turn':
                 console.log('room__take-turn', message);
 
-                view.setState({activeUserId: message.states.last.activeUserId || ''});
+                view.setState({activeUserId: message.states.last.activeUserId});
 
                 break;
 
@@ -144,7 +144,8 @@ class GameView extends Component<PropsType, StateType> {
 
                 console.log('push - state');
 
-                view.setState({activeUserId: message.states.last.activeUserId || ''});
+                // TODO: check and update map state here
+                view.setState({activeUserId: message.states.last.activeUserId});
 
                 console.log(message);
 
