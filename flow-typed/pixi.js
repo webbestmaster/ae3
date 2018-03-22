@@ -11,6 +11,10 @@ type ApplicationOptionsType = {|
 |};
 
 declare module 'pixi.js' {
+    declare var settings: {|
+        SCALE_MODE: 0 | 1
+    |}
+
     declare class PixiObject {
         position: {
             set(x: number, y: number): void
@@ -28,7 +32,7 @@ declare module 'pixi.js' {
     declare class Container extends PixiObject {
         constructor(): Container;
         addChild(pixiObject: PixiObject): void
-   }
+    }
 
     declare class Application {
         constructor(width: number, height: number, options?: ApplicationOptionsType): Application;

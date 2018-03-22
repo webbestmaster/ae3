@@ -32,6 +32,8 @@ export default class Game {
     initialize(setting: InitializeConfigType) {
         const game = this; // eslint-disable-line consistent-this
 
+        PIXI.settings.SCALE_MODE = 1; // eslint-disable-line id-match
+
         const app = new PIXI.Application(setting.width, setting.height, {
             view: setting.view,
             clearBeforeRender: false,
@@ -49,7 +51,7 @@ export default class Game {
 
         app.stage.position.set(100, 100);
 
-        app.stage.scale.set(4, 4);
+        app.stage.scale.set(2, 2);
     }
 
     setCanvasSize(width: number, height: number) {
@@ -70,9 +72,7 @@ export default class Game {
                 sprite.position.set(tileX * mapGuide.size.square, tileY * mapGuide.size.square);
 
                 landscape.addChild(sprite);
-            }
-            );
-        }
-        );
+            });
+        });
     }
 }
