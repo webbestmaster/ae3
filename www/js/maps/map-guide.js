@@ -5,6 +5,9 @@ export type MapGuideType = {|
     playerIdList: Array<string>,
     teamIdList: Array<string>,
     colorList: Array<string>,
+    size: {
+        square: number
+    },
     landscape: {
         road: {
             pathReduce: 1,
@@ -64,6 +67,9 @@ const mapGuide: MapGuideType = {
         'green',
         'red'
     ],
+    size: {
+        square: 24
+    },
     landscape: {
         road: {
             pathReduce: 1,

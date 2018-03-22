@@ -11,20 +11,29 @@ type ApplicationOptionsType = {|
 |};
 
 declare module 'pixi.js' {
-    declare class Sprite {
+    declare class PixiObject {
+        position: {
+            set(x: number, y: number): void
+        };
+        scale: {
+            set(x: number, y: number): void
+        }
+    }
+
+    declare class Sprite extends PixiObject {
         constructor(): Sprite;
         static fromImage(spriteName: string): Sprite
     }
 
-    declare class Stage {
-        constructor(): Stage;
-        addChild(sprite: Sprite): void
-    }
+    declare class Container extends PixiObject {
+        constructor(): Container;
+        addChild(pixiObject: PixiObject): void
+   }
 
     declare class Application {
         constructor(width: number, height: number, options?: ApplicationOptionsType): Application;
         view: HTMLElement;
-        stage: Stage;
+        stage: Container;
         renderer: {
             resize(width: number, height: number): void
         }

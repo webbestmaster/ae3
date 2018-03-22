@@ -73,6 +73,8 @@ class GameView extends Component<PropsType, StateType> {
             height: props.system.screen.height
         });
 
+        state.game.drawLandscape(settings.settings.map);
+
         view.bindEventListeners();
 
         return roomId;

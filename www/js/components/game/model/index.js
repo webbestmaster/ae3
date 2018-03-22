@@ -3,6 +3,9 @@
 /* global window */
 
 import * as PIXI from 'pixi.js';
+import type {MapType, LandscapeType} from '../../../maps/type';
+import mapGuide from '../../../maps/map-guide';
+import imageMap from './../image/image-map';
 
 type InitializeConfigType = {|
     width: number,
@@ -10,12 +13,20 @@ type InitializeConfigType = {|
     view: HTMLElement
 |};
 
-const sprite = require('./image.png');
+// const sprite = require('./image.png');
 
 export default class Game {
     app: PIXI.Application;
-    constructor() {
+    layer: {|
+        landscape: PIXI.Container
+    |}
 
+    constructor() {
+        const game = this; // eslint-disable-line consistent-this
+
+        game.layer = {
+            landscape: new PIXI.Container()
+        };
     }
 
     initialize(setting: InitializeConfigType) {
@@ -32,12 +43,36 @@ export default class Game {
 
         game.app = app;
 
-        app.stage.addChild(PIXI.Sprite.fromImage(sprite));
+        // app.stage.addChild(PIXI.Sprite.fromImage(sprite));
+
+        app.stage.addChild(game.layer.landscape);
+
+        app.stage.position.set(100, 100);
+
+        app.stage.scale.set(4, 4);
     }
 
     setCanvasSize(width: number, height: number) {
         const game = this; // eslint-disable-line consistent-this
 
         game.app.renderer.resize(width, height);
+    }
+
+    drawLandscape(map: MapType) {
+        const game = this; // eslint-disable-line consistent-this
+
+        const {landscape} = game.layer;
+
+        map.landscape.forEach((list: Array<LandscapeType>, tileY: number) => {
+            list.forEach((landscapeItem: LandscapeType, tileX: number) => {
+                const sprite = PIXI.Sprite.fromImage(imageMap.landscape[landscapeItem]);
+
+                sprite.position.set(tileX * mapGuide.size.square, tileY * mapGuide.size.square);
+
+                landscape.addChild(sprite);
+            }
+            );
+        }
+        );
     }
 }
