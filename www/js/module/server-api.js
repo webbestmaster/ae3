@@ -196,4 +196,14 @@ export function takeTurn(roomId: string,
         .then((blob: Response): Promise<TakeTurnType> => blob.json());
 }
 
+export type DropTurnType = {|
+    roomId: string
+|};
+
+export function dropTurn(roomId: string,
+                         userId: string): Promise<DropTurnType> {
+    return fetch(url + '/api/room/drop-turn/' + [roomId, userId].join('/'))
+        .then((blob: Response): Promise<DropTurnType> => blob.json());
+}
+
 

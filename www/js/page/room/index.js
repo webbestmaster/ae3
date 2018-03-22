@@ -171,7 +171,7 @@ class Room extends Component<PropsType, StateType> {
         const roomId = props.match.params.roomId || '';
 
         if (state.isGameStart === true) {
-            return <Game/>;
+            return <Game roomId={roomId}/>;
         }
 
         return <div>
