@@ -147,7 +147,8 @@ export function getAllRoomIds(): Promise<GetAllRoomIdsType> {
 
 export type PushedStatePayloadType = {|
     isGameStart?: boolean,
-    activeUserId: string
+    activeUserId: string,
+    map: MapType
 |};
 
 export type PushStateType = {|

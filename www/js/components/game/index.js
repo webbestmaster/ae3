@@ -26,7 +26,8 @@ type StateType = {|
     settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
     model: MainModel,
-    game: Game
+    game: Game,
+    activeUserId: string
 |};
 
 type RefsType = {|
@@ -46,7 +47,8 @@ class GameView extends Component<PropsType, StateType> {
         view.state = {
             userList: [],
             model: new MainModel(),
-            game: new Game()
+            game: new Game(),
+            activeUserId: ''
         };
     }
 
@@ -61,7 +63,8 @@ class GameView extends Component<PropsType, StateType> {
 
         view.setState({
             settings: settings.settings,
-            userList: users.users
+            userList: users.users,
+            activeUserId: users.users[0].userId
         });
 
         state.game.initialize({
@@ -105,6 +108,9 @@ class GameView extends Component<PropsType, StateType> {
         switch (message.type) {
             case 'room__take-turn':
                 console.log('room__take-turn', message);
+
+                view.setState({activeUserId: message.states.last.activeUserId || ''});
+
                 break;
 
             case 'room__join-into-room':
@@ -135,23 +141,7 @@ class GameView extends Component<PropsType, StateType> {
 
                 console.log('push - state');
 
-                /*
-                                if (message.states.last.state.isGameStart === true && state.isGameStart !== true) {
-                                    console.warn('The game has begun!!!');
-
-                                    const settings = await serverApi.getAllRoomSettings(roomId);
-
-                                    console.log(settings);
-
-                                    view.setState({
-                                        settings: settings.settings
-                                    });
-
-                                    view.setState({isGameStart: true});
-
-                                    return;
-                                }
-                */
+                view.setState({activeUserId: message.states.last.activeUserId || ''});
 
                 console.log(message);
 
@@ -183,6 +173,8 @@ class GameView extends Component<PropsType, StateType> {
 
         return <div>
             <h1>game</h1>
+
+            <h2>activeUserId: {state.activeUserId}</h2>
 
             <br/>
             <br/>

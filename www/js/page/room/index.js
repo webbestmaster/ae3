@@ -15,10 +15,12 @@ import Game from './../../components/game';
 // import serviceStyle from './../../../css/service.scss';
 // import type {AuthType} from '../../components/auth/reducer';
 import * as serverApi from './../../module/server-api';
+import type {PushedStatePayloadType} from './../../module/server-api';
 import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
 import mapGuide from './../../maps/map-guide';
 
 import routes, {type HistoryType, type MatchType} from './../../app/routes';
+import type {MapType} from '../../maps/type';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -203,12 +205,21 @@ class Room extends Component<PropsType, StateType> {
 
                 console.log(takeTurnResult);
 
+                const map: MapType | void = state.settings && state.settings.map;
+
+                if (!map) {
+                    return;
+                }
+
+                const newState: PushedStatePayloadType = {
+                    isGameStart: true,
+                    activeUserId: user.getId(),
+                    map
+                };
+
                 const pushStateResult = await serverApi.pushState(roomId, user.getId(), {
                     type: 'room__push-state',
-                    state: {
-                        isGameStart: true,
-                        activeUserId: user.getId()
-                    }
+                    state: newState
                 });
 
                 console.log(pushStateResult);

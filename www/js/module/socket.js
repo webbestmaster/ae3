@@ -83,6 +83,7 @@ export type SocketMessageType = {|
         'room__push-state',
     +states: {
         +last: {
+            +activeUserId?: string,
             +state: PushedStatePayloadType
         }
     }
