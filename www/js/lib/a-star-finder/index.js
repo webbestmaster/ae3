@@ -199,7 +199,7 @@ function getNearCells(map: MapType, start: PointType, options: OptionsType): Arr
         x = startX + disArray[ii];
         y = startY + disArray[ii + 1];
         cell = getCell(x, y, map);
-        if (cell !== false && cell !== noPath) {
+        if (cell !== null && cell !== noPath) {
             result.push([x, y]);
         }
     }
@@ -216,7 +216,7 @@ function clone<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj));
 }
 
-function getItem<T>(index: number, array: Array<T>): T | null {
+function getItem<T:string | PointType>(index: number, array: Array<T>): T | null {
     if (index >= 0 && index < array.length) {
         return array[index];
     }
