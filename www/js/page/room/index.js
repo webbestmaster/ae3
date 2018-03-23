@@ -1,5 +1,13 @@
 // @flow
 
+// wait other players and prepare map\settings for Game view
+
+// list of settings, can NOT be changed, this is start game state
+// - defaultMoney
+// - map
+// - unitLimit
+// - userList
+
 import React, {Component} from 'react';
 import type {Node} from 'react';
 import {connect} from 'react-redux';
@@ -208,6 +216,7 @@ class Room extends Component<PropsType, StateType> {
                 const map: MapType | void = state.settings && state.settings.map;
 
                 if (!map) {
+                    console.error('---> map is not exists!!!!');
                     return;
                 }
 
