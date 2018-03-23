@@ -96,8 +96,6 @@ class Room extends Component<PropsType, StateType> {
         model.destroy();
 
         const leaveRoomResult = await serverApi.leaveRoom(roomId, user.getId());
-
-        console.log(leaveRoomResult);
     }
 
     bindEventListeners() {
@@ -119,7 +117,6 @@ class Room extends Component<PropsType, StateType> {
 
         switch (message.type) {
             case 'room__take-turn':
-                console.log('room__take-turn', message);
                 break;
 
             case 'room__join-into-room':
@@ -148,14 +145,10 @@ class Room extends Component<PropsType, StateType> {
 
             case 'room__push-state':
 
-                console.log('push - state');
-
                 if (message.states.last.state.isGameStart === true && state.isGameStart !== true) {
-                    console.warn('The game has begun!!!');
+                    console.warn('---> The game has begun!!!');
 
                     const settings = await serverApi.getAllRoomSettings(roomId);
-
-                    console.log(settings);
 
                     view.setState({
                         settings: settings.settings
@@ -166,12 +159,10 @@ class Room extends Component<PropsType, StateType> {
                     return;
                 }
 
-                console.log(message);
-
                 break;
 
             default:
-                console.log('unsupported message type: ' + message.type);
+                console.log('---> view - room - unsupported message type: ' + message.type);
         }
     }
 
@@ -210,8 +201,6 @@ class Room extends Component<PropsType, StateType> {
 
 
                 const takeTurnResult = await serverApi.takeTurn(roomId, user.getId());
-
-                console.log(takeTurnResult);
 
                 const map: MapType | void = state.settings && state.settings.map;
 
@@ -258,8 +247,6 @@ class Room extends Component<PropsType, StateType> {
                     type: 'room__push-state',
                     state: newState
                 });
-
-                console.log(pushStateResult);
             }}>
                 start
             </button>

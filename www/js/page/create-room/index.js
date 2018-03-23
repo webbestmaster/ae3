@@ -72,8 +72,6 @@ class CreateRoom extends Component<PropsType, StateType> {
             }]
         });
 
-        console.log('setAllRoomSettingsResult', setAllRoomSettingsResult);
-
         const joinRoomResult = await serverApi.joinRoom(createRoomResult.roomId, userId, socketId);
 
         if (joinRoomResult.roomId === '') {

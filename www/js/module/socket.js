@@ -43,13 +43,13 @@ export default class Socket {
             const socketIo = socketIoClient.connect(appConst.api.url, options);
 
             socketIo.on('message', (message: string | void) => {
-                console.log('from server', message);
+                console.log('---> SW:', message);
 
                 socket.attr.model.trigger('message', message);
             });
 
             socketIo.on('connect', () => {
-                console.log('socket connected');
+                console.log('---> socket connected');
                 socket.attr.socket = socketIo;
                 socket.attr.model.trigger('connect');
                 resolve(socket);

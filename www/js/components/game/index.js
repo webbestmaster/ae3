@@ -110,7 +110,6 @@ class GameView extends Component<PropsType, StateType> {
 
         switch (message.type) {
             case 'room__take-turn':
-                console.log('room__take-turn', message);
 
                 view.setState({activeUserId: message.states.last.activeUserId});
 
@@ -142,17 +141,13 @@ class GameView extends Component<PropsType, StateType> {
 
             case 'room__push-state':
 
-                console.log('push - state');
-
                 // TODO: check and update map state here
                 view.setState({activeUserId: message.states.last.activeUserId});
-
-                console.log(message);
 
                 break;
 
             default:
-                console.log('unsupported message type: ' + message.type);
+                console.log('---> view - game - unsupported message type: ' + message.type);
         }
     }
 
@@ -167,8 +162,6 @@ class GameView extends Component<PropsType, StateType> {
         // todo: add Game.destroy()
 
         const leaveRoomResult = await serverApi.leaveRoom(roomId, user.getId());
-
-        console.log(leaveRoomResult);
     }
 
     render(): Node {

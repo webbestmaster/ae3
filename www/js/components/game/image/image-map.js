@@ -79,6 +79,4 @@ ____ReqContext.keys()
     });
 */
 
-console.log(imageMap);
-
 export default imageMap;
