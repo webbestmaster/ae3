@@ -2,35 +2,73 @@
 
 /* global setTimeout */
 
-const defaultOptions = {
+type MapType = Array<string>;
+
+type PointType = [number, number];
+
+type PathType = Array<PointType>;
+
+type SelfDataType = {|
+    collectedCells: Array<string>
+|};
+
+type AsyncCallbackType = (path: PathType | null) => void;
+
+type OptionsType = {|
+    noPath?: string,
+    callBack?: AsyncCallbackType
+|};
+
+const defaultOptions: OptionsType = {
     noPath: '#'
 };
 
-const defaultSelfData = {
+const defaultSelfData: SelfDataType = {
     collectedCells: []
 };
 
-module.exports.getPath = (map, start, end, options) =>
-    getPath(
+
+module.exports.getPath = (map: MapType,
+                          start: PointType,
+                          end: PointType,
+                          options?: OptionsType): PathType | null => {
+    return getPath(
         map,
         start,
         end,
         [[start]],
-        Object.assign({}, defaultOptions, options || {}),
+        {
+            noPath: options && typeof options.noPath === 'string' ? options.noPath : defaultOptions.noPath
+        },
         clone(defaultSelfData)
     );
+};
 
-module.exports.getPathAsync = (map, start, end, callBack, options) =>
+module.exports.getPathAsync = (map: MapType,
+                               start: PointType,
+                               end: PointType,
+                               callBack: AsyncCallbackType,
+                               options?: OptionsType) => {
     getPathAsync(
         map,
         start,
         end,
         [[start]],
-        Object.assign({}, defaultOptions, options || {}, {callBack}),
+        {
+            noPath: options && typeof options.noPath === 'string' ? options.noPath : defaultOptions.noPath,
+            callBack
+        },
+        // Object.assign({}, defaultOptions, options || {}, {callBack}),
         clone(defaultSelfData)
     );
+};
 
-function getPath(map, start, target, paths, options, selfData) { // eslint-disable-line max-params
+function getPath(map: MapType, // eslint-disable-line max-params
+                 start: PointType,
+                 target: PointType,
+                 paths: Array<PathType>,
+                 options: OptionsType,
+                 selfData: SelfDataType): PathType | null { // eslint-disable-line max-params
     const solution = checkPathsForSolution(paths, target);
 
     if (solution !== null) {
@@ -46,25 +84,32 @@ function getPath(map, start, target, paths, options, selfData) { // eslint-disab
     return getPath(map, start, target, newPaths, options, selfData);
 }
 
-function getPathAsync(map, start, target, paths, options, selfData) { // eslint-disable-line max-params
+function getPathAsync(map: MapType, // eslint-disable-line max-params
+                      start: PointType,
+                      target: PointType,
+                      paths: Array<PathType>,
+                      options: OptionsType,
+                      selfData: SelfDataType) {
     const solution = checkPathsForSolution(paths, target);
 
-    if (solution !== null) {
+    if (solution !== null && typeof options.callBack === 'function') {
         options.callBack(solution);
         return;
     }
 
     const newPaths = createPathsFromList(map, paths, options, selfData);
 
-    if (newPaths.length === 0) {
+    if (newPaths.length === 0 && typeof options.callBack === 'function') {
         options.callBack(null);
         return;
     }
 
-    setTimeout(() => getPathAsync(map, start, target, newPaths, options, selfData), 0);
+    setTimeout(() => {
+        getPathAsync(map, start, target, newPaths, options, selfData);
+    }, 0);
 }
 
-function checkPathsForSolution(paths, target) {
+function checkPathsForSolution(paths: Array<PathType>, target: PointType): PathType | null {
     const len = paths.length;
     const targetX = target[0];
     const targetY = target[1];
@@ -83,11 +128,16 @@ function checkPathsForSolution(paths, target) {
     return null;
 }
 
-function createPaths(map, path, options, selfData) {
+function createPaths(map: MapType, path: PathType, options: OptionsType, selfData: SelfDataType): Array<PathType> { // eslint-disable-line max-statements
     const pathLength = path.length;
     const newPaths = [];
     const {collectedCells} = selfData;
     const lastCell = getItem(pathLength - 1, path);
+
+    if (lastCell === null) {
+        return [];
+    }
+
     const cells = getNearCells(map, lastCell, options);
     const len = cells.length;
     let cell = null;
@@ -109,7 +159,10 @@ function createPaths(map, path, options, selfData) {
     return newPaths;
 }
 
-function createPathsFromList(map, paths, options, selfData) {
+function createPathsFromList(map: MapType,
+                             paths: Array<PathType>,
+                             options: OptionsType,
+                             selfData: SelfDataType): Array<PathType> {
     const len = paths.length;
     const newPaths = [];
     const {push} = Array.prototype;
@@ -126,20 +179,20 @@ function createPathsFromList(map, paths, options, selfData) {
     return newPaths;
 }
 
-function getNearCells(map, start, options) {
+function getNearCells(map: MapType, start: PointType, options: OptionsType): Array<PointType> {
     const startX = start[0];
     const startY = start[1];
     const disArray = [
-        0, -1,  // up
-        1, 0,   // right
-        0, 1,   // down
-        -1, 0   // left
+        0, -1, // up
+        1, 0, // right
+        0, 1, // down
+        -1, 0 // left
     ];
     const result = [];
     const {noPath} = options;
     let ii = 0;
-    let x = 0;
-    let y = 0;
+    let x = 0; // eslint-disable-line id-length
+    let y = 0; // eslint-disable-line id-length
     let cell = null;
 
     for (; ii < 8; ii += 2) {
@@ -155,16 +208,28 @@ function getNearCells(map, start, options) {
 }
 
 // helpers
-function clone(obj) {
+function stringToArray(str: string): Array<string> {
+    return str.split('');
+}
+
+function clone<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj));
 }
 
-function getItem(index, array) {
-    return index >= 0 && index < array.length && array[index];
+function getItem<T>(index: number, array: Array<T>): T | null {
+    if (index >= 0 && index < array.length) {
+        return array[index];
+    }
+
+    return null;
 }
 
-function getCell(x, y, map) {
+function getCell(x: number, y: number, map: MapType): string | null { // eslint-disable-line id-length
     const line = getItem(y, map);
 
-    return line && getItem(x, line);
+    if (line === null) {
+        return null;
+    }
+
+    return getItem(x, stringToArray(line));
 }
