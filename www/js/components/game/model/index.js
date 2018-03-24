@@ -12,6 +12,7 @@ import type {UnitType} from '../../../maps/type';
 import Render from './render';
 import type {AllRoomSettingsType} from '../../../module/server-api';
 import Building from './building';
+import Unit from './unit';
 
 type RenderSettingType = {|
     width: number,
@@ -33,12 +34,14 @@ export default class Game {
     settings: AllRoomSettingsType;
     userList: Array<ServerUserType>;
     buildingList: Array<Building>;
+    unitList: Array<Unit>;
 
     constructor() {
         const game = this; // eslint-disable-line consistent-this
 
         game.render = new Render();
         game.buildingList = [];
+        game.unitList = [];
     }
 
     initialize(renderSetting: RenderSettingType) {
@@ -58,9 +61,14 @@ export default class Game {
             game.render.addBuilding(building.attr.container);
         });
 
+        // add units
+        game.settings.map.units.forEach((unitData: UnitType) => {
+            const unit = new Unit({unitData, userList: game.userList});
 
-        // game.render.drawBuildings(game.settings.map, game.users);
-        // game.render.drawUnits(game.settings.map, game.users);
+            game.unitList.push(unit);
+
+            game.render.addUnit(unit.attr.container);
+        });
     }
 
     setCanvasSize(width: number, height: number) {

@@ -24,6 +24,11 @@ declare module 'pixi.js' {
         }
     }
 
+    declare class Texture {
+        constructor(): Texture;
+        static fromImage(spriteName: string): Texture
+    }
+
     declare class Sprite extends PixiObject {
         constructor(): Sprite;
         static fromImage(spriteName: string): Sprite
@@ -42,4 +47,29 @@ declare module 'pixi.js' {
             resize(width: number, height: number): void
         }
     }
+
+    declare class AnimatedSprite extends PixiObject {
+        constructor(textureList: Array<Texture>): AnimatedSprite;
+        animationSpeed: number
+    }
+
+    declare var extras: {}
 }
+
+
+/*
+    declare module.exports: {
+        extras: {
+            declare class AnimatedSprite extends PixiObject {
+            constructor(textureList: Array<Texture>): AnimatedSprite;
+            animationSpeed: number;
+            }
+
+        }
+
+
+    }
+*/
+
+// declare module extras {
+// }

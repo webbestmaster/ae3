@@ -53,8 +53,8 @@ export default class Render {
         render.app = app;
 
         app.stage.addChild(render.layer.landscape);
-        // app.stage.addChild(game.layer.buildings);
-        // app.stage.addChild(game.layer.units);
+        app.stage.addChild(render.layer.buildings);
+        app.stage.addChild(render.layer.units);
 
         app.stage.position.set(100, 100);
 
@@ -86,70 +86,76 @@ export default class Render {
     addBuilding(container: PIXI.Container) {
         const render = this; // eslint-disable-line consistent-this
 
-        render.layer.landscape.addChild(container);
+        render.layer.buildings.addChild(container);
     }
 
-/*
-    getBuildingColor(buildingData: BuildingType, userList: Array<ServerUserType>) {
+    addUnit(container: PIXI.Container) {
+        const render = this; // eslint-disable-line consistent-this
 
+        render.layer.units.addChild(container);
     }
 
-    drawBuildings(map: MapType, userList: Array<ServerUserType>) {
-        const game = this; // eslint-disable-line consistent-this
+    /*
+        getBuildingColor(buildingData: BuildingType, userList: Array<ServerUserType>) {
 
-        const {buildings} = game.layer;
+        }
 
-        map.buildings.forEach((buildingData: BuildingType) => {
-            if (['castle', 'farm'].includes(buildingData.type)) {
+        drawBuildings(map: MapType, userList: Array<ServerUserType>) {
+            const game = this; // eslint-disable-line consistent-this
+
+            const {buildings} = game.layer;
+
+            map.buildings.forEach((buildingData: BuildingType) => {
+                if (['castle', 'farm'].includes(buildingData.type)) {
+                    let color = 'gray';
+
+                    if (typeof buildingData.userId === 'string') {
+                        const userColor = getUserColor(buildingData.userId, userList);
+
+                        if (typeof userColor === 'string') {
+                            color = userColor;
+                        }
+                    }
+
+                    const sprite = PIXI.Sprite.fromImage(imageMap.building[buildingData.type + '-' + color]);
+
+                    sprite.position.set(buildingData.x * mapGuide.size.square, buildingData.y * mapGuide.size.square);
+
+                    buildings.addChild(sprite);
+                }
+
+                if (['well', 'temple', 'farm-destroyed'].includes(buildingData.type)) {
+                    const sprite = PIXI.Sprite.fromImage(imageMap.building[buildingData.type]);
+
+                    sprite.position.set(buildingData.x * mapGuide.size.square, buildingData.y * mapGuide.size.square);
+
+                    buildings.addChild(sprite);
+                }
+            });
+        }
+
+        drawUnits(map: MapType, userList: Array<ServerUserType>) {
+            const game = this; // eslint-disable-line consistent-this
+
+            const {units} = game.layer;
+
+            map.units.forEach((unitData: UnitType) => {
                 let color = 'gray';
 
-                if (typeof buildingData.userId === 'string') {
-                    const userColor = getUserColor(buildingData.userId, userList);
+                if (typeof unitData.userId === 'string') {
+                    const userColor = getUserColor(unitData.userId, userList);
 
                     if (typeof userColor === 'string') {
                         color = userColor;
                     }
                 }
 
-                const sprite = PIXI.Sprite.fromImage(imageMap.building[buildingData.type + '-' + color]);
+                const sprite = PIXI.Sprite.fromImage(imageMap.unit[unitData.type + '-' + color + '-0']);
 
-                sprite.position.set(buildingData.x * mapGuide.size.square, buildingData.y * mapGuide.size.square);
+                sprite.position.set(unitData.x * mapGuide.size.square, unitData.y * mapGuide.size.square);
 
-                buildings.addChild(sprite);
-            }
-
-            if (['well', 'temple', 'farm-destroyed'].includes(buildingData.type)) {
-                const sprite = PIXI.Sprite.fromImage(imageMap.building[buildingData.type]);
-
-                sprite.position.set(buildingData.x * mapGuide.size.square, buildingData.y * mapGuide.size.square);
-
-                buildings.addChild(sprite);
-            }
-        });
-    }
-
-    drawUnits(map: MapType, userList: Array<ServerUserType>) {
-        const game = this; // eslint-disable-line consistent-this
-
-        const {units} = game.layer;
-
-        map.units.forEach((unitData: UnitType) => {
-            let color = 'gray';
-
-            if (typeof unitData.userId === 'string') {
-                const userColor = getUserColor(unitData.userId, userList);
-
-                if (typeof userColor === 'string') {
-                    color = userColor;
-                }
-            }
-
-            const sprite = PIXI.Sprite.fromImage(imageMap.unit[unitData.type + '-' + color + '-0']);
-
-            sprite.position.set(unitData.x * mapGuide.size.square, unitData.y * mapGuide.size.square);
-
-            units.addChild(sprite);
-        });
-    }
-*/
+                units.addChild(sprite);
+            });
+        }
+    */
 }
