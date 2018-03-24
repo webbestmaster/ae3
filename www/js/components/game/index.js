@@ -58,23 +58,36 @@ class GameView extends Component<PropsType, StateType> {
 
         const {roomId} = props;
 
-        const settings = await serverApi.getAllRoomSettings(roomId);
-        const users = await serverApi.getAllRoomUsers(roomId);
+        const {settings} = await serverApi.getAllRoomSettings(roomId);
+        const {users} = await serverApi.getAllRoomUsers(roomId);
 
         view.setState({
-            settings: settings.settings,
-            userList: users.users,
-            activeUserId: users.users[0].userId
+            settings,
+            userList: users,
+            activeUserId: users[0].userId
         });
 
+        // initialize game's data
+        Object.assign(
+            state.game,
+            {
+                settings,
+                userList: users
+            }
+        );
+
+        // actually initialize game's render
         state.game.initialize({
             view: refs.canvas,
             width: props.system.screen.width,
             height: props.system.screen.height
         });
 
+        /*
         state.game.drawLandscape(settings.settings.map);
         state.game.drawBuildings(settings.settings.map, users.users);
+        state.game.drawUnits(settings.settings.map, users.users);
+*/
 
         view.bindEventListeners();
 
@@ -86,7 +99,7 @@ class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
 
         // check for game is initialized
-        if (state.game.app) {
+        if (state.game.render.app) {
             state.game.setCanvasSize(props.system.screen.width, props.system.screen.height);
         }
     }

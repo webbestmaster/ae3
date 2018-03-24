@@ -13,7 +13,7 @@ type ApplicationOptionsType = {|
 declare module 'pixi.js' {
     declare var settings: {|
         SCALE_MODE: 0 | 1
-    |}
+    |};
 
     declare class PixiObject {
         position: {

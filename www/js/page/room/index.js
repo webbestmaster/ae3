@@ -209,8 +209,12 @@ class Room extends Component<PropsType, StateType> {
                     return;
                 }
 
-                [].concat(map.buildings, map.units).forEach((userItem: BuildingType | UnitType) => {
+                [].concat(map.buildings, map.units).forEach((userItem: BuildingType | UnitType) => { // eslint-disable-line complexity
                     const userItemUserId = typeof userItem.userId === 'string' ? userItem.userId : '';
+
+                    if (typeof userItem.id !== 'string' || userItem.id === '') {
+                        Object.assign(userItem, {id: [userItem.x, userItem.y, Math.random()].join('_')});
+                    }
 
                     if (userItemUserId === '') {
                         return;

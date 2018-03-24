@@ -45,7 +45,7 @@ landscapeReqContext.keys()
     });
 
 
-const otherReqContext = require.context('./landscape/', true, /\.png$/);
+const otherReqContext = require.context('./other/', true, /\.png$/);
 
 otherReqContext.keys()
     .forEach((fileName: string) => {
@@ -56,7 +56,7 @@ otherReqContext.keys()
     });
 
 
-const unitReqContext = require.context('./landscape/', true, /\.png$/);
+const unitReqContext = require.context('./unit/', true, /\.png$/);
 
 unitReqContext.keys()
     .forEach((fileName: string) => {

@@ -24,7 +24,8 @@ export type BuildingType = {|
     x: number,
     y: number,
     type: 'castle' | 'farm' | 'farm-destroyed' | 'well' | 'temple',
-    userId?: UserIdType
+    userId?: UserIdType,
+    id?: string
 |};
 
 export type UnitType = {|
@@ -49,7 +50,8 @@ export type UnitType = {|
         'saeth',
     hitPoint?: number,
     level?: number,
-    userId?: UserIdType
+    userId?: UserIdType,
+    id?: string
 |};
 
 export type GraveType = {|
