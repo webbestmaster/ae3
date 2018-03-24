@@ -32,11 +32,13 @@ export default class Game {
     render: Render;
     settings: AllRoomSettingsType;
     userList: Array<ServerUserType>;
+    buildingList: Array<Building>;
 
     constructor() {
         const game = this; // eslint-disable-line consistent-this
 
         game.render = new Render();
+        game.buildingList = [];
     }
 
     initialize(renderSetting: RenderSettingType) {
@@ -50,6 +52,8 @@ export default class Game {
         // add buildings
         game.settings.map.buildings.forEach((buildingData: BuildingType) => {
             const building = new Building({buildingData, userList: game.userList});
+
+            game.buildingList.push(building);
 
             game.render.addBuilding(building.attr.container);
         });
