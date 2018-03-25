@@ -6,6 +6,17 @@ import type {ServerUserType} from '../../../../module/server-api';
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import imageMap from './../../image/image-map';
+import Building from '../building';
+import {getPath} from './path-master';
+import type {AvailablePathMapType} from './path-master';
+
+type UnitActionType = {|
+    type: 'move',
+    x: number,
+    y: number
+|};
+
+type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
 
 type UnitAttrType = {|
     x: number,
@@ -23,6 +34,23 @@ type UnitAttrType = {|
 type UnitConstructorType = {|
     unitData: UnitType,
     userList: Array<ServerUserType>
+|};
+
+type GameDataType = {|
+    +userList: Array<ServerUserType>;
+    +buildingList: Array<Building>;
+    +unitList: Array<Unit>; // eslint-disable-line no-use-before-define
+    +pathMap: {
+        +walk: Array<Array<number>>,
+        +flow: Array<Array<number>>,
+        +fly: Array<Array<number>>
+    };
+    +armorMap: {
+        +walk: Array<Array<number>>,
+        +flow: Array<Array<number>>,
+        +fly: Array<Array<number>>
+    };
+    +emptyActionMap: Array<Array<[]>>
 |};
 
 export default class Unit {
@@ -84,20 +112,48 @@ export default class Unit {
         attr.container.addChild(attr.sprite.unit);
     }
 
-/*
-    bindUnitEventListeners() { // eslint-disable-line complexity
+    getActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this; // eslint-disable-line consistent-this
-        const {attr} = unit;
-        const {square} = mapGuide.size;
+        const availablePath = unit.getAvailablePath(gameData);
+        const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
 
-        const unitContainer = unit.attr.container;
-
-        unitContainer.interactive = true;
-        unitContainer.buttonMode = true;
-
-        unitContainer.on('click', () => {
-            unit.attr.onClick()
+        availablePath.forEach((cell: [number, number]) => {
+            actionMap[cell[1]][cell[0]].push({
+                type: 'move',
+                x: cell[0],
+                y: cell[1]
+            });
         });
+
+        return actionMap;
     }
-*/
+
+    getUnitCoordinates(gameData: GameDataType): Array<[number, number]> {
+        const {unitList} = gameData;
+
+        return unitList.map((unit: Unit): [number, number] => [unit.attr.x, unit.attr.y]);
+    }
+
+    getAvailablePath(gameData: GameDataType): AvailablePathMapType {
+        const unit = this; // eslint-disable-line consistent-this
+
+        return getPath(unit.attr.x, unit.attr.y, 4, gameData.pathMap.walk, unit.getUnitCoordinates(gameData));
+    }
+
+    /*
+        bindUnitEventListeners() { // eslint-disable-line complexity
+            const unit = this; // eslint-disable-line consistent-this
+            const {attr} = unit;
+            const {square} = mapGuide.size;
+
+            const unitContainer = unit.attr.container;
+
+            unitContainer.interactive = true;
+            unitContainer.buttonMode = true;
+
+            unitContainer.on('click', () => {
+                unit.attr.onClick()
+            });
+        }
+    */
 }

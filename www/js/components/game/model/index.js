@@ -13,7 +13,6 @@ import Render from './render';
 import type {AllRoomSettingsType} from '../../../module/server-api';
 import Building from './building';
 import Unit from './unit';
-import {getPath} from './unit/path-master';
 
 type RenderSettingType = {|
     width: number,
@@ -36,7 +35,13 @@ export default class Game {
     userList: Array<ServerUserType>;
     buildingList: Array<Building>;
     unitList: Array<Unit>;
+    emptyActionMap: Array<Array<[]>>;
     pathMap: {
+        walk: Array<Array<number>>,
+        flow: Array<Array<number>>,
+        fly: Array<Array<number>>
+    };
+    armorMap: {
         walk: Array<Array<number>>,
         flow: Array<Array<number>>,
         fly: Array<Array<number>>
@@ -49,6 +54,11 @@ export default class Game {
         game.buildingList = [];
         game.unitList = [];
         game.pathMap = {
+            walk: [],
+            flow: [],
+            fly: []
+        };
+        game.armorMap = {
             walk: [],
             flow: [],
             fly: []
@@ -76,8 +86,6 @@ export default class Game {
         // make path maps
         game.initializePathMaps();
 
-        console.log(game.pathMap);
-
         // FIXME: remove extra dispatch
         window.dispatchEvent(new window.Event('resize'));
     }
@@ -100,9 +108,16 @@ export default class Game {
         unitContainer.buttonMode = true;
 
         unitContainer.on('click', () => {
-            const path = getPath(unit.attr.x, unit.attr.y, 4, game.pathMap.walk, game.getUnitCoordinates());
+            const actionList = unit.getActions({
+                userList: game.userList,
+                buildingList: game.buildingList,
+                unitList: game.unitList,
+                pathMap: game.pathMap,
+                armorMap: game.armorMap,
+                emptyActionMap: game.emptyActionMap
+            });
 
-            console.log(path);
+            console.log(actionList);
             // const fullAvailablePath = unit.getFullAvailablePath();
         });
 
@@ -132,6 +147,10 @@ export default class Game {
     initializePathMaps() {
         const game = this; // eslint-disable-line consistent-this
 
+        game.initializeEmptyActionMap();
+
+        // TODO: armorMap needed
+        console.warn('---> armorMap needed');
         game.initializePathMapWalk();
         game.initializePathMapFlow();
         game.initializePathMapFly();
@@ -191,10 +210,26 @@ export default class Game {
         game.pathMap.fly = pathMap;
     }
 
-    getUnitCoordinates(): Array<[number, number]> {
+    initializeEmptyActionMap() {
         const game = this; // eslint-disable-line consistent-this
-        const {unitList} = game;
+        const {map} = game.settings;
+        const emptyActionMap = [];
 
-        return unitList.map((unit: Unit): [number, number] => [unit.attr.x, unit.attr.y]);
+        map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
+            emptyActionMap.push([]);
+            line.forEach((landscapeItem: LandscapeType, tileX: number) => {
+                emptyActionMap[tileY].push([]);
+            });
+        });
+
+        game.emptyActionMap = emptyActionMap;
     }
+
+/*
+    getEmptyActionMap(): Array<Array<[]>> {
+        const game = this; // eslint-disable-line consistent-this
+
+        return JSON.parse(JSON.stringify(game.emptyActionMap));
+    }
+*/
 }
