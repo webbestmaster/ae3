@@ -10,13 +10,14 @@ import Building from '../building';
 import {getPath} from './path-master';
 import type {AvailablePathMapType} from './path-master';
 
-type UnitActionType = {|
+export type UnitActionType = {|
     type: 'move',
     x: number,
-    y: number
+    y: number,
+    container: PIXI.Container
 |};
 
-type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
+export type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
 
 type UnitAttrType = {|
     x: number,
@@ -28,12 +29,18 @@ type UnitAttrType = {|
     sprite: {
         unit: PIXI.Sprite
     },
-    userList: Array<ServerUserType>
+    userList: Array<ServerUserType>,
+    event: {
+        click: (unit: Unit) => void // eslint-disable-line no-use-before-define
+    }
 |};
 
 type UnitConstructorType = {|
     unitData: UnitType,
-    userList: Array<ServerUserType>
+    userList: Array<ServerUserType>,
+    event: {
+        click: (unit: Unit) => void // eslint-disable-line no-use-before-define
+    }
 |};
 
 type GameDataType = {|
@@ -74,11 +81,14 @@ export default class Unit {
             sprite: {
                 unit: new PIXI.Sprite()
             },
-            userList: unitConstructor.userList
+            userList: unitConstructor.userList,
+            event: {
+                click: unitConstructor.event.click
+            }
         };
 
         unit.initializeUnitSprite();
-        // unit.bindUnitEventListeners();
+        unit.bindUnitEventListeners();
     }
 
     initializeUnitSprite() { // eslint-disable-line complexity
@@ -121,7 +131,8 @@ export default class Unit {
             actionMap[cell[1]][cell[0]].push({
                 type: 'move',
                 x: cell[0],
-                y: cell[1]
+                y: cell[1],
+                container: new PIXI.Container()
             });
         });
 
@@ -140,20 +151,18 @@ export default class Unit {
         return getPath(unit.attr.x, unit.attr.y, 4, gameData.pathMap.walk, unit.getUnitCoordinates(gameData));
     }
 
-    /*
-        bindUnitEventListeners() { // eslint-disable-line complexity
-            const unit = this; // eslint-disable-line consistent-this
-            const {attr} = unit;
-            const {square} = mapGuide.size;
+    bindUnitEventListeners() { // eslint-disable-line complexity
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const {square} = mapGuide.size;
 
-            const unitContainer = unit.attr.container;
+        const unitContainer = unit.attr.container;
 
-            unitContainer.interactive = true;
-            unitContainer.buttonMode = true;
+        unitContainer.interactive = true;
+        unitContainer.buttonMode = true;
 
-            unitContainer.on('click', () => {
-                unit.attr.onClick()
-            });
-        }
-    */
+        unitContainer.on('click', () => {
+            unit.attr.event.click(unit);
+        });
+    }
 }

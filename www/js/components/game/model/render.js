@@ -9,6 +9,7 @@ import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
 import {getUserColor} from './helper';
 import type {UnitType} from '../../../maps/type';
+import type {UnitActionsMapType, UnitActionType} from './unit/index';
 
 type InitializeConfigType = {|
     width: number,
@@ -23,7 +24,8 @@ export default class Render {
     layer: {|
         landscape: PIXI.Container,
         buildings: PIXI.Container,
-        units: PIXI.Container
+        units: PIXI.Container,
+        actions: PIXI.Container
     |};
 
     constructor() {
@@ -32,7 +34,8 @@ export default class Render {
         render.layer = {
             landscape: new PIXI.Container(),
             buildings: new PIXI.Container(),
-            units: new PIXI.Container()
+            units: new PIXI.Container(),
+            actions: new PIXI.Container()
         };
     }
 
@@ -55,6 +58,7 @@ export default class Render {
         app.stage.addChild(render.layer.landscape);
         app.stage.addChild(render.layer.buildings);
         app.stage.addChild(render.layer.units);
+        app.stage.addChild(render.layer.actions);
 
         app.stage.position.set(100, 100);
 
@@ -93,6 +97,47 @@ export default class Render {
         const render = this; // eslint-disable-line consistent-this
 
         render.layer.units.addChild(container);
+    }
+
+    drawActionsList(actionsList: UnitActionsMapType) {
+        const render = this; // eslint-disable-line consistent-this
+
+        render.cleanActionsList();
+
+        actionsList.forEach((mapLine: Array<Array<UnitActionType>>) => {
+            mapLine.forEach((actionList: Array<UnitActionType>) => {
+                // check here action count, if 2 or more - make select action button
+                actionList.forEach((unitAction: UnitActionType) => {
+                    render.drawAction(unitAction);
+                });
+            });
+        });
+    }
+
+    drawAction(unitAction: UnitActionType) {
+        const render = this; // eslint-disable-line consistent-this
+        const {x, y, type, container} = unitAction;
+
+        container.position.set(x * mapGuide.size.square, y * mapGuide.size.square);
+        container.buttonMode = true;
+        container.interactive = true;
+
+        switch (type) {
+            case 'move':
+                container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-move']));
+                break;
+
+            default:
+                console.warn('---> unknown unit action', unitAction);
+        }
+
+        render.layer.actions.addChild(container);
+    }
+
+    cleanActionsList() {
+        const render = this; // eslint-disable-line consistent-this
+
+        render.layer.actions.removeChildren();
     }
 
     /*

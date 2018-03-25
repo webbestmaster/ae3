@@ -101,29 +101,49 @@ export default class Game {
 
     createUnit(unitData: UnitType) {
         const game = this; // eslint-disable-line consistent-this
-        const unit = new Unit({unitData, userList: game.userList});
-        const unitContainer = unit.attr.container;
-
-        unitContainer.interactive = true;
-        unitContainer.buttonMode = true;
-
-        unitContainer.on('click', () => {
-            const actionList = unit.getActions({
-                userList: game.userList,
-                buildingList: game.buildingList,
-                unitList: game.unitList,
-                pathMap: game.pathMap,
-                armorMap: game.armorMap,
-                emptyActionMap: game.emptyActionMap
-            });
-
-            console.log(actionList);
-            // const fullAvailablePath = unit.getFullAvailablePath();
+        const unit = new Unit({
+            unitData,
+            userList: game.userList,
+            event: {
+                click: (clickedUnit: Unit) => {
+                    game.onUnitClick(clickedUnit);
+                }
+            }
         });
+
+        /*
+                const unitContainer = unit.attr.container;
+
+                unitContainer.interactive = true;
+                unitContainer.buttonMode = true;
+
+                unitContainer.on('click', () => {
+
+                    // const fullAvailablePath = unit.getFullAvailablePath();
+                });
+        */
 
         game.unitList.push(unit);
 
         game.render.addUnit(unit.attr.container);
+    }
+
+    onUnitClick(unit: Unit) {
+        const game = this; // eslint-disable-line consistent-this
+
+        const actionsList = unit.getActions({
+            userList: game.userList,
+            buildingList: game.buildingList,
+            unitList: game.unitList,
+            pathMap: game.pathMap,
+            armorMap: game.armorMap,
+            emptyActionMap: game.emptyActionMap
+        });
+
+        // TODO: bind on click to PIXI.Container here
+        console.log(actionsList);
+
+        game.render.drawActionsList(actionsList);
     }
 
     setSettings(settings: AllRoomSettingsType) {
@@ -225,11 +245,11 @@ export default class Game {
         game.emptyActionMap = emptyActionMap;
     }
 
-/*
-    getEmptyActionMap(): Array<Array<[]>> {
-        const game = this; // eslint-disable-line consistent-this
+    /*
+        getEmptyActionMap(): Array<Array<[]>> {
+            const game = this; // eslint-disable-line consistent-this
 
-        return JSON.parse(JSON.stringify(game.emptyActionMap));
-    }
-*/
+            return JSON.parse(JSON.stringify(game.emptyActionMap));
+        }
+    */
 }

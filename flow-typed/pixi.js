@@ -24,7 +24,8 @@ declare module 'pixi.js' {
         };
         scale: {
             set(x: number, y: number): void
-        }
+        };
+        removeChildren(startIndex?: number, endIndex?: number): void
     }
 
     declare class Texture {
