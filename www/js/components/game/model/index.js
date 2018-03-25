@@ -13,6 +13,7 @@ import Render from './render';
 import type {AllRoomSettingsType} from '../../../module/server-api';
 import Building from './building';
 import Unit from './unit';
+import {getPath} from './unit/path-master';
 
 type RenderSettingType = {|
     width: number,
@@ -35,6 +36,11 @@ export default class Game {
     userList: Array<ServerUserType>;
     buildingList: Array<Building>;
     unitList: Array<Unit>;
+    pathMap: {
+        walk: Array<Array<number>>,
+        flow: Array<Array<number>>,
+        fly: Array<Array<number>>
+    };
 
     constructor() {
         const game = this; // eslint-disable-line consistent-this
@@ -42,6 +48,11 @@ export default class Game {
         game.render = new Render();
         game.buildingList = [];
         game.unitList = [];
+        game.pathMap = {
+            walk: [],
+            flow: [],
+            fly: []
+        };
     }
 
     initialize(renderSetting: RenderSettingType) {
@@ -61,6 +72,11 @@ export default class Game {
         game.settings.map.units.forEach((unitData: UnitType) => {
             game.createUnit(unitData);
         });
+
+        // make path maps
+        game.initializePathMaps();
+
+        console.log(game.pathMap);
 
         // FIXME: remove extra dispatch
         window.dispatchEvent(new window.Event('resize'));
@@ -84,7 +100,10 @@ export default class Game {
         unitContainer.buttonMode = true;
 
         unitContainer.on('click', () => {
-            console.log('get needed unit data here');
+            const path = getPath(unit.attr.x, unit.attr.y, 4, game.pathMap.walk, game.getUnitCoordinates());
+
+            console.log(path);
+            // const fullAvailablePath = unit.getFullAvailablePath();
         });
 
         game.unitList.push(unit);
@@ -108,5 +127,74 @@ export default class Game {
         const game = this; // eslint-disable-line consistent-this
 
         game.render.setCanvasSize(width, height);
+    }
+
+    initializePathMaps() {
+        const game = this; // eslint-disable-line consistent-this
+
+        game.initializePathMapWalk();
+        game.initializePathMapFlow();
+        game.initializePathMapFly();
+    }
+
+    initializePathMapWalk() {
+        const game = this; // eslint-disable-line consistent-this
+        const {map} = game.settings;
+        const pathMap = [];
+
+        map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
+            pathMap.push([]);
+            line.forEach((landscapeItem: LandscapeType, tileX: number) => {
+                const landscapeImageType = map.landscape[tileY][tileX];
+                const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                const pathReduce = mapGuide.landscape[landscapeType].pathReduce;
+
+                pathMap[tileY].push(pathReduce);
+            });
+        });
+        game.pathMap.walk = pathMap;
+    }
+
+    initializePathMapFlow() {
+        const game = this; // eslint-disable-line consistent-this
+        const {map} = game.settings;
+        const pathMap = [];
+
+        map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
+            pathMap.push([]);
+            line.forEach((landscapeItem: LandscapeType, tileX: number) => {
+                const landscapeImageType = map.landscape[tileY][tileX];
+                const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                const pathReduce = landscapeType === 'water' ?
+                    1 :
+                    mapGuide.landscape[landscapeType].pathReduce;
+
+                pathMap[tileY].push(pathReduce);
+            });
+        });
+
+        game.pathMap.flow = pathMap;
+    }
+
+    initializePathMapFly() {
+        const game = this; // eslint-disable-line consistent-this
+        const {map} = game.settings;
+        const pathMap = [];
+
+        map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
+            pathMap.push([]);
+            line.forEach((landscapeItem: LandscapeType, tileX: number) => {
+                pathMap[tileY].push(1);
+            });
+        });
+
+        game.pathMap.fly = pathMap;
+    }
+
+    getUnitCoordinates(): Array<[number, number]> {
+        const game = this; // eslint-disable-line consistent-this
+        const {unitList} = game;
+
+        return unitList.map((unit: Unit): [number, number] => [unit.attr.x, unit.attr.y]);
     }
 }
