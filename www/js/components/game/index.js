@@ -68,13 +68,8 @@ class GameView extends Component<PropsType, StateType> {
         });
 
         // initialize game's data
-        Object.assign(
-            state.game,
-            {
-                settings,
-                userList: users
-            }
-        );
+        state.game.setSettings(settings);
+        state.game.setUserList(users);
 
         // actually initialize game's render
         state.game.initialize({

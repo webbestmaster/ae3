@@ -71,6 +71,18 @@ export default class Game {
         });
     }
 
+    setSettings(settings: AllRoomSettingsType) {
+        const game = this; // eslint-disable-line consistent-this
+
+        game.settings = settings;
+    }
+
+    setUserList(userList: Array<ServerUserType>) {
+        const game = this; // eslint-disable-line consistent-this
+
+        game.userList = userList;
+    }
+
     setCanvasSize(width: number, height: number) {
         const game = this; // eslint-disable-line consistent-this
 
