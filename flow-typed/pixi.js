@@ -16,6 +16,9 @@ declare module 'pixi.js' {
     |};
 
     declare class PixiObject {
+        on(string: 'click', callback: () => void): void,
+        interactive: boolean,
+        buttonMode: boolean,
         position: {
             set(x: number, y: number): void
         };

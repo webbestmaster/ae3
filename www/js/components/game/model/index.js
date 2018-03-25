@@ -54,21 +54,42 @@ export default class Game {
 
         // add buildings
         game.settings.map.buildings.forEach((buildingData: BuildingType) => {
-            const building = new Building({buildingData, userList: game.userList});
-
-            game.buildingList.push(building);
-
-            game.render.addBuilding(building.attr.container);
+            game.createBuilding(buildingData);
         });
 
         // add units
         game.settings.map.units.forEach((unitData: UnitType) => {
-            const unit = new Unit({unitData, userList: game.userList});
-
-            game.unitList.push(unit);
-
-            game.render.addUnit(unit.attr.container);
+            game.createUnit(unitData);
         });
+
+        // FIXME: remove extra dispatch
+        window.dispatchEvent(new window.Event('resize'));
+    }
+
+    createBuilding(buildingData: BuildingType) {
+        const game = this; // eslint-disable-line consistent-this
+        const building = new Building({buildingData, userList: game.userList});
+
+        game.buildingList.push(building);
+
+        game.render.addBuilding(building.attr.container);
+    }
+
+    createUnit(unitData: UnitType) {
+        const game = this; // eslint-disable-line consistent-this
+        const unit = new Unit({unitData, userList: game.userList});
+        const unitContainer = unit.attr.container;
+
+        unitContainer.interactive = true;
+        unitContainer.buttonMode = true;
+
+        unitContainer.on('click', () => {
+            console.log('get needed unit data here');
+        });
+
+        game.unitList.push(unit);
+
+        game.render.addUnit(unit.attr.container);
     }
 
     setSettings(settings: AllRoomSettingsType) {

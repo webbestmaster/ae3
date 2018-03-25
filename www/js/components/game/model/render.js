@@ -58,7 +58,7 @@ export default class Render {
 
         app.stage.position.set(100, 100);
 
-        app.stage.scale.set(2, 2);
+        app.stage.scale.set(3, 3);
     }
 
     setCanvasSize(width: number, height: number) {

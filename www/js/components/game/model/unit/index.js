@@ -50,6 +50,7 @@ export default class Unit {
         };
 
         unit.initializeUnitSprite();
+        // unit.bindUnitEventListeners();
     }
 
     initializeUnitSprite() { // eslint-disable-line complexity
@@ -82,4 +83,21 @@ export default class Unit {
 
         attr.container.addChild(attr.sprite.unit);
     }
+
+/*
+    bindUnitEventListeners() { // eslint-disable-line complexity
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const {square} = mapGuide.size;
+
+        const unitContainer = unit.attr.container;
+
+        unitContainer.interactive = true;
+        unitContainer.buttonMode = true;
+
+        unitContainer.on('click', () => {
+            unit.attr.onClick()
+        });
+    }
+*/
 }
