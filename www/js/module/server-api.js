@@ -159,7 +159,18 @@ type PushedStatePayloadIsGameStartedType = {|
     map: MapType
 |};
 
-export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType;
+type PushedStatePayloadUnitMoveType = {|
+    type: 'move',
+    unit: {
+        x: number,
+        y: number,
+        id: string
+    },
+    map: MapType,
+    activeUserId: string
+|};
+
+export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType | PushedStatePayloadUnitMoveType;
 
 export type PushStateType = {|
     roomId: string,

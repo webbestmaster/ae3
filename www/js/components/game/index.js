@@ -15,7 +15,8 @@ import type {SocketMessageType} from '../../module/socket';
 import * as serverApi from '../../module/server-api';
 import MainModel from '../../lib/main-model';
 import type {AllRoomSettingsType, ServerUserType} from '../../module/server-api';
-
+import find from 'lodash/find';
+import Unit from './model/unit';
 
 type PropsType = {|
     system: SystemType,
@@ -70,6 +71,7 @@ class GameView extends Component<PropsType, StateType> {
         // initialize game's data
         state.game.setSettings(settings);
         state.game.setUserList(users);
+        state.game.setRoomId(props.roomId);
 
         // actually initialize game's render
         state.game.initialize({
@@ -155,10 +157,35 @@ class GameView extends Component<PropsType, StateType> {
                 // TODO: check and update map state here
                 view.setState({activeUserId: message.states.last.state.activeUserId});
 
+                if (typeof message.states.last.state.type === 'string') {
+                    switch (message.states.last.state.type) {
+                        case 'move':
+                            const unitId = message.states.last.state.unit.id;
+                            const unit = find(view.state.game.unitList, (unit: Unit) => {
+                                return unitId === unit.attr.id;
+                            });
+
+                            unit.attr.container.position
+                                .set(message.states.last.state.unit.x * 24, message.states.last.state.unit.y * 24);
+
+                            unit.attr.x = message.states.last.state.unit.x;
+                            unit.attr.y = message.states.last.state.unit.y;
+
+                            console.log('---> unit moved!!!');
+                            console.log(message);
+
+                            break;
+
+                        default:
+                            console.log('---> view - game - unsupported push state type: ', message);
+                    }
+                }
+
+
                 break;
 
             default:
-                console.log('---> view - game - unsupported message type: ' + message.type);
+                console.log('---> view - game - unsupported message type: ', message);
         }
     }
 

@@ -14,6 +14,7 @@ export type UnitActionType = {|
     type: 'move',
     x: number,
     y: number,
+    id: string,
     container: PIXI.Container
 |};
 
@@ -129,6 +130,7 @@ export default class Unit {
 
         availablePath.forEach((cell: [number, number]) => {
             actionMap[cell[1]][cell[0]].push({
+                id: unit.attr.id,
                 type: 'move',
                 x: cell[0],
                 y: cell[1],

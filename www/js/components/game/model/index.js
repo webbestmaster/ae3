@@ -13,6 +13,10 @@ import Render from './render';
 import type {AllRoomSettingsType} from '../../../module/server-api';
 import Building from './building';
 import Unit from './unit';
+import type {UnitActionType} from './unit';
+import * as serverApi from './../../../module/server-api';
+import {user} from './../../../module/user';
+import find from 'lodash/find';
 
 type RenderSettingType = {|
     width: number,
@@ -36,6 +40,7 @@ export default class Game {
     buildingList: Array<Building>;
     unitList: Array<Unit>;
     emptyActionMap: Array<Array<[]>>;
+    roomId: string;
     pathMap: {
         walk: Array<Array<number>>,
         flow: Array<Array<number>>,
@@ -144,6 +149,50 @@ export default class Game {
         console.log(actionsList);
 
         game.render.drawActionsList(actionsList);
+
+        actionsList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
+            unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
+                unitActionList.forEach((unitAction: UnitActionType) => {
+                    unitAction.container.on('click', () => {
+                        if (unitAction.type === 'move') {
+                            const movedUnit = find(game.settings.map.units, {id: unitAction.id});
+
+                            if (movedUnit) {
+                                movedUnit.x = unitAction.x;
+                                movedUnit.y = unitAction.y;
+
+                                serverApi
+                                    .pushState(
+                                        game.roomId,
+                                        user.getId(),
+                                        {
+                                            type: 'room__push-state',
+                                            state: {
+                                                type: 'move',
+                                                unit: {
+                                                    x: unitAction.x,
+                                                    y: unitAction.y,
+                                                    id: unitAction.id
+                                                },
+                                                map: game.settings.map,
+                                                activeUserId: user.getId()
+                                            }
+                                        }
+                                    )
+                                    .then((response: mixed) => {
+                                        console.log('---> action pushed');
+                                        console.log(response);
+                                    });
+                            }
+
+                            return;
+                        }
+
+                        console.warn('---> unknown unitAction', unitAction);
+                    });
+                });
+            });
+        });
     }
 
     setSettings(settings: AllRoomSettingsType) {
@@ -156,6 +205,12 @@ export default class Game {
         const game = this; // eslint-disable-line consistent-this
 
         game.userList = userList;
+    }
+
+    setRoomId(roomId: string) {
+        const game = this; // eslint-disable-line consistent-this
+
+        game.roomId = roomId;
     }
 
     setCanvasSize(width: number, height: number) {
