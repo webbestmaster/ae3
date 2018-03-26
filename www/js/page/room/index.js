@@ -240,7 +240,6 @@ class Room extends Component<PropsType, StateType> {
                     map
                 });
 
-
                 const newState: PushedStatePayloadType = {
                     isGameStart: true,
                     activeUserId: user.getId(),

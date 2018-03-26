@@ -80,9 +80,12 @@ export function setAllRoomSettings(roomId: string,
 }
 
 
-export type RoomSettingType = {|
-    userList?: Array<ServerUserType>,
-    map?: MapType
+export type RoomSettingUserListType = {|
+    userList: Array<ServerUserType>
+|};
+
+export type RoomSettingMapType = {|
+    map: MapType
 |};
 
 export type SetRoomSettingType = {|
@@ -90,7 +93,7 @@ export type SetRoomSettingType = {|
 |};
 
 export function setRoomSetting(roomId: string,
-                               roomSetting: RoomSettingType): Promise<SetRoomSettingType> {
+                               roomSetting: RoomSettingUserListType | RoomSettingMapType): Promise<SetRoomSettingType> {
     console.warn('---> use this method in room only, not in game or other views');
 
     return fetch(url + '/api/room/set-setting/' + roomId, {
