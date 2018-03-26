@@ -74,17 +74,89 @@ const socketModel = new Socket();
 
 export {socketModel as socket};
 
-export type SocketMessageType = {|
-    +type: 'room__join-into-room' |
-        'room__leave-from-room' |
-        'room__user-disconnected' |
-        'room__take-turn' |
-        'room__drop-turn' |
-        'room__push-state',
-    +states: {
-        +last: {
-            +activeUserId?: string,
-            +state: PushedStatePayloadType
-        }
-    }
+
+// socket message
+type SocketMessageJoinIntoRoomType = {|
+    +roomId: string,
+    +type: 'room__join-into-room',
+    +states: {|
+        +last: {|
+            +roomId: string,
+            +socketId: string,
+            +type: 'room__join-into-room',
+            +userId: string
+        |},
+        length: number
+    |}
 |};
+
+type SocketMessageLeaveFromRoomType = {|
+    +roomId: string,
+    +type: 'room__leave-from-room',
+    +states: {|
+        +last: {|
+            +roomId: string,
+            +type: 'room__leave-from-room',
+            +userId: string
+        |},
+        length: number
+    |}
+|};
+
+type SocketMessageUserDisconnectedFromRoomType = {|
+    +roomId: string,
+    +type: 'room__user-disconnected',
+    +states: {|
+        +last: {|
+            +roomId: string,
+            +type: 'room__user-disconnected',
+            +userId: string
+        |},
+        length: number
+    |}
+|};
+
+type SocketMessageTakeTurnType = {|
+    +roomId: string,
+    +type: 'room__take-turn',
+    +states: {|
+        +last: {|
+            +roomId: string,
+            +type: 'room__take-turn',
+            +activeUserId: string // !!! instead of userId, new active user
+        |},
+        length: number
+    |}
+|};
+
+type SocketMessageDropTurnType = {|
+    +roomId: string,
+    +type: 'room__drop-turn',
+    +states: {|
+        +last: {|
+            +roomId: string,
+            +type: 'room__drop-turn',
+            +activeUserId: string // !!! instead of userId, user who drop turn
+        |},
+        length: number
+    |}
+|};
+
+type SocketMessagePushStateType = {|
+    +roomId: string,
+    +type: 'room__push-state',
+    +states: {|
+        +last: {|
+            +type: 'room__push-state',
+            +state: PushedStatePayloadType
+        |},
+        length: number
+    |}
+|};
+
+export type SocketMessageType = SocketMessageJoinIntoRoomType
+    | SocketMessageLeaveFromRoomType
+    | SocketMessageUserDisconnectedFromRoomType
+    | SocketMessageTakeTurnType
+    | SocketMessageDropTurnType
+    | SocketMessagePushStateType;

@@ -104,9 +104,12 @@ class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {model} = state;
 
-        model.listenTo(socket.attr.model, 'message', async (message: SocketMessageType): Promise<void> => {
-            await view.onMessage(message);
-        });
+        model.listenTo(socket.attr.model,
+            'message',
+            async (message: SocketMessageType): Promise<void> => {
+                await view.onMessage(message);
+            }
+        );
     }
 
     async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
@@ -150,7 +153,7 @@ class GameView extends Component<PropsType, StateType> {
             case 'room__push-state':
 
                 // TODO: check and update map state here
-                view.setState({activeUserId: message.states.last.activeUserId});
+                view.setState({activeUserId: message.states.last.state.activeUserId});
 
                 break;
 

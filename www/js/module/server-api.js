@@ -153,11 +153,13 @@ export function getAllRoomIds(): Promise<GetAllRoomIdsType> {
         .then((blob: Response): Promise<GetAllRoomIdsType> => blob.json());
 }
 
-export type PushedStatePayloadType = {|
-    isGameStart?: boolean,
+type PushedStatePayloadIsGameStartedType = {|
+    isGameStart: boolean,
     activeUserId: string,
     map: MapType
 |};
+
+export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType;
 
 export type PushStateType = {|
     roomId: string,
