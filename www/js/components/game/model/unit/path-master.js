@@ -2,6 +2,7 @@
 
 type MapPathReduceType = Array<Array<number>>;
 type MapNoPathType = Array<[number, number]>;
+export type PathType = Array<[number, number]>; // need for export only
 export type AvailablePathMapType = Array<[number, number]>;
 
 function getItem<T:number | Array<number>>(index: number, array: Array<T>): T | null {

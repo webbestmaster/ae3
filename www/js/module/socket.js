@@ -142,7 +142,7 @@ type SocketMessageDropTurnType = {|
     |}
 |};
 
-type SocketMessagePushStateType = {|
+export type SocketMessagePushStateType = {|
     +roomId: string,
     +type: 'room__push-state',
     +states: {|

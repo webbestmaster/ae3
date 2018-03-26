@@ -4,6 +4,7 @@
 import appConst from './../app-const';
 import type {MapType} from '../maps/type';
 import mapGuide from './../maps/map-guide';
+import type {PathType} from './../components/game/model/unit/path-master';
 
 const {api} = appConst;
 const {url} = api;
@@ -161,6 +162,7 @@ type PushedStatePayloadIsGameStartedType = {|
 
 type PushedStatePayloadUnitMoveType = {|
     type: 'move',
+    path: PathType,
     unit: {
         x: number,
         y: number,

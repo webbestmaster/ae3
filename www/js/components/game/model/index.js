@@ -17,6 +17,9 @@ import type {UnitActionType} from './unit';
 import * as serverApi from './../../../module/server-api';
 import {user} from './../../../module/user';
 import find from 'lodash/find';
+import {socket} from '../../../module/socket';
+import type {SocketMessageType, SocketMessagePushStateType} from '../../../module/socket';
+import MainModel from './../../../lib/main-model';
 
 type RenderSettingType = {|
     width: number,
@@ -41,6 +44,7 @@ export default class Game {
     unitList: Array<Unit>;
     emptyActionMap: Array<Array<[]>>;
     roomId: string;
+    model: MainModel;
     pathMap: {
         walk: Array<Array<number>>,
         flow: Array<Array<number>>,
@@ -68,6 +72,7 @@ export default class Game {
             flow: [],
             fly: []
         };
+        game.model = new MainModel();
     }
 
     initialize(renderSetting: RenderSettingType) {
@@ -91,8 +96,98 @@ export default class Game {
         // make path maps
         game.initializePathMaps();
 
+        game.bindEventListeners();
+
         // FIXME: remove extra dispatch
         window.dispatchEvent(new window.Event('resize'));
+    }
+
+    bindEventListeners() {
+        const game = this; // eslint-disable-line consistent-this
+        const {model} = game;
+
+        model.listenTo(socket.attr.model,
+            'message',
+            async (message: SocketMessageType): Promise<void> => {
+                await game.onMessage(message);
+            }
+        );
+    }
+
+    async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
+        const game = this; // eslint-disable-line consistent-this
+
+        switch (message.type) {
+            case 'room__take-turn':
+
+                break;
+
+            case 'room__join-into-room':
+
+                break;
+
+            case 'room__leave-from-room':
+
+                break;
+
+            case 'room__user-disconnected':
+
+                break;
+
+            case 'room__push-state':
+                game.handleServerPushState(message);
+                break;
+
+            default:
+                console.log('---> view - game - unsupported message type: ', message);
+        }
+    }
+
+    handleServerPushState(message: SocketMessagePushStateType) {
+        const game = this; // eslint-disable-line consistent-this
+
+        if (typeof message.states.last.state.type !== 'string') {
+            return;
+        }
+
+
+        switch (message.states.last.state.type) {
+            case 'move':
+                // TODO: check pushed map with map after action
+                console.log('---> check pushed map with map after action');
+                game.handleServerPushStateMove(message);
+
+                break;
+
+            default:
+                console.log('---> view - game - unsupported push state type: ', message);
+        }
+    }
+
+    handleServerPushStateMove(message: SocketMessagePushStateType) {
+        const game = this; // eslint-disable-line consistent-this
+        const state = message.states.last.state;
+
+        if (!state.unit || typeof state.unit.id !== 'string') {
+            console.error('---> Wrong socket message', message);
+            return;
+        }
+
+        const unitState = state.unit;
+        const unitId = unitState.id;
+        const unitModel = find(game.unitList, (unitModelInList: Unit): boolean => {
+            return unitId === unitModelInList.attr.id;
+        });
+
+        if (!unitModel) {
+            console.error('---> Can not find unitModel', message, game.unitList);
+            return;
+        }
+
+        unitModel.move(unitState.x, unitState.y);
+
+        console.log('---> unit moved!!!');
+        console.log(message);
     }
 
     createBuilding(buildingData: BuildingType) {
@@ -115,18 +210,6 @@ export default class Game {
                 }
             }
         });
-
-        /*
-                const unitContainer = unit.attr.container;
-
-                unitContainer.interactive = true;
-                unitContainer.buttonMode = true;
-
-                unitContainer.on('click', () => {
-
-                    // const fullAvailablePath = unit.getFullAvailablePath();
-                });
-        */
 
         game.unitList.push(unit);
 
@@ -154,45 +237,65 @@ export default class Game {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
                 unitActionList.forEach((unitAction: UnitActionType) => {
                     unitAction.container.on('click', () => {
-                        if (unitAction.type === 'move') {
-                            const movedUnit = find(game.settings.map.units, {id: unitAction.id});
-
-                            if (movedUnit) {
-                                movedUnit.x = unitAction.x;
-                                movedUnit.y = unitAction.y;
-
-                                serverApi
-                                    .pushState(
-                                        game.roomId,
-                                        user.getId(),
-                                        {
-                                            type: 'room__push-state',
-                                            state: {
-                                                type: 'move',
-                                                unit: {
-                                                    x: unitAction.x,
-                                                    y: unitAction.y,
-                                                    id: unitAction.id
-                                                },
-                                                map: game.settings.map,
-                                                activeUserId: user.getId()
-                                            }
-                                        }
-                                    )
-                                    .then((response: mixed) => {
-                                        console.log('---> action pushed');
-                                        console.log(response);
-                                    });
-                            }
-
-                            return;
-                        }
-
-                        console.warn('---> unknown unitAction', unitAction);
+                        game.bindOnClickUnitAction(unitAction);
                     });
                 });
             });
         });
+    }
+
+    bindOnClickUnitAction(unitAction: UnitActionType) {
+        const game = this; // eslint-disable-line consistent-this
+
+        game.render.cleanActionsList();
+
+        const newMap: MapType = JSON.parse(JSON.stringify(game.settings.map));
+
+        if (unitAction.type === 'move') {
+            const movedUnit = find(newMap.units, {id: unitAction.id});
+
+            if (!movedUnit) {
+                console.error('--> can not find unit for action:', unitAction);
+                return;
+            }
+
+            // TODO: make move path with a-star-finder and pass path into path;
+            const moviePath = [[1, 2], [3, 4]];
+
+            console.warn('---> make move path with a-star-finder and pass path into path');
+
+            // update map movie unit
+            movedUnit.x = unitAction.x;
+            movedUnit.y = unitAction.y;
+
+            serverApi
+                .pushState(
+                    game.roomId,
+                    user.getId(),
+                    {
+                        type: 'room__push-state',
+                        state: {
+                            type: 'move',
+                            path: moviePath,
+                            unit: {
+                                x: unitAction.x,
+                                y: unitAction.y,
+                                id: unitAction.id
+                            },
+                            map: newMap,
+                            activeUserId: user.getId()
+                        }
+                    }
+                )
+                .then((response: mixed) => {
+                    console.log('---> unit action pushed');
+                    console.log(response);
+                });
+
+            return;
+        }
+
+        console.warn('---> unknown unitAction', unitAction);
     }
 
     setSettings(settings: AllRoomSettingsType) {

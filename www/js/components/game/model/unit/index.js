@@ -167,4 +167,15 @@ export default class Unit {
             unit.attr.event.click(unit);
         });
     }
+
+    move(x: number, y: number) {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const {square} = mapGuide.size;
+
+        attr.x = x;
+        attr.y = y;
+
+        attr.container.position.set(x * square, y * square);
+    }
 }

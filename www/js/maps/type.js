@@ -48,7 +48,7 @@ export type UnitType = {|
         'valadorn' |
         'demon-lord' |
         'saeth',
-    hitPoint?: number,
+    hitPointCount?: number,
     level?: number,
     userId?: UserIdType,
     id?: string
