@@ -27,6 +27,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@tweenjs/tween.js": "^17.2.0",
     "fastclick": "^1.0.6",
     "lodash": "^4.17.5",
     "pixi.js": "^4.7.1",
