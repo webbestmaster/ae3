@@ -7,16 +7,13 @@ import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import imageMap from './../../image/image-map';
 
-type BuildingAttrType = {|
-    x: number,
-    y: number,
-    type: string,
-    userId: string | null,
-    id: string,
+type BuildingAttrType = BuildingType;
+
+type BuildingGameAttrType = {|
     container: PIXI.Container,
-    sprite: {
+    sprite: {|
         building: PIXI.Sprite
-    },
+    |},
     userList: Array<ServerUserType>
 |};
 
@@ -27,10 +24,11 @@ type BuildingConstructorType = {|
 
 export default class Building {
     attr: BuildingAttrType;
+    gameAttr: BuildingGameAttrType;
 
     constructor(buildingConstructor: BuildingConstructorType) {
         const building = this; // eslint-disable-line consistent-this
-        const {buildingData} = buildingConstructor;
+        const {buildingData} = JSON.parse(JSON.stringify(buildingConstructor));
 
         if (typeof buildingData.userId !== 'string' || typeof buildingData.id !== 'string') {
             console.warn('---> buildingData has NO .userId or/and .id', buildingData);
@@ -41,12 +39,15 @@ export default class Building {
             y: buildingData.y,
             type: buildingData.type,
             userId: typeof buildingData.userId === 'string' ? buildingData.userId : null,
-            id: typeof buildingData.id === 'string' ? buildingData.id : 'no-bulding-id-' + Math.random(),
+            id: typeof buildingData.id === 'string' ? buildingData.id : 'no-bulding-id-' + Math.random()
+        };
+
+        building.gameAttr = {
             container: new PIXI.Container(),
             sprite: {
                 building: new PIXI.Sprite()
             },
-            userList: buildingConstructor.userList
+            userList: JSON.parse(JSON.stringify(buildingConstructor.userList))
         };
 
         building.initializeBuildingSprite();
@@ -54,35 +55,35 @@ export default class Building {
 
     initializeBuildingSprite() { // eslint-disable-line complexity
         const building = this; // eslint-disable-line consistent-this
-        const {attr} = building;
+        const {attr, gameAttr} = building;
         const {square} = mapGuide.size;
 
         if (attr.type === 'castle') {
-            attr.container.position.set(attr.x * square, attr.y * square - square);
+            gameAttr.container.position.set(attr.x * square, attr.y * square - square);
         } else {
-            attr.container.position.set(attr.x * square, attr.y * square);
+            gameAttr.container.position.set(attr.x * square, attr.y * square);
         }
 
         if (['castle', 'farm'].includes(attr.type)) {
             let color = 'gray';
 
             if (typeof attr.userId === 'string') {
-                const userColor = getUserColor(attr.userId, attr.userList);
+                const userColor = getUserColor(attr.userId, gameAttr.userList);
 
                 if (typeof userColor === 'string') {
                     color = userColor;
                 }
             }
 
-            attr.sprite.building = PIXI.Sprite.fromImage(imageMap.building[attr.type + '-' + color]);
+            gameAttr.sprite.building = PIXI.Sprite.fromImage(imageMap.building[attr.type + '-' + color]);
 
-            attr.container.addChild(attr.sprite.building);
+            gameAttr.container.addChild(gameAttr.sprite.building);
         }
 
         if (['well', 'temple', 'farm-destroyed'].includes(attr.type)) {
-            attr.sprite.building = PIXI.Sprite.fromImage(imageMap.building[attr.type]);
+            gameAttr.sprite.building = PIXI.Sprite.fromImage(imageMap.building[attr.type]);
 
-            attr.container.addChild(attr.sprite.building);
+            gameAttr.container.addChild(gameAttr.sprite.building);
         }
     }
 }

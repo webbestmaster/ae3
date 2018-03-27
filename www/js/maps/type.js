@@ -24,7 +24,7 @@ export type BuildingType = {|
     x: number,
     y: number,
     type: 'castle' | 'farm' | 'farm-destroyed' | 'well' | 'temple',
-    userId?: UserIdType,
+    userId?: UserIdType | null,
     id?: string
 |};
 
@@ -48,8 +48,19 @@ export type UnitType = {|
         'valadorn' |
         'demon-lord' |
         'saeth',
-    hitPointCount?: number,
-    level?: number,
+    action?: {|
+        didMove?: boolean,
+        didAttack?: boolean,
+        didFixBuilding?: boolean,
+        didDestroyBuilding?: boolean,
+        didRaiseSkeleton?: boolean
+    |},
+    hitPoints?: number,
+    poisonCounter?: number,
+    damage?: {|
+        given?: number,
+        received?: number
+    |},
     userId?: UserIdType,
     id?: string
 |};

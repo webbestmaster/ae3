@@ -42,6 +42,7 @@ export default class Game {
     userList: Array<ServerUserType>;
     buildingList: Array<Building>;
     unitList: Array<Unit>;
+    mapState: MapType;
     emptyActionMap: Array<Array<[]>>;
     roomId: string;
     model: MainModel;
@@ -137,7 +138,7 @@ export default class Game {
             case 'room__push-state':
 
                 // TODO: check and update map state here
-                game.handleServerPushState(message);
+                await game.handleServerPushState(message);
                 break;
 
             default:
@@ -145,7 +146,7 @@ export default class Game {
         }
     }
 
-    handleServerPushState(message: SocketMessagePushStateType) {
+    async handleServerPushState(message: SocketMessagePushStateType): Promise<void> {
         const game = this; // eslint-disable-line consistent-this
 
         if (typeof message.states.last.state.type !== 'string') {
@@ -157,22 +158,25 @@ export default class Game {
             case 'move':
                 // TODO: check pushed map with map after action
                 console.log('---> check pushed map with map after action');
-                game.handleServerPushStateMove(message);
+                await game.handleServerPushStateMove(message);
+
 
                 break;
 
             default:
                 console.log('---> view - game - unsupported push state type: ', message);
         }
+
+        // game.checkMapState(message)
     }
 
-    handleServerPushStateMove(message: SocketMessagePushStateType) {
+    handleServerPushStateMove(message: SocketMessagePushStateType): Promise<void> {
         const game = this; // eslint-disable-line consistent-this
         const state = message.states.last.state;
 
         if (!state.unit || typeof state.unit.id !== 'string') {
             console.error('---> Wrong socket message', message);
-            return;
+            return Promise.resolve();
         }
 
         const unitState = state.unit;
@@ -183,13 +187,10 @@ export default class Game {
 
         if (!unitModel) {
             console.error('---> Can not find unitModel', message, game.unitList);
-            return;
+            return Promise.resolve();
         }
 
-        unitModel.move(state.to.x, state.to.y, state.path);
-
-        console.log('---> unit moved!!!');
-        console.log(message);
+        return unitModel.move(state.to.x, state.to.y, state.path);
     }
 
     createBuilding(buildingData: BuildingType) {
@@ -198,7 +199,7 @@ export default class Game {
 
         game.buildingList.push(building);
 
-        game.render.addBuilding(building.attr.container);
+        game.render.addBuilding(building.gameAttr.container);
     }
 
     createUnit(unitData: UnitType) {
