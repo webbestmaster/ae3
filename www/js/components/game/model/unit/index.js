@@ -26,32 +26,29 @@ export type UnitActionMoveType = {|
     container: PIXI.Container
 |};
 
-export type UnitActionType = UnitActionMoveType;
+export type UnitActionType = UnitActionMoveType; // | UnitActionMoveType;
 
 export type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
 
-type UnitAttrType = {|
-    x: number,
-    y: number,
-    type: string,
-    userId: string | null,
-    id: string,
+type UnitAttrType = UnitType;
+
+type UnitGameAttrType = {|
     container: PIXI.Container,
-    sprite: {
-        unit: PIXI.Sprite
-    },
+    sprite: {|
+        unit: PIXI.AnimatedSprite
+    |},
     userList: Array<ServerUserType>,
-    event: {
+    event: {|
         click: (unit: Unit) => void // eslint-disable-line no-use-before-define
-    }
+    |}
 |};
 
 type UnitConstructorType = {|
     unitData: UnitType,
     userList: Array<ServerUserType>,
-    event: {
+    event: {|
         click: (unit: Unit) => void // eslint-disable-line no-use-before-define
-    }
+    |}
 |};
 
 type GameDataType = {|
@@ -73,6 +70,7 @@ type GameDataType = {|
 
 export default class Unit {
     attr: UnitAttrType;
+    gameAttr: UnitGameAttrType;
 
     constructor(unitConstructor: UnitConstructorType) {
         const unit = this; // eslint-disable-line consistent-this
@@ -82,21 +80,25 @@ export default class Unit {
             console.warn('---> unitData has NO .userId or/and .id', unitData);
         }
 
-        unit.attr = {
-            x: unitData.x,
-            y: unitData.y,
-            type: unitData.type,
-            userId: typeof unitData.userId === 'string' ? unitData.userId : null,
-            id: typeof unitData.id === 'string' ? unitData.id : 'no-unit-id-' + Math.random(),
+        unit.attr = JSON.parse(JSON.stringify(unitData));
+
+        // $FlowFixMe
+        const unitAnimatedSprite = new PIXI.extras.AnimatedSprite([
+            PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-0']),
+            PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1'])
+        ]);
+
+        unit.gameAttr = {
             container: new PIXI.Container(),
             sprite: {
-                unit: new PIXI.Sprite()
+                unit: unitAnimatedSprite
             },
-            userList: unitConstructor.userList,
+            userList: JSON.parse(JSON.stringify(unitConstructor.userList)),
             event: {
                 click: unitConstructor.event.click
             }
         };
+
 
         unit.initializeUnitSprite();
         unit.bindUnitEventListeners();
@@ -104,15 +106,15 @@ export default class Unit {
 
     initializeUnitSprite() { // eslint-disable-line complexity
         const unit = this; // eslint-disable-line consistent-this
-        const {attr} = unit;
+        const {attr, gameAttr} = unit;
         const {square} = mapGuide.size;
 
         let color = 'gray';
 
-        attr.container.position.set(attr.x * square, attr.y * square);
+        gameAttr.container.position.set(attr.x * square, attr.y * square);
 
         if (typeof attr.userId === 'string') {
-            const userColor = getUserColor(attr.userId, attr.userList);
+            const userColor = getUserColor(attr.userId, gameAttr.userList);
 
             if (typeof userColor === 'string') {
                 color = userColor;
@@ -120,17 +122,19 @@ export default class Unit {
         }
 
         // $FlowFixMe
-        attr.sprite.unit = new PIXI.extras.AnimatedSprite([
+        const unitAnimatedSprite = new PIXI.extras.AnimatedSprite([
             PIXI.Texture.fromImage(imageMap.unit[attr.type + '-' + color + '-0']),
             PIXI.Texture.fromImage(imageMap.unit[attr.type + '-' + color + '-1'])
         ]);
 
-        attr.sprite.unit.animationSpeed = 0.08;
+        gameAttr.sprite.unit = unitAnimatedSprite;
 
-        attr.sprite.unit.play();
+        gameAttr.sprite.unit.animationSpeed = 0.08;
+
+        gameAttr.sprite.unit.play();
         // attr.sprite.unit = PIXI.Sprite.fromImage(imageMap.unit[attr.type + '-' + color + '-0']);
 
-        attr.container.addChild(attr.sprite.unit);
+        gameAttr.container.addChild(gameAttr.sprite.unit);
     }
 
     getActions(gameData: GameDataType): UnitActionsMapType {
@@ -138,7 +142,11 @@ export default class Unit {
         const availablePath = unit.getAvailablePath(gameData);
         const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
 
+
         availablePath.forEach((cell: [number, number]) => {
+            if (typeof unit.attr.id !== 'string') {
+                return;
+            }
             actionMap[cell[1]][cell[0]].push({
                 id: unit.attr.id,
                 type: 'move',
@@ -171,31 +179,31 @@ export default class Unit {
 
     bindUnitEventListeners() { // eslint-disable-line complexity
         const unit = this; // eslint-disable-line consistent-this
-        const {attr} = unit;
+        const {attr, gameAttr} = unit;
         const {square} = mapGuide.size;
 
-        const unitContainer = unit.attr.container;
+        const unitContainer = unit.gameAttr.container;
 
         unitContainer.interactive = true;
         unitContainer.buttonMode = true;
 
         unitContainer.on('click', () => {
-            unit.attr.event.click(unit);
+            unit.gameAttr.event.click(unit);
         });
     }
 
     move(x: number, y: number, movePath: PathType): Promise<void> {
         const unit = this; // eslint-disable-line consistent-this
-        const {attr} = unit;
+        const {attr, gameAttr} = unit;
         const {square} = mapGuide.size;
 
         attr.x = x;
         attr.y = y;
 
-        attr.container.position.set(x * square, y * square);
+        // gameAttr.container.position.set(x * square, y * square);
 
         return tweenList(movePath, 100, (pathPoint: PointType) => {
-            attr.container.position.set(pathPoint[0] * square, pathPoint[1] * square);
+            gameAttr.container.position.set(pathPoint[0] * square, pathPoint[1] * square);
         })
             .then(() => {
             });

@@ -54,7 +54,8 @@ declare module 'pixi.js' {
 
     declare class AnimatedSprite extends PixiObject {
         constructor(textureList: Array<Texture>): AnimatedSprite;
-        animationSpeed: number
+        animationSpeed: number;
+        play(): void
     }
 
     declare var extras: {}

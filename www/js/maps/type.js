@@ -56,7 +56,7 @@ export type UnitType = {|
         didRaiseSkeleton?: boolean
     |},
     hitPoints?: number,
-    poisonCounter?: number,
+    poisonCountdown?: number,
     damage?: {|
         given?: number,
         received?: number
@@ -68,7 +68,7 @@ export type UnitType = {|
 export type GraveType = {|
     x: number,
     y: number,
-    countdown: number
+    removeCountdown: number
 |};
 
 export type MapType = {|

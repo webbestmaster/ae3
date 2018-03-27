@@ -217,7 +217,7 @@
         {
             "x": 6,
             "y": 6,
-            "countdown": 3
+            "removeCountdown": 3
         }
     ]
 }

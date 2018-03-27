@@ -216,7 +216,7 @@ export default class Game {
 
         game.unitList.push(unit);
 
-        game.render.addUnit(unit.attr.container);
+        game.render.addUnit(unit.gameAttr.container);
     }
 
     onUnitClick(unit: Unit) {
