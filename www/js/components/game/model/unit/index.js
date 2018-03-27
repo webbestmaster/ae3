@@ -182,6 +182,7 @@ export default class Unit {
         unitContainer.buttonMode = true;
 
         unitContainer.on('click', () => {
+            console.log('click on unit', unit);
             unit.gameAttr.event.click(unit);
         });
     }

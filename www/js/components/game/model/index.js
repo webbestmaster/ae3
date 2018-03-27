@@ -17,6 +17,7 @@ import type {UnitActionType, UnitActionsMapType} from './unit';
 import * as serverApi from './../../../module/server-api';
 import {user} from './../../../module/user';
 import find from 'lodash/find';
+import isEqual from 'lodash/isEqual';
 import {socket} from '../../../module/socket';
 import type {SocketMessageType, SocketMessagePushStateType} from '../../../module/socket';
 import MainModel from './../../../lib/main-model';
@@ -79,6 +80,8 @@ export default class Game {
     initialize(renderSetting: RenderSettingType) {
         const game = this; // eslint-disable-line consistent-this
 
+        game.setMapState(game.settings.map);
+
         game.render.initialize(renderSetting);
 
         // draw landscape
@@ -137,8 +140,9 @@ export default class Game {
 
             case 'room__push-state':
 
-                // TODO: check and update map state here
                 await game.handleServerPushState(message);
+                game.checkMapState(message.states.last.state.map);
+                game.setMapState(message.states.last.state.map);
                 break;
 
             default:
@@ -156,18 +160,13 @@ export default class Game {
 
         switch (message.states.last.state.type) {
             case 'move':
-                // TODO: check pushed map with map after action
-                console.log('---> check pushed map with map after action');
                 await game.handleServerPushStateMove(message);
-
 
                 break;
 
             default:
                 console.log('---> view - game - unsupported push state type: ', message);
         }
-
-        // game.checkMapState(message)
     }
 
     handleServerPushStateMove(message: SocketMessagePushStateType): Promise<void> {
@@ -249,7 +248,7 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = JSON.parse(JSON.stringify(game.settings.map));
+        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
 
         if (unitAction.type === 'move') {
             const movedUnit = find(newMap.units, {id: unitAction.id});
@@ -322,6 +321,12 @@ export default class Game {
         const game = this; // eslint-disable-line consistent-this
 
         game.roomId = roomId;
+    }
+
+    setMapState(map: MapType) {
+        const game = this; // eslint-disable-line consistent-this
+
+        game.mapState = map;
     }
 
     setCanvasSize(width: number, height: number) {
@@ -411,11 +416,48 @@ export default class Game {
         game.emptyActionMap = emptyActionMap;
     }
 
-    /*
-        getEmptyActionMap(): Array<Array<[]>> {
-            const game = this; // eslint-disable-line consistent-this
+    checkMapState(socketMapState: MapType) {
+        const game = this; // eslint-disable-line consistent-this
+        const {unitList} = game;
 
-            return JSON.parse(JSON.stringify(game.emptyActionMap));
+        // check unit length
+        const isUnitListLengthEqual = socketMapState.units.length === unitList.length;
+
+        if (isUnitListLengthEqual === false) {
+            console.error('Unit List Length is not equal', socketMapState, unitList);
+            return;
         }
-    */
+
+        const isUnitListStateEqual = unitList.every((unit: Unit): boolean => {
+            const unitId = unit.attr.id;
+
+            if (typeof unitId !== 'string' || unitId === '') {
+                console.error('Unit has no id:', unitId);
+                return false;
+            }
+
+            const mapUnit = find(socketMapState.units, {id: unitId});
+
+            if (!mapUnit) {
+                console.error('Map unit with id:', unitId, 'is not exist on pushed map');
+                return false;
+            }
+
+            const isUnitEqual = isEqual(mapUnit, unit.attr);
+
+            if (isUnitEqual === false) {
+                console.error('units is not equal', mapUnit, unit.attr);
+                return false;
+            }
+
+            return true;
+        });
+
+        if (isUnitListStateEqual === false) {
+            console.error('Unit List state is not equal', socketMapState, unitList);
+            return;
+        }
+
+        console.log('game map and push map is equal');
+    }
 }

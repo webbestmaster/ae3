@@ -39,7 +39,7 @@ export default class Building {
             y: buildingData.y,
             type: buildingData.type,
             userId: typeof buildingData.userId === 'string' ? buildingData.userId : null,
-            id: typeof buildingData.id === 'string' ? buildingData.id : 'no-bulding-id-' + Math.random()
+            id: typeof buildingData.id === 'string' ? buildingData.id : 'no-building-id-' + Math.random()
         };
 
         building.gameAttr = {
