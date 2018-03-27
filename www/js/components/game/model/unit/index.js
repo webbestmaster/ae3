@@ -35,7 +35,7 @@ type UnitAttrType = UnitType;
 type UnitGameAttrType = {|
     container: PIXI.Container,
     sprite: {|
-        unit: PIXI.AnimatedSprite
+        unit: PIXI.extras.AnimatedSprite
     |},
     userList: Array<ServerUserType>,
     event: {|
@@ -82,16 +82,13 @@ export default class Unit {
 
         unit.attr = JSON.parse(JSON.stringify(unitData));
 
-        // $FlowFixMe
-        const unitAnimatedSprite = new PIXI.extras.AnimatedSprite([
-            PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-0']),
-            PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1'])
-        ]);
-
         unit.gameAttr = {
             container: new PIXI.Container(),
             sprite: {
-                unit: unitAnimatedSprite
+                unit: new PIXI.extras.AnimatedSprite([
+                    PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-0']),
+                    PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1'])
+                ])
             },
             userList: JSON.parse(JSON.stringify(unitConstructor.userList)),
             event: {
@@ -121,13 +118,10 @@ export default class Unit {
             }
         }
 
-        // $FlowFixMe
-        const unitAnimatedSprite = new PIXI.extras.AnimatedSprite([
+        gameAttr.sprite.unit = new PIXI.extras.AnimatedSprite([
             PIXI.Texture.fromImage(imageMap.unit[attr.type + '-' + color + '-0']),
             PIXI.Texture.fromImage(imageMap.unit[attr.type + '-' + color + '-1'])
         ]);
-
-        gameAttr.sprite.unit = unitAnimatedSprite;
 
         gameAttr.sprite.unit.animationSpeed = 0.08;
 

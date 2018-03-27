@@ -11,7 +11,7 @@ type ApplicationOptionsType = {|
 |};
 
 declare module 'pixi.js' {
-    declare var settings: {|
+    declare export var settings: {|
         SCALE_MODE: 0 | 1
     |};
 
@@ -28,22 +28,22 @@ declare module 'pixi.js' {
         removeChildren(startIndex?: number, endIndex?: number): void
     }
 
-    declare class Texture {
+    declare export class Texture {
         constructor(): Texture;
         static fromImage(spriteName: string): Texture
     }
 
-    declare class Sprite extends PixiObject {
+    declare export class Sprite extends PixiObject {
         constructor(): Sprite;
         static fromImage(spriteName: string): Sprite
     }
 
-    declare class Container extends PixiObject {
+    declare export class Container extends PixiObject {
         constructor(): Container;
         addChild(pixiObject: PixiObject): void
     }
 
-    declare class Application {
+    declare export class Application {
         constructor(width: number, height: number, options?: ApplicationOptionsType): Application;
         view: HTMLElement;
         stage: Container;
@@ -58,23 +58,7 @@ declare module 'pixi.js' {
         play(): void
     }
 
-    declare var extras: {}
-}
-
-
-/*
-    declare module.exports: {
-        extras: {
-            declare class AnimatedSprite extends PixiObject {
-            constructor(textureList: Array<Texture>): AnimatedSprite;
-            animationSpeed: number;
-            }
-
-        }
-
-
+    declare export var extras: {
+        AnimatedSprite: typeof AnimatedSprite
     }
-*/
-
-// declare module extras {
-// }
+}
