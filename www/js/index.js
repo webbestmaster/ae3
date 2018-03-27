@@ -1,10 +1,18 @@
 // @flow
 /* global window, IS_PRODUCTION */
 // declare var IS_PRODUCTION: boolean;
+/* global requestAnimationFrame */
 
 import FastClick from 'fastclick';
 
 FastClick.attach(window.document.body);
+
+const TWEEN = require('@tweenjs/tween.js');
+
+(function animate() {
+    requestAnimationFrame(animate);
+    TWEEN.update();
+})();
 
 import React from 'react';
 import {render} from 'react-dom';
