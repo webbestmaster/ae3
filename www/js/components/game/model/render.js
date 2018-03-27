@@ -60,9 +60,9 @@ export default class Render {
         app.stage.addChild(render.layer.units);
         app.stage.addChild(render.layer.actions);
 
-        app.stage.position.set(100, 100);
+        app.stage.position.set(0, 0);
 
-        app.stage.scale.set(3, 3);
+        app.stage.scale.set(0.5, 0.5);
     }
 
     setCanvasSize(width: number, height: number) {
@@ -116,9 +116,9 @@ export default class Render {
 
     drawAction(unitAction: UnitActionType) {
         const render = this; // eslint-disable-line consistent-this
-        const {x, y, type, container} = unitAction;
+        const {to, type, container} = unitAction;
 
-        container.position.set(x * mapGuide.size.square, y * mapGuide.size.square);
+        container.position.set(to.x * mapGuide.size.square, to.y * mapGuide.size.square);
         container.buttonMode = true;
         container.interactive = true;
 

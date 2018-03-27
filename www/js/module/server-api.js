@@ -163,11 +163,17 @@ type PushedStatePayloadIsGameStartedType = {|
 type PushedStatePayloadUnitMoveType = {|
     type: 'move',
     path: PathType,
-    unit: {
+    from: {|
         x: number,
-        y: number,
+        y: number
+    |},
+    to: {|
+        x: number,
+        y: number
+    |},
+    unit: {|
         id: string
-    },
+    |},
     map: MapType,
     activeUserId: string
 |};

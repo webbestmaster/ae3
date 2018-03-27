@@ -7,13 +7,13 @@ import type {MapType, LandscapeType, BuildingType} from './../../../maps/type';
 import type {ServerUserType} from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
-import {getUserColor} from './helper';
+import {getUserColor, getMoviePath} from './helper';
 import type {UnitType} from '../../../maps/type';
 import Render from './render';
 import type {AllRoomSettingsType} from '../../../module/server-api';
 import Building from './building';
 import Unit from './unit';
-import type {UnitActionType} from './unit';
+import type {UnitActionType, UnitActionsMapType} from './unit';
 import * as serverApi from './../../../module/server-api';
 import {user} from './../../../module/user';
 import find from 'lodash/find';
@@ -135,6 +135,8 @@ export default class Game {
                 break;
 
             case 'room__push-state':
+
+                // TODO: check and update map state here
                 game.handleServerPushState(message);
                 break;
 
@@ -184,7 +186,7 @@ export default class Game {
             return;
         }
 
-        unitModel.move(unitState.x, unitState.y);
+        unitModel.move(state.to.x, state.to.y);
 
         console.log('---> unit moved!!!');
         console.log(message);
@@ -228,23 +230,20 @@ export default class Game {
             emptyActionMap: game.emptyActionMap
         });
 
-        // TODO: bind on click to PIXI.Container here
-        console.log(actionsList);
-
         game.render.drawActionsList(actionsList);
 
         actionsList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
                 unitActionList.forEach((unitAction: UnitActionType) => {
                     unitAction.container.on('click', () => {
-                        game.bindOnClickUnitAction(unitAction);
+                        game.bindOnClickUnitAction(unitAction, actionsList);
                     });
                 });
             });
         });
     }
 
-    bindOnClickUnitAction(unitAction: UnitActionType) {
+    bindOnClickUnitAction(unitAction: UnitActionType, actionsList: UnitActionsMapType) {
         const game = this; // eslint-disable-line consistent-this
 
         game.render.cleanActionsList();
@@ -259,14 +258,16 @@ export default class Game {
                 return;
             }
 
-            // TODO: make move path with a-star-finder and pass path into path;
-            const moviePath = [[1, 2], [3, 4]];
+            const moviePath = getMoviePath(unitAction, actionsList);
 
-            console.warn('---> make move path with a-star-finder and pass path into path');
+            if (moviePath === null) {
+                console.error('moviePath is not define, actually === null');
+                return;
+            }
 
             // update map movie unit
-            movedUnit.x = unitAction.x;
-            movedUnit.y = unitAction.y;
+            movedUnit.x = unitAction.to.x;
+            movedUnit.y = unitAction.to.y;
 
             serverApi
                 .pushState(
@@ -277,9 +278,15 @@ export default class Game {
                         state: {
                             type: 'move',
                             path: moviePath,
+                            from: {
+                                x: unitAction.from.x,
+                                y: unitAction.from.y
+                            },
+                            to: {
+                                x: unitAction.to.x,
+                                y: unitAction.to.y
+                            },
                             unit: {
-                                x: unitAction.x,
-                                y: unitAction.y,
                                 id: unitAction.id
                             },
                             map: newMap,

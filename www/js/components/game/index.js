@@ -154,7 +154,6 @@ class GameView extends Component<PropsType, StateType> {
 
             case 'room__push-state':
 
-                // TODO: check and update map state here
                 view.setState({activeUserId: message.states.last.state.activeUserId});
 
                 break;

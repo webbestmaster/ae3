@@ -10,13 +10,21 @@ import Building from '../building';
 import {getPath} from './path-master';
 import type {AvailablePathMapType} from './path-master';
 
-export type UnitActionType = {|
+export type UnitActionMoveType = {|
     type: 'move',
-    x: number,
-    y: number,
+    from: {
+        x: number,
+        y: number
+    },
+    to: {
+        x: number,
+        y: number
+    },
     id: string,
     container: PIXI.Container
 |};
+
+export type UnitActionType = UnitActionMoveType;
 
 export type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
 
@@ -132,8 +140,14 @@ export default class Unit {
             actionMap[cell[1]][cell[0]].push({
                 id: unit.attr.id,
                 type: 'move',
-                x: cell[0],
-                y: cell[1],
+                from: {
+                    x: unit.attr.x,
+                    y: unit.attr.y
+                },
+                to: {
+                    x: cell[0],
+                    y: cell[1]
+                },
                 container: new PIXI.Container()
             });
         });
@@ -169,6 +183,8 @@ export default class Unit {
     }
 
     move(x: number, y: number) {
+        // todo: user move path to move unit
+        console.log('user move path to move unit');
         const unit = this; // eslint-disable-line consistent-this
         const {attr} = unit;
         const {square} = mapGuide.size;

@@ -6,7 +6,7 @@ type MapType = Array<string>;
 
 type PointType = [number, number];
 
-type PathType = Array<PointType>;
+export type PathType = Array<PointType>;
 
 type SelfDataType = {|
     collectedCells: Array<string>
@@ -22,6 +22,8 @@ type OptionsType = {|
 const defaultOptions: OptionsType = {
     noPath: '#'
 };
+
+module.exports.defaultOptions = defaultOptions;
 
 const defaultSelfData: SelfDataType = {
     collectedCells: []
