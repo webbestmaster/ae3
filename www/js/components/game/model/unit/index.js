@@ -185,8 +185,6 @@ export default class Unit {
     }
 
     move(x: number, y: number, movePath: PathType): Promise<void> {
-        // todo: user move path to move unit
-        console.log('user move path to move unit');
         const unit = this; // eslint-disable-line consistent-this
         const {attr} = unit;
         const {square} = mapGuide.size;
