@@ -9,6 +9,8 @@ import imageMap from './../../image/image-map';
 import Building from '../building';
 import {getPath} from './path-master';
 import type {AvailablePathMapType} from './path-master';
+import type {PathType, PointType} from './../../../../lib/a-star-finder';
+import {tweenList} from './../../../../lib/tween';
 
 export type UnitActionMoveType = {|
     type: 'move',
@@ -182,7 +184,7 @@ export default class Unit {
         });
     }
 
-    move(x: number, y: number) {
+    move(x: number, y: number, movePath: PathType): Promise<void> {
         // todo: user move path to move unit
         console.log('user move path to move unit');
         const unit = this; // eslint-disable-line consistent-this
@@ -193,5 +195,11 @@ export default class Unit {
         attr.y = y;
 
         attr.container.position.set(x * square, y * square);
+
+        return tweenList(movePath, 100, (pathPoint: PointType) => {
+            attr.container.position.set(pathPoint[0] * square, pathPoint[1] * square);
+        })
+            .then(() => {
+            });
     }
 }

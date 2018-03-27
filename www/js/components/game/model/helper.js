@@ -4,7 +4,7 @@ import type {ServerUserType} from '../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 import type {UnitActionType, UnitActionsMapType} from './unit';
 import {getPath, defaultOptions} from './../../../lib/a-star-finder';
-import type {PathType} from './../../../lib/a-star-finder';
+import type {PathType, PointType} from './../../../lib/a-star-finder';
 
 export function getUserIndex(userId: string, userList: Array<ServerUserType>): number | null {
     let userIndex = 0;

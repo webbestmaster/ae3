@@ -186,7 +186,7 @@ export default class Game {
             return;
         }
 
-        unitModel.move(state.to.x, state.to.y);
+        unitModel.move(state.to.x, state.to.y, state.path);
 
         console.log('---> unit moved!!!');
         console.log(message);

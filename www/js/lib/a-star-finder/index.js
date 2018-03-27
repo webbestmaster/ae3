@@ -4,7 +4,7 @@
 
 type MapType = Array<string>;
 
-type PointType = [number, number];
+export type PointType = [number, number];
 
 export type PathType = Array<PointType>;
 
