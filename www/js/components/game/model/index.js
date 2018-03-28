@@ -21,6 +21,7 @@ import isEqual from 'lodash/isEqual';
 import {socket} from '../../../module/socket';
 import type {SocketMessageType, SocketMessagePushStateType} from '../../../module/socket';
 import MainModel from './../../../lib/main-model';
+import * as unitMaster from './unit/master';
 
 type RenderSettingType = {|
     width: number,
@@ -203,7 +204,7 @@ export default class Game {
 
     createUnit(unitData: UnitType) {
         const game = this; // eslint-disable-line consistent-this
-        const unit = new Unit({
+        const unit = unitMaster.createUnit({
             unitData,
             userList: game.userList,
             event: {
@@ -419,6 +420,9 @@ export default class Game {
     checkMapState(socketMapState: MapType) {
         const game = this; // eslint-disable-line consistent-this
         const {unitList} = game;
+
+        // TODO: check building too!!
+        console.warn('---> check building too!!');
 
         // check unit length
         const isUnitListLengthEqual = socketMapState.units.length === unitList.length;

@@ -43,7 +43,7 @@ type UnitGameAttrType = {|
     |}
 |};
 
-type UnitConstructorType = {|
+export type UnitConstructorType = {|
     unitData: UnitType,
     userList: Array<ServerUserType>,
     event: {|
@@ -72,7 +72,15 @@ export default class Unit {
     attr: UnitAttrType;
     gameAttr: UnitGameAttrType;
 
-    constructor(unitConstructor: UnitConstructorType) {
+    constructor(unitConstructor: UnitConstructorType): Unit {
+        const unit = this; // eslint-disable-line consistent-this
+
+        unit.initialize(unitConstructor);
+
+        return unit;
+    }
+
+    initialize(unitConstructor: UnitConstructorType) {
         const unit = this; // eslint-disable-line consistent-this
         const {unitData} = unitConstructor;
 
@@ -95,7 +103,6 @@ export default class Unit {
                 click: unitConstructor.event.click
             }
         };
-
 
         unit.initializeUnitSprite();
         unit.bindUnitEventListeners();
