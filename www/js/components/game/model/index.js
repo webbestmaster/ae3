@@ -417,12 +417,9 @@ export default class Game {
         game.emptyActionMap = emptyActionMap;
     }
 
-    checkMapState(socketMapState: MapType) {
+    checkMapStateUnit(socketMapState: MapType) {
         const game = this; // eslint-disable-line consistent-this
         const {unitList} = game;
-
-        // TODO: check building too!!
-        console.warn('---> check building too!!');
 
         // check unit length
         const isUnitListLengthEqual = socketMapState.units.length === unitList.length;
@@ -462,6 +459,58 @@ export default class Game {
             return;
         }
 
-        console.log('game map and push map is equal');
+        console.log('game map unit and push map unit is equal');
+    }
+
+    checkMapStateBuilding(socketMapState: MapType) {
+        const game = this; // eslint-disable-line consistent-this
+        const {buildingList} = game;
+
+        // check building length
+        const isBuildingListLengthEqual = socketMapState.buildings.length === buildingList.length;
+
+        if (isBuildingListLengthEqual === false) {
+            console.error('Building List Length is not equal', socketMapState, buildingList);
+            return;
+        }
+
+        const isBuildingListStateEqual = buildingList.every((building: Building): boolean => {
+            const buildingId = building.attr.id;
+
+            if (typeof buildingId !== 'string' || buildingId === '') {
+                console.error('Building has no id:', buildingId);
+                return false;
+            }
+
+            const mapBuilding = find(socketMapState.buildings, {id: buildingId});
+
+            if (!mapBuilding) {
+                console.error('Map building with id:', buildingId, 'is not exist on pushed map');
+                return false;
+            }
+
+            const isBuildingEqual = isEqual(mapBuilding, building.attr);
+
+            if (isBuildingEqual === false) {
+                console.error('buildings is not equal', mapBuilding, building.attr);
+                return false;
+            }
+
+            return true;
+        });
+
+        if (isBuildingListStateEqual === false) {
+            console.error('Building List state is not equal', socketMapState, buildingList);
+            return;
+        }
+
+        console.log('game map building and push map building is equal');
+    }
+
+    checkMapState(socketMapState: MapType) {
+        const game = this; // eslint-disable-line consistent-this
+
+        game.checkMapStateUnit(socketMapState);
+        game.checkMapStateBuilding(socketMapState);
     }
 }

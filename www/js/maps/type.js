@@ -24,7 +24,7 @@ export type BuildingType = {|
     x: number,
     y: number,
     type: 'castle' | 'farm' | 'farm-destroyed' | 'well' | 'temple',
-    userId?: UserIdType | null,
+    userId?: UserIdType,
     id?: string
 |};
 

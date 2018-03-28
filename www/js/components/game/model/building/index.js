@@ -34,13 +34,7 @@ export default class Building {
             console.warn('---> buildingData has NO .userId or/and .id', buildingData);
         }
 
-        building.attr = {
-            x: buildingData.x,
-            y: buildingData.y,
-            type: buildingData.type,
-            userId: typeof buildingData.userId === 'string' ? buildingData.userId : null,
-            id: typeof buildingData.id === 'string' ? buildingData.id : 'no-building-id-' + Math.random()
-        };
+        building.attr = buildingData;
 
         building.gameAttr = {
             container: new PIXI.Container(),
