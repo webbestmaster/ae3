@@ -2,7 +2,7 @@
 
 import type {ServerUserType} from '../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
-import type {UnitActionType, UnitActionsMapType} from './unit';
+import type {UnitActionType, UnitActionsMapType, UnitActionMoveType} from './unit';
 import {getPath, defaultOptions} from './../../../lib/a-star-finder';
 import type {PathType, PointType} from './../../../lib/a-star-finder';
 
@@ -52,7 +52,7 @@ function unitActionMapToPathMap(actionsList: UnitActionsMapType): Array<string> 
         .map((mapLine: Array<string>): string => mapLine.join(''));
 }
 
-export function getMoviePath(unitAction: UnitActionType, actionsList: UnitActionsMapType): PathType | null {
+export function getMoviePath(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType): PathType | null {
     const unitPathMap = unitActionMapToPathMap(actionsList);
 
     return getPath(unitPathMap, [unitAction.from.x, unitAction.from.y], [unitAction.to.x, unitAction.to.y]);

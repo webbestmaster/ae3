@@ -9,6 +9,7 @@ import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
 import {getUserColor, getMoviePath} from './helper';
 import type {UnitType} from '../../../maps/type';
+import {unitActionStateDefaultValue} from '../../../maps/type';
 import Render from './render';
 import type {AllRoomSettingsType} from '../../../module/server-api';
 import Building from './building';
@@ -19,7 +20,7 @@ import {user} from './../../../module/user';
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
 import {socket} from '../../../module/socket';
-import type {SocketMessageType, SocketMessagePushStateType} from '../../../module/socket';
+import type {SocketMessageType, SocketMessagePushStateType, SocketMessageTakeTurnType} from '../../../module/socket';
 import MainModel from './../../../lib/main-model';
 import * as unitMaster from './unit/master';
 
@@ -119,11 +120,74 @@ export default class Game {
         );
     }
 
+    async refreshUnitActionState(): Promise<void> {
+        // TODO: update unit action (didMove, didAttack, etc.)
+        console.warn('---> refresh unit action (didMove, didAttack, etc.)');
+        const game = this; // eslint-disable-line consistent-this
+
+        game.render.cleanActionsList();
+
+        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+        const {unitList} = game;
+        const mapUnitList = newMap.units;
+        const isUnitListLengthEqual = mapUnitList.length === unitList.length;
+
+        if (isUnitListLengthEqual === false) {
+            console.error('Unit List Length is not equal', mapUnitList, unitList);
+            return;
+        }
+
+        mapUnitList.forEach((mapUnit: UnitType) => {
+            const unitActionState = mapUnit.hasOwnProperty('action') && mapUnit.action ? mapUnit.action : null;
+
+            if (unitActionState === null) {
+                console.log('unit has no property \'action\'', mapUnit);
+                return;
+            }
+
+            Object.keys(unitActionState).forEach((key: string) => {
+                unitActionState[key] = unitActionStateDefaultValue[key];
+            });
+        });
+
+        serverApi
+            .pushState(
+                game.roomId,
+                user.getId(),
+                {
+                    type: 'room__push-state',
+                    state: {
+                        type: 'refresh-unit-list',
+                        map: newMap,
+                        activeUserId: user.getId()
+                    }
+                }
+            )
+            .then((response: mixed) => {
+                console.log('---> refresh unit list pushed');
+                console.log(response);
+            });
+    }
+
+    async refreshUnitPoisonCountdown(): Promise<void> {
+        // TODO: update grave's countdown
+        console.warn('---> update grave\'s countdown');
+    }
+
+    async refreshGraveCountdown(): Promise<void> {
+        // TODO: update poison countdown
+        console.warn('---> update poison countdown');
+    }
+
     async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
         const game = this; // eslint-disable-line consistent-this
 
         switch (message.type) {
             case 'room__take-turn':
+                await game.handleServerTakeTurn(message);
+                break;
+
+            case 'room__drop-turn':
 
                 break;
 
@@ -147,8 +211,25 @@ export default class Game {
                 break;
 
             default:
-                console.log('---> view - game - unsupported message type: ', message);
+                console.error('---> view - game - unsupported message type: ', message);
         }
+    }
+
+    async handleServerTakeTurn(message: SocketMessageTakeTurnType): Promise<void> {
+        const game = this; // eslint-disable-line consistent-this
+
+        const activeUserId = message.states.last.activeUserId;
+
+        if (activeUserId !== user.getId()) {
+            console.log('---> take turn, but NOT for me');
+            return;
+        }
+
+        console.log('---> take turn, and it\'s ME!!!');
+
+        await game.refreshUnitActionState();
+        await game.refreshUnitPoisonCountdown();
+        await game.refreshGraveCountdown();
     }
 
     async handleServerPushState(message: SocketMessagePushStateType): Promise<void> {
@@ -165,12 +246,18 @@ export default class Game {
 
                 break;
 
+            case 'refresh-unit-list':
+
+                await game.handleServerRefreshUnitList(message);
+
+                break;
+
             default:
-                console.log('---> view - game - unsupported push state type: ', message);
+                console.error('---> view - game - unsupported push state type: ', message);
         }
     }
 
-    handleServerPushStateMove(message: SocketMessagePushStateType): Promise<void> {
+    async handleServerPushStateMove(message: SocketMessagePushStateType): Promise<void> {
         const game = this; // eslint-disable-line consistent-this
         const state = message.states.last.state;
 
@@ -191,6 +278,45 @@ export default class Game {
         }
 
         return unitModel.move(state.to.x, state.to.y, state.path);
+    }
+
+    async handleServerRefreshUnitList(message: SocketMessagePushStateType): Promise<void> {
+        const game = this; // eslint-disable-line consistent-this
+        const {unitList} = game;
+        const socketMapState = message.states.last.state.map;
+
+        // check unit length
+        const isUnitListLengthEqual = socketMapState.units.length === unitList.length;
+
+        if (isUnitListLengthEqual === false) {
+            console.error('Unit List Length is not equal', socketMapState, unitList);
+            return;
+        }
+
+        unitList.forEach(async (unit: Unit): Promise<void> => { // eslint-disable-line complexity
+            const unitId = unit.attr.id;
+
+            if (typeof unitId !== 'string' || unitId === '') {
+                console.error('Unit has no id:', unitId);
+                return;
+            }
+
+            const mapUnit = find(socketMapState.units, {id: unitId});
+
+            if (!mapUnit) {
+                console.error('Map unit with id:', unitId, 'is not exist on pushed map');
+                return;
+            }
+
+            const isUnitEqual = isEqual(mapUnit, unit.attr);
+
+            if (isUnitEqual === true) {
+                console.log('units is equal', mapUnit, unit);
+                return;
+            }
+
+            await unit.setActionState(mapUnit.action || null);
+        });
     }
 
     createBuilding(buildingData: BuildingType) {
@@ -236,9 +362,11 @@ export default class Game {
         actionsList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
                 unitActionList.forEach((unitAction: UnitActionType) => {
-                    unitAction.container.on('click', () => {
-                        game.bindOnClickUnitAction(unitAction, actionsList);
-                    });
+                    if (unitAction.type === 'move') {
+                        unitAction.container.on('click', () => {
+                            game.bindOnClickUnitAction(unitAction, actionsList);
+                        });
+                    }
                 });
             });
         });

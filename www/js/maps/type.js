@@ -28,6 +28,30 @@ export type BuildingType = {|
     id?: string
 |};
 
+export type UnitActionStateType = {|
+    didMove?: boolean,
+    didAttack?: boolean,
+
+    didFixBuilding?: boolean,
+    didOccupyBuilding?: boolean,
+    didDestroyBuilding?: boolean,
+
+    didRaiseSkeleton?: boolean
+|};
+
+const unitActionStateDefaultValue: UnitActionStateType = {
+    didMove: false,
+    didAttack: false,
+
+    didFixBuilding: false,
+    didOccupyBuilding: false,
+    didDestroyBuilding: false,
+
+    didRaiseSkeleton: false
+};
+
+export {unitActionStateDefaultValue};
+
 export type UnitType = {|
     x: number,
     y: number,
@@ -48,13 +72,7 @@ export type UnitType = {|
         'valadorn' |
         'demon-lord' |
         'saeth',
-    action?: {|
-        didMove?: boolean,
-        didAttack?: boolean,
-        didFixBuilding?: boolean,
-        didDestroyBuilding?: boolean,
-        didRaiseSkeleton?: boolean
-    |},
+    action?: UnitActionStateType,
     hitPoints?: number,
     poisonCountdown?: number,
     damage?: {|

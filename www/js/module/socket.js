@@ -116,7 +116,7 @@ type SocketMessageUserDisconnectedFromRoomType = {|
     |}
 |};
 
-type SocketMessageTakeTurnType = {|
+export type SocketMessageTakeTurnType = {|
     +roomId: string,
     +type: 'room__take-turn',
     +states: {|

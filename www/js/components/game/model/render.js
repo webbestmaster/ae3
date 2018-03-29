@@ -10,6 +10,7 @@ import imageMap from './../image/image-map';
 import {getUserColor} from './helper';
 import type {UnitType} from '../../../maps/type';
 import type {UnitActionsMapType, UnitActionType} from './unit/index';
+import type {UnitActionMoveType} from './unit';
 
 type InitializeConfigType = {|
     width: number,
@@ -109,30 +110,36 @@ export default class Render {
             mapLine.forEach((actionList: Array<UnitActionType>) => {
                 // check here action count, if 2 or more - make select action button
                 actionList.forEach((unitAction: UnitActionType) => {
-                    render.drawAction(unitAction);
+                    if (unitAction.type === 'move') {
+                        render.drawAction(unitAction);
+                    }
                 });
             });
         });
     }
 
-    drawAction(unitAction: UnitActionType) {
+    drawAction(unitAction: UnitActionMoveType) {
         const render = this; // eslint-disable-line consistent-this
-        const {to, type, container} = unitAction;
+        const {type} = unitAction;
+
+        if (type === 'move') {
+            render.drawActionMove(unitAction);
+            return;
+        }
+
+        console.warn('---> unknown unit action', unitAction);
+    }
+
+    drawActionMove(unitAction: UnitActionMoveType) {
+        const render = this; // eslint-disable-line consistent-this
+        const {to, container} = unitAction;
 
         container.position.set(to.x * mapGuide.size.square, to.y * mapGuide.size.square);
         container.buttonMode = true;
         container.interactive = true;
+        container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-move']));
 
-        switch (type) {
-            case 'move':
-                container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-move']));
-                break;
-
-            default:
-                console.warn('---> unknown unit action', unitAction);
-        }
-
-        render.layer.actions.addChild(container);
+        render.layer.actions.addChild(unitAction.container);
     }
 
     cleanActionsList() {

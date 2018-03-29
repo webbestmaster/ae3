@@ -146,7 +146,7 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
 
 
 export type GetAllRoomIdsType = {|
-    roomIds: Array<string>
+    +roomIds: Array<string>
 |};
 
 export function getAllRoomIds(): Promise<GetAllRoomIdsType> {
@@ -155,30 +155,38 @@ export function getAllRoomIds(): Promise<GetAllRoomIdsType> {
 }
 
 type PushedStatePayloadIsGameStartedType = {|
-    isGameStart: boolean,
-    activeUserId: string,
-    map: MapType
+    +isGameStart: boolean,
+    +activeUserId: string,
+    +map: MapType
 |};
 
 type PushedStatePayloadUnitMoveType = {|
-    type: 'move',
-    path: PathType,
-    from: {|
-        x: number,
-        y: number
+    +type: 'move',
+    +path: PathType,
+    +from: {|
+        +x: number,
+        +y: number
     |},
-    to: {|
-        x: number,
-        y: number
+    +to: {|
+        +x: number,
+        +y: number
     |},
-    unit: {|
-        id: string
+    +unit: {|
+        +id: string
     |},
-    map: MapType,
-    activeUserId: string
+    +map: MapType,
+    +activeUserId: string
 |};
 
-export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType | PushedStatePayloadUnitMoveType;
+type PushedStatePayloadRefreshUnitListType = {|
+    +type: 'refresh-unit-list',
+    +map: MapType,
+    +activeUserId: string
+|};
+
+export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType
+    | PushedStatePayloadUnitMoveType
+    | PushedStatePayloadRefreshUnitListType;
 
 export type PushStateType = {|
     roomId: string,

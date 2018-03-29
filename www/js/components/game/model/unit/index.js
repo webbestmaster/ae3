@@ -1,7 +1,7 @@
 // @flow
 
 import * as PIXI from 'pixi.js';
-import type {UnitType} from '../../../../maps/type';
+import type {MapType, UnitType, UnitActionStateType} from '../../../../maps/type';
 import type {ServerUserType} from '../../../../module/server-api';
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
@@ -27,7 +27,13 @@ export type UnitActionMoveType = {|
     container: PIXI.Container
 |};
 
-export type UnitActionType = UnitActionMoveType; // | UnitActionMoveType;
+export type RefreshUnitListType = {|
+    type: 'refresh-unit-list',
+    map: MapType,
+    activeUserId: string
+|};
+
+export type UnitActionType = UnitActionMoveType | RefreshUnitListType; // | UnitActionMoveType;
 
 export type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
 
@@ -225,6 +231,58 @@ export default class Unit {
         return tweenList(movePath, 100, (pathPoint: PointType) => {
             gameAttr.container.position.set(pathPoint[0] * square, pathPoint[1] * square);
         })
+            .then(() => {
+            });
+    }
+
+    async setActionState(actionState: UnitActionStateType | null): Promise<void> { // eslint-disable-line complexity
+        const unit = this; // eslint-disable-line consistent-this
+        const currentActionState = unit.attr.action || null;
+
+        if (actionState === null && currentActionState === null) {
+            console.log('old and new action state is null');
+            return Promise.resolve();
+        }
+
+        if (actionState === null && currentActionState !== null) {
+            console.error('old action state !==  null, but new action state === null!!!, ' +
+                'the game has not method to remove unit\'s action');
+            return Promise.resolve();
+        }
+
+        if (actionState === null) {
+            console.log('action state did not passed');
+            return Promise.resolve();
+        }
+
+        const promiseList = [];
+
+        Object.keys(actionState).forEach((actionName: string) => {
+            const oldAction = unit.attr.action || {};
+
+            if (actionState === null) {
+                console.error('actionState is null, is is impossible, cause we check for null couple line ago!!!');
+                return;
+            }
+
+            if (actionState[actionName] === oldAction[actionName]) {
+                console.log('old action state value === new action state value');
+                return;
+            }
+
+            switch (actionName) {
+                case 'didMove': {
+                    console.log('setDidMove', actionState[actionName]);
+                    unit.setDidMove(Boolean(actionState[actionName]));
+                    return;
+                }
+
+                default:
+                    console.error('unsupported action name', actionName, actionState);
+            }
+        });
+
+        return Promise.all(promiseList)
             .then(() => {
             });
     }
