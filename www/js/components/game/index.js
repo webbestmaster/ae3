@@ -189,6 +189,15 @@ class GameView extends Component<PropsType, StateType> {
             <br/>
 
             <button onClick={async (): Promise<void> => {
+                // TODO: update unit action (didMove, didAttack, etc.)
+                console.warn('---> refresh unit action (didMove, didAttack, etc.)');
+
+                // TODO: update grave's countdown
+                console.warn('---> update grave\'s countdown');
+
+                // TODO: update poison countdown
+                console.warn('---> update poison countdown');
+
                 await serverApi.dropTurn(props.roomId, user.getId());
             }}>
                 end turn
