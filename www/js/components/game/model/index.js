@@ -270,6 +270,9 @@ export default class Game {
             movedUnit.x = unitAction.to.x;
             movedUnit.y = unitAction.to.y;
 
+            movedUnit.action = movedUnit.action || {};
+            movedUnit.action.didMove = true;
+
             serverApi
                 .pushState(
                     game.roomId,

@@ -141,28 +141,31 @@ export default class Unit {
 
     getActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this; // eslint-disable-line consistent-this
-        const availablePath = unit.getAvailablePath(gameData);
+        const {attr} = unit;
         const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
 
-
-        availablePath.forEach((cell: [number, number]) => {
-            if (typeof unit.attr.id !== 'string') {
-                return;
-            }
-            actionMap[cell[1]][cell[0]].push({
-                id: unit.attr.id,
-                type: 'move',
-                from: {
-                    x: unit.attr.x,
-                    y: unit.attr.y
-                },
-                to: {
-                    x: cell[0],
-                    y: cell[1]
-                },
-                container: new PIXI.Container()
+        if (!unit.getDidMove()) {
+            // add move action
+            unit.getAvailablePath(gameData).forEach((cell: [number, number]) => {
+                if (typeof attr.id !== 'string') {
+                    console.error('unit has no id', unit);
+                    return;
+                }
+                actionMap[cell[1]][cell[0]].push({
+                    id: attr.id,
+                    type: 'move',
+                    from: {
+                        x: attr.x,
+                        y: attr.y
+                    },
+                    to: {
+                        x: cell[0],
+                        y: cell[1]
+                    },
+                    container: new PIXI.Container()
+                });
             });
-        });
+        }
 
         return actionMap;
     }
@@ -217,12 +220,29 @@ export default class Unit {
         attr.x = x;
         attr.y = y;
 
-        // gameAttr.container.position.set(x * square, y * square);
+        unit.setDidMove(true);
 
         return tweenList(movePath, 100, (pathPoint: PointType) => {
             gameAttr.container.position.set(pathPoint[0] * square, pathPoint[1] * square);
         })
             .then(() => {
             });
+    }
+
+    setDidMove(didMove: boolean) {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        unitActionState.didMove = didMove;
+        attr.action = unitActionState;
+    }
+
+    getDidMove(): boolean {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        return Boolean(unitActionState.didMove);
     }
 }
