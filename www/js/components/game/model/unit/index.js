@@ -5,6 +5,7 @@ import type {UnitType} from '../../../../maps/type';
 import type {ServerUserType} from '../../../../module/server-api';
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
+import unitGuide from './unit-guide';
 import imageMap from './../../image/image-map';
 import Building from '../building';
 import {getPath} from './path-master';
@@ -166,7 +167,7 @@ export default class Unit {
         return actionMap;
     }
 
-    getUnitCoordinates(gameData: GameDataType): Array<[number, number]> {
+    getAllUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {
         const {unitList} = gameData;
 
         return unitList.map((unit: Unit): [number, number] => [unit.attr.x, unit.attr.y]);
@@ -174,8 +175,22 @@ export default class Unit {
 
     getAvailablePath(gameData: GameDataType): AvailablePathMapType {
         const unit = this; // eslint-disable-line consistent-this
+        const {x, y, type} = unit.attr;
 
-        return getPath(unit.attr.x, unit.attr.y, 4, gameData.pathMap.walk, unit.getUnitCoordinates(gameData));
+        if (!unitGuide.hasOwnProperty(type)) {
+            console.error('unitGuide has no property:', type, unit);
+            return [];
+        }
+
+        const unitGuideData = unitGuide[type];
+
+        const moveType = typeof unitGuideData.moveType === 'string' ?
+            unitGuideData.moveType :
+            null;
+
+        const pathMap = moveType === null ? gameData.pathMap.walk : gameData.pathMap[moveType];
+
+        return getPath(x, y, unitGuideData.move, pathMap, unit.getAllUnitsCoordinates(gameData));
     }
 
     bindUnitEventListeners() { // eslint-disable-line complexity
