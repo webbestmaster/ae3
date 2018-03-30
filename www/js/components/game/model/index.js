@@ -367,6 +367,12 @@ export default class Game {
                             game.bindOnClickUnitAction(unitAction, actionsList);
                         });
                     }
+                    if (unitAction.type === 'attack') {
+                        console.error('has no handler for attack');
+                        // unitAction.container.on('click', () => {
+                        //     game.bindOnClickUnitAction(unitAction, actionsList);
+                        // });
+                    }
                 });
             });
         });

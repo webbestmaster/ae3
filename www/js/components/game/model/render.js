@@ -10,7 +10,7 @@ import imageMap from './../image/image-map';
 import {getUserColor} from './helper';
 import type {UnitType} from '../../../maps/type';
 import type {UnitActionsMapType, UnitActionType} from './unit/index';
-import type {UnitActionMoveType} from './unit';
+import type {UnitActionAttackType, UnitActionMoveType} from './unit';
 
 type InitializeConfigType = {|
     width: number,
@@ -113,17 +113,25 @@ export default class Render {
                     if (unitAction.type === 'move') {
                         render.drawAction(unitAction);
                     }
+
+                    if (unitAction.type === 'attack') {
+                        render.drawAction(unitAction);
+                    }
                 });
             });
         });
     }
 
-    drawAction(unitAction: UnitActionMoveType) {
+    drawAction(unitAction: UnitActionMoveType | UnitActionAttackType) {
         const render = this; // eslint-disable-line consistent-this
-        const {type} = unitAction;
 
-        if (type === 'move') {
+        if (unitAction.type === 'move') {
             render.drawActionMove(unitAction);
+            return;
+        }
+
+        if (unitAction.type === 'attack') {
+            render.drawActionAttack(unitAction);
             return;
         }
 
@@ -138,6 +146,18 @@ export default class Render {
         container.buttonMode = true;
         container.interactive = true;
         container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-move']));
+
+        render.layer.actions.addChild(unitAction.container);
+    }
+
+    drawActionAttack(unitAction: UnitActionAttackType) {
+        const render = this; // eslint-disable-line consistent-this
+        const {to, container} = unitAction;
+
+        container.position.set(to.x * mapGuide.size.square, to.y * mapGuide.size.square);
+        container.buttonMode = true;
+        container.interactive = true;
+        container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-attack-0']));
 
         render.layer.actions.addChild(unitAction.container);
     }

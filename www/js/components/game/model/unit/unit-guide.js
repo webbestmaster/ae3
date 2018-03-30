@@ -4,9 +4,9 @@ const unitData = {
     soldier: {
         attack: {
             min: 50,
-            max: 55
+            max: 55,
+            range: 1
         },
-        attackRange: 1,
         armor: 5,
         move: 4,
         langKey: 'soldier',
@@ -18,9 +18,9 @@ const unitData = {
     archer: {
         attack: {
             min: 50,
-            max: 55
+            max: 55,
+            range: 2
         },
-        attackRange: 2,
         armor: 5,
         move: 4,
         langKey: 'archer',
@@ -31,9 +31,9 @@ const unitData = {
     elemental: {
         attack: {
             min: 50,
-            max: 55
+            max: 55,
+            range: 1
         },
-        attackRange: 1,
         armor: 10,
         move: 4,
         langKey: 'elemental',
@@ -44,9 +44,9 @@ const unitData = {
     sorceress: {
         attack: {
             min: 40,
-            max: 45
+            max: 45,
+            range: 1
         },
-        attackRange: 1,
         armor: 5,
         move: 4,
         langKey: 'sorceress',
@@ -57,9 +57,9 @@ const unitData = {
     wisp: {
         attack: {
             min: 35,
-            max: 40
+            max: 40,
+            range: 1
         },
-        attackRange: 1,
         armor: 10,
         move: 4,
         langKey: 'wisp',
@@ -71,9 +71,9 @@ const unitData = {
     'dire-wolf': {
         attack: {
             min: 60,
-            max: 65
+            max: 65,
+            range: 1
         },
-        attackRange: 1,
         armor: 15,
         move: 5,
         langKey: 'dire-wolf',
@@ -84,9 +84,9 @@ const unitData = {
     golem: {
         attack: {
             min: 60,
-            max: 70
+            max: 70,
+            range: 1
         },
-        attackRange: 1,
         armor: 30,
         move: 4,
         langKey: 'golem',
@@ -95,9 +95,9 @@ const unitData = {
     catapult: {
         attack: {
             min: 50,
-            max: 70
+            max: 70,
+            range: 4
         },
-        attackRange: 4,
         armor: 10,
         move: 3,
         langKey: 'catapult',
@@ -108,9 +108,9 @@ const unitData = {
     dragon: {
         attack: {
             min: 70,
-            max: 80
+            max: 80,
+            range: 1
         },
-        attackRange: 1,
         armor: 25,
         move: 6,
         langKey: 'dragon',
@@ -121,9 +121,9 @@ const unitData = {
     skeleton: {
         attack: {
             min: 40,
-            max: 50
+            max: 50,
+            range: 1
         },
-        attackRange: 1,
         armor: 2,
         move: 4,
         langKey: 'skeleton',
@@ -135,9 +135,9 @@ const unitData = {
     crystal: {
         attack: {
             min: 0,
-            max: 0
+            max: 0,
+            range: 0
         },
-        attackRange: 0,
         armor: 15,
         move: 3,
         langKey: 'crystal',
@@ -148,9 +148,9 @@ const unitData = {
     galamar: {
         attack: {
             min: 55,
-            max: 65
+            max: 65,
+            range: 1
         },
-        attackRange: 1,
         armor: 20,
         move: 4,
         langKey: 'galamar',
@@ -167,9 +167,9 @@ const unitData = {
     valadorn: {
         attack: {
             min: 55,
-            max: 65
+            max: 65,
+            range: 1
         },
-        attackRange: 1,
         armor: 20,
         move: 4,
         langKey: 'valadorn',
@@ -186,9 +186,9 @@ const unitData = {
     'demon-lord': {
         attack: {
             min: 55,
-            max: 65
+            max: 65,
+            range: 1
         },
-        attackRange: 1,
         armor: 20,
         move: 4,
         langKey: 'demon-lord',
@@ -205,9 +205,9 @@ const unitData = {
     saeth: {
         attack: {
             min: 55,
-            max: 65
+            max: 65,
+            range: 1
         },
-        attackRange: 1,
         armor: 20,
         move: 4,
         langKey: 'saeth',
@@ -224,9 +224,9 @@ const unitData = {
     'saeth-heavens-fury': {
         attack: {
             min: 55,
-            max: 65
+            max: 65,
+            range: 15
         },
-        attackRange: 15,
         armor: 45,
         move: 0,
         langKey: 'saeth',

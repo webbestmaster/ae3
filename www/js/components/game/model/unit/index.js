@@ -27,13 +27,27 @@ export type UnitActionMoveType = {|
     container: PIXI.Container
 |};
 
+export type UnitActionAttackType = {|
+    type: 'attack',
+    from: {
+        x: number,
+        y: number
+    },
+    to: {
+        x: number,
+        y: number
+    },
+    id: string,
+    container: PIXI.Container
+|};
+
 export type RefreshUnitListType = {|
     type: 'refresh-unit-list',
     map: MapType,
     activeUserId: string
 |};
 
-export type UnitActionType = UnitActionMoveType | RefreshUnitListType; // | UnitActionMoveType;
+export type UnitActionType = UnitActionMoveType | UnitActionAttackType | RefreshUnitListType;
 
 export type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
 
@@ -159,6 +173,16 @@ export default class Unit {
             });
         }
 
+        if (!unit.getDidAttack()) {
+            const actionMapAttack = unit.getAttackActions(gameData);
+
+            actionMapAttack.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
+                lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
+                    actionMap[yCell][xCell].push(...cellAction);
+                });
+            });
+        }
+
         return actionMap;
     }
 
@@ -192,6 +216,36 @@ export default class Unit {
         return moveMap;
     }
 
+    getAttackActions(gameData: GameDataType): UnitActionsMapType {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const attackMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const unitId = typeof attr.id === 'string' ? attr.id : null;
+
+        if (unitId === null) {
+            console.error('unit has no id', unit);
+            return attackMap;
+        }
+
+        unit.getAvailableAttack(gameData).forEach((cell: [number, number]) => {
+            attackMap[cell[1]][cell[0]].push({
+                id: unitId,
+                type: 'attack',
+                from: {
+                    x: attr.x,
+                    y: attr.y
+                },
+                to: {
+                    x: cell[0],
+                    y: cell[1]
+                },
+                container: new PIXI.Container()
+            });
+        });
+
+        return attackMap;
+    }
+
     getAllUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {
         const {unitList} = gameData;
 
@@ -216,6 +270,44 @@ export default class Unit {
         const pathMap = moveType === null ? gameData.pathMap.walk : gameData.pathMap[moveType];
 
         return getPath(x, y, unitGuideData.move, pathMap, unit.getAllUnitsCoordinates(gameData));
+    }
+
+    getAvailableAttack(gameData: GameDataType): AvailablePathMapType {
+        const unit = this; // eslint-disable-line consistent-this
+        const {x, y, type} = unit.attr;
+
+        if (!unitGuide.hasOwnProperty(type)) {
+            console.error('unitGuide has no property:', type, unit);
+            return [];
+        }
+
+        const unitGuideData = unitGuide[type];
+
+        const moveType = typeof unitGuideData.moveType === 'string' ?
+            unitGuideData.moveType :
+            null;
+
+        const pathMap = moveType === null ? gameData.pathMap.walk : gameData.pathMap[moveType];
+        const unitCoordinates = unit.getAllUnitsCoordinates(gameData);
+        const allAvailableAttack = unit.getAllAvailableAttack(gameData).filter((mapPoint: PointType): boolean => {
+            return true;
+        });
+
+        return allAvailableAttack;
+    }
+
+    getAllAvailableAttack(gameData: GameDataType): AvailablePathMapType {
+        const unit = this; // eslint-disable-line consistent-this
+        const {x, y, type} = unit.attr;
+
+        if (!unitGuide.hasOwnProperty(type)) {
+            console.error('unitGuide has no property:', type, unit);
+            return [];
+        }
+
+        const unitGuideData = unitGuide[type];
+
+        return getPath(x, y, unitGuideData.attack.range, gameData.pathMap.fly, []);
     }
 
     bindUnitEventListeners() { // eslint-disable-line complexity
@@ -318,5 +410,22 @@ export default class Unit {
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
         return Boolean(unitActionState.didMove);
+    }
+
+    setDidAttack(didAttack: boolean) {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        unitActionState.didAttack = didAttack;
+        attr.action = unitActionState;
+    }
+
+    getDidAttack(): boolean {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        return Boolean(unitActionState.didAttack);
     }
 }
