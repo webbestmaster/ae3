@@ -147,33 +147,49 @@ export default class Unit {
 
     getActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this; // eslint-disable-line consistent-this
-        const {attr} = unit;
         const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
 
         if (!unit.getDidMove()) {
-            // add move action
-            unit.getAvailablePath(gameData).forEach((cell: [number, number]) => {
-                if (typeof attr.id !== 'string') {
-                    console.error('unit has no id', unit);
-                    return;
-                }
-                actionMap[cell[1]][cell[0]].push({
-                    id: attr.id,
-                    type: 'move',
-                    from: {
-                        x: attr.x,
-                        y: attr.y
-                    },
-                    to: {
-                        x: cell[0],
-                        y: cell[1]
-                    },
-                    container: new PIXI.Container()
+            const actionMapMove = unit.getMoveActions(gameData);
+
+            actionMapMove.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
+                lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
+                    actionMap[yCell][xCell].push(...cellAction);
                 });
             });
         }
 
         return actionMap;
+    }
+
+    getMoveActions(gameData: GameDataType): UnitActionsMapType {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const moveMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const unitId = typeof attr.id === 'string' ? attr.id : null;
+
+        if (unitId === null) {
+            console.error('unit has no id', unit);
+            return moveMap;
+        }
+
+        unit.getAvailablePath(gameData).forEach((cell: [number, number]) => {
+            moveMap[cell[1]][cell[0]].push({
+                id: unitId,
+                type: 'move',
+                from: {
+                    x: attr.x,
+                    y: attr.y
+                },
+                to: {
+                    x: cell[0],
+                    y: cell[1]
+                },
+                container: new PIXI.Container()
+            });
+        });
+
+        return moveMap;
     }
 
     getAllUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {
