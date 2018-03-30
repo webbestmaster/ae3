@@ -252,6 +252,24 @@ export default class Unit {
         return unitList.map((unit: Unit): [number, number] => [unit.attr.x, unit.attr.y]);
     }
 
+    getAllEnemyUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const {unitList} = gameData;
+        const userId = typeof attr.userId === 'string' ? attr.userId : null;
+
+        if (userId === null) {
+            console.error('unit has no user id', unit);
+            return [];
+        }
+
+        return unitList
+            .filter((unitInList: Unit): boolean => {
+                return unitInList.attr.userId !== userId;
+            })
+            .map((unitInList: Unit): [number, number] => [unitInList.attr.x, unitInList.attr.y]);
+    }
+
     getAvailablePath(gameData: GameDataType): AvailablePathMapType {
         const unit = this; // eslint-disable-line consistent-this
         const {x, y, type} = unit.attr;
@@ -281,16 +299,11 @@ export default class Unit {
             return [];
         }
 
-        const unitGuideData = unitGuide[type];
-
-        const moveType = typeof unitGuideData.moveType === 'string' ?
-            unitGuideData.moveType :
-            null;
-
-        const pathMap = moveType === null ? gameData.pathMap.walk : gameData.pathMap[moveType];
-        const unitCoordinates = unit.getAllUnitsCoordinates(gameData);
+        const enemyUnitCoordinates = unit.getAllEnemyUnitsCoordinates(gameData);
         const allAvailableAttack = unit.getAllAvailableAttack(gameData).filter((mapPoint: PointType): boolean => {
-            return true;
+            return enemyUnitCoordinates.some((unitCoordinates: [number, number]): boolean => {
+                return unitCoordinates[0] === mapPoint[0] && unitCoordinates[1] === mapPoint[1];
+            });
         });
 
         return allAvailableAttack;
