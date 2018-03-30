@@ -188,7 +188,7 @@ export default class Game {
                 break;
 
             case 'room__drop-turn':
-
+                game.render.cleanActionsList();
                 break;
 
             case 'room__join-into-room':
@@ -217,6 +217,8 @@ export default class Game {
 
     async handleServerTakeTurn(message: SocketMessageTakeTurnType): Promise<void> {
         const game = this; // eslint-disable-line consistent-this
+
+        game.render.cleanActionsList();
 
         const activeUserId = message.states.last.activeUserId;
 
