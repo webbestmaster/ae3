@@ -347,6 +347,17 @@ export default class Game {
 
     onUnitClick(unit: Unit) {
         const game = this; // eslint-disable-line consistent-this
+        const unitUserId = typeof unit.attr.userId === 'string' ? unit.attr.userId : null;
+
+        if (unitUserId === null) {
+            console.error('userId is not exists in unit', unit);
+            return;
+        }
+
+        if (unitUserId !== user.getId()) {
+            console.warn('this is has different userId', unit);
+            return;
+        }
 
         const actionsList = unit.getActions({
             userList: game.userList,
