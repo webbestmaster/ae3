@@ -75,6 +75,7 @@ export type UnitType = {|
     action?: UnitActionStateType,
     hitPoints?: number,
     poisonCountdown?: number,
+    hasWispAura?: boolean,
     damage?: {|
         given?: number,
         received?: number

@@ -12,6 +12,8 @@ import {getPath} from './path-master';
 import type {AvailablePathMapType} from './path-master';
 import type {PathType, PointType} from './../../../../lib/a-star-finder';
 import {tweenList} from './../../../../lib/tween';
+import find from 'lodash/find';
+import {getAttackResult} from './../helper';
 
 export type UnitActionMoveType = {|
     type: 'move',
@@ -29,15 +31,12 @@ export type UnitActionMoveType = {|
 
 export type UnitActionAttackType = {|
     type: 'attack',
-    from: {
-        x: number,
-        y: number
-    },
-    to: {
-        x: number,
-        y: number
-    },
-    id: string,
+    aggressor: {|
+        id: string
+    |},
+    defender: {|
+        id: string
+    |},
     container: PIXI.Container
 |};
 
@@ -72,7 +71,7 @@ export type UnitConstructorType = {|
     |}
 |};
 
-type GameDataType = {|
+export type GameDataType = {|
     +userList: Array<ServerUserType>;
     +buildingList: Array<Building>;
     +unitList: Array<Unit>; // eslint-disable-line no-use-before-define
@@ -227,21 +226,35 @@ export default class Unit {
             return attackMap;
         }
 
-        unit.getAvailableAttack(gameData).forEach((cell: [number, number]) => {
+        const attackMapPointList = unit.getAvailableAttack(gameData);
+
+
+        // get attack fields
+        attackMapPointList.forEach((cell: [number, number]) => {
+            const aggressor = unit.attr;
+            const defender = find(gameData.unitList, (unitInList: Unit): boolean => {
+                return unitInList.attr.x === cell[0] && unitInList.attr.y === cell[1];
+            }) || null;
+
+            if (defender === null) {
+                console.error('Can not find unit by coordinates:', cell);
+                return;
+            }
+
+            const attackResult = getAttackResult(gameData, aggressor, defender.attr);
+
+
+            console.error('you stay here');
+
+            /*
             attackMap[cell[1]][cell[0]].push({
-                id: unitId,
                 type: 'attack',
-                from: {
-                    x: attr.x,
-                    y: attr.y
-                },
-                to: {
-                    x: cell[0],
-                    y: cell[1]
-                },
                 container: new PIXI.Container()
             });
+*/
         });
+
+        // count attack result
 
         return attackMap;
     }

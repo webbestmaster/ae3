@@ -14,7 +14,7 @@ import Render from './render';
 import type {AllRoomSettingsType} from '../../../module/server-api';
 import Building from './building';
 import Unit from './unit';
-import type {UnitActionType, UnitActionsMapType} from './unit';
+import type {UnitActionType, UnitActionsMapType, UnitActionMoveType, UnitActionAttackType} from './unit';
 import * as serverApi from './../../../module/server-api';
 import {user} from './../../../module/user';
 import find from 'lodash/find';
@@ -263,6 +263,11 @@ export default class Game {
         const game = this; // eslint-disable-line consistent-this
         const state = message.states.last.state;
 
+        if (state.type !== 'move') {
+            console.error('here is should be a MOVE type');
+            return Promise.resolve();
+        }
+
         if (!state.unit || typeof state.unit.id !== 'string') {
             console.error('---> Wrong socket message', message);
             return Promise.resolve();
@@ -375,85 +380,139 @@ export default class Game {
         actionsList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
                 unitActionList.forEach((unitAction: UnitActionType) => {
-                    if (unitAction.type === 'move') {
+                    if (unitAction.container) {
                         unitAction.container.on('click', () => {
-                            game.bindOnClickUnitAction(unitAction, actionsList);
+                            if (unitAction.type === 'move') {
+                                game.bindOnClickUnitActionMove(unitAction, actionsList);
+                                return;
+                            }
+
+                            if (unitAction.type === 'attack') {
+                                game.bindOnClickUnitActionAttack(unitAction, actionsList);
+                                return;
+                            }
+
+                            console.warn('unknown action', unitAction);
                         });
+                        return;
                     }
-                    if (unitAction.type === 'attack') {
-                        console.error('has no handler for attack');
-                        // unitAction.container.on('click', () => {
-                        //     game.bindOnClickUnitAction(unitAction, actionsList);
-                        // });
-                    }
+
+                    console.log('no container to add onClick', unitAction);
                 });
             });
         });
     }
 
-    bindOnClickUnitAction(unitAction: UnitActionType, actionsList: UnitActionsMapType) {
+    bindOnClickUnitActionMove(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType) {
         const game = this; // eslint-disable-line consistent-this
 
         game.render.cleanActionsList();
 
         const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
 
-        if (unitAction.type === 'move') {
-            const movedUnit = find(newMap.units, {id: unitAction.id});
+        const movedUnit = find(newMap.units, {id: unitAction.id});
 
-            if (!movedUnit) {
-                console.error('--> can not find unit for action:', unitAction);
-                return;
-            }
-
-            const moviePath = getMoviePath(unitAction, actionsList);
-
-            if (moviePath === null) {
-                console.error('moviePath is not define, actually === null');
-                return;
-            }
-
-            // update map movie unit
-            movedUnit.x = unitAction.to.x;
-            movedUnit.y = unitAction.to.y;
-
-            movedUnit.action = movedUnit.action || {};
-            movedUnit.action.didMove = true;
-
-            serverApi
-                .pushState(
-                    game.roomId,
-                    user.getId(),
-                    {
-                        type: 'room__push-state',
-                        state: {
-                            type: 'move',
-                            path: moviePath,
-                            from: {
-                                x: unitAction.from.x,
-                                y: unitAction.from.y
-                            },
-                            to: {
-                                x: unitAction.to.x,
-                                y: unitAction.to.y
-                            },
-                            unit: {
-                                id: unitAction.id
-                            },
-                            map: newMap,
-                            activeUserId: user.getId()
-                        }
-                    }
-                )
-                .then((response: mixed) => {
-                    console.log('---> unit action pushed');
-                    console.log(response);
-                });
-
+        if (!movedUnit) {
+            console.error('--> can not find unit for action:', unitAction);
             return;
         }
 
-        console.warn('---> unknown unitAction', unitAction);
+        const moviePath = getMoviePath(unitAction, actionsList);
+
+        if (moviePath === null) {
+            console.error('moviePath is not define, actually === null');
+            return;
+        }
+
+        // update map movie unit
+        movedUnit.x = unitAction.to.x;
+        movedUnit.y = unitAction.to.y;
+
+        movedUnit.action = movedUnit.action || {};
+        movedUnit.action.didMove = true;
+
+        serverApi
+            .pushState(
+                game.roomId,
+                user.getId(),
+                {
+                    type: 'room__push-state',
+                    state: {
+                        type: 'move',
+                        path: moviePath,
+                        from: {
+                            x: unitAction.from.x,
+                            y: unitAction.from.y
+                        },
+                        to: {
+                            x: unitAction.to.x,
+                            y: unitAction.to.y
+                        },
+                        unit: {
+                            id: unitAction.id
+                        },
+                        map: newMap,
+                        activeUserId: user.getId()
+                    }
+                }
+            )
+            .then((response: mixed) => {
+                console.log('---> unit action pushed');
+                console.log(response);
+            });
+    }
+
+    bindOnClickUnitActionAttack(unitAction: UnitActionAttackType, actionsList: UnitActionsMapType) {
+        const game = this; // eslint-disable-line consistent-this
+
+        /*
+                game.render.cleanActionsList();
+
+                const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+
+                const movedUnit = find(newMap.units, {id: unitAction.id});
+
+                if (!movedUnit) {
+                    console.error('--> can not find unit for action:', unitAction);
+                    return;
+                }
+
+                // update map movie unit
+                // movedUnit.x = unitAction.to.x;
+                // movedUnit.y = unitAction.to.y;
+
+                movedUnit.action = movedUnit.action || {};
+                movedUnit.action.didAttack = true;
+
+                serverApi
+                    .pushState(
+                        game.roomId,
+                        user.getId(),
+                        {
+                            type: 'room__push-state',
+                            state: {
+                                type: 'attack',
+                                from: {
+                                    x: unitAction.from.x,
+                                    y: unitAction.from.y
+                                },
+                                to: {
+                                    x: unitAction.to.x,
+                                    y: unitAction.to.y
+                                },
+                                unit: {
+                                    id: unitAction.id
+                                },
+                                map: newMap,
+                                activeUserId: user.getId()
+                            }
+                        }
+                    )
+                    .then((response: mixed) => {
+                        console.log('---> unit action pushed');
+                        console.log(response);
+                    });
+        */
     }
 
     setSettings(settings: AllRoomSettingsType) {
@@ -491,11 +550,13 @@ export default class Game {
 
         game.initializeEmptyActionMap();
 
-        // TODO: armorMap needed
-        console.warn('---> armorMap needed');
         game.initializePathMapWalk();
         game.initializePathMapFlow();
         game.initializePathMapFly();
+
+        game.initializeArmorMapWalk();
+        game.initializeArmorMapFlow();
+        game.initializeArmorMapFly();
     }
 
     initializePathMapWalk() {
@@ -550,6 +611,65 @@ export default class Game {
         });
 
         game.pathMap.fly = pathMap;
+    }
+
+    initializeArmorMapWalk() {
+        const game = this; // eslint-disable-line consistent-this
+        const {map} = game.settings;
+        const armorMap = [];
+
+        map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
+            armorMap.push([]);
+            line.forEach((landscapeItem: LandscapeType, tileX: number) => {
+                const landscapeImageType = map.landscape[tileY][tileX];
+                const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                const placeArmor = mapGuide.landscape[landscapeType].armor;
+
+                armorMap[tileY].push(placeArmor);
+            });
+        });
+
+        game.armorMap.walk = armorMap;
+    }
+
+    initializeArmorMapFlow() {
+        const game = this; // eslint-disable-line consistent-this
+        const {map} = game.settings;
+        const armorMap = [];
+
+        map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
+            armorMap.push([]);
+            line.forEach((landscapeItem: LandscapeType, tileX: number) => {
+                const landscapeImageType = map.landscape[tileY][tileX];
+                const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                const placeArmor = landscapeType === 'water' ?
+                    mapGuide.landscape[landscapeType].flowArmor :
+                    mapGuide.landscape[landscapeType].armor;
+
+                armorMap[tileY].push(placeArmor);
+            });
+        });
+
+        game.armorMap.flow = armorMap;
+    }
+
+    initializeArmorMapFly() {
+        const game = this; // eslint-disable-line consistent-this
+        const {map} = game.settings;
+        const armorMap = [];
+
+        map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
+            armorMap.push([]);
+            line.forEach((landscapeItem: LandscapeType, tileX: number) => {
+                const landscapeImageType = map.landscape[tileY][tileX];
+                const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                const placeArmor = mapGuide.landscape[landscapeType].armor;
+
+                armorMap[tileY].push(placeArmor);
+            });
+        });
+
+        game.armorMap.fly = armorMap;
     }
 
     initializeEmptyActionMap() {

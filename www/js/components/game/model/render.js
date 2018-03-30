@@ -152,6 +152,10 @@ export default class Render {
 
     drawActionAttack(unitAction: UnitActionAttackType) {
         const render = this; // eslint-disable-line consistent-this
+
+        console.error('NO draw unit attack');
+
+        /*
         const {to, container} = unitAction;
 
         container.position.set(to.x * mapGuide.size.square, to.y * mapGuide.size.square);
@@ -160,6 +164,7 @@ export default class Render {
         container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-attack-0']));
 
         render.layer.actions.addChild(unitAction.container);
+*/
     }
 
     cleanActionsList() {

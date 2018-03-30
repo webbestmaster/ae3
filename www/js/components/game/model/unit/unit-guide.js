@@ -260,3 +260,11 @@ const unitData = {
 };
 
 export default unitData;
+
+const defaultUnitData = {
+    hitPoints: 100,
+    poisonCountdown: 0,
+    hasWispAura: false
+};
+
+export {defaultUnitData};

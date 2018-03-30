@@ -27,7 +27,8 @@ export type MapGuideType = {|
         },
         water: {
             pathReduce: 3,
-            armor: 0
+            armor: 0,
+            flowArmor: 3
         },
         hill: {
             pathReduce: 2,
@@ -89,7 +90,8 @@ const mapGuide: MapGuideType = {
         },
         water: {
             pathReduce: 3,
-            armor: 0
+            armor: 0,
+            flowArmor: 3
         },
         hill: {
             pathReduce: 2,

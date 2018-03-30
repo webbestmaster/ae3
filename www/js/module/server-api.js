@@ -178,6 +178,23 @@ type PushedStatePayloadUnitMoveType = {|
     +activeUserId: string
 |};
 
+type PushedStatePayloadUnitAttackType = {|
+    +type: 'attack',
+    +from: {|
+        +x: number,
+        +y: number
+    |},
+    +to: {|
+        +x: number,
+        +y: number
+    |},
+    +unit: {|
+        +id: string
+    |},
+    +map: MapType,
+    +activeUserId: string
+|};
+
 type PushedStatePayloadRefreshUnitListType = {|
     +type: 'refresh-unit-list',
     +map: MapType,
@@ -186,6 +203,7 @@ type PushedStatePayloadRefreshUnitListType = {|
 
 export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType
     | PushedStatePayloadUnitMoveType
+    | PushedStatePayloadUnitAttackType
     | PushedStatePayloadRefreshUnitListType;
 
 export type PushStateType = {|
