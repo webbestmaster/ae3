@@ -248,6 +248,11 @@ export default class Game {
 
                 break;
 
+            case 'attack':
+                await game.handleServerPushStateAttack(message);
+
+                break;
+
             case 'refresh-unit-list':
 
                 await game.handleServerRefreshUnitList(message);
@@ -285,6 +290,22 @@ export default class Game {
         }
 
         return unitModel.move(state.to.x, state.to.y, state.path);
+    }
+
+    async handleServerPushStateAttack(message: SocketMessagePushStateType): Promise<void> {
+        const game = this; // eslint-disable-line consistent-this
+        const state = message.states.last.state;
+
+        console.error('you stay here!');
+        // after this do make new map in serverApi.pushState
+
+        if (state.type !== 'attack') {
+            console.error('here is should be a ATTACK type');
+            return Promise.resolve();
+        }
+
+
+        return Promise.resolve();
     }
 
     async handleServerRefreshUnitList(message: SocketMessagePushStateType): Promise<void> {
@@ -388,7 +409,7 @@ export default class Game {
                             }
 
                             if (unitAction.type === 'attack') {
-                                game.bindOnClickUnitActionAttack(unitAction, actionsList);
+                                game.bindOnClickUnitActionAttack(unitAction);
                                 return;
                             }
 
@@ -457,64 +478,51 @@ export default class Game {
                 }
             )
             .then((response: mixed) => {
-                console.log('---> unit action pushed');
+                console.log('---> unit action move pushed');
                 console.log(response);
             });
     }
 
-    bindOnClickUnitActionAttack(unitAction: UnitActionAttackType, actionsList: UnitActionsMapType) {
+    bindOnClickUnitActionAttack(unitAction: UnitActionAttackType) {
         const game = this; // eslint-disable-line consistent-this
 
-        console.log('Attaaaaaack!!!');
+        game.render.cleanActionsList();
 
-        /*
-                game.render.cleanActionsList();
+        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
 
-                const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+        const aggressorUnit = find(newMap.units, {id: unitAction.aggressor.id});
 
-                const movedUnit = find(newMap.units, {id: unitAction.id});
+        if (!aggressorUnit) {
+            console.error('--> can not find aggressorUnit for action:', unitAction);
+            return;
+        }
 
-                if (!movedUnit) {
-                    console.error('--> can not find unit for action:', unitAction);
-                    return;
+        const defenderUnit = find(newMap.units, {id: unitAction.defender.id});
+
+        if (!defenderUnit) {
+            console.error('--> can not find defenderUnit for action:', unitAction);
+            return;
+        }
+
+        serverApi
+            .pushState(
+                game.roomId,
+                user.getId(),
+                {
+                    type: 'room__push-state',
+                    state: {
+                        type: 'attack',
+                        aggressor: unitAction.aggressor,
+                        defender: unitAction.defender,
+                        map: newMap,
+                        activeUserId: user.getId()
+                    }
                 }
-
-                // update map movie unit
-                // movedUnit.x = unitAction.to.x;
-                // movedUnit.y = unitAction.to.y;
-
-                movedUnit.action = movedUnit.action || {};
-                movedUnit.action.didAttack = true;
-
-                serverApi
-                    .pushState(
-                        game.roomId,
-                        user.getId(),
-                        {
-                            type: 'room__push-state',
-                            state: {
-                                type: 'attack',
-                                from: {
-                                    x: unitAction.from.x,
-                                    y: unitAction.from.y
-                                },
-                                to: {
-                                    x: unitAction.to.x,
-                                    y: unitAction.to.y
-                                },
-                                unit: {
-                                    id: unitAction.id
-                                },
-                                map: newMap,
-                                activeUserId: user.getId()
-                            }
-                        }
-                    )
-                    .then((response: mixed) => {
-                        console.log('---> unit action pushed');
-                        console.log(response);
-                    });
-        */
+            )
+            .then((response: mixed) => {
+                console.log('---> unit action attack pushed');
+                console.log(response);
+            });
     }
 
     setSettings(settings: AllRoomSettingsType) {

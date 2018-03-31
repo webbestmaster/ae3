@@ -5,6 +5,7 @@ import appConst from './../app-const';
 import type {MapType} from '../maps/type';
 import mapGuide from './../maps/map-guide';
 import type {PathType} from './../components/game/model/unit/path-master';
+import type {AttackResultUnitType} from '../components/game/model/helper';
 
 const {api} = appConst;
 const {url} = api;
@@ -160,7 +161,7 @@ type PushedStatePayloadIsGameStartedType = {|
     +map: MapType
 |};
 
-type PushedStatePayloadUnitMoveType = {|
+export type PushedStatePayloadUnitMoveType = {|
     +type: 'move',
     +path: PathType,
     +from: {|
@@ -178,24 +179,15 @@ type PushedStatePayloadUnitMoveType = {|
     +activeUserId: string
 |};
 
-type PushedStatePayloadUnitAttackType = {|
+export type PushedStatePayloadUnitAttackType = {|
     +type: 'attack',
-    +from: {|
-        +x: number,
-        +y: number
-    |},
-    +to: {|
-        +x: number,
-        +y: number
-    |},
-    +unit: {|
-        +id: string
-    |},
+    +aggressor: AttackResultUnitType,
+    +defender: AttackResultUnitType,
     +map: MapType,
     +activeUserId: string
 |};
 
-type PushedStatePayloadRefreshUnitListType = {|
+export type PushedStatePayloadRefreshUnitListType = {|
     +type: 'refresh-unit-list',
     +map: MapType,
     +activeUserId: string
