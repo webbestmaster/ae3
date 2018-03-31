@@ -268,3 +268,12 @@ const defaultUnitData = {
 };
 
 export {defaultUnitData};
+
+
+const additionalUnitData = {
+    wispAttackBonus: 15,
+    poisonAttackReduce: 10,
+    poisonArmorReduce: 10
+};
+
+export {additionalUnitData};

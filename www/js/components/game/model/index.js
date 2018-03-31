@@ -465,6 +465,8 @@ export default class Game {
     bindOnClickUnitActionAttack(unitAction: UnitActionAttackType, actionsList: UnitActionsMapType) {
         const game = this; // eslint-disable-line consistent-this
 
+        console.log('Attaaaaaack!!!');
+
         /*
                 game.render.cleanActionsList();
 

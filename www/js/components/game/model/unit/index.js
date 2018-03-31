@@ -3,7 +3,8 @@
 import * as PIXI from 'pixi.js';
 import type {MapType, UnitType, UnitActionStateType} from '../../../../maps/type';
 import type {ServerUserType} from '../../../../module/server-api';
-import {getUserColor} from './../helper';
+import {getUserColor, getAttackResult} from './../helper';
+import type {AttackResultUnitType} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import unitGuide from './unit-guide';
 import imageMap from './../../image/image-map';
@@ -13,7 +14,7 @@ import type {AvailablePathMapType} from './path-master';
 import type {PathType, PointType} from './../../../../lib/a-star-finder';
 import {tweenList} from './../../../../lib/tween';
 import find from 'lodash/find';
-import {getAttackResult} from './../helper';
+// import {getAttackResult} from './../helper';
 
 export type UnitActionMoveType = {|
     type: 'move',
@@ -31,12 +32,8 @@ export type UnitActionMoveType = {|
 
 export type UnitActionAttackType = {|
     type: 'attack',
-    aggressor: {|
-        id: string
-    |},
-    defender: {|
-        id: string
-    |},
+    aggressor: AttackResultUnitType,
+    defender: AttackResultUnitType,
     container: PIXI.Container
 |};
 
@@ -228,10 +225,8 @@ export default class Unit {
 
         const attackMapPointList = unit.getAvailableAttack(gameData);
 
-
         // get attack fields
         attackMapPointList.forEach((cell: [number, number]) => {
-            const aggressor = unit.attr;
             const defender = find(gameData.unitList, (unitInList: Unit): boolean => {
                 return unitInList.attr.x === cell[0] && unitInList.attr.y === cell[1];
             }) || null;
@@ -241,20 +236,15 @@ export default class Unit {
                 return;
             }
 
-            const attackResult = getAttackResult(gameData, aggressor, defender.attr);
+            const attackResult = getAttackResult(gameData, unit, defender);
 
-
-            console.error('you stay here');
-
-            /*
             attackMap[cell[1]][cell[0]].push({
                 type: 'attack',
+                aggressor: attackResult.aggressor,
+                defender: attackResult.defender,
                 container: new PIXI.Container()
             });
-*/
         });
-
-        // count attack result
 
         return attackMap;
     }
@@ -453,5 +443,9 @@ export default class Unit {
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
         return Boolean(unitActionState.didAttack);
+    }
+
+    hasWispAura(): boolean {
+        return false;
     }
 }

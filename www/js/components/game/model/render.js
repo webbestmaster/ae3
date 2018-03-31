@@ -63,7 +63,7 @@ export default class Render {
 
         app.stage.position.set(0, 0);
 
-        app.stage.scale.set(1, 1);
+        app.stage.scale.set(3, 3);
         // app.stage.scale.set(3, 3);
     }
 
@@ -152,19 +152,14 @@ export default class Render {
 
     drawActionAttack(unitAction: UnitActionAttackType) {
         const render = this; // eslint-disable-line consistent-this
+        const {defender, container} = unitAction;
 
-        console.error('NO draw unit attack');
-
-        /*
-        const {to, container} = unitAction;
-
-        container.position.set(to.x * mapGuide.size.square, to.y * mapGuide.size.square);
+        container.position.set(defender.x * mapGuide.size.square, defender.y * mapGuide.size.square);
         container.buttonMode = true;
         container.interactive = true;
         container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-attack-0']));
 
         render.layer.actions.addChild(unitAction.container);
-*/
     }
 
     cleanActionsList() {
