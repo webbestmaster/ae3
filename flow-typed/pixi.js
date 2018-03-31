@@ -10,6 +10,23 @@ type ApplicationOptionsType = {|
     sharedLoader?: boolean
 |};
 
+type TextStyleConstructorType = {
+    fontFamily?: string,
+    fontSize?: number,
+    fontStyle?: 'normal' | 'italic',
+    fontWeight?: 'normal' | 'bold',
+    fill?: string | [string, string],
+    stroke?: string,
+    strokeThickness?: number,
+    dropShadow?: boolean,
+    dropShadowColor?: string,
+    dropShadowBlur?: number,
+    dropShadowAngle?: number,
+    dropShadowDistance?: number,
+    wordWrap?: boolean,
+    wordWrapWidth?: number
+};
+
 declare module 'pixi.js' {
     declare export var settings: {|
         SCALE_MODE: 0 | 1
@@ -36,6 +53,15 @@ declare module 'pixi.js' {
     declare export class Sprite extends PixiObject {
         constructor(): Sprite;
         static fromImage(spriteName: string): Sprite
+    }
+
+    declare export class TextStyle {
+        constructor(initialData?: TextStyleConstructorType): TextStyle
+    }
+
+    declare export class Text extends PixiObject {
+        constructor(text: string | number, style?: TextStyle): Text;
+        text: string | number
     }
 
     declare export class Container extends PixiObject {

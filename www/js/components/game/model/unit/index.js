@@ -6,7 +6,7 @@ import type {ServerUserType} from '../../../../module/server-api';
 import {getUserColor, getAttackResult} from './../helper';
 import type {AttackResultUnitType} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
-import unitGuide from './unit-guide';
+import unitGuide, {defaultUnitData} from './unit-guide';
 import imageMap from './../../image/image-map';
 import Building from '../building';
 import {getPath} from './path-master';
@@ -52,7 +52,8 @@ type UnitAttrType = UnitType;
 type UnitGameAttrType = {|
     container: PIXI.Container,
     sprite: {|
-        unit: PIXI.extras.AnimatedSprite
+        unit: PIXI.extras.AnimatedSprite,
+        hitPoints: PIXI.Text
     |},
     userList: Array<ServerUserType>,
     event: {|
@@ -113,7 +114,8 @@ export default class Unit {
                 unit: new PIXI.extras.AnimatedSprite([
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-0']),
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1'])
-                ])
+                ]),
+                hitPoints: new PIXI.Text('')
             },
             userList: JSON.parse(JSON.stringify(unitConstructor.userList)),
             event: {
@@ -122,6 +124,7 @@ export default class Unit {
         };
 
         unit.initializeUnitSprite();
+        unit.initializeHitPointsSprite();
         unit.bindUnitEventListeners();
     }
 
@@ -153,6 +156,21 @@ export default class Unit {
         // attr.sprite.unit = PIXI.Sprite.fromImage(imageMap.unit[attr.type + '-' + color + '-0']);
 
         gameAttr.container.addChild(gameAttr.sprite.unit);
+    }
+
+    initializeHitPointsSprite() {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr, gameAttr} = unit;
+
+        if (typeof unit.attr.hitPoints === 'number') {
+            gameAttr.sprite.hitPoints = new PIXI.Text(unit.attr.hitPoints);
+        }
+
+        gameAttr.container.addChild(gameAttr.sprite.hitPoints);
+
+        // TODO: you stay here
+        console.error('TODO: you stay here - last');
+        gameAttr.sprite.hitPoints.text = 23;
     }
 
     getActions(gameData: GameDataType): UnitActionsMapType {
@@ -444,6 +462,25 @@ export default class Unit {
 
         return Boolean(unitActionState.didAttack);
     }
+
+    setHitPoints(hitPoints: number) {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr, gameAttr} = unit;
+
+        attr.hitPoints = hitPoints;
+        gameAttr.sprite.hitPoints.text = hitPoints;
+    }
+
+    getHitPoints(): number {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+
+        if (typeof attr.hitPoints === 'number') {
+            return attr.hitPoints;
+        }
+        return defaultUnitData.hitPoints;
+    }
+
 
     hasWispAura(): boolean {
         return false;
