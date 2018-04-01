@@ -15,8 +15,8 @@ type TextStyleConstructorType = {
     fontSize?: number,
     fontStyle?: 'normal' | 'italic',
     fontWeight?: 'normal' | 'bold',
-    fill?: string | [string, string],
-    stroke?: string,
+    fill?: string | [string, string], // color
+    stroke?: string, // stroke color
     strokeThickness?: number,
     dropShadow?: boolean,
     dropShadowColor?: string,

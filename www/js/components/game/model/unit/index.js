@@ -86,6 +86,14 @@ export type GameDataType = {|
     +emptyActionMap: Array<Array<[]>>
 |};
 
+const textStyle = new PIXI.TextStyle({
+    fontFamily: 'monospace',
+    fill: '#cccc00',
+    fontSize: 8,
+    stroke: '#000000',
+    strokeThickness: 4
+});
+
 export default class Unit {
     attr: UnitAttrType;
     gameAttr: UnitGameAttrType;
@@ -115,7 +123,7 @@ export default class Unit {
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-0']),
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1'])
                 ]),
-                hitPoints: new PIXI.Text('')
+                hitPoints: new PIXI.Text('', textStyle)
             },
             userList: JSON.parse(JSON.stringify(unitConstructor.userList)),
             event: {
@@ -161,16 +169,10 @@ export default class Unit {
     initializeHitPointsSprite() {
         const unit = this; // eslint-disable-line consistent-this
         const {attr, gameAttr} = unit;
+        const hitPoints = unit.getHitPoints();
 
-        if (typeof unit.attr.hitPoints === 'number') {
-            gameAttr.sprite.hitPoints = new PIXI.Text(unit.attr.hitPoints);
-        }
-
+        unit.setHitPoints(hitPoints);
         gameAttr.container.addChild(gameAttr.sprite.hitPoints);
-
-        // TODO: you stay here
-        console.error('TODO: you stay here - last');
-        gameAttr.sprite.hitPoints.text = 23;
     }
 
     getActions(gameData: GameDataType): UnitActionsMapType {
@@ -467,8 +469,19 @@ export default class Unit {
         const unit = this; // eslint-disable-line consistent-this
         const {attr, gameAttr} = unit;
 
+        if (hitPoints > defaultUnitData.hitPoints) {
+            console.error('too many hitPoints', hitPoints, unit);
+            unit.setHitPoints(defaultUnitData.hitPoints);
+            return;
+        }
+
+        if (hitPoints === 0) {
+            console.error('hitPoints is 0, remove from Game unit and create a grave', unit);
+            return;
+        }
+
         attr.hitPoints = hitPoints;
-        gameAttr.sprite.hitPoints.text = hitPoints;
+        gameAttr.sprite.hitPoints.text = hitPoints === defaultUnitData.hitPoints ? '' : hitPoints;
     }
 
     getHitPoints(): number {

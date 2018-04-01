@@ -192,9 +192,7 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
         x: aggressor.attr.x,
         y: aggressor.attr.y,
         canAttack: canAttack(aggressor, defender),
-        hitPoints: typeof aggressor.attr.hitPoints === 'number' ?
-            aggressor.attr.hitPoints :
-            defaultUnitData.hitPoints,
+        hitPoints: aggressor.getHitPoints(),
         poisonCountdown: typeof aggressor.attr.poisonCountdown === 'number' ?
             aggressor.attr.poisonCountdown :
             defaultUnitData.poisonCountdown,
@@ -226,9 +224,7 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
         x: defender.attr.x,
         y: defender.attr.y,
         canAttack: canAttack(defender, aggressor),
-        hitPoints: typeof defender.attr.hitPoints === 'number' ?
-            defender.attr.hitPoints :
-            defaultUnitData.hitPoints,
+        hitPoints: defender.getHitPoints(),
         poisonCountdown: typeof defender.attr.poisonCountdown === 'number' ?
             defender.attr.poisonCountdown :
             defaultUnitData.poisonCountdown,
