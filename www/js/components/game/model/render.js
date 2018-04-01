@@ -8,9 +8,12 @@ import type {ServerUserType} from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
 import {getUserColor} from './helper';
+import type {UnitDataForAttackType} from './helper';
 import type {UnitType} from '../../../maps/type';
 import type {UnitActionsMapType, UnitActionType} from './unit/index';
 import type {UnitActionAttackType, UnitActionMoveType} from './unit';
+import Unit from './unit';
+import type {SocketMessagePushStateType} from '../../../module/socket';
 
 type InitializeConfigType = {|
     width: number,
@@ -168,67 +171,23 @@ export default class Render {
         render.layer.actions.removeChildren();
     }
 
-    /*
-        getBuildingColor(buildingData: BuildingType, userList: Array<ServerUserType>) {
+    async drawAttack(aggressorUnit: Unit, defenderUnit: Unit, message: SocketMessagePushStateType): Promise<void> {
+        // TODO: DO NOT set HP here - do it in handleServerPushStateAttack
+        const render = this; // eslint-disable-line consistent-this
+        const state = message.states.last.state;
 
+        if (state.type !== 'attack') {
+            console.error('here is should be a ATTACK type');
+            return Promise.resolve();
         }
 
-        drawBuildings(map: MapType, userList: Array<ServerUserType>) {
-            const game = this; // eslint-disable-line consistent-this
-
-            const {buildings} = game.layer;
-
-            map.buildings.forEach((buildingData: BuildingType) => {
-                if (['castle', 'farm'].includes(buildingData.type)) {
-                    let color = 'gray';
-
-                    if (typeof buildingData.userId === 'string') {
-                        const userColor = getUserColor(buildingData.userId, userList);
-
-                        if (typeof userColor === 'string') {
-                            color = userColor;
-                        }
-                    }
-
-                    const sprite = PIXI.Sprite.fromImage(imageMap.building[buildingData.type + '-' + color]);
-
-                    sprite.position.set(buildingData.x * mapGuide.size.square, buildingData.y * mapGuide.size.square);
-
-                    buildings.addChild(sprite);
-                }
-
-                if (['well', 'temple', 'farm-destroyed'].includes(buildingData.type)) {
-                    const sprite = PIXI.Sprite.fromImage(imageMap.building[buildingData.type]);
-
-                    sprite.position.set(buildingData.x * mapGuide.size.square, buildingData.y * mapGuide.size.square);
-
-                    buildings.addChild(sprite);
-                }
-            });
+        if (!state.aggressor || !state.defender) {
+            console.error('no aggressor or defender', state);
+            return Promise.resolve();
         }
 
-        drawUnits(map: MapType, userList: Array<ServerUserType>) {
-            const game = this; // eslint-disable-line consistent-this
+        console.log('Animate attack!');
 
-            const {units} = game.layer;
-
-            map.units.forEach((unitData: UnitType) => {
-                let color = 'gray';
-
-                if (typeof unitData.userId === 'string') {
-                    const userColor = getUserColor(unitData.userId, userList);
-
-                    if (typeof userColor === 'string') {
-                        color = userColor;
-                    }
-                }
-
-                const sprite = PIXI.Sprite.fromImage(imageMap.unit[unitData.type + '-' + color + '-0']);
-
-                sprite.position.set(unitData.x * mapGuide.size.square, unitData.y * mapGuide.size.square);
-
-                units.addChild(sprite);
-            });
-        }
-    */
+        return Promise.resolve();
+    }
 }

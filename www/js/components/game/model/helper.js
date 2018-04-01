@@ -67,7 +67,7 @@ function canAttack(aggressor: Unit, defender: Unit): boolean {
     return Math.abs(defender.attr.x - aggressor.attr.x) + Math.abs(defender.attr.y - aggressor.attr.y) <= range;
 }
 
-type UnitDataForAttackType = {|
+export type UnitDataForAttackType = {|
     +attack: {|
         +min: number,
         +max: number,

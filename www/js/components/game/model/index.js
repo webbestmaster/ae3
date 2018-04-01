@@ -292,17 +292,48 @@ export default class Game {
         return unitModel.move(state.to.x, state.to.y, state.path);
     }
 
-    async handleServerPushStateAttack(message: SocketMessagePushStateType): Promise<void> {
+    // TODO:
+    // after this do make new map in serverApi.pushState
+    async handleServerPushStateAttack(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this; // eslint-disable-line consistent-this
         const state = message.states.last.state;
-
-        console.error('you stay here!');
-        // after this do make new map in serverApi.pushState
 
         if (state.type !== 'attack') {
             console.error('here is should be a ATTACK type');
             return Promise.resolve();
         }
+
+        if (!state.aggressor || !state.defender) {
+            console.error('no aggressor or defender', state);
+            return Promise.resolve();
+        }
+
+        const aggressorId = typeof state.aggressor.id === 'string' ? state.aggressor.id : null;
+        const defenderId = typeof state.defender.id === 'string' ? state.defender.id : null;
+
+        if (aggressorId === null || defenderId === null) {
+            console.error('aggressor or defender has no Id', state);
+            return Promise.resolve();
+        }
+
+        const {unitList} = game;
+        const aggressorUnit = find(unitList, (unitInList: Unit): boolean => {
+            return unitInList.attr.id === aggressorId;
+        }) || null;
+
+        const defenderUnit = find(unitList, (unitInList: Unit): boolean => {
+            return unitInList.attr.id === defenderId;
+        }) || null;
+
+        if (aggressorUnit === null || defenderUnit === null) {
+            console.error('can not find aggressor or defender', state);
+            return Promise.resolve();
+        }
+
+        await game.render.drawAttack(aggressorUnit, defenderUnit, message);
+
+
+        // TODO: set HP here
 
 
         return Promise.resolve();
