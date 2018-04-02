@@ -96,7 +96,7 @@ export type AttackResultType = {|
     defender: AttackResultUnitType
 |};
 
-export function getAttackResult(gameData: GameDataType, aggressor: Unit, defender: Unit): AttackResultType {
+export function getAttackResult(gameData: GameDataType, aggressor: Unit, defender: Unit): AttackResultType { // eslint-disable-line max-statements, complexity
     const unitsDataForAttack = getUnitsDataForAttack(gameData, aggressor, defender);
     const aggressorData = unitsDataForAttack.aggressor;
     const defenderData = unitsDataForAttack.defender;
@@ -135,7 +135,12 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
         };
     }
 
-    aggressorData.hitPoints -= resultDefenderDamage;
+    if (defenderData.canAttack === true) {
+        aggressorData.hitPoints -= resultDefenderDamage;
+        console.log('defender CAN strike back');
+    } else {
+        console.log('defender can NOT strike back');
+    }
 
     return {
         aggressor: aggressorData,

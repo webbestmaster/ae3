@@ -24,6 +24,7 @@ import {socket} from '../../../module/socket';
 import type {SocketMessageType, SocketMessagePushStateType, SocketMessageTakeTurnType} from '../../../module/socket';
 import MainModel from './../../../lib/main-model';
 import * as unitMaster from './unit/master';
+import {defaultUnitData} from './unit/unit-guide';
 
 type RenderSettingType = {|
     width: number,
@@ -293,8 +294,6 @@ export default class Game {
         return unitModel.move(state.to.x, state.to.y, state.path);
     }
 
-    // TODO:
-    // after this do make new map in serverApi.pushState
     async handleServerPushStateAttack(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this; // eslint-disable-line consistent-this
         const state = message.states.last.state;
@@ -335,6 +334,7 @@ export default class Game {
         // aggressor attack phase
         if (state.aggressor.canAttack) {
             await game.render.drawAttack(aggressorUnit, defenderUnit);
+            aggressorUnit.setDidAttack(true);
             // defender is/isn't alive
             if (state.defender.hitPoints > 0) {
                 defenderUnit.setHitPoints(state.defender.hitPoints);
@@ -349,6 +349,7 @@ export default class Game {
 
         if (state.defender.canAttack) {
             await game.render.drawAttack(defenderUnit, aggressorUnit);
+            defenderUnit.setDidAttack(true);
             // aggressor is/isn't alive
             if (state.aggressor.hitPoints > 0) {
                 aggressorUnit.setHitPoints(state.aggressor.hitPoints);
@@ -562,7 +563,7 @@ export default class Game {
             });
     }
 
-    bindOnClickUnitActionAttack(unitAction: UnitActionAttackType) {
+    bindOnClickUnitActionAttack(unitAction: UnitActionAttackType) { // eslint-disable-line complexity, max-statements
         const game = this; // eslint-disable-line consistent-this
 
         game.render.cleanActionsList();
@@ -589,11 +590,47 @@ export default class Game {
         if (actionAggressorUnit.hitPoints === 0) {
             remove(newMap.units, {id: actionAggressorUnit.id});
             console.warn('Add/update grave here is needed');
+        } else {
+            const aggressorMapUnit = find(newMap.units, {id: actionAggressorUnit.id}) || null;
+
+            if (aggressorMapUnit === null) {
+                console.error('can not find', aggressorMapUnit);
+            } else {
+                if (actionAggressorUnit.hitPoints !== defaultUnitData.hitPoints) {
+                    aggressorMapUnit.hitPoints = actionAggressorUnit.hitPoints;
+                }
+                if (actionAggressorUnit.canAttack) {
+                    const aggressorMapUnitAction = aggressorMapUnit.action || {};
+
+                    aggressorMapUnitAction.didAttack = true;
+                    aggressorMapUnit.action = aggressorMapUnitAction;
+                } else {
+                    console.error('aggressorMapUnit can not attack', aggressorMapUnit);
+                }
+            }
         }
 
         if (actionDefenderUnit.hitPoints === 0) {
             remove(newMap.units, {id: actionDefenderUnit.id});
             console.warn('Add/update grave here is needed');
+        } else {
+            const defenderMapUnit = find(newMap.units, {id: actionDefenderUnit.id}) || null;
+
+            if (defenderMapUnit === null) {
+                console.error('can not find', defenderMapUnit);
+            } else {
+                if (actionDefenderUnit.hitPoints !== defaultUnitData.hitPoints) {
+                    defenderMapUnit.hitPoints = actionDefenderUnit.hitPoints;
+                }
+                if (actionDefenderUnit.canAttack) {
+                    const defenderMapUnitAction = defenderMapUnit.action || {};
+
+                    defenderMapUnitAction.didAttack = true;
+                    defenderMapUnit.action = defenderMapUnitAction;
+                } else {
+                    console.log('defenderMapUnit can not attack', defenderMapUnit);
+                }
+            }
         }
 
         serverApi

@@ -408,7 +408,7 @@ export default class Unit {
 
         const promiseList = [];
 
-        Object.keys(actionState).forEach((actionName: string) => {
+        Object.keys(actionState).forEach((actionName: string) => { // eslint-disable-line max-statements, complexity
             const oldAction = unit.attr.action || {};
 
             if (actionState === null) {
@@ -425,6 +425,11 @@ export default class Unit {
                 case 'didMove': {
                     console.log('setDidMove', actionState[actionName]);
                     unit.setDidMove(Boolean(actionState[actionName]));
+                    return;
+                }
+                case 'didAttack': {
+                    console.log('setDidAttack', actionState[actionName]);
+                    unit.setDidAttack(Boolean(actionState[actionName]));
                     return;
                 }
 
