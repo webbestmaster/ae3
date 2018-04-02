@@ -439,10 +439,11 @@ export default class Game {
 
         const lengthAfterRemove = unitList.length;
 
-        if (lengthAfterRemove === lengthBeforeRemove) {
-            console.error('unit did NOT removed', unit, unitList);
-        } else {
+        // check to remove ONE unit
+        if (lengthAfterRemove === lengthBeforeRemove - 1) {
             console.log('unit did removed successfully');
+        } else {
+            console.error('unit did NOT removed', unit, unitList);
         }
 
         game.render.layer.units.removeChild(unit.gameAttr.container);
