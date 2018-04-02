@@ -446,6 +446,8 @@ export default class Game {
             console.error('unit did NOT removed', unit, unitList);
         }
 
+        console.warn('Add/update grave here is needed');
+
         game.render.layer.units.removeChild(unit.gameAttr.container);
         unit.destroy();
     }
@@ -579,6 +581,19 @@ export default class Game {
         if (!defenderUnit) {
             console.error('--> can not find defenderUnit for action:', unitAction);
             return;
+        }
+
+        const actionAggressorUnit = unitAction.aggressor;
+        const actionDefenderUnit = unitAction.defender;
+
+        if (actionAggressorUnit.hitPoints === 0) {
+            remove(newMap.units, {id: actionAggressorUnit.id});
+            console.warn('Add/update grave here is needed');
+        }
+
+        if (actionDefenderUnit.hitPoints === 0) {
+            remove(newMap.units, {id: actionDefenderUnit.id});
+            console.warn('Add/update grave here is needed');
         }
 
         serverApi
