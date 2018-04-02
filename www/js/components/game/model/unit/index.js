@@ -171,7 +171,14 @@ export default class Unit {
         const {attr, gameAttr} = unit;
         const hitPoints = unit.getHitPoints();
 
-        unit.setHitPoints(hitPoints);
+        if (hitPoints !== defaultUnitData.hitPoints) {
+            unit.setHitPoints(hitPoints);
+        }
+
+        if (hitPoints > defaultUnitData.hitPoints) {
+            console.error('hitPoints bigger than default hitPoints!', unit);
+        }
+
         gameAttr.container.addChild(gameAttr.sprite.hitPoints);
     }
 
@@ -494,8 +501,11 @@ export default class Unit {
         return defaultUnitData.hitPoints;
     }
 
-
     hasWispAura(): boolean {
         return false;
+    }
+
+    destroy() {
+        console.warn('implement unit destroy method for unit!!!!');
     }
 }

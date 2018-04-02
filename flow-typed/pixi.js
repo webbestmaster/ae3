@@ -65,8 +65,9 @@ declare module 'pixi.js' {
     }
 
     declare export class Container extends PixiObject {
-        constructor(): Container;
-        addChild(pixiObject: PixiObject): void
+        constructor(): Container,
+        addChild(pixiObject: PixiObject): void,
+        removeChild(pixiObject: PixiObject): void
     }
 
     declare export class Application {

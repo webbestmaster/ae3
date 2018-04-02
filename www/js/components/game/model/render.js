@@ -14,6 +14,7 @@ import type {UnitActionsMapType, UnitActionType} from './unit/index';
 import type {UnitActionAttackType, UnitActionMoveType} from './unit';
 import Unit from './unit';
 import type {SocketMessagePushStateType} from '../../../module/socket';
+import {tween} from './../../../lib/tween';
 
 type InitializeConfigType = {|
     width: number,
@@ -66,7 +67,7 @@ export default class Render {
 
         app.stage.position.set(0, 0);
 
-        app.stage.scale.set(3, 3);
+        app.stage.scale.set(0.5, 0.5);
         // app.stage.scale.set(3, 3);
     }
 
@@ -171,22 +172,39 @@ export default class Render {
         render.layer.actions.removeChildren();
     }
 
-    async drawAttack(aggressorUnit: Unit, defenderUnit: Unit, message: SocketMessagePushStateType): Promise<void> {
+    async drawAttack(aggressorUnit: Unit, defenderUnit: Unit): Promise<void> {
         // TODO: DO NOT set HP here - do it in handleServerPushStateAttack
         const render = this; // eslint-disable-line consistent-this
-        const state = message.states.last.state;
+        // const state = message.states.last.state;
 
+        /*
         if (state.type !== 'attack') {
             console.error('here is should be a ATTACK type');
             return Promise.resolve();
         }
+*/
 
+        /*
         if (!state.aggressor || !state.defender) {
             console.error('no aggressor or defender', state);
             return Promise.resolve();
         }
+*/
 
-        console.log('Animate attack!');
+        const attackSprite = PIXI.Sprite.fromImage(imageMap.other['action-attack-0']);
+
+        render.layer.actions.addChild(attackSprite);
+
+        await tween(
+            {x: aggressorUnit.attr.x, y: aggressorUnit.attr.y},
+            {x: defenderUnit.attr.x, y: defenderUnit.attr.y},
+            1000,
+            (coordinates: { x: number, y: number }) => {
+                attackSprite.position.set(coordinates.x * mapGuide.size.square, coordinates.y * mapGuide.size.square);
+            }
+        );
+
+        render.layer.actions.removeChild(attackSprite);
 
         return Promise.resolve();
     }

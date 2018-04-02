@@ -19,6 +19,7 @@ import * as serverApi from './../../../module/server-api';
 import {user} from './../../../module/user';
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
+import remove from 'lodash/remove';
 import {socket} from '../../../module/socket';
 import type {SocketMessageType, SocketMessagePushStateType, SocketMessageTakeTurnType} from '../../../module/socket';
 import MainModel from './../../../lib/main-model';
@@ -330,11 +331,33 @@ export default class Game {
             return Promise.resolve();
         }
 
-        await game.render.drawAttack(aggressorUnit, defenderUnit, message);
 
+        // aggressor attack phase
+        if (state.aggressor.canAttack) {
+            await game.render.drawAttack(aggressorUnit, defenderUnit);
+            // defender is/isn't alive
+            if (state.defender.hitPoints > 0) {
+                defenderUnit.setHitPoints(state.defender.hitPoints);
+            } else {
+                game.removeUnit(defenderUnit);
+                return Promise.resolve();
+            }
+        } else {
+            console.error('aggressor can not attack the defender', state);
+            return Promise.resolve();
+        }
 
-        // TODO: set HP here
-
+        if (state.defender.canAttack) {
+            await game.render.drawAttack(defenderUnit, aggressorUnit);
+            // aggressor is/isn't alive
+            if (state.aggressor.hitPoints > 0) {
+                aggressorUnit.setHitPoints(state.aggressor.hitPoints);
+            } else {
+                game.removeUnit(aggressorUnit);
+            }
+        } else {
+            console.log('defender can not attack');
+        }
 
         return Promise.resolve();
     }
@@ -402,6 +425,28 @@ export default class Game {
         game.unitList.push(unit);
 
         game.render.addUnit(unit.gameAttr.container);
+    }
+
+    removeUnit(unit: Unit) {
+        const game = this; // eslint-disable-line consistent-this
+        const {unitList} = game;
+
+        const lengthBeforeRemove = unitList.length;
+
+        remove(unitList, (unitInList: Unit): boolean => {
+            return unitInList === unit;
+        });
+
+        const lengthAfterRemove = unitList.length;
+
+        if (lengthAfterRemove === lengthBeforeRemove) {
+            console.error('unit did NOT removed', unit, unitList);
+        } else {
+            console.log('unit did removed successfully');
+        }
+
+        game.render.layer.units.removeChild(unit.gameAttr.container);
+        unit.destroy();
     }
 
     onUnitClick(unit: Unit) {
