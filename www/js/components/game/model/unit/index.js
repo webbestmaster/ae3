@@ -42,6 +42,8 @@ export type UnitActionFixBuildingType = {|
     type: 'fix-building',
     x: number,
     y: number,
+    id: string,
+    userId: string,
     container: PIXI.Container
 |};
 
@@ -311,14 +313,20 @@ export default class Unit {
         return attackMap;
     }
 
-    getFixBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity
+    getFixBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
         const unit = this; // eslint-disable-line consistent-this
         const {attr} = unit;
         const fixBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = typeof attr.id === 'string' ? attr.id : null;
+        const userId = typeof attr.userId === 'string' ? attr.userId : null;
 
         if (unitId === null) {
             console.error('unit has no id', unit);
+            return fixBuildingMap;
+        }
+
+        if (userId === null) {
+            console.error('unit has no userId', unit);
             return fixBuildingMap;
         }
 
@@ -345,6 +353,8 @@ export default class Unit {
 
         fixBuildingMap[unitY][unitX].push({
             type: 'fix-building',
+            id: unitId,
+            userId,
             x: unitX,
             y: unitY,
             container: new PIXI.Container()

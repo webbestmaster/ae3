@@ -87,6 +87,12 @@
             "userId": "0"
         },
         {
+            "x": 3,
+            "y": 3,
+            "type": "soldier",
+            "userId": "0"
+        },
+        {
             "x": 1,
             "y": 0,
             "type": "archer",

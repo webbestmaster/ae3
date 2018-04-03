@@ -161,15 +161,12 @@ export default class Render {
 
     drawActionFixBuilding(unitAction: UnitActionFixBuildingType) {
         const render = this; // eslint-disable-line consistent-this
+        const {container} = unitAction;
 
-        console.error('you stay here');
-
-        /*
-                container.position.set(defender.x * mapGuide.size.square, defender.y * mapGuide.size.square);
-                container.buttonMode = true;
-                container.interactive = true;
-                container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-attack-0']));
-        */
+        container.position.set(unitAction.x * mapGuide.size.square, unitAction.y * mapGuide.size.square);
+        container.buttonMode = true;
+        container.interactive = true;
+        container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-fix-building']));
 
         render.layer.actions.addChild(unitAction.container);
     }

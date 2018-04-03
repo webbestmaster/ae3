@@ -14,7 +14,13 @@ import Render from './render';
 import type {AllRoomSettingsType} from '../../../module/server-api';
 import Building from './building';
 import Unit from './unit';
-import type {UnitActionType, UnitActionsMapType, UnitActionMoveType, UnitActionAttackType} from './unit';
+import type {
+    UnitActionType,
+    UnitActionsMapType,
+    UnitActionMoveType,
+    UnitActionAttackType,
+    UnitActionFixBuildingType
+} from './unit';
 import * as serverApi from './../../../module/server-api';
 import {user} from './../../../module/user';
 import find from 'lodash/find';
@@ -488,22 +494,27 @@ export default class Game {
                 unitActionList.forEach((unitAction: UnitActionType) => {
                     if (unitAction.container) {
                         unitAction.container.on('click', () => {
-                            if (unitAction.type === 'move') {
-                                game.bindOnClickUnitActionMove(unitAction, actionsList);
-                                return;
-                            }
+                            switch (unitAction.type) {
+                                case 'move':
+                                    game.bindOnClickUnitActionMove(unitAction, actionsList);
+                                    break;
 
-                            if (unitAction.type === 'attack') {
-                                game.bindOnClickUnitActionAttack(unitAction);
-                                return;
-                            }
+                                case 'attack':
+                                    game.bindOnClickUnitActionAttack(unitAction);
+                                    break;
 
-                            console.warn('unknown action', unitAction);
+                                case 'fix-building':
+                                    game.bindOnClickUnitActionFixBuilding(unitAction);
+                                    break;
+
+                                default:
+                                    console.error('unknown action', unitAction);
+                            }
                         });
                         return;
                     }
 
-                    console.log('no container to add onClick', unitAction);
+                    console.error('no container to add onClick', unitAction);
                 });
             });
         });
@@ -657,6 +668,18 @@ export default class Game {
                 console.log('---> unit action attack pushed');
                 console.log(response);
             });
+    }
+
+    bindOnClickUnitActionFixBuilding(unitAction: UnitActionFixBuildingType) {
+        const game = this; // eslint-disable-line consistent-this
+
+        game.render.cleanActionsList();
+
+        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+
+        const fixerUnit = find(newMap.units, {id: unitAction.id});
+
+        console.error('you stay here');
     }
 
     setSettings(settings: AllRoomSettingsType) {
