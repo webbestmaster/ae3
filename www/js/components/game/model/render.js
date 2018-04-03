@@ -11,7 +11,7 @@ import {getUserColor} from './helper';
 import type {UnitDataForAttackType} from './helper';
 import type {UnitType} from '../../../maps/type';
 import type {UnitActionsMapType, UnitActionType} from './unit/index';
-import type {UnitActionAttackType, UnitActionMoveType} from './unit';
+import type {UnitActionAttackType, UnitActionFixBuildingType, UnitActionMoveType} from './unit';
 import Unit from './unit';
 import type {SocketMessagePushStateType} from '../../../module/socket';
 import {tween} from './../../../lib/tween';
@@ -114,32 +114,25 @@ export default class Render {
             mapLine.forEach((actionList: Array<UnitActionType>) => {
                 // check here action count, if 2 or more - make select action button
                 actionList.forEach((unitAction: UnitActionType) => {
-                    if (unitAction.type === 'move') {
-                        render.drawAction(unitAction);
-                    }
+                    switch (unitAction.type) {
+                        case 'move':
+                            render.drawActionMove(unitAction);
+                            break;
 
-                    if (unitAction.type === 'attack') {
-                        render.drawAction(unitAction);
+                        case 'attack':
+                            render.drawActionAttack(unitAction);
+                            break;
+
+                        case 'fix-building':
+                            render.drawActionFixBuilding(unitAction);
+                            break;
+
+                        default:
+                            console.error('unsupported unit action type', unitAction);
                     }
                 });
             });
         });
-    }
-
-    drawAction(unitAction: UnitActionMoveType | UnitActionAttackType) {
-        const render = this; // eslint-disable-line consistent-this
-
-        if (unitAction.type === 'move') {
-            render.drawActionMove(unitAction);
-            return;
-        }
-
-        if (unitAction.type === 'attack') {
-            render.drawActionAttack(unitAction);
-            return;
-        }
-
-        console.warn('---> unknown unit action', unitAction);
     }
 
     drawActionMove(unitAction: UnitActionMoveType) {
@@ -166,6 +159,21 @@ export default class Render {
         render.layer.actions.addChild(unitAction.container);
     }
 
+    drawActionFixBuilding(unitAction: UnitActionFixBuildingType) {
+        const render = this; // eslint-disable-line consistent-this
+
+        console.error('you stay here');
+
+        /*
+                container.position.set(defender.x * mapGuide.size.square, defender.y * mapGuide.size.square);
+                container.buttonMode = true;
+                container.interactive = true;
+                container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-attack-0']));
+        */
+
+        render.layer.actions.addChild(unitAction.container);
+    }
+
     cleanActionsList() {
         const render = this; // eslint-disable-line consistent-this
 
@@ -182,14 +190,14 @@ export default class Render {
             console.error('here is should be a ATTACK type');
             return Promise.resolve();
         }
-*/
+        */
 
         /*
         if (!state.aggressor || !state.defender) {
             console.error('no aggressor or defender', state);
             return Promise.resolve();
         }
-*/
+        */
 
         const attackSprite = PIXI.Sprite.fromImage(imageMap.other['action-attack-0']);
 

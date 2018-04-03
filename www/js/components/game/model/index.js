@@ -476,6 +476,11 @@ export default class Game {
             emptyActionMap: game.emptyActionMap
         });
 
+        if (actionsList === null) {
+            console.log('---> unit already done - set unit GRAY state');
+            return;
+        }
+
         game.render.drawActionsList(actionsList);
 
         actionsList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {

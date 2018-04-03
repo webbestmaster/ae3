@@ -1,6 +1,37 @@
 // @flow
 
-const unitData = {
+export type UnitGuideDataType = {|
+    +attack: {|
+        +min: number,
+        +max: number,
+        +range: number
+    |},
+    +armor: number,
+    +move: number,
+    +langKey: string,
+    +cost: number,
+
+    +auraRange?: number,
+
+    +moveType?: string,
+
+    +canFixBuilding?: boolean,
+    +occupyBuildingList?: Array<string>,
+    +bonusAtkAgainstSkeleton?: number,
+    +bonusAtkAgainstFly?: number,
+    +poisonAttack?: number,
+
+    +destroyBuildingList?: Array<string>,
+
+    +raiseSkeletonRange?: number,
+    +canNotBeBuy?: boolean,
+    +withoutGrave?: boolean,
+    +isCommander?: boolean
+|};
+
+type GuideUnitDataType = { [key: string]: UnitGuideDataType };
+
+const unitData: GuideUnitDataType = {
     soldier: {
         attack: {
             min: 50,
@@ -227,6 +258,7 @@ const unitData = {
             max: 65,
             range: 15
         },
+        cost: 0,
         armor: 45,
         move: 0,
         langKey: 'saeth',
@@ -234,31 +266,30 @@ const unitData = {
         canNotBeBuy: true,
         withoutGrave: true
     }
-
-    /*
-        other: {
-            grave: {
-                liveTime: 3
-            },
-            aura: {
-                wisp: {
-                    addAttack: 10
-                }
-            },
-            isPoisoned: {
-                reduceAttack: 15,
-                reduceArmor: 10,
-                reduceMove: 1
-            },
-            waterElementalArmor: 3,
-            levelBonus: {
-                attack: 10,
-                armor: 10
-            }
-        }
-    */
 };
 
+/*
+    other: {
+        grave: {
+            liveTime: 3
+        },
+        aura: {
+            wisp: {
+                addAttack: 10
+            }
+        },
+        isPoisoned: {
+            reduceAttack: 15,
+            reduceArmor: 10,
+            reduceMove: 1
+        },
+        waterElementalArmor: 3,
+        levelBonus: {
+            attack: 10,
+            armor: 10
+        }
+    }
+*/
 export default unitData;
 
 const defaultUnitData = {

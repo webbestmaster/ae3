@@ -7,6 +7,7 @@ import {getUserColor, getAttackResult} from './../helper';
 import type {AttackResultUnitType} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import unitGuide, {defaultUnitData} from './unit-guide';
+import type {UnitGuideDataType} from './unit-guide';
 import imageMap from './../../image/image-map';
 import Building from '../building';
 import {getPath} from './path-master';
@@ -37,13 +38,23 @@ export type UnitActionAttackType = {|
     container: PIXI.Container
 |};
 
+export type UnitActionFixBuildingType = {|
+    type: 'fix-building',
+    x: number,
+    y: number,
+    container: PIXI.Container
+|};
+
 export type RefreshUnitListType = {|
     type: 'refresh-unit-list',
     map: MapType,
     activeUserId: string
 |};
 
-export type UnitActionType = UnitActionMoveType | UnitActionAttackType | RefreshUnitListType;
+export type UnitActionType = UnitActionMoveType
+    | UnitActionAttackType
+    | RefreshUnitListType
+    | UnitActionFixBuildingType;
 
 export type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
 
@@ -182,29 +193,53 @@ export default class Unit {
         gameAttr.container.addChild(gameAttr.sprite.hitPoints);
     }
 
-    getActions(gameData: GameDataType): UnitActionsMapType {
+    getActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity
         const unit = this; // eslint-disable-line consistent-this
         const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+
+        if (unit.getDidAttack() ||
+            unit.getDidFixBuilding() ||
+            unit.getDidOccupyBuilding() ||
+            unit.getDidDestroyBuilding() ||
+            unit.getDidRaiseSkeleton()) {
+            return null;
+        }
 
         if (!unit.getDidMove()) {
             const actionMapMove = unit.getMoveActions(gameData);
 
+            // add attack
             actionMapMove.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
                 lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
-                    actionMap[yCell][xCell].push(...cellAction);
+                    // actionMap[yCell][xCell].push(...cellAction);
+                    if (cellAction[0]) {
+                        actionMap[yCell][xCell][0] = cellAction[0];
+                    }
                 });
             });
         }
 
-        if (!unit.getDidAttack()) {
-            const actionMapAttack = unit.getAttackActions(gameData);
+        // add attack
+        const actionMapAttack = unit.getAttackActions(gameData);
 
-            actionMapAttack.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
-                lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
-                    actionMap[yCell][xCell].push(...cellAction);
-                });
+        actionMapAttack.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
+            lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
+                if (cellAction[0]) {
+                    actionMap[yCell][xCell][0] = cellAction[0];
+                }
             });
-        }
+        });
+
+        // add fix building
+        const actionMapFixBuilding = unit.getFixBuildingActions(gameData);
+
+        actionMapFixBuilding.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
+            lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
+                if (cellAction[0]) {
+                    actionMap[yCell][xCell][0] = cellAction[0];
+                }
+            });
+        });
 
         return actionMap;
     }
@@ -274,6 +309,48 @@ export default class Unit {
         });
 
         return attackMap;
+    }
+
+    getFixBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const fixBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const unitId = typeof attr.id === 'string' ? attr.id : null;
+
+        if (unitId === null) {
+            console.error('unit has no id', unit);
+            return fixBuildingMap;
+        }
+
+        const unitGuideData = unit.getGuideData();
+
+        if (unitGuideData.canFixBuilding !== true) {
+            console.log('unit can not fix building');
+            return [];
+        }
+
+        // find building for fix
+        const unitX = attr.x;
+        const unitY = attr.y;
+
+        const building = find(gameData.buildingList, (buildingInList: Building): boolean => {
+            return buildingInList.attr.type === 'farm-destroyed' &&
+                buildingInList.attr.x === unitX &&
+                buildingInList.attr.y === unitY;
+        }) || null;
+
+        if (building === null) {
+            return [];
+        }
+
+        fixBuildingMap[unitY][unitX].push({
+            type: 'fix-building',
+            x: unitX,
+            y: unitY,
+            container: new PIXI.Container()
+        });
+
+        return fixBuildingMap;
     }
 
     getAllUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {
@@ -477,6 +554,93 @@ export default class Unit {
         return Boolean(unitActionState.didAttack);
     }
 
+    setDidFixBuilding(didFixBuilding: boolean) {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        unitActionState.didFixBuilding = didFixBuilding;
+        attr.action = unitActionState;
+    }
+
+    getDidFixBuilding(): boolean {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        return Boolean(unitActionState.didFixBuilding);
+    }
+
+    setDidOccupyBuilding(didOccupyBuilding: boolean) {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        unitActionState.didOccupyBuilding = didOccupyBuilding;
+        attr.action = unitActionState;
+    }
+
+    getDidOccupyBuilding(): boolean {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        return Boolean(unitActionState.didOccupyBuilding);
+    }
+
+    setDidDestroyBuilding(didDestroyBuilding: boolean) {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        unitActionState.didDestroyBuilding = didDestroyBuilding;
+        attr.action = unitActionState;
+    }
+
+    getDidDestroyBuilding(): boolean {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        return Boolean(unitActionState.didDestroyBuilding);
+    }
+
+    setDidRaiseSkeleton(didRaiseSkeleton: boolean) {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        unitActionState.didRaiseSkeleton = didRaiseSkeleton;
+        attr.action = unitActionState;
+    }
+
+    getDidRaiseSkeleton(): boolean {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        return Boolean(unitActionState.didRaiseSkeleton);
+    }
+
+    /*
+    set___(___: boolean) {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        unitActionState.___ = ___;
+        attr.action = unitActionState;
+    }
+
+    get___(): boolean {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
+
+        return Boolean(unitActionState.___);
+    }
+    */
+
     setHitPoints(hitPoints: number) {
         const unit = this; // eslint-disable-line consistent-this
         const {attr, gameAttr} = unit;
@@ -504,6 +668,14 @@ export default class Unit {
             return attr.hitPoints;
         }
         return defaultUnitData.hitPoints;
+    }
+
+    getGuideData(): UnitGuideDataType {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const {type} = attr;
+
+        return unitGuide[type];
     }
 
     hasWispAura(): boolean {
