@@ -3,7 +3,7 @@
 import * as PIXI from 'pixi.js';
 import type {MapType, UnitType, UnitActionStateType} from '../../../../maps/type';
 import type {ServerUserType} from '../../../../module/server-api';
-import {getUserColor, getAttackResult} from './../helper';
+import {getUserColor, getAttackResult, getEventName} from './../helper';
 import type {AttackResultUnitType} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import unitGuide, {defaultUnitData} from './unit-guide';
@@ -134,7 +134,7 @@ export default class Unit {
         const {unitData} = unitConstructor;
 
         if (typeof unitData.userId !== 'string' || typeof unitData.id !== 'string') {
-            console.warn('---> unitData has NO .userId or/and .id', unitData);
+            console.error('---> unitData has NO .userId or/and .id', unitData);
         }
 
         unit.attr = JSON.parse(JSON.stringify(unitData));
@@ -523,7 +523,7 @@ export default class Unit {
         unitContainer.interactive = true;
         unitContainer.buttonMode = true;
 
-        unitContainer.on('click', () => {
+        unitContainer.on(getEventName('click'), () => {
             console.log('click on unit', unit);
             unit.gameAttr.event.click(unit);
         });
@@ -590,6 +590,16 @@ export default class Unit {
                 case 'didAttack': {
                     console.log('setDidAttack', actionState[actionName]);
                     unit.setDidAttack(Boolean(actionState[actionName]));
+                    return;
+                }
+                case 'didFixBuilding': {
+                    console.log('didFixBuilding', actionState[actionName]);
+                    unit.setDidFixBuilding(Boolean(actionState[actionName]));
+                    return;
+                }
+                case 'didOccupyBuilding': {
+                    console.log('didOccupyBuilding', actionState[actionName]);
+                    unit.setDidOccupyBuilding(Boolean(actionState[actionName]));
                     return;
                 }
 

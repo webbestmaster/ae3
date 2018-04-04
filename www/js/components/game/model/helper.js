@@ -1,4 +1,5 @@
 // @flow
+/* global document */
 
 import type {ServerUserType} from '../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
@@ -251,4 +252,22 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
         aggressor: aggressorData,
         defender: defenderData
     };
+}
+
+export function getEventName(pcEventName: 'click'): 'click' | 'tap' {
+    const eventNameMap = {
+        click: 'tap'
+    };
+
+    const hasInMap = typeof eventNameMap[pcEventName] === 'string';
+
+    // check for mobile events
+    if ('ontouchstart' in document) {
+        if (hasInMap) {
+            return eventNameMap[pcEventName];
+        }
+        return 'tap';
+    }
+
+    return hasInMap ? pcEventName : 'click';
 }

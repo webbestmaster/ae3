@@ -7,7 +7,7 @@ import type {MapType, LandscapeType, BuildingType} from './../../../maps/type';
 import type {ServerUserType} from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
-import {getUserColor, getMoviePath} from './helper';
+import {getUserColor, getMoviePath, getEventName} from './helper';
 import type {UnitType} from '../../../maps/type';
 import {unitActionStateDefaultValue} from '../../../maps/type';
 import Render from './render';
@@ -105,6 +105,10 @@ export default class Game {
 
         // add units
         game.settings.map.units.forEach((unitData: UnitType) => {
+            if (typeof unitData.userId !== 'string') {
+                console.warn('unit has no userId');
+                return;
+            }
             game.createUnit(unitData);
         });
 
@@ -114,6 +118,7 @@ export default class Game {
         game.bindEventListeners();
 
         // FIXME: remove extra dispatch
+        // actually fix extra horizontal scroll
         window.dispatchEvent(new window.Event('resize'));
     }
 
@@ -399,13 +404,22 @@ export default class Game {
             return buildingInList.attr.x === mapBuilding.x && buildingInList.attr.y === mapBuilding.y;
         }) || null;
 
-
         if (gameBuilding === null) {
             console.error('can not find building for message', message);
             return Promise.resolve();
         }
 
+        const gameUnit = find(game.unitList, (unitInList: Unit): boolean => {
+            return unitInList.attr.x === mapBuilding.x && unitInList.attr.y === mapBuilding.y;
+        }) || null;
+
+        if (gameUnit === null) {
+            console.error('can not find building for message', message);
+            return Promise.resolve();
+        }
+
         gameBuilding.setType(mapBuilding.type);
+        gameUnit.setDidFixBuilding(true);
 
         return Promise.resolve();
     }
@@ -430,8 +444,16 @@ export default class Game {
             return buildingInList.attr.x === mapBuilding.x && buildingInList.attr.y === mapBuilding.y;
         }) || null;
 
-
         if (gameBuilding === null) {
+            console.error('can not find building for message', message);
+            return Promise.resolve();
+        }
+
+        const gameUnit = find(game.unitList, (unitInList: Unit): boolean => {
+            return unitInList.attr.x === mapBuilding.x && unitInList.attr.y === mapBuilding.y;
+        }) || null;
+
+        if (gameUnit === null) {
             console.error('can not find building for message', message);
             return Promise.resolve();
         }
@@ -442,6 +464,7 @@ export default class Game {
         }
 
         gameBuilding.setUserId(mapBuilding.userId);
+        gameUnit.setDidOccupyBuilding(true);
 
         return Promise.resolve();
     }
@@ -570,7 +593,7 @@ export default class Game {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
                 unitActionList.forEach((unitAction: UnitActionType) => {
                     if (unitAction.container) {
-                        unitAction.container.on('click', () => {
+                        unitAction.container.on(getEventName('click'), () => {
                             switch (unitAction.type) {
                                 case 'move':
                                     game.bindOnClickUnitActionMove(unitAction, actionsList);
@@ -751,7 +774,7 @@ export default class Game {
             });
     }
 
-    bindOnClickUnitActionFixBuilding(unitAction: UnitActionFixBuildingType) {
+    bindOnClickUnitActionFixBuilding(unitAction: UnitActionFixBuildingType) { // eslint-disable-line max-statements, complexity
         const game = this; // eslint-disable-line consistent-this
 
         game.render.cleanActionsList();
@@ -764,6 +787,16 @@ export default class Game {
             console.error('can not find building for unit action', unitAction);
             return;
         }
+
+        const fixerUnit = find(newMap.units, {x: unitAction.x, y: unitAction.y}) || null;
+
+        if (fixerUnit === null) {
+            console.error('can not find unit for unit action', unitAction);
+            return;
+        }
+
+        fixerUnit.action = fixerUnit.action || {};
+        fixerUnit.action.didFixBuilding = true;
 
         building.type = 'farm';
 
@@ -787,7 +820,7 @@ export default class Game {
             });
     }
 
-    bindOnClickUnitActionOccupyBuilding(unitAction: UnitActionOccupyBuildingType) { // eslint-disable-line id-length
+    bindOnClickUnitActionOccupyBuilding(unitAction: UnitActionOccupyBuildingType) { // eslint-disable-line max-statements, complexity, id-length
         const game = this; // eslint-disable-line consistent-this
 
         game.render.cleanActionsList();
@@ -800,6 +833,16 @@ export default class Game {
             console.error('can not find building for unit action', unitAction);
             return;
         }
+
+        const occuperUnit = find(newMap.units, {x: unitAction.x, y: unitAction.y}) || null;
+
+        if (occuperUnit === null) {
+            console.error('can not find unit for unit action', unitAction);
+            return;
+        }
+
+        occuperUnit.action = occuperUnit.action || {};
+        occuperUnit.action.didOccupyBuilding = true;
 
         building.userId = unitAction.userId;
 

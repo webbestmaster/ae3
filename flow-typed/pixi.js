@@ -33,7 +33,7 @@ declare module 'pixi.js' {
     |};
 
     declare class PixiObject {
-        on(string: 'click', callback: () => void): void,
+        on(string: 'click' | 'tap', callback: () => void): void,
         interactive: boolean,
         buttonMode: boolean,
         position: {
