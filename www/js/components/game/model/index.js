@@ -3,7 +3,7 @@
 /* global window */
 
 import * as PIXI from 'pixi.js';
-import type {MapType, LandscapeType, BuildingType} from './../../../maps/type';
+import type {MapType, LandscapeType, BuildingType, GraveType} from './../../../maps/type';
 import type {ServerUserType} from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
@@ -13,6 +13,7 @@ import {unitActionStateDefaultValue} from '../../../maps/type';
 import Render from './render';
 import type {AllRoomSettingsType} from '../../../module/server-api';
 import Building from './building';
+import Grave from './grave';
 import Unit from './unit';
 import type {
     UnitActionType,
@@ -31,7 +32,7 @@ import {socket} from '../../../module/socket';
 import type {SocketMessageType, SocketMessagePushStateType, SocketMessageTakeTurnType} from '../../../module/socket';
 import MainModel from './../../../lib/main-model';
 import * as unitMaster from './unit/master';
-import {defaultUnitData} from './unit/unit-guide';
+import unitGuideData, {defaultUnitData} from './unit/unit-guide';
 
 type RenderSettingType = {|
     width: number,
@@ -54,6 +55,7 @@ export default class Game {
     userList: Array<ServerUserType>;
     buildingList: Array<Building>;
     unitList: Array<Unit>;
+    graveList: Array<Grave>;
     mapState: MapType;
     emptyActionMap: Array<Array<[]>>;
     roomId: string;
@@ -75,6 +77,7 @@ export default class Game {
         game.render = new Render();
         game.buildingList = [];
         game.unitList = [];
+        game.graveList = [];
         game.pathMap = {
             walk: [],
             flow: [],
@@ -110,6 +113,11 @@ export default class Game {
                 return;
             }
             game.createUnit(unitData);
+        });
+
+        // add graves
+        game.settings.map.graves.forEach((graveData: GraveType) => {
+            game.createGrave(graveData);
         });
 
         // make path maps
@@ -360,7 +368,26 @@ export default class Game {
             if (state.defender.hitPoints > 0) {
                 defenderUnit.setHitPoints(state.defender.hitPoints);
             } else {
+                const defenderUnitGuideData = defenderUnit.getGuideData();
+
+                if (defenderUnitGuideData.withoutGrave !== true) {
+                    const currentDefenderGrave = find(game.graveList, (grave: Grave): boolean => {
+                        return grave.attr.x === defenderUnit.attr.x && grave.attr.y === defenderUnit.attr.y;
+                    }) || null;
+
+                    if (currentDefenderGrave === null) {
+                        game.createGrave({
+                            x: defenderUnit.attr.x,
+                            y: defenderUnit.attr.y,
+                            removeCountdown: defaultUnitData.graveRemoveCountdown
+                        });
+                    } else {
+                        currentDefenderGrave.setRemoveCountdown(defaultUnitData.graveRemoveCountdown);
+                    }
+                }
+
                 game.removeUnit(defenderUnit);
+
                 return Promise.resolve();
             }
         } else {
@@ -375,6 +402,24 @@ export default class Game {
             if (state.aggressor.hitPoints > 0) {
                 aggressorUnit.setHitPoints(state.aggressor.hitPoints);
             } else {
+                const aggressorUnitGuideData = aggressorUnit.getGuideData();
+
+                if (aggressorUnitGuideData.withoutGrave !== true) {
+                    const currentAggressorGrave = find(game.graveList, (grave: Grave): boolean => {
+                        return grave.attr.x === aggressorUnit.attr.x && grave.attr.y === aggressorUnit.attr.y;
+                    }) || null;
+
+                    if (currentAggressorGrave === null) {
+                        game.createGrave({
+                            x: defenderUnit.attr.x,
+                            y: defenderUnit.attr.y,
+                            removeCountdown: defaultUnitData.graveRemoveCountdown
+                        });
+                    } else {
+                        currentAggressorGrave.setRemoveCountdown(defaultUnitData.graveRemoveCountdown);
+                    }
+                }
+
                 game.removeUnit(aggressorUnit);
             }
         } else {
@@ -515,6 +560,15 @@ export default class Game {
         game.buildingList.push(building);
 
         game.render.addBuilding(building.gameAttr.container);
+    }
+
+    createGrave(graveData: GraveType) {
+        const game = this; // eslint-disable-line consistent-this
+        const grave = new Grave({graveData});
+
+        game.graveList.push(grave);
+
+        game.render.addGrave(grave.gameAttr.container);
     }
 
     createUnit(unitData: UnitType) {
@@ -709,7 +763,24 @@ export default class Game {
 
         if (actionAggressorUnit.hitPoints === 0) {
             remove(newMap.units, {id: actionAggressorUnit.id});
-            console.warn('Add/update grave here is needed');
+            const aggressorUnitGuideData = unitGuideData[actionAggressorUnit.type];
+
+            if (aggressorUnitGuideData.withoutGrave !== true) {
+                const aggressorGrave = find(newMap.graves, {
+                    x: actionAggressorUnit.x,
+                    y: actionAggressorUnit.y
+                }) || null;
+
+                if (aggressorGrave === null) {
+                    newMap.graves.push({
+                        x: actionAggressorUnit.x,
+                        y: actionAggressorUnit.y,
+                        removeCountdown: defaultUnitData.graveRemoveCountdown
+                    });
+                } else {
+                    aggressorGrave.removeCountdown = defaultUnitData.graveRemoveCountdown;
+                }
+            }
         } else {
             const aggressorMapUnit = find(newMap.units, {id: actionAggressorUnit.id}) || null;
 
@@ -732,7 +803,24 @@ export default class Game {
 
         if (actionDefenderUnit.hitPoints === 0) {
             remove(newMap.units, {id: actionDefenderUnit.id});
-            console.warn('Add/update grave here is needed');
+            const defenderUnitGuideData = unitGuideData[actionDefenderUnit.type];
+
+            if (defenderUnitGuideData.withoutGrave !== true) {
+                const defenderGrave = find(newMap.graves, {
+                    x: actionDefenderUnit.x,
+                    y: actionDefenderUnit.y
+                }) || null;
+
+                if (defenderGrave === null) {
+                    newMap.graves.push({
+                        x: actionDefenderUnit.x,
+                        y: actionDefenderUnit.y,
+                        removeCountdown: defaultUnitData.graveRemoveCountdown
+                    });
+                } else {
+                    defenderGrave.removeCountdown = defaultUnitData.graveRemoveCountdown;
+                }
+            }
         } else {
             const defenderMapUnit = find(newMap.units, {id: actionDefenderUnit.id}) || null;
 
@@ -1128,10 +1216,50 @@ export default class Game {
         console.log('game map building and push map building is equal');
     }
 
+    checkMapStateGrave(socketMapState: MapType) {
+        const game = this; // eslint-disable-line consistent-this
+
+        const {graveList} = game;
+
+        // check building length
+        const isGraveListLengthEqual = socketMapState.graves.length === graveList.length;
+
+        if (isGraveListLengthEqual === false) {
+            console.error('Grave List Length is not equal', socketMapState, graveList);
+            return;
+        }
+
+        const isGraveListStateEqual = graveList.every((grave: Grave): boolean => {
+            const mapGrave = find(socketMapState.graves, {x: grave.attr.x, y: grave.attr.y});
+
+            if (!mapGrave) {
+                console.error('Map grave with data:', {x: grave.attr.x, y: grave.attr.y}, 'is not exist on pushed map');
+                return false;
+            }
+
+            const isGraveEqual = isEqual(mapGrave, grave.attr);
+
+            if (isGraveEqual === false) {
+                console.error('graves is not equal', mapGrave, grave.attr);
+                return false;
+            }
+
+            return true;
+        });
+
+        if (isGraveListStateEqual === false) {
+            console.error('Grave List state is not equal', socketMapState, graveList);
+            return;
+        }
+
+        console.log('game map grave and push map building is equal');
+    }
+
     checkMapState(socketMapState: MapType) {
         const game = this; // eslint-disable-line consistent-this
 
         game.checkMapStateUnit(socketMapState);
         game.checkMapStateBuilding(socketMapState);
+        game.checkMapStateGrave(socketMapState);
     }
 }

@@ -34,6 +34,7 @@ export default class Render {
     layer: {|
         landscape: PIXI.Container,
         buildings: PIXI.Container,
+        graves: PIXI.Container,
         units: PIXI.Container,
         actions: PIXI.Container
     |};
@@ -44,6 +45,7 @@ export default class Render {
         render.layer = {
             landscape: new PIXI.Container(),
             buildings: new PIXI.Container(),
+            graves: new PIXI.Container(),
             units: new PIXI.Container(),
             actions: new PIXI.Container()
         };
@@ -67,6 +69,7 @@ export default class Render {
 
         app.stage.addChild(render.layer.landscape);
         app.stage.addChild(render.layer.buildings);
+        app.stage.addChild(render.layer.graves);
         app.stage.addChild(render.layer.units);
         app.stage.addChild(render.layer.actions);
 
@@ -108,6 +111,12 @@ export default class Render {
         const render = this; // eslint-disable-line consistent-this
 
         render.layer.units.addChild(container);
+    }
+
+    addGrave(container: PIXI.Container) {
+        const render = this; // eslint-disable-line consistent-this
+
+        render.layer.graves.addChild(container);
     }
 
     drawActionsList(actionsList: UnitActionsMapType) {

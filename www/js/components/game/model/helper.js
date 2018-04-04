@@ -74,6 +74,7 @@ export type UnitDataForAttackType = {|
         +max: number,
         +range: number
     |},
+    +type: string,
     +id: string,
     +userId: string,
     +armor: number,
@@ -190,6 +191,7 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
             max: unitGuide[aggressor.attr.type].attack.max,
             range: unitGuide[aggressor.attr.type].attack.range
         },
+        type: aggressor.attr.type,
         id: typeof aggressor.attr.id === 'string' ? aggressor.attr.id : 'no-aggressor-id-' + Math.random(),
         userId: typeof aggressor.attr.userId === 'string' ?
             aggressor.attr.userId :
@@ -222,6 +224,7 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
             max: unitGuide[defender.attr.type].attack.max,
             range: unitGuide[defender.attr.type].attack.range
         },
+        type: defender.attr.type,
         id: typeof defender.attr.id === 'string' ? defender.attr.id : 'no-defender-id-' + Math.random(),
         userId: typeof defender.attr.userId === 'string' ?
             defender.attr.userId :
