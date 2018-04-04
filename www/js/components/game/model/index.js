@@ -19,7 +19,8 @@ import type {
     UnitActionsMapType,
     UnitActionMoveType,
     UnitActionAttackType,
-    UnitActionFixBuildingType
+    UnitActionFixBuildingType,
+    UnitActionOccupyBuildingType
 } from './unit';
 import * as serverApi from './../../../module/server-api';
 import {user} from './../../../module/user';
@@ -266,8 +267,12 @@ export default class Game {
 
                 break;
 
-            case 'refresh-unit-list':
+            case 'occupy-building':
+                await game.handleServerPushStateOccupyBuilding(message);
 
+                break;
+
+            case 'refresh-unit-list':
                 await game.handleServerRefreshUnitList(message);
 
                 break;
@@ -401,6 +406,42 @@ export default class Game {
         }
 
         gameBuilding.setType(mapBuilding.type);
+
+        return Promise.resolve();
+    }
+
+    async handleServerPushStateOccupyBuilding(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements, id-length
+        const game = this; // eslint-disable-line consistent-this
+        const state = message.states.last.state;
+
+        if (state.type !== 'occupy-building') {
+            console.error('here is should be a occupy-building type', message);
+            return Promise.resolve();
+        }
+
+        if (!state.building) {
+            console.log('building is not define', message);
+            return Promise.resolve();
+        }
+
+        const mapBuilding = state.building;
+
+        const gameBuilding = find(game.buildingList, (buildingInList: Building): boolean => {
+            return buildingInList.attr.x === mapBuilding.x && buildingInList.attr.y === mapBuilding.y;
+        }) || null;
+
+
+        if (gameBuilding === null) {
+            console.error('can not find building for message', message);
+            return Promise.resolve();
+        }
+
+        if (typeof mapBuilding.userId !== 'string') {
+            console.error('userId is not defined', message);
+            return Promise.resolve();
+        }
+
+        gameBuilding.setUserId(mapBuilding.userId);
 
         return Promise.resolve();
     }
@@ -541,6 +582,10 @@ export default class Game {
 
                                 case 'fix-building':
                                     game.bindOnClickUnitActionFixBuilding(unitAction);
+                                    break;
+
+                                case 'occupy-building':
+                                    game.bindOnClickUnitActionOccupyBuilding(unitAction);
                                     break;
 
                                 default:
@@ -738,6 +783,42 @@ export default class Game {
             )
             .then((response: mixed) => {
                 console.log('---> unit action fix building pushed');
+                console.log(response);
+            });
+    }
+
+    bindOnClickUnitActionOccupyBuilding(unitAction: UnitActionOccupyBuildingType) { // eslint-disable-line id-length
+        const game = this; // eslint-disable-line consistent-this
+
+        game.render.cleanActionsList();
+
+        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+
+        const building = find(newMap.buildings, {x: unitAction.x, y: unitAction.y}) || null;
+
+        if (building === null) {
+            console.error('can not find building for unit action', unitAction);
+            return;
+        }
+
+        building.userId = unitAction.userId;
+
+        serverApi
+            .pushState(
+                game.roomId,
+                user.getId(),
+                {
+                    type: 'room__push-state',
+                    state: {
+                        type: 'occupy-building',
+                        building,
+                        map: newMap,
+                        activeUserId: user.getId()
+                    }
+                }
+            )
+            .then((response: mixed) => {
+                console.log('---> unit action occupy building pushed');
                 console.log(response);
             });
     }

@@ -91,4 +91,15 @@ export default class Building {
 
         building.initializeBuildingSprite();
     }
+
+    setUserId(userId: string) {
+        const building = this; // eslint-disable-line consistent-this
+        const {attr, gameAttr} = building;
+
+        attr.userId = userId;
+
+        gameAttr.container.removeChild(gameAttr.sprite.building);
+
+        building.initializeBuildingSprite();
+    }
 }

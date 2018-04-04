@@ -11,7 +11,12 @@ import {getUserColor} from './helper';
 import type {UnitDataForAttackType} from './helper';
 import type {UnitType} from '../../../maps/type';
 import type {UnitActionsMapType, UnitActionType} from './unit/index';
-import type {UnitActionAttackType, UnitActionFixBuildingType, UnitActionMoveType} from './unit';
+import type {
+    UnitActionAttackType,
+    UnitActionMoveType,
+    UnitActionFixBuildingType,
+    UnitActionOccupyBuildingType
+} from './unit';
 import Unit from './unit';
 import type {SocketMessagePushStateType} from '../../../module/socket';
 import {tween} from './../../../lib/tween';
@@ -127,6 +132,10 @@ export default class Render {
                             render.drawActionFixBuilding(unitAction);
                             break;
 
+                        case 'occupy-building':
+                            render.drawActionOccupyBuilding(unitAction);
+                            break;
+
                         default:
                             console.error('unsupported unit action type', unitAction);
                     }
@@ -167,6 +176,18 @@ export default class Render {
         container.buttonMode = true;
         container.interactive = true;
         container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-fix-building']));
+
+        render.layer.actions.addChild(unitAction.container);
+    }
+
+    drawActionOccupyBuilding(unitAction: UnitActionOccupyBuildingType) {
+        const render = this; // eslint-disable-line consistent-this
+        const {container} = unitAction;
+
+        container.position.set(unitAction.x * mapGuide.size.square, unitAction.y * mapGuide.size.square);
+        container.buttonMode = true;
+        container.interactive = true;
+        container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-occupy-building']));
 
         render.layer.actions.addChild(unitAction.container);
     }

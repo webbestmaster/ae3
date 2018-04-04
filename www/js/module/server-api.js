@@ -194,6 +194,13 @@ export type PushedStatePayloadFixBuildingType = {|
     +activeUserId: string
 |};
 
+export type PushedStatePayloadOccupyBuildingType = {|
+    +type: 'occupy-building',
+    +building: BuildingType,
+    +map: MapType,
+    +activeUserId: string
+|};
+
 export type PushedStatePayloadRefreshUnitListType = {|
     +type: 'refresh-unit-list',
     +map: MapType,
@@ -204,7 +211,8 @@ export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType
     | PushedStatePayloadUnitMoveType
     | PushedStatePayloadUnitAttackType
     | PushedStatePayloadRefreshUnitListType
-    | PushedStatePayloadFixBuildingType;
+    | PushedStatePayloadFixBuildingType
+    | PushedStatePayloadOccupyBuildingType;
 
 export type PushStateType = {|
     roomId: string,

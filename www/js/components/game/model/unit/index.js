@@ -47,6 +47,15 @@ export type UnitActionFixBuildingType = {|
     container: PIXI.Container
 |};
 
+export type UnitActionOccupyBuildingType = {|
+    type: 'occupy-building',
+    x: number,
+    y: number,
+    id: string,
+    userId: string,
+    container: PIXI.Container
+|};
+
 export type RefreshUnitListType = {|
     type: 'refresh-unit-list',
     map: MapType,
@@ -56,7 +65,8 @@ export type RefreshUnitListType = {|
 export type UnitActionType = UnitActionMoveType
     | UnitActionAttackType
     | RefreshUnitListType
-    | UnitActionFixBuildingType;
+    | UnitActionFixBuildingType
+    | UnitActionOccupyBuildingType;
 
 export type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
 
@@ -208,9 +218,9 @@ export default class Unit {
         }
 
         if (!unit.getDidMove()) {
+            // add move
             const actionMapMove = unit.getMoveActions(gameData);
 
-            // add attack
             actionMapMove.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
                 lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
                     // actionMap[yCell][xCell].push(...cellAction);
@@ -236,6 +246,17 @@ export default class Unit {
         const actionMapFixBuilding = unit.getFixBuildingActions(gameData);
 
         actionMapFixBuilding.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
+            lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
+                if (cellAction[0]) {
+                    actionMap[yCell][xCell][0] = cellAction[0];
+                }
+            });
+        });
+
+        // add occupy building
+        const actionMapOccupyBuilding = unit.getOccupyBuildingActions(gameData);
+
+        actionMapOccupyBuilding.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
             lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
                 if (cellAction[0]) {
                     actionMap[yCell][xCell][0] = cellAction[0];
@@ -361,6 +382,58 @@ export default class Unit {
         });
 
         return fixBuildingMap;
+    }
+
+    getOccupyBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const occupyBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const unitId = typeof attr.id === 'string' ? attr.id : null;
+        const userId = typeof attr.userId === 'string' ? attr.userId : null;
+
+        if (unitId === null) {
+            console.error('unit has no id', unit);
+            return occupyBuildingMap;
+        }
+
+        if (userId === null) {
+            console.error('unit has no userId', unit);
+            return occupyBuildingMap;
+        }
+
+        const unitGuideData = unit.getGuideData();
+
+        if (!(unitGuideData.occupyBuildingList instanceof Array)) {
+            console.log('unit can not occupy building');
+            return [];
+        }
+
+        // find building for occupy
+        const unitX = attr.x;
+        const unitY = attr.y;
+
+        const building = find(gameData.buildingList, (buildingInList: Building): boolean => {
+            return buildingInList.attr.x === unitX &&
+                buildingInList.attr.y === unitY &&
+                buildingInList.attr.userId !== userId &&
+                unitGuideData.occupyBuildingList instanceof Array &&
+                unitGuideData.occupyBuildingList.includes(buildingInList.attr.type);
+        }) || null;
+
+        if (building === null) {
+            return [];
+        }
+
+        occupyBuildingMap[unitY][unitX].push({
+            type: 'occupy-building',
+            id: unitId,
+            userId,
+            x: unitX,
+            y: unitY,
+            container: new PIXI.Container()
+        });
+
+        return occupyBuildingMap;
     }
 
     getAllUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {
