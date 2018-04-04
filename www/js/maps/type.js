@@ -20,10 +20,12 @@ export type LandscapeType =
     'water-1' |
     'water-2';
 
+export type BuildingAttrTypeType = 'castle' | 'farm' | 'farm-destroyed' | 'well' | 'temple';
+
 export type BuildingType = {|
     x: number,
     y: number,
-    type: 'castle' | 'farm' | 'farm-destroyed' | 'well' | 'temple',
+    type: BuildingAttrTypeType,
     userId?: UserIdType,
     id?: string
 |};

@@ -1,7 +1,7 @@
 // @flow
 
 import * as PIXI from 'pixi.js';
-import type {BuildingType} from '../../../../maps/type';
+import type {BuildingType, BuildingAttrTypeType} from '../../../../maps/type';
 import type {ServerUserType} from '../../../../module/server-api';
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
@@ -79,5 +79,16 @@ export default class Building {
 
             gameAttr.container.addChild(gameAttr.sprite.building);
         }
+    }
+
+    setType(type: BuildingAttrTypeType) {
+        const building = this; // eslint-disable-line consistent-this
+        const {attr, gameAttr} = building;
+
+        attr.type = type;
+
+        gameAttr.container.removeChild(gameAttr.sprite.building);
+
+        building.initializeBuildingSprite();
     }
 }

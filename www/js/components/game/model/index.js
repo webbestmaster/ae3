@@ -242,7 +242,7 @@ export default class Game {
         await game.refreshGraveCountdown();
     }
 
-    async handleServerPushState(message: SocketMessagePushStateType): Promise<void> {
+    async handleServerPushState(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this; // eslint-disable-line consistent-this
 
         if (typeof message.states.last.state.type !== 'string') {
@@ -258,6 +258,11 @@ export default class Game {
 
             case 'attack':
                 await game.handleServerPushStateAttack(message);
+
+                break;
+
+            case 'fix-building':
+                await game.handleServerPushStateFixBuilding(message);
 
                 break;
 
@@ -277,7 +282,7 @@ export default class Game {
         const state = message.states.last.state;
 
         if (state.type !== 'move') {
-            console.error('here is should be a MOVE type');
+            console.error('here is should be a MOVE type', message);
             return Promise.resolve();
         }
 
@@ -305,7 +310,7 @@ export default class Game {
         const state = message.states.last.state;
 
         if (state.type !== 'attack') {
-            console.error('here is should be a ATTACK type');
+            console.error('here is should be a ATTACK type', message);
             return Promise.resolve();
         }
 
@@ -365,6 +370,37 @@ export default class Game {
         } else {
             console.log('defender can not attack');
         }
+
+        return Promise.resolve();
+    }
+
+    async handleServerPushStateFixBuilding(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
+        const game = this; // eslint-disable-line consistent-this
+        const state = message.states.last.state;
+
+        if (state.type !== 'fix-building') {
+            console.error('here is should be a fix-building type', message);
+            return Promise.resolve();
+        }
+
+        if (!state.building) {
+            console.log('building is not define', message);
+            return Promise.resolve();
+        }
+
+        const mapBuilding = state.building;
+
+        const gameBuilding = find(game.buildingList, (buildingInList: Building): boolean => {
+            return buildingInList.attr.x === mapBuilding.x && buildingInList.attr.y === mapBuilding.y;
+        }) || null;
+
+
+        if (gameBuilding === null) {
+            console.error('can not find building for message', message);
+            return Promise.resolve();
+        }
+
+        gameBuilding.setType(mapBuilding.type);
 
         return Promise.resolve();
     }
@@ -677,9 +713,33 @@ export default class Game {
 
         const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
 
-        const fixerUnit = find(newMap.units, {id: unitAction.id});
+        const building = find(newMap.buildings, {x: unitAction.x, y: unitAction.y}) || null;
 
-        console.error('you stay here');
+        if (building === null) {
+            console.error('can not find building for unit action', unitAction);
+            return;
+        }
+
+        building.type = 'farm';
+
+        serverApi
+            .pushState(
+                game.roomId,
+                user.getId(),
+                {
+                    type: 'room__push-state',
+                    state: {
+                        type: 'fix-building',
+                        building,
+                        map: newMap,
+                        activeUserId: user.getId()
+                    }
+                }
+            )
+            .then((response: mixed) => {
+                console.log('---> unit action fix building pushed');
+                console.log(response);
+            });
     }
 
     setSettings(settings: AllRoomSettingsType) {
