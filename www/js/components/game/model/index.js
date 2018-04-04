@@ -192,13 +192,15 @@ export default class Game {
     }
 
     async refreshUnitPoisonCountdown(): Promise<void> {
-        // TODO: update grave's countdown
-        console.warn('---> update grave\'s countdown');
+        // TODO: update poison countdown
+        // TODO: move to refreshUnitActionState !!!
+        console.warn('---> update poison countdown');
     }
 
     async refreshGraveCountdown(): Promise<void> {
-        // TODO: update poison countdown
-        console.warn('---> update poison countdown');
+        // TODO: update grave's countdown
+        // TODO: move to refreshUnitActionState !!!
+        console.warn('---> update grave\'s  countdown');
     }
 
     async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
