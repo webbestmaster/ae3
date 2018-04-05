@@ -33,17 +33,17 @@ type GuideUnitDataType = { [key: string]: UnitGuideDataType };
 
 const unitData: GuideUnitDataType = {
     soldier: {
-        attack: {
-            min: 150,
-            max: 155,
-            range: 4
-        },
-        // original data
         // attack: {
-        //     min: 50,
-        //     max: 55,
-        //     range: 1
+        //     min: 150,
+        //     max: 155,
+        //     range: 4
         // },
+        // original data
+        attack: {
+            min: 50,
+            max: 55,
+            range: 1
+        },
         armor: 5,
         move: 4,
         langKey: 'soldier',

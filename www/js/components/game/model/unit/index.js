@@ -83,7 +83,8 @@ type UnitGameAttrType = {|
     event: {|
         click: (unit: Unit) => void // eslint-disable-line no-use-before-define
     |},
-    hasWispAura: boolean
+    hasWispAura: boolean,
+    isActionAvailable: boolean
 |};
 
 export type UnitConstructorType = {|
@@ -155,7 +156,8 @@ export default class Unit {
             event: {
                 click: unitConstructor.event.click
             },
-            hasWispAura: false
+            hasWispAura: false,
+            isActionAvailable: false
         };
 
         unit.initializeUnitSprite();
@@ -209,7 +211,7 @@ export default class Unit {
         gameAttr.container.addChild(gameAttr.sprite.hitPoints);
     }
 
-    getActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity
+    getActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity, max-statements
         const unit = this; // eslint-disable-line consistent-this
         const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
 
@@ -221,7 +223,15 @@ export default class Unit {
             return null;
         }
 
-        if (!unit.getDidMove()) {
+        const isDidMoved = unit.getDidMove();
+
+        let isAvailableAttack = !isDidMoved;
+        let isAvailableFixBuilding = !isDidMoved;
+        let isAvailableOccupyBuilding = !isDidMoved;
+        const isAvailableDestroyBuilding = !isDidMoved;
+        const isAvailableRaiseSkeleton = !isDidMoved;
+
+        if (!isDidMoved) {
             // add move
             const actionMapMove = unit.getMoveActions(gameData);
 
@@ -241,6 +251,7 @@ export default class Unit {
         actionMapAttack.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
             lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
                 if (cellAction[0]) {
+                    isAvailableAttack = true;
                     actionMap[yCell][xCell][0] = cellAction[0];
                 }
             });
@@ -252,6 +263,7 @@ export default class Unit {
         actionMapFixBuilding.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
             lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
                 if (cellAction[0]) {
+                    isAvailableFixBuilding = true;
                     actionMap[yCell][xCell][0] = cellAction[0];
                 }
             });
@@ -263,10 +275,21 @@ export default class Unit {
         actionMapOccupyBuilding.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
             lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
                 if (cellAction[0]) {
+                    isAvailableOccupyBuilding = true;
                     actionMap[yCell][xCell][0] = cellAction[0];
                 }
             });
         });
+
+
+        if (isDidMoved &&
+            !isAvailableAttack &&
+            !isAvailableFixBuilding &&
+            !isAvailableOccupyBuilding &&
+            !isAvailableDestroyBuilding &&
+            !isAvailableRaiseSkeleton) {
+            return null;
+        }
 
         return actionMap;
     }
@@ -765,6 +788,22 @@ export default class Unit {
             return attr.hitPoints;
         }
         return defaultUnitData.hitPoints;
+    }
+
+    setIsActionAvailable(isActionAvailable: boolean) {
+        const unit = this; // eslint-disable-line consistent-this
+        const {gameAttr} = unit;
+
+        gameAttr.isActionAvailable = isActionAvailable;
+
+        gameAttr.container.alpha = isActionAvailable ? 1 : 0.5;
+    }
+
+    getIsActionAvailable(): boolean {
+        const unit = this; // eslint-disable-line consistent-this
+        const {gameAttr} = unit;
+
+        return gameAttr.isActionAvailable;
     }
 
     getGuideData(): UnitGuideDataType {

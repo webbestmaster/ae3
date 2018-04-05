@@ -275,6 +275,10 @@ export default class Game {
 
         game.render.cleanActionsList();
 
+        game.unitList.forEach((unitInList: Unit) => {
+            unitInList.setIsActionAvailable(true);
+        });
+
         const activeUserId = message.states.last.activeUserId;
 
         if (activeUserId !== user.getId()) {
@@ -353,7 +357,11 @@ export default class Game {
             return Promise.resolve();
         }
 
-        return unitModel.move(state.to.x, state.to.y, state.path);
+        await unitModel.move(state.to.x, state.to.y, state.path);
+
+        game.onUnitClick(unitModel);
+
+        return Promise.resolve();
     }
 
     async handleServerPushStateAttack(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
@@ -421,6 +429,8 @@ export default class Game {
 
                 game.removeUnit(defenderUnit);
 
+                game.onUnitClick(aggressorUnit);
+
                 return Promise.resolve();
             }
         } else {
@@ -457,6 +467,10 @@ export default class Game {
             }
         } else {
             console.log('defender can not attack');
+        }
+
+        if (state.aggressor.hitPoints > 0) {
+            game.onUnitClick(aggressorUnit);
         }
 
         return Promise.resolve();
@@ -498,6 +512,8 @@ export default class Game {
 
         gameBuilding.setType(mapBuilding.type);
         gameUnit.setDidFixBuilding(true);
+
+        game.onUnitClick(gameUnit);
 
         return Promise.resolve();
     }
@@ -543,6 +559,8 @@ export default class Game {
 
         gameBuilding.setUserId(mapBuilding.userId);
         gameUnit.setDidOccupyBuilding(true);
+
+        game.onUnitClick(gameUnit);
 
         return Promise.resolve();
     }
@@ -729,6 +747,7 @@ export default class Game {
 
         if (actionsList === null) {
             console.log('---> unit already done - set unit GRAY state');
+            unit.setIsActionAvailable(false);
             return;
         }
 

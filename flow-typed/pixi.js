@@ -42,6 +42,7 @@ declare module 'pixi.js' {
         scale: {
             set(x: number, y: number): void
         };
+        alpha: number,
         removeChildren(startIndex?: number, endIndex?: number): void
     }
 
