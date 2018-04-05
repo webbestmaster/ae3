@@ -81,7 +81,8 @@ type UnitGameAttrType = {|
     userList: Array<ServerUserType>,
     event: {|
         click: (unit: Unit) => void // eslint-disable-line no-use-before-define
-    |}
+    |},
+    hasWispAura: boolean
 |};
 
 export type UnitConstructorType = {|
@@ -151,7 +152,8 @@ export default class Unit {
             userList: JSON.parse(JSON.stringify(unitConstructor.userList)),
             event: {
                 click: unitConstructor.event.click
-            }
+            },
+            hasWispAura: false
         };
 
         unit.initializeUnitSprite();
@@ -772,7 +774,18 @@ export default class Unit {
     }
 
     hasWispAura(): boolean {
-        return false;
+        const unit = this; // eslint-disable-line consistent-this
+
+        return unit.gameAttr.hasWispAura;
+    }
+
+    refreshWispAura(gameData: GameDataType): boolean {
+        console.warn('implement unit refreshWispAura method for unit!!!!');
+
+        const unit = this; // eslint-disable-line consistent-this
+
+        unit.gameAttr.hasWispAura = Math.random() > 0.5;
+        return unit.hasWispAura();
     }
 
     destroy() {

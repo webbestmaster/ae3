@@ -21,7 +21,8 @@ import type {
     UnitActionMoveType,
     UnitActionAttackType,
     UnitActionFixBuildingType,
-    UnitActionOccupyBuildingType
+    UnitActionOccupyBuildingType,
+    GameDataType
 } from './unit';
 import * as serverApi from './../../../module/server-api';
 import {user} from './../../../module/user';
@@ -128,6 +129,8 @@ export default class Game {
         game.initializePathMaps();
 
         game.bindEventListeners();
+
+        game.refreshWispAura();
 
         // FIXME: remove extra dispatch
         // actually fix extra horizontal scroll
@@ -259,6 +262,7 @@ export default class Game {
                 await game.handleServerPushState(message);
                 game.checkMapState(message.states.last.state.map);
                 game.setMapState(message.states.last.state.map);
+                game.refreshWispAura();
                 break;
 
             default:
@@ -1355,5 +1359,22 @@ export default class Game {
         game.checkMapStateUnit(socketMapState);
         game.checkMapStateBuilding(socketMapState);
         game.checkMapStateGrave(socketMapState);
+    }
+
+    refreshWispAura() {
+        const game = this; // eslint-disable-line consistent-this
+
+        const gameData: GameDataType = {
+            userList: game.userList,
+            buildingList: game.buildingList,
+            unitList: game.unitList,
+            pathMap: game.pathMap,
+            armorMap: game.armorMap,
+            emptyActionMap: game.emptyActionMap
+        };
+
+        game.unitList.forEach((unit: Unit) => {
+            unit.refreshWispAura(gameData);
+        });
     }
 }
