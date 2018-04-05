@@ -213,7 +213,7 @@ class Room extends Component<PropsType, StateType> {
                     const userItemUserId = typeof userItem.userId === 'string' ? userItem.userId : '';
 
                     if (typeof userItem.id !== 'string' || userItem.id === '') {
-                        Object.assign(userItem, {id: [userItem.x, userItem.y, Math.random()].join('_')});
+                        userItem.id = [userItem.x, userItem.y, Math.random()].join('_'); // eslint-disable-line no-param-reassign
                     }
 
                     if (userItemUserId === '') {
@@ -229,7 +229,7 @@ class Room extends Component<PropsType, StateType> {
                         return;
                     }
 
-                    Object.assign(userItem, {userId: userData.userId});
+                    userItem.userId = userData.userId; // eslint-disable-line no-param-reassign
                 });
 
                 const setSettingResult = await serverApi.setRoomSetting(roomId, {

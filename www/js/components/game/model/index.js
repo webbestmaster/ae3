@@ -94,6 +94,10 @@ export default class Game {
     initialize(renderSetting: RenderSettingType) {
         const game = this; // eslint-disable-line consistent-this
 
+        game.settings.map.units = game.settings.map.units.filter((mapUnitData: UnitType): boolean => {
+            return typeof mapUnitData.userId === 'string';
+        });
+
         game.setMapState(game.settings.map);
 
         game.render.initialize(renderSetting);
@@ -109,7 +113,7 @@ export default class Game {
         // add units
         game.settings.map.units.forEach((unitData: UnitType) => {
             if (typeof unitData.userId !== 'string') {
-                console.warn('unit has no userId');
+                console.error('unit has no userId');
                 return;
             }
             game.createUnit(unitData);
@@ -172,6 +176,25 @@ export default class Game {
             });
         });
 
+
+        // update graves
+        const {graveList} = game;
+        const mapGraveList = newMap.graves;
+        const isGraveListLengthEqual = mapGraveList.length === graveList.length;
+
+        if (isGraveListLengthEqual === false) {
+            console.error('Grave List Length is not equal', mapUnitList, unitList);
+            return;
+        }
+
+        mapGraveList.forEach((mapGrave: GraveType) => {
+            mapGrave.removeCountdown -= 1; // eslint-disable-line no-param-reassign
+        });
+
+        newMap.graves = mapGraveList.filter((mapGrave: GraveType): boolean => {
+            return mapGrave.removeCountdown > 0;
+        });
+
         serverApi
             .pushState(
                 game.roomId,
@@ -191,17 +214,21 @@ export default class Game {
             });
     }
 
-    async refreshUnitPoisonCountdown(): Promise<void> {
-        // TODO: update poison countdown
-        // TODO: move to refreshUnitActionState !!!
-        console.warn('---> update poison countdown');
-    }
+    /*
+        async refreshUnitPoisonCountdown(): Promise<void> {
+            // TODO: update poison countdown
+            // TODO: move to refreshUnitActionState !!!
+            console.warn('---> update poison countdown');
+        }
+    */
 
-    async refreshGraveCountdown(): Promise<void> {
-        // TODO: update grave's countdown
-        // TODO: move to refreshUnitActionState !!!
-        console.warn('---> update grave\'s  countdown');
-    }
+    /*
+        async refreshGraveCountdown(): Promise<void> {
+            // TODO: update grave's countdown
+            // TODO: move to refreshUnitActionState !!!
+            console.warn('---> update grave\'s  countdown');
+        }
+    */
 
     async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
         const game = this; // eslint-disable-line consistent-this
@@ -254,8 +281,8 @@ export default class Game {
         console.log('---> take turn, and it\'s ME!!!');
 
         await game.refreshUnitActionState();
-        await game.refreshUnitPoisonCountdown();
-        await game.refreshGraveCountdown();
+        // await game.refreshUnitPoisonCountdown();
+        // await game.refreshGraveCountdown();
     }
 
     async handleServerPushState(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
@@ -553,6 +580,46 @@ export default class Game {
 
             await unit.setActionState(mapUnit.action || null);
         });
+
+        const {graveList} = game;
+
+        // // check unit length
+        // const isGraveListLengthEqual = socketMapState.graves.length === graveList.length;
+        //
+        // if (isGraveListLengthEqual === false) {
+        //     console.error('Grave List Length is not equal', socketMapState, graveList);
+        //     return;
+        // }
+
+        const graveListToRemove: Array<Grave> = [];
+
+        graveList.forEach(async (grave: Grave): Promise<void> => { // eslint-disable-line complexity
+            const mapGrave = find(socketMapState.graves, {x: grave.attr.x, y: grave.attr.y});
+
+            if (!mapGrave) {
+                if (grave.attr.removeCountdown === 1) {
+                    console.log('grave ', grave, 'will remove');
+                    graveListToRemove.push(grave);
+                    return;
+                }
+                console.error('Map grave with data:', grave, 'has wrong removeCountdown');
+
+                return;
+            }
+
+            const isGraveEqual = isEqual(mapGrave, grave.attr);
+
+            if (isGraveEqual === true) {
+                console.error('grave can NOT have equal states', mapGrave, grave);
+                return;
+            }
+
+            await grave.setRemoveCountdown(mapGrave.removeCountdown);
+        });
+
+        while (graveListToRemove.length > 0) {
+            game.removeGrave(graveListToRemove.pop());
+        }
     }
 
     createBuilding(buildingData: BuildingType) {
@@ -571,6 +638,31 @@ export default class Game {
         game.graveList.push(grave);
 
         game.render.addGrave(grave.gameAttr.container);
+    }
+
+    removeGrave(grave: Grave) {
+        const game = this; // eslint-disable-line consistent-this
+        const {graveList} = game;
+
+        const lengthBeforeRemove = graveList.length;
+
+        remove(graveList, (graveInList: Unit): boolean => {
+            return graveInList === grave;
+        });
+
+        const lengthAfterRemove = graveList.length;
+
+        // check to remove ONE grave
+        if (lengthAfterRemove === lengthBeforeRemove - 1) {
+            console.log('grave did removed successfully');
+        } else {
+            console.error('grave did NOT removed', grave, graveList);
+        }
+
+        // console.warn('Add/update grave here is needed');
+
+        game.render.layer.graves.removeChild(grave.gameAttr.container);
+        grave.destroy();
     }
 
     createUnit(unitData: UnitType) {
@@ -609,7 +701,7 @@ export default class Game {
             console.error('unit did NOT removed', unit, unitList);
         }
 
-        console.warn('Add/update grave here is needed');
+        // console.warn('Add/update grave here is needed');
 
         game.render.layer.units.removeChild(unit.gameAttr.container);
         unit.destroy();

@@ -58,4 +58,8 @@ export default class Grave {
 
         attr.removeCountdown = removeCountdown;
     }
+
+    destroy() {
+        console.warn('implement grave destroy method for grave!!!!');
+    }
 }
