@@ -131,6 +131,12 @@
         {
             "x": 5,
             "y": 0,
+            "type": "wisp",
+            "userId": "0"
+        },
+        {
+            "x": 6,
+            "y": 0,
             "type": "dire-wolf",
             "userId": "0"
         },

@@ -444,8 +444,8 @@ export default class Game {
 
                     if (currentAggressorGrave === null) {
                         game.createGrave({
-                            x: defenderUnit.attr.x,
-                            y: defenderUnit.attr.y,
+                            x: aggressorUnit.attr.x,
+                            y: aggressorUnit.attr.y,
                             removeCountdown: defaultUnitData.graveRemoveCountdown
                         });
                     } else {
@@ -725,14 +725,7 @@ export default class Game {
             return;
         }
 
-        const actionsList = unit.getActions({
-            userList: game.userList,
-            buildingList: game.buildingList,
-            unitList: game.unitList,
-            pathMap: game.pathMap,
-            armorMap: game.armorMap,
-            emptyActionMap: game.emptyActionMap
-        });
+        const actionsList = unit.getActions(game.getGameData());
 
         if (actionsList === null) {
             console.log('---> unit already done - set unit GRAY state');
@@ -1364,6 +1357,16 @@ export default class Game {
     refreshWispAura() {
         const game = this; // eslint-disable-line consistent-this
 
+        const gameData = game.getGameData();
+
+        game.unitList.forEach((unit: Unit) => {
+            unit.refreshWispAura(gameData);
+        });
+    }
+
+    getGameData(): GameDataType {
+        const game = this; // eslint-disable-line consistent-this
+
         const gameData: GameDataType = {
             userList: game.userList,
             buildingList: game.buildingList,
@@ -1373,8 +1376,6 @@ export default class Game {
             emptyActionMap: game.emptyActionMap
         };
 
-        game.unitList.forEach((unit: Unit) => {
-            unit.refreshWispAura(gameData);
-        });
+        return gameData;
     }
 }

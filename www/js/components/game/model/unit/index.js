@@ -76,7 +76,8 @@ type UnitGameAttrType = {|
     container: PIXI.Container,
     sprite: {|
         unit: PIXI.extras.AnimatedSprite,
-        hitPoints: PIXI.Text
+        hitPoints: PIXI.Text,
+        wispAura: PIXI.Sprite
     |},
     userList: Array<ServerUserType>,
     event: {|
@@ -147,7 +148,8 @@ export default class Unit {
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-0']),
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1'])
                 ]),
-                hitPoints: new PIXI.Text('', textStyle)
+                hitPoints: new PIXI.Text('', textStyle),
+                wispAura: PIXI.Sprite.fromImage(imageMap.other['under-wisp-aura'])
             },
             userList: JSON.parse(JSON.stringify(unitConstructor.userList)),
             event: {
@@ -780,12 +782,63 @@ export default class Unit {
     }
 
     refreshWispAura(gameData: GameDataType): boolean {
-        console.warn('implement unit refreshWispAura method for unit!!!!');
-
         const unit = this; // eslint-disable-line consistent-this
+        const {square} = mapGuide.size;
+        const unitUserId = typeof unit.attr.userId === 'string' ? unit.attr.userId : null;
 
-        unit.gameAttr.hasWispAura = Math.random() > 0.5;
-        return unit.hasWispAura();
+        if (unitUserId === null) {
+            console.error('unit has no userId', unit);
+            return false;
+        }
+
+        if (unit.attr.type === 'wisp') {
+            return false;
+        }
+
+        const friendWispList = gameData.unitList.filter((unitInList: Unit): boolean => {
+            return unitInList.attr.type === 'wisp' && unitInList.attr.userId === unitUserId;
+        });
+
+        const wispAuraMap: Array<[number, number]> = [];
+
+        friendWispList.forEach((unitWisp: Unit) => {
+            const wispAuraCoordinates = getPath(
+                unitWisp.attr.x,
+                unitWisp.attr.y,
+                unitWisp.getGuideData().auraRange || 0,
+                gameData.pathMap.fly,
+                []
+            );
+
+            wispAuraCoordinates.forEach((mapPoint: [number, number]) => {
+                const isAlreadyInWispAuraMap = wispAuraMap.some((wispAuraMapPoint: [number, number]): boolean => {
+                    return wispAuraMapPoint[0] === mapPoint[0] && wispAuraMapPoint[1] === mapPoint[1];
+                });
+
+                if (isAlreadyInWispAuraMap) {
+                    console.log('already in wispAuraMap');
+                    return;
+                }
+
+                wispAuraMap.push(mapPoint);
+            });
+        });
+
+        const hasWispAura = wispAuraMap.some((mapPoint: [number, number]): boolean => {
+            return unit.attr.x === mapPoint[0] && unit.attr.y === mapPoint[1];
+        });
+
+        unit.gameAttr.hasWispAura = hasWispAura;
+
+        unit.gameAttr.sprite.wispAura.position.set(square / 2, 0);
+
+        if (hasWispAura) {
+            unit.gameAttr.container.addChild(unit.gameAttr.sprite.wispAura);
+        } else {
+            unit.gameAttr.container.removeChild(unit.gameAttr.sprite.wispAura);
+        }
+
+        return hasWispAura;
     }
 
     destroy() {
