@@ -15,6 +15,7 @@ import type {AvailablePathMapType} from './path-master';
 import type {PathType, PointType} from './../../../../lib/a-star-finder';
 import {tweenList} from './../../../../lib/tween';
 import find from 'lodash/find';
+import Grave from './../grave';
 // import {getAttackResult} from './../helper';
 
 export type UnitActionMoveType = {|
@@ -56,6 +57,21 @@ export type UnitActionOccupyBuildingType = {|
     container: PIXI.Container
 |};
 
+export type UnitActionRaiseSkeletonType = {|
+    type: 'raise-skeleton',
+    raiser: {|
+        x: number,
+        y: number,
+        id: string
+    |},
+    grave: {|
+        x: number,
+        y: number
+    |},
+    userId: string,
+    container: PIXI.Container
+|};
+
 export type RefreshUnitListType = {|
     type: 'refresh-unit-list',
     map: MapType,
@@ -66,7 +82,8 @@ export type UnitActionType = UnitActionMoveType
     | UnitActionAttackType
     | RefreshUnitListType
     | UnitActionFixBuildingType
-    | UnitActionOccupyBuildingType;
+    | UnitActionOccupyBuildingType
+    | UnitActionRaiseSkeletonType;
 
 export type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
 
@@ -99,6 +116,7 @@ export type GameDataType = {|
     +userList: Array<ServerUserType>;
     +buildingList: Array<Building>;
     +unitList: Array<Unit>; // eslint-disable-line no-use-before-define
+    +graveList: Array<Grave>; // eslint-disable-line no-use-before-define
     +pathMap: {
         +walk: Array<Array<number>>,
         +flow: Array<Array<number>>,
@@ -228,8 +246,8 @@ export default class Unit {
         let isAvailableAttack = !isDidMoved;
         let isAvailableFixBuilding = !isDidMoved;
         let isAvailableOccupyBuilding = !isDidMoved;
-        const isAvailableDestroyBuilding = !isDidMoved;
-        const isAvailableRaiseSkeleton = !isDidMoved;
+        let isAvailableDestroyBuilding = !isDidMoved;
+        let isAvailableRaiseSkeleton = !isDidMoved;
 
         if (!isDidMoved) {
             // add move
@@ -276,6 +294,31 @@ export default class Unit {
             lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
                 if (cellAction[0]) {
                     isAvailableOccupyBuilding = true;
+                    actionMap[yCell][xCell][0] = cellAction[0];
+                }
+            });
+        });
+
+        // add destroy building
+        const actionMapDestroyBuilding = unit.getDestroyBuildingActions(gameData);
+
+        actionMapDestroyBuilding.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
+            lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
+                if (cellAction[0]) {
+                    isAvailableDestroyBuilding = true;
+                    actionMap[yCell][xCell][0] = cellAction[0];
+                }
+            });
+        });
+
+
+        // add raise skeleton
+        const actionMapRaiseSkeleton = unit.getRaiseSkeletonActions(gameData);
+
+        actionMapRaiseSkeleton.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
+            lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
+                if (cellAction[0]) {
+                    isAvailableRaiseSkeleton = true;
                     actionMap[yCell][xCell][0] = cellAction[0];
                 }
             });
@@ -461,6 +504,87 @@ export default class Unit {
         });
 
         return occupyBuildingMap;
+    }
+
+    getDestroyBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const destroyBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const unitId = typeof attr.id === 'string' ? attr.id : null;
+        const userId = typeof attr.userId === 'string' ? attr.userId : null;
+
+        if (unitId === null) {
+            console.error('unit has no id', unit);
+            return destroyBuildingMap;
+        }
+
+        if (userId === null) {
+            console.error('unit has no userId', unit);
+            return destroyBuildingMap;
+        }
+
+        return destroyBuildingMap;
+    }
+
+    getRaiseSkeletonActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr} = unit;
+        const raiseSkeletonMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const unitId = typeof attr.id === 'string' ? attr.id : null;
+        const userId = typeof attr.userId === 'string' ? attr.userId : null;
+
+        if (unitId === null) {
+            console.error('unit has no id', unit);
+            return raiseSkeletonMap;
+        }
+
+        if (userId === null) {
+            console.error('unit has no userId', unit);
+            return raiseSkeletonMap;
+        }
+
+        const unitGuideData = unit.getGuideData();
+
+        if (typeof unitGuideData.raiseSkeletonRange !== 'number') {
+            console.log('unit can not raise skeleton');
+            return raiseSkeletonMap;
+        }
+
+        const raiseSkeletonMapPointList = getPath(
+            unit.attr.x,
+            unit.attr.y,
+            unitGuideData.raiseSkeletonRange,
+            gameData.pathMap.fly,
+            []);
+
+        // get attack fields
+        raiseSkeletonMapPointList.forEach((cell: [number, number]) => {
+            const grave = find(gameData.graveList, (graveInList: Grave): boolean => {
+                return graveInList.attr.x === cell[0] && graveInList.attr.y === cell[1];
+            }) || null;
+
+            if (grave === null) {
+                console.log('No grave by coordinates:', cell);
+                return;
+            }
+
+            raiseSkeletonMap[cell[1]][cell[0]].push({
+                type: 'raise-skeleton',
+                raiser: {
+                    x: unit.attr.x,
+                    y: unit.attr.y,
+                    id: unitId
+                },
+                grave: {
+                    x: grave.attr.x,
+                    y: grave.attr.y
+                },
+                userId,
+                container: new PIXI.Container()
+            });
+        });
+
+        return raiseSkeletonMap;
     }
 
     getAllUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {

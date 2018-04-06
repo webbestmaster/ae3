@@ -15,7 +15,8 @@ import type {
     UnitActionAttackType,
     UnitActionMoveType,
     UnitActionFixBuildingType,
-    UnitActionOccupyBuildingType
+    UnitActionOccupyBuildingType,
+    UnitActionRaiseSkeletonType
 } from './unit';
 import Unit from './unit';
 import type {SocketMessagePushStateType} from '../../../module/socket';
@@ -127,7 +128,7 @@ export default class Render {
         actionsList.forEach((mapLine: Array<Array<UnitActionType>>) => {
             mapLine.forEach((actionList: Array<UnitActionType>) => {
                 // check here action count, if 2 or more - make select action button
-                actionList.forEach((unitAction: UnitActionType) => {
+                actionList.forEach((unitAction: UnitActionType) => { // eslint-disable-line complexity
                     switch (unitAction.type) {
                         case 'move':
                             render.drawActionMove(unitAction);
@@ -143,6 +144,10 @@ export default class Render {
 
                         case 'occupy-building':
                             render.drawActionOccupyBuilding(unitAction);
+                            break;
+
+                        case 'raise-skeleton':
+                            render.drawActionRaiseSkeleton(unitAction);
                             break;
 
                         default:
@@ -197,6 +202,18 @@ export default class Render {
         container.buttonMode = true;
         container.interactive = true;
         container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-occupy-building']));
+
+        render.layer.actions.addChild(unitAction.container);
+    }
+
+    drawActionRaiseSkeleton(unitAction: UnitActionRaiseSkeletonType) {
+        const render = this; // eslint-disable-line consistent-this
+        const {grave, container} = unitAction;
+
+        container.position.set(grave.x * mapGuide.size.square, grave.y * mapGuide.size.square);
+        container.buttonMode = true;
+        container.interactive = true;
+        container.addChild(PIXI.Sprite.fromImage(imageMap.other.skull));
 
         render.layer.actions.addChild(unitAction.container);
     }

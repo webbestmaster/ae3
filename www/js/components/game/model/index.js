@@ -22,7 +22,7 @@ import type {
     UnitActionAttackType,
     UnitActionFixBuildingType,
     UnitActionOccupyBuildingType,
-    GameDataType
+    GameDataType, UnitActionRaiseSkeletonType
 } from './unit';
 import * as serverApi from './../../../module/server-api';
 import {user} from './../../../module/user';
@@ -757,7 +757,7 @@ export default class Game {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
                 unitActionList.forEach((unitAction: UnitActionType) => {
                     if (unitAction.container) {
-                        unitAction.container.on(getEventName('click'), () => {
+                        unitAction.container.on(getEventName('click'), () => { // eslint-disable-line complexity
                             switch (unitAction.type) {
                                 case 'move':
                                     game.bindOnClickUnitActionMove(unitAction, actionsList);
@@ -773,6 +773,10 @@ export default class Game {
 
                                 case 'occupy-building':
                                     game.bindOnClickUnitActionOccupyBuilding(unitAction);
+                                    break;
+
+                                case 'raise-skeleton':
+                                    game.bindOnClickUnitActionRaiseSkeleton(unitAction);
                                     break;
 
                                 default:
@@ -1060,6 +1064,56 @@ export default class Game {
             )
             .then((response: mixed) => {
                 console.log('---> unit action occupy building pushed');
+                console.log(response);
+            });
+    }
+
+    bindOnClickUnitActionRaiseSkeleton(unitAction: UnitActionRaiseSkeletonType) { // eslint-disable-line max-statements, complexity, id-length
+        const game = this; // eslint-disable-line consistent-this
+
+        game.render.cleanActionsList();
+
+        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+
+        const actionGrave = unitAction.grave;
+        const actionRaiser = unitAction.raiser;
+
+        const raiserMapUnit = find(newMap.units, {x: actionRaiser.x, y: actionRaiser.y, id: actionRaiser.id}) || null;
+
+        if (raiserMapUnit === null) {
+            console.error('can not find unit for unit action', unitAction);
+            return;
+        }
+
+        raiserMapUnit.action = raiserMapUnit.action || {};
+        raiserMapUnit.action.didRaiseSkeleton = true;
+
+        const graveMap = find(newMap.graves, {x: actionGrave.x, y: actionGrave.y}) || null;
+
+        if (graveMap === null) {
+            console.error('can not find grave for unit action', unitAction);
+            return;
+        }
+
+        remove(newMap.graves, {x: actionGrave.x, y: actionGrave.y});
+
+        serverApi
+            .pushState(
+                game.roomId,
+                user.getId(),
+                {
+                    type: 'room__push-state',
+                    state: {
+                        type: 'raise-skeleton',
+                        raiser: actionRaiser,
+                        grave: actionGrave,
+                        map: newMap,
+                        activeUserId: user.getId()
+                    }
+                }
+            )
+            .then((response: mixed) => {
+                console.log('---> unit action raise skeleton pushed');
                 console.log(response);
             });
     }
@@ -1390,6 +1444,7 @@ export default class Game {
             userList: game.userList,
             buildingList: game.buildingList,
             unitList: game.unitList,
+            graveList: game.graveList,
             pathMap: game.pathMap,
             armorMap: game.armorMap,
             emptyActionMap: game.emptyActionMap
