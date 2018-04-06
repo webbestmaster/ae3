@@ -621,7 +621,20 @@ export default class Game {
 
         game.removeGrave(gameGrave);
 
+        const newSkeleton = game.createUnit({
+            x: mapGrave.x,
+            y: mapGrave.y,
+            type: 'skeleton',
+            userId: mapRaiser.userId,
+            id: mapRaiser.newUnitId,
+            action: {
+                didAttack: true,
+                didMove: true
+            }
+        });
+
         game.onUnitClick(gameRaiser);
+        game.onUnitClick(newSkeleton);
 
         return Promise.resolve();
     }
@@ -748,7 +761,7 @@ export default class Game {
         grave.destroy();
     }
 
-    createUnit(unitData: UnitType) {
+    createUnit(unitData: UnitType): Unit {
         const game = this; // eslint-disable-line consistent-this
         const unit = unitMaster.createUnit({
             unitData,
@@ -763,6 +776,8 @@ export default class Game {
         game.unitList.push(unit);
 
         game.render.addUnit(unit.gameAttr.container);
+
+        return unit;
     }
 
     removeUnit(unit: Unit) {
@@ -1157,6 +1172,18 @@ export default class Game {
         }
 
         remove(newMap.graves, {x: actionGrave.x, y: actionGrave.y});
+
+        newMap.units.push({
+            x: actionGrave.x,
+            y: actionGrave.y,
+            type: 'skeleton',
+            userId: actionRaiser.userId,
+            id: actionRaiser.newUnitId,
+            action: {
+                didAttack: true,
+                didMove: true
+            }
+        });
 
         serverApi
             .pushState(

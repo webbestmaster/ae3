@@ -206,7 +206,9 @@ export type PushedStatePayloadRaiseSkeletonType = {|
     +raiser: {|
         +x: number,
         +y: number,
-        +id: string
+        +id: string,
+        +userId: string,
+        +newUnitId: string
     |},
     +grave: {|
         +x: number,

@@ -62,7 +62,9 @@ export type UnitActionRaiseSkeletonType = {|
     raiser: {|
         x: number,
         y: number,
-        id: string
+        id: string,
+        userId: string,
+        newUnitId: string
     |},
     grave: {|
         x: number,
@@ -573,7 +575,9 @@ export default class Unit {
                 raiser: {
                     x: unit.attr.x,
                     y: unit.attr.y,
-                    id: unitId
+                    id: unitId,
+                    userId,
+                    newUnitId: [grave.attr.x, grave.attr.y, Math.random()].join('_')
                 },
                 grave: {
                     x: grave.attr.x,
