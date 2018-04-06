@@ -150,6 +150,11 @@ export default class Render {
                             render.drawActionRaiseSkeleton(unitAction);
                             break;
 
+                        case 'destroy-building':
+                            console.error('you stay here');
+                            // render.drawActionRaiseSkeleton(unitAction);
+                            break;
+
                         default:
                             console.error('unsupported unit action type', unitAction);
                     }

@@ -74,6 +74,17 @@ export type UnitActionRaiseSkeletonType = {|
     container: PIXI.Container
 |};
 
+export type UnitActionDestroyBuildingType = {|
+    type: 'destroy-building',
+    building: {|
+        x: number,
+        y: number,
+        type: 'farm-destroy'
+    |},
+    userId: string,
+    container: PIXI.Container
+|};
+
 export type RefreshUnitListType = {|
     type: 'refresh-unit-list',
     map: MapType,
@@ -85,7 +96,8 @@ export type UnitActionType = UnitActionMoveType
     | RefreshUnitListType
     | UnitActionFixBuildingType
     | UnitActionOccupyBuildingType
-    | UnitActionRaiseSkeletonType;
+    | UnitActionRaiseSkeletonType
+    | UnitActionDestroyBuildingType;
 
 export type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
 
@@ -525,6 +537,49 @@ export default class Unit {
             return destroyBuildingMap;
         }
 
+        const unitGuideData = unit.getGuideData();
+
+        if (!unitGuideData.destroyBuildingList || unitGuideData.destroyBuildingList.length === 0) {
+            console.log('unit can not destroy building');
+            return destroyBuildingMap;
+        }
+
+        const destroyBuildingList = unitGuideData.destroyBuildingList;
+
+        const attackBuildingMapPointList = getPath(
+            unit.attr.x,
+            unit.attr.y,
+            unitGuideData.attack.range,
+            gameData.pathMap.fly,
+            []);
+
+        attackBuildingMapPointList.forEach((cell: [number, number]) => {
+            const building = find(gameData.buildingList, (buildingInList: Building): boolean => {
+                return destroyBuildingList.includes(buildingInList.attr.type) &&
+                    typeof buildingInList.attr.userId === 'string' &&
+                    buildingInList.attr.userId !== userId &&
+                    buildingInList.attr.x === cell[0] &&
+                    buildingInList.attr.y === cell[1];
+            }) || null;
+
+            if (building === null) {
+                console.log('can not find building in ', cell);
+                return;
+            }
+
+            destroyBuildingMap[cell[1]][cell[0]].push({
+                type: 'destroy-building',
+                userId,
+                building: {
+                    x: building.attr.x,
+                    y: building.attr.y,
+                    type: 'farm-destroy'
+                },
+                container: new PIXI.Container()
+            });
+        });
+
+
         return destroyBuildingMap;
     }
 
@@ -616,6 +671,7 @@ export default class Unit {
     }
 
     getAvailablePath(gameData: GameDataType): AvailablePathMapType {
+        console.warn('---> reduce path if unit poisoned!');
         const unit = this; // eslint-disable-line consistent-this
         const {x, y, type} = unit.attr;
 
