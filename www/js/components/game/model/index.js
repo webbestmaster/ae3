@@ -327,6 +327,11 @@ export default class Game {
 
                 break;
 
+            case 'raise-skeleton':
+                await game.handleServerPushStateRaiseSkeleton(message);
+
+                break;
+
             default:
                 console.error('---> view - game - unsupported push state type: ', message);
         }
@@ -561,6 +566,62 @@ export default class Game {
         gameUnit.setDidOccupyBuilding(true);
 
         game.onUnitClick(gameUnit);
+
+        return Promise.resolve();
+    }
+
+    async handleServerPushStateRaiseSkeleton(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements, id-length
+        const game = this; // eslint-disable-line consistent-this
+        const state = message.states.last.state;
+
+        if (state.type !== 'raise-skeleton') {
+            console.error('here is should be a raise-skeleton type', message);
+            return Promise.resolve();
+        }
+
+        if (!state.raiser) {
+            console.log('raiser is not define', message);
+            return Promise.resolve();
+        }
+
+        if (!state.grave) {
+            console.log('grave is not define', message);
+            return Promise.resolve();
+        }
+
+        const mapGrave = state.grave;
+
+        const gameGrave = find(game.graveList, (graveInList: Grave): boolean => {
+            return graveInList.attr.x === mapGrave.x && graveInList.attr.y === mapGrave.y;
+        }) || null;
+
+        if (gameGrave === null) {
+            console.error('can not find grave for message', message);
+            return Promise.resolve();
+        }
+
+        const mapRaiser = state.raiser;
+
+        const gameRaiser = find(game.unitList, (unitInList: Unit): boolean => {
+            return unitInList.attr.x === mapRaiser.x && unitInList.attr.y === mapRaiser.y;
+        }) || null;
+
+        if (gameRaiser === null) {
+            console.error('can not find raiser for message', message);
+            return Promise.resolve();
+        }
+
+
+        if (typeof gameRaiser.setDidRaiseSkeleton !== 'function') {
+            console.error('raiser has not method setDidRaiseSkeleton', message);
+            return Promise.resolve();
+        }
+
+        gameRaiser.setDidRaiseSkeleton(true);
+
+        game.removeGrave(gameGrave);
+
+        game.onUnitClick(gameRaiser);
 
         return Promise.resolve();
     }

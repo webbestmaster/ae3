@@ -753,6 +753,11 @@ export default class Unit {
                     unit.setDidOccupyBuilding(Boolean(actionState[actionName]));
                     return;
                 }
+                case 'didRaiseSkeleton': {
+                    console.log('didRaiseSkeleton', actionState[actionName]);
+                    unit.setDidRaiseSkeleton(Boolean(actionState[actionName]));
+                    return;
+                }
 
                 default:
                     console.error('unsupported action name', actionName, actionState);
