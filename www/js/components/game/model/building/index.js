@@ -102,4 +102,15 @@ export default class Building {
 
         building.initializeBuildingSprite();
     }
+
+    setAttr(newAttr: BuildingAttrType) {
+        const building = this; // eslint-disable-line consistent-this
+        const {gameAttr} = building;
+
+        building.attr = newAttr;
+
+        gameAttr.container.removeChild(gameAttr.sprite.building);
+
+        building.initializeBuildingSprite();
+    }
 }

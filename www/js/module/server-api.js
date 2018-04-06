@@ -2,10 +2,10 @@
 /* global fetch */
 
 import appConst from './../app-const';
-import type {MapType, BuildingType} from '../maps/type';
+import type {MapType, BuildingType, BuildingAttrTypeType} from './../maps/type';
 import mapGuide from './../maps/map-guide';
 import type {PathType} from './../components/game/model/unit/path-master';
-import type {AttackResultUnitType} from '../components/game/model/helper';
+import type {AttackResultUnitType} from './../components/game/model/helper';
 
 const {api} = appConst;
 const {url} = api;
@@ -218,6 +218,24 @@ export type PushedStatePayloadRaiseSkeletonType = {|
     +activeUserId: string
 |};
 
+export type PushedStatePayloadDestroyBuildingType = {|
+    +type: 'destroy-building',
+    +destroyer: {|
+        +x: number,
+        +y: number,
+        +id: string,
+        +userId: string
+    |},
+    +building: {|
+        +x: number,
+        +y: number,
+        +type: BuildingAttrTypeType,
+        +id: string
+    |},
+    +map: MapType,
+    +activeUserId: string
+|};
+
 export type PushedStatePayloadRefreshUnitListType = {|
     +type: 'refresh-unit-list',
     +map: MapType,
@@ -230,7 +248,8 @@ export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType
     | PushedStatePayloadRefreshUnitListType
     | PushedStatePayloadFixBuildingType
     | PushedStatePayloadOccupyBuildingType
-    | PushedStatePayloadRaiseSkeletonType;
+    | PushedStatePayloadRaiseSkeletonType
+    | PushedStatePayloadDestroyBuildingType;
 
 export type PushStateType = {|
     roomId: string,

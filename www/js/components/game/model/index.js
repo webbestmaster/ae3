@@ -22,7 +22,7 @@ import type {
     UnitActionAttackType,
     UnitActionFixBuildingType,
     UnitActionOccupyBuildingType,
-    GameDataType, UnitActionRaiseSkeletonType
+    GameDataType, UnitActionRaiseSkeletonType, UnitActionDestroyBuildingType
 } from './unit';
 import * as serverApi from './../../../module/server-api';
 import {user} from './../../../module/user';
@@ -329,6 +329,11 @@ export default class Game {
 
             case 'raise-skeleton':
                 await game.handleServerPushStateRaiseSkeleton(message);
+
+                break;
+
+            case 'destroy-building':
+                await game.handleServerPushStateDestroyBuilding(message);
 
                 break;
 
@@ -639,6 +644,66 @@ export default class Game {
         return Promise.resolve();
     }
 
+    async handleServerPushStateDestroyBuilding(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements, id-length
+        const game = this; // eslint-disable-line consistent-this
+        const state = message.states.last.state;
+
+        if (state.type !== 'destroy-building') {
+            console.error('here is should be a destroy-building type', message);
+            return Promise.resolve();
+        }
+
+        if (!state.building) {
+            console.log('building is not define', message);
+            return Promise.resolve();
+        }
+
+        if (!state.destroyer) {
+            console.log('destroyer is not define', message);
+            return Promise.resolve();
+        }
+
+        const mapBuilding = state.building;
+
+        const gameBuilding = find(game.buildingList, (buildingInList: Building): boolean => {
+            return buildingInList.attr.x === mapBuilding.x && buildingInList.attr.y === mapBuilding.y;
+        }) || null;
+
+        if (gameBuilding === null) {
+            console.error('can not find building for message', message);
+            return Promise.resolve();
+        }
+
+        const mapDestroyer = state.destroyer;
+
+        const gameDestroyer = find(game.unitList, (unitInList: Unit): boolean => {
+            return unitInList.attr.x === mapDestroyer.x && unitInList.attr.y === mapDestroyer.y;
+        }) || null;
+
+        if (gameDestroyer === null) {
+            console.error('can not find destroyer for message', message);
+            return Promise.resolve();
+        }
+
+        if (typeof gameDestroyer.setDidDestroyBuilding !== 'function') {
+            console.error('destroyer has not method setDidDestroyBuilding', message);
+            return Promise.resolve();
+        }
+
+        gameDestroyer.setDidDestroyBuilding(true);
+
+        gameBuilding.setAttr({
+            type: mapBuilding.type,
+            x: mapBuilding.x,
+            y: mapBuilding.y,
+            id: mapBuilding.id
+        });
+
+        game.onUnitClick(gameDestroyer);
+
+        return Promise.resolve();
+    }
+
     async handleServerRefreshUnitList(message: SocketMessagePushStateType): Promise<void> {
         const game = this; // eslint-disable-line consistent-this
         const {unitList} = game;
@@ -853,6 +918,10 @@ export default class Game {
 
                                 case 'raise-skeleton':
                                     game.bindOnClickUnitActionRaiseSkeleton(unitAction);
+                                    break;
+
+                                case 'destroy-building':
+                                    game.bindOnClickUnitActionDestroyBuilding(unitAction);
                                     break;
 
                                 default:
@@ -1202,6 +1271,73 @@ export default class Game {
             )
             .then((response: mixed) => {
                 console.log('---> unit action raise skeleton pushed');
+                console.log(response);
+            });
+    }
+
+    bindOnClickUnitActionDestroyBuilding(unitAction: UnitActionDestroyBuildingType) { // eslint-disable-line max-statements, complexity, id-length
+        const game = this; // eslint-disable-line consistent-this
+
+        game.render.cleanActionsList();
+
+        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+
+        const mapBuilding = find(newMap.buildings, {
+            x: unitAction.building.x,
+            y: unitAction.building.y
+        }) || null;
+
+        if (mapBuilding === null) {
+            console.error('can not find building for action', unitAction);
+            return;
+        }
+
+        const buildingIndex = newMap.buildings.indexOf(mapBuilding);
+
+        if (buildingIndex === -1) {
+            console.error('building should be in newMap.Building', unitAction);
+            return;
+        }
+
+        newMap.buildings[buildingIndex] = {
+            x: unitAction.building.x,
+            y: unitAction.building.y,
+            type: unitAction.building.type,
+            id: unitAction.building.id
+        };
+
+        const mapUnit = find(newMap.units, {
+            x: unitAction.destroyer.x,
+            y: unitAction.destroyer.y,
+            id: unitAction.destroyer.id
+        }) || null;
+
+
+        if (mapUnit === null) {
+            console.error('can not find destroyer for unit action', unitAction);
+            return;
+        }
+
+        mapUnit.action = mapUnit.action || {};
+        mapUnit.action.didDestroyBuilding = true;
+
+        serverApi
+            .pushState(
+                game.roomId,
+                user.getId(),
+                {
+                    type: 'room__push-state',
+                    state: {
+                        type: 'destroy-building',
+                        destroyer: unitAction.destroyer,
+                        building: unitAction.building,
+                        map: newMap,
+                        activeUserId: user.getId()
+                    }
+                }
+            )
+            .then((response: mixed) => {
+                console.log('---> unit action destroy building pushed');
                 console.log(response);
             });
     }

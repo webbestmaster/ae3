@@ -302,7 +302,10 @@ const defaultUnitData = {
     hitPoints: 100,
     poisonCountdown: 0,
     graveRemoveCountdown: 3,
-    hasWispAura: false
+    hasWispAura: false,
+    render: {
+        spriteAnimatedSpeed: 0.08
+    }
 };
 
 export {defaultUnitData};

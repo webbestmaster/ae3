@@ -76,10 +76,17 @@ export type UnitActionRaiseSkeletonType = {|
 
 export type UnitActionDestroyBuildingType = {|
     type: 'destroy-building',
+    destroyer: {|
+        x: number,
+        y: number,
+        id: string,
+        userId: string
+    |},
     building: {|
         x: number,
         y: number,
-        type: 'farm-destroy'
+        type: 'farm-destroyed',
+        id: string
     |},
     userId: string,
     container: PIXI.Container
@@ -219,7 +226,7 @@ export default class Unit {
             PIXI.Texture.fromImage(imageMap.unit[attr.type + '-' + color + '-1'])
         ]);
 
-        gameAttr.sprite.unit.animationSpeed = 0.08;
+        gameAttr.sprite.unit.animationSpeed = defaultUnitData.render.spriteAnimatedSpeed;
 
         gameAttr.sprite.unit.play();
         // attr.sprite.unit = PIXI.Sprite.fromImage(imageMap.unit[attr.type + '-' + color + '-0']);
@@ -569,12 +576,19 @@ export default class Unit {
 
             destroyBuildingMap[cell[1]][cell[0]].push({
                 type: 'destroy-building',
-                userId,
                 building: {
                     x: building.attr.x,
                     y: building.attr.y,
-                    type: 'farm-destroy'
+                    type: 'farm-destroyed',
+                    id: typeof building.attr.id === 'string' ? building.attr.id : 'no-building-id-' + Math.random()
                 },
+                destroyer: {
+                    x: unit.attr.x,
+                    y: unit.attr.y,
+                    id: unitId,
+                    userId
+                },
+                userId,
                 container: new PIXI.Container()
             });
         });
@@ -816,6 +830,11 @@ export default class Unit {
                 case 'didRaiseSkeleton': {
                     console.log('didRaiseSkeleton', actionState[actionName]);
                     unit.setDidRaiseSkeleton(Boolean(actionState[actionName]));
+                    return;
+                }
+                case 'didDestroyBuilding': {
+                    console.log('didDestroyBuilding', actionState[actionName]);
+                    unit.setDidDestroyBuilding(Boolean(actionState[actionName]));
                     return;
                 }
 

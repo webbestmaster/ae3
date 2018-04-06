@@ -16,7 +16,8 @@ import type {
     UnitActionMoveType,
     UnitActionFixBuildingType,
     UnitActionOccupyBuildingType,
-    UnitActionRaiseSkeletonType
+    UnitActionRaiseSkeletonType,
+    UnitActionDestroyBuildingType
 } from './unit';
 import Unit from './unit';
 import type {SocketMessagePushStateType} from '../../../module/socket';
@@ -151,8 +152,7 @@ export default class Render {
                             break;
 
                         case 'destroy-building':
-                            console.error('you stay here');
-                            // render.drawActionRaiseSkeleton(unitAction);
+                            render.drawActionDestroyBuilding(unitAction);
                             break;
 
                         default:
@@ -219,6 +219,18 @@ export default class Render {
         container.buttonMode = true;
         container.interactive = true;
         container.addChild(PIXI.Sprite.fromImage(imageMap.other.skull));
+
+        render.layer.actions.addChild(unitAction.container);
+    }
+
+    drawActionDestroyBuilding(unitAction: UnitActionDestroyBuildingType) {
+        const render = this; // eslint-disable-line consistent-this
+        const {building, container} = unitAction;
+
+        container.position.set(building.x * mapGuide.size.square, building.y * mapGuide.size.square);
+        container.buttonMode = true;
+        container.interactive = true;
+        container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-destroy-building-0']));
 
         render.layer.actions.addChild(unitAction.container);
     }
