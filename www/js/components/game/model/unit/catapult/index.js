@@ -1,6 +1,8 @@
 // @flow
 import Unit from './../index';
-import type {GameDataType, UnitActionsMapType, UnitActionType} from './../index';
+import type {GameDataType, UnitActionsMapType, UnitActionType, UnitActionMoveType} from './../index';
+import {getMoviePath} from '../../helper';
+import type {PathType} from '../../../../../lib/a-star-finder';
 
 function getCell(x: number, y: number, map: UnitActionsMapType): Array<UnitActionType> | null {
     const line = getLine(y, map);
@@ -28,7 +30,7 @@ function getItemOfLine(index: number, line: Array<Array<UnitActionType>>): Array
     return null;
 }
 
-export default class UnitCustom extends Unit {
+export default class Catapult extends Unit {
     getActions(gameData: GameDataType): UnitActionsMapType | null {
         const unit = this; // eslint-disable-line consistent-this
 
@@ -79,13 +81,24 @@ export default class UnitCustom extends Unit {
 
             const cell = getCell(x, y, superUnitActionMap);
 
-            console.log(cell);
-
             if (cell !== null) {
                 superUnitActionMap[y][x] = [];
             }
         }
 
         return superUnitActionMap;
+    }
+
+    getMoviePath(unitAction: UnitActionMoveType,
+                 actionsList: UnitActionsMapType,
+                 gameData?: GameDataType): PathType | null {
+        if (!gameData) {
+            console.error('gameData is needed');
+            return null;
+        }
+
+        const moveActionList = super.getMoveActions(gameData);
+
+        return getMoviePath(unitAction, moveActionList);
     }
 }

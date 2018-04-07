@@ -939,7 +939,7 @@ export default class Game {
         });
     }
 
-    bindOnClickUnitActionMove(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType) {
+    bindOnClickUnitActionMove(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType) { // eslint-disable-line complexity
         const game = this; // eslint-disable-line consistent-this
 
         game.render.cleanActionsList();
@@ -953,7 +953,16 @@ export default class Game {
             return;
         }
 
-        const moviePath = getMoviePath(unitAction, actionsList);
+        const gameUnit = find(game.unitList, (unitInList: Unit): boolean => {
+            return unitInList.attr.id === unitAction.id;
+        }) || null;
+
+        if (gameUnit === null) {
+            console.error('--> can not find game unit for action:', unitAction);
+            return;
+        }
+
+        const moviePath = gameUnit.getMoviePath(unitAction, actionsList, game.getGameData());
 
         if (moviePath === null) {
             console.error('moviePath is not define, actually === null');

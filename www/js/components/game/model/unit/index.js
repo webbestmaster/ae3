@@ -3,7 +3,7 @@
 import * as PIXI from 'pixi.js';
 import type {MapType, UnitType, UnitActionStateType} from '../../../../maps/type';
 import type {ServerUserType} from '../../../../module/server-api';
-import {getUserColor, getAttackResult, getEventName} from './../helper';
+import {getUserColor, getAttackResult, getEventName, getMoviePath} from './../helper';
 import type {AttackResultUnitType} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import unitGuide, {defaultUnitData} from './unit-guide';
@@ -1087,6 +1087,12 @@ export default class Unit {
         }
 
         return hasWispAura;
+    }
+
+    getMoviePath(unitAction: UnitActionMoveType,
+                 actionsList: UnitActionsMapType,
+                 gameData?: GameDataType): PathType | null {
+        return getMoviePath(unitAction, actionsList);
     }
 
     destroy() {

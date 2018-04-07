@@ -1,5 +1,5 @@
 // @flow
 import Unit from './../index';
 
-export default class UnitCustom extends Unit {
+export default class DireWolf extends Unit {
 }
