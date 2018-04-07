@@ -635,6 +635,16 @@ export default class Unit {
                 return;
             }
 
+            // check unit on grave
+            const unitOnGrave = find(gameData.unitList, (unitInList: Unit): boolean => {
+                return unitInList.attr.x === grave.attr.x && unitInList.attr.y === grave.attr.y;
+            }) || null;
+
+            if (unitOnGrave !== null) {
+                console.log('Grave under unit, can not raise skeleton', unitOnGrave);
+                return;
+            }
+
             raiseSkeletonMap[cell[1]][cell[0]].push({
                 type: 'raise-skeleton',
                 raiser: {
