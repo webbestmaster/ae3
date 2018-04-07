@@ -411,77 +411,79 @@ export default class Game {
         }
 
 
-        // aggressor attack phase
-        if (state.aggressor.canAttack) {
-            await game.render.drawAttack(aggressorUnit, defenderUnit);
-            aggressorUnit.setDidAttack(true);
-            // defender is/isn't alive
-            if (state.defender.hitPoints > 0) {
-                defenderUnit.setHitPoints(state.defender.hitPoints);
-            } else {
-                const defenderUnitGuideData = defenderUnit.getGuideData();
-
-                if (defenderUnitGuideData.withoutGrave !== true) {
-                    const currentDefenderGrave = find(game.graveList, (grave: Grave): boolean => {
-                        return grave.attr.x === defenderUnit.attr.x && grave.attr.y === defenderUnit.attr.y;
-                    }) || null;
-
-                    if (currentDefenderGrave === null) {
-                        game.createGrave({
-                            x: defenderUnit.attr.x,
-                            y: defenderUnit.attr.y,
-                            removeCountdown: defaultUnitData.graveRemoveCountdown
-                        });
-                    } else {
-                        currentDefenderGrave.setRemoveCountdown(defaultUnitData.graveRemoveCountdown);
-                    }
-                }
-
-                game.removeUnit(defenderUnit);
-
-                game.onUnitClick(aggressorUnit);
-
-                return Promise.resolve();
-            }
-        } else {
-            console.error('aggressor can not attack the defender', state);
+        if (state.aggressor.canAttack === false) {
+            console.error('aggressor can not attack defender', aggressorUnit, defenderUnit);
             return Promise.resolve();
         }
 
-        if (state.defender.canAttack) {
-            await game.render.drawAttack(defenderUnit, aggressorUnit);
-            defenderUnit.setDidAttack(true);
-            // aggressor is/isn't alive
-            if (state.aggressor.hitPoints > 0) {
-                aggressorUnit.setHitPoints(state.aggressor.hitPoints);
-            } else {
-                const aggressorUnitGuideData = aggressorUnit.getGuideData();
+        await game.render.drawAttack(aggressorUnit, defenderUnit);
+        aggressorUnit.setDidAttack(true);
+        // defender isn't alive
+        if (state.defender.hitPoints === 0) {
+            const defenderUnitGuideData = defenderUnit.getGuideData();
 
-                if (aggressorUnitGuideData.withoutGrave !== true) {
-                    const currentAggressorGrave = find(game.graveList, (grave: Grave): boolean => {
-                        return grave.attr.x === aggressorUnit.attr.x && grave.attr.y === aggressorUnit.attr.y;
-                    }) || null;
+            if (defenderUnitGuideData.withoutGrave !== true) {
+                const currentDefenderGrave = find(game.graveList, (grave: Grave): boolean => {
+                    return grave.attr.x === defenderUnit.attr.x && grave.attr.y === defenderUnit.attr.y;
+                }) || null;
 
-                    if (currentAggressorGrave === null) {
-                        game.createGrave({
-                            x: aggressorUnit.attr.x,
-                            y: aggressorUnit.attr.y,
-                            removeCountdown: defaultUnitData.graveRemoveCountdown
-                        });
-                    } else {
-                        currentAggressorGrave.setRemoveCountdown(defaultUnitData.graveRemoveCountdown);
-                    }
+                if (currentDefenderGrave === null) {
+                    game.createGrave({
+                        x: defenderUnit.attr.x,
+                        y: defenderUnit.attr.y,
+                        removeCountdown: defaultUnitData.graveRemoveCountdown
+                    });
+                } else {
+                    currentDefenderGrave.setRemoveCountdown(defaultUnitData.graveRemoveCountdown);
                 }
-
-                game.removeUnit(aggressorUnit);
             }
-        } else {
-            console.log('defender can not attack');
+
+            game.removeUnit(defenderUnit);
+
+            game.onUnitClick(aggressorUnit);
+
+            return Promise.resolve();
         }
 
-        if (state.aggressor.hitPoints > 0) {
+        defenderUnit.setHitPoints(state.defender.hitPoints);
+
+
+        if (state.defender.canAttack === false) {
+            console.log('defender can NOT attack');
             game.onUnitClick(aggressorUnit);
+            return Promise.resolve();
         }
+
+
+        await game.render.drawAttack(defenderUnit, aggressorUnit);
+        defenderUnit.setDidAttack(true);
+        // aggressor isn't alive
+        if (state.aggressor.hitPoints === 0) {
+            const aggressorUnitGuideData = aggressorUnit.getGuideData();
+
+            if (aggressorUnitGuideData.withoutGrave !== true) {
+                const currentAggressorGrave = find(game.graveList, (grave: Grave): boolean => {
+                    return grave.attr.x === aggressorUnit.attr.x && grave.attr.y === aggressorUnit.attr.y;
+                }) || null;
+
+                if (currentAggressorGrave === null) {
+                    game.createGrave({
+                        x: aggressorUnit.attr.x,
+                        y: aggressorUnit.attr.y,
+                        removeCountdown: defaultUnitData.graveRemoveCountdown
+                    });
+                } else {
+                    currentAggressorGrave.setRemoveCountdown(defaultUnitData.graveRemoveCountdown);
+                }
+            }
+
+            game.removeUnit(aggressorUnit);
+
+            return Promise.resolve();
+        }
+
+        aggressorUnit.setHitPoints(state.aggressor.hitPoints);
+        game.onUnitClick(aggressorUnit);
 
         return Promise.resolve();
     }

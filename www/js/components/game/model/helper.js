@@ -68,6 +68,7 @@ export type UnitDataForAttackType = {|
         +max: number,
         +range: number
     |},
+    +poisonAttack: number,
     +type: string,
     +id: string,
     +userId: string,
@@ -76,7 +77,7 @@ export type UnitDataForAttackType = {|
     +y: number,
     +canAttack: boolean,
     hitPoints: number, // will rewrite in getAttackDamage
-    +poisonCountdown: number,
+    poisonCountdown: number,
     +hasWispAura: boolean,
     +damage: {| // need to count level
         given: number, // will rewrite in getAttackDamage
@@ -98,7 +99,7 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
     const defenderData = unitsDataForAttack.defender;
 
     if (aggressorData.canAttack === false) {
-        console.warn('aggressor can not attack defender', aggressorData, defenderData);
+        console.error('aggressor can not attack defender', aggressorData, defenderData);
         return {
             aggressor: aggressorData,
             defender: defenderData
@@ -117,7 +118,20 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
         };
     }
 
+    aggressorData.damage.given += resultAggressorDamage;
     defenderData.hitPoints -= resultAggressorDamage;
+    if (aggressorData.poisonAttack !== 0) {
+        defenderData.poisonCountdown = Math.max(defenderData.poisonCountdown || 0, aggressorData.poisonAttack);
+    }
+
+    if (defenderData.canAttack === false) {
+        console.log('defender can NOT strike back');
+        return {
+            aggressor: aggressorData,
+            defender: defenderData
+        };
+    }
+
 
     const resultDefenderDamage = getAttackDamage(defenderData, aggressorData);
 
@@ -131,11 +145,10 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
         };
     }
 
-    if (defenderData.canAttack === true) {
-        aggressorData.hitPoints -= resultDefenderDamage;
-        console.log('defender CAN strike back');
-    } else {
-        console.log('defender can NOT strike back');
+    aggressorData.hitPoints -= resultDefenderDamage;
+    defenderData.damage.given += resultDefenderDamage;
+    if (defenderData.poisonAttack !== 0) {
+        aggressorData.poisonCountdown = Math.max(aggressorData.poisonCountdown || 0, defenderData.poisonAttack);
     }
 
     return {
@@ -185,6 +198,9 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
             max: unitGuide[aggressor.attr.type].attack.max,
             range: unitGuide[aggressor.attr.type].attack.range
         },
+        poisonAttack: typeof unitGuide[aggressor.attr.type].poisonAttack === 'number' ?
+            unitGuide[aggressor.attr.type].poisonAttack :
+            0,
         type: aggressor.attr.type,
         id: typeof aggressor.attr.id === 'string' ? aggressor.attr.id : 'no-aggressor-id-' + Math.random(),
         userId: typeof aggressor.attr.userId === 'string' ?
@@ -218,6 +234,9 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
             max: unitGuide[defender.attr.type].attack.max,
             range: unitGuide[defender.attr.type].attack.range
         },
+        poisonAttack: typeof unitGuide[defender.attr.type].poisonAttack === 'number' ?
+            unitGuide[defender.attr.type].poisonAttack :
+            0,
         type: defender.attr.type,
         id: typeof defender.attr.id === 'string' ? defender.attr.id : 'no-defender-id-' + Math.random(),
         userId: typeof defender.attr.userId === 'string' ?
