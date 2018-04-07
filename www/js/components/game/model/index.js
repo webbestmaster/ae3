@@ -692,6 +692,8 @@ export default class Game {
 
         gameDestroyer.setDidDestroyBuilding(true);
 
+        await game.render.drawBuildingAttack(gameDestroyer, gameBuilding);
+
         gameBuilding.setAttr({
             type: mapBuilding.type,
             x: mapBuilding.x,

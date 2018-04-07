@@ -20,6 +20,7 @@ import type {
     UnitActionDestroyBuildingType
 } from './unit';
 import Unit from './unit';
+import Building from './building';
 import type {SocketMessagePushStateType} from '../../../module/socket';
 import {tween} from './../../../lib/tween';
 
@@ -267,6 +268,27 @@ export default class Render {
         await tween(
             {x: aggressorUnit.attr.x, y: aggressorUnit.attr.y},
             {x: defenderUnit.attr.x, y: defenderUnit.attr.y},
+            1000,
+            (coordinates: { x: number, y: number }) => {
+                attackSprite.position.set(coordinates.x * mapGuide.size.square, coordinates.y * mapGuide.size.square);
+            }
+        );
+
+        render.layer.actions.removeChild(attackSprite);
+
+        return Promise.resolve();
+    }
+
+    async drawBuildingAttack(destroyerUnit: Unit, building: Building): Promise<void> {
+        const render = this; // eslint-disable-line consistent-this
+
+        const attackSprite = PIXI.Sprite.fromImage(imageMap.other['action-destroy-building-0']);
+
+        render.layer.actions.addChild(attackSprite);
+
+        await tween(
+            {x: destroyerUnit.attr.x, y: destroyerUnit.attr.y},
+            {x: building.attr.x, y: building.attr.y},
             1000,
             (coordinates: { x: number, y: number }) => {
                 attackSprite.position.set(coordinates.x * mapGuide.size.square, coordinates.y * mapGuide.size.square);
