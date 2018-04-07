@@ -81,6 +81,9 @@ export default class Catapult extends Unit {
         const aggressor = this; // eslint-disable-line consistent-this
         const range = aggressor.getGuideData().attack.range;
 
-        return Math.abs(defender.attr.x - aggressor.attr.x) + Math.abs(defender.attr.y - aggressor.attr.y) <= range;
+        const coordinatesDifferent = Math.abs(defender.attr.x - aggressor.attr.x) +
+            Math.abs(defender.attr.y - aggressor.attr.y);
+
+        return coordinatesDifferent <= range && coordinatesDifferent !== 1;
     }
 }
