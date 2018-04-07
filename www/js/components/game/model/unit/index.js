@@ -252,7 +252,6 @@ export default class Unit {
 
     getActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity, max-statements
         const unit = this; // eslint-disable-line consistent-this
-        const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
 
         if (unit.getDidAttack() ||
             unit.getDidFixBuilding() ||
@@ -261,6 +260,8 @@ export default class Unit {
             unit.getDidRaiseSkeleton()) {
             return null;
         }
+
+        const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
 
         const isDidMoved = unit.getDidMove();
 
