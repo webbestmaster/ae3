@@ -190,6 +190,7 @@ function getNearCells(map: MapType, start: PointType, options: OptionsType): Arr
         0, 1, // down
         -1, 0 // left
     ];
+    const disArrayLength = disArray.length;
     const result = [];
     const {noPath} = options;
     let ii = 0;
@@ -197,7 +198,7 @@ function getNearCells(map: MapType, start: PointType, options: OptionsType): Arr
     let y = 0; // eslint-disable-line id-length
     let cell = null;
 
-    for (; ii < 8; ii += 2) {
+    for (; ii < disArrayLength; ii += 2) {
         x = startX + disArray[ii];
         y = startY + disArray[ii + 1];
         cell = getCell(x, y, map);

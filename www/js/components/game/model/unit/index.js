@@ -571,7 +571,7 @@ export default class Unit {
             }) || null;
 
             if (building === null) {
-                console.log('can not find building in ', cell);
+                // console.log('can not find building in ', cell);
                 return;
             }
 

@@ -71,8 +71,9 @@ function getAvailablePath(startX: number, // eslint-disable-line max-params
                           currentProgress: AvailablePathMapType): AvailablePathMapType {
     let ii = 0;
     const disArray = [0, -1, -1, 0, 1, 0, 0, 1];
+    const disArrayLength = disArray.length;
 
-    for (; ii < 8; ii += 2) {
+    for (; ii < disArrayLength; ii += 2) {
         const x = startX + disArray[ii];
         const y = startY + disArray[ii + 1];
 
