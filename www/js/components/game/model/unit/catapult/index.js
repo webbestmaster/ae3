@@ -2,7 +2,9 @@
 import Unit from './../index';
 import type {GameDataType, UnitActionsMapType, UnitActionType, UnitActionMoveType} from './../index';
 import {getMoviePath} from '../../helper';
-import type {PathType} from '../../../../../lib/a-star-finder';
+import type {PathType, PointType} from '../../../../../lib/a-star-finder';
+import unitGuide from '../unit-guide';
+import type {AvailablePathMapType} from './../path-master';
 
 function getCell(x: number, y: number, map: UnitActionsMapType): Array<UnitActionType> | null {
     const line = getLine(y, map);
@@ -41,52 +43,25 @@ export default class Catapult extends Unit {
         return super.getActions(gameData);
     }
 
-    getAttackActions(gameData: GameDataType): UnitActionsMapType {
+    getAllAvailableAttack(gameData: GameDataType): AvailablePathMapType {
         const unit = this; // eslint-disable-line consistent-this
-        const startX = unit.attr.x;
-        const startY = unit.attr.y;
-        const superUnitActionMap = super.getAttackActions(gameData);
+        const {x, y, type} = unit.attr;
 
-        let ii = 0;
-        const disArray = [0, -1, -1, 0, 1, 0, 0, 1];
-        const disArrayLength = disArray.length;
+        console.log('catapult');
 
-        for (; ii < disArrayLength; ii += 2) {
-            const x = startX + disArray[ii];
-            const y = startY + disArray[ii + 1];
+        const disArray = [[0, -1], [-1, 0], [1, 0], [0, 1], [0, 0]]
+            .map((coordinates: [number, number]): [number, number] => {
+                return [x + coordinates[0], y + coordinates[1]];
+            });
 
-            const cell = getCell(x, y, superUnitActionMap);
+        const allAvailableAttack = super.getAllAvailableAttack(gameData)
+            .filter((coordinates: [number, number]): boolean => {
+                return !disArray.some((disArrayCoordinates: [number, number]): boolean => {
+                    return coordinates[0] === disArrayCoordinates[0] && coordinates[1] === disArrayCoordinates[1];
+                });
+            });
 
-            if (cell !== null) {
-                superUnitActionMap[y][x] = [];
-            }
-        }
-
-        return superUnitActionMap;
-    }
-
-    getDestroyBuildingActions(gameData: GameDataType): UnitActionsMapType {
-        const unit = this; // eslint-disable-line consistent-this
-        const startX = unit.attr.x;
-        const startY = unit.attr.y;
-        const superUnitActionMap = super.getDestroyBuildingActions(gameData);
-
-        let ii = 0;
-        const disArray = [0, -1, -1, 0, 1, 0, 0, 1, 0, 0];
-        const disArrayLength = disArray.length;
-
-        for (; ii < disArrayLength; ii += 2) {
-            const x = startX + disArray[ii];
-            const y = startY + disArray[ii + 1];
-
-            const cell = getCell(x, y, superUnitActionMap);
-
-            if (cell !== null) {
-                superUnitActionMap[y][x] = [];
-            }
-        }
-
-        return superUnitActionMap;
+        return allAvailableAttack;
     }
 
     getMoviePath(unitAction: UnitActionMoveType,
@@ -100,5 +75,12 @@ export default class Catapult extends Unit {
         const moveActionList = super.getMoveActions(gameData);
 
         return getMoviePath(unitAction, moveActionList);
+    }
+
+    canAttack(defender: Unit): boolean {
+        const aggressor = this; // eslint-disable-line consistent-this
+        const range = aggressor.getGuideData().attack.range;
+
+        return Math.abs(defender.attr.x - aggressor.attr.x) + Math.abs(defender.attr.y - aggressor.attr.y) <= range;
     }
 }

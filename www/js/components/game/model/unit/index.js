@@ -554,12 +554,7 @@ export default class Unit {
 
         const destroyBuildingList = unitGuideData.destroyBuildingList;
 
-        const attackBuildingMapPointList = getPath(
-            unit.attr.x,
-            unit.attr.y,
-            unitGuideData.attack.range,
-            gameData.pathMap.fly,
-            []);
+        const attackBuildingMapPointList = unit.getAllAvailableAttack(gameData);
 
         attackBuildingMapPointList.forEach((cell: [number, number]) => {
             const building = find(gameData.buildingList, (buildingInList: Building): boolean => {
@@ -1093,6 +1088,13 @@ export default class Unit {
                  actionsList: UnitActionsMapType,
                  gameData?: GameDataType): PathType | null {
         return getMoviePath(unitAction, actionsList);
+    }
+
+    canAttack(defender: Unit): boolean {
+        const aggressor = this; // eslint-disable-line consistent-this
+        const range = aggressor.getGuideData().attack.range;
+
+        return Math.abs(defender.attr.x - aggressor.attr.x) + Math.abs(defender.attr.y - aggressor.attr.y) <= range;
     }
 
     destroy() {

@@ -62,12 +62,6 @@ export function getMoviePath(unitAction: UnitActionMoveType, actionsList: UnitAc
     return getPath(unitPathMap, [unitAction.from.x, unitAction.from.y], [unitAction.to.x, unitAction.to.y]);
 }
 
-function canAttack(aggressor: Unit, defender: Unit): boolean {
-    const range = unitGuide[aggressor.attr.type].attack.range;
-
-    return Math.abs(defender.attr.x - aggressor.attr.x) + Math.abs(defender.attr.y - aggressor.attr.y) <= range;
-}
-
 export type UnitDataForAttackType = {|
     +attack: {|
         +min: number,
@@ -199,7 +193,7 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
         armor: unitGuide[aggressor.attr.type].armor,
         x: aggressor.attr.x,
         y: aggressor.attr.y,
-        canAttack: canAttack(aggressor, defender),
+        canAttack: aggressor.canAttack(defender),
         hitPoints: aggressor.getHitPoints(),
         poisonCountdown: typeof aggressor.attr.poisonCountdown === 'number' ?
             aggressor.attr.poisonCountdown :
@@ -232,7 +226,7 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
         armor: unitGuide[defender.attr.type].armor,
         x: defender.attr.x,
         y: defender.attr.y,
-        canAttack: canAttack(defender, aggressor),
+        canAttack: defender.canAttack(aggressor),
         hitPoints: defender.getHitPoints(),
         poisonCountdown: typeof defender.attr.poisonCountdown === 'number' ?
             defender.attr.poisonCountdown :
