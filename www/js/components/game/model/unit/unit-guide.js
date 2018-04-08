@@ -305,7 +305,8 @@ const defaultUnitData = {
     hasWispAura: false,
     render: {
         spriteAnimatedSpeed: 0.08
-    }
+    },
+    level: 1
 };
 
 export {defaultUnitData};

@@ -956,6 +956,131 @@ export default class Unit {
         return Boolean(unitActionState.didRaiseSkeleton);
     }
 
+    setDamageGiven(damageGiven: number) {
+        const unit = this; // eslint-disable-line consistent-this
+
+        unit.attr.damage = unit.attr.damage || {};
+
+        unit.attr.damage.given = damageGiven;
+    }
+
+    setDamageGivenUpdateBy(damageGivenDelta: number) {
+        const unit = this; // eslint-disable-line consistent-this
+
+        unit.setDamageGiven(unit.getDamageGiven() + damageGivenDelta);
+    }
+
+    getDamageGiven(): number {
+        const unit = this; // eslint-disable-line consistent-this
+        const {damage} = unit.attr;
+
+        return damage && typeof damage.given === 'number' ? damage.given : 0;
+    }
+
+
+    setDamageReceived(damageReceived: number) {
+        const unit = this; // eslint-disable-line consistent-this
+
+        unit.attr.damage = unit.attr.damage || {};
+
+        unit.attr.damage.received = damageReceived;
+    }
+
+    setDamageReceivedUpdateBy(damageReceivedDelta: number) {
+        const unit = this; // eslint-disable-line consistent-this
+
+        unit.setDamageReceived(unit.getDamageReceived() + damageReceivedDelta);
+    }
+
+    getDamageReceived(): number {
+        const unit = this; // eslint-disable-line consistent-this
+        const {damage} = unit.attr;
+
+        return damage && typeof damage.received === 'number' ? damage.received : 0;
+    }
+
+    setPoisonCountdown(poisonCountdown: number) {
+        const unit = this; // eslint-disable-line consistent-this
+
+        unit.attr.poisonCountdown = poisonCountdown;
+    }
+
+    decreasePoisonCountdown() {
+        const unit = this; // eslint-disable-line consistent-this
+
+        const poisonCountdown = unit.getPoisonCountdown();
+
+        if (poisonCountdown === 0) {
+            return;
+        }
+
+        unit.setPoisonCountdown(poisonCountdown - 1);
+    }
+
+    getPoisonCountdown(): number {
+        const unit = this; // eslint-disable-line consistent-this
+
+        return typeof unit.attr.poisonCountdown === 'number' ?
+            unit.attr.poisonCountdown :
+            defaultUnitData.poisonCountdown;
+    }
+
+
+    hasId(): boolean {
+        const unit = this; // eslint-disable-line consistent-this
+
+        return typeof unit.attr.id === 'string' && unit.attr.id.length > 0;
+    }
+
+    getId(): string | null {
+        const unit = this; // eslint-disable-line consistent-this
+
+        if (typeof unit.attr.id === 'string' && unit.attr.id.length > 0) {
+            return unit.attr.id;
+        }
+
+        console.error('unit has no id', unit);
+
+        return null;
+    }
+
+    hasUserId(): boolean {
+        const unit = this; // eslint-disable-line consistent-this
+
+        return typeof unit.attr.userId === 'string' && unit.attr.userId.length > 0;
+    }
+
+    getUserId(): string | null {
+        const unit = this; // eslint-disable-line consistent-this
+
+        if (typeof unit.attr.userId === 'string' && unit.attr.userId.length > 0) {
+            return unit.attr.userId;
+        }
+
+        console.error('unit has no userId', unit);
+
+        return null;
+    }
+
+    setLevel(level: number) {
+        const unit = this; // eslint-disable-line consistent-this
+
+        unit.attr.level = level;
+    }
+
+    getLevel(): number {
+        const unit = this; // eslint-disable-line consistent-this
+
+        return typeof unit.attr.level === 'number' ? unit.attr.level : defaultUnitData.level;
+    }
+
+    getPoisonAttack(): number {
+        const unit = this; // eslint-disable-line consistent-this
+        const guideData = unit.getGuideData();
+
+        return typeof guideData.poisonAttack === 'number' ? guideData.poisonAttack : 0;
+    }
+
     /*
     set___(___: boolean) {
         const unit = this; // eslint-disable-line consistent-this

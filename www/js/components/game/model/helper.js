@@ -83,6 +83,7 @@ export type UnitDataForAttackType = {|
         given: number, // will rewrite in getAttackDamage
         received: number // will rewrite in getAttackDamage
     |},
+    +level: number,
     +placeArmor: number
 |};
 
@@ -111,6 +112,7 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
     if (resultAggressorDamage >= defenderData.hitPoints) {
         // aggressor kill defender
         aggressorData.damage.given += defenderData.hitPoints;
+        defenderData.damage.received += defenderData.hitPoints;
         defenderData.hitPoints = 0;
         return {
             aggressor: aggressorData,
@@ -119,6 +121,7 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
     }
 
     aggressorData.damage.given += resultAggressorDamage;
+    defenderData.damage.received += resultAggressorDamage;
     defenderData.hitPoints -= resultAggressorDamage;
     if (aggressorData.poisonAttack !== 0) {
         defenderData.poisonCountdown = Math.max(defenderData.poisonCountdown || 0, aggressorData.poisonAttack);
@@ -139,6 +142,7 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
         // defender kill aggressor
         defenderData.damage.given += aggressorData.hitPoints;
         aggressorData.hitPoints = 0;
+        aggressorData.damage.received += aggressorData.hitPoints;
         return {
             aggressor: aggressorData,
             defender: defenderData
@@ -146,6 +150,7 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
     }
 
     aggressorData.hitPoints -= resultDefenderDamage;
+    aggressorData.damage.received += resultDefenderDamage;
     defenderData.damage.given += resultDefenderDamage;
     if (defenderData.poisonAttack !== 0) {
         aggressorData.poisonCountdown = Math.max(aggressorData.poisonCountdown || 0, defenderData.poisonAttack);
@@ -192,75 +197,66 @@ function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataFor
 function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line complexity
                                aggressor: Unit,
                                defender: Unit): UnitsDataForAttackType {
+    const aggressorGuideData = aggressor.getGuideData();
+
     const aggressorData: UnitDataForAttackType = {
         attack: {
-            min: unitGuide[aggressor.attr.type].attack.min,
-            max: unitGuide[aggressor.attr.type].attack.max,
-            range: unitGuide[aggressor.attr.type].attack.range
+            min: aggressorGuideData.attack.min,
+            max: aggressorGuideData.attack.max,
+            range: aggressorGuideData.attack.range
         },
-        poisonAttack: typeof unitGuide[aggressor.attr.type].poisonAttack === 'number' ?
-            unitGuide[aggressor.attr.type].poisonAttack :
-            0,
+        poisonAttack: aggressor.getPoisonAttack(),
         type: aggressor.attr.type,
         id: typeof aggressor.attr.id === 'string' ? aggressor.attr.id : 'no-aggressor-id-' + Math.random(),
         userId: typeof aggressor.attr.userId === 'string' ?
             aggressor.attr.userId :
             'no-aggressor-user-id-' + Math.random(),
-        armor: unitGuide[aggressor.attr.type].armor,
+        armor: aggressorGuideData.armor,
         x: aggressor.attr.x,
         y: aggressor.attr.y,
         canAttack: aggressor.canAttack(defender),
         hitPoints: aggressor.getHitPoints(),
-        poisonCountdown: typeof aggressor.attr.poisonCountdown === 'number' ?
-            aggressor.attr.poisonCountdown :
-            defaultUnitData.poisonCountdown,
+        poisonCountdown: aggressor.getPoisonCountdown(),
         hasWispAura: aggressor.hasWispAura(),
-        damage: { // need to count level
-            given: aggressor.attr.damage && typeof aggressor.attr.damage.given === 'number' ?
-                aggressor.attr.damage.given :
-                0,
-            received: aggressor.attr.damage && typeof aggressor.attr.damage.received === 'number' ?
-                aggressor.attr.damage.received :
-                0
+        damage: {
+            given: aggressor.getDamageGiven(),
+            received: aggressor.getDamageReceived()
         },
-        placeArmor: typeof unitGuide[aggressor.attr.type].moveType === 'string' ?
-            gameData.armorMap[unitGuide[aggressor.attr.type].moveType][aggressor.attr.y][aggressor.attr.x] :
+        level: aggressor.getLevel(),
+        placeArmor: typeof aggressorGuideData.moveType === 'string' ?
+            gameData.armorMap[aggressorGuideData.moveType][aggressor.attr.y][aggressor.attr.x] :
             gameData.armorMap.walk[aggressor.attr.y][aggressor.attr.x]
     };
 
+
+    const defenderGuideData = defender.getGuideData();
+
     const defenderData: UnitDataForAttackType = {
         attack: {
-            min: unitGuide[defender.attr.type].attack.min,
-            max: unitGuide[defender.attr.type].attack.max,
-            range: unitGuide[defender.attr.type].attack.range
+            min: defenderGuideData.attack.min,
+            max: defenderGuideData.attack.max,
+            range: defenderGuideData.attack.range
         },
-        poisonAttack: typeof unitGuide[defender.attr.type].poisonAttack === 'number' ?
-            unitGuide[defender.attr.type].poisonAttack :
-            0,
+        poisonAttack: defender.getPoisonAttack(),
         type: defender.attr.type,
         id: typeof defender.attr.id === 'string' ? defender.attr.id : 'no-defender-id-' + Math.random(),
         userId: typeof defender.attr.userId === 'string' ?
             defender.attr.userId :
             'no-defender-user-id-' + Math.random(),
-        armor: unitGuide[defender.attr.type].armor,
+        armor: defenderGuideData.armor,
         x: defender.attr.x,
         y: defender.attr.y,
         canAttack: defender.canAttack(aggressor),
         hitPoints: defender.getHitPoints(),
-        poisonCountdown: typeof defender.attr.poisonCountdown === 'number' ?
-            defender.attr.poisonCountdown :
-            defaultUnitData.poisonCountdown,
+        poisonCountdown: defender.getPoisonCountdown(),
         hasWispAura: defender.hasWispAura(),
-        damage: { // need to count level
-            given: defender.attr.damage && typeof defender.attr.damage.given === 'number' ?
-                defender.attr.damage.given :
-                0,
-            received: defender.attr.damage && typeof defender.attr.damage.received === 'number' ?
-                defender.attr.damage.received :
-                0
+        damage: {
+            given: defender.getDamageGiven(),
+            received: defender.getDamageReceived()
         },
-        placeArmor: typeof unitGuide[defender.attr.type].moveType === 'string' ?
-            gameData.armorMap[unitGuide[defender.attr.type].moveType][defender.attr.y][defender.attr.x] :
+        level: defender.getLevel(),
+        placeArmor: typeof defenderGuideData.moveType === 'string' ?
+            gameData.armorMap[defenderGuideData.moveType][defender.attr.y][defender.attr.x] :
             gameData.armorMap.walk[defender.attr.y][defender.attr.x]
     };
 
