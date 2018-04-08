@@ -115,6 +115,7 @@ type UnitGameAttrType = {|
     sprite: {|
         unit: PIXI.extras.AnimatedSprite,
         hitPoints: PIXI.Text,
+        poisonCountdown: PIXI.Text,
         wispAura: PIXI.Sprite
     |},
     userList: Array<ServerUserType>,
@@ -159,6 +160,14 @@ const textStyle = new PIXI.TextStyle({
     strokeThickness: 4
 });
 
+const textStyleRed = new PIXI.TextStyle({
+    fontFamily: 'monospace',
+    fill: '#cc0000',
+    fontSize: 8,
+    stroke: '#000000',
+    strokeThickness: 4
+});
+
 export default class Unit {
     attr: UnitAttrType;
     gameAttr: UnitGameAttrType;
@@ -189,6 +198,7 @@ export default class Unit {
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1'])
                 ]),
                 hitPoints: new PIXI.Text('', textStyle),
+                poisonCountdown: new PIXI.Text('', textStyleRed),
                 wispAura: PIXI.Sprite.fromImage(imageMap.other['under-wisp-aura'])
             },
             userList: JSON.parse(JSON.stringify(unitConstructor.userList)),
@@ -201,6 +211,7 @@ export default class Unit {
 
         unit.initializeUnitSprite();
         unit.initializeHitPointsSprite();
+        unit.initializePoisonCountdownSprite();
         unit.bindUnitEventListeners();
     }
 
@@ -248,6 +259,28 @@ export default class Unit {
         }
 
         gameAttr.container.addChild(gameAttr.sprite.hitPoints);
+    }
+
+    initializePoisonCountdownSprite() {
+        const unit = this; // eslint-disable-line consistent-this
+        const {attr, gameAttr} = unit;
+        const poisonCountdown = unit.getPoisonCountdown();
+        const {square} = mapGuide.size;
+
+
+        // if (poisonCountdown !== defaultUnitData.poisonCountdown) {
+        unit.setPoisonCountdown(poisonCountdown);
+        // }
+
+        /*
+                if (hitPoints > defaultUnitData.hitPoints) {
+                    console.error('hitPoints bigger than default hitPoints!', unit);
+                }
+        */
+
+        gameAttr.sprite.poisonCountdown.position.set(square * 0.75, 0);
+
+        gameAttr.container.addChild(gameAttr.sprite.poisonCountdown);
     }
 
     getActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity, max-statements
@@ -1001,8 +1034,13 @@ export default class Unit {
 
     setPoisonCountdown(poisonCountdown: number) {
         const unit = this; // eslint-disable-line consistent-this
+        const {attr, gameAttr} = unit;
 
-        unit.attr.poisonCountdown = poisonCountdown;
+        attr.poisonCountdown = poisonCountdown;
+
+        gameAttr.sprite.poisonCountdown.text = poisonCountdown === defaultUnitData.poisonCountdown ?
+            '' :
+            poisonCountdown;
     }
 
     decreasePoisonCountdown() {
