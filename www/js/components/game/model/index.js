@@ -416,22 +416,14 @@ export default class Game {
             return Promise.resolve();
         }
 
-        /*
-        const aggressorUnitGuideData = aggressorUnit.getGuideData();
-        const defenderUnitGuideData = defenderUnit.getGuideData();
-*/
-
-        aggressorUnit.setDamageGiven(state.aggressor.damage.given);
-        aggressorUnit.setDamageReceived(state.aggressor.damage.received);
-
-        defenderUnit.setDamageGiven(state.defender.damage.given);
-        defenderUnit.setDamageReceived(state.defender.damage.received);
 
         await game.render.drawAttack(aggressorUnit, defenderUnit);
         aggressorUnit.setDidAttack(true);
-        // defender isn't alive
+        aggressorUnit.setDamageGiven(state.aggressor.damage.given);
+        defenderUnit.setDamageReceived(state.defender.damage.received);
+
         if (state.defender.hitPoints === 0) {
-            aggressorUnit.setPoisonCountdown(state.aggressor.poisonCountdown);
+            // defenderUnit.setHitPoints(0);
             const defenderUnitGuideData = defenderUnit.getGuideData();
 
             if (defenderUnitGuideData.withoutGrave !== true) {
@@ -458,11 +450,11 @@ export default class Game {
         }
 
         defenderUnit.setHitPoints(state.defender.hitPoints);
+        defenderUnit.setPoisonCountdown(state.defender.poisonCountdown);
+
 
         if (state.defender.canAttack === false) {
             console.log('defender can NOT attack');
-            defenderUnit.setPoisonCountdown(state.defender.poisonCountdown);
-            aggressorUnit.setPoisonCountdown(state.aggressor.poisonCountdown);
             game.onUnitClick(aggressorUnit);
             return Promise.resolve();
         }
@@ -470,9 +462,12 @@ export default class Game {
 
         await game.render.drawAttack(defenderUnit, aggressorUnit);
         defenderUnit.setDidAttack(true);
+        defenderUnit.setDamageGiven(state.defender.damage.given);
+        aggressorUnit.setDamageReceived(state.aggressor.damage.received);
+
         // aggressor isn't alive
         if (state.aggressor.hitPoints === 0) {
-            defenderUnit.setPoisonCountdown(state.defender.poisonCountdown);
+            // aggressorUnit.setHitPoints(0);
             const aggressorUnitGuideData = aggressorUnit.getGuideData();
 
             if (aggressorUnitGuideData.withoutGrave !== true) {
@@ -498,7 +493,6 @@ export default class Game {
 
         aggressorUnit.setHitPoints(state.aggressor.hitPoints);
         aggressorUnit.setPoisonCountdown(state.aggressor.poisonCountdown);
-        defenderUnit.setPoisonCountdown(state.defender.poisonCountdown);
         game.onUnitClick(aggressorUnit);
 
         return Promise.resolve();
@@ -709,7 +703,6 @@ export default class Game {
         }
 
         gameDestroyer.setDidDestroyBuilding(true);
-        // gameDestroyer.setPoisonCountdown(gameDestroyer.getPoisonCountdown());
 
         await game.render.drawBuildingAttack(gameDestroyer, gameBuilding);
 
@@ -1033,81 +1026,70 @@ export default class Game {
 
         const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
 
-        const aggressorUnit = find(newMap.units, {id: unitAction.aggressor.id});
+        const aggressorMapUnit = find(newMap.units, {id: unitAction.aggressor.id});
 
-        if (!aggressorUnit) {
-            console.error('--> can not find aggressorUnit for action:', unitAction);
+        if (!aggressorMapUnit) {
+            console.error('--> can not find aggressorMapUnit for action:', unitAction);
             return;
         }
 
-        const defenderUnit = find(newMap.units, {id: unitAction.defender.id});
+        const defenderMapUnit = find(newMap.units, {id: unitAction.defender.id});
 
-        if (!defenderUnit) {
-            console.error('--> can not find defenderUnit for action:', unitAction);
+        if (!defenderMapUnit) {
+            console.error('--> can not find defenderMapUnit for action:', unitAction);
             return;
         }
 
-        const actionAggressorUnit = unitAction.aggressor;
-        const actionDefenderUnit = unitAction.defender;
+        const aggressorActionUnit = unitAction.aggressor;
+        const defenderActionUnit = unitAction.defender;
 
-        aggressorUnit.damage = {
-            received: actionAggressorUnit.damage.received,
-            given: actionAggressorUnit.damage.given
-        };
+        if (aggressorActionUnit.canAttack) {
+            const aggressorMapUnitAction = aggressorMapUnit.action || {};
 
-        aggressorUnit.poisonCountdown = actionAggressorUnit.poisonCountdown;
+            aggressorMapUnitAction.didAttack = true;
+            aggressorMapUnit.action = aggressorMapUnitAction;
 
-        defenderUnit.damage = {
-            received: actionDefenderUnit.damage.received,
-            given: actionDefenderUnit.damage.given
-        };
+            aggressorMapUnit.damage = aggressorMapUnit.damage || {};
+            aggressorMapUnit.damage.given = aggressorActionUnit.damage.given;
+            defenderMapUnit.damage = defenderMapUnit.damage || {};
+            defenderMapUnit.damage.received = defenderActionUnit.damage.received;
 
-        defenderUnit.poisonCountdown = actionDefenderUnit.poisonCountdown;
-
-        if (actionAggressorUnit.hitPoints === 0) {
-            remove(newMap.units, {id: actionAggressorUnit.id});
-            procedureMakeGraveForMapUnit(newMap, actionAggressorUnit);
-        } else {
-            const aggressorMapUnit = find(newMap.units, {id: actionAggressorUnit.id}) || null;
-
-            if (aggressorMapUnit === null) {
-                console.error('can not find', aggressorMapUnit);
+            if (defenderActionUnit.hitPoints === 0) {
+                defenderMapUnit.hitPoints = 0;
+                remove(newMap.units, {id: defenderActionUnit.id});
+                procedureMakeGraveForMapUnit(newMap, defenderActionUnit);
             } else {
-                if (actionAggressorUnit.hitPoints !== defaultUnitData.hitPoints) {
-                    aggressorMapUnit.hitPoints = actionAggressorUnit.hitPoints;
-                }
-                if (actionAggressorUnit.canAttack) {
-                    const aggressorMapUnitAction = aggressorMapUnit.action || {};
-
-                    aggressorMapUnitAction.didAttack = true;
-                    aggressorMapUnit.action = aggressorMapUnitAction;
-                } else {
-                    console.error('aggressorMapUnit can not attack', aggressorMapUnit);
-                }
+                defenderMapUnit.hitPoints = defenderActionUnit.hitPoints;
+                defenderMapUnit.poisonCountdown = defenderActionUnit.poisonCountdown;
             }
+        } else {
+            console.error('aggressor can NOT attack', unitAction);
+            return;
         }
 
-        if (actionDefenderUnit.hitPoints === 0) {
-            remove(newMap.units, {id: actionDefenderUnit.id});
-            procedureMakeGraveForMapUnit(newMap, actionDefenderUnit);
-        } else {
-            const defenderMapUnit = find(newMap.units, {id: actionDefenderUnit.id}) || null;
+        if (defenderActionUnit.canAttack &&
+            typeof defenderMapUnit.hitPoints === 'number' &&
+            defenderMapUnit.hitPoints > 0) {
+            const defenderMapUnitAction = defenderMapUnit.action || {};
 
-            if (defenderMapUnit === null) {
-                console.error('can not find', defenderMapUnit);
+            defenderMapUnitAction.didAttack = true;
+            defenderMapUnit.action = defenderMapUnitAction;
+
+            defenderMapUnit.damage = defenderMapUnit.damage || {};
+            defenderMapUnit.damage.given = defenderActionUnit.damage.given;
+            aggressorMapUnit.damage = aggressorMapUnit.damage || {};
+            aggressorMapUnit.damage.received = aggressorActionUnit.damage.received;
+
+            if (aggressorActionUnit.hitPoints === 0) {
+                aggressorMapUnit.hitPoints = 0;
+                remove(newMap.units, {id: aggressorActionUnit.id});
+                procedureMakeGraveForMapUnit(newMap, aggressorActionUnit);
             } else {
-                if (actionDefenderUnit.hitPoints !== defaultUnitData.hitPoints) {
-                    defenderMapUnit.hitPoints = actionDefenderUnit.hitPoints;
-                }
-                if (actionDefenderUnit.canAttack) {
-                    const defenderMapUnitAction = defenderMapUnit.action || {};
-
-                    defenderMapUnitAction.didAttack = true;
-                    defenderMapUnit.action = defenderMapUnitAction;
-                } else {
-                    console.log('defenderMapUnit can not attack', defenderMapUnit);
-                }
+                aggressorMapUnit.hitPoints = aggressorActionUnit.hitPoints;
+                aggressorMapUnit.poisonCountdown = aggressorActionUnit.poisonCountdown;
             }
+        } else {
+            console.log('defenderUnitAction can NOT strike back');
         }
 
         serverApi

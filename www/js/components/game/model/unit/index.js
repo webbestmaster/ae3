@@ -269,7 +269,9 @@ export default class Unit {
 
 
         // if (poisonCountdown !== defaultUnitData.poisonCountdown) {
-        unit.setPoisonCountdown(poisonCountdown);
+        if (typeof attr.poisonCountdown === 'number') {
+            unit.setPoisonCountdown(poisonCountdown);
+        }
         // }
 
         /*
