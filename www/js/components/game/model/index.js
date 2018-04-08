@@ -416,13 +416,22 @@ export default class Game {
             return Promise.resolve();
         }
 
-        console.error('you stay here');
-        console.error('add unit damage data and poison countdown');
+        /*
+        const aggressorUnitGuideData = aggressorUnit.getGuideData();
+        const defenderUnitGuideData = defenderUnit.getGuideData();
+*/
+
+        aggressorUnit.setDamageGiven(state.aggressor.damage.given);
+        aggressorUnit.setDamageReceived(state.aggressor.damage.received);
+
+        defenderUnit.setDamageGiven(state.defender.damage.given);
+        defenderUnit.setDamageReceived(state.defender.damage.received);
 
         await game.render.drawAttack(aggressorUnit, defenderUnit);
         aggressorUnit.setDidAttack(true);
         // defender isn't alive
         if (state.defender.hitPoints === 0) {
+            aggressorUnit.setPoisonCountdown(state.aggressor.poisonCountdown);
             const defenderUnitGuideData = defenderUnit.getGuideData();
 
             if (defenderUnitGuideData.withoutGrave !== true) {
@@ -450,9 +459,10 @@ export default class Game {
 
         defenderUnit.setHitPoints(state.defender.hitPoints);
 
-
         if (state.defender.canAttack === false) {
             console.log('defender can NOT attack');
+            defenderUnit.setPoisonCountdown(state.defender.poisonCountdown);
+            aggressorUnit.setPoisonCountdown(state.aggressor.poisonCountdown);
             game.onUnitClick(aggressorUnit);
             return Promise.resolve();
         }
@@ -462,6 +472,7 @@ export default class Game {
         defenderUnit.setDidAttack(true);
         // aggressor isn't alive
         if (state.aggressor.hitPoints === 0) {
+            defenderUnit.setPoisonCountdown(state.defender.poisonCountdown);
             const aggressorUnitGuideData = aggressorUnit.getGuideData();
 
             if (aggressorUnitGuideData.withoutGrave !== true) {
@@ -486,6 +497,8 @@ export default class Game {
         }
 
         aggressorUnit.setHitPoints(state.aggressor.hitPoints);
+        aggressorUnit.setPoisonCountdown(state.aggressor.poisonCountdown);
+        defenderUnit.setPoisonCountdown(state.defender.poisonCountdown);
         game.onUnitClick(aggressorUnit);
 
         return Promise.resolve();
@@ -696,6 +709,7 @@ export default class Game {
         }
 
         gameDestroyer.setDidDestroyBuilding(true);
+        // gameDestroyer.setPoisonCountdown(gameDestroyer.getPoisonCountdown());
 
         await game.render.drawBuildingAttack(gameDestroyer, gameBuilding);
 

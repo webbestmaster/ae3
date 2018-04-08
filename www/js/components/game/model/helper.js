@@ -125,9 +125,9 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
     aggressorData.damage.given += resultAggressorDamage;
     defenderData.damage.received += resultAggressorDamage;
     defenderData.hitPoints -= resultAggressorDamage;
-    if (aggressorData.poisonAttack !== 0) {
-        defenderData.poisonCountdown = Math.max(defenderData.poisonCountdown || 0, aggressorData.poisonAttack);
-    }
+    // if (aggressorData.poisonAttack !== 0) {
+    defenderData.poisonCountdown = Math.max(defenderData.poisonCountdown, aggressorData.poisonAttack);
+    // }
 
     if (defenderData.canAttack === false) {
         console.log('defender can NOT strike back');
@@ -154,9 +154,9 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
     aggressorData.hitPoints -= resultDefenderDamage;
     aggressorData.damage.received += resultDefenderDamage;
     defenderData.damage.given += resultDefenderDamage;
-    if (defenderData.poisonAttack !== 0) {
-        aggressorData.poisonCountdown = Math.max(aggressorData.poisonCountdown || 0, defenderData.poisonAttack);
-    }
+    // if (defenderData.poisonAttack !== 0) {
+    aggressorData.poisonCountdown = Math.max(aggressorData.poisonCountdown, defenderData.poisonAttack);
+    // }
 
     return {
         aggressor: aggressorData,
