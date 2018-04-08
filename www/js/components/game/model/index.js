@@ -177,6 +177,8 @@ export default class Game {
             Object.keys(unitActionState).forEach((key: string) => {
                 unitActionState[key] = unitActionStateDefaultValue[key];
             });
+
+            console.error('decrease poison countdown here - 1');
         });
 
 
@@ -216,22 +218,6 @@ export default class Game {
                 console.log(response);
             });
     }
-
-    /*
-        async refreshUnitPoisonCountdown(): Promise<void> {
-            // TODO: update poison countdown
-            // TODO: move to refreshUnitActionState !!!
-            console.warn('---> update poison countdown');
-        }
-    */
-
-    /*
-        async refreshGraveCountdown(): Promise<void> {
-            // TODO: update grave's countdown
-            // TODO: move to refreshUnitActionState !!!
-            console.warn('---> update grave\'s  countdown');
-        }
-    */
 
     async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
         const game = this; // eslint-disable-line consistent-this
@@ -754,6 +740,7 @@ export default class Game {
             }
 
             await unit.setActionState(mapUnit.action || null);
+            console.error('decrease poison countdown here - 2');
         });
 
         const {graveList} = game;
