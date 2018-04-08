@@ -8,7 +8,9 @@ import type {UnitActionType, UnitActionsMapType, UnitActionMoveType, GameDataTyp
 import Unit from './unit';
 import {getPath, defaultOptions} from './../../../lib/a-star-finder';
 import type {PathType, PointType} from './../../../lib/a-star-finder';
-import type {UnitType} from '../../../maps/type';
+import type {MapType, UnitType} from '../../../maps/type';
+import find from 'lodash/find';
+import unitGuideData from './unit/unit-guide';
 
 export function getUserIndex(userId: string, userList: Array<ServerUserType>): number | null {
     let userIndex = 0;
@@ -282,4 +284,26 @@ export function getEventName(pcEventName: 'click'): 'click' | 'tap' {
     }
 
     return hasInMap ? pcEventName : 'click';
+}
+
+export function procedureMakeGraveForMapUnit(newMap: MapType, mapUnit: AttackResultUnitType) {
+    const actionUnitGuideData = unitGuideData[mapUnit.type];
+
+    if (actionUnitGuideData.withoutGrave === true) {
+        console.log('unit without grave', mapUnit);
+        return;
+    }
+
+    const unitGrave = find(newMap.graves, {x: mapUnit.x, y: mapUnit.y}) || null;
+
+    if (unitGrave === null) {
+        newMap.graves.push({
+            x: mapUnit.x,
+            y: mapUnit.y,
+            removeCountdown: defaultUnitData.graveRemoveCountdown
+        });
+        return;
+    }
+
+    unitGrave.removeCountdown = defaultUnitData.graveRemoveCountdown;
 }

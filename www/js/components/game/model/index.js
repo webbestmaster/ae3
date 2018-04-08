@@ -7,7 +7,7 @@ import type {MapType, LandscapeType, BuildingType, GraveType} from './../../../m
 import type {ServerUserType} from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
-import {getUserColor, getMoviePath, getEventName} from './helper';
+import {getUserColor, getMoviePath, getEventName, procedureMakeGraveForMapUnit} from './helper';
 import type {UnitType} from '../../../maps/type';
 import {unitActionStateDefaultValue} from '../../../maps/type';
 import Render from './render';
@@ -415,6 +415,9 @@ export default class Game {
             console.error('aggressor can not attack defender', aggressorUnit, defenderUnit);
             return Promise.resolve();
         }
+
+        console.error('you stay here');
+        console.error('add unit damage data and poison countdown');
 
         await game.render.drawAttack(aggressorUnit, defenderUnit);
         aggressorUnit.setDidAttack(true);
@@ -1033,26 +1036,23 @@ export default class Game {
         const actionAggressorUnit = unitAction.aggressor;
         const actionDefenderUnit = unitAction.defender;
 
+        aggressorUnit.damage = {
+            received: actionAggressorUnit.damage.received,
+            given: actionAggressorUnit.damage.given
+        };
+
+        aggressorUnit.poisonCountdown = actionAggressorUnit.poisonCountdown;
+
+        defenderUnit.damage = {
+            received: actionDefenderUnit.damage.received,
+            given: actionDefenderUnit.damage.given
+        };
+
+        defenderUnit.poisonCountdown = actionDefenderUnit.poisonCountdown;
+
         if (actionAggressorUnit.hitPoints === 0) {
             remove(newMap.units, {id: actionAggressorUnit.id});
-            const aggressorUnitGuideData = unitGuideData[actionAggressorUnit.type];
-
-            if (aggressorUnitGuideData.withoutGrave !== true) {
-                const aggressorGrave = find(newMap.graves, {
-                    x: actionAggressorUnit.x,
-                    y: actionAggressorUnit.y
-                }) || null;
-
-                if (aggressorGrave === null) {
-                    newMap.graves.push({
-                        x: actionAggressorUnit.x,
-                        y: actionAggressorUnit.y,
-                        removeCountdown: defaultUnitData.graveRemoveCountdown
-                    });
-                } else {
-                    aggressorGrave.removeCountdown = defaultUnitData.graveRemoveCountdown;
-                }
-            }
+            procedureMakeGraveForMapUnit(newMap, actionAggressorUnit);
         } else {
             const aggressorMapUnit = find(newMap.units, {id: actionAggressorUnit.id}) || null;
 
@@ -1075,24 +1075,7 @@ export default class Game {
 
         if (actionDefenderUnit.hitPoints === 0) {
             remove(newMap.units, {id: actionDefenderUnit.id});
-            const defenderUnitGuideData = unitGuideData[actionDefenderUnit.type];
-
-            if (defenderUnitGuideData.withoutGrave !== true) {
-                const defenderGrave = find(newMap.graves, {
-                    x: actionDefenderUnit.x,
-                    y: actionDefenderUnit.y
-                }) || null;
-
-                if (defenderGrave === null) {
-                    newMap.graves.push({
-                        x: actionDefenderUnit.x,
-                        y: actionDefenderUnit.y,
-                        removeCountdown: defaultUnitData.graveRemoveCountdown
-                    });
-                } else {
-                    defenderGrave.removeCountdown = defaultUnitData.graveRemoveCountdown;
-                }
-            }
+            procedureMakeGraveForMapUnit(newMap, actionDefenderUnit);
         } else {
             const defenderMapUnit = find(newMap.units, {id: actionDefenderUnit.id}) || null;
 
