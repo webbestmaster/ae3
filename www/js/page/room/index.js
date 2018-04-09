@@ -127,6 +127,9 @@ class Room extends Component<PropsType, StateType> {
             case 'room__take-turn':
                 break;
 
+            case 'room__drop-turn':
+                break;
+
             case 'room__join-into-room':
             case 'room__leave-from-room':
             case 'room__user-disconnected':
