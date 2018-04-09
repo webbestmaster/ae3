@@ -163,10 +163,10 @@ class Room extends Component<PropsType, StateType> {
                 if (message.states.last.state.isGameStart === true && state.isGameStart !== true) {
                     console.warn('---> The game has begun!!!');
 
-                    const settings = await serverApi.getAllRoomSettings(roomId);
+                    roomDataSettings = await serverApi.getAllRoomSettings(roomId);
 
                     view.setState({
-                        settings: settings.settings
+                        settings: roomDataSettings.settings
                     });
 
                     view.setState({isGameStart: true});
@@ -177,7 +177,7 @@ class Room extends Component<PropsType, StateType> {
                 break;
 
             default:
-                console.log('---> view - room - unsupported message type: ' + message.type);
+                console.error('---> view - room - unsupported message type: ' + message.type);
         }
 
         return Promise.resolve();
