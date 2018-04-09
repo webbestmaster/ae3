@@ -1,4 +1,7 @@
 // @flow
+
+export type TeamIdType = 'team-0' | 'team-1' | 'team-2' | 'team-3';
+
 export type MapGuideType = {|
     defaultMoneyList: Array<number>,
     unitLimitList: Array<number>,
@@ -38,18 +41,8 @@ export type MapGuideType = {|
 |};
 
 const mapGuide: MapGuideType = {
-    defaultMoneyList: [
-        500,
-        1000,
-        2000,
-        5000
-    ],
-    unitLimitList: [
-        10,
-        15,
-        20,
-        25
-    ],
+    defaultMoneyList: [500, 1000, 2000, 5000],
+    unitLimitList: [10, 15, 20, 25, 50, 99],
 
     /*
     userIdList: [

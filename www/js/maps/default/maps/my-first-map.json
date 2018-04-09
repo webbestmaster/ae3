@@ -13,11 +13,13 @@
     "userList": [
         {
             "userId": "0",
-            "money": 0
+            "money": 0,
+            "teamId": "team-0"
         },
         {
             "userId": "1",
-            "money": 0
+            "money": 0,
+            "teamId": "team-1"
         }
     ],
     "unitLimit": 0,

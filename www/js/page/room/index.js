@@ -28,7 +28,7 @@ import type {AllRoomSettingsType, ServerUserType} from './../../module/server-ap
 import mapGuide from './../../maps/map-guide';
 
 import routes, {type HistoryType, type MatchType} from './../../app/routes';
-import type {BuildingType, MapType, UnitType} from '../../maps/type';
+import type {BuildingType, MapType, UnitType, MapUserType} from '../../maps/type';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -113,32 +113,45 @@ class Room extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {model} = state;
         const roomId = props.match.params.roomId || '';
-        let users = null;
+        let roomDataUsers = null;
+        let roomDataSettings = null;
+
+        if (!state.settings) {
+            console.error('state.settings is not defined');
+            return Promise.resolve();
+        }
+
+        const defaultMoney = state.settings.map.defaultMoney;
 
         switch (message.type) {
             case 'room__take-turn':
                 break;
 
             case 'room__join-into-room':
-                users = await serverApi.getAllRoomUsers(roomId);
-                view.setState({
-                    userList: users.users
-                });
-
-                break;
-
             case 'room__leave-from-room':
-                users = await serverApi.getAllRoomUsers(roomId);
+            case 'room__user-disconnected':
+                roomDataUsers = await serverApi.getAllRoomUsers(roomId);
                 view.setState({
-                    userList: users.users
+                    userList: roomDataUsers.users
                 });
 
-                break;
+                roomDataSettings = await serverApi.getAllRoomSettings(roomId);
 
-            case 'room__user-disconnected':
-                users = await serverApi.getAllRoomUsers(roomId);
+                roomDataSettings.settings.map.userList = roomDataUsers
+                    .users.map((serverUser: ServerUserType, userIndex: number): MapUserType => {
+                        return {
+                            userId: serverUser.userId,
+                            money: defaultMoney,
+                            teamId: mapGuide.teamIdList[userIndex]
+                        };
+                    });
+
+                await serverApi.setRoomSetting(roomId, {map: roomDataSettings.settings.map});
+
+                roomDataSettings = await serverApi.getAllRoomSettings(roomId);
+
                 view.setState({
-                    userList: users.users
+                    settings: roomDataSettings.settings
                 });
 
                 break;
@@ -156,7 +169,7 @@ class Room extends Component<PropsType, StateType> {
 
                     view.setState({isGameStart: true});
 
-                    return;
+                    return Promise.resolve();
                 }
 
                 break;
@@ -164,6 +177,8 @@ class Room extends Component<PropsType, StateType> {
             default:
                 console.log('---> view - room - unsupported message type: ' + message.type);
         }
+
+        return Promise.resolve();
     }
 
     async startGame(): Promise<void> {

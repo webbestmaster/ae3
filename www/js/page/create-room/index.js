@@ -57,14 +57,20 @@ class CreateRoom extends Component<PropsType, StateType> {
         }
 
         const {mapIndex, defaultMoney, unitLimit} = state;
-        const map: MapType = mapList[mapIndex];
+        const map: MapType = JSON.parse(JSON.stringify(mapList[mapIndex]));
         const socketId = props.auth.socket.id;
         const userId = props.auth.user.id;
 
+        map.unitLimit = unitLimit;
+        map.defaultMoney = defaultMoney;
+        map.userList = [{
+            userId,
+            teamId: mapGuide.teamIdList[0],
+            money: defaultMoney
+        }];
+
         const setAllRoomSettingsResult = await serverApi.setAllRoomSettings(createRoomResult.roomId, {
             map,
-            defaultMoney,
-            unitLimit,
             userList: [{
                 userId,
                 socketId,
@@ -95,6 +101,7 @@ class CreateRoom extends Component<PropsType, StateType> {
 
     render(): Node {
         const view = this;
+        const {state} = view;
 
         return <div>
             <h1>CreateRoom</h1>
@@ -113,7 +120,7 @@ class CreateRoom extends Component<PropsType, StateType> {
             {mapGuide.defaultMoneyList.map((defaultMoney: number): Node => <div
                 onClick={(): void => view.setState({defaultMoney})}
                 key={defaultMoney}>
-                {defaultMoney}
+                {defaultMoney} {defaultMoney === state.defaultMoney ? '<-' : ''}
             </div>)}
 
             <br/>
@@ -122,7 +129,7 @@ class CreateRoom extends Component<PropsType, StateType> {
             {mapGuide.unitLimitList.map((unitLimit: number): Node => <div
                 onClick={(): void => view.setState({unitLimit})}
                 key={unitLimit}>
-                {unitLimit}
+                {unitLimit} {unitLimit === state.unitLimit ? '<-' : ''}
             </div>)}
 
             <br/>
@@ -132,9 +139,10 @@ class CreateRoom extends Component<PropsType, StateType> {
 
             <button
                 onClick={async (): Promise<void> => {
-                    const result = view.createRoom();
+                    const result = await view.createRoom();
                 }}
-            >create room
+            >
+                create room
             </button>
 
             <br/>

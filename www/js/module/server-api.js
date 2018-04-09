@@ -57,8 +57,8 @@ export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType
 
 export type AllRoomSettingsType = {|
     map: MapType,
-    defaultMoney: number,
-    unitLimit: number,
+    // defaultMoney: number,
+    // unitLimit: number,
     userList: Array<ServerUserType>
 |};
 

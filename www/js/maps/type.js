@@ -1,4 +1,5 @@
 // @flow
+import type {TeamIdType} from './map-guide';
 
 export type UserIdType = string;
 
@@ -95,7 +96,8 @@ export type GraveType = {|
 
 export type MapUserType = {|
     userId: string,
-    money: number
+    money: number,
+    teamId: TeamIdType
 |};
 
 export type MapType = {|
@@ -118,3 +120,4 @@ export type MapType = {|
     units: Array<UnitType>,
     graves: Array<GraveType>
 |};
+
