@@ -113,6 +113,7 @@ export type MapType = {|
     },
     type: 'skirmish',
     userList: Array<MapUserType>,
+    activeUserId: string,
     unitLimit: number,
     defaultMoney: number,
     landscape: Array<Array<LandscapeType>>,

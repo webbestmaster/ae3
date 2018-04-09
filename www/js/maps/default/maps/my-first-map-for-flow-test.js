@@ -27,6 +27,7 @@ const myFirsyMap: MapType = {
             teamId: 'team-1'
         }
     ],
+    activeUserId: '0',
     unitLimit: 0,
     defaultMoney: 0,
     landscape: [

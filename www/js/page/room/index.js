@@ -146,6 +146,8 @@ class Room extends Component<PropsType, StateType> {
                         };
                     });
 
+                roomDataSettings.settings.map.activeUserId = roomDataSettings.settings.map.userList[0].userId;
+
                 await serverApi.setRoomSetting(roomId, {map: roomDataSettings.settings.map});
 
                 roomDataSettings = await serverApi.getAllRoomSettings(roomId);

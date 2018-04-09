@@ -68,6 +68,7 @@ class CreateRoom extends Component<PropsType, StateType> {
             teamId: mapGuide.teamIdList[0],
             money: defaultMoney
         }];
+        map.activeUserId = userId;
 
         const setAllRoomSettingsResult = await serverApi.setAllRoomSettings(createRoomResult.roomId, {
             map,
