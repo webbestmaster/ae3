@@ -93,6 +93,11 @@ export type GraveType = {|
     removeCountdown: number
 |};
 
+export type MapUserType = {|
+    userId: string,
+    money: number
+|};
+
 export type MapType = {|
     meta: {
         en: {
@@ -104,6 +109,10 @@ export type MapType = {|
             name: string
         }
     },
+    type: 'skirmish',
+    userList: Array<MapUserType>,
+    unitLimit: number,
+    defaultMoney: number,
     landscape: Array<Array<LandscapeType>>,
     buildings: Array<BuildingType>,
     units: Array<UnitType>,

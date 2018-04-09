@@ -166,6 +166,72 @@ class Room extends Component<PropsType, StateType> {
         }
     }
 
+    async startGame(): Promise<void> {
+        const view = this;
+        const {props, state} = view;
+        const roomId = props.match.params.roomId || '';
+
+        const userList: Array<ServerUserType> = state.userList
+            .map((userItem: ServerUserType, userIndex: number): ServerUserType => {
+                return {
+                    socketId: userItem.socketId,
+                    userId: userItem.userId,
+                    teamId: mapGuide.teamIdList[userIndex]
+                };
+            });
+
+        const takeTurnResult = await serverApi.takeTurn(roomId, user.getId());
+
+        const map: MapType | void = state.settings && state.settings.map;
+
+        if (!map) {
+            console.error('---> map is not exists!!!!');
+            return;
+        }
+
+        [].concat(map.buildings, map.units).forEach((userItem: BuildingType | UnitType) => { // eslint-disable-line complexity
+            const userItemUserId = typeof userItem.userId === 'string' ? userItem.userId : '';
+
+            if (typeof userItem.id !== 'string' || userItem.id === '') {
+                userItem.id = [userItem.x, userItem.y, Math.random()].join('_'); // eslint-disable-line no-param-reassign
+            }
+
+            if (userItemUserId === '') {
+                return;
+            }
+
+            const userIndex = parseInt(userItemUserId.replace(/\D/g, ''), 10) || 0;
+
+            const userData: ServerUserType | void = userList[userIndex];
+
+            if (!userData) {
+                Reflect.deleteProperty(userItem, 'userId');
+                return;
+            }
+
+            userItem.userId = userData.userId; // eslint-disable-line no-param-reassign
+        });
+
+        const setSettingResult = await serverApi.setRoomSetting(roomId, {
+            userList
+        });
+
+        const setSettingResult1 = await serverApi.setRoomSetting(roomId, {
+            map
+        });
+
+        const newState: PushedStatePayloadType = {
+            isGameStart: true,
+            activeUserId: user.getId(),
+            map
+        };
+
+        const pushStateResult = await serverApi.pushState(roomId, user.getId(), {
+            type: 'room__push-state',
+            state: newState
+        });
+    }
+
     render(): Node { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
@@ -190,66 +256,7 @@ class Room extends Component<PropsType, StateType> {
             </div>
 
             <button onClick={async (): Promise<void> => {
-                const userList: Array<ServerUserType> = state.userList
-                    .map((userItem: ServerUserType, userIndex: number): ServerUserType => {
-                        return {
-                            socketId: userItem.socketId,
-                            userId: userItem.userId,
-                            teamId: mapGuide.teamIdList[userIndex]
-                        };
-                    });
-
-
-                const takeTurnResult = await serverApi.takeTurn(roomId, user.getId());
-
-                const map: MapType | void = state.settings && state.settings.map;
-
-                if (!map) {
-                    console.error('---> map is not exists!!!!');
-                    return;
-                }
-
-                [].concat(map.buildings, map.units).forEach((userItem: BuildingType | UnitType) => { // eslint-disable-line complexity
-                    const userItemUserId = typeof userItem.userId === 'string' ? userItem.userId : '';
-
-                    if (typeof userItem.id !== 'string' || userItem.id === '') {
-                        userItem.id = [userItem.x, userItem.y, Math.random()].join('_'); // eslint-disable-line no-param-reassign
-                    }
-
-                    if (userItemUserId === '') {
-                        return;
-                    }
-
-                    const userIndex = parseInt(userItemUserId.replace(/\D/g, ''), 10) || 0;
-
-                    const userData: ServerUserType | void = userList[userIndex];
-
-                    if (!userData) {
-                        Reflect.deleteProperty(userItem, 'userId');
-                        return;
-                    }
-
-                    userItem.userId = userData.userId; // eslint-disable-line no-param-reassign
-                });
-
-                const setSettingResult = await serverApi.setRoomSetting(roomId, {
-                    userList
-                });
-
-                const setSettingResult1 = await serverApi.setRoomSetting(roomId, {
-                    map
-                });
-
-                const newState: PushedStatePayloadType = {
-                    isGameStart: true,
-                    activeUserId: user.getId(),
-                    map
-                };
-
-                const pushStateResult = await serverApi.pushState(roomId, user.getId(), {
-                    type: 'room__push-state',
-                    state: newState
-                });
+                await view.startGame();
             }}>
                 start
             </button>

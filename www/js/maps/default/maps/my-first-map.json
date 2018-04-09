@@ -9,6 +9,19 @@
             "name": "моя первая карта"
         }
     },
+    "type": "skirmish",
+    "userList": [
+        {
+            "userId": "0",
+            "money": 0
+        },
+        {
+            "userId": "1",
+            "money": 0
+        }
+    ],
+    "unitLimit": 0,
+    "defaultMoney": 0,
     "landscape": [
         [
             "hill-0",

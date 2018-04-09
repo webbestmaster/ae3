@@ -2,7 +2,7 @@
 export type MapGuideType = {|
     defaultMoneyList: Array<number>,
     unitLimitList: Array<number>,
-    userIdList: Array<string>,
+    // userIdList: Array<string>,
     teamIdList: ['team-0', 'team-1', 'team-2', 'team-3'],
     colorList: ['black', 'blue', 'green', 'red'],
     size: {
@@ -50,12 +50,15 @@ const mapGuide: MapGuideType = {
         20,
         25
     ],
+
+    /*
     userIdList: [
         '0',
         '1',
         '2',
         '3'
     ],
+*/
     teamIdList: [
         'team-0',
         'team-1',
