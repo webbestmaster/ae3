@@ -150,8 +150,6 @@ export default class Game {
     }
 
     async refreshUnitActionState(): Promise<void> {
-        // TODO: update unit action (didMove, didAttack, etc.)
-        console.warn('---> refresh unit action (didMove, didAttack, etc.)');
         const game = this; // eslint-disable-line consistent-this
 
         game.render.cleanActionsList();
@@ -166,6 +164,7 @@ export default class Game {
             return;
         }
 
+        // refresh action state
         mapUnitList.forEach((mapUnit: UnitType) => {
             const unitActionState = mapUnit.hasOwnProperty('action') && mapUnit.action ? mapUnit.action : null;
 
@@ -177,10 +176,18 @@ export default class Game {
             Object.keys(unitActionState).forEach((key: string) => {
                 unitActionState[key] = unitActionStateDefaultValue[key];
             });
-
-            console.error('decrease poison countdown here - 1');
         });
 
+        // refresh poison countdown
+        mapUnitList.forEach((mapUnit: UnitType) => {
+            if (typeof mapUnit.poisonCountdown !== 'number') {
+                return;
+            }
+            if (mapUnit.poisonCountdown === 0) {
+                return;
+            }
+            mapUnit.poisonCountdown -= 1; // eslint-disable-line no-param-reassign
+        });
 
         // update graves
         const {graveList} = game;
@@ -740,7 +747,7 @@ export default class Game {
             }
 
             await unit.setActionState(mapUnit.action || null);
-            console.error('decrease poison countdown here - 2');
+            unit.decreasePoisonCountdown();
         });
 
         const {graveList} = game;

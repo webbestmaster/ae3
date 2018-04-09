@@ -848,36 +848,35 @@ export default class Unit {
             }
 
             switch (actionName) {
-                case 'didMove': {
+                case 'didMove':
                     console.log('setDidMove', actionState[actionName]);
                     unit.setDidMove(Boolean(actionState[actionName]));
-                    return;
-                }
-                case 'didAttack': {
+                    break;
+
+                case 'didAttack':
                     console.log('setDidAttack', actionState[actionName]);
                     unit.setDidAttack(Boolean(actionState[actionName]));
-                    return;
-                }
-                case 'didFixBuilding': {
+                    break;
+
+                case 'didFixBuilding':
                     console.log('didFixBuilding', actionState[actionName]);
                     unit.setDidFixBuilding(Boolean(actionState[actionName]));
-                    return;
-                }
-                case 'didOccupyBuilding': {
+                    break;
+
+                case 'didOccupyBuilding':
                     console.log('didOccupyBuilding', actionState[actionName]);
                     unit.setDidOccupyBuilding(Boolean(actionState[actionName]));
-                    return;
-                }
-                case 'didRaiseSkeleton': {
+                    break;
+
+                case 'didRaiseSkeleton':
                     console.log('didRaiseSkeleton', actionState[actionName]);
                     unit.setDidRaiseSkeleton(Boolean(actionState[actionName]));
-                    return;
-                }
-                case 'didDestroyBuilding': {
+                    break;
+
+                case 'didDestroyBuilding':
                     console.log('didDestroyBuilding', actionState[actionName]);
                     unit.setDidDestroyBuilding(Boolean(actionState[actionName]));
-                    return;
-                }
+                    break;
 
                 default:
                     console.error('unsupported action name', actionName, actionState);
