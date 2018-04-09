@@ -116,7 +116,7 @@ const unitData: GuideUnitDataType = {
         langKey: 'dire-wolf',
         cost: 600,
 
-        poisonAttack: 2
+        poisonAttack: 3
     },
     golem: {
         attack: {

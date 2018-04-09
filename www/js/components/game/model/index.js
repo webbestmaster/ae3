@@ -746,8 +746,8 @@ export default class Game {
                 return;
             }
 
-            await unit.setActionState(mapUnit.action || null);
             unit.decreasePoisonCountdown();
+            await unit.setActionState(mapUnit.action || null);
         });
 
         const {graveList} = game;
