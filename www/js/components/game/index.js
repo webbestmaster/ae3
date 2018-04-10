@@ -158,8 +158,12 @@ class GameView extends Component<PropsType, StateType> {
 
                 break;
 
+            case 'room__drop-turn':
+
+                break;
+
             default:
-                console.log('---> view - game - unsupported message type: ', message);
+                console.error('---> view - game - unsupported message type: ', message);
         }
     }
 
@@ -191,6 +195,8 @@ class GameView extends Component<PropsType, StateType> {
             <h1>game</h1>
 
             <h2>activeUserId: {state.activeUserId}</h2>
+
+            <h3>server user list: {JSON.stringify(state.userList)}</h3>
 
             <br/>
             <br/>
