@@ -171,17 +171,6 @@ class Room extends Component<PropsType, StateType> {
 
                     view.setState({isGameStart: true});
 
-                    roomDataSettings = await serverApi.getAllRoomSettings(roomId);
-
-                    view.setState({
-                        settings: roomDataSettings.settings
-                    });
-
-                    if (roomDataSettings.settings.map.activeUserId === user.getId()) {
-                        console.log('---> take turn');
-                        const takeTurnResult = await serverApi.takeTurn(roomId, user.getId());
-                    }
-
                     return Promise.resolve();
                 }
 

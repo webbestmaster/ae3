@@ -1174,7 +1174,7 @@ export default class Unit {
 
         gameAttr.isActionAvailable = isActionAvailable;
 
-        gameAttr.container.alpha = isActionAvailable ? 1 : 0.5;
+        gameAttr.sprite.unit.alpha = isActionAvailable ? 1 : 0.65;
     }
 
     getIsActionAvailable(): boolean {
