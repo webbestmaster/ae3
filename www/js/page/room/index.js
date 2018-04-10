@@ -133,6 +133,7 @@ class Room extends Component<PropsType, StateType> {
             case 'room__join-into-room':
             case 'room__leave-from-room':
             case 'room__user-disconnected':
+                // TODO: refactor me!!!
                 roomDataUsers = await serverApi.getAllRoomUsers(roomId);
                 view.setState({
                     userList: roomDataUsers.users
@@ -173,6 +174,11 @@ class Room extends Component<PropsType, StateType> {
                     });
 
                     view.setState({isGameStart: true});
+
+                    if (roomDataSettings.settings.map.activeUserId === user.getId()) {
+                        console.log('---> take turn');
+                        const takeTurnResult = await serverApi.takeTurn(roomId, user.getId());
+                    }
 
                     return Promise.resolve();
                 }
