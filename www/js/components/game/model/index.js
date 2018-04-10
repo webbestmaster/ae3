@@ -149,12 +149,15 @@ export default class Game {
         );
     }
 
-    async refreshUnitActionState(): Promise<void> {
+    async refreshUnitActionState(): Promise<void> { // eslint-disable-line max-statements
         const game = this; // eslint-disable-line consistent-this
 
         game.render.cleanActionsList();
 
         const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+
+        newMap.activeUserId = user.getId();
+
         const {unitList} = game;
         const mapUnitList = newMap.units;
         const isUnitListLengthEqual = mapUnitList.length === unitList.length;

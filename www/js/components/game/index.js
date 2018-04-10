@@ -28,7 +28,8 @@ type StateType = {|
     userList: Array<ServerUserType>,
     model: MainModel,
     game: Game,
-    activeUserId: string
+    activeUserId: string,
+    socketMessageList: Array<SocketMessageType>
 |};
 
 type RefsType = {|
@@ -49,7 +50,8 @@ class GameView extends Component<PropsType, StateType> {
             userList: [],
             model: new MainModel(),
             game: new Game(),
-            activeUserId: ''
+            activeUserId: '',
+            socketMessageList: []
         };
     }
 
@@ -120,6 +122,12 @@ class GameView extends Component<PropsType, StateType> {
         const {model} = state;
         const {roomId} = props;
         let users = null;
+
+        // need just for debug
+        view.setState((prevState: StateType): StateType => {
+            prevState.socketMessageList.push(message);
+            return prevState;
+        });
 
         switch (message.type) {
             case 'room__take-turn':
