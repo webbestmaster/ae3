@@ -88,16 +88,6 @@ class CreateRoom extends Component<PropsType, StateType> {
         props.history.push(routes.room.replace(':roomId', joinRoomResult.roomId));
 
         return joinRoomResult.roomId;
-
-        /*
-        const getAllRoomSettingsResult = await serverApi.getAllRoomSettings(joinRoomResult.roomId);
-
-        console.log('getAllRoomSettingsResult');
-        console.log(getAllRoomSettingsResult.settings);
-        console.log(getAllRoomSettingsResult.roomId);
-
-        return joinRoomResult.roomId;
-*/
     }
 
     render(): Node {

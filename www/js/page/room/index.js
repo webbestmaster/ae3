@@ -108,7 +108,7 @@ class Room extends Component<PropsType, StateType> {
         });
     }
 
-    async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
+    async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity, max-statements
         const view = this;
         const {props, state} = view;
         const {model} = state;
@@ -118,6 +118,10 @@ class Room extends Component<PropsType, StateType> {
 
         if (!state.settings) {
             console.error('state.settings is not defined');
+            return Promise.resolve();
+        }
+
+        if (state.isGameStart === true) {
             return Promise.resolve();
         }
 
@@ -133,7 +137,6 @@ class Room extends Component<PropsType, StateType> {
             case 'room__join-into-room':
             case 'room__leave-from-room':
             case 'room__user-disconnected':
-                // TODO: refactor me!!!
                 roomDataUsers = await serverApi.getAllRoomUsers(roomId);
                 view.setState({
                     userList: roomDataUsers.users
@@ -163,17 +166,16 @@ class Room extends Component<PropsType, StateType> {
                 break;
 
             case 'room__push-state':
-
-                if (message.states.last.state.isGameStart === true && state.isGameStart !== true) {
+                if (message.states.last.state.isGameStart === true) {
                     console.warn('---> The game has begun!!!');
+
+                    view.setState({isGameStart: true});
 
                     roomDataSettings = await serverApi.getAllRoomSettings(roomId);
 
                     view.setState({
                         settings: roomDataSettings.settings
                     });
-
-                    view.setState({isGameStart: true});
 
                     if (roomDataSettings.settings.map.activeUserId === user.getId()) {
                         console.log('---> take turn');
