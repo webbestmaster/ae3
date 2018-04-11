@@ -155,9 +155,6 @@ export default class Game {
         game.render.cleanActionsList();
 
         const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
-
-        newMap.activeUserId = user.getId();
-
         const {unitList} = game;
         const mapUnitList = newMap.units;
         const isUnitListLengthEqual = mapUnitList.length === unitList.length;
@@ -166,6 +163,8 @@ export default class Game {
             console.error('Unit List Length is not equal', mapUnitList, unitList);
             return;
         }
+
+        newMap.activeUserId = user.getId();
 
         // refresh action state
         mapUnitList.forEach((mapUnit: UnitType) => {
