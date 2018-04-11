@@ -144,6 +144,10 @@ export default class Game {
         model.listenTo(socket.attr.model,
             'message',
             async (message: SocketMessageType): Promise<void> => {
+                // TODO: wait and of previous action
+                // TODO: use Process/Promise Master
+                console.warn('TODO: wait and of previous action');
+                console.warn('TODO: use Process/Promise Master');
                 await game.onMessage(message);
             }
         );
