@@ -15,6 +15,7 @@ import type {SocketMessageType} from '../../module/socket';
 import * as serverApi from '../../module/server-api';
 import MainModel from '../../lib/main-model';
 import type {AllRoomSettingsType, ServerUserType} from '../../module/server-api';
+import ReactJson from 'react-json-view';
 import find from 'lodash/find';
 import Unit from './model/unit';
 
@@ -202,12 +203,15 @@ class GameView extends Component<PropsType, StateType> {
         return <div>
             <h1>game</h1>
 
-            <h2>activeUserId: {state.activeUserId}</h2>
+            <h2>activeUserId:<br/>{state.activeUserId}</h2>
 
-            <h3>server user list: {JSON.stringify(state.userList)}</h3>
+            <h2>server user list:</h2>
 
-            <br/>
-            <br/>
+            <ReactJson src={state.userList}/>
+
+            <h3>map active user: {state.game &&
+            state.game.mapState &&
+            state.game.mapState.activeUserId || 'no map activeUserId'}</h3>
 
             <button onClick={async (): Promise<void> => {
                 await view.endTurn();
