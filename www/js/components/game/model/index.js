@@ -1664,4 +1664,10 @@ export default class Game {
 
         return gameData;
     }
+
+    destroy() {
+        const game = this; // eslint-disable-line consistent-this
+
+        console.warn('---> add game destroy');
+    }
 }

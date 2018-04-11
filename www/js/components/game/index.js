@@ -179,12 +179,12 @@ class GameView extends Component<PropsType, StateType> {
     async componentWillUnmount(): Promise<void> {
         const view = this;
         const {props, state} = view;
-        const {model} = state;
+        const {model, game} = state;
         const {roomId} = props;
 
-        model.destroy();
+        game.destroy();
 
-        // todo: add Game.destroy()
+        model.destroy();
 
         const leaveRoomResult = await serverApi.leaveRoom(roomId, user.getId());
     }
@@ -222,7 +222,7 @@ class GameView extends Component<PropsType, StateType> {
             <canvas style={{
                 width: props.system.screen.width,
                 height: props.system.screen.height,
-                display: 'block'
+                display: 'none'
             }} ref="canvas"/>
 
         </div>;
