@@ -30,6 +30,7 @@ type StateType = {|
     model: MainModel,
     game: Game,
     activeUserId: string,
+    mapActiveUserId: string,
     socketMessageList: Array<SocketMessageType>
 |};
 
@@ -52,6 +53,7 @@ class GameView extends Component<PropsType, StateType> {
             model: new MainModel(),
             game: new Game(),
             activeUserId: '',
+            mapActiveUserId: '',
             socketMessageList: []
         };
     }
@@ -68,7 +70,8 @@ class GameView extends Component<PropsType, StateType> {
         view.setState({
             settings,
             userList: users,
-            activeUserId: users[0].userId
+            activeUserId: settings.map.activeUserId,
+            mapActiveUserId: settings.map.activeUserId
         });
 
         // initialize game's data
@@ -122,7 +125,7 @@ class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {model} = state;
         const {roomId} = props;
-        let users = null;
+        let allUserResponse = null;
 
         // need just for debug
         view.setState((prevState: StateType): StateType => {
@@ -134,29 +137,30 @@ class GameView extends Component<PropsType, StateType> {
             case 'room__take-turn':
 
                 view.setState({activeUserId: message.states.last.activeUserId});
+                view.setState({mapActiveUserId: 'no-user-id'});
 
                 break;
 
             case 'room__join-into-room':
-                users = await serverApi.getAllRoomUsers(roomId);
+                allUserResponse = await serverApi.getAllRoomUsers(roomId);
                 view.setState({
-                    userList: users.users
+                    userList: allUserResponse.users
                 });
 
                 break;
 
             case 'room__leave-from-room':
-                users = await serverApi.getAllRoomUsers(roomId);
+                allUserResponse = await serverApi.getAllRoomUsers(roomId);
                 view.setState({
-                    userList: users.users
+                    userList: allUserResponse.users
                 });
 
                 break;
 
             case 'room__user-disconnected':
-                users = await serverApi.getAllRoomUsers(roomId);
+                allUserResponse = await serverApi.getAllRoomUsers(roomId);
                 view.setState({
-                    userList: users.users
+                    userList: allUserResponse.users
                 });
 
                 break;
@@ -164,6 +168,7 @@ class GameView extends Component<PropsType, StateType> {
             case 'room__push-state':
 
                 view.setState({activeUserId: message.states.last.state.activeUserId});
+                view.setState({mapActiveUserId: message.states.last.state.map.activeUserId});
 
                 break;
 
@@ -203,15 +208,15 @@ class GameView extends Component<PropsType, StateType> {
         return <div>
             <h1>game</h1>
 
-            <h2>activeUserId:<br/>{state.activeUserId}</h2>
+            <h2>server activeUserId:<br/>{state.activeUserId}</h2>
+            <h3>mapActiveUser: {state.game &&
+            state.game.mapState &&
+            state.game.mapState.activeUserId || 'no map activeUserId'}</h3>
 
             <h2>server user list:</h2>
 
             <ReactJson src={state.userList}/>
 
-            <h3>map active user: {state.game &&
-            state.game.mapState &&
-            state.game.mapState.activeUserId || 'no map activeUserId'}</h3>
 
             <button onClick={async (): Promise<void> => {
                 await view.endTurn();
@@ -220,9 +225,9 @@ class GameView extends Component<PropsType, StateType> {
             </button>
 
             <canvas style={{
+                display: 'block',
                 width: props.system.screen.width,
-                height: props.system.screen.height,
-                display: 'none'
+                height: props.system.screen.height
             }} ref="canvas"/>
 
         </div>;
