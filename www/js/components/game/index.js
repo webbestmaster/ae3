@@ -74,7 +74,8 @@ class GameView extends Component<PropsType, StateType> {
             settings,
             userList: users,
             activeUserId: settings.map.activeUserId,
-            mapActiveUserId: settings.map.activeUserId
+            mapActiveUserId: settings.map.activeUserId,
+            mapUserList: settings.map.userList
         });
 
         // initialize game's data
