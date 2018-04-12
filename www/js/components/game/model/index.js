@@ -233,7 +233,7 @@ export default class Game {
             mapUser.money += buildingData.moneyBonus;
         });
 
-        serverApi
+        await serverApi
             .pushState(
                 game.roomId,
                 user.getId(),
@@ -308,6 +308,7 @@ export default class Game {
         console.log('---> take turn, and it\'s ME!!!');
 
         await game.refreshUnitActionState();
+        console.log('---> unit and users - refreshed');
         // await game.refreshUnitPoisonCountdown();
         // await game.refreshGraveCountdown();
     }
