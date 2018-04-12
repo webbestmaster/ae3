@@ -8,36 +8,53 @@ export type MapGuideType = {|
     // userIdList: Array<string>,
     teamIdList: ['team-0', 'team-1', 'team-2', 'team-3'],
     colorList: ['black', 'blue', 'green', 'red'],
-    size: {
+    size: {|
         square: number
-    },
-    landscape: {
-        road: {
+    |},
+    building: {|
+        farm: {|
+            moneyBonus: 20
+        |},
+        castle: {|
+            moneyBonus: 30
+        |},
+        'farm-destroyed': {|
+            moneyBonus: 0
+        |},
+        temple: {|
+            moneyBonus: 0
+        |},
+        well: {|
+            moneyBonus: 0
+        |}
+    |},
+    landscape: {|
+        road: {|
             pathReduce: 1,
             armor: 0
-        },
-        terra: {
+        |},
+        terra: {|
             pathReduce: 1,
             armor: 1
-        },
-        forest: {
+        |},
+        forest: {|
             pathReduce: 2,
             armor: 2
-        },
-        stone: {
+        |},
+        stone: {|
             pathReduce: 3,
             armor: 3
-        },
-        water: {
+        |},
+        water: {|
             pathReduce: 3,
             armor: 0,
             flowArmor: 3
-        },
-        hill: {
+        |},
+        hill: {|
             pathReduce: 2,
             armor: 0
-        }
-    }
+        |}
+    |}
 |};
 
 const mapGuide: MapGuideType = {
@@ -51,7 +68,7 @@ const mapGuide: MapGuideType = {
         '2',
         '3'
     ],
-*/
+    */
     teamIdList: [
         'team-0',
         'team-1',
@@ -66,6 +83,23 @@ const mapGuide: MapGuideType = {
     ],
     size: {
         square: 24
+    },
+    building: {
+        farm: {
+            moneyBonus: 20
+        },
+        castle: {
+            moneyBonus: 30
+        },
+        'farm-destroyed': {
+            moneyBonus: 0
+        },
+        temple: {
+            moneyBonus: 0
+        },
+        well: {
+            moneyBonus: 0
+        }
     },
     landscape: {
         road: {

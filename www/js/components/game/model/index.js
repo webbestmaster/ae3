@@ -8,7 +8,7 @@ import type {ServerUserType} from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
 import {getUserColor, getMoviePath, getEventName, procedureMakeGraveForMapUnit} from './helper';
-import type {UnitType} from '../../../maps/type';
+import type {MapUserType, UnitType} from '../../../maps/type';
 import {unitActionStateDefaultValue} from '../../../maps/type';
 import Render from './render';
 import type {AllRoomSettingsType} from '../../../module/server-api';
@@ -211,6 +211,26 @@ export default class Game {
 
         newMap.graves = mapGraveList.filter((mapGrave: GraveType): boolean => {
             return mapGrave.removeCountdown > 0;
+        });
+
+
+        const userId = user.getId();
+        const mapUser = find(newMap.userList, {userId}) || null;
+
+        if (mapUser === null) {
+            console.error('can not find mapUser', newMap, userId);
+            return;
+        }
+
+        // add money
+        newMap.buildings.forEach((mapBuilding: BuildingType) => {
+            if (mapBuilding.userId !== userId) {
+                return;
+            }
+
+            const buildingData = mapGuide.building[mapBuilding.type];
+
+            mapUser.money += buildingData.moneyBonus;
         });
 
         serverApi

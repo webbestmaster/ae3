@@ -18,6 +18,7 @@ import type {AllRoomSettingsType, ServerUserType} from '../../module/server-api'
 import ReactJson from 'react-json-view';
 import find from 'lodash/find';
 import Unit from './model/unit';
+import type {MapUserType} from './../../maps/type';
 
 type PropsType = {|
     system: SystemType,
@@ -27,6 +28,7 @@ type PropsType = {|
 type StateType = {|
     settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
+    mapUserList: Array<MapUserType>,
     model: MainModel,
     game: Game,
     activeUserId: string,
@@ -50,6 +52,7 @@ class GameView extends Component<PropsType, StateType> {
 
         view.state = {
             userList: [],
+            mapUserList: [],
             model: new MainModel(),
             game: new Game(),
             activeUserId: '',
@@ -90,7 +93,7 @@ class GameView extends Component<PropsType, StateType> {
         state.game.drawLandscape(settings.settings.map);
         state.game.drawBuildings(settings.settings.map, users.users);
         state.game.drawUnits(settings.settings.map, users.users);
-*/
+        */
 
         view.bindEventListeners();
 
@@ -169,6 +172,7 @@ class GameView extends Component<PropsType, StateType> {
 
                 view.setState({activeUserId: message.states.last.state.activeUserId});
                 view.setState({mapActiveUserId: message.states.last.state.map.activeUserId});
+                view.setState({mapUserList: message.states.last.state.map.userList});
 
                 break;
 
@@ -217,6 +221,10 @@ class GameView extends Component<PropsType, StateType> {
 
             <ReactJson src={state.userList}/>
 
+            <h2>map user list:</h2>
+
+            <ReactJson src={state.mapUserList}/>
+
 
             <button onClick={async (): Promise<void> => {
                 await view.endTurn();
@@ -225,7 +233,7 @@ class GameView extends Component<PropsType, StateType> {
             </button>
 
             <canvas style={{
-                display: 'block',
+                display: 'none',
                 width: props.system.screen.width,
                 height: props.system.screen.height
             }} ref="canvas"/>
