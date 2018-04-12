@@ -1,5 +1,7 @@
 // @flow
 
+import {Rectangle, Texture} from 'pixi.js';
+
 type ApplicationOptionsType = {|
     autoStart?: boolean,
     backgroundColor?: number,
@@ -36,6 +38,7 @@ declare module 'pixi.js' {
         on(string: 'click' | 'tap', callback: () => void): void,
         interactive: boolean,
         buttonMode: boolean,
+        hitArea: Rectangle,
         position: {
             set(x: number, y: number): void
         };
@@ -54,6 +57,10 @@ declare module 'pixi.js' {
     declare export class Sprite extends PixiObject {
         constructor(): Sprite;
         static fromImage(spriteName: string): Sprite
+    }
+
+    declare export class Rectangle extends PixiObject {
+        constructor(number, number, number, number): Rectangle
     }
 
     declare export class TextStyle {

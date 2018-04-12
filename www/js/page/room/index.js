@@ -12,7 +12,7 @@ import React, {Component} from 'react';
 import type {Node} from 'react';
 import {connect} from 'react-redux';
 import MainModel from './../../lib/main-model/index';
-
+import ReactJson from 'react-json-view';
 import {Link} from 'react-router-dom';
 
 import {user} from './../../module/user';
@@ -262,21 +262,23 @@ class Room extends Component<PropsType, StateType> {
             <h1>Room</h1>
             <h2>wait for other players</h2>
 
-            <div className="json">
-                {state && state.userList && JSON.stringify(state.userList)}
-            </div>
-
+            <ReactJson src={state && state.userList && state.userList}/>
+            <br/>
             <br/>
 
-            <div className="json">
-                {state && state.settings && JSON.stringify(state.settings)}
-            </div>
+            <ReactJson src={state && state.settings && state.settings}/>
+            <br/>
+            <br/>
 
             <button onClick={async (): Promise<void> => {
                 await view.startGame();
             }}>
-                start
+                -------------<br/>
+                --- start ---<br/>
+                -------------
             </button>
+            <br/>
+            <br/>
 
         </div>;
     }

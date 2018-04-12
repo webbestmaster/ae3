@@ -213,7 +213,7 @@ class GameView extends Component<PropsType, StateType> {
         return <div>
             <h1>game</h1>
 
-            <h2>server activeUserId:<br/>{state.activeUserId}</h2>
+            <h2>server activeUserId: {state.activeUserId}</h2>
             <h3>mapActiveUser: {state.game &&
             state.game.mapState &&
             state.game.mapState.activeUserId || 'no map activeUserId'}</h3>
@@ -234,7 +234,7 @@ class GameView extends Component<PropsType, StateType> {
             </button>
 
             <canvas style={{
-                display: 'none',
+                display: 'block',
                 width: props.system.screen.width,
                 height: props.system.screen.height
             }} ref="canvas"/>
