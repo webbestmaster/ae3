@@ -19,10 +19,13 @@ import ReactJson from 'react-json-view';
 import find from 'lodash/find';
 import Unit from './model/unit';
 import type {MapUserType} from './../../maps/type';
+import {Link, withRouter} from 'react-router-dom';
+import type {ContextRouter} from 'react-router-dom';
 
 type PropsType = {|
     system: SystemType,
-    roomId: string
+    roomId: string,
+    ...ContextRouter
 |};
 
 type StateType = {|
@@ -211,6 +214,8 @@ class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
 
         return <div>
+            <Link to={props.match.url + '?store=open&x=2&y=5&userId=dfsddsf'}>to store</Link>
+
             <h1>game</h1>
 
             <h2>server activeUserId: {state.activeUserId}</h2>
@@ -243,11 +248,11 @@ class GameView extends Component<PropsType, StateType> {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     (state: GlobalStateType): {} => ({
         system: state.system
     }),
     {
         // setUser
     }
-)(GameView);
+)(GameView));
