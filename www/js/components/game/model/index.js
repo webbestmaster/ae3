@@ -824,6 +824,18 @@ export default class Game {
 
         game.buildingList.push(building);
 
+        console.warn('TODO: pass from game in props callback for on castle click');
+
+        building.gameAttr.container.on(getEventName('click'), () => {
+            if (building.attr.type !== 'castle') {
+                return;
+            }
+
+            // TODO: pass from game in props callback for on castle click
+            console.warn('TODO: pass from game in props callback for on castle click');
+            console.log('click on building - castle');
+        });
+
         game.render.addBuilding(building.gameAttr.container);
     }
 
@@ -1394,6 +1406,7 @@ export default class Game {
         game.initializePathMapFlow();
         game.initializePathMapFly();
 
+        console.warn('---> add building in armor map');
         game.initializeArmorMapWalk();
         game.initializeArmorMapFlow();
         game.initializeArmorMapFly();

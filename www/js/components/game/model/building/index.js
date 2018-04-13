@@ -45,7 +45,7 @@ export default class Building {
         };
 
         building.initializeBuildingSprite();
-        building.bindEventListeners();
+        building.defineEventListeners();
     }
 
     initializeBuildingSprite() { // eslint-disable-line complexity
@@ -82,7 +82,7 @@ export default class Building {
         }
     }
 
-    bindEventListeners() {
+    defineEventListeners() {
         const building = this; // eslint-disable-line consistent-this
         const {attr, gameAttr} = building;
         const {square} = mapGuide.size;
@@ -94,14 +94,6 @@ export default class Building {
         gameAttr.container.interactive = true;
         gameAttr.container.buttonMode = true;
         gameAttr.container.hitArea = new PIXI.Rectangle(0, square, square, square);
-
-        console.warn('TODO: pass from game in props callback for on castle click');
-
-        gameAttr.container.on('click', () => {
-            // TODO: pass from game in props callback for on castle click
-            console.warn('TODO: pass from game in props callback for on castle click');
-            console.log('click on building - castle');
-        });
     }
 
     setType(type: BuildingAttrTypeType) {
