@@ -34,6 +34,7 @@ import type {SocketMessageType, SocketMessagePushStateType, SocketMessageTakeTur
 import MainModel from './../../../lib/main-model';
 import * as unitMaster from './unit/master';
 import unitGuideData, {defaultUnitData} from './unit/unit-guide';
+import {GameView} from './../../game/index';
 
 type RenderSettingType = {|
     width: number,
@@ -52,6 +53,7 @@ export default class Game {
     // |};
 
     render: Render;
+    gameView: GameView;
     settings: AllRoomSettingsType;
     userList: Array<ServerUserType>;
     buildingList: Array<Building>;
@@ -831,6 +833,8 @@ export default class Game {
                 return;
             }
 
+            game.gameView.props.history.push('?store=11');
+
             // TODO: pass from game in props callback for on castle click
             console.warn('TODO: pass from game in props callback for on castle click');
             console.log('click on building - castle');
@@ -1395,6 +1399,12 @@ export default class Game {
         const game = this; // eslint-disable-line consistent-this
 
         game.render.setCanvasSize(width, height);
+    }
+
+    setGameView(gameView: GameView) {
+        const game = this; // eslint-disable-line consistent-this
+
+        game.gameView = gameView;
     }
 
     initializePathMaps() {

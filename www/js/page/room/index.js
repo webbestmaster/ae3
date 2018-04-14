@@ -266,7 +266,12 @@ class Room extends Component<PropsType, StateType> {
             <br/>
             <br/>
 
-            <ReactJson src={state && state.settings && state.settings}/>
+            {/* <ReactJson src={state && state.settings && state.settings}/> */}
+
+            <div className="json">
+                {JSON.stringify(state && state.settings && state.settings)}
+            </div>
+
             <br/>
             <br/>
 

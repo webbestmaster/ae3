@@ -19,8 +19,10 @@ import ReactJson from 'react-json-view';
 import find from 'lodash/find';
 import Unit from './model/unit';
 import type {MapUserType} from './../../maps/type';
-import {Link, withRouter} from 'react-router-dom';
+import {Link, withRouter, Switch, Route} from 'react-router-dom';
 import type {ContextRouter} from 'react-router-dom';
+import Store from './../store';
+import queryString from 'query-string';
 
 type PropsType = {|
     system: SystemType,
@@ -43,7 +45,7 @@ type RefsType = {|
     canvas: HTMLElement
 |};
 
-class GameView extends Component<PropsType, StateType> {
+export class GameView extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
     refs: RefsType;
@@ -85,6 +87,7 @@ class GameView extends Component<PropsType, StateType> {
         state.game.setSettings(settings);
         state.game.setUserList(users);
         state.game.setRoomId(props.roomId);
+        state.game.setGameView(view);
 
         // actually initialize game's render
         state.game.initialize({
@@ -214,7 +217,17 @@ class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
 
         return <div>
-            <Link to={props.match.url + '?store=open&x=2&y=5&userId=dfsddsf'}>to store</Link>
+
+            <div className="json">{JSON.stringify(props.match)}</div>
+
+            <div>
+                {queryString.parse(props.location.search).store ?
+                    <div onClick={() => {
+                        view.props.history.goBack();
+                    }}>STORE</div> :
+                    <div>NO store</div>}
+            </div>
+
 
             <h1>game</h1>
 
@@ -231,18 +244,20 @@ class GameView extends Component<PropsType, StateType> {
 
             <ReactJson src={state.mapUserList}/>
 
-
             <button onClick={async (): Promise<void> => {
                 await view.endTurn();
             }}>
                 end turn
             </button>
 
-            <canvas style={{
-                display: 'block',
-                width: props.system.screen.width,
-                height: props.system.screen.height
-            }} ref="canvas"/>
+            <canvas
+                key="canvas"
+                ref="canvas"
+                style={{
+                    display: 'block',
+                    width: props.system.screen.width,
+                    height: props.system.screen.height
+                }}/>
 
         </div>;
     }
