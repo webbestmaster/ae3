@@ -37,8 +37,8 @@ type StateType = {|
     model: MainModel,
     game: Game,
     activeUserId: string,
-    socketMessageList: Array<SocketMessageType>,
-    map: MapType | null
+    socketMessageList: Array<SocketMessageType>
+    // map: MapType | null
 |};
 
 type RefsType = {|
@@ -60,8 +60,7 @@ export class GameView extends Component<PropsType, StateType> {
             model: new MainModel(),
             game: new Game(),
             activeUserId: '',
-            socketMessageList: [],
-            map: null
+            socketMessageList: []
         };
     }
 
@@ -77,8 +76,7 @@ export class GameView extends Component<PropsType, StateType> {
         view.setState({
             settings,
             userList: users,
-            activeUserId: settings.map.activeUserId,
-            map: settings.map
+            activeUserId: settings.map.activeUserId
         });
 
         // initialize game's data
@@ -174,12 +172,13 @@ export class GameView extends Component<PropsType, StateType> {
 
             case 'room__push-state':
 
-                view.setState({activeUserId: message.states.last.state.activeUserId});
-                if (message.states.last.state.map) {
-                    view.setState({map: message.states.last.state.map});
-                } else {
-                    console.error('push-state has no map', message);
-                }
+                // view.forceUpdate();
+                // view.setState({activeUserId: message.states.last.state.activeUserId});
+                // if (message.states.last.state.map) {
+                //     view.setState({map: message.states.last.state.map});
+                // } else {
+                //     console.error('push-state has no map', message);
+                // }
 
                 break;
 
@@ -223,18 +222,17 @@ export class GameView extends Component<PropsType, StateType> {
 
             <div>
                 {queryData.viewId === 'store' &&
-                state.map &&
-                /^\d$/.test(queryData.x) &&
-                /^\d$/.test(queryData.y) ?
-                    <Store x={parseInt(queryData.x, 10)} y={parseInt(queryData.y, 10)} map={state.map}/> :
+                /^\d+$/.test(queryData.x) &&
+                /^\d+$/.test(queryData.y) ?
+                    <Store x={parseInt(queryData.x, 10)} y={parseInt(queryData.y, 10)} map={state.game.mapState}/> :
                     <div>NO store, for {JSON.stringify(queryData)}</div>}
             </div>
 
             <h1>game</h1>
 
             <h2>server activeUserId: {state.activeUserId}</h2>
-            <h3>mapActiveUser: {state.map &&
-            state.map.activeUserId || 'no map activeUserId'}</h3>
+            <h3>mapActiveUser: {state.game.mapState &&
+            state.game.mapState.activeUserId || 'no map activeUserId'}</h3>
 
             <h2>server user list:</h2>
 
@@ -242,7 +240,7 @@ export class GameView extends Component<PropsType, StateType> {
 
             <h2>map user list:</h2>
 
-            {state.map ? <ReactJson src={state.map.userList}/> : <h1>no map</h1>}
+            {state.game.mapState ? <ReactJson src={state.game.mapState.userList}/> : <h1>no map</h1>}
 
             <button onClick={async (): Promise<void> => {
                 await view.endTurn();

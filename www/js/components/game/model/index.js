@@ -286,6 +286,8 @@ export default class Game {
                 game.checkMapState(message.states.last.state.map);
                 game.setMapState(message.states.last.state.map);
                 game.refreshWispAura();
+                game.gameView.forceUpdate();
+
                 break;
 
             default:
