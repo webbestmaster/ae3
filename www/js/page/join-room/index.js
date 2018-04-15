@@ -7,13 +7,13 @@ import {Link} from 'react-router-dom';
 
 import uiStyle from './../../components/ui/ui.scss';
 import serviceStyle from './../../../css/service.scss';
-import routes from '../../app/routes';
-import type {HistoryType, MatchType} from '../../app/routes';
-import type {AllRoomSettingsType, ServerUserType, GetAllRoomIdsType} from '../../module/server-api';
+import routes from './../../app/routes';
+import type {HistoryType, MatchType} from './../../app/routes';
+import type {AllRoomSettingsType, ServerUserType, GetAllRoomIdsType} from './../../module/server-api';
 
 import * as serverApi from './../../module/server-api';
-import type {GlobalStateType} from '../../app-reducer';
-import type {AuthType} from '../../components/auth/reducer';
+import type {GlobalStateType} from './../../app-reducer';
+import type {AuthType} from './../../components/auth/reducer';
 
 type StateType = {|
     roomIds: Array<string>

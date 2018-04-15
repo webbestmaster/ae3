@@ -1,15 +1,15 @@
 // @flow
 
 import * as PIXI from 'pixi.js';
-import type {MapType, UnitType, UnitActionStateType} from '../../../../maps/type';
-import type {ServerUserType} from '../../../../module/server-api';
+import type {MapType, UnitType, UnitActionStateType} from './../../../../maps/type';
+import type {ServerUserType} from './../../../../module/server-api';
 import {getUserColor, getAttackResult, getEventName, getMoviePath} from './../helper';
 import type {AttackResultUnitType} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import unitGuide, {defaultUnitData} from './unit-guide';
 import type {UnitGuideDataType} from './unit-guide';
 import imageMap from './../../image/image-map';
-import Building from '../building';
+import Building from './../building';
 import {getPath} from './path-master';
 import type {AvailablePathMapType} from './path-master';
 import type {PathType, PointType} from './../../../../lib/a-star-finder';

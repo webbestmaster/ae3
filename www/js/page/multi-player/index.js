@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom';
 
 import uiStyle from './../../components/ui/ui.scss';
 import serviceStyle from './../../../css/service.scss';
-import routes from '../../app/routes';
+import routes from './../../app/routes';
 
 class MultiPlayer extends Component<void, void> {
     render(): Node {

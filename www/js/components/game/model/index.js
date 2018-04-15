@@ -8,10 +8,10 @@ import type {ServerUserType} from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
 import {getUserColor, getMoviePath, getEventName, procedureMakeGraveForMapUnit} from './helper';
-import type {MapUserType, UnitType} from '../../../maps/type';
-import {unitActionStateDefaultValue} from '../../../maps/type';
+import type {MapUserType, UnitType} from './../../../maps/type';
+import {unitActionStateDefaultValue} from './../../../maps/type';
 import Render from './render';
-import type {AllRoomSettingsType} from '../../../module/server-api';
+import type {AllRoomSettingsType} from './../../../module/server-api';
 import Building from './building';
 import Grave from './grave';
 import Unit from './unit';
@@ -29,12 +29,14 @@ import {user} from './../../../module/user';
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
 import remove from 'lodash/remove';
-import {socket} from '../../../module/socket';
-import type {SocketMessageType, SocketMessagePushStateType, SocketMessageTakeTurnType} from '../../../module/socket';
+import {socket} from './../../../module/socket';
+import type {SocketMessageType, SocketMessagePushStateType, SocketMessageTakeTurnType} from './../../../module/socket';
 import MainModel from './../../../lib/main-model';
 import * as unitMaster from './unit/master';
 import unitGuideData, {defaultUnitData} from './unit/unit-guide';
 import {GameView} from './../../game/index';
+import {storeViewId} from './../../store';
+import queryString from 'query-string';
 
 type RenderSettingType = {|
     width: number,
@@ -830,10 +832,28 @@ export default class Game {
 
         building.gameAttr.container.on(getEventName('click'), () => {
             if (building.attr.type !== 'castle') {
+                console.log('NOT a castle');
                 return;
             }
 
-            game.gameView.props.history.push('?store=11');
+            if (building.attr.userId !== user.getId()) {
+                console.log('NOT your building');
+                return;
+            }
+
+            if (game.mapState.activeUserId !== user.getId()) {
+                console.warn('NOT you turn');
+                return;
+            }
+
+            if (queryString.parse(window.location.search).viewId === storeViewId) {
+                console.error('store already open', window.location.search);
+                return;
+            }
+
+            game.gameView.props.history.push('?viewId=' + storeViewId +
+                '&x=' + building.attr.x +
+                '&y=' + building.attr.y);
 
             // TODO: pass from game in props callback for on castle click
             console.warn('TODO: pass from game in props callback for on castle click');

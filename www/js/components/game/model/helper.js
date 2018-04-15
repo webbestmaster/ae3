@@ -1,14 +1,14 @@
 // @flow
 /* global document */
 
-import type {ServerUserType} from '../../../module/server-api';
+import type {ServerUserType} from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 import unitGuide, {defaultUnitData, additionalUnitData} from './unit/unit-guide';
 import type {UnitActionType, UnitActionsMapType, UnitActionMoveType, GameDataType} from './unit';
 import Unit from './unit';
 import {getPath, defaultOptions} from './../../../lib/a-star-finder';
 import type {PathType, PointType} from './../../../lib/a-star-finder';
-import type {MapType, UnitType} from '../../../maps/type';
+import type {MapType, UnitType} from './../../../maps/type';
 import find from 'lodash/find';
 import unitGuideData from './unit/unit-guide';
 

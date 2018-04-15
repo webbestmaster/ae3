@@ -9,7 +9,7 @@ import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
 import {getUserColor} from './helper';
 import type {UnitDataForAttackType} from './helper';
-import type {UnitType} from '../../../maps/type';
+import type {UnitType} from './../../../maps/type';
 import type {UnitActionsMapType, UnitActionType} from './unit/index';
 import type {
     UnitActionAttackType,
@@ -21,7 +21,7 @@ import type {
 } from './unit';
 import Unit from './unit';
 import Building from './building';
-import type {SocketMessagePushStateType} from '../../../module/socket';
+import type {SocketMessagePushStateType} from './../../../module/socket';
 import {tween} from './../../../lib/tween';
 
 type InitializeConfigType = {|

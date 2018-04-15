@@ -1,9 +1,9 @@
 // @flow
 import Unit from './../index';
 import type {GameDataType, UnitActionsMapType, UnitActionType, UnitActionMoveType} from './../index';
-import {getMoviePath} from '../../helper';
-import type {PathType, PointType} from '../../../../../lib/a-star-finder';
-import unitGuide from '../unit-guide';
+import {getMoviePath} from './../../helper';
+import type {PathType, PointType} from './../../../../../lib/a-star-finder';
+import unitGuide from './../unit-guide';
 import type {AvailablePathMapType} from './../path-master';
 
 function getCell(x: number, y: number, map: UnitActionsMapType): Array<UnitActionType> | null {

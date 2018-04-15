@@ -1,8 +1,8 @@
 // @flow
 
 import * as PIXI from 'pixi.js';
-import type {GraveType} from '../../../../maps/type';
-import type {ServerUserType} from '../../../../module/server-api';
+import type {GraveType} from './../../../../maps/type';
+import type {ServerUserType} from './../../../../module/server-api';
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import imageMap from './../../image/image-map';

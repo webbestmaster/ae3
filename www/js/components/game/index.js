@@ -8,13 +8,13 @@ import {connect} from 'react-redux';
 import {user} from './../../module/user';
 import {socket} from './../../module/socket';
 import type {GlobalStateType} from './../../app-reducer';
-import {store} from '../../index';
-import type {SystemType} from '../system/reducer';
+import {store} from './../../index';
+import type {SystemType} from './../system/reducer';
 import Game from './model/index';
-import type {SocketMessageType} from '../../module/socket';
-import * as serverApi from '../../module/server-api';
-import MainModel from '../../lib/main-model';
-import type {AllRoomSettingsType, ServerUserType} from '../../module/server-api';
+import type {SocketMessageType} from './../../module/socket';
+import * as serverApi from './../../module/server-api';
+import MainModel from './../../lib/main-model';
+import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
 import ReactJson from 'react-json-view';
 import find from 'lodash/find';
 import Unit from './model/unit';
@@ -23,6 +23,7 @@ import {Link, withRouter, Switch, Route} from 'react-router-dom';
 import type {ContextRouter} from 'react-router-dom';
 import Store from './../store';
 import queryString from 'query-string';
+import type {MapType, LandscapeType, BuildingType, GraveType} from './../../maps/type';
 
 type PropsType = {|
     system: SystemType,
@@ -33,12 +34,11 @@ type PropsType = {|
 type StateType = {|
     settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
-    mapUserList: Array<MapUserType>,
     model: MainModel,
     game: Game,
     activeUserId: string,
-    mapActiveUserId: string,
-    socketMessageList: Array<SocketMessageType>
+    socketMessageList: Array<SocketMessageType>,
+    map: MapType | null
 |};
 
 type RefsType = {|
@@ -57,12 +57,11 @@ export class GameView extends Component<PropsType, StateType> {
 
         view.state = {
             userList: [],
-            mapUserList: [],
             model: new MainModel(),
             game: new Game(),
             activeUserId: '',
-            mapActiveUserId: '',
-            socketMessageList: []
+            socketMessageList: [],
+            map: null
         };
     }
 
@@ -79,8 +78,7 @@ export class GameView extends Component<PropsType, StateType> {
             settings,
             userList: users,
             activeUserId: settings.map.activeUserId,
-            mapActiveUserId: settings.map.activeUserId,
-            mapUserList: settings.map.userList
+            map: settings.map
         });
 
         // initialize game's data
@@ -147,7 +145,6 @@ export class GameView extends Component<PropsType, StateType> {
             case 'room__take-turn':
 
                 view.setState({activeUserId: message.states.last.activeUserId});
-                view.setState({mapActiveUserId: 'no-user-id'});
 
                 break;
 
@@ -178,8 +175,11 @@ export class GameView extends Component<PropsType, StateType> {
             case 'room__push-state':
 
                 view.setState({activeUserId: message.states.last.state.activeUserId});
-                view.setState({mapActiveUserId: message.states.last.state.map.activeUserId});
-                view.setState({mapUserList: message.states.last.state.map.userList});
+                if (message.states.last.state.map) {
+                    view.setState({map: message.states.last.state.map});
+                } else {
+                    console.error('push-state has no map', message);
+                }
 
                 break;
 
@@ -212,29 +212,29 @@ export class GameView extends Component<PropsType, StateType> {
         await serverApi.dropTurn(props.roomId, user.getId());
     }
 
-    render(): Node {
+    render(): Node { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
+        const queryData = queryString.parse(props.location.search);
 
         return <div>
 
             <div className="json">{JSON.stringify(props.match)}</div>
 
             <div>
-                {queryString.parse(props.location.search).store ?
-                    <div onClick={() => {
-                        view.props.history.goBack();
-                    }}>STORE</div> :
-                    <div>NO store</div>}
+                {queryData.viewId === 'store' &&
+                state.map &&
+                /^\d$/.test(queryData.x) &&
+                /^\d$/.test(queryData.y) ?
+                    <Store x={parseInt(queryData.x, 10)} y={parseInt(queryData.y, 10)} map={state.map}/> :
+                    <div>NO store, for {JSON.stringify(queryData)}</div>}
             </div>
-
 
             <h1>game</h1>
 
             <h2>server activeUserId: {state.activeUserId}</h2>
-            <h3>mapActiveUser: {state.game &&
-            state.game.mapState &&
-            state.game.mapState.activeUserId || 'no map activeUserId'}</h3>
+            <h3>mapActiveUser: {state.map &&
+            state.map.activeUserId || 'no map activeUserId'}</h3>
 
             <h2>server user list:</h2>
 
@@ -242,7 +242,7 @@ export class GameView extends Component<PropsType, StateType> {
 
             <h2>map user list:</h2>
 
-            <ReactJson src={state.mapUserList}/>
+            {state.map ? <ReactJson src={state.map.userList}/> : <h1>no map</h1>}
 
             <button onClick={async (): Promise<void> => {
                 await view.endTurn();

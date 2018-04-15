@@ -10,7 +10,7 @@ import {user} from './../../module/user';
 import {socket} from './../../module/socket';
 import type {GlobalStateType} from './../../app-reducer';
 import type {AuthType, UserType} from './reducer';
-import {store} from '../../index';
+import {store} from './../../index';
 
 type PropsType = {|
     // setUser: (userState: UserType) => void,

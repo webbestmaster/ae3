@@ -238,6 +238,12 @@ const myFirsyMap: MapType = {
             userId: '1'
         },
         {
+            x: 2,
+            y: 5,
+            type: 'castle',
+            userId: '0'
+        },
+        {
             x: 5,
             y: 5,
             type: 'well'

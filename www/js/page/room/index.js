@@ -21,14 +21,14 @@ import Game from './../../components/game';
 
 // import uiStyle from './../../components/ui/ui.scss';
 // import serviceStyle from './../../../css/service.scss';
-// import type {AuthType} from '../../components/auth/reducer';
+// import type {AuthType} from './../../components/auth/reducer';
 import * as serverApi from './../../module/server-api';
 import type {PushedStatePayloadType} from './../../module/server-api';
 import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
 import mapGuide from './../../maps/map-guide';
 
 import routes, {type HistoryType, type MatchType} from './../../app/routes';
-import type {BuildingType, MapType, UnitType, MapUserType} from '../../maps/type';
+import type {BuildingType, MapType, UnitType, MapUserType} from './../../maps/type';
 
 type StateType = {|
     settings?: AllRoomSettingsType,

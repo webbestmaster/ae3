@@ -6,8 +6,8 @@ import {connect} from 'react-redux';
 import type {MapType} from './../../maps/type';
 import mapGuide from './../../maps/map-guide';
 import * as serverApi from './../../module/server-api';
-import type {GlobalStateType} from '../../app-reducer';
-import type {AuthType} from '../../components/auth/reducer';
+import type {GlobalStateType} from './../../app-reducer';
+import type {AuthType} from './../../components/auth/reducer';
 import routes, {type HistoryType} from './../../app/routes';
 
 const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
@@ -18,7 +18,7 @@ const mapList: Array<MapType> = mapReqContext.keys()
 
 // import uiStyle from './../../components/ui/ui.scss';
 // import serviceStyle from './../../../css/service.scss';
-// import routes from '../../app/routes';
+// import routes from '/../../app/routes';
 type StateType = {|
     mapIndex: number,
     defaultMoney: number,
