@@ -20,6 +20,7 @@ import find from 'lodash/find';
 // import Unit from './model/unit';
 import type {MapUserType} from './../../maps/type';
 import type {MapType, LandscapeType, BuildingType, GraveType} from './../../maps/type';
+import unitData from './../game/model/unit/unit-guide';
 
 const storeViewId = 'store';
 
@@ -31,7 +32,9 @@ type PropsType = {|
     +map: MapType
 |};
 
-type StateType = {||};
+type StateType = {|
+    mapUserData: MapUserType | null
+|};
 
 type RefsType = {||};
 
@@ -40,21 +43,55 @@ class Store extends Component<PropsType, StateType> {
     state: StateType;
     refs: RefsType;
 
-    constructor() {
-        super();
+    constructor(props: PropsType) {
+        super(props);
 
         const view = this;
 
-        // view.state = null;
+        view.state = {
+            mapUserData: find(props.map.userList, {userId: user.getId()}) || null
+        };
     }
 
     componentDidMount() {
 
     }
 
+    buyUnit(unitType: string) {
+        const view = this;
+        const {props, state} = view;
+
+        console.error('you stay here');
+        console.log(unitType);
+    }
+
+    renderUnitList(): Array<Node> {
+        const view = this;
+        const {props, state} = view;
+
+        return Object.keys(unitData)
+            .map((unitType: string): Node => <div key={unitType}>
+                <hr/>
+                {unitType}: {JSON.stringify(unitData[unitType])}
+                <div onClick={() => {
+                    view.buyUnit(unitType);
+                }}>
+                    --------------<br/>
+                    -- buy unit --<br/>
+                    --------------
+                </div>
+                <hr/>
+            </div>);
+    }
+
     render(): Node {
         const view = this;
         const {props, state} = view;
+
+        if (state.mapUserData === null) {
+            console.error('ERROR with state.mapUserData');
+            return <div>ERROR with state.mapUserData</div>;
+        }
 
         return <div>
             <h1>---</h1>
@@ -63,6 +100,15 @@ class Store extends Component<PropsType, StateType> {
             <h1>store</h1>
             <h1>---</h1>
             <div className="json">{JSON.stringify(props.map)}</div>
+
+            <hr/>
+            current user data: {JSON.stringify(state.mapUserData)}
+
+            {view.renderUnitList()}
+
+            <hr/>
+            <hr/>
+
         </div>;
     }
 }
