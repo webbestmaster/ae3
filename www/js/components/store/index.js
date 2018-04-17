@@ -21,6 +21,7 @@ import find from 'lodash/find';
 import type {MapUserType} from './../../maps/type';
 import type {MapType, LandscapeType, BuildingType, GraveType} from './../../maps/type';
 import unitData from './../game/model/unit/unit-guide';
+import type {UnitTypeType} from './../game/model/unit/unit-guide';
 
 const storeViewId = 'store';
 
@@ -57,12 +58,46 @@ class Store extends Component<PropsType, StateType> {
 
     }
 
-    buyUnit(unitType: string) {
+    buyUnit(unitType: UnitTypeType): Promise<void> {
         const view = this;
         const {props, state} = view;
+        const newMap: MapType = JSON.parse(JSON.stringify(props.map));
+        const newMapUserData = find(newMap.userList, {userId: user.getId()}) || null;
+        const newUnitData = unitData[unitType];
 
-        console.error('you stay here');
-        console.log(unitType);
+        if (newMapUserData === null) {
+            console.error('can not find map user with id', user.getId(), newMap);
+            return Promise.resolve();
+        }
+
+        newMapUserData.money -= newUnitData.cost;
+
+        newMap.units.push({
+            x: props.x,
+            y: props.y,
+            userId: user.getId(),
+            type: unitType
+        });
+
+        return serverApi
+            .pushState(
+                game.roomId, // eslint-disable-line no-undef
+                user.getId(),
+                {
+                    type: 'room__push-state',
+                    state: {
+                        type: 'buy-unit',
+                        map: newMap,
+                        activeUserId: user.getId()
+                    }
+                }
+            )
+            .then((response: mixed) => {
+                console.log('---> unit action move pushed');
+                console.log(response);
+                console.error('use with router to get history and roomId!!!');
+                history.back(); // eslint-disable-line no-undef
+            });
     }
 
     renderUnitList(): Array<Node> {
@@ -70,7 +105,7 @@ class Store extends Component<PropsType, StateType> {
         const {props, state} = view;
 
         return Object.keys(unitData)
-            .map((unitType: string): Node => <div key={unitType}>
+            .map((unitType: UnitTypeType): Node => <div key={unitType}>
                 <hr/>
                 {unitType}: {JSON.stringify(unitData[unitType])}
                 <div onClick={() => {

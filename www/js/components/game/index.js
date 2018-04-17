@@ -24,6 +24,8 @@ import type {ContextRouter} from 'react-router-dom';
 import Store from './../store';
 import queryString from 'query-string';
 import type {MapType, LandscapeType, BuildingType, GraveType} from './../../maps/type';
+import type {UnitTypeType} from './model/unit/unit-guide';
+import unitData from './model/unit/unit-guide';
 
 type PropsType = {|
     system: SystemType,
@@ -224,7 +226,10 @@ export class GameView extends Component<PropsType, StateType> {
                 {queryData.viewId === 'store' &&
                 /^\d+$/.test(queryData.x) &&
                 /^\d+$/.test(queryData.y) ?
-                    <Store x={parseInt(queryData.x, 10)} y={parseInt(queryData.y, 10)} map={state.game.mapState}/> :
+                    <Store
+                        x={parseInt(queryData.x, 10)}
+                        y={parseInt(queryData.y, 10)}
+                        map={state.game.mapState}/> :
                     <div>NO store, for {JSON.stringify(queryData)}</div>}
             </div>
 

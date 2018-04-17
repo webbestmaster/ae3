@@ -1,5 +1,6 @@
 // @flow
 import type {TeamIdType} from './map-guide';
+import type {UnitTypeType} from './../components/game/model/unit/unit-guide';
 
 export type UserIdType = string;
 
@@ -58,23 +59,7 @@ export {unitActionStateDefaultValue};
 export type UnitType = {|
     x: number,
     y: number,
-    type: 'soldier' |
-        'archer' |
-        'elemental' |
-        'sorceress' |
-        'wisp' |
-        'dire-wolf' |
-        'golem' |
-        'catapult' |
-        'dragon' |
-        'skeleton' |
-        // company unit
-        'crystal' |
-        // commanders
-        'galamar' |
-        'valadorn' |
-        'demon-lord' |
-        'saeth',
+    type: UnitTypeType,
     action?: UnitActionStateType,
     hitPoints?: number,
     poisonCountdown?: number,

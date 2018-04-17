@@ -1,5 +1,25 @@
 // @flow
 
+export type UnitTypeType =
+    | 'soldier'
+    | 'archer'
+    | 'elemental'
+    | 'sorceress'
+    | 'wisp'
+    | 'dire-wolf'
+    | 'golem'
+    | 'catapult'
+    | 'dragon'
+    | 'skeleton'
+    // commanders
+    | 'galamar'
+    | 'valadorn'
+    | 'demon-lord'
+    | 'saeth'
+    // extra units for mission
+    | 'crystal'
+    | 'saeth-heavens-fury';
+
 export type UnitGuideDataType = {|
     +attack: {|
         +min: number,
@@ -29,7 +49,8 @@ export type UnitGuideDataType = {|
     +isCommander?: boolean
 |};
 
-type GuideUnitDataType = { [key: string]: UnitGuideDataType };
+type GuideUnitDataType = { [key: UnitTypeType]: UnitGuideDataType };
+
 
 const unitData: GuideUnitDataType = {
     soldier: {
