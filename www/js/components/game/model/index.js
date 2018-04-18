@@ -363,6 +363,11 @@ export default class Game {
 
                 break;
 
+            case 'buy-unit':
+                await game.handleServerPushStateBuyUnit(message);
+
+                break;
+
             default:
                 console.error('---> view - game - unsupported push state type: ', message);
         }
@@ -692,12 +697,12 @@ export default class Game {
         }
 
         if (!state.building) {
-            console.log('building is not define', message);
+            console.error('building is not define', message);
             return Promise.resolve();
         }
 
         if (!state.destroyer) {
-            console.log('destroyer is not define', message);
+            console.error('destroyer is not define', message);
             return Promise.resolve();
         }
 
@@ -740,6 +745,27 @@ export default class Game {
         });
 
         game.onUnitClick(gameDestroyer);
+
+        return Promise.resolve();
+    }
+
+    async handleServerPushStateBuyUnit(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements, id-length
+        const game = this; // eslint-disable-line consistent-this
+        const state = message.states.last.state;
+
+        if (state.type !== 'buy-unit') {
+            console.error('here is should be a buy-unit type', message);
+            return Promise.resolve();
+        }
+
+        if (!state.newMapUnit) {
+            console.error('newMapUnit is not define', message);
+            return Promise.resolve();
+        }
+
+        const newGameUnit = game.createUnit(state.newMapUnit);
+
+        game.onUnitClick(newGameUnit);
 
         return Promise.resolve();
     }

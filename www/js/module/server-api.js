@@ -2,7 +2,7 @@
 /* global fetch */
 
 import appConst from './../app-const';
-import type {MapType, BuildingType, BuildingAttrTypeType} from './../maps/type';
+import type {MapType, UnitType, BuildingType, BuildingAttrTypeType} from './../maps/type';
 import mapGuide from './../maps/map-guide';
 import type {PathType} from './../components/game/model/unit/path-master';
 import type {AttackResultUnitType} from './../components/game/model/helper';
@@ -242,6 +242,13 @@ export type PushedStatePayloadRefreshUnitListType = {|
     +activeUserId: string
 |};
 
+export type PushedStatePayloadBuyUnitType = {|
+    +type: 'buy-unit',
+    +newMapUnit: UnitType,
+    +map: MapType,
+    +activeUserId: string
+|};
+
 export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType
     | PushedStatePayloadUnitMoveType
     | PushedStatePayloadUnitAttackType
@@ -249,7 +256,8 @@ export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType
     | PushedStatePayloadFixBuildingType
     | PushedStatePayloadOccupyBuildingType
     | PushedStatePayloadRaiseSkeletonType
-    | PushedStatePayloadDestroyBuildingType;
+    | PushedStatePayloadDestroyBuildingType
+    | PushedStatePayloadBuyUnitType;
 
 export type PushStateType = {|
     roomId: string,

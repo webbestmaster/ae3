@@ -22,6 +22,9 @@ import type {MapUserType} from './../../maps/type';
 import type {MapType, LandscapeType, BuildingType, GraveType} from './../../maps/type';
 import unitData from './../game/model/unit/unit-guide';
 import type {UnitTypeType} from './../game/model/unit/unit-guide';
+import {withRouter} from 'react-router-dom';
+import type {ContextRouter} from 'react-router-dom';
+import type {UnitType} from '../../maps/type';
 
 const storeViewId = 'store';
 
@@ -30,7 +33,13 @@ export {storeViewId};
 type PropsType = {|
     +x: number,
     +y: number,
-    +map: MapType
+    +map: MapType,
+    ...ContextRouter,
+    +match: {|
+        +params: {|
+            +roomId: string
+        |}
+    |}
 |};
 
 type StateType = {|
@@ -72,21 +81,25 @@ class Store extends Component<PropsType, StateType> {
 
         newMapUserData.money -= newUnitData.cost;
 
-        newMap.units.push({
+        const newMapUnitData: UnitType = {
+            type: unitType,
             x: props.x,
             y: props.y,
             userId: user.getId(),
-            type: unitType
-        });
+            id: [props.x, props.y, Math.random()].join('-')
+        };
+
+        newMap.units.push(newMapUnitData);
 
         return serverApi
             .pushState(
-                game.roomId, // eslint-disable-line no-undef
+                props.match.params.roomId,
                 user.getId(),
                 {
                     type: 'room__push-state',
                     state: {
                         type: 'buy-unit',
+                        newMapUnit: newMapUnitData,
                         map: newMap,
                         activeUserId: user.getId()
                     }
@@ -95,8 +108,7 @@ class Store extends Component<PropsType, StateType> {
             .then((response: mixed) => {
                 console.log('---> unit action move pushed');
                 console.log(response);
-                console.error('use with router to get history and roomId!!!');
-                history.back(); // eslint-disable-line no-undef
+                props.history.goBack();
             });
     }
 
@@ -148,11 +160,11 @@ class Store extends Component<PropsType, StateType> {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     (state: GlobalStateType): {} => ({
         system: state.system
     }),
     {
         // setUser
     }
-)(Store);
+)(Store));
