@@ -148,11 +148,17 @@ export default class Game {
         model.listenTo(socket.attr.model,
             'message',
             async (message: SocketMessageType): Promise<void> => {
+                // really we have bug if one user has slow connection and slow phone
                 // TODO: wait and of previous action
                 // TODO: use Process/Promise Master
                 console.warn('TODO: wait and of previous action');
                 console.warn('TODO: use Process/Promise Master');
+
+                game.gameView.addDisableReason('server-receive-message');
+
                 await game.onMessage(message);
+
+                game.gameView.removeDisableReason('server-receive-message');
             }
         );
     }
@@ -179,7 +185,7 @@ export default class Game {
             const unitActionState = mapUnit.hasOwnProperty('action') && mapUnit.action ? mapUnit.action : null;
 
             if (unitActionState === null) {
-                console.log('unit has no property \'action\'', mapUnit);
+                // console.log('unit has no property \'action\'', mapUnit);
                 return;
             }
 
@@ -286,7 +292,8 @@ export default class Game {
                 game.checkMapState(message.states.last.state.map);
                 game.setMapState(message.states.last.state.map);
                 game.refreshWispAura();
-                game.gameView.forceUpdate();
+                // game.gameView.addDisableReason('unit-in-action'); - update view
+                // game.gameView.forceUpdate();
 
                 break;
 
@@ -801,7 +808,7 @@ export default class Game {
             const isUnitEqual = isEqual(mapUnit, unit.attr);
 
             if (isUnitEqual === true) {
-                console.log('units is equal', mapUnit, unit);
+                // console.log('units is equal', mapUnit, unit);
                 return;
             }
 

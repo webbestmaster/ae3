@@ -33,13 +33,16 @@ type PropsType = {|
     ...ContextRouter
 |};
 
+export type DisabledByItemType = 'server-receive-message';
+
 type StateType = {|
     settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
     model: MainModel,
     game: Game,
     activeUserId: string,
-    socketMessageList: Array<SocketMessageType>
+    socketMessageList: Array<SocketMessageType>,
+    disabledByList: Array<DisabledByItemType>
     // map: MapType | null
 |};
 
@@ -62,7 +65,8 @@ export class GameView extends Component<PropsType, StateType> {
             model: new MainModel(),
             game: new Game(),
             activeUserId: '',
-            socketMessageList: []
+            socketMessageList: [],
+            disabledByList: []
         };
     }
 
@@ -213,10 +217,40 @@ export class GameView extends Component<PropsType, StateType> {
         await serverApi.dropTurn(props.roomId, user.getId());
     }
 
+    addDisableReason(reason: DisabledByItemType) {
+        const view = this;
+        const {props, state} = view;
+
+        view.setState((prevState: StateType): StateType => {
+            prevState.disabledByList.push(reason);
+            return prevState;
+        });
+    }
+
+    removeDisableReason(reason: DisabledByItemType) {
+        const view = this;
+        const {props, state} = view;
+
+        view.setState((prevState: StateType): StateType => {
+            const {disabledByList} = prevState;
+            const reasonIndex = disabledByList.indexOf(reason);
+
+            if (reasonIndex === -1) {
+                console.error('ERROR: reason is not exists in disabledByList', reason, view);
+                return prevState;
+            }
+
+            disabledByList.splice(reasonIndex);
+            return prevState;
+        });
+    }
+
     render(): Node { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
         const queryData = queryString.parse(props.location.search);
+        const mapActiveUserId = state.game.mapState &&
+            state.game.mapState.activeUserId || 'no map activeUserId';
 
         return <div>
 
@@ -236,8 +270,7 @@ export class GameView extends Component<PropsType, StateType> {
             <h1>game</h1>
 
             <h2>server activeUserId: {state.activeUserId}</h2>
-            <h3>mapActiveUser: {state.game.mapState &&
-            state.game.mapState.activeUserId || 'no map activeUserId'}</h3>
+            <h3>mapActiveUser: {mapActiveUserId}</h3>
 
             <h2>server user list:</h2>
 
@@ -253,11 +286,14 @@ export class GameView extends Component<PropsType, StateType> {
                 end turn
             </button>
 
+            <div>{mapActiveUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>
+
+            <div>{JSON.stringify(state.disabledByList)}</div>
+
             <canvas
                 key="canvas"
                 ref="canvas"
                 style={{
-                    display: 'block',
                     width: props.system.screen.width,
                     height: props.system.screen.height
                 }}/>

@@ -43,7 +43,8 @@ type PropsType = {|
 |};
 
 type StateType = {|
-    mapUserData: MapUserType | null
+    mapUserData: MapUserType | null,
+    isInProgress: boolean
 |};
 
 type RefsType = {||};
@@ -59,7 +60,8 @@ class Store extends Component<PropsType, StateType> {
         const view = this;
 
         view.state = {
-            mapUserData: find(props.map.userList, {userId: user.getId()}) || null
+            mapUserData: find(props.map.userList, {userId: user.getId()}) || null,
+            isInProgress: false
         };
     }
 
@@ -90,6 +92,8 @@ class Store extends Component<PropsType, StateType> {
         };
 
         newMap.units.push(newMapUnitData);
+
+        view.setState({isInProgress: true});
 
         return serverApi
             .pushState(
@@ -151,7 +155,7 @@ class Store extends Component<PropsType, StateType> {
             <hr/>
             current user data: {JSON.stringify(state.mapUserData)}
 
-            {view.renderUnitList()}
+            {state.isInProgress ? <div>---- WAIT FOR SERVER ----</div> : view.renderUnitList()}
 
             <hr/>
             <hr/>

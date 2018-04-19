@@ -327,7 +327,11 @@ const defaultUnitData = {
     render: {
         spriteAnimatedSpeed: 0.08
     },
-    level: 1
+    level: 1,
+    animation: {
+        moveStep: 100,
+        attack: 500
+    }
 };
 
 export {defaultUnitData};

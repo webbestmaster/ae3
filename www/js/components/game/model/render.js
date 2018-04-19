@@ -20,6 +20,7 @@ import type {
     UnitActionDestroyBuildingType
 } from './unit';
 import Unit from './unit';
+import {defaultUnitData} from './unit/unit-guide';
 import Building from './building';
 import type {SocketMessagePushStateType} from './../../../module/socket';
 import {tween} from './../../../lib/tween';
@@ -268,7 +269,7 @@ export default class Render {
         await tween(
             {x: aggressorUnit.attr.x, y: aggressorUnit.attr.y},
             {x: defenderUnit.attr.x, y: defenderUnit.attr.y},
-            1000,
+            defaultUnitData.animation.attack,
             (coordinates: { x: number, y: number }) => {
                 attackSprite.position.set(coordinates.x * mapGuide.size.square, coordinates.y * mapGuide.size.square);
             }
@@ -289,7 +290,7 @@ export default class Render {
         await tween(
             {x: destroyerUnit.attr.x, y: destroyerUnit.attr.y},
             {x: building.attr.x, y: building.attr.y},
-            1000,
+            defaultUnitData.animation.attack,
             (coordinates: { x: number, y: number }) => {
                 attackSprite.position.set(coordinates.x * mapGuide.size.square, coordinates.y * mapGuide.size.square);
             }

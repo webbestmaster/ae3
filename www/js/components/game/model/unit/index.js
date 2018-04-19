@@ -805,7 +805,7 @@ export default class Unit {
 
         unit.setDidMove(true);
 
-        return tweenList(movePath, 100, (pathPoint: PointType) => {
+        return tweenList(movePath, defaultUnitData.animation.moveStep, (pathPoint: PointType) => {
             gameAttr.container.position.set(pathPoint[0] * square, pathPoint[1] * square);
         })
             .then(() => {
