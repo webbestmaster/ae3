@@ -286,7 +286,9 @@ export class GameView extends Component<PropsType, StateType> {
                 end turn
             </button>
 
-            <div>{mapActiveUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>
+            <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>
+            <div>mapActiveUserId === state(server).activeUserId :
+                {mapActiveUserId === state.activeUserId ? ' YES' : ' NO'}</div>
 
             <div>{JSON.stringify(state.disabledByList)}</div>
 

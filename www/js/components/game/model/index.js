@@ -2,11 +2,11 @@
 
 /* global window */
 
-import * as PIXI from 'pixi.js';
+// import * as PIXI from 'pixi.js';
 import type {MapType, LandscapeType, BuildingType, GraveType} from './../../../maps/type';
 import type {ServerUserType} from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
-import imageMap from './../image/image-map';
+// import imageMap from './../image/image-map';
 import {getUserColor, getMoviePath, getEventName, procedureMakeGraveForMapUnit} from './helper';
 import type {MapUserType, UnitType} from './../../../maps/type';
 import {unitActionStateDefaultValue} from './../../../maps/type';
@@ -37,6 +37,7 @@ import unitGuideData, {defaultUnitData} from './unit/unit-guide';
 import {GameView} from './../../game/index';
 import {storeViewId} from './../../store';
 import queryString from 'query-string';
+import Queue from './../../../lib/queue';
 
 type RenderSettingType = {|
     width: number,
@@ -53,7 +54,7 @@ export default class Game {
     //     buildings: PIXI.Container,
     //     units: PIXI.Container,
     // |};
-
+    onMessageQueue: Queue;
     render: Render;
     gameView: GameView;
     settings: AllRoomSettingsType;
@@ -79,6 +80,7 @@ export default class Game {
     constructor() {
         const game = this; // eslint-disable-line consistent-this
 
+        game.onMessageQueue = new Queue();
         game.render = new Render();
         game.buildingList = [];
         game.unitList = [];
@@ -147,18 +149,20 @@ export default class Game {
 
         model.listenTo(socket.attr.model,
             'message',
-            async (message: SocketMessageType): Promise<void> => {
+            (message: SocketMessageType) => {
                 // really we have bug if one user has slow connection and slow phone
                 // TODO: wait and of previous action
                 // TODO: use Process/Promise Master
                 console.warn('TODO: wait and of previous action');
                 console.warn('TODO: use Process/Promise Master');
 
-                game.gameView.addDisableReason('server-receive-message');
+                game.onMessageQueue.push(async (): Promise<void> => {
+                    game.gameView.addDisableReason('server-receive-message');
 
-                await game.onMessage(message);
+                    await game.onMessage(message);
 
-                game.gameView.removeDisableReason('server-receive-message');
+                    game.gameView.removeDisableReason('server-receive-message');
+                });
             }
         );
     }
