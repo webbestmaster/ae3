@@ -47,12 +47,12 @@ export type UnitGuideDataType = {|
     +destroyBuildingList?: Array<string>,
 
     +raiseSkeletonRange?: number,
-    +canNotBeBuy?: boolean,
+    +canBeBuy?: boolean,
     +withoutGrave?: boolean,
     +isCommander?: boolean
 |};
 
-type GuideUnitDataType = { [key: UnitTypeAllType]: UnitGuideDataType };
+type GuideUnitDataType = { +[key: UnitTypeAllType]: UnitGuideDataType };
 
 
 const unitData: GuideUnitDataType = {
@@ -71,6 +71,7 @@ const unitData: GuideUnitDataType = {
         armor: 5,
         move: 4,
         langKey: 'soldier',
+        canBeBuy: true,
         cost: 150,
 
         canFixBuilding: true,
@@ -85,6 +86,7 @@ const unitData: GuideUnitDataType = {
         armor: 5,
         move: 4,
         langKey: 'archer',
+        canBeBuy: true,
         cost: 250,
 
         bonusAtkAgainstFly: 30
@@ -98,6 +100,7 @@ const unitData: GuideUnitDataType = {
         armor: 10,
         move: 4,
         langKey: 'elemental',
+        canBeBuy: true,
         cost: 300,
 
         moveType: 'flow'
@@ -111,6 +114,7 @@ const unitData: GuideUnitDataType = {
         armor: 5,
         move: 4,
         langKey: 'sorceress',
+        canBeBuy: true,
         cost: 400,
 
         raiseSkeletonRange: 1
@@ -124,6 +128,7 @@ const unitData: GuideUnitDataType = {
         armor: 10,
         move: 4,
         langKey: 'wisp',
+        canBeBuy: true,
         cost: 500,
 
         auraRange: 2,
@@ -138,6 +143,7 @@ const unitData: GuideUnitDataType = {
         armor: 15,
         move: 5,
         langKey: 'dire-wolf',
+        canBeBuy: true,
         cost: 600,
 
         poisonAttack: 3
@@ -151,6 +157,7 @@ const unitData: GuideUnitDataType = {
         armor: 30,
         move: 4,
         langKey: 'golem',
+        canBeBuy: true,
         cost: 600
     },
     catapult: {
@@ -162,6 +169,7 @@ const unitData: GuideUnitDataType = {
         armor: 10,
         move: 3,
         langKey: 'catapult',
+        canBeBuy: true,
         cost: 700,
 
         destroyBuildingList: ['farm']
@@ -175,6 +183,7 @@ const unitData: GuideUnitDataType = {
         armor: 25,
         move: 6,
         langKey: 'dragon',
+        canBeBuy: true,
         cost: 1000,
 
         moveType: 'fly'
@@ -190,8 +199,7 @@ const unitData: GuideUnitDataType = {
         langKey: 'skeleton',
         cost: 0,
 
-        withoutGrave: true,
-        canNotBeBuy: true
+        withoutGrave: true
     },
     crystal: {
         attack: {
@@ -202,9 +210,7 @@ const unitData: GuideUnitDataType = {
         armor: 15,
         move: 3,
         langKey: 'crystal',
-        cost: 0,
-
-        canNotBeBuy: true
+        cost: 0
     },
     galamar: {
         attack: {
@@ -215,6 +221,7 @@ const unitData: GuideUnitDataType = {
         armor: 20,
         move: 4,
         langKey: 'galamar',
+        canBeBuy: true,
         cost: 200,
 
         withoutGrave: true,
@@ -234,6 +241,7 @@ const unitData: GuideUnitDataType = {
         armor: 20,
         move: 4,
         langKey: 'valadorn',
+        canBeBuy: true,
         cost: 200,
 
         withoutGrave: true,
@@ -253,6 +261,7 @@ const unitData: GuideUnitDataType = {
         armor: 20,
         move: 4,
         langKey: 'demon-lord',
+        canBeBuy: true,
         cost: 200,
 
         withoutGrave: true,
@@ -272,6 +281,7 @@ const unitData: GuideUnitDataType = {
         armor: 20,
         move: 4,
         langKey: 'saeth',
+        canBeBuy: true,
         cost: 200,
 
         withoutGrave: true,
@@ -293,7 +303,6 @@ const unitData: GuideUnitDataType = {
         move: 0,
         langKey: 'saeth',
 
-        canNotBeBuy: true,
         withoutGrave: true
     }
 };
@@ -343,7 +352,8 @@ export {defaultUnitData};
 const additionalUnitData = {
     wispAttackBonus: 15,
     poisonAttackReduce: 10,
-    poisonArmorReduce: 10
+    poisonArmorReduce: 10,
+    additionalCommanderCost: 200
 };
 
 export {additionalUnitData};

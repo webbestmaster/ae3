@@ -894,6 +894,8 @@ export default class Game {
                 '&x=' + building.attr.x +
                 '&y=' + building.attr.y);
 
+            game.render.cleanActionsList();
+
             // TODO: pass from game in props callback for on castle click
             console.warn('TODO: pass from game in props callback for on castle click');
             console.log('click on building - castle');

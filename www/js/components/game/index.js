@@ -26,6 +26,7 @@ import queryString from 'query-string';
 import type {MapType, LandscapeType, BuildingType, GraveType} from './../../maps/type';
 import type {UnitTypeAllType} from './model/unit/unit-guide';
 import unitData from './model/unit/unit-guide';
+import serviceStyle from './../../../css/service.scss';
 
 type PropsType = {|
     system: SystemType,
@@ -238,14 +239,14 @@ export class GameView extends Component<PropsType, StateType> {
         const mapActiveUserId = state.game.mapState &&
             state.game.mapState.activeUserId || 'no map activeUserId';
 
+        const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
+
         return <div>
 
             <div className="json">{JSON.stringify(props.match)}</div>
 
             <div>
-                {queryData.viewId === 'store' &&
-                /^\d+$/.test(queryData.x) &&
-                /^\d+$/.test(queryData.y) ?
+                {isStoreOpen ?
                     <Store
                         x={parseInt(queryData.x, 10)}
                         y={parseInt(queryData.y, 10)}
@@ -255,37 +256,40 @@ export class GameView extends Component<PropsType, StateType> {
 
             <h1>game</h1>
 
-            <h2>server activeUserId: {state.activeUserId}</h2>
-            <h3>mapActiveUser: {mapActiveUserId}</h3>
+            <div className={isStoreOpen ? serviceStyle.disabled : ''}>
 
-            <h2>server user list:</h2>
+                <h2>server activeUserId: {state.activeUserId}</h2>
+                <h3>mapActiveUser: {mapActiveUserId}</h3>
 
-            <ReactJson src={state.userList}/>
+                <h2>server user list:</h2>
 
-            <h2>map user list:</h2>
+                <ReactJson src={state.userList}/>
 
-            {state.game.mapState ? <ReactJson src={state.game.mapState.userList}/> : <h1>no map</h1>}
+                <h2>map user list:</h2>
 
-            <button onClick={async (): Promise<void> => {
-                await view.endTurn();
-            }}>
-                end turn
-            </button>
+                {state.game.mapState ? <ReactJson src={state.game.mapState.userList}/> : <h1>no map</h1>}
 
-            <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>
-            <div>mapActiveUserId === state(server).activeUserId :
-                {mapActiveUserId === state.activeUserId ? ' YES' : ' NO'}</div>
+                <button
+                    onClick={async (): Promise<void> => {
+                        await view.endTurn();
+                    }}>
+                    end turn
+                </button>
 
-            <div>{JSON.stringify(state.disabledByList)}</div>
+                <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>
+                <div>mapActiveUserId === state(server).activeUserId :
+                    {mapActiveUserId === state.activeUserId ? ' YES' : ' NO'}</div>
 
-            <canvas
-                key="canvas"
-                ref="canvas"
-                style={{
-                    width: props.system.screen.width,
-                    height: props.system.screen.height
-                }}/>
+                <div>{JSON.stringify(state.disabledByList)}</div>
 
+                <canvas
+                    key="canvas"
+                    ref="canvas"
+                    style={{
+                        width: props.system.screen.width,
+                        height: props.system.screen.height
+                    }}/>
+            </div>
         </div>;
     }
 }
