@@ -53,6 +53,7 @@ class CreateRoom extends Component<PropsType, StateType> {
         const createRoomResult = await serverApi.createRoom();
 
         if (createRoomResult.roomId === null) {
+            console.error('can not create a room');
             return null;
         }
 
@@ -63,20 +64,24 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         map.unitLimit = unitLimit;
         map.defaultMoney = defaultMoney;
+        map.userList = [];
+
+        /*
         map.userList = [{
             userId,
             teamId: mapGuide.teamIdList[0],
             money: defaultMoney
         }];
+*/
         map.activeUserId = userId;
 
         const setAllRoomSettingsResult = await serverApi.setAllRoomSettings(createRoomResult.roomId, {
-            map,
-            userList: [{
-                userId,
-                socketId,
-                teamId: mapGuide.teamIdList[0]
-            }]
+            map
+            // userList: [{
+            //     userId,
+            //     socketId,
+            //     teamId: mapGuide.teamIdList[0]
+            // }]
         });
 
         const joinRoomResult = await serverApi.joinRoom(createRoomResult.roomId, userId, socketId);

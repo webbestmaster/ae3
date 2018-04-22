@@ -153,21 +153,7 @@ export class GameView extends Component<PropsType, StateType> {
                 break;
 
             case 'room__join-into-room':
-                allUserResponse = await serverApi.getAllRoomUsers(roomId);
-                view.setState({
-                    userList: allUserResponse.users
-                });
-
-                break;
-
             case 'room__leave-from-room':
-                allUserResponse = await serverApi.getAllRoomUsers(roomId);
-                view.setState({
-                    userList: allUserResponse.users
-                });
-
-                break;
-
             case 'room__user-disconnected':
                 allUserResponse = await serverApi.getAllRoomUsers(roomId);
                 view.setState({

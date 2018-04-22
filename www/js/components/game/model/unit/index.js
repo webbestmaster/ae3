@@ -1233,7 +1233,7 @@ export default class Unit {
                 });
 
                 if (isAlreadyInWispAuraMap) {
-                    console.log('already in wispAuraMap');
+                    // console.log('already in wispAuraMap');
                     return;
                 }
 
