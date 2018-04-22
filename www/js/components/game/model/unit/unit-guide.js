@@ -46,7 +46,10 @@ export type UnitGuideDataType = {|
     +raiseSkeletonRange?: number,
     +canNotBeBuy?: boolean,
     +withoutGrave?: boolean,
-    +isCommander?: boolean
+    +isCommander?: boolean,
+    +commanderData?: {|
+        +userIndex: number
+    |}
 |};
 
 type GuideUnitDataType = { [key: UnitTypeType]: UnitGuideDataType };
@@ -220,7 +223,10 @@ const unitData: GuideUnitDataType = {
             'farm',
             'castle'
         ],
-        isCommander: true
+        isCommander: true,
+        commanderData: {
+            userIndex: 0
+        }
     },
     valadorn: {
         attack: {
@@ -239,7 +245,10 @@ const unitData: GuideUnitDataType = {
             'farm',
             'castle'
         ],
-        isCommander: true
+        isCommander: true,
+        commanderData: {
+            userIndex: 1
+        }
     },
     'demon-lord': {
         attack: {
@@ -258,7 +267,10 @@ const unitData: GuideUnitDataType = {
             'farm',
             'castle'
         ],
-        isCommander: true
+        isCommander: true,
+        commanderData: {
+            userIndex: 2
+        }
     },
     saeth: {
         attack: {
@@ -277,7 +289,10 @@ const unitData: GuideUnitDataType = {
             'farm',
             'castle'
         ],
-        isCommander: true
+        isCommander: true,
+        commanderData: {
+            userIndex: 3
+        }
     },
     'saeth-heavens-fury': {
         attack: {
