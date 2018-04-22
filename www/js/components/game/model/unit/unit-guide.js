@@ -1,6 +1,5 @@
 // @flow
-
-export type UnitTypeType =
+export type UnitTypeCommonType =
     | 'soldier'
     | 'archer'
     | 'elemental'
@@ -10,15 +9,19 @@ export type UnitTypeType =
     | 'golem'
     | 'catapult'
     | 'dragon'
-    | 'skeleton'
-    // commanders
+    | 'skeleton';
+
+export type UnitTypeCommanderType =
     | 'galamar'
     | 'valadorn'
     | 'demon-lord'
-    | 'saeth'
-    // extra units for mission
+    | 'saeth';
+
+export type UnitTypeExtraType =
     | 'crystal'
     | 'saeth-heavens-fury';
+
+export type UnitTypeAllType = UnitTypeCommonType | UnitTypeCommanderType | UnitTypeExtraType;
 
 export type UnitGuideDataType = {|
     +attack: {|
@@ -46,13 +49,10 @@ export type UnitGuideDataType = {|
     +raiseSkeletonRange?: number,
     +canNotBeBuy?: boolean,
     +withoutGrave?: boolean,
-    +isCommander?: boolean,
-    +commanderData?: {|
-        +userIndex: number
-    |}
+    +isCommander?: boolean
 |};
 
-type GuideUnitDataType = { [key: UnitTypeType]: UnitGuideDataType };
+type GuideUnitDataType = { [key: UnitTypeAllType]: UnitGuideDataType };
 
 
 const unitData: GuideUnitDataType = {
@@ -223,10 +223,7 @@ const unitData: GuideUnitDataType = {
             'farm',
             'castle'
         ],
-        isCommander: true,
-        commanderData: {
-            userIndex: 0
-        }
+        isCommander: true
     },
     valadorn: {
         attack: {
@@ -245,10 +242,7 @@ const unitData: GuideUnitDataType = {
             'farm',
             'castle'
         ],
-        isCommander: true,
-        commanderData: {
-            userIndex: 1
-        }
+        isCommander: true
     },
     'demon-lord': {
         attack: {
@@ -267,10 +261,7 @@ const unitData: GuideUnitDataType = {
             'farm',
             'castle'
         ],
-        isCommander: true,
-        commanderData: {
-            userIndex: 2
-        }
+        isCommander: true
     },
     saeth: {
         attack: {
@@ -289,10 +280,7 @@ const unitData: GuideUnitDataType = {
             'farm',
             'castle'
         ],
-        isCommander: true,
-        commanderData: {
-            userIndex: 3
-        }
+        isCommander: true
     },
     'saeth-heavens-fury': {
         attack: {

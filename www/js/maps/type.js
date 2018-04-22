@@ -1,6 +1,6 @@
 // @flow
 import type {TeamIdType} from './map-guide';
-import type {UnitTypeType} from './../components/game/model/unit/unit-guide';
+import type {UnitTypeAllType, UnitTypeCommanderType} from './../components/game/model/unit/unit-guide';
 
 export type UserIdType = string;
 
@@ -59,7 +59,7 @@ export {unitActionStateDefaultValue};
 export type UnitType = {|
     x: number,
     y: number,
-    type: UnitTypeType,
+    type: UnitTypeAllType,
     action?: UnitActionStateType,
     hitPoints?: number,
     poisonCountdown?: number,
@@ -82,7 +82,11 @@ export type GraveType = {|
 export type MapUserType = {|
     userId: string,
     money: number,
-    teamId: TeamIdType
+    teamId: TeamIdType,
+    commander?: {|
+        type: UnitTypeCommanderType,
+        buyCount: number
+    |}
 |};
 
 export type MapType = {|

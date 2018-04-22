@@ -11,7 +11,7 @@ import type {PathType, PointType} from './../../../lib/a-star-finder';
 import type {MapType, UnitType} from './../../../maps/type';
 import find from 'lodash/find';
 import unitGuideData from './unit/unit-guide';
-import type {UnitTypeType} from './unit/unit-guide';
+import type {UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
 
 export function getUserIndex(userId: string, userList: Array<ServerUserType>): number | null {
     let userIndex = 0;
@@ -72,7 +72,7 @@ export type UnitDataForAttackType = {|
         +range: number
     |},
     +poisonAttack: number,
-    +type: UnitTypeType,
+    +type: UnitTypeAllType,
     +id: string,
     +userId: string,
     +armor: number,
@@ -303,4 +303,8 @@ export function procedureMakeGraveForMapUnit(newMap: MapType, mapUnit: AttackRes
     }
 
     unitGrave.removeCountdown = defaultUnitData.graveRemoveCountdown;
+}
+
+export function getCommanderDataByUserIndex(userIndex: number): UnitTypeCommanderType {
+    return ['galamar', 'valadorn', 'demon-lord', 'saeth'][userIndex];
 }

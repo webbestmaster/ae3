@@ -21,7 +21,7 @@ import find from 'lodash/find';
 import type {MapUserType} from './../../maps/type';
 import type {MapType, LandscapeType, BuildingType, GraveType} from './../../maps/type';
 import unitData from './../game/model/unit/unit-guide';
-import type {UnitTypeType} from './../game/model/unit/unit-guide';
+import type {UnitTypeAllType} from './../game/model/unit/unit-guide';
 import {withRouter} from 'react-router-dom';
 import type {ContextRouter} from 'react-router-dom';
 import type {UnitType} from '../../maps/type';
@@ -69,7 +69,7 @@ class Store extends Component<PropsType, StateType> {
 
     }
 
-    buyUnit(unitType: UnitTypeType): Promise<void> {
+    buyUnit(unitType: UnitTypeAllType): Promise<void> {
         const view = this;
         const {props, state} = view;
         const newMap: MapType = JSON.parse(JSON.stringify(props.map));
@@ -121,7 +121,7 @@ class Store extends Component<PropsType, StateType> {
         const {props, state} = view;
 
         return Object.keys(unitData)
-            .map((unitType: UnitTypeType): Node => <div key={unitType}>
+            .map((unitType: UnitTypeAllType): Node => <div key={unitType}>
                 <hr/>
                 {unitType}: {JSON.stringify(unitData[unitType])}
                 <div onClick={() => {

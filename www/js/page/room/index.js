@@ -26,6 +26,7 @@ import * as serverApi from './../../module/server-api';
 import type {PushedStatePayloadType} from './../../module/server-api';
 import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
 import mapGuide from './../../maps/map-guide';
+import {getCommanderDataByUserIndex} from './../../components/game/model/helper';
 
 import routes, {type HistoryType, type MatchType} from './../../app/routes';
 import type {BuildingType, MapType, UnitType, MapUserType} from './../../maps/type';
@@ -98,7 +99,7 @@ class Room extends Component<PropsType, StateType> {
 
         model.destroy();
 
-        const leaveRoomResult = await serverApi.leaveRoom(roomId, user.getId());
+        // const leaveRoomResult = await serverApi.leaveRoom(roomId, user.getId());
     }
 
     bindEventListeners() {
@@ -142,7 +143,11 @@ class Room extends Component<PropsType, StateType> {
                 return {
                     userId: serverUser.userId,
                     money: defaultMoney,
-                    teamId: mapGuide.teamIdList[userIndex]
+                    teamId: mapGuide.teamIdList[userIndex],
+                    commander: {
+                        type: getCommanderDataByUserIndex(userIndex),
+                        buyCount: 0
+                    }
                 };
             });
 
@@ -160,13 +165,15 @@ class Room extends Component<PropsType, StateType> {
     async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity, max-statements
         const view = this;
         const {props, state} = view;
-        const {model} = state;
-        const roomId = props.match.params.roomId || '';
+        // const {model} = state;
+        // const roomId = props.match.params.roomId || '';
 
+        /*
         if (!state.settings) {
             console.error('state.settings is not defined');
             return Promise.resolve();
         }
+        */
 
         if (state.isGameStart === true) {
             console.error('unbindEventListeners should prevent this IF');
@@ -212,13 +219,11 @@ class Room extends Component<PropsType, StateType> {
         const roomId = props.match.params.roomId || '';
 
         const userList: Array<ServerUserType> = state.userList
-            .map((userItem: ServerUserType, userIndex: number): ServerUserType => {
-                return {
-                    socketId: userItem.socketId,
-                    userId: userItem.userId,
-                    teamId: mapGuide.teamIdList[userIndex]
-                };
-            });
+            .map((userItem: ServerUserType, userIndex: number): ServerUserType => ({
+                socketId: userItem.socketId,
+                userId: userItem.userId,
+                teamId: mapGuide.teamIdList[userIndex]
+            }));
 
         const takeTurnResult = await serverApi.takeTurn(roomId, user.getId());
 

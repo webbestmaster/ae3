@@ -24,7 +24,7 @@ import type {ContextRouter} from 'react-router-dom';
 import Store from './../store';
 import queryString from 'query-string';
 import type {MapType, LandscapeType, BuildingType, GraveType} from './../../maps/type';
-import type {UnitTypeType} from './model/unit/unit-guide';
+import type {UnitTypeAllType} from './model/unit/unit-guide';
 import unitData from './model/unit/unit-guide';
 
 type PropsType = {|
