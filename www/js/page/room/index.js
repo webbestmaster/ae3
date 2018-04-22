@@ -77,11 +77,11 @@ class Room extends Component<PropsType, StateType> {
         // const settingsResponse = await serverApi.getAllRoomSettings(roomId);
         // const usersResponse = await serverApi.getAllRoomUsers(roomId);
 
-        view.setState({
-            // settings: settingsResponse.settings,
-            // userList: usersResponse.users,
-            model: new MainModel()
-        });
+        // view.setState({
+        // settings: settingsResponse.settings,
+        // userList: usersResponse.users,
+        // model: new MainModel()
+        // });
 
         view.bindEventListeners();
 
@@ -109,6 +109,14 @@ class Room extends Component<PropsType, StateType> {
         model.listenTo(socket.attr.model, 'message', async (message: SocketMessageType): Promise<void> => {
             await view.onMessage(message);
         });
+    }
+
+    unbindEventListeners() {
+        const view = this;
+        const {props, state} = view;
+        const {model} = state;
+
+        model.stopListening();
     }
 
     async onServerUserListChange(): Promise<void> {
@@ -161,6 +169,7 @@ class Room extends Component<PropsType, StateType> {
         }
 
         if (state.isGameStart === true) {
+            console.error('unbindEventListeners should prevent this IF');
             return Promise.resolve();
         }
 
@@ -180,6 +189,8 @@ class Room extends Component<PropsType, StateType> {
             case 'room__push-state':
                 if (message.states.last.state.isGameStart === true) {
                     console.warn('---> The game has begun!!!');
+
+                    view.unbindEventListeners();
 
                     view.setState({isGameStart: true});
 
@@ -241,11 +252,13 @@ class Room extends Component<PropsType, StateType> {
             userItem.userId = userData.userId; // eslint-disable-line no-param-reassign
         });
 
+        /*
         const setSettingResult = await serverApi.setRoomSetting(roomId, {
             userList
         });
+        */
 
-        const setSettingResult1 = await serverApi.setRoomSetting(roomId, {
+        const setSettingResult = await serverApi.setRoomSetting(roomId, {
             map
         });
 
