@@ -13,19 +13,24 @@ export type MapGuideType = {|
     |},
     building: {|
         farm: {|
-            moneyBonus: 20
+            moneyBonus: 20,
+            hitPointsBonus: 20
         |},
         castle: {|
-            moneyBonus: 30
+            moneyBonus: 30,
+            hitPointsBonus: 30
         |},
         'farm-destroyed': {|
-            moneyBonus: 0
+            moneyBonus: 0,
+            hitPointsBonus: 0
         |},
         temple: {|
-            moneyBonus: 0
+            moneyBonus: 0,
+            hitPointsBonus: 20
         |},
         well: {|
-            moneyBonus: 0
+            moneyBonus: 0,
+            hitPointsBonus: 20
         |}
     |},
     landscape: {|
@@ -86,19 +91,24 @@ const mapGuide: MapGuideType = {
     },
     building: {
         farm: {
-            moneyBonus: 20
+            moneyBonus: 20,
+            hitPointsBonus: 20
         },
         castle: {
-            moneyBonus: 30
+            moneyBonus: 30,
+            hitPointsBonus: 30
         },
         'farm-destroyed': {
-            moneyBonus: 0
+            moneyBonus: 0,
+            hitPointsBonus: 0
         },
         temple: {
-            moneyBonus: 0
+            moneyBonus: 0,
+            hitPointsBonus: 20
         },
         well: {
-            moneyBonus: 0
+            moneyBonus: 0,
+            hitPointsBonus: 20
         }
     },
     landscape: {

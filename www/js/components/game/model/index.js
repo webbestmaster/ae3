@@ -38,6 +38,7 @@ import {GameView} from './../../game/index';
 import {storeViewId} from './../../store';
 import queryString from 'query-string';
 import Queue from './../../../lib/queue';
+import {countHealHitPointOnBuilding} from './helper';
 
 type RenderSettingType = {|
     width: number,
@@ -207,6 +208,26 @@ export default class Game {
                 return;
             }
             mapUnit.poisonCountdown -= 1; // eslint-disable-line no-param-reassign
+        });
+
+        // add hit point for units under building
+        mapUnitList.forEach((mapUnit: UnitType) => {
+            if (mapUnit.userId !== user.getId()) {
+                return;
+            }
+
+            const additionHitPointValue = countHealHitPointOnBuilding(newMap, mapUnit);
+
+            if (additionHitPointValue === null) {
+                return;
+            }
+
+            if (mapUnit.hitPoints + additionHitPointValue > defaultUnitData.hitPoints) {
+                console.error('too many hit points');
+                return;
+            }
+
+            mapUnit.hitPoints += additionHitPointValue; // eslint-disable-line no-param-reassign
         });
 
         // update graves
@@ -817,6 +838,18 @@ export default class Game {
             }
 
             unit.decreasePoisonCountdown();
+
+            if (unit.getUserId() === socketMapState.activeUserId) {
+                const healHitPointOnBuilding = countHealHitPointOnBuilding(
+                    socketMapState,
+                    JSON.parse(JSON.stringify(unit.attr))
+                );
+
+                if (healHitPointOnBuilding !== null) {
+                    unit.setHitPoints(unit.getHitPoints() + healHitPointOnBuilding);
+                }
+            }
+
             await unit.setActionState(mapUnit.action || null);
         });
 

@@ -276,19 +276,19 @@ export type PushedStateType = {|
     state: PushedStatePayloadType
 |};
 
-const lastPushedState = {};
-
-export function pushState(roomId: string,
-                          userId: string,
-                          pushedState: PushedStateType): Promise<PushStateType> {
+// const lastPushedState = {};
+/*
     const stateToPush = Object.assign({}, lastPushedState, pushedState);
 
     // update last pushed state
     Object.assign(lastPushedState, pushedState);
-
+*/
+export function pushState(roomId: string,
+                          userId: string,
+                          pushedState: PushedStateType): Promise<PushStateType> {
     return fetch(url + '/api/room/push-state/' + [roomId, userId].join('/'), {
         method: 'POST',
-        body: JSON.stringify(stateToPush),
+        body: JSON.stringify(pushedState),
         headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
     })
         .then((blob: Response): Promise<PushStateType> => blob.json());

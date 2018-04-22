@@ -308,3 +308,44 @@ export function procedureMakeGraveForMapUnit(newMap: MapType, mapUnit: AttackRes
 export function getCommanderDataByUserIndex(userIndex: number): UnitTypeCommanderType {
     return ['galamar', 'valadorn', 'demon-lord', 'saeth'][userIndex];
 }
+
+// return additional hit points or null if no changes
+export function countHealHitPointOnBuilding(newMap: MapType, mapUnit: UnitType): number | null { // eslint-disable-line complexity
+    if (mapUnit.hitPoints === defaultUnitData.hitPoints) {
+        return null;
+    }
+
+    if (typeof mapUnit.hitPoints !== 'number') {
+        return null;
+    }
+
+    const currentUnitHitPoints = mapUnit.hitPoints;
+
+    const building = find(newMap.buildings, {x: mapUnit.x, y: mapUnit.y}) || null;
+
+    if (building === null) {
+        return null;
+    }
+
+    const buildingType = building.type;
+    let additionalHitPoints = 0;
+
+    if (['well', 'temple'].includes(buildingType)) {
+        additionalHitPoints = mapGuide.building[buildingType].hitPointsBonus;
+    }
+
+    if (['farm', 'castle'].includes(buildingType) &&
+        typeof building.userId === 'string' &&
+        typeof mapUnit.userId === 'string' &&
+        building.userId === mapUnit.userId) {
+        additionalHitPoints = mapGuide.building[buildingType].hitPointsBonus;
+    }
+
+    const endUnitHitPoints = Math.min(defaultUnitData.hitPoints, currentUnitHitPoints + additionalHitPoints);
+
+    if (endUnitHitPoints === currentUnitHitPoints) {
+        return null;
+    }
+
+    return endUnitHitPoints - currentUnitHitPoints;
+}
