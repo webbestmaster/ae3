@@ -173,7 +173,7 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+        const newMap: MapType = game.getMapState();
         const {unitList} = game;
         const mapUnitList = newMap.units;
         const isUnitListLengthEqual = mapUnitList.length === unitList.length;
@@ -1087,7 +1087,7 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+        const newMap: MapType = game.getMapState();
 
         const movedUnit = find(newMap.units, {id: unitAction.id});
 
@@ -1155,7 +1155,7 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+        const newMap: MapType = game.getMapState();
 
         const aggressorMapUnit = find(newMap.units, {id: unitAction.aggressor.id});
 
@@ -1249,7 +1249,7 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+        const newMap: MapType = game.getMapState();
 
         const building = find(newMap.buildings, {x: unitAction.x, y: unitAction.y}) || null;
 
@@ -1295,7 +1295,7 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+        const newMap: MapType = game.getMapState();
 
         const building = find(newMap.buildings, {x: unitAction.x, y: unitAction.y}) || null;
 
@@ -1341,7 +1341,7 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+        const newMap: MapType = game.getMapState();
 
         const actionGrave = unitAction.grave;
         const actionRaiser = unitAction.raiser;
@@ -1403,7 +1403,7 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = JSON.parse(JSON.stringify(game.mapState));
+        const newMap: MapType = game.getMapState();
 
         const mapBuilding = find(newMap.buildings, {
             x: unitAction.building.x,
@@ -1487,6 +1487,12 @@ export default class Game {
         const game = this; // eslint-disable-line consistent-this
 
         game.mapState = map;
+    }
+
+    getMapState(): MapType {
+        const game = this; // eslint-disable-line consistent-this
+
+        return JSON.parse(JSON.stringify(game.mapState));
     }
 
     setCanvasSize(width: number, height: number) {

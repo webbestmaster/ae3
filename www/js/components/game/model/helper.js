@@ -12,6 +12,7 @@ import type {MapType, UnitType} from './../../../maps/type';
 import find from 'lodash/find';
 import unitGuideData from './unit/unit-guide';
 import type {UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
+import {user} from '../../../module/user';
 
 export function getUserIndex(userId: string, userList: Array<ServerUserType>): number | null {
     let userIndex = 0;
@@ -348,4 +349,19 @@ export function countHealHitPointOnBuilding(newMap: MapType, mapUnit: UnitType):
     }
 
     return endUnitHitPoints - currentUnitHitPoints;
+}
+
+
+type UnitSupplyStateType = {|
+    +unitCount: number,
+    +unitLimit: number
+|};
+
+export function getSupplyState(map: MapType, userId: string): UnitSupplyStateType {
+    const userUnitList = map.units.filter((mapUnit: UnitType): boolean => mapUnit.userId === userId);
+
+    return {
+        unitCount: userUnitList.length,
+        unitLimit: map.unitLimit
+    };
 }

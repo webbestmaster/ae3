@@ -199,7 +199,11 @@ class Room extends Component<PropsType, StateType> {
 
                     view.unbindEventListeners();
 
-                    view.setState({isGameStart: true});
+                    view.setState({
+                        isGameStart: true,
+                        settings: null, // wipe extra data
+                        userList: [] // wipe extra data
+                    });
 
                     return Promise.resolve();
                 }

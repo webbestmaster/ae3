@@ -23,10 +23,11 @@ import {Link, withRouter, Switch, Route} from 'react-router-dom';
 import type {ContextRouter} from 'react-router-dom';
 import Store from './../store';
 import queryString from 'query-string';
-import type {MapType, LandscapeType, BuildingType, GraveType} from './../../maps/type';
+import type {UnitType, MapType, LandscapeType, BuildingType, GraveType} from './../../maps/type';
 import type {UnitTypeAllType} from './model/unit/unit-guide';
 import unitData from './model/unit/unit-guide';
 import serviceStyle from './../../../css/service.scss';
+import {getSupplyState} from './model/helper';
 
 type PropsType = {|
     system: SystemType,
@@ -232,12 +233,27 @@ export class GameView extends Component<PropsType, StateType> {
         });
     }
 
+    renderSupplyState(): Node {
+        const view = this;
+        const {props, state} = view;
+        const {mapState} = state.game; // do not use game.getMapState(), map stay might undefined in game
+        const userId = user.getId();
+
+        if (!mapState) {
+            return <div>no map state</div>;
+        }
+
+        const supplyState = getSupplyState(mapState, userId);
+
+        return <div>supply state: {supplyState.unitCount} / {supplyState.unitLimit}</div>;
+    }
+
     render(): Node { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
         const queryData = queryString.parse(props.location.search);
-        const mapActiveUserId = state.game.mapState &&
-            state.game.mapState.activeUserId || 'no map activeUserId';
+        const {mapState} = state.game; // do not use game.getMapState(), map stay might undefined in game
+        const mapActiveUserId = mapState && mapState.activeUserId || 'no-map-state';
 
         const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
 
@@ -250,11 +266,13 @@ export class GameView extends Component<PropsType, StateType> {
                     <Store
                         x={parseInt(queryData.x, 10)}
                         y={parseInt(queryData.y, 10)}
-                        map={state.game.mapState}/> :
+                        map={mapState}/> :
                     <div>NO store, for {JSON.stringify(queryData)}</div>}
             </div>
 
             <h1>game</h1>
+
+            <div>{view.renderSupplyState()}</div>
 
             <div className={isStoreOpen ? serviceStyle.disabled : ''}>
 
@@ -267,7 +285,7 @@ export class GameView extends Component<PropsType, StateType> {
 
                 <h2>map user list:</h2>
 
-                {state.game.mapState ? <ReactJson src={state.game.mapState.userList}/> : <h1>no map</h1>}
+                {mapState ? <ReactJson src={mapState.userList}/> : <h1>no map</h1>}
 
                 <button
                     onClick={async (): Promise<void> => {
