@@ -354,14 +354,20 @@ export function countHealHitPointOnBuilding(newMap: MapType, mapUnit: UnitType):
 
 type UnitSupplyStateType = {|
     +unitCount: number,
-    +unitLimit: number
+    +unitLimit: number,
+    +isFull: boolean,
+    +isOverFull: boolean
 |};
 
 export function getSupplyState(map: MapType, userId: string): UnitSupplyStateType {
     const userUnitList = map.units.filter((mapUnit: UnitType): boolean => mapUnit.userId === userId);
+    const unitCount = userUnitList.length;
+    const {unitLimit} = map;
 
     return {
-        unitCount: userUnitList.length,
-        unitLimit: map.unitLimit
+        unitCount,
+        unitLimit,
+        isFull: unitCount >= unitLimit,
+        isOverFull: unitCount > unitLimit
     };
 }

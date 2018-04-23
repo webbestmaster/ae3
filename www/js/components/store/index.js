@@ -26,6 +26,7 @@ import {withRouter} from 'react-router-dom';
 import type {ContextRouter} from 'react-router-dom';
 import type {UnitType} from '../../maps/type';
 import serviceStyle from './../../../css/service.scss';
+import {getSupplyState} from '../game/model/helper';
 
 const storeViewId = 'store';
 
@@ -147,6 +148,8 @@ class Store extends Component<PropsType, StateType> {
             return null;
         }
 
+        const supplyState = getSupplyState(props.map, user.getId());
+
         /*
                 const userCommander = mapUserData.commander || null;
 
@@ -172,7 +175,7 @@ class Store extends Component<PropsType, StateType> {
         */
 
         return <div
-            className={mapUserData.money < unitCost ? serviceStyle.disabled : ''}
+            className={mapUserData.money < unitCost || supplyState.isFull ? serviceStyle.disabled : ''}
             key={unitType}>
             <hr/>
             {unitType}: {JSON.stringify(unitData)}<br/>
@@ -264,6 +267,14 @@ class Store extends Component<PropsType, StateType> {
 
             <hr/>
             current user data: {JSON.stringify(state.mapUserData)}
+            <hr/>
+            <div onClick={() => {
+                props.history.goBack();
+            }}>
+                ----------<br/>
+                -- BACK --<br/>
+                ----------
+            </div>
 
             {state.isInProgress ? <div>---- WAIT FOR SERVER ----</div> : view.renderUnitList()}
 
