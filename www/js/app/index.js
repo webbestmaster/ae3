@@ -1,8 +1,8 @@
 // @flow
 
-import React, {Component} from 'react';
 import type {Node} from 'react';
-import {Switch, Route, Link, BrowserRouter} from 'react-router-dom';
+import React from 'react';
+import {Route, Switch} from 'react-router-dom';
 import System from './../components/system';
 import Auth from './../components/auth';
 

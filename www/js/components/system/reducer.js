@@ -3,7 +3,6 @@
 /* global window */
 
 import {combineReducers} from 'redux';
-
 // screen
 import type {OnResizeType} from './action';
 

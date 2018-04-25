@@ -3,9 +3,9 @@
 /* global window */
 
 import {combineReducers} from 'redux';
-
 // user
-import type {SetUserType} from './action';
+// socket
+import type {SetSocketType, SetUserType} from './action';
 
 export type UserType = {|
     id: string
@@ -15,9 +15,6 @@ const defaultUserState: UserType = {
     id: ''
 };
 
-
-// socket
-import type {SetSocketType} from './action';
 
 export type SocketType = {|
     id: string

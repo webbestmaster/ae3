@@ -3,16 +3,14 @@
 
 import type {ServerUserType} from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
-import unitGuide, {defaultUnitData, additionalUnitData} from './unit/unit-guide';
-import type {UnitActionType, UnitActionsMapType, UnitActionMoveType, GameDataType} from './unit';
+import type {UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
+import unitGuideData, {additionalUnitData, defaultUnitData} from './unit/unit-guide';
+import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './unit';
 import Unit from './unit';
-import {getPath, defaultOptions} from './../../../lib/a-star-finder';
-import type {PathType, PointType} from './../../../lib/a-star-finder';
+import type {PathType} from './../../../lib/a-star-finder';
+import {defaultOptions, getPath} from './../../../lib/a-star-finder';
 import type {MapType, UnitType} from './../../../maps/type';
 import find from 'lodash/find';
-import unitGuideData from './unit/unit-guide';
-import type {UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
-import {user} from '../../../module/user';
 
 export function getUserIndex(userId: string, userList: Array<ServerUserType>): number | null {
     let userIndex = 0;

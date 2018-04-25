@@ -1,7 +1,8 @@
 // @flow
 
 // user
-import type {UserType} from './reducer';
+// socket
+import type {SocketType, UserType} from './reducer';
 
 export type SetUserType = {|
     type: 'auth--set-user-state',
@@ -15,8 +16,6 @@ export function setUser(userState: UserType): SetUserType {
     };
 }
 
-// socket
-import type {SocketType} from './reducer';
 
 export type SetSocketType = {|
     type: 'auth--set-socket-state',

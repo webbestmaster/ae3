@@ -2,7 +2,7 @@
 /* global fetch */
 
 import appConst from './../app-const';
-import type {MapType, UnitType, BuildingType, BuildingAttrTypeType} from './../maps/type';
+import type {BuildingAttrTypeType, BuildingType, MapType, UnitType} from './../maps/type';
 import mapGuide from './../maps/map-guide';
 import type {PathType} from './../components/game/model/unit/path-master';
 import type {AttackResultUnitType} from './../components/game/model/helper';

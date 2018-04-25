@@ -1,7 +1,7 @@
 // @flow
 
-import React, {Component} from 'react';
 import type {Node} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {MapType} from './../../maps/type';
 import mapGuide from './../../maps/map-guide';

@@ -3,26 +3,21 @@
 /* global window */
 
 import * as PIXI from 'pixi.js';
-import type {MapType, LandscapeType, BuildingType} from './../../../maps/type';
-import type {ServerUserType} from './../../../module/server-api';
+import type {LandscapeType, MapType} from './../../../maps/type';
 import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
-import {getUserColor} from './helper';
-import type {UnitDataForAttackType} from './helper';
-import type {UnitType} from './../../../maps/type';
 import type {UnitActionsMapType, UnitActionType} from './unit/index';
 import type {
     UnitActionAttackType,
-    UnitActionMoveType,
+    UnitActionDestroyBuildingType,
     UnitActionFixBuildingType,
+    UnitActionMoveType,
     UnitActionOccupyBuildingType,
-    UnitActionRaiseSkeletonType,
-    UnitActionDestroyBuildingType
+    UnitActionRaiseSkeletonType
 } from './unit';
 import Unit from './unit';
 import {defaultUnitData} from './unit/unit-guide';
 import Building from './building';
-import type {SocketMessagePushStateType} from './../../../module/socket';
 import {tween} from './../../../lib/tween';
 
 type InitializeConfigType = {|

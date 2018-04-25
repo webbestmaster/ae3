@@ -2,28 +2,20 @@
 
 /* global window */
 
-import React, {Component} from 'react';
 import type {Node} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {user} from './../../module/user';
-import {socket} from './../../module/socket';
-import type {GlobalStateType} from './../../app-reducer';
-import {store} from './../../index';
-import type {SystemType} from './../system/reducer';
 // import Game from './model/index';
-import type {SocketMessageType} from './../../module/socket';
+import type {GlobalStateType} from './../../app-reducer';
 import * as serverApi from './../../module/server-api';
-import MainModel from './../../lib/main-model';
-import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
-import ReactJson from 'react-json-view';
 import find from 'lodash/find';
 // import Unit from './model/unit';
-import type {MapUserType} from './../../maps/type';
-import type {MapType, LandscapeType, BuildingType, GraveType} from './../../maps/type';
-import guideUnitData, {additionalUnitData} from './../game/model/unit/unit-guide';
+import type {MapType, MapUserType} from './../../maps/type';
 import type {UnitTypeAllType} from './../game/model/unit/unit-guide';
-import {withRouter} from 'react-router-dom';
+import guideUnitData, {additionalUnitData} from './../game/model/unit/unit-guide';
 import type {ContextRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import type {UnitType} from '../../maps/type';
 import serviceStyle from './../../../css/service.scss';
 import {getSupplyState} from '../game/model/helper';

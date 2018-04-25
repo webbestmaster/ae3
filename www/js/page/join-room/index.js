@@ -1,16 +1,10 @@
 // @flow
 
-import React, {Component} from 'react';
 import type {Node} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-
-import uiStyle from './../../components/ui/ui.scss';
-import serviceStyle from './../../../css/service.scss';
+import type {HistoryType} from './../../app/routes';
 import routes from './../../app/routes';
-import type {HistoryType, MatchType} from './../../app/routes';
-import type {AllRoomSettingsType, ServerUserType, GetAllRoomIdsType} from './../../module/server-api';
-
 import * as serverApi from './../../module/server-api';
 import type {GlobalStateType} from './../../app-reducer';
 import type {AuthType} from './../../components/auth/reducer';

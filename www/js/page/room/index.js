@@ -8,28 +8,25 @@
 // - unitLimit
 // - userList
 
-import React, {Component} from 'react';
 import type {Node} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import MainModel from './../../lib/main-model/index';
 import ReactJson from 'react-json-view';
-import {Link} from 'react-router-dom';
 
 import {user} from './../../module/user';
 import {socket, type SocketMessageType} from './../../module/socket';
 import Game from './../../components/game';
-
+import type {AllRoomSettingsType, PushedStatePayloadType, ServerUserType} from './../../module/server-api';
 // import uiStyle from './../../components/ui/ui.scss';
 // import serviceStyle from './../../../css/service.scss';
 // import type {AuthType} from './../../components/auth/reducer';
 import * as serverApi from './../../module/server-api';
-import type {PushedStatePayloadType} from './../../module/server-api';
-import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
 import mapGuide from './../../maps/map-guide';
 import {getCommanderDataByUserIndex} from './../../components/game/model/helper';
 
-import routes, {type HistoryType, type MatchType} from './../../app/routes';
-import type {BuildingType, MapType, UnitType, MapUserType} from './../../maps/type';
+import {type MatchType} from './../../app/routes';
+import type {BuildingType, MapType, MapUserType, UnitType} from './../../maps/type';
 
 type StateType = {|
     settings?: AllRoomSettingsType,

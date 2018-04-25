@@ -1,5 +1,6 @@
 // @flow
 
+import type {UnitConstructorType} from './index';
 import Unit from './index';
 import UnitArcher from './archer';
 import UnitCatapult from './catapult';
@@ -17,8 +18,6 @@ import UnitSoldier from './soldier';
 import UnitSorceress from './sorceress';
 import UnitValadorn from './valadorn';
 import UnitWisp from './wisp';
-
-import type {UnitConstructorType} from './index';
 
 export function createUnit(unitConstructor: UnitConstructorType): Unit { // eslint-disable-line complexity
     const type = unitConstructor.unitData.type;

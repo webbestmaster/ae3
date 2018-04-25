@@ -3,42 +3,41 @@
 /* global window */
 
 // import * as PIXI from 'pixi.js';
-import type {MapType, LandscapeType, BuildingType, GraveType} from './../../../maps/type';
-import type {ServerUserType} from './../../../module/server-api';
+import type {BuildingType, GraveType, LandscapeType, MapType, UnitType} from './../../../maps/type';
+import {unitActionStateDefaultValue} from './../../../maps/type';
+import type {AllRoomSettingsType, ServerUserType} from './../../../module/server-api';
+import * as serverApi from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 // import imageMap from './../image/image-map';
-import {getUserColor, getMoviePath, getEventName, procedureMakeGraveForMapUnit} from './helper';
-import type {MapUserType, UnitType} from './../../../maps/type';
-import {unitActionStateDefaultValue} from './../../../maps/type';
+import {countHealHitPointOnBuilding, getEventName, procedureMakeGraveForMapUnit} from './helper';
 import Render from './render';
-import type {AllRoomSettingsType} from './../../../module/server-api';
 import Building from './building';
 import Grave from './grave';
-import Unit from './unit';
 import type {
-    UnitActionType,
-    UnitActionsMapType,
-    UnitActionMoveType,
+    GameDataType,
     UnitActionAttackType,
+    UnitActionDestroyBuildingType,
     UnitActionFixBuildingType,
+    UnitActionMoveType,
     UnitActionOccupyBuildingType,
-    GameDataType, UnitActionRaiseSkeletonType, UnitActionDestroyBuildingType
+    UnitActionRaiseSkeletonType,
+    UnitActionsMapType,
+    UnitActionType
 } from './unit';
-import * as serverApi from './../../../module/server-api';
+import Unit from './unit';
 import {user} from './../../../module/user';
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
 import remove from 'lodash/remove';
+import type {SocketMessagePushStateType, SocketMessageTakeTurnType, SocketMessageType} from './../../../module/socket';
 import {socket} from './../../../module/socket';
-import type {SocketMessageType, SocketMessagePushStateType, SocketMessageTakeTurnType} from './../../../module/socket';
 import MainModel from './../../../lib/main-model';
 import * as unitMaster from './unit/master';
-import unitGuideData, {defaultUnitData} from './unit/unit-guide';
+import {defaultUnitData} from './unit/unit-guide';
 import {GameView} from './../../game/index';
 import {storeViewId} from './../../store';
 import queryString from 'query-string';
 import Queue from './../../../lib/queue';
-import {countHealHitPointOnBuilding} from './helper';
 
 type RenderSettingType = {|
     width: number,
