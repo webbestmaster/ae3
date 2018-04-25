@@ -150,15 +150,11 @@ export default class Game {
         model.listenTo(socket.attr.model,
             'message',
             (message: SocketMessageType) => {
-                // really we have bug if one user has slow connection and slow phone
-                // TODO: wait and of previous action
-                // TODO: use Process/Promise Master
-                console.warn('TODO: wait and of previous action');
-                console.warn('TODO: use Process/Promise Master');
-
                 game.onMessageQueue.push(async (): Promise<void> => {
                     game.gameView.addDisableReason('server-receive-message');
 
+                    // TODO: CATCH error response !!!
+                    console.warn('TODO: CATCH error response !!!');
                     await game.onMessage(message);
 
                     game.gameView.removeDisableReason('server-receive-message');
