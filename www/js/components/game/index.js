@@ -35,7 +35,7 @@ type PropsType = {|
     ...ContextRouter
 |};
 
-export type DisabledByItemType = 'server-receive-message';
+export type DisabledByItemType = 'server-receive-message' | 'client-push-state' | 'client-drop-turn';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -202,7 +202,16 @@ export class GameView extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
-        await serverApi.dropTurn(props.roomId, user.getId());
+        view.addDisableReason('client-drop-turn');
+
+        return serverApi.dropTurn(props.roomId, user.getId())
+            .catch((error: Error) => {
+                console.error('Drop turn error');
+                console.log(error);
+            })
+            .then(() => {
+                view.removeDisableReason('client-drop-turn');
+            });
     }
 
     addDisableReason(reason: DisabledByItemType) {
@@ -210,7 +219,12 @@ export class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
 
         view.setState((prevState: StateType): StateType => {
-            prevState.disabledByList.push(reason);
+            const newDisabledByList = JSON.parse(JSON.stringify(prevState.disabledByList));
+
+            newDisabledByList.push(reason);
+
+            prevState.disabledByList = newDisabledByList; // eslint-disable-line no-param-reassign
+
             return prevState;
         });
     }
@@ -220,15 +234,18 @@ export class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
 
         view.setState((prevState: StateType): StateType => {
-            const {disabledByList} = prevState;
-            const reasonIndex = disabledByList.indexOf(reason);
+            const newDisabledByList = JSON.parse(JSON.stringify(prevState.disabledByList));
+            const reasonIndex = newDisabledByList.indexOf(reason);
 
             if (reasonIndex === -1) {
                 console.error('ERROR: reason is not exists in disabledByList', reason, view);
                 return prevState;
             }
 
-            disabledByList.splice(reasonIndex);
+            newDisabledByList.splice(reasonIndex, 1);
+
+            prevState.disabledByList = newDisabledByList; // eslint-disable-line no-param-reassign
+
             return prevState;
         });
     }

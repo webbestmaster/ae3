@@ -128,6 +128,12 @@ class Store extends Component<PropsType, StateType> {
             .then((response: mixed) => {
                 console.log('---> unit action move pushed');
                 console.log(response);
+            })
+            .catch((error: Error) => {
+                console.error('store-push-state error');
+                console.log(error);
+            })
+            .then(() => {
                 props.history.goBack();
             });
     }

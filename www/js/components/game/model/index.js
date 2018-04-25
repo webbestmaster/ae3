@@ -268,6 +268,8 @@ export default class Game {
             mapUser.money += buildingData.moneyBonus;
         });
 
+        game.gameView.addDisableReason('client-push-state');
+
         await serverApi
             .pushState(
                 game.roomId,
@@ -284,6 +286,13 @@ export default class Game {
             .then((response: mixed) => {
                 console.log('---> refresh unit list pushed');
                 console.log(response);
+            })
+            .catch((error: Error) => {
+                console.error('client-push-state error');
+                console.log(error);
+            })
+            .then(() => {
+                game.gameView.removeDisableReason('client-push-state');
             });
     }
 
@@ -317,7 +326,6 @@ export default class Game {
                 game.checkMapState(message.states.last.state.map);
                 game.setMapState(message.states.last.state.map);
                 game.refreshWispAura();
-                // game.gameView.addDisableReason('unit-in-action'); - update view
                 // game.gameView.forceUpdate();
 
                 break;
@@ -1082,7 +1090,7 @@ export default class Game {
         });
     }
 
-    bindOnClickUnitActionMove(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType) { // eslint-disable-line complexity
+    bindOnClickUnitActionMove(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType) { // eslint-disable-line complexity, max-statements
         const game = this; // eslint-disable-line consistent-this
 
         game.render.cleanActionsList();
@@ -1119,6 +1127,8 @@ export default class Game {
         movedUnit.action = movedUnit.action || {};
         movedUnit.action.didMove = true;
 
+        game.gameView.addDisableReason('client-push-state');
+
         serverApi
             .pushState(
                 game.roomId,
@@ -1147,6 +1157,13 @@ export default class Game {
             .then((response: mixed) => {
                 console.log('---> unit action move pushed');
                 console.log(response);
+            })
+            .catch((error: Error) => {
+                console.error('client-push-state error');
+                console.log(error);
+            })
+            .then(() => {
+                game.gameView.removeDisableReason('client-push-state');
             });
     }
 
@@ -1223,6 +1240,8 @@ export default class Game {
             console.log('defenderUnitAction can NOT strike back');
         }
 
+        game.gameView.addDisableReason('client-push-state');
+
         serverApi
             .pushState(
                 game.roomId,
@@ -1241,6 +1260,13 @@ export default class Game {
             .then((response: mixed) => {
                 console.log('---> unit action attack pushed');
                 console.log(response);
+            })
+            .catch((error: Error) => {
+                console.error('client-push-state error');
+                console.log(error);
+            })
+            .then(() => {
+                game.gameView.removeDisableReason('client-push-state');
             });
     }
 
@@ -1270,6 +1296,8 @@ export default class Game {
 
         building.type = 'farm';
 
+        game.gameView.addDisableReason('client-push-state');
+
         serverApi
             .pushState(
                 game.roomId,
@@ -1287,6 +1315,13 @@ export default class Game {
             .then((response: mixed) => {
                 console.log('---> unit action fix building pushed');
                 console.log(response);
+            })
+            .catch((error: Error) => {
+                console.error('client-push-state error');
+                console.log(error);
+            })
+            .then(() => {
+                game.gameView.removeDisableReason('client-push-state');
             });
     }
 
@@ -1316,6 +1351,8 @@ export default class Game {
 
         building.userId = unitAction.userId;
 
+        game.gameView.addDisableReason('client-push-state');
+
         serverApi
             .pushState(
                 game.roomId,
@@ -1333,6 +1370,13 @@ export default class Game {
             .then((response: mixed) => {
                 console.log('---> unit action occupy building pushed');
                 console.log(response);
+            })
+            .catch((error: Error) => {
+                console.error('client-push-state error');
+                console.log(error);
+            })
+            .then(() => {
+                game.gameView.removeDisableReason('client-push-state');
             });
     }
 
@@ -1377,6 +1421,8 @@ export default class Game {
             }
         });
 
+        game.gameView.addDisableReason('client-push-state');
+
         serverApi
             .pushState(
                 game.roomId,
@@ -1395,6 +1441,13 @@ export default class Game {
             .then((response: mixed) => {
                 console.log('---> unit action raise skeleton pushed');
                 console.log(response);
+            })
+            .catch((error: Error) => {
+                console.error('client-push-state error');
+                console.log(error);
+            })
+            .then(() => {
+                game.gameView.removeDisableReason('client-push-state');
             });
     }
 
@@ -1444,6 +1497,8 @@ export default class Game {
         mapUnit.action = mapUnit.action || {};
         mapUnit.action.didDestroyBuilding = true;
 
+        game.gameView.addDisableReason('client-push-state');
+
         serverApi
             .pushState(
                 game.roomId,
@@ -1462,6 +1517,13 @@ export default class Game {
             .then((response: mixed) => {
                 console.log('---> unit action destroy building pushed');
                 console.log(response);
+            })
+            .catch((error: Error) => {
+                console.error('client-push-state error');
+                console.log(error);
+            })
+            .then(() => {
+                game.gameView.removeDisableReason('client-push-state');
             });
     }
 
