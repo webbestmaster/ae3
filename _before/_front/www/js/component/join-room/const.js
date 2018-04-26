@@ -1,3 +1,0 @@
-export default {
-    UPDATE_AVAILABLE_ROOMS: 'UPDATE_AVAILABLE_ROOMS'
-};

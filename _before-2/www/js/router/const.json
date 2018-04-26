@@ -1,7 +1,0 @@
-{
-    "route": {
-        "room": "room",
-        "createRoom": "create-room",
-        "joinRoom": "join-room"
-    }
-}

@@ -1,6 +1,0 @@
-{
-    "type": {
-        "updateContactList": "updateContactList",
-        "setContactsViewVisible": "setContactsViewVisible"
-    }
-}

@@ -1,9 +1,0 @@
-{
-    "route": {
-        "getServerInfo": "get-server-info",
-        "createRoom": "create-room",
-        "getAvailableRooms": "get-available-rooms",
-
-        "roomApi": "room-api/:userId/:roomId/:methodName/:params"
-    }
-}
