@@ -8,8 +8,12 @@ import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
 import type {UnitActionsMapType, UnitActionType} from './unit/index';
 import type {
-    UnitActionAttackType, UnitActionDestroyBuildingType, UnitActionFixBuildingType, UnitActionMoveType,
-    UnitActionOccupyBuildingType, UnitActionRaiseSkeletonType
+    UnitActionAttackType,
+    UnitActionDestroyBuildingType,
+    UnitActionFixBuildingType,
+    UnitActionMoveType,
+    UnitActionOccupyBuildingType,
+    UnitActionRaiseSkeletonType
 } from './unit';
 import Unit from './unit';
 import {defaultUnitData} from './unit/unit-guide';

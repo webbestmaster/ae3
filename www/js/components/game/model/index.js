@@ -14,8 +14,15 @@ import Render from './render';
 import Building from './building';
 import Grave from './grave';
 import type {
-    GameDataType, UnitActionAttackType, UnitActionDestroyBuildingType, UnitActionFixBuildingType,
-    UnitActionMoveType, UnitActionOccupyBuildingType, UnitActionRaiseSkeletonType, UnitActionsMapType, UnitActionType
+    GameDataType,
+    UnitActionAttackType,
+    UnitActionDestroyBuildingType,
+    UnitActionFixBuildingType,
+    UnitActionMoveType,
+    UnitActionOccupyBuildingType,
+    UnitActionRaiseSkeletonType,
+    UnitActionsMapType,
+    UnitActionType
 } from './unit';
 import Unit from './unit';
 import {user} from './../../../module/user';
