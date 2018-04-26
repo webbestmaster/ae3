@@ -1,7 +1,7 @@
-@import "./../../../css/var";
+@import "./../../../../css/var";
 
-.button {
-    display: inline-block;
+.wrapper {
+    display: block;
     color: $mainTextColor;
     text-decoration: none;
     text-align: center;
@@ -11,6 +11,7 @@
     font-weight: normal;
     background-color: #ccc;
     cursor: pointer;
+    margin-bottom: 10px;
     &:hover {
         background-color: #777;
     }

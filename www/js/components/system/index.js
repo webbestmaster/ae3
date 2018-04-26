@@ -2,6 +2,7 @@
 
 /* global window */
 
+import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {onResize} from './action';
@@ -32,7 +33,7 @@ class System extends Component<PropsType, StateType> {
             false);
     }
 
-    render(): null {
+    render(): Node {
         return null;
     }
 }

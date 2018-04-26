@@ -3,32 +3,32 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
 import routes from './../../app/routes';
+import Button from './../../components/ui/button';
+import ButtonLink from './../../components/ui/button-link';
 
-import uiStyle from './../../components/ui/ui.scss';
+import uiStyle from './../../../css/ui.scss';
 import serviceStyle from './../../../css/service.scss';
 
 class Index extends Component<void, void> {
     render(): Node {
-        return <div>
-            <h1>Index</h1>
-            <br/>
-            <br/>
-            <br/>
+        return <div className={uiStyle.page}>
             <div className={serviceStyle.ta_c}>
-                <Link
-                    to={routes.multiPlayer}
-                    className={uiStyle.button}>
+                <ButtonLink
+                    to={routes.multiPlayer}>
                     multi player
-                </Link>
+                </ButtonLink>
+
                 <br/>
                 <br/>
-                <div className={uiStyle.button}>single player</div>
+                <Button>
+                    single player
+                </Button>
                 <br/>
                 <br/>
-                <div className={uiStyle.button}>settings</div>
-                <br/>
+                <Button>
+                    settings
+                </Button>
             </div>
         </div>;
     }

@@ -43,9 +43,7 @@ class Auth extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
-        return <div>
-            {JSON.stringify(props.auth.user)}
-        </div>;
+        return null;
     }
 }
 
