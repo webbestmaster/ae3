@@ -41,7 +41,7 @@ const webpackConfig = {
         // common: './js/common.js',
         main: [
             'babel-polyfill',
-            './css/reset.scss',
+            './css/root.scss',
             './js/index.js'
         ]
     },

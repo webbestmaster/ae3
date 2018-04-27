@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 
-import uiStyle from './../../../css/ui.scss';
+import uiStyle from '../../components/ui/ui.scss';
 import serviceStyle from './../../../css/service.scss';
 import routes from './../../app/routes';
 

@@ -12,7 +12,8 @@ import {Link} from 'react-router-dom';
 
 type PropsType = {|
     children: Node,
-    to: string
+    to: string,
+    className?: string
 |};
 
 type StateType = {||};
@@ -25,7 +26,11 @@ export class ButtonLink extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
-        return <Link to={props.to} className={style.wrapper}>
+        const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
+
+        return <Link
+            to={props.to}
+            className={style.wrapper + additionClass}>
             {props.children}
         </Link>;
     }

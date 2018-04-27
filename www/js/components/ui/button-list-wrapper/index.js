@@ -10,13 +10,19 @@ import style from './style.m.scss';
 
 type PropsType = {|
     children: Node,
-    onClick?: () => void,
     className?: string
 |};
 
 type StateType = {||};
 
-export class Button extends Component<PropsType, StateType> {
+type StyleType = {|
+    position?: 'absolute',
+    transform?: 'translate3d(-50%, -50%, 0)',
+    left?: '50%',
+    top?: '50%'
+|} | null;
+
+export class ButtonListWrapper extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -26,8 +32,7 @@ export class Button extends Component<PropsType, StateType> {
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
         return <div
-            className={style.wrapper + additionClass}
-            onClick={typeof props.onClick === 'function' ? props.onClick : null}>
+            className={style.wrapper + additionClass}>
             {props.children}
         </div>;
     }
@@ -40,4 +45,4 @@ export default connect(
     {
         // setUser
     }
-)(Button);
+)(ButtonListWrapper);

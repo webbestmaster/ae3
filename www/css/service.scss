@@ -1,51 +1,54 @@
-.hidden {
-    display: none !important;
-}
+:global {
 
-.disabled {
-    opacity: 0.5;
-    pointer-events: none; // see Can I Use
-}
-
-.clear_self {
-    &:after {
-        display: block;
-        content: '';
-        clear: both;
+    .hidden {
+        display: none !important;
     }
-}
 
-.clear_full {
-    clear: both;
-    &:after {
-        display: block;
-        content: '';
-        clear: both;
+    .disabled {
+        opacity: 0.5;
+        pointer-events: none; // see Can I Use
     }
-}
 
-.ellipsis {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
+    .clear_self {
+        &:after {
+            display: block;
+            content: '';
+            clear: both;
+        }
+    }
 
-.ta_c {
-    text-align: center;
-}
+    .clear_full {
+        clear: both;
+        &:after {
+            display: block;
+            content: '';
+            clear: both;
+        }
+    }
 
-.fl_l {
-    float: left;
-}
+    .ellipsis {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 
-.fl_r {
-    float: right;
-}
+    .ta_c {
+        text-align: center;
+    }
 
-.fl_n {
-    float: none;
-}
+    .fl_l {
+        float: left;
+    }
 
-.json {
-    word-break: break-all;
+    .fl_r {
+        float: right;
+    }
+
+    .fl_n {
+        float: none;
+    }
+
+    .json {
+        word-break: break-all;
+    }
 }
