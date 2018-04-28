@@ -437,3 +437,5 @@ const myFirsyMap: MapType = {
         }
     ]
 };
+
+export default myFirsyMap;

@@ -1,0 +1,30 @@
+@import "./../../../../css/var";
+
+.wrapper {
+    display: block;
+    color: $mainTextColor;
+    text-decoration: none;
+    text-align: center;
+    padding: 15px 30px;
+    border: 3px solid $mainTextColor;
+    //border-radius: 10px;
+    font-size: 16px;
+    font-weight: normal;
+    background-color: #000077;
+    cursor: pointer;
+    margin-bottom: 15px;
+    text-transform: capitalize;
+    box-shadow: 5px 5px 0 $mainShadowColor;
+
+    &:hover {
+        background-color: #0000aa;
+    }
+
+    &:active {
+        box-shadow: none;
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
