@@ -10,12 +10,8 @@ import type {GlobalStateType} from './../../app-reducer';
 import type {AuthType} from './../../components/auth/reducer';
 import routes, {type HistoryType} from './../../app/routes';
 
-// const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
-// const mapList: Array<MapType> = mapReqContext.keys()
-//     .map(mapReqContext);
-
-const {myFirstMap} = require('./../../maps/default/maps/my-first-map-for-flow-test');
-const mapList: Array<MapType> = [myFirstMap];
+const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
+const mapList: Array<MapType> = mapReqContext.keys().map(mapReqContext);
 
 type StateType = {|
     mapIndex: number,

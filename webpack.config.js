@@ -78,12 +78,6 @@ const webpackConfig = {
                 }
             },
             {
-                test: /\.json$/,
-                use: {
-                    loader: 'json-loader'
-                }
-            },
-            {
                 test: /\.(png|jpg|jpeg|gif|svg)(\?[a-z0-9=&.]+)?$/,
                 use: {
                     loader: IS_DEVELOPMENT ?
