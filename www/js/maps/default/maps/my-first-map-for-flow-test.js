@@ -3,7 +3,7 @@
 
 import type {MapType} from './../../type';
 
-const myFirsyMap: MapType = {
+const myFirstMap: MapType = {
     meta: {
         en: { // eslint-disable-line id-length
             local: 'en',
@@ -438,4 +438,4 @@ const myFirsyMap: MapType = {
     ]
 };
 
-export default myFirsyMap;
+export {myFirstMap};
