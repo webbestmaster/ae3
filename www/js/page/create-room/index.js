@@ -17,11 +17,6 @@ import routes, {type HistoryType} from './../../app/routes';
 const {myFirstMap} = require('./../../maps/default/maps/my-first-map-for-flow-test');
 const mapList: Array<MapType> = [myFirstMap];
 
-// import {Link} from 'react-router-dom';
-
-// import uiStyle from './../../components/ui/ui.scss';
-// import serviceStyle from './../../../css/service.scss';
-// import routes from '/../../app/routes';
 type StateType = {|
     mapIndex: number,
     defaultMoney: number,

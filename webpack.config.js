@@ -32,9 +32,39 @@ const webpackConfig = {
         './www/js/index.js'
     ],
     output: {
-        path: path.join(__dirname, '/dist'),
-        filename: 'index_bundle.js'
+        path: path.join(__dirname, '/dist')
+        // filename: '[name].js'
     },
+    optimization: Object.assign(
+        {},
+        IS_DEVELOPMENT ?
+            {
+                splitChunks: {
+                    cacheGroups: {
+                        main: {
+                            chunks: 'initial',
+                            name: 'main',
+                            priority: -20,
+                            reuseExistingChunk: true
+                        },
+                        style: {
+                            chunks: 'initial',
+                            name: 'style',
+                            priority: -15,
+                            reuseExistingChunk: true,
+                            test: /\.scss$/
+                        },
+                        vendor: {
+                            chunks: 'initial',
+                            name: 'vendor',
+                            priority: -10,
+                            test: /node_modules/
+                        }
+                    }
+                }
+            } :
+            null
+    ),
     module: {
         rules: [
             {
