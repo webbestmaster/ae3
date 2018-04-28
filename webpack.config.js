@@ -106,6 +106,7 @@ const webpackConfig = {
             },
 
             // global styles and libraries
+            /*
             {
                 test: /(\.css)$/,
                 use: [
@@ -131,6 +132,7 @@ const webpackConfig = {
                     {loader: 'sass-loader', options: {sourceMap: IS_DEVELOPMENT}}
                 ]
             },
+            */
 
             {
                 test: /\.raw$/,
