@@ -9,6 +9,16 @@ import * as serverApi from './../../module/server-api';
 import type {GlobalStateType} from './../../app-reducer';
 import type {AuthType} from './../../components/auth/reducer';
 
+import Page from './../../components/ui/page';
+import Button from './../../components/ui/button';
+import ButtonLink from './../../components/ui/button-link';
+import ButtonListWrapper from './../../components/ui/button-list-wrapper';
+import Header from './../../components/ui/header';
+import Form from './../../components/ui/form';
+import Label from './../../components/ui/label';
+import FormHeader from './../../components/ui/form-header';
+import Fieldset from './../../components/ui/fieldset';
+
 type StateType = {|
     roomIds: Array<string>
     // settings: AllRoomSettingsType,
@@ -63,21 +73,25 @@ class JoinRoom extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
-        return <div>
-            <h1>JoinRoom</h1>
-            <br/>
+        return <Page>
+            <Header>Join Into Room</Header>
 
-            {state.roomIds.map((roomId: string): Node => <div
-                onClick={async (): Promise<void> => {
-                    const result = view.joinRoom(roomId);
-                }}
-                key={roomId}>
-                {roomId}
-            </div>)}
-
-            <br/>
-            <br/>
-        </div>;
+            <Form>
+                <Fieldset>
+                    {state.roomIds.map((roomId: string): Node => <p
+                        style={{
+                            padding: 10,
+                            cursor: 'pointer'
+                        }}
+                        onClick={async (): Promise<void> => {
+                            const result = view.joinRoom(roomId);
+                        }}
+                        key={roomId}>
+                        {roomId}
+                    </p>)}
+                </Fieldset>
+            </Form>
+        </Page>;
     }
 }
 
