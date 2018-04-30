@@ -13,6 +13,16 @@ import routes, {type HistoryType} from './../../app/routes';
 const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
 const mapList: Array<MapType> = mapReqContext.keys().map(mapReqContext);
 
+import Page from './../../components/ui/page';
+import Button from './../../components/ui/button';
+import ButtonLink from './../../components/ui/button-link';
+import ButtonListWrapper from './../../components/ui/button-list-wrapper';
+import Header from './../../components/ui/header';
+import Form from './../../components/ui/form';
+import Label from './../../components/ui/label';
+import FormHeader from './../../components/ui/form-header';
+import Fieldset from './../../components/ui/fieldset';
+
 type StateType = {|
     mapIndex: number,
     defaultMoney: number,
@@ -36,7 +46,7 @@ class CreateRoom extends Component<PropsType, StateType> {
         view.state = {
             mapIndex: 0,
             defaultMoney: mapGuide.defaultMoneyList[0],
-            unitLimit: mapGuide.unitLimitList[0]
+            unitLimit: mapGuide.defaultUnitLimitList[0]
         };
     }
 
@@ -93,55 +103,56 @@ class CreateRoom extends Component<PropsType, StateType> {
         const view = this;
         const {state} = view;
 
-        return <div>
-            <h1>CreateRoom</h1>
-            <br/>
-            <br/>
-            <h1>select map</h1>
-            <br/>
+        return <Page>
+            <Header>Create Game</Header>
+            <Form>
 
-            {mapList.map((map: MapType, mapIndex: number): Node => <div
-                onClick={(): void => view.setState({mapIndex})}
-                key={map.meta.en.name}>
-                <h3>{map.meta.en.name}</h3>
-            </div>)}
+                <Fieldset>
+                    <FormHeader>
+                        select map
+                    </FormHeader>
 
-            <h1>defaultMoney</h1>
-            {mapGuide.defaultMoneyList.map((defaultMoney: number): Node => <div
-                onClick={(): void => view.setState({defaultMoney})}
-                key={defaultMoney}>
-                {defaultMoney} {defaultMoney === state.defaultMoney ? '<-' : ''}
-            </div>)}
+                    {mapList
+                        .map((map: MapType, mapIndex: number): Node => <div
+                            onClick={(): void => view.setState({mapIndex})}
+                            key={map.meta.en.name}>
+                            <h3>{map.meta.en.name} {mapIndex === state.mapIndex ? '<-' : ''}</h3>
+                        </div>)}
+                </Fieldset>
 
-            <br/>
+                <Fieldset>
+                    <FormHeader>
+                        Money
+                    </FormHeader>
 
-            <h1>unitLimit</h1>
-            {mapGuide.unitLimitList.map((unitLimit: number): Node => <div
-                onClick={(): void => view.setState({unitLimit})}
-                key={unitLimit}>
-                {unitLimit} {unitLimit === state.unitLimit ? '<-' : ''}
-            </div>)}
+                    {mapGuide.defaultMoneyList
+                        .map((defaultMoney: number): Node => <div
+                            onClick={(): void => view.setState({defaultMoney})}
+                            key={defaultMoney}>
+                            {defaultMoney} {defaultMoney === state.defaultMoney ? '<-' : ''}
+                        </div>)}
+                </Fieldset>
 
-            <br/>
-            <br/>
-            <br/>
-            <br/>
+                <Fieldset>
+                    <FormHeader>Unit Limit</FormHeader>
 
-            <button
-                onClick={async (): Promise<void> => {
-                    const result = await view.createRoom();
-                }}
-            >
-                create room
-            </button>
+                    {mapGuide.defaultUnitLimitList
+                        .map((unitLimit: number): Node => <div
+                            onClick={(): void => view.setState({unitLimit})}
+                            key={unitLimit}>
+                            {unitLimit} {unitLimit === state.unitLimit ? '<-' : ''}
+                        </div>)}
+                </Fieldset>
 
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <div className="json">{JSON.stringify(mapList)}</div>
-            <br/>
-        </div>;
+                <Button
+                    onClick={async (): Promise<void> => {
+                        const result = await view.createRoom();
+                    }}>
+                    create room
+                </Button>
+
+            </Form>
+        </Page>;
     }
 }
 
