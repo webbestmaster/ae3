@@ -28,6 +28,16 @@ import {getCommanderDataByUserIndex} from './../../components/game/model/helper'
 import {type MatchType} from './../../app/routes';
 import type {BuildingType, MapType, MapUserType, UnitType} from './../../maps/type';
 
+import Page from './../../components/ui/page';
+import Button from './../../components/ui/button';
+import ButtonLink from './../../components/ui/button-link';
+import ButtonListWrapper from './../../components/ui/button-list-wrapper';
+import Header from './../../components/ui/header';
+import Form from './../../components/ui/form';
+import Label from './../../components/ui/label';
+import FormHeader from './../../components/ui/form-header';
+import Fieldset from './../../components/ui/fieldset';
+
 type StateType = {|
     settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
@@ -48,13 +58,11 @@ class Room extends Component<PropsType, StateType> {
 
         const view = this;
 
-        const state: StateType = {
+        view.state = {
             userList: [],
             model: new MainModel(),
             isGameStart: false
         };
-
-        view.state = state;
     }
 
     async componentDidMount(): Promise<string> {
@@ -289,34 +297,33 @@ class Room extends Component<PropsType, StateType> {
             return <Game roomId={roomId}/>;
         }
 
-        return <div>
-            <h1>Room</h1>
-            <h2>wait for other players</h2>
+        return <Page>
+            <Header>Room</Header>
 
-            <ReactJson src={state && state.userList && state.userList}/>
-            <br/>
-            <br/>
+            <Form>
 
-            {/* <ReactJson src={state && state.settings && state.settings}/> */}
+                <Fieldset>
+                    <FormHeader>User List:</FormHeader>
 
-            <div className="json">
-                {JSON.stringify(state && state.settings && state.settings)}
-            </div>
+                    {(state && state.userList && state.userList || [])
+                        .map((userData: ServerUserType): Node => <div key={userData.userId}>
+                            <hr/>
+                            userId: {userData.userId}<br/>
+                            teamId: {userData.teamId}<br/>
+                            socketId: {userData.socketId}
+                        </div>)}
+                    <hr/>
 
-            <br/>
-            <br/>
+                </Fieldset>
 
-            <button onClick={async (): Promise<void> => {
-                await view.startGame();
-            }}>
-                -------------<br/>
-                --- start ---<br/>
-                -------------
-            </button>
-            <br/>
-            <br/>
+                <Button onClick={async (): Promise<void> => {
+                    await view.startGame();
+                }}>
+                    start
+                </Button>
 
-        </div>;
+            </Form>
+        </Page>;
     }
 }
 
