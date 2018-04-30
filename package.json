@@ -1,11 +1,11 @@
 {
-  "name": "traversy",
+  "name": "ae3",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-nix": "NODE_ENV=production webpack --progress --mode production",
-    "build-win": "set NODE_ENV=production& webpack --progress --mode production",
+    "build-nix": "NODE_ENV=production webpack --mode production --progress",
+    "build-win": "set NODE_ENV=production& webpack --mode production --progress",
     "start-dev-server": "webpack-dev-server --mode development --content-base dist/ --host 0.0.0.0 --port 8181 --progress --no-inline --history-api-fallback",
     "start-dev-server-hot-css": "webpack-dev-server --mode development --inline --hot --content-base dist/ --host 0.0.0.0 --port 8181 --progress --history-api-fallback",
     "lint": "eslint .",
