@@ -32,7 +32,7 @@ export class ButtonListWrapper extends Component<PropsType, StateType> {
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
         return <div
-            className={style.wrapper + additionClass}>
+            className={style.button_list_wrapper + additionClass}>
             {props.children}
         </div>;
     }

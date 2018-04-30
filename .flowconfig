@@ -1,12 +1,11 @@
 [ignore]
-# .*/dist/.*
+./_before/**/
+./_before_/**/
 
 [include]
 ./flow-typed/**/
 
 [libs]
-# .*/node_modules/.*
-# .*/www/js/lib/.*
 
 [lints]
 all=warn

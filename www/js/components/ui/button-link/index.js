@@ -30,7 +30,7 @@ export class ButtonLink extends Component<PropsType, StateType> {
 
         return <Link
             to={props.to}
-            className={style.wrapper + additionClass}>
+            className={style.button + additionClass}>
             {props.children}
         </Link>;
     }

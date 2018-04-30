@@ -16,7 +16,7 @@ type PropsType = {|
 
 type StateType = {||};
 
-export class Button extends Component<PropsType, StateType> {
+export class Header extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -25,11 +25,11 @@ export class Button extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
-        return <div
-            className={style.button + additionClass}
+        return <h2
+            className={style.header + additionClass}
             onClick={typeof props.onClick === 'function' ? props.onClick : null}>
             {props.children}
-        </div>;
+        </h2>;
     }
 }
 
@@ -40,4 +40,4 @@ export default connect(
     {
         // setUser
     }
-)(Button);
+)(Header);

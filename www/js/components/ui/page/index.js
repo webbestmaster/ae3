@@ -10,13 +10,12 @@ import style from './style.m.scss';
 
 type PropsType = {|
     children: Node,
-    onClick?: () => void,
     className?: string
 |};
 
 type StateType = {||};
 
-export class Button extends Component<PropsType, StateType> {
+export class Page extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -25,9 +24,7 @@ export class Button extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
-        return <div
-            className={style.button + additionClass}
-            onClick={typeof props.onClick === 'function' ? props.onClick : null}>
+        return <div className={style.page + additionClass}>
             {props.children}
         </div>;
     }
@@ -40,4 +37,4 @@ export default connect(
     {
         // setUser
     }
-)(Button);
+)(Page);

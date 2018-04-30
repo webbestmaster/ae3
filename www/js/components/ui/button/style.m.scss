@@ -2,7 +2,7 @@ $buttonFontFamily: 'Open Sans', Helvetica, Arial, sans-serif;
 $buttonTextColor: #0fe0f5;
 $buttonShadowColor: #222;
 
-.wrapper {
+.button {
     display: block;
     z-index: 0;
     position: relative;
@@ -50,7 +50,7 @@ $buttonShadowColor: #222;
     }
 
     &:before {
-        content: "";
+        content: '';
         z-index: 1;
         position: absolute;
         left: 0;

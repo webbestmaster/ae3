@@ -4,36 +4,30 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
-
-import uiStyle from '../../components/ui/ui.scss';
-import serviceStyle from './../../../css/service.scss';
 import routes from './../../app/routes';
+
+import Page from './../../components/ui/page';
+import Button from './../../components/ui/button';
+import ButtonLink from './../../components/ui/button-link';
+import ButtonListWrapper from './../../components/ui/button-list-wrapper';
+import Header from './../../components/ui/header';
 
 class MultiPlayer extends Component<void, void> {
     render(): Node {
-        return <div>
-            <h1>MultiPlayer</h1>
-            <br/>
-            <div className={serviceStyle.ta_c}>
-                <Link
-                    to={routes.createRoom}
-                    className={uiStyle.button}>
+        return <Page>
+            <Header>Multi Player</Header>
+            <ButtonListWrapper>
+                <ButtonLink
+                    to={routes.createRoom}>
                     create game
-                </Link>
-                <br/>
-                <br/>
-                <Link
-                    to={routes.joinRoom}
-                    className={uiStyle.button}>
-                    join game
-                </Link>
-                <br/>
-                <br/>
-            </div>
+                </ButtonLink>
 
-            <br/>
-            <br/>
-        </div>;
+                <ButtonLink
+                    to={routes.joinRoom}>
+                    join game
+                </ButtonLink>
+            </ButtonListWrapper>
+        </Page>;
     }
 }
 
