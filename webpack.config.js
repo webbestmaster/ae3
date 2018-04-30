@@ -32,7 +32,7 @@ const webpackConfig = {
         './www/js/index.js'
     ],
     output: {
-        path: path.join(__dirname, '/dist')
+        path: path.join(CWD, '/dist')
         // filename: '[name].js'
     },
     optimization: Object.assign(
