@@ -292,6 +292,9 @@ class Room extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
         const roomId = props.match.params.roomId || '';
+        const amIMasterPlayer = (state.userList && state.userList || [])
+            .map((userData: ServerUserType): string => userData.userId)
+            .indexOf(user.getId()) === 0;
 
         if (state.isGameStart === true) {
             return <Game roomId={roomId}/>;
@@ -321,11 +324,16 @@ class Room extends Component<PropsType, StateType> {
 
                 </Fieldset>
 
-                <Button onClick={async (): Promise<void> => {
-                    await view.startGame();
-                }}>
-                    start
-                </Button>
+                {amIMasterPlayer ?
+                    <Button
+                        onClick={async (): Promise<void> => {
+                            await view.startGame();
+                        }}>
+                        start
+                    </Button> :
+                    <Button>
+                        wait for start...
+                    </Button>}
 
             </Form>
         </Page>;
