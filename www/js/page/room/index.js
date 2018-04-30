@@ -303,16 +303,21 @@ class Room extends Component<PropsType, StateType> {
             <Form>
 
                 <Fieldset>
+                    <FormHeader>Map:</FormHeader>
+                    {state.settings && state.settings.map.meta.en.name}
+                </Fieldset>
+
+                <Fieldset>
                     <FormHeader>User List:</FormHeader>
 
-                    {(state && state.userList && state.userList || [])
-                        .map((userData: ServerUserType): Node => <div key={userData.userId}>
-                            <hr/>
+                    {(state.userList && state.userList || [])
+                        .map((userData: ServerUserType, userIndex: number): Node => <div key={userData.userId}>
+                            {userIndex === 0 ? <hr/> : null}
                             userId: {userData.userId}<br/>
                             teamId: {userData.teamId}<br/>
                             socketId: {userData.socketId}
+                            <hr/>
                         </div>)}
-                    <hr/>
 
                 </Fieldset>
 

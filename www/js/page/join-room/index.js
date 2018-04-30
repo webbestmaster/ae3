@@ -78,17 +78,20 @@ class JoinRoom extends Component<PropsType, StateType> {
 
             <Form>
                 <Fieldset>
-                    {state.roomIds.map((roomId: string): Node => <p
-                        style={{
-                            padding: 10,
-                            cursor: 'pointer'
-                        }}
-                        onClick={async (): Promise<void> => {
-                            const result = view.joinRoom(roomId);
-                        }}
-                        key={roomId}>
-                        {roomId}
-                    </p>)}
+                    {state.roomIds.length === 0 ?
+                        'No Open Rooms, create your own room...' :
+                        state.roomIds.map((roomId: string): Node => <p
+                            style={{
+                                padding: 10,
+                                cursor: 'pointer'
+                            }}
+                            onClick={async (): Promise<void> => {
+                                const result = view.joinRoom(roomId);
+                            }}
+                            key={roomId}>
+                            {roomId}
+                        </p>)
+                    }
                 </Fieldset>
             </Form>
         </Page>;
