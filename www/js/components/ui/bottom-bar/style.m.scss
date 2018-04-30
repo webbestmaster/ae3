@@ -1,23 +1,16 @@
 @import "./../button/style.m.scss";
 
 .bottom_bar {
-    display: block;
-    z-index: 0;
-    position: relative;
-    padding: 20px 46px;
-    margin-bottom: 30px;
-    text-align: center;
-    text-transform: uppercase;
-    color: $buttonTextColor;
-    font-size: 21px;
-    font-weight: bold;
-    background-color: transparent;
-    transition: color 0.5s;
-    cursor: pointer;
-    text-shadow: 4px 6px $buttonShadowColor;
-    box-sizing: border-box;
-    text-decoration: none;
+    @extend .button;
+    text-align: left;
+    margin-bottom: 0;
 
+    &:after {
+        display: none;
+    }
+
+
+    /*
     &:before {
         box-sizing: border-box;
         content: '';
@@ -29,5 +22,6 @@
         height: 100%;
         border: 6px solid $buttonTextColor;
     }
+    */
 }
 

@@ -6,7 +6,6 @@ const webpack = require('webpack');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer'); // eslint-disable-line no-unused-vars
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const DEVELOPMENT = 'development';
 const PRODUCTION = 'production';
@@ -113,8 +112,6 @@ const webpackConfig = {
         ]
     },
     plugins: [
-        // new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/), // for moment.js
-        new LodashModuleReplacementPlugin(),
         new webpack.DefinePlugin(definePluginParams),
         new HtmlWebpackPlugin({
             template: './www/index.html'

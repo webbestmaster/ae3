@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@tweenjs/tween.js": "^17.2.0",
+    "classnames": "^2.2.5",
     "fastclick": "^1.0.6",
     "lodash": "^4.17.10",
     "pixi.js": "^4.7.3",
@@ -49,7 +50,6 @@
     "flow-bin": "^0.71.0",
     "flow-typed": "^2.4.0",
     "html-webpack-plugin": "^3.2.0",
-    "lodash-webpack-plugin": "^0.11.5",
     "node-sass": "^4.9.0",
     "postcss-loader": "^2.1.4",
     "redux-devtools": "^3.4.1",

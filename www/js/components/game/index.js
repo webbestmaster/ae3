@@ -21,6 +21,23 @@ import Store from './../store';
 import queryString from 'query-string';
 import serviceStyle from './../../../css/service.scss';
 import {getSupplyState} from './model/helper';
+import style from './style.m.scss';
+import classnames from 'classnames';
+
+import Page from './../../components/ui/page';
+import Button from './../../components/ui/button';
+import ButtonLink from './../../components/ui/button-link';
+import ButtonListWrapper from './../../components/ui/button-list-wrapper';
+import Header from './../../components/ui/header';
+import Form from './../../components/ui/form';
+import Label from './../../components/ui/label';
+import FormHeader from './../../components/ui/form-header';
+import Fieldset from './../../components/ui/fieldset';
+import BottomBar from './../../components/ui/bottom-bar';
+
+const bottomBarData = {
+    height: 64
+};
 
 type PropsType = {|
     system: SystemType,
@@ -255,7 +272,7 @@ export class GameView extends Component<PropsType, StateType> {
 
         const supplyState = getSupplyState(mapState, userId);
 
-        return <div>supply state: {supplyState.unitCount} / {supplyState.unitLimit}</div>;
+        return <React.Fragment>Units: {supplyState.unitCount} / {supplyState.unitLimit}</React.Fragment>;
     }
 
     render(): Node { // eslint-disable-line complexity
@@ -267,25 +284,17 @@ export class GameView extends Component<PropsType, StateType> {
 
         const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
 
-        return <div>
+        return <Page>
+            {isStoreOpen ?
+                <Store
+                    x={parseInt(queryData.x, 10)}
+                    y={parseInt(queryData.y, 10)}
+                    map={mapState}/> :
+                null
+            }
 
-            <div className="json">{JSON.stringify(props.match)}</div>
 
-            <div>
-                {isStoreOpen ?
-                    <Store
-                        x={parseInt(queryData.x, 10)}
-                        y={parseInt(queryData.y, 10)}
-                        map={mapState}/> :
-                    <div>NO store, for {JSON.stringify(queryData)}</div>}
-            </div>
-
-            <h1>game</h1>
-
-            <div>{view.renderSupplyState()}</div>
-
-            <div className={isStoreOpen ? serviceStyle.disabled : ''}>
-
+            {/*
                 <h2>server activeUserId: {state.activeUserId}</h2>
                 <h3>mapActiveUser: {mapActiveUserId}</h3>
 
@@ -296,29 +305,44 @@ export class GameView extends Component<PropsType, StateType> {
                 <h2>map user list:</h2>
 
                 {mapState ? <ReactJson src={mapState.userList}/> : <h1>no map</h1>}
+            */}
 
-                <button
-                    onClick={async (): Promise<void> => {
-                        await view.endTurn();
-                    }}>
-                    end turn
-                </button>
+            <div
+                className={classnames(style.end_turn, {hidden: isStoreOpen})}
+                onClick={async (): Promise<void> => {
+                    await view.endTurn();
+                }}>
+                >|
+            </div>
 
-                <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>
+            {/* <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>*/}
+
+            {/*
                 <div>mapActiveUserId === state(server).activeUserId :
                     {mapActiveUserId === state.activeUserId ? ' YES' : ' NO'}</div>
+                */}
 
-                <div>{JSON.stringify(state.disabledByList)}</div>
+            {/* <div>{JSON.stringify(state.disabledByList)}</div> */}
 
-                <canvas
-                    key="canvas"
-                    ref="canvas"
-                    style={{
-                        width: props.system.screen.width,
-                        height: props.system.screen.height
-                    }}/>
-            </div>
-        </div>;
+            <canvas
+                className={classnames({
+                    hidden: isStoreOpen,
+                    disabled:
+                    state.activeUserId !== user.getId() ||
+                    mapActiveUserId !== state.activeUserId ||
+                    state.disabledByList.length > 0
+                })}
+                key="canvas"
+                ref="canvas"
+                style={{
+                    width: props.system.screen.width,
+                    height: props.system.screen.height - bottomBarData.height
+                }}/>
+            <BottomBar
+                className={classnames('ta-l', {hidden: isStoreOpen})}>
+                {view.renderSupplyState()}
+            </BottomBar>
+        </Page>;
     }
 }
 

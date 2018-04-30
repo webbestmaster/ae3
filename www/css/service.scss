@@ -9,7 +9,7 @@
         pointer-events: none; // see Can I Use
     }
 
-    .clear_self {
+    .clear-self {
         &:after {
             display: block;
             content: '';
@@ -17,7 +17,7 @@
         }
     }
 
-    .clear_full {
+    .clear-full {
         clear: both;
         &:after {
             display: block;
@@ -32,23 +32,33 @@
         overflow: hidden;
     }
 
-    .ta_c {
+    .ta-c {
         text-align: center;
     }
 
-    .fl_l {
+    .ta-l {
+        text-align: left;
+    }
+
+    .ta-r {
+        text-align: right;
+    }
+
+    .fl-l {
         float: left;
     }
 
-    .fl_r {
+    .fl-r {
         float: right;
     }
 
-    .fl_n {
+    .fl-n {
         float: none;
     }
 
+    /*
     .json {
         word-break: break-all;
     }
+    */
 }
