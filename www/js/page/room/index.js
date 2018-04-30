@@ -37,6 +37,7 @@ import Form from './../../components/ui/form';
 import Label from './../../components/ui/label';
 import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
+import BottomBar from './../../components/ui/bottom-bar';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -331,9 +332,9 @@ class Room extends Component<PropsType, StateType> {
                         }}>
                         start
                     </Button> :
-                    <Button>
+                    <BottomBar>
                         wait for start...
-                    </Button>}
+                    </BottomBar>}
 
             </Form>
         </Page>;
