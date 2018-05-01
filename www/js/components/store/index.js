@@ -9,13 +9,15 @@ import {user} from './../../module/user';
 import type {GlobalStateType} from './../../app-reducer';
 import * as serverApi from './../../module/server-api';
 import find from 'lodash/find';
+import padStart from 'lodash/padStart';
+import padEnd from 'lodash/padEnd';
 import type {MapType, MapUserType} from './../../maps/type';
 import type {UnitTypeAllType} from './../game/model/unit/unit-guide';
 import guideUnitData, {additionalUnitData} from './../game/model/unit/unit-guide';
 import type {ContextRouter} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
 import type {UnitType} from '../../maps/type';
-import serviceStyle from './../../../css/service.scss';
+import classnames from 'classnames';
 import {getSupplyState} from '../game/model/helper';
 
 import Page from './../../components/ui/page';
@@ -156,22 +158,21 @@ class Store extends Component<PropsType, StateType> {
 
         const supplyState = getSupplyState(props.map, user.getId());
 
-        return <div
-            className={mapUserData.money < unitCost || supplyState.isFull ? serviceStyle.disabled : ''}
-            key={unitType}>
-            <hr/>
-            {unitType}: {JSON.stringify(unitData)}<br/>
-            COST: {unitCost}
-
-            <div onClick={() => {
+        return <Button
+            className={classnames('w75-c', 'ta-l', {disabled: mapUserData.money < unitCost || supplyState.isFull})}
+            onClick={() => {
                 view.buyUnit(unitType);
-            }}>
-                --------------<br/>
-                -- buy unit --<br/>
-                --------------
-            </div>
-            <hr/>
-        </div>;
+            }}
+            key={unitType}>
+            <pre>
+                {padEnd(unitType, 10, ' ')}
+                &nbsp;|&nbsp;
+                attack: {unitData.attack.min} - {unitData.attack.max}<br/>
+                COST: {padStart(String(unitCost), 4, ' ')}
+                &nbsp;|&nbsp;
+                move: {unitData.move}
+            </pre>
+        </Button>;
     }
 
     getUnitCost(unitType: UnitTypeAllType): number | null { // eslint-disable-line complexity, max-statements
@@ -234,29 +235,43 @@ class Store extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
+        const supplyState = getSupplyState(props.map, user.getId());
+
         if (state.mapUserData === null) {
-            console.error('ERROR with state.mapUserData');
-            return <div>ERROR with state.mapUserData</div>;
+            console.error('ERROR with state.mapUserData', state);
+            return <Page>
+                <Header>ERROR with state.mapUserData</Header>
+            </Page>;
+        }
+
+        if (state.isInProgress) {
+            return <Page>
+                <Header>Waiting...</Header>
+            </Page>;
         }
 
         return <Page>
-            <Header>Store</Header>
-            <hr/>
-            current user data: {JSON.stringify(state.mapUserData)}
-            <hr/>
-            <div onClick={() => {
-                props.history.goBack();
-            }}>
-                ----------<br/>
-                -- BACK --<br/>
-                ----------
-            </div>
+            <Header>
+                Store
+                &nbsp;|&nbsp;
+                Money: {state.mapUserData.money}
+                &nbsp;|&nbsp;
+                Units: {supplyState.unitCount} / {supplyState.unitLimit}
+            </Header>
 
-            {state.isInProgress ? <div>---- WAIT FOR SERVER ----</div> : view.renderUnitList()}
+            <br/>
 
-            <hr/>
-            <hr/>
+            {view.renderUnitList()}
 
+            <Button
+                className="w50-c"
+                onClick={() => {
+                    props.history.goBack();
+                }}>
+                [ &larr; BACK ]
+            </Button>
+
+            <br/>
         </Page>;
     }
 }

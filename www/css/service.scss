@@ -1,59 +1,74 @@
 :global {
 
-    .hidden {
-        display: none !important;
-    }
+    body {
 
-    .disabled {
-        opacity: 0.5;
-        pointer-events: none; // see Can I Use
-    }
-
-    .clear-self {
-        &:after {
-            display: block;
-            content: '';
-            clear: both;
+        .hidden {
+            display: none !important;
         }
-    }
 
-    .clear-full {
-        clear: both;
-        &:after {
-            display: block;
-            content: '';
-            clear: both;
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none; // see Can I Use
         }
-    }
 
-    .ellipsis {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-    }
+        .clear-self {
+            &:after {
+                display: block;
+                content: '';
+                clear: both;
+            }
+        }
 
-    .ta-c {
-        text-align: center;
-    }
+        .clear-full {
+            clear: both;
+            &:after {
+                display: block;
+                content: '';
+                clear: both;
+            }
+        }
 
-    .ta-l {
-        text-align: left;
-    }
+        .ellipsis {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
 
-    .ta-r {
-        text-align: right;
-    }
+        .ta-c {
+            text-align: center;
+        }
 
-    .fl-l {
-        float: left;
-    }
+        .ta-l {
+            text-align: left;
+        }
 
-    .fl-r {
-        float: right;
-    }
+        .ta-r {
+            text-align: right;
+        }
 
-    .fl-n {
-        float: none;
+        .fl-l {
+            float: left;
+        }
+
+        .fl-r {
+            float: right;
+        }
+
+        .fl-n {
+            float: none;
+        }
+
+        .w50-c {
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .w75-c {
+            width: 75%;
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
 
     /*

@@ -12,7 +12,6 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import MainModel from './../../lib/main-model/index';
-import ReactJson from 'react-json-view';
 
 import {user} from './../../module/user';
 import {socket, type SocketMessageType} from './../../module/socket';
