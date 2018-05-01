@@ -4,6 +4,8 @@
     @extend .button;
     text-align: left;
     margin-bottom: 0;
+    cursor: auto;
+    text-shadow: none;
 
     &:after {
         display: none;

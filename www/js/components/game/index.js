@@ -34,6 +34,7 @@ import Label from './../../components/ui/label';
 import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
 import BottomBar from './../../components/ui/bottom-bar';
+import find from 'lodash/find';
 
 const bottomBarData = {
     height: 64
@@ -272,7 +273,24 @@ export class GameView extends Component<PropsType, StateType> {
 
         const supplyState = getSupplyState(mapState, userId);
 
-        return <React.Fragment>Units: {supplyState.unitCount} / {supplyState.unitLimit}</React.Fragment>;
+        return ['Units:', supplyState.unitCount, '/', supplyState.unitLimit].join(' ');
+    }
+
+    renderMoneyState(): Node {
+        const view = this;
+        const {props, state} = view;
+
+        if (!state.game.mapState) {
+            return null;
+        }
+
+        const mapUserData = find(state.game.mapState.userList, {userId: user.getId()}) || null;
+
+        if (mapUserData === null) {
+            return null;
+        }
+
+        return ['Money:', mapUserData.money].join(' ');
     }
 
     render(): Node { // eslint-disable-line complexity
@@ -281,6 +299,9 @@ export class GameView extends Component<PropsType, StateType> {
         const queryData = queryString.parse(props.location.search);
         const {mapState} = state.game; // do not use game.getMapState(), map stay might undefined in game
         const mapActiveUserId = mapState && mapState.activeUserId || 'no-map-state';
+        const isCanvasDisabled = state.activeUserId !== user.getId() || // your/not turn
+            mapActiveUserId !== state.activeUserId || // map user id should be the same server active user id
+            state.disabledByList.length > 0; // disabledByList should be empty array
 
         const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
 
@@ -327,10 +348,7 @@ export class GameView extends Component<PropsType, StateType> {
             <canvas
                 className={classnames({
                     hidden: isStoreOpen,
-                    disabled:
-                    state.activeUserId !== user.getId() ||
-                    mapActiveUserId !== state.activeUserId ||
-                    state.disabledByList.length > 0
+                    disabled: isCanvasDisabled
                 })}
                 key="canvas"
                 ref="canvas"
@@ -341,6 +359,8 @@ export class GameView extends Component<PropsType, StateType> {
             <BottomBar
                 className={classnames('ta-l', {hidden: isStoreOpen})}>
                 {view.renderSupplyState()}
+                &nbsp;|&nbsp;
+                {view.renderMoneyState()}
             </BottomBar>
         </Page>;
     }

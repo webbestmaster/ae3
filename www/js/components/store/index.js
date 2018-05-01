@@ -6,11 +6,9 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {user} from './../../module/user';
-// import Game from './model/index';
 import type {GlobalStateType} from './../../app-reducer';
 import * as serverApi from './../../module/server-api';
 import find from 'lodash/find';
-// import Unit from './model/unit';
 import type {MapType, MapUserType} from './../../maps/type';
 import type {UnitTypeAllType} from './../game/model/unit/unit-guide';
 import guideUnitData, {additionalUnitData} from './../game/model/unit/unit-guide';
@@ -20,15 +18,25 @@ import type {UnitType} from '../../maps/type';
 import serviceStyle from './../../../css/service.scss';
 import {getSupplyState} from '../game/model/helper';
 
+import Page from './../../components/ui/page';
+import Button from './../../components/ui/button';
+import ButtonLink from './../../components/ui/button-link';
+import ButtonListWrapper from './../../components/ui/button-list-wrapper';
+import Header from './../../components/ui/header';
+import Form from './../../components/ui/form';
+import Label from './../../components/ui/label';
+import FormHeader from './../../components/ui/form-header';
+import Fieldset from './../../components/ui/fieldset';
+
 const storeViewId = 'store';
 
 export {storeViewId};
 
 type PropsType = {|
+    ...ContextRouter,
     +x: number,
     +y: number,
     +map: MapType,
-    ...ContextRouter,
     +match: {|
         +params: {|
             +roomId: string
@@ -148,30 +156,6 @@ class Store extends Component<PropsType, StateType> {
 
         const supplyState = getSupplyState(props.map, user.getId());
 
-        /*
-                const userCommander = mapUserData.commander || null;
-
-                if (userCommander === null) {
-                    console.error('userCommander is not define');
-                    return null;
-                }
-
-                // show unit which can be buy only
-                if (unitData.canBeBuy !== true) {
-                    return null;
-                }
-
-                const isCommander = typeof unitData.isCommander === 'boolean' && unitData.isCommander;
-
-                // hide extra commanders
-                if (isCommander && userCommander.type !== unitType) {
-                    return null;
-                }
-
-                // detect user's commander on map
-                const isCommanderLive = Boolean(find(props.map.units, {type: userCommander.type}));
-        */
-
         return <div
             className={mapUserData.money < unitCost || supplyState.isFull ? serviceStyle.disabled : ''}
             key={unitType}>
@@ -255,14 +239,8 @@ class Store extends Component<PropsType, StateType> {
             return <div>ERROR with state.mapUserData</div>;
         }
 
-        return <div>
-            <h1>---</h1>
-            <h1>store</h1>
-            <h1>x: {props.x} - y: {props.y}</h1>
-            <h1>store</h1>
-            <h1>---</h1>
-            <div className="json">{JSON.stringify(props.map)}</div>
-
+        return <Page>
+            <Header>Store</Header>
             <hr/>
             current user data: {JSON.stringify(state.mapUserData)}
             <hr/>
@@ -279,7 +257,7 @@ class Store extends Component<PropsType, StateType> {
             <hr/>
             <hr/>
 
-        </div>;
+        </Page>;
     }
 }
 
