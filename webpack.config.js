@@ -35,6 +35,9 @@ const webpackConfig = {
         path: path.join(CWD, '/dist')
         // filename: '[name].js'
     },
+
+    devtool: IS_DEVELOPMENT ? 'source-map' : false,
+
     optimization: Object.assign(
         {},
         IS_DEVELOPMENT ?

@@ -11,9 +11,6 @@ import ButtonLink from './../../components/ui/button-link';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
 import Header from './../../components/ui/header';
 
-// import uiStyle from '../../components/ui/ui.scss';
-// import serviceStyle from './../../../css/service.scss';
-
 class Index extends Component<void, void> {
     render(): Node {
         return <Page>
