@@ -73,7 +73,7 @@ const webpackConfig = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['env', 'es2015', 'stage-1', 'stage-0', 'react', 'flow']
+                        presets: ['env', 'stage-1', 'stage-0', 'react', 'flow']
                     }
                 }
             },
