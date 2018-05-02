@@ -22,6 +22,8 @@ import Form from './../../components/ui/form';
 import Label from './../../components/ui/label';
 import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
+import image from './i/image.jpg';
+import style from './style/main.scss';
 
 type StateType = {|
     mapIndex: number,
@@ -76,7 +78,7 @@ class CreateRoom extends Component<PropsType, StateType> {
             teamId: mapGuide.teamIdList[0],
             money: defaultMoney
         }];
-*/
+        */
         map.activeUserId = userId;
 
         const setAllRoomSettingsResult = await serverApi.setAllRoomSettings(createRoomResult.roomId, {
@@ -106,6 +108,10 @@ class CreateRoom extends Component<PropsType, StateType> {
         return <Page>
             <Header>Create Game</Header>
             <Form>
+
+                <img src={image} alt=""/>
+
+                <div className={style.test_div}/>
 
                 <Fieldset>
                     <FormHeader>

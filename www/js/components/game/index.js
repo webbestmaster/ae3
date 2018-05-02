@@ -327,7 +327,10 @@ export class GameView extends Component<PropsType, StateType> {
             */}
 
             <div
-                className={classnames(style.end_turn, {hidden: isStoreOpen})}
+                className={classnames(
+                    style.end_turn,
+                    {hidden: isStoreOpen || isCanvasDisabled}
+                )}
                 onClick={async (): Promise<void> => {
                     await view.endTurn();
                 }}>
@@ -351,6 +354,7 @@ export class GameView extends Component<PropsType, StateType> {
                 key="canvas"
                 ref="canvas"
                 style={{
+                    transition: 'opacity ease-out 0.3s',
                     width: props.system.screen.width,
                     height: props.system.screen.height - bottomBarData.height
                 }}/>

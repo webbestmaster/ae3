@@ -91,7 +91,7 @@ const webpackConfig = {
                     // - name - The name is a standard option.
                     query: IS_DEVELOPMENT ?
                         {
-                            limit: 0,
+                            limit: 10e3, // 10k bytes
                             name: 'img/img-[name]-[hash:6].[ext]'
                         } :
                         {
@@ -112,7 +112,6 @@ const webpackConfig = {
                             minimize: IS_PRODUCTION
                         }
                     },
-                    {loader: 'resolve-url-loader'},
                     {
                         loader: 'postcss-loader', options: {
                             sourceMap: true,
