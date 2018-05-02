@@ -1,3 +1,6 @@
+// Rule 'space-after-keywords' was removed and replaced by: keyword-spacing  space-after-keywords
+// Rule 'space-return-throw-case' was removed and replaced by: keyword-spacing  space-return-throw-case
+
 {
     "parser": "babel-eslint",
     "extends": [
@@ -78,7 +81,6 @@
         ],
         "flowtype/use-flow-type": 1,
         "flowtype/valid-syntax": 1,
-
         "no-console": 0,
         "no-empty-label": 0,
         "no-warning-comments": 0,
