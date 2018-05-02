@@ -6,6 +6,7 @@ const webpack = require('webpack');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer'); // eslint-disable-line no-unused-vars
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const DEVELOPMENT = 'development';
 const PRODUCTION = 'production';
@@ -133,6 +134,13 @@ const webpackConfig = {
     ]
 };
 
-// webpackConfig.plugins.push(new BundleAnalyzerPlugin());
+if (IS_PRODUCTION) {
+    webpackConfig.plugins.push(
+        new LodashModuleReplacementPlugin(),
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
+    );
+}
+
+webpackConfig.plugins.push(new BundleAnalyzerPlugin());
 
 module.exports = webpackConfig;
