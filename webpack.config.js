@@ -83,9 +83,20 @@ const webpackConfig = {
             {
                 test: /\.(png|jpg|jpeg|gif|svg)(\?[a-z0-9=&.]+)?$/,
                 use: {
-                    loader: IS_DEVELOPMENT ?
-                        'base64-inline-loader?limit=2&name=img/img-[name]-[hash:6].[ext]' :
-                        'base64-inline-loader?limit=65536&name=img/img-[name]-[hash:6].[ext]'
+                    loader: 'base64-inline-loader',
+                    // - limit - The limit can be specified with a query parameter. (Defaults to no limit).
+                    // If the file is greater than the limit (in bytes) the file-loader is used and
+                    // all query parameters are passed to it.
+                    // - name - The name is a standard option.
+                    query: IS_DEVELOPMENT ?
+                        {
+                            limit: 0,
+                            name: 'img/img-[name]-[hash:6].[ext]'
+                        } :
+                        {
+                            limit: 10e3, // 10k bytes
+                            name: 'img/img-[name]-[hash:6].[ext]'
+                        }
                 }
             },
             {
