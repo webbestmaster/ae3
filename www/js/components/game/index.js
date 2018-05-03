@@ -44,7 +44,7 @@ type PropsType = {|
     ...ContextRouter
 |};
 
-export type DisabledByItemType = 'server-receive-message' | 'client-push-state' | 'client-drop-turn';
+export type DisabledByItemType = 'server-receive-message' | 'client-push-state' | 'client-drop-turn' | 'end-game-popup';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -289,6 +289,13 @@ export class GameView extends Component<PropsType, StateType> {
         }
 
         return ['Money:', mapUserData.money].join(' ');
+    }
+
+    showEndGame() {
+        const view = this;
+        const {props, state} = view;
+
+        view.addDisableReason('end-game-popup');
     }
 
     render(): Node { // eslint-disable-line complexity

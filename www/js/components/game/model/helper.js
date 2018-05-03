@@ -2,6 +2,7 @@
 /* global document */
 
 import type {ServerUserType} from './../../../module/server-api';
+import type {TeamIdType} from './../../../maps/map-guide';
 import mapGuide from './../../../maps/map-guide';
 import type {UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
 import unitGuideData, {additionalUnitData, defaultUnitData} from './unit/unit-guide';
@@ -11,6 +12,7 @@ import type {PathType} from './../../../lib/a-star-finder';
 import {defaultOptions, getPath} from './../../../lib/a-star-finder';
 import type {MapType, UnitType} from './../../../maps/type';
 import find from 'lodash/find';
+import type {BuildingType, MapUserType} from '../../../maps/type';
 
 export function getUserIndex(userId: string, userList: Array<ServerUserType>): number | null {
     let userIndex = 0;
@@ -368,4 +370,62 @@ export function getSupplyState(map: MapType, userId: string): UnitSupplyStateTyp
         isFull: unitCount >= unitLimit,
         isOverFull: unitCount > unitLimit
     };
+}
+
+
+type SkirmishMathResultType = {|
+    winner: {|
+        teamId: TeamIdType | null
+    |}
+|};
+
+type MathResultType = SkirmishMathResultType;
+
+export function isCommanderLive(userId: string, map: MapType): boolean {
+    return map.units.some((mapUnit: UnitType): boolean => mapUnit.userId === userId &&
+        unitGuideData[mapUnit.type].isCommander === true);
+}
+
+export function hasCastle(userId: string, map: MapType): boolean {
+    return map.buildings.some((mapBuilding: BuildingType): boolean => mapBuilding.userId === userId &&
+        mapBuilding.type === 'castle');
+}
+
+function isUserSkirmishLoose(userId: string, map: MapType): boolean {
+    return !isCommanderLive(userId, map) && !hasCastle(userId, map);
+}
+
+function isTeamSkirmishLoose(teamId: TeamIdType, map: MapType): boolean {
+    return map.userList
+        .filter((mapUser: MapUserType): boolean => mapUser.teamId === teamId)
+        .every((mapUser: MapUserType): boolean => isUserSkirmishLoose(mapUser.userId, map));
+}
+
+function getSkirmishMatchResult(map: MapType): SkirmishMathResultType {
+    const skirmishMatchResult: SkirmishMathResultType = {
+        winner: {
+            teamId: null
+        }
+    };
+
+    const fullTeamList: Array<TeamIdType> = JSON.parse(JSON.stringify(mapGuide.teamIdList));
+
+    const winnerTeamList: Array<TeamIdType> = fullTeamList.filter((teamId: TeamIdType): boolean =>
+        !isTeamSkirmishLoose(teamId, map));
+
+    const winnerTeamId = winnerTeamList.length === 1 ? winnerTeamList[0] : null;
+
+    skirmishMatchResult.winner.teamId = winnerTeamId;
+
+    return skirmishMatchResult;
+}
+
+export function getMatchResult(map: MapType): MathResultType | null {
+    if (map.type === 'skirmish') {
+        return getSkirmishMatchResult(map);
+    }
+
+    console.error('unsupported map.type', map);
+
+    return null;
 }

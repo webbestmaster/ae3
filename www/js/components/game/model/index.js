@@ -9,7 +9,7 @@ import type {AllRoomSettingsType, ServerUserType} from './../../../module/server
 import * as serverApi from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 // import imageMap from './../image/image-map';
-import {countHealHitPointOnBuilding, getEventName, procedureMakeGraveForMapUnit} from './helper';
+import {countHealHitPointOnBuilding, getEventName, procedureMakeGraveForMapUnit, getMatchResult} from './helper';
 import Render from './render';
 import Building from './building';
 import Grave from './grave';
@@ -154,8 +154,8 @@ export default class Game {
                     game.gameView.addDisableReason('server-receive-message');
 
                     // TODO: CATCH error response !!!
-                    // TODO: how I can get error response from web-socket ?
-                    // console.warn('TODO: CATCH error response !!!');
+                    // TODO: how I can get error response from web-socket ???
+                    // console.warn('CATCH error response !!!');
                     console.warn('check message.states.length', message.states.length);
                     console.warn('every next message should be bigger by 1 then previous');
 
@@ -163,8 +163,7 @@ export default class Game {
 
                     game.gameView.removeDisableReason('server-receive-message');
 
-                    // TODO: for fight is end !!!
-                    console.warn('TODO: for fight is end !!!');
+                    await game.detectAndHandleEndGame();
                 });
             }
         );
@@ -1879,6 +1878,25 @@ export default class Game {
         };
 
         return gameData;
+    }
+
+    async detectAndHandleEndGame(): Promise<void> {
+        const game = this; // eslint-disable-line consistent-this
+
+        const matchState = getMatchResult(game.getMapState());
+
+        // if can not detect match state
+        if (matchState === null) {
+            console.error('matchState is null!!');
+            return;
+        }
+
+        // if not winner team
+        if (matchState.winner.teamId === null) {
+            return;
+        }
+
+        game.gameView.showEndGame();
     }
 
     destroy() {

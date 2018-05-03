@@ -18,17 +18,11 @@ import type {ContextRouter} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
 import type {UnitType} from '../../maps/type';
 import classnames from 'classnames';
-import {getSupplyState} from '../game/model/helper';
+import {getSupplyState, isCommanderLive} from '../game/model/helper';
 
 import Page from './../../components/ui/page';
 import Button from './../../components/ui/button';
-import ButtonLink from './../../components/ui/button-link';
-import ButtonListWrapper from './../../components/ui/button-list-wrapper';
 import Header from './../../components/ui/header';
-import Form from './../../components/ui/form';
-import Label from './../../components/ui/label';
-import FormHeader from './../../components/ui/form-header';
-import Fieldset from './../../components/ui/fieldset';
 
 const storeViewId = 'store';
 
@@ -215,9 +209,7 @@ class Store extends Component<PropsType, StateType> {
         }
 
         // detect user's commander on map
-        const isCommanderLive = Boolean(find(props.map.units, {type: userCommander.type}));
-
-        if (isCommanderLive) {
+        if (isCommanderLive(user.getId(), props.map)) {
             return null;
         }
 
