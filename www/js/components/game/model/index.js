@@ -154,10 +154,17 @@ export default class Game {
                     game.gameView.addDisableReason('server-receive-message');
 
                     // TODO: CATCH error response !!!
-                    console.warn('TODO: CATCH error response !!!');
+                    // TODO: how I can get error response from web-socket ?
+                    // console.warn('TODO: CATCH error response !!!');
+                    console.warn('check message.states.length', message.states.length);
+                    console.warn('every next message should be bigger by 1 then previous');
+
                     await game.onMessage(message);
 
                     game.gameView.removeDisableReason('server-receive-message');
+
+                    // TODO: for fight is end !!!
+                    console.warn('TODO: for fight is end !!!');
                 });
             }
         );
@@ -309,6 +316,8 @@ export default class Game {
 
             case 'room__leave-from-room':
 
+                // TODO: check here map users and server users, only if your turn
+                console.warn('check here map users and server users, only if your turn');
                 break;
 
             case 'room__user-disconnected':
@@ -348,6 +357,8 @@ export default class Game {
 
         console.log('---> take turn, and it\'s ME!!!');
 
+        // TODO: check here map users and server users, only if your turn
+        console.warn('check here map users and server users, only if your turn');
         await game.refreshUnitActionState();
         console.log('---> unit and users - refreshed');
         // await game.refreshUnitPoisonCountdown();
