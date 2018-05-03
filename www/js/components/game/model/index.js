@@ -80,6 +80,14 @@ export default class Game {
     constructor() {
         const game = this; // eslint-disable-line consistent-this
 
+        game.initializeProperties();
+    }
+
+    // '@private' is not works, but it needed to code understanding
+    // @private
+    initializeProperties() {
+        const game = this; // eslint-disable-line consistent-this
+
         game.onMessageQueue = new Queue();
         game.render = new Render();
         game.buildingList = [];
@@ -1896,12 +1904,16 @@ export default class Game {
             return;
         }
 
+        game.destroy();
+
         game.gameView.showEndGame();
     }
 
     destroy() {
         const game = this; // eslint-disable-line consistent-this
 
-        console.warn('---> add game destroy');
+        game.model.destroy();
+
+        game.initializeProperties();
     }
 }

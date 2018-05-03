@@ -47,7 +47,7 @@ type PropsType = {|
 export type DisabledByItemType = 'server-receive-message' | 'client-push-state' | 'client-drop-turn' | 'end-game-popup';
 
 type StateType = {|
-    settings?: AllRoomSettingsType,
+    // settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
     model: MainModel,
     game: Game,
@@ -91,7 +91,6 @@ export class GameView extends Component<PropsType, StateType> {
         const {users} = await serverApi.getAllRoomUsers(roomId);
 
         view.setState({
-            settings,
             userList: users,
             activeUserId: settings.map.activeUserId
         });
