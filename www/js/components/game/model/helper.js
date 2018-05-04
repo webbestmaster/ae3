@@ -409,6 +409,7 @@ function getSkirmishMatchResult(map: MapType): SkirmishMathResultType {
     };
 
     const fullTeamList: Array<TeamIdType> = JSON.parse(JSON.stringify(mapGuide.teamIdList));
+    // .filter((teamId: TeamIdType): boolean => Boolean(find(map.userList, {teamId})));
 
     const winnerTeamList: Array<TeamIdType> = fullTeamList.filter((teamId: TeamIdType): boolean =>
         !isTeamSkirmishLoose(teamId, map));

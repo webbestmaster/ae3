@@ -18,11 +18,22 @@ import type {ContextRouter} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
 import Store from './../store';
 import queryString from 'query-string';
-import {getSupplyState} from './model/helper';
+import {getSupplyState, getMatchResult} from './model/helper';
 import style from './style.m.scss';
 import classnames from 'classnames';
 
-import Dialog from 'material-ui/Dialog';
+import Dialog, {
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle
+} from 'material-ui/Dialog';
+
+import Slide from 'material-ui/transitions/Slide';
+
+function Transition(props: mixed): Node {
+    return <Slide direction="up" {...props} />;
+}
 
 import Page from './../../components/ui/page';
 import Button from './../../components/ui/button';
@@ -55,7 +66,12 @@ type StateType = {|
     game: Game,
     activeUserId: string,
     socketMessageList: Array<SocketMessageType>,
-    disabledByList: Array<DisabledByItemType>
+    disabledByList: Array<DisabledByItemType>,
+    popup: {|
+        endGame: {|
+            isOpen: boolean
+        |}
+    |}
     // map: MapType | null
 |};
 
@@ -79,7 +95,12 @@ export class GameView extends Component<PropsType, StateType> {
             game: new Game(),
             activeUserId: '',
             socketMessageList: [],
-            disabledByList: []
+            disabledByList: [],
+            popup: {
+                endGame: {
+                    isOpen: false
+                }
+            }
         };
     }
 
@@ -297,11 +318,85 @@ export class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
 
         view.addDisableReason('end-game-popup');
+
+        view.setState((prevState: StateType): StateType => {
+            prevState.popup.endGame.isOpen = true; // eslint-disable-line no-param-reassign
+
+            return prevState;
+        });
+    }
+
+    renderEndGameDialog(): Node | null { // eslint-disable-line complexity
+        const view = this;
+        const {props, state} = view;
+        const {popup} = state;
+        const {game} = state;
+        const queryData = queryString.parse(props.location.search);
+        const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
+
+        if (popup.endGame.isOpen === false || isStoreOpen) {
+            return null;
+        }
+
+        const {mapState} = game;
+
+        const matchResult = getMatchResult(mapState);
+
+        if (matchResult === null) {
+            console.error('to show end game popup game has to have winner');
+            return null;
+        }
+
+        const mapUser = find(mapState.userList, {userId: user.getId()}) || null;
+
+        if (mapUser === null) {
+            console.error('can not find mapUser with userId', user.getId(), mapState);
+            return null;
+        }
+
+        const isWinner = matchResult.winner.teamId === mapUser.teamId;
+
+        return <Dialog
+            open={popup.endGame.isOpen}
+            transition={Transition}
+            keepMounted
+            onClose={() => {
+                props.history.goBack();
+            }}
+            onClick={() => {
+                props.history.goBack();
+            }}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+        >
+            <DialogTitle id="alert-dialog-slide-title">
+                {isWinner ? 'You win!' : 'You loose :('}
+            </DialogTitle>
+        </Dialog>;
+    }
+
+    renderStore(): Node | null {
+        const view = this;
+        const {props, state} = view;
+        const queryData = queryString.parse(props.location.search);
+        const {mapState} = state.game; // do not use game.getMapState(), map stay might undefined in game
+
+        const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
+
+        if (!isStoreOpen) {
+            return null;
+        }
+
+        return <Store
+            x={parseInt(queryData.x, 10)}
+            y={parseInt(queryData.y, 10)}
+            map={mapState}/>;
     }
 
     render(): Node { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
+        const {popup} = state;
         const queryData = queryString.parse(props.location.search);
         const {mapState} = state.game; // do not use game.getMapState(), map stay might undefined in game
         const mapActiveUserId = mapState && mapState.activeUserId || 'no-map-state';
@@ -313,20 +408,9 @@ export class GameView extends Component<PropsType, StateType> {
 
         return <Page>
 
-            <Dialog
-                open={false}
-            >
-                You win or lose!
-            </Dialog>
+            {view.renderStore()}
 
-            {isStoreOpen ?
-                <Store
-                    x={parseInt(queryData.x, 10)}
-                    y={parseInt(queryData.y, 10)}
-                    map={mapState}/> :
-                null
-            }
-
+            {view.renderEndGameDialog()}
 
             {/*
                 <h2>server activeUserId: {state.activeUserId}</h2>
