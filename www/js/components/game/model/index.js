@@ -34,7 +34,7 @@ import {socket} from './../../../module/socket';
 import MainModel from './../../../lib/main-model';
 import * as unitMaster from './unit/master';
 import {defaultUnitData} from './unit/unit-guide';
-import {GameView} from './../../game/index';
+import {GameView, bottomBarData} from './../../game/index';
 import {storeViewId} from './../../store';
 import queryString from 'query-string';
 import Queue from './../../../lib/queue';
@@ -42,7 +42,8 @@ import Queue from './../../../lib/queue';
 type RenderSettingType = {|
     width: number,
     height: number,
-    view: HTMLElement
+    view: HTMLElement,
+    map: MapType
 |};
 
 // const sprite = require('./image.png');
@@ -1573,7 +1574,7 @@ export default class Game {
     setCanvasSize(width: number, height: number) {
         const game = this; // eslint-disable-line consistent-this
 
-        game.render.setCanvasSize(width, height);
+        game.render.setCanvasSize(width, height - bottomBarData.height);
     }
 
     setGameView(gameView: GameView) {

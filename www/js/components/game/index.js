@@ -47,7 +47,7 @@ import Fieldset from './../../components/ui/fieldset';
 import BottomBar from './../../components/ui/bottom-bar';
 import find from 'lodash/find';
 
-const bottomBarData = {
+export const bottomBarData = {
     height: 64
 };
 
@@ -128,7 +128,8 @@ export class GameView extends Component<PropsType, StateType> {
         state.game.initialize({
             view: refs.canvas,
             width: props.system.screen.width,
-            height: props.system.screen.height
+            height: props.system.screen.height,
+            map: settings.map
         });
 
         /*

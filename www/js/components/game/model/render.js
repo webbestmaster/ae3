@@ -19,13 +19,21 @@ import Unit from './unit';
 import {defaultUnitData} from './unit/unit-guide';
 import Building from './building';
 import {tween} from './../../../lib/tween';
+import Viewport from 'pixi-viewport';
 
 type InitializeConfigType = {|
     width: number,
     height: number,
-    view: HTMLElement
+    view: HTMLElement,
+    map: MapType
 |};
 
+const stagePadding = {
+    top: 100,
+    right: 100,
+    left: 100,
+    bottom: 100
+};
 // const sprite = require('./image.png');
 
 export default class Render {
@@ -37,6 +45,9 @@ export default class Render {
         units: PIXI.Container,
         actions: PIXI.Container
     |};
+    map: MapType;
+    viewport: Viewport;
+    mainContainer: PIXI.Container;
 
     constructor() {
         const render = this; // eslint-disable-line consistent-this
@@ -53,6 +64,10 @@ export default class Render {
     initialize(setting: InitializeConfigType) {
         const render = this; // eslint-disable-line consistent-this
 
+        render.map = JSON.parse(JSON.stringify(setting.map));
+
+        const worldSize = render.getWorldSize();
+
         PIXI.settings.SCALE_MODE = 1; // eslint-disable-line id-match
 
         const app = new PIXI.Application(setting.width, setting.height, {
@@ -66,22 +81,69 @@ export default class Render {
 
         render.app = app;
 
-        app.stage.addChild(render.layer.landscape);
-        app.stage.addChild(render.layer.buildings);
-        app.stage.addChild(render.layer.graves);
-        app.stage.addChild(render.layer.units);
-        app.stage.addChild(render.layer.actions);
+        const viewport = new Viewport({
+            screenWidth: setting.width,
+            screenHeight: setting.height,
+            worldWidth: worldSize.width,
+            worldHeight: worldSize.height
+        });
 
-        app.stage.position.set(0, 0);
+        render.viewport = viewport;
 
-        // app.stage.scale.set(0.5, 0.5);
-        app.stage.scale.set(2, 2);
+        // app.stage.position.set(stagePadding.top, stagePadding.left);
+
+        app.stage.addChild(viewport);
+
+        viewport
+            .drag({clampWheel: true})
+            .wheel()
+            .pinch()
+            .decelerate()
+            .bounce()
+            .resize();
+
+        const mainContainer = new PIXI.Container();
+
+        render.mainContainer = mainContainer;
+
+        mainContainer.position.set(stagePadding.top, stagePadding.left);
+        mainContainer.addChild(render.layer.landscape);
+        mainContainer.addChild(render.layer.buildings);
+        mainContainer.addChild(render.layer.graves);
+        mainContainer.addChild(render.layer.units);
+        mainContainer.addChild(render.layer.actions);
+
+        viewport.addChild(mainContainer);
+    }
+
+    getWorldSize(): { width: number, height: number } {
+        const render = this; // eslint-disable-line consistent-this
+        const {map} = render;
+
+        if (!map || !map.landscape || !map.landscape[0]) {
+            return {
+                width: 0,
+                height: 0
+            };
+        }
+
+        return {
+            width: map.landscape[0].length * mapGuide.size.square + stagePadding.top + stagePadding.bottom,
+            height: map.landscape.length * mapGuide.size.square + stagePadding.left + stagePadding.right
+        };
     }
 
     setCanvasSize(width: number, height: number) {
         const render = this; // eslint-disable-line consistent-this
+        const worldSize = render.getWorldSize();
 
         render.app.renderer.resize(width, height);
+        render.viewport.resize(
+            width,
+            height,
+            worldSize.width,
+            worldSize.height
+        );
     }
 
     drawLandscape(map: MapType) {
