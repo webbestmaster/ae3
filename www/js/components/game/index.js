@@ -22,6 +22,8 @@ import {getSupplyState} from './model/helper';
 import style from './style.m.scss';
 import classnames from 'classnames';
 
+import Dialog from 'material-ui/Dialog';
+
 import Page from './../../components/ui/page';
 import Button from './../../components/ui/button';
 import ButtonLink from './../../components/ui/button-link';
@@ -310,6 +312,13 @@ export class GameView extends Component<PropsType, StateType> {
         const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
 
         return <Page>
+
+            <Dialog
+                open={false}
+            >
+                You win or lose!
+            </Dialog>
+
             {isStoreOpen ?
                 <Store
                     x={parseInt(queryData.x, 10)}
