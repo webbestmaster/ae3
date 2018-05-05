@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer'); // eslint-disable-line no-unused-vars
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 
 const DEVELOPMENT = 'development';
 const PRODUCTION = 'production';
@@ -128,7 +129,19 @@ const webpackConfig = {
     plugins: [
         new webpack.DefinePlugin(definePluginParams),
         new HtmlWebpackPlugin({
-            template: './www/index.html'
+            template: './www/index.html',
+            minify: {
+                collapseWhitespace: IS_PRODUCTION,
+                removeComments: IS_PRODUCTION,
+                minifyCSS: IS_PRODUCTION,
+                minifyJS: IS_PRODUCTION
+            },
+            hash: true
+            // filename: IS_PRODUCTION ? './../index.html' : './index.html'
+        }),
+        new ScriptExtHtmlWebpackPlugin({
+            defaultAttribute: 'defer'
+            // defaultAttribute: IS_PRODUCTION ? 'async' : 'defer'
         })
     ]
 };
