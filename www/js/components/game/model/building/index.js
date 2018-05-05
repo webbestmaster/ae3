@@ -6,6 +6,7 @@ import type {BuildingAttrTypeType, BuildingType, MapUserType} from './../../../.
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import imageMap from './../../image/image-map';
+import type {UserIdType} from '../../../../maps/type';
 
 type BuildingAttrType = BuildingType;
 
@@ -118,11 +119,34 @@ export default class Building {
         building.initializeBuildingSprite();
     }
 
+    getUserId(): string {
+        const building = this; // eslint-disable-line consistent-this
+        const {attr} = building;
+
+        return typeof attr.userId === 'string' ? attr.userId : 'no-user-id';
+    }
+
     setAttr(newAttr: BuildingAttrType) {
         const building = this; // eslint-disable-line consistent-this
         const {gameAttr} = building;
 
         building.attr = newAttr;
+
+        gameAttr.container.removeChild(gameAttr.sprite.building);
+
+        building.initializeBuildingSprite();
+    }
+
+    setNoManAttr() {
+        const building = this; // eslint-disable-line consistent-this
+        const {gameAttr} = building;
+
+        building.attr = {
+            type: building.attr.type,
+            x: building.attr.x,
+            y: building.attr.y,
+            id: building.attr.id
+        };
 
         gameAttr.container.removeChild(gameAttr.sprite.building);
 

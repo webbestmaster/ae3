@@ -67,7 +67,8 @@ export type DisabledByItemType =
     | 'client-push-state'
     | 'client-drop-turn'
     | 'end-game-popup'
-    | 'change-active-user-popup';
+    | 'change-active-user-popup'
+    | 'sync-map-with-server-user-list';
 
 type StateType = {|
     // settings?: AllRoomSettingsType,

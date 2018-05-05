@@ -255,6 +255,12 @@ export type PushedStatePayloadBuyUnitType = {|
     +activeUserId: string
 |};
 
+export type PushedStatePayloadSyncMapWithServerUserListType = {|
+    +type: 'sync-map-with-server-user-list',
+    +map: MapType,
+    +activeUserId: string
+|};
+
 export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType
     | PushedStatePayloadUnitMoveType
     | PushedStatePayloadUnitAttackType
@@ -263,7 +269,8 @@ export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType
     | PushedStatePayloadOccupyBuildingType
     | PushedStatePayloadRaiseSkeletonType
     | PushedStatePayloadDestroyBuildingType
-    | PushedStatePayloadBuyUnitType;
+    | PushedStatePayloadBuyUnitType
+    | PushedStatePayloadSyncMapWithServerUserListType;
 
 export type PushStateType = {|
     roomId: string,

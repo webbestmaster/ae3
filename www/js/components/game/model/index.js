@@ -3,7 +3,7 @@
 /* global window */
 
 // import * as PIXI from 'pixi.js';
-import type {BuildingType, GraveType, LandscapeType, MapType, UnitType} from './../../../maps/type';
+import type {BuildingType, GraveType, LandscapeType, MapType, UnitType, MapUserType} from './../../../maps/type';
 import {unitActionStateDefaultValue} from './../../../maps/type';
 import type {AllRoomSettingsType, ServerUserType} from './../../../module/server-api';
 import * as serverApi from './../../../module/server-api';
@@ -360,6 +360,8 @@ export default class Game {
                 break;
 
             case 'room__leave-from-room':
+                // work only if your turn
+                await game.syncMapWithServerUserList(message);
 
                 // TODO: check here map users and server users, only if your turn
                 console.warn('check here map users and server users, only if your turn');
@@ -376,6 +378,8 @@ export default class Game {
                 // game.setMapState(message.states.last.state.map);
                 game.refreshWispAura();
                 // game.gameView.forceUpdate();
+
+                await game.syncMapWithServerUserList(message);
 
                 break;
 
@@ -408,6 +412,98 @@ export default class Game {
         game.gameView.popupChangeActiveUser({isOpen: true});
 
         console.log('---> take turn, but NOT for me');
+    }
+
+    async syncMapWithServerUserList(message: SocketMessageType): Promise<void> {
+        const game = this; // eslint-disable-line consistent-this
+
+        game.render.cleanActionsList();
+
+        const newMap = game.getMapState();
+
+        if (newMap === null) {
+            return;
+        }
+
+        game.unitList.forEach((unitInList: Unit) => {
+            unitInList.setIsActionAvailable(true);
+        });
+
+        const messageActiveUserId = typeof message.states.last.activeUserId === 'string' ?
+            message.states.last.activeUserId :
+            newMap.activeUserId;
+
+        const isMyTurn = messageActiveUserId === user.getId();
+
+        if (isMyTurn === false) {
+            return;
+        }
+
+        const getAllRoomUsersResult = await serverApi.getAllRoomUsers(game.roomId);
+        const mapUserList = newMap.userList;
+
+        if (mapUserList.length === getAllRoomUsersResult.users.length) {
+            console.log('no changed user');
+            return;
+        }
+
+        mapUserList.forEach((mapUser: MapUserType) => {
+            const serverUser = find(getAllRoomUsersResult.users, {userId: mapUser.userId}) || null;
+            const isLeaved = serverUser === null;
+
+            if (isLeaved) {
+                mapUser.isLeaved = true; // eslint-disable-line no-param-reassign
+            }
+        });
+
+        mapUserList.forEach((mapUser: MapUserType) => {
+            if (mapUser.isLeaved !== true) {
+                return;
+            }
+
+            const mapUserId = mapUser.userId;
+
+            newMap.units = newMap.units.filter((mapUnit: UnitType): boolean => mapUnit.userId !== mapUserId);
+            newMap.buildings = newMap.buildings.map((mapBuilding: BuildingType): BuildingType => {
+                if (mapBuilding.userId === mapUserId) {
+                    return {
+                        type: mapBuilding.type,
+                        x: mapBuilding.x,
+                        y: mapBuilding.y,
+                        id: mapBuilding.id
+                    };
+                }
+
+                return mapBuilding;
+            });
+        });
+
+        game.gameView.addDisableReason('sync-map-with-server-user-list');
+
+        serverApi
+            .pushState(
+                game.roomId,
+                user.getId(),
+                {
+                    type: 'room__push-state',
+                    state: {
+                        type: 'sync-map-with-server-user-list',
+                        map: newMap,
+                        activeUserId: user.getId()
+                    }
+                }
+            )
+            .then((response: mixed) => {
+                console.log('---> unit action move pushed');
+                console.log(response);
+            })
+            .catch((error: Error) => {
+                console.error('client-push-state error');
+                console.log(error);
+            })
+            .then(() => {
+                game.gameView.removeDisableReason('sync-map-with-server-user-list');
+            });
     }
 
     async handleServerPushState(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
@@ -456,6 +552,11 @@ export default class Game {
 
             case 'buy-unit':
                 await game.handleServerPushStateBuyUnit(message);
+
+                break;
+
+            case 'sync-map-with-server-user-list':
+                await game.handleServerPushStateSyncMapWithServerUserList(message);
 
                 break;
 
@@ -857,6 +958,43 @@ export default class Game {
         const newGameUnit = game.createUnit(state.newMapUnit);
 
         game.onUnitClick(newGameUnit);
+
+        return Promise.resolve();
+    }
+
+    async handleServerPushStateSyncMapWithServerUserList(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements, id-length
+        const game = this; // eslint-disable-line consistent-this
+        const state = message.states.last.state;
+
+        if (state.type !== 'sync-map-with-server-user-list') {
+            console.error('here is should be a sync-map-with-server-user-list', message);
+            return Promise.resolve();
+        }
+
+        const gameUnitList = game.unitList;
+        const gameBuildingList = game.buildingList;
+
+        const mapState = state.map;
+
+        mapState.userList.forEach((mapUser: MapUserType) => {
+            if (mapUser.isLeaved !== true) {
+                return;
+            }
+
+            const leavedUserId = mapUser.userId;
+
+            gameUnitList
+                .filter((gameUnit: Unit): boolean => gameUnit.getUserId() === leavedUserId)
+                .forEach((gameUnit: Unit) => {
+                    game.removeUnit(gameUnit);
+                });
+
+            gameBuildingList
+                .filter((gameBuilding: Building): boolean => gameBuilding.getUserId() === leavedUserId)
+                .forEach((gameBuilding: Building) => {
+                    gameBuilding.setNoManAttr();
+                });
+        });
 
         return Promise.resolve();
     }
