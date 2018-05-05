@@ -1999,7 +1999,12 @@ export default class Game {
             return;
         }
 
+        const roomId = game.roomId;
+        const userId = user.getId();
+
         game.destroy();
+
+        await serverApi.leaveRoom(roomId, userId);
 
         game.gameView.showEndGame();
     }
