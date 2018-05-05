@@ -302,16 +302,6 @@ export default class Game {
         }
 
         // add money
-        newMap.buildings.forEach((mapBuilding: BuildingType) => {
-            if (mapBuilding.userId !== userId) {
-                return;
-            }
-
-            const buildingData = mapGuide.building[mapBuilding.type];
-
-            mapUser.money += buildingData.moneyBonus;
-        });
-
         const earnedMoney = game.getEarnedMoney(userId);
 
         if (earnedMoney === null) {
@@ -965,7 +955,14 @@ export default class Game {
 
     createBuilding(buildingData: BuildingType) {
         const game = this; // eslint-disable-line consistent-this
-        const building = new Building({buildingData, userList: game.userList});
+        const mapState = game.getMapState();
+
+        if (mapState === null) {
+            console.error('no mapState for createBuilding');
+            return;
+        }
+
+        const building = new Building({buildingData, userList: mapState.userList});
 
         game.buildingList.push(building);
 
@@ -1042,9 +1039,15 @@ export default class Game {
 
     createUnit(unitData: UnitType): Unit {
         const game = this; // eslint-disable-line consistent-this
+        const mapState = game.getMapState();
+
+        if (mapState === null) {
+            console.error('no mapState for createUnit');
+        }
+
         const unit = unitMaster.createUnit({
             unitData,
-            userList: game.userList,
+            userList: mapState === null ? [] : mapState.userList,
             event: {
                 click: (clickedUnit: Unit) => {
                     game.onUnitClick(clickedUnit);
@@ -1957,8 +1960,14 @@ export default class Game {
     getGameData(): GameDataType {
         const game = this; // eslint-disable-line consistent-this
 
-        const gameData: GameDataType = {
-            userList: game.userList,
+        const mapState = game.getMapState();
+
+        if (mapState === null) {
+            console.error('no map state for getGameData');
+        }
+
+        return {
+            userList: mapState === null ? [] : mapState.userList,
             buildingList: game.buildingList,
             unitList: game.unitList,
             graveList: game.graveList,
@@ -1966,8 +1975,6 @@ export default class Game {
             armorMap: game.armorMap,
             emptyActionMap: game.emptyActionMap
         };
-
-        return gameData;
     }
 
     async detectAndHandleEndGame(): Promise<void> {

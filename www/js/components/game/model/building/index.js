@@ -1,8 +1,8 @@
 // @flow
 
 import * as PIXI from 'pixi.js';
-import type {BuildingAttrTypeType, BuildingType} from './../../../../maps/type';
-import type {ServerUserType} from './../../../../module/server-api';
+import type {BuildingAttrTypeType, BuildingType, MapUserType} from './../../../../maps/type';
+// import type {ServerUserType} from './../../../../module/server-api';
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import imageMap from './../../image/image-map';
@@ -14,12 +14,12 @@ type BuildingGameAttrType = {|
     sprite: {|
         building: PIXI.Sprite
     |},
-    userList: Array<ServerUserType>
+    userList: Array<MapUserType>
 |};
 
 type BuildingConstructorType = {|
     buildingData: BuildingType,
-    userList: Array<ServerUserType>
+    userList: Array<MapUserType>
 |};
 
 export default class Building {

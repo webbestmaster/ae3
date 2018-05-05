@@ -1,8 +1,7 @@
 // @flow
 
 import * as PIXI from 'pixi.js';
-import type {MapType, UnitActionStateType, UnitType} from './../../../../maps/type';
-import type {ServerUserType} from './../../../../module/server-api';
+import type {MapType, MapUserType, UnitActionStateType, UnitType} from './../../../../maps/type';
 import type {AttackResultUnitType} from './../helper';
 import {getAttackResult, getEventName, getMoviePath, getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
@@ -118,7 +117,7 @@ type UnitGameAttrType = {|
         poisonCountdown: PIXI.Text,
         wispAura: PIXI.Sprite
     |},
-    userList: Array<ServerUserType>,
+    userList: Array<MapUserType>,
     event: {|
         click: (unit: Unit) => void // eslint-disable-line no-use-before-define
     |},
@@ -128,14 +127,14 @@ type UnitGameAttrType = {|
 
 export type UnitConstructorType = {|
     unitData: UnitType,
-    userList: Array<ServerUserType>,
+    userList: Array<MapUserType>,
     event: {|
         click: (unit: Unit) => void // eslint-disable-line no-use-before-define
     |}
 |};
 
 export type GameDataType = {|
-    +userList: Array<ServerUserType>;
+    +userList: Array<MapUserType>;
     +buildingList: Array<Building>;
     +unitList: Array<Unit>; // eslint-disable-line no-use-before-define
     +graveList: Array<Grave>; // eslint-disable-line no-use-before-define

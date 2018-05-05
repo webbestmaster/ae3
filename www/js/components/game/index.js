@@ -466,7 +466,7 @@ export class GameView extends Component<PropsType, StateType> {
             return null;
         }
 
-        const activeUserColor = getUserColor(activeUserId, game.userList);
+        const activeUserColor = getUserColor(activeUserId, mapState.userList);
 
         if (activeUserColor === null) {
             console.error('no activeUserColor for renderPopupChangeActiveUserDialog', game);

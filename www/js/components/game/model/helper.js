@@ -14,7 +14,7 @@ import type {MapType, UnitType} from './../../../maps/type';
 import find from 'lodash/find';
 import type {BuildingType, MapUserType} from '../../../maps/type';
 
-export function getUserIndex(userId: string, userList: Array<ServerUserType>): number | null {
+export function getUserIndex(userId: string, userList: Array<MapUserType>): number | null {
     let userIndex = 0;
     const maxIndex = 4;
 
@@ -29,7 +29,7 @@ export function getUserIndex(userId: string, userList: Array<ServerUserType>): n
     return userIndex;
 }
 
-export function getUserColor(userId: string, userList: Array<ServerUserType>): string | null {
+export function getUserColor(userId: string, userList: Array<MapUserType>): string | null {
     const userIndex = getUserIndex(userId, userList);
 
     if (userIndex === null) {
