@@ -18,7 +18,7 @@ import type {ContextRouter} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
 import Store from './../store';
 import queryString from 'query-string';
-import {getSupplyState, getMatchResult} from './model/helper';
+import {getSupplyState, getMatchResult, getUserColor} from './model/helper';
 import style from './style.m.scss';
 import classnames from 'classnames';
 
@@ -57,7 +57,16 @@ type PropsType = {|
     ...ContextRouter
 |};
 
-export type DisabledByItemType = 'server-receive-message' | 'client-push-state' | 'client-drop-turn' | 'end-game-popup';
+export type PopupParameterType = {|
+    isOpen: boolean
+|};
+
+export type DisabledByItemType =
+    | 'server-receive-message'
+    | 'client-push-state'
+    | 'client-drop-turn'
+    | 'end-game-popup'
+    | 'change-active-user-popup';
 
 type StateType = {|
     // settings?: AllRoomSettingsType,
@@ -69,6 +78,9 @@ type StateType = {|
     disabledByList: Array<DisabledByItemType>,
     popup: {|
         endGame: {|
+            isOpen: boolean
+        |},
+        changeActiveUser: {|
             isOpen: boolean
         |}
     |}
@@ -98,6 +110,9 @@ export class GameView extends Component<PropsType, StateType> {
             disabledByList: [],
             popup: {
                 endGame: {
+                    isOpen: false
+                },
+                changeActiveUser: {
                     isOpen: false
                 }
             }
@@ -253,6 +268,11 @@ export class GameView extends Component<PropsType, StateType> {
         view.setState((prevState: StateType): StateType => {
             const newDisabledByList = JSON.parse(JSON.stringify(prevState.disabledByList));
 
+            if (newDisabledByList.includes(reason)) {
+                console.warn('--->', reason, 'already exists in newDisabledByList');
+                return prevState;
+            }
+
             newDisabledByList.push(reason);
 
             prevState.disabledByList = newDisabledByList; // eslint-disable-line no-param-reassign
@@ -285,11 +305,11 @@ export class GameView extends Component<PropsType, StateType> {
     renderSupplyState(): Node {
         const view = this;
         const {props, state} = view;
-        const {mapState} = state.game; // do not use game.getMapState(), map stay might undefined in game
+        const mapState = state.game.getMapState();
         const userId = user.getId();
 
-        if (!mapState) {
-            return <div>no map state</div>;
+        if (mapState === null) {
+            return <div>no map state for renderSupplyState</div>;
         }
 
         const supplyState = getSupplyState(mapState, userId);
@@ -301,11 +321,13 @@ export class GameView extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
-        if (!state.game.mapState) {
-            return null;
+        const mapState = state.game.getMapState();
+
+        if (mapState === null) {
+            return <div>no map state for renderMoneyState</div>;
         }
 
-        const mapUserData = find(state.game.mapState.userList, {userId: user.getId()}) || null;
+        const mapUserData = find(mapState.userList, {userId: user.getId()}) || null;
 
         if (mapUserData === null) {
             return null;
@@ -327,7 +349,7 @@ export class GameView extends Component<PropsType, StateType> {
         });
     }
 
-    renderEndGameDialog(): Node | null { // eslint-disable-line complexity
+    renderEndGameDialog(): Node | null { // eslint-disable-line complexity, max-statements
         const view = this;
         const {props, state} = view;
         const {popup} = state;
@@ -339,7 +361,12 @@ export class GameView extends Component<PropsType, StateType> {
             return null;
         }
 
-        const {mapState} = game;
+        const mapState = game.getMapState();
+
+        if (mapState === null) {
+            console.error('No mapState for renderEndGameDialog');
+            return null;
+        }
 
         const matchResult = getMatchResult(mapState);
 
@@ -376,15 +403,99 @@ export class GameView extends Component<PropsType, StateType> {
         </Dialog>;
     }
 
+    popupChangeActiveUser(state: PopupParameterType) {
+        const view = this;
+
+        if (state.isOpen) {
+            view.addDisableReason('change-active-user-popup');
+        } else {
+            view.removeDisableReason('change-active-user-popup');
+        }
+
+        view.setState((prevState: StateType): StateType => {
+            prevState.popup.changeActiveUser.isOpen = state.isOpen; // eslint-disable-line no-param-reassign
+
+            return prevState;
+        });
+    }
+
+    renderPopupChangeActiveUserDialog(): Node | null { // eslint-disable-line complexity, max-statements
+        const view = this;
+        const {props, state} = view;
+        const {popup} = state;
+        const {game} = state;
+
+        const mapState = game.getMapState();
+
+        if (mapState === null) {
+            if (popup.changeActiveUser.isOpen) {
+                console.error('No show popup for change ActiveUser');
+                return null;
+            }
+            console.log('No show popup for change ActiveUser');
+            return null;
+        }
+
+        const activeUserId = mapState.activeUserId;
+        const userId = user.getId();
+
+        const mapActiveUser = find(mapState.userList, {userId: activeUserId}) || null;
+
+        if (mapActiveUser === null) {
+            console.error('No ActiveUser for renderPopupChangeActiveUserDialog', activeUserId, mapState);
+            return null;
+        }
+
+        const earnedMoney = game.getEarnedMoney(activeUserId);
+
+        if (earnedMoney === null) {
+            console.error('no earnedMoney for renderPopupChangeActiveUserDialog', game);
+            return null;
+        }
+
+        const activeUserColor = getUserColor(activeUserId, game.userList);
+
+        if (activeUserColor === null) {
+            console.error('no activeUserColor for renderPopupChangeActiveUserDialog', game);
+            return null;
+        }
+
+        return <Dialog
+            open={popup.changeActiveUser.isOpen}
+            transition={Transition}
+            keepMounted
+            // onClose={() => {
+            //     view.popupChangeActiveUser({isOpen: false});
+            // }}
+            onClick={() => {
+                view.popupChangeActiveUser({isOpen: false});
+            }}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+        >
+            <DialogTitle id="alert-dialog-slide-title">
+                {activeUserId === userId ?
+                    'your turn, earned: ' + earnedMoney :
+                    'wait for: ' + activeUserColor}
+            </DialogTitle>
+        </Dialog>;
+    }
+
     renderStore(): Node | null {
         const view = this;
         const {props, state} = view;
         const queryData = queryString.parse(props.location.search);
-        const {mapState} = state.game; // do not use game.getMapState(), map stay might undefined in game
 
         const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
 
         if (!isStoreOpen) {
+            return null;
+        }
+
+        const mapState = state.game.getMapState();
+
+        if (mapState === null) {
+            console.error('No mapState for renderStore');
             return null;
         }
 
@@ -399,8 +510,9 @@ export class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {popup} = state;
         const queryData = queryString.parse(props.location.search);
-        const {mapState} = state.game; // do not use game.getMapState(), map stay might undefined in game
-        const mapActiveUserId = mapState && mapState.activeUserId || 'no-map-state';
+        const mapState = state.game.getMapState();
+
+        const mapActiveUserId = mapState === null ? 'no-map-state-no-active-user-id' : mapState.activeUserId;
         const isCanvasDisabled = state.activeUserId !== user.getId() || // your/not turn
             mapActiveUserId !== state.activeUserId || // map user id should be the same server active user id
             state.disabledByList.length > 0; // disabledByList should be empty array
@@ -412,6 +524,7 @@ export class GameView extends Component<PropsType, StateType> {
             {view.renderStore()}
 
             {view.renderEndGameDialog()}
+            {view.renderPopupChangeActiveUserDialog()}
 
             {/*
                 <h2>server activeUserId: {state.activeUserId}</h2>

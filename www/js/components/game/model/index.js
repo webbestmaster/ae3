@@ -148,8 +148,10 @@ export default class Game {
         game.refreshWispAura();
 
         // FIXME: remove extra dispatch
-        // actually fix extra horizontal scroll
         window.dispatchEvent(new window.Event('resize'));
+        window.requestAnimationFrame(() => {
+            window.dispatchEvent(new window.Event('resize'));
+        });
     }
 
     bindEventListeners() {
@@ -178,12 +180,44 @@ export default class Game {
         );
     }
 
-    async refreshUnitActionState(): Promise<void> { // eslint-disable-line max-statements
+    getEarnedMoney(userId: string): number | null {
+        const game = this; // eslint-disable-line consistent-this
+
+        const newMap = game.getMapState();
+
+        if (newMap === null) {
+            console.error('no mapState for getEarnedMoney');
+            return null;
+        }
+
+        let earnedMoney = 0;
+
+        // count money
+        newMap.buildings.forEach((mapBuilding: BuildingType) => {
+            if (mapBuilding.userId !== userId) {
+                return;
+            }
+
+            const buildingData = mapGuide.building[mapBuilding.type];
+
+            earnedMoney += buildingData.moneyBonus;
+        });
+
+        return earnedMoney;
+    }
+
+    async refreshUnitActionState(): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this; // eslint-disable-line consistent-this
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = game.getMapState();
+        const newMap = game.getMapState();
+
+        if (newMap === null) {
+            console.error('no mapState for refreshUnitActionState');
+            return;
+        }
+
         const {unitList} = game;
         const mapUnitList = newMap.units;
         const isUnitListLengthEqual = mapUnitList.length === unitList.length;
@@ -278,6 +312,15 @@ export default class Game {
             mapUser.money += buildingData.moneyBonus;
         });
 
+        const earnedMoney = game.getEarnedMoney(userId);
+
+        if (earnedMoney === null) {
+            console.error('earnedMoney for userId is null');
+            return;
+        }
+
+        mapUser.money += earnedMoney;
+
         game.gameView.addDisableReason('client-push-state');
 
         await serverApi
@@ -309,6 +352,10 @@ export default class Game {
     async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
         const game = this; // eslint-disable-line consistent-this
 
+        if (message.states.last.state && message.states.last.state.map) {
+            game.setMapState(message.states.last.state.map);
+        }
+
         switch (message.type) {
             case 'room__take-turn':
                 await game.handleServerTakeTurn(message);
@@ -336,7 +383,7 @@ export default class Game {
 
                 await game.handleServerPushState(message);
                 game.checkMapState(message.states.last.state.map);
-                game.setMapState(message.states.last.state.map);
+                // game.setMapState(message.states.last.state.map);
                 game.refreshWispAura();
                 // game.gameView.forceUpdate();
 
@@ -356,30 +403,30 @@ export default class Game {
             unitInList.setIsActionAvailable(true);
         });
 
-        const activeUserId = message.states.last.activeUserId;
+        const isMyTurn = message.states.last.activeUserId === user.getId();
 
-        if (activeUserId !== user.getId()) {
-            console.log('---> take turn, but NOT for me');
-            return;
+        if (isMyTurn) {
+            console.log('---> take turn, and it\'s ME!!!');
+            // TODO: check here map users and server users, only if your turn
+            console.warn('check here map users and server users, only if your turn');
+            await game.refreshUnitActionState();
+            console.log('---> unit and users - refreshed');
+            // await game.refreshUnitPoisonCountdown();
+            // await game.refreshGraveCountdown();
         }
 
-        console.log('---> take turn, and it\'s ME!!!');
+        game.gameView.popupChangeActiveUser({isOpen: true});
 
-        // TODO: check here map users and server users, only if your turn
-        console.warn('check here map users and server users, only if your turn');
-        await game.refreshUnitActionState();
-        console.log('---> unit and users - refreshed');
-        // await game.refreshUnitPoisonCountdown();
-        // await game.refreshGraveCountdown();
+        console.log('---> take turn, but NOT for me');
     }
 
     async handleServerPushState(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this; // eslint-disable-line consistent-this
 
         if (typeof message.states.last.state.type !== 'string') {
+            console.error('message.states.last.state.type should be string', message);
             return;
         }
-
 
         switch (message.states.last.state.type) {
             case 'move':
@@ -1109,7 +1156,12 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = game.getMapState();
+        const newMap = game.getMapState();
+
+        if (newMap === null) {
+            console.error('no mapState for bindOnClickUnitActionMove');
+            return;
+        }
 
         const movedUnit = find(newMap.units, {id: unitAction.id});
 
@@ -1186,7 +1238,12 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = game.getMapState();
+        const newMap = game.getMapState();
+
+        if (newMap === null) {
+            console.error('no mapState for bindOnClickUnitActionAttack');
+            return;
+        }
 
         const aggressorMapUnit = find(newMap.units, {id: unitAction.aggressor.id});
 
@@ -1289,7 +1346,12 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = game.getMapState();
+        const newMap = game.getMapState();
+
+        if (newMap === null) {
+            console.error('no mapState for bindOnClickUnitActionFixBuilding');
+            return;
+        }
 
         const building = find(newMap.buildings, {x: unitAction.x, y: unitAction.y}) || null;
 
@@ -1344,7 +1406,12 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = game.getMapState();
+        const newMap = game.getMapState();
+
+        if (newMap === null) {
+            console.error('no mapState for bindOnClickUnitActionOccupyBuilding');
+            return;
+        }
 
         const building = find(newMap.buildings, {x: unitAction.x, y: unitAction.y}) || null;
 
@@ -1399,7 +1466,12 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = game.getMapState();
+        const newMap = game.getMapState();
+
+        if (newMap === null) {
+            console.error('no mapState for bindOnClickUnitActionRaiseSkeleton');
+            return;
+        }
 
         const actionGrave = unitAction.grave;
         const actionRaiser = unitAction.raiser;
@@ -1470,7 +1542,12 @@ export default class Game {
 
         game.render.cleanActionsList();
 
-        const newMap: MapType = game.getMapState();
+        const newMap = game.getMapState();
+
+        if (newMap === null) {
+            console.error('no mapState for bindOnClickUnitActionDestroyBuilding');
+            return;
+        }
 
         const mapBuilding = find(newMap.buildings, {
             x: unitAction.building.x,
@@ -1565,10 +1642,14 @@ export default class Game {
         game.mapState = map;
     }
 
-    getMapState(): MapType {
+    getMapState(): MapType | null {
         const game = this; // eslint-disable-line consistent-this
 
-        return JSON.parse(JSON.stringify(game.mapState));
+        if (game.mapState) {
+            return JSON.parse(JSON.stringify(game.mapState));
+        }
+
+        return null;
     }
 
     setCanvasSize(width: number, height: number) {
@@ -1891,8 +1972,14 @@ export default class Game {
 
     async detectAndHandleEndGame(): Promise<void> {
         const game = this; // eslint-disable-line consistent-this
+        const mapState = game.getMapState();
 
-        const matchState = getMatchResult(game.getMapState());
+        if (mapState === null) {
+            console.error('no mapState for detectAndHandleEndGame');
+            return;
+        }
+
+        const matchState = getMatchResult(mapState);
 
         // if can not detect match state
         if (matchState === null) {
