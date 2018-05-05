@@ -130,7 +130,13 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
     return fetch(url + '/api/room/get-users/' + roomId)
         .then((blob: Response): Promise<GetAllRoomUsersType> => blob.json())
         .then((result: GetAllRoomUsersType): GetAllRoomUsersType => {
-            const users = result.users.map((user: ServerUserType, userIndex: number): ServerUserType => {
+            const serverUserList = Array.isArray(result.users) ? result.users : [];
+
+            if (Array.isArray(result.users) === false) {
+                console.log('getAllRoomUsers get no array', result);
+            }
+
+            const users = serverUserList.map((user: ServerUserType, userIndex: number): ServerUserType => {
                 return {
                     socketId: user.socketId,
                     userId: user.userId,
