@@ -3,11 +3,9 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
 import routes from './../../app/routes';
 
 import Page from './../../components/ui/page';
-import Button from './../../components/ui/button';
 import ButtonLink from './../../components/ui/button-link';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
 import Header from './../../components/ui/header';

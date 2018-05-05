@@ -10,13 +10,8 @@ import type {GlobalStateType} from './../../app-reducer';
 import type {AuthType} from './../../components/auth/reducer';
 
 import Page from './../../components/ui/page';
-import Button from './../../components/ui/button';
-import ButtonLink from './../../components/ui/button-link';
-import ButtonListWrapper from './../../components/ui/button-list-wrapper';
 import Header from './../../components/ui/header';
 import Form from './../../components/ui/form';
-import Label from './../../components/ui/label';
-import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
 
 type StateType = {|

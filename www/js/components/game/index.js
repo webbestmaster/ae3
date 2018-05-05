@@ -11,41 +11,27 @@ import {socket} from './../../module/socket';
 import type {GlobalStateType} from './../../app-reducer';
 import type {SystemType} from './../system/reducer';
 import Game from './model/index';
-import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
+import type {ServerUserType} from './../../module/server-api';
 import * as serverApi from './../../module/server-api';
 import MainModel from './../../lib/main-model';
 import type {ContextRouter} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
 import Store from './../store';
 import queryString from 'query-string';
-import {getSupplyState, getMatchResult, getUserColor} from './model/helper';
+import {getMatchResult, getSupplyState, getUserColor} from './model/helper';
 import style from './style.m.scss';
 import classnames from 'classnames';
 
-import Dialog, {
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle
-} from 'material-ui/Dialog';
+import Dialog, {DialogTitle} from 'material-ui/Dialog';
 
 import Slide from 'material-ui/transitions/Slide';
+import Page from './../../components/ui/page';
+import BottomBar from './../../components/ui/bottom-bar';
+import find from 'lodash/find';
 
 function Transition(props: mixed): Node {
     return <Slide direction="up" {...props} />;
 }
-
-import Page from './../../components/ui/page';
-import Button from './../../components/ui/button';
-import ButtonLink from './../../components/ui/button-link';
-import ButtonListWrapper from './../../components/ui/button-list-wrapper';
-import Header from './../../components/ui/header';
-import Form from './../../components/ui/form';
-import Label from './../../components/ui/label';
-import FormHeader from './../../components/ui/form-header';
-import Fieldset from './../../components/ui/fieldset';
-import BottomBar from './../../components/ui/bottom-bar';
-import find from 'lodash/find';
 
 export const bottomBarData = {
     height: 64

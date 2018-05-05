@@ -6,7 +6,6 @@ import type {BuildingAttrTypeType, BuildingType, MapUserType} from './../../../.
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import imageMap from './../../image/image-map';
-import type {UserIdType} from '../../../../maps/type';
 
 type BuildingAttrType = BuildingType;
 

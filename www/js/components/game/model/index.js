@@ -3,26 +3,19 @@
 /* global window */
 
 // import * as PIXI from 'pixi.js';
-import type {BuildingType, GraveType, LandscapeType, MapType, UnitType, MapUserType} from './../../../maps/type';
+import type {BuildingType, GraveType, LandscapeType, MapType, MapUserType, UnitType} from './../../../maps/type';
 import {unitActionStateDefaultValue} from './../../../maps/type';
 import type {AllRoomSettingsType, ServerUserType} from './../../../module/server-api';
 import * as serverApi from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
 // import imageMap from './../image/image-map';
-import {countHealHitPointOnBuilding, getEventName, procedureMakeGraveForMapUnit, getMatchResult} from './helper';
+import {countHealHitPointOnBuilding, getEventName, getMatchResult, procedureMakeGraveForMapUnit} from './helper';
 import Render from './render';
 import Building from './building';
 import Grave from './grave';
 import type {
-    GameDataType,
-    UnitActionAttackType,
-    UnitActionDestroyBuildingType,
-    UnitActionFixBuildingType,
-    UnitActionMoveType,
-    UnitActionOccupyBuildingType,
-    UnitActionRaiseSkeletonType,
-    UnitActionsMapType,
-    UnitActionType
+    GameDataType, UnitActionAttackType, UnitActionDestroyBuildingType, UnitActionFixBuildingType,
+    UnitActionMoveType, UnitActionOccupyBuildingType, UnitActionRaiseSkeletonType, UnitActionsMapType, UnitActionType
 } from './unit';
 import Unit from './unit';
 import {user} from './../../../module/user';
@@ -34,7 +27,7 @@ import {socket} from './../../../module/socket';
 import MainModel from './../../../lib/main-model';
 import * as unitMaster from './unit/master';
 import {defaultUnitData} from './unit/unit-guide';
-import {GameView, bottomBarData} from './../../game/index';
+import {bottomBarData, GameView} from './../../game/index';
 import {storeViewId} from './../../store';
 import queryString from 'query-string';
 import Queue from './../../../lib/queue';

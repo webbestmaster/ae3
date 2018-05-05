@@ -1,7 +1,6 @@
 // @flow
 /* global document */
 
-import type {ServerUserType} from './../../../module/server-api';
 import type {TeamIdType} from './../../../maps/map-guide';
 import mapGuide from './../../../maps/map-guide';
 import type {UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
