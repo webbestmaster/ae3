@@ -58,7 +58,8 @@ type PropsType = {|
 |};
 
 export type PopupParameterType = {|
-    isOpen: boolean
+    isOpen: boolean,
+    showMoney?: boolean
 |};
 
 export type DisabledByItemType =
@@ -81,7 +82,8 @@ type StateType = {|
             isOpen: boolean
         |},
         changeActiveUser: {|
-            isOpen: boolean
+            isOpen: boolean,
+            showMoney: boolean
         |}
     |}
     // map: MapType | null
@@ -113,7 +115,8 @@ export class GameView extends Component<PropsType, StateType> {
                     isOpen: false
                 },
                 changeActiveUser: {
-                    isOpen: false
+                    isOpen: false,
+                    showMoney: true
                 }
             }
         };
@@ -145,6 +148,11 @@ export class GameView extends Component<PropsType, StateType> {
             width: props.system.screen.width,
             height: props.system.screen.height,
             map: settings.map
+        });
+
+        view.popupChangeActiveUser({
+            isOpen: true,
+            showMoney: false
         });
 
         /*
@@ -414,6 +422,7 @@ export class GameView extends Component<PropsType, StateType> {
 
         view.setState((prevState: StateType): StateType => {
             prevState.popup.changeActiveUser.isOpen = state.isOpen; // eslint-disable-line no-param-reassign
+            prevState.popup.changeActiveUser.showMoney = typeof state.showMoney === 'boolean' ? state.showMoney : true; // eslint-disable-line no-param-reassign
 
             return prevState;
         });
@@ -424,6 +433,10 @@ export class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {popup} = state;
         const {game} = state;
+
+        if (popup.endGame.isOpen === true) {
+            return null;
+        }
 
         const mapState = game.getMapState();
 
@@ -460,6 +473,8 @@ export class GameView extends Component<PropsType, StateType> {
             return null;
         }
 
+        const earnedString = popup.changeActiveUser.showMoney ? ', earned: ' + earnedMoney : '';
+
         return <Dialog
             open={popup.changeActiveUser.isOpen}
             transition={Transition}
@@ -468,14 +483,16 @@ export class GameView extends Component<PropsType, StateType> {
             //     view.popupChangeActiveUser({isOpen: false});
             // }}
             onClick={() => {
-                view.popupChangeActiveUser({isOpen: false});
+                view.popupChangeActiveUser({
+                    isOpen: false
+                });
             }}
             aria-labelledby="alert-dialog-slide-title"
             aria-describedby="alert-dialog-slide-description"
         >
             <DialogTitle id="alert-dialog-slide-title">
                 {activeUserId === userId ?
-                    'your turn, earned: ' + earnedMoney :
+                    'your turn' + earnedString :
                     'wait for: ' + activeUserColor}
             </DialogTitle>
         </Dialog>;
