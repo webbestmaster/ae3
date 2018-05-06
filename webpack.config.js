@@ -75,12 +75,7 @@ const webpackConfig = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['env', 'stage-1', 'stage-0', 'react', 'flow']
-                    }
-                }
+                loader: 'babel-loader'
             },
             {
                 test: /\.(png|jpg|jpeg|gif|svg)(\?[a-z0-9=&.]+)?$/,
