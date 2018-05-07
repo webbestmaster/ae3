@@ -384,10 +384,10 @@ export class GameView extends Component<PropsType, StateType> {
             transition={Transition}
             keepMounted
             onClose={() => {
-                props.history.goBack();
+                view.leaveGame();
             }}
             onClick={() => {
-                props.history.goBack();
+                view.leaveGame();
             }}
             aria-labelledby="alert-dialog-slide-title"
             aria-describedby="alert-dialog-slide-description"
@@ -396,6 +396,20 @@ export class GameView extends Component<PropsType, StateType> {
                 {isWinner ? 'You win!' : 'You loose :('}
             </DialogTitle>
         </Dialog>;
+    }
+
+    leaveGame() {
+        const view = this;
+        const {props, state} = view;
+        const queryData = queryString.parse(props.location.search);
+        const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
+
+        if (isStoreOpen) {
+            props.history.go(-2);
+            return;
+        }
+
+        props.history.go(-1);
     }
 
     popupChangeActiveUser(state: PopupParameterType) {
