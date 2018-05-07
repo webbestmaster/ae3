@@ -60,16 +60,19 @@ export default class Game {
     emptyActionMap: Array<Array<[]>>;
     roomId: string;
     model: MainModel;
-    pathMap: {
+    pathMap: {|
         walk: Array<Array<number>>,
         flow: Array<Array<number>>,
         fly: Array<Array<number>>
-    };
-    armorMap: {
+    |};
+    armorMap: {|
         walk: Array<Array<number>>,
         flow: Array<Array<number>>,
         fly: Array<Array<number>>
-    };
+    |};
+    message: {|
+        list: Array<SocketMessageType>
+    |}
 
     constructor() {
         const game = this; // eslint-disable-line consistent-this
@@ -98,6 +101,9 @@ export default class Game {
             fly: []
         };
         game.model = new MainModel();
+        game.message = {
+            list: []
+        };
     }
 
     initialize(renderSetting: RenderSettingType) {
@@ -153,7 +159,34 @@ export default class Game {
 
         model.listenTo(socket.attr.model,
             'message',
-            (message: SocketMessageType) => {
+            (message: SocketMessageType) => { // eslint-disable-line complexity
+                const lastSavedSocketMessage = game.getLastSocketMessage();
+                const messageMap = message.states.last.state && message.states.last.state.map ?
+                    message.states.last.state.map :
+                    null;
+
+                // check for messed message
+                if (lastSavedSocketMessage !== null &&
+                    message.states.length - 1 !== lastSavedSocketMessage.states.length) {
+                    console.error(
+                        'you have missed message(s)',
+                        message.states.length - 1 - lastSavedSocketMessage.states.length,
+                        message,
+                        lastSavedSocketMessage);
+
+                    if (messageMap !== null) {
+                        game.onMessageQueue.push(async (): Promise<void> => {
+                            await game.loadMapState(messageMap);
+                            game.message.list.push(message);
+                        });
+                    } else {
+                        console.error('message has no map to loadMapState, wait for map', message);
+                    }
+                    return;
+                }
+
+                game.message.list.push(message);
+
                 game.onMessageQueue.push(async (): Promise<void> => {
                     game.gameView.addDisableReason('server-receive-message');
 
@@ -171,6 +204,18 @@ export default class Game {
                 });
             }
         );
+    }
+
+    getLastSocketMessage(): SocketMessageType | null {
+        const game = this; // eslint-disable-line consistent-this
+        const messageList = game.message.list;
+        const messageListLength = messageList.length;
+
+        if (messageListLength === 0) {
+            return null;
+        }
+
+        return messageList[messageListLength - 1];
     }
 
     getEarnedMoney(userId: string): number | null {
@@ -2138,6 +2183,11 @@ export default class Game {
         await serverApi.leaveRoom(roomId, userId);
 
         game.gameView.showEndGame();
+    }
+
+    async loadMapState(map: MapType): Promise<void> {
+        // TODO: implement load map state
+        console.error('implement load map state');
     }
 
     destroy() {
