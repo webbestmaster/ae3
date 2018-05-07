@@ -349,10 +349,9 @@ export class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {popup} = state;
         const {game} = state;
-        const queryData = queryString.parse(props.location.search);
-        const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
+        const storeState = view.getStoreState();
 
-        if (popup.endGame.isOpen === false || isStoreOpen) {
+        if (popup.endGame.isOpen === false || storeState.isOpen) {
             return null;
         }
 
@@ -398,16 +397,20 @@ export class GameView extends Component<PropsType, StateType> {
         </Dialog>;
     }
 
-    leaveGame() {
+    getStoreState(): {| isOpen: boolean |} {
         const view = this;
         const {props, state} = view;
         const queryData = queryString.parse(props.location.search);
-        const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
 
-        if (isStoreOpen) {
-            props.history.go(-2);
-            return;
-        }
+        return {
+            isOpen: queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y)
+        };
+    }
+
+    // to leave game by user, user should close store or other views which use router
+    leaveGame() {
+        const view = this;
+        const {props, state} = view;
 
         props.history.go(-1);
     }
@@ -504,9 +507,9 @@ export class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
         const queryData = queryString.parse(props.location.search);
 
-        const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
+        const storeState = view.getStoreState();
 
-        if (!isStoreOpen) {
+        if (!storeState.isOpen) {
             return null;
         }
 
@@ -526,8 +529,6 @@ export class GameView extends Component<PropsType, StateType> {
     render(): Node { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
-        const {popup} = state;
-        const queryData = queryString.parse(props.location.search);
         const mapState = state.game.getMapState();
 
         const mapActiveUserId = mapState === null ? 'no-map-state-no-active-user-id' : mapState.activeUserId;
@@ -535,7 +536,7 @@ export class GameView extends Component<PropsType, StateType> {
             mapActiveUserId !== state.activeUserId || // map user id should be the same server active user id
             state.disabledByList.length > 0; // disabledByList should be empty array
 
-        const isStoreOpen = queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y);
+        const storeState = view.getStoreState();
 
         return <Page>
 
@@ -560,7 +561,7 @@ export class GameView extends Component<PropsType, StateType> {
             <div
                 className={classnames(
                     style.end_turn,
-                    {hidden: isStoreOpen || isCanvasDisabled}
+                    {hidden: storeState.isOpen || isCanvasDisabled}
                 )}
                 onClick={async (): Promise<void> => {
                     await view.endTurn();
@@ -579,7 +580,7 @@ export class GameView extends Component<PropsType, StateType> {
 
             <canvas
                 className={classnames({
-                    hidden: isStoreOpen,
+                    hidden: storeState.isOpen,
                     disabled: isCanvasDisabled
                 })}
                 key="canvas"
@@ -590,7 +591,7 @@ export class GameView extends Component<PropsType, StateType> {
                     height: props.system.screen.height - bottomBarData.height
                 }}/>
             <BottomBar
-                className={classnames('ta-l', {hidden: isStoreOpen})}>
+                className={classnames('ta-l', {hidden: storeState.isOpen})}>
                 {view.renderSupplyState()}
                 &nbsp;|&nbsp;
                 {view.renderMoneyState()}
