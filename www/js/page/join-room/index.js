@@ -8,14 +8,16 @@ import routes from './../../app/routes';
 import * as serverApi from './../../module/server-api';
 import type {GlobalStateType} from './../../app-reducer';
 import type {AuthType} from './../../components/auth/reducer';
-
 import Page from './../../components/ui/page';
 import Header from './../../components/ui/header';
 import Form from './../../components/ui/form';
 import Fieldset from './../../components/ui/fieldset';
+import type {RoomDataType} from './helper';
+import {getRoomState} from './helper';
 
 type StateType = {|
-    roomIds: Array<string>
+    // roomIds: Array<string>,
+    roomDataList: Array<RoomDataType>
     // settings: AllRoomSettingsType,
     // userList: Array<ServerUserType>
 |};
@@ -27,26 +29,23 @@ type PropsType = {|
 
 class JoinRoom extends Component<PropsType, StateType> {
     props: PropsType;
-    state: StateType;
-
-    constructor() {
-        super();
-        const view = this;
-
-        const state: StateType = {
-            roomIds: []
-        };
-
-        view.state = state;
-    }
+    state: StateType = {
+        // roomIds: [],
+        roomDataList: []
+    };
 
     async componentDidMount(): Promise<void> {
         const view = this;
         const {props, state} = view;
 
-        const allRoomIds = await serverApi.getAllRoomIds();
+        const getAllRoomIdsResult = await serverApi.getAllRoomIds();
+        const roomDataList = [];
 
-        view.setState({roomIds: allRoomIds.roomIds});
+        for (let ii = 0; ii < getAllRoomIdsResult.roomIds.length; ii += 1) {
+            roomDataList.push(await getRoomState(getAllRoomIdsResult.roomIds[ii]));
+        }
+
+        view.setState({roomDataList});
     }
 
     async joinRoom(roomId: string): Promise<void> {
@@ -54,6 +53,14 @@ class JoinRoom extends Component<PropsType, StateType> {
         const {props, state} = view;
         const socketId = props.auth.socket.id;
         const userId = props.auth.user.id;
+
+        const roomState = await getRoomState(roomId);
+
+        if (roomState === null || roomState.userList.length === roomState.maxUserSize) {
+            console.error('roomState is null or room state is fool', roomState);
+            await view.componentDidMount();
+            return;
+        }
 
         const joinRoomResult = await serverApi.joinRoom(roomId, userId, socketId);
 
@@ -68,25 +75,38 @@ class JoinRoom extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
+        if (state.roomDataList.length === 0) {
+            return <Page>
+                <Header>Join Into Room</Header>
+                <Form>
+                    <Fieldset>
+                        No Open Rooms, create your own room...
+                    </Fieldset>
+                </Form>
+            </Page>;
+        }
+
         return <Page>
             <Header>Join Into Room</Header>
 
             <Form>
                 <Fieldset>
-                    {state.roomIds.length === 0 ?
-                        'No Open Rooms, create your own room...' :
-                        state.roomIds.map((roomId: string): Node => <p
+                    {state.roomDataList
+                        .map((roomData: RoomDataType): Node => <p
                             style={{
                                 padding: 10,
                                 cursor: 'pointer'
                             }}
                             onClick={async (): Promise<void> => {
-                                const result = view.joinRoom(roomId);
+                                const result = view.joinRoom(roomData.roomId);
                             }}
-                            key={roomId}>
-                            {roomId}
-                        </p>)
-                    }
+                            key={roomData.roomId}>
+                            {roomData.roomId}
+                            {' - '}
+                            {roomData.settings.map.meta.en.name}
+                            {' - '}
+                            {roomData.userList.length} / {roomData.maxUserSize}
+                        </p>)}
                 </Fieldset>
             </Form>
         </Page>;

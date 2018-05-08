@@ -23,8 +23,6 @@ import type {AllRoomSettingsType, PushedStatePayloadType, ServerUserType} from '
 import * as serverApi from './../../module/server-api';
 import mapGuide from './../../maps/map-guide';
 import {getCommanderDataByUserIndex} from './../../components/game/model/helper';
-
-import {type MatchType} from './../../app/routes';
 import type {BuildingType, MapType, MapUserType, UnitType} from './../../maps/type';
 
 import Page from './../../components/ui/page';
@@ -34,6 +32,8 @@ import Form from './../../components/ui/form';
 import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
 import BottomBar from './../../components/ui/bottom-bar';
+import {getRoomState} from './../join-room/helper';
+import type {ContextRouter} from 'react-router-dom';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -43,26 +43,18 @@ type StateType = {|
 |};
 
 type PropsType = {|
-    match: MatchType
+    ...ContextRouter
 |};
 
 class Room extends Component<PropsType, StateType> {
     props: PropsType;
-    state: StateType;
+    state: StateType = {
+        userList: [],
+        model: new MainModel(),
+        isGameStart: false
+    };
 
-    constructor() {
-        super();
-
-        const view = this;
-
-        view.state = {
-            userList: [],
-            model: new MainModel(),
-            isGameStart: false
-        };
-    }
-
-    async componentDidMount(): Promise<string> {
+    async componentDidMount(): Promise<void> {
         const view = this;
         const {props, state} = view;
 
@@ -70,7 +62,15 @@ class Room extends Component<PropsType, StateType> {
 
         if (roomId === '') {
             console.error('room id is not define!!!');
-            return '';
+            return;
+        }
+
+        const roomState = await getRoomState(roomId);
+
+        if (roomState === null || roomState.userList.length > roomState.maxUserSize) {
+            console.error('roomState is null or room state is fool', roomState);
+            props.history.goBack();
+            return;
         }
 
         // try to join into room, in case disconnected, nah
@@ -89,8 +89,6 @@ class Room extends Component<PropsType, StateType> {
         view.bindEventListeners();
 
         await view.onServerUserListChange();
-
-        return roomId;
     }
 
     async componentWillUnmount(): Promise<void> {
@@ -101,7 +99,8 @@ class Room extends Component<PropsType, StateType> {
 
         model.destroy();
 
-        // const leaveRoomResult = await serverApi.leaveRoom(roomId, user.getId());
+        // needed if game did not started
+        const leaveRoomResult = await serverApi.leaveRoom(roomId, user.getId());
     }
 
     bindEventListeners() {
