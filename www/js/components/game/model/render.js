@@ -17,6 +17,15 @@ import Building from './building';
 import {tween} from './../../../lib/tween';
 import Viewport from 'pixi-viewport';
 
+import borderImage1 from './../i/border/1.png';
+import borderImage2 from './../i/border/2.png';
+import borderImage3 from './../i/border/3.png';
+import borderImage4 from './../i/border/4.png';
+import borderImage6 from './../i/border/6.png';
+import borderImage7 from './../i/border/7.png';
+import borderImage8 from './../i/border/8.png';
+import borderImage9 from './../i/border/9.png';
+
 type InitializeConfigType = {|
     width: number,
     height: number,
@@ -102,6 +111,8 @@ export default class Render {
         const mainContainer = new PIXI.Container();
 
         render.mainContainer = mainContainer;
+
+        render.drawBorder(worldSize.width, worldSize.height);
 
         mainContainer.position.set(stagePadding.top, stagePadding.left);
         mainContainer.addChild(render.layer.landscape);
@@ -353,5 +364,58 @@ export default class Render {
         render.layer.actions.removeChild(attackSprite);
 
         return Promise.resolve();
+    }
+
+    drawBorder(width: number, height: number) { // eslint-disable-line max-statements
+        const render = this; // eslint-disable-line consistent-this
+        const {mainContainer} = render;
+        const {square} = mapGuide.size;
+
+        const border = new PIXI.Container();
+
+        const top = -square;
+        const right = width - stagePadding.right - stagePadding.left;
+        const bottom = height - stagePadding.top - stagePadding.bottom;
+        const left = -square;
+
+        const borderSprite1 = PIXI.Sprite.fromImage(borderImage1);
+        const borderSprite2 = PIXI.Sprite.fromImage(borderImage2);
+        const borderSprite3 = PIXI.Sprite.fromImage(borderImage3);
+        const borderSprite4 = PIXI.Sprite.fromImage(borderImage4);
+        const borderSprite6 = PIXI.Sprite.fromImage(borderImage6);
+        const borderSprite7 = PIXI.Sprite.fromImage(borderImage7);
+        const borderSprite8 = PIXI.Sprite.fromImage(borderImage8);
+        const borderSprite9 = PIXI.Sprite.fromImage(borderImage9);
+
+        borderSprite1.position.set(left, top);
+
+        borderSprite2.position.set(0, top);
+        borderSprite2.width = right;
+
+        borderSprite3.position.set(right, top);
+
+        borderSprite4.position.set(left, 0);
+        borderSprite4.height = bottom;
+
+        borderSprite6.position.set(right, 0);
+        borderSprite6.height = bottom;
+
+        borderSprite7.position.set(left, bottom);
+
+        borderSprite8.position.set(0, bottom);
+        borderSprite8.width = right;
+
+        borderSprite9.position.set(right, bottom);
+
+        border.addChild(borderSprite1);
+        border.addChild(borderSprite2);
+        border.addChild(borderSprite3);
+        border.addChild(borderSprite4);
+        border.addChild(borderSprite6);
+        border.addChild(borderSprite7);
+        border.addChild(borderSprite8);
+        border.addChild(borderSprite9);
+
+        mainContainer.addChild(border);
     }
 }

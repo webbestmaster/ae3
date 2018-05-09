@@ -4,6 +4,7 @@ import {Rectangle, Texture} from 'pixi.js';
 
 type ApplicationOptionsType = {|
     autoStart?: boolean,
+    transparent?: boolean,
     backgroundColor?: number,
     view?: HTMLElement,
     resolution?: number,
@@ -36,6 +37,8 @@ declare module 'pixi.js' {
 
     declare class PixiObject {
         on(string: 'click' | 'tap', callback: () => void): void,
+        width: number,
+        height: number,
         interactive: boolean,
         buttonMode: boolean,
         hitArea: Rectangle,
