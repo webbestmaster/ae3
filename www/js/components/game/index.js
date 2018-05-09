@@ -538,7 +538,7 @@ export class GameView extends Component<PropsType, StateType> {
 
         const storeState = view.getStoreState();
 
-        return <Page>
+        return <Page className={style.game_page}>
 
             {view.renderStore()}
 

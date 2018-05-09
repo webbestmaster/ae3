@@ -68,10 +68,11 @@ export default class Render {
 
         const app = new PIXI.Application(setting.width, setting.height, {
             view: setting.view,
-            clearBeforeRender: false,
+            clearBeforeRender: true,
             sharedTicker: true,
             sharedLoader: true,
-            backgroundColor: 0x1099bb,
+            transparent: true,
+            // backgroundColor: 0x1099bb,
             resolution: window.devicePixelRatio || 1
         });
 
