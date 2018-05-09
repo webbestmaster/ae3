@@ -24,14 +24,14 @@ import classnames from 'classnames';
 
 import Dialog, {DialogTitle} from 'material-ui/Dialog';
 
-import Slide from 'material-ui/transitions/Slide';
+// import Slide from 'material-ui/transitions/Slide';
 import Page from './../../components/ui/page';
 import BottomBar from './../../components/ui/bottom-bar';
 import find from 'lodash/find';
 
-function Transition(props: mixed): Node {
-    return <Slide direction="up" {...props} />;
-}
+// function Transition(props: mixed): Node {
+//     return <Slide direction="up" {...props} />;
+// }
 
 export const bottomBarData = {
     height: 64
@@ -380,7 +380,7 @@ export class GameView extends Component<PropsType, StateType> {
 
         return <Dialog
             open={popup.endGame.isOpen}
-            transition={Transition}
+            // transition={Transition}
             keepMounted
             onClose={() => {
                 view.leaveGame();
@@ -481,7 +481,7 @@ export class GameView extends Component<PropsType, StateType> {
 
         return <Dialog
             open={popup.changeActiveUser.isOpen}
-            transition={Transition}
+            // transition={Transition}
             keepMounted
             // onClose={() => {
             //     view.popupChangeActiveUser({isOpen: false});

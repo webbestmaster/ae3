@@ -455,17 +455,11 @@ export default class Game {
     async syncMapWithServerUserList(message: SocketMessageType): Promise<void> {
         const game = this; // eslint-disable-line consistent-this
 
-        game.render.cleanActionsList();
-
         const newMap = game.getMapState();
 
         if (newMap === null) {
             return;
         }
-
-        game.unitList.forEach((unitInList: Unit) => {
-            unitInList.setIsActionAvailable(true);
-        });
 
         const messageActiveUserId = typeof message.states.last.activeUserId === 'string' ?
             message.states.last.activeUserId :
