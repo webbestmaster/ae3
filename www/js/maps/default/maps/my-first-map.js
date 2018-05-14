@@ -1,15 +1,16 @@
 // @flow
-// for map test only
+
+/* eslint id-length: [ "error", { "min": 3, "max": 34, "exceptions": ["x", "y", "en", "ru"] } ] */
 
 import type {MapType} from './../../type';
 
-const myFirstMap: MapType = {
+export const myFirstMap: MapType = {
     meta: {
-        en: { // eslint-disable-line id-length
+        en: {
             local: 'en',
             name: 'my first map'
         },
-        ru: { // eslint-disable-line id-length
+        ru: {
             local: 'ru',
             name: 'моя первая карта'
         }
@@ -438,4 +439,3 @@ const myFirstMap: MapType = {
     ]
 };
 
-export {myFirstMap};

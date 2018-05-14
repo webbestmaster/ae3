@@ -15,9 +15,12 @@ import Header from './../../components/ui/header';
 import Form from './../../components/ui/form';
 import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
+import * as mapHash from './../../maps/default/map-list';
 
-const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
-const mapList: Array<MapType> = mapReqContext.keys().map(mapReqContext);
+// const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
+// const mapList: Array<MapType> = mapReqContext.keys().map(mapReqContext);
+
+const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
 type StateType = {|
     mapIndex: number,
