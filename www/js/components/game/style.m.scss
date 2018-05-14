@@ -1,21 +1,22 @@
-@import "./../ui/button/style.m";
-@import "./../../../css/var";
+@import './../ui/button/style.m';
+@import './../../../css/var';
 
 .end_turn {
-    @extend .button;
-    font-family: $mainFontFamily;
+    @extend %button;
+
+    background-color: rgba(0, 0, 0, 0.5);
+    color: $main-text-color;
+    font-family: $main-font-family;
+    font-size: 40px;
+    font-weight: bold;
+    padding: 3px 5px 3px 14px;
     position: absolute;
     right: 10px;
     top: 10px;
-    padding: 3px 5px 3px 14px;
-    font-size: 40px;
-    font-weight: bold;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: $mainTextColor;
 
     &:before {
+        border-color: $main-text-color;
         border-width: 5px;
-        border-color: $mainTextColor;
     }
 
     &:after {
@@ -24,10 +25,10 @@
 }
 
 .game_page {
-    overflow: hidden;
     background-color: #333;
     background-image: url('./i/game-bg.jpg');
-    background-repeat: no-repeat;
     background-position: center center;
+    background-repeat: no-repeat;
     background-size: cover;
+    overflow: hidden;
 }

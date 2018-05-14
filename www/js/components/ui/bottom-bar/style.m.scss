@@ -1,9 +1,10 @@
-@import "./../button/style.m.scss";
-@import "./../header/style.m.scss";
+@import './../button/style.m';
+@import './../header/style.m';
 
 .bottom_bar {
-    @extend .button;
-    @extend .header;
+    @extend %button;
+    @extend %header;
+
     background-color: #333;
 }
 

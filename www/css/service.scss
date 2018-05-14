@@ -1,7 +1,7 @@
+/* stylelint-disable selector-pseudo-class-no-unknown, max-nesting-depth */
+
 :global {
-
     body {
-
         .hidden {
             display: none !important;
         }
@@ -13,25 +13,26 @@
 
         .clear-self {
             &:after {
-                display: block;
-                content: '';
                 clear: both;
+                content: '';
+                display: block;
             }
         }
 
         .clear-full {
             clear: both;
+
             &:after {
-                display: block;
-                content: '';
                 clear: both;
+                content: '';
+                display: block;
             }
         }
 
         .ellipsis {
+            overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            overflow: hidden;
         }
 
         .ta-c {
@@ -59,15 +60,15 @@
         }
 
         .w50-c {
-            width: 50%;
             margin-left: auto;
             margin-right: auto;
+            width: 50%;
         }
 
         .w75-c {
-            width: 75%;
             margin-left: auto;
             margin-right: auto;
+            width: 75%;
         }
     }
 

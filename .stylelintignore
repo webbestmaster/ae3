@@ -1,0 +1,19 @@
+# before
+_before
+_before_
+_before-2
+_before-3
+_before-4
+
+# dist
+/dist/
+/prod/
+
+# res
+/_res
+
+# example
+# /* eslint-disable no-unused-vars */
+# var React = require('react');
+# /* eslint-enable no-unused-vars */
+# var React = require('react'); // eslint-disable-line no-unused-vars

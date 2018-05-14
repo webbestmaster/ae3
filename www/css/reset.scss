@@ -1,3 +1,5 @@
+/* stylelint-disable selector-list-comma-newline-after */
+
 /*
 
 HTML5 CSS Reset
@@ -8,7 +10,8 @@ Copyright (c) 2011 736 Computing Services Limited
 Released under the MIT license. http://opensource.736cs.com/licenses/mit
 
 */
-@import "./var";
+
+@import './var';
 
 html, body, div, span, applet, object, iframe,
 button, input, textarea, main,
@@ -22,17 +25,17 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, audio, canvas, details, figcaption,
 figure, footer, header, hgroup, mark, menu, meter, nav,
 output, progress, section, summary, time, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    outline: 0;
-    vertical-align: baseline;
     background-color: transparent;
-    font-weight: normal;
-    font-family: "Lucida Console", monospace;
+    border: 0;
+    font-family: 'Lucida Console', monospace;
     font-size: 14px;
+    font-weight: normal;
     line-height: 1.15;
+    margin: 0;
+    outline: 0;
+    padding: 0;
     text-decoration: none;
+    vertical-align: baseline;
 }
 
 canvas {
