@@ -27,6 +27,8 @@ const definePluginParams = {
     IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
 };
 
+const fileRETest = /\.(png|jpg|jpeg|gif|svg)(\?[a-z0-9=&.]+)?$/;
+
 const webpackConfig = {
     entry: [
         'babel-polyfill',
@@ -59,10 +61,16 @@ const webpackConfig = {
                             reuseExistingChunk: true,
                             test: /\.scss$/
                         },
+                        file: {
+                            chunks: 'initial',
+                            name: 'file',
+                            priority: -10,
+                            test: fileRETest
+                        },
                         vendor: {
                             chunks: 'initial',
                             name: 'vendor',
-                            priority: -10,
+                            priority: -5,
                             test: /node_modules/
                         }
                     }
@@ -78,7 +86,7 @@ const webpackConfig = {
                 loader: 'babel-loader'
             },
             {
-                test: /\.(png|jpg|jpeg|gif|svg)(\?[a-z0-9=&.]+)?$/,
+                test: fileRETest,
                 use: {
                     loader: 'base64-inline-loader',
                     // - limit - The limit can be specified with a query parameter. (Defaults to no limit).
