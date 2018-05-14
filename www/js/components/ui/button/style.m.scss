@@ -2,7 +2,8 @@
 $button-text-color: #0fe0f5;
 $button-shadow-color: #222;
 
-.button {
+.button,
+%button {
     background-color: transparent;
     box-sizing: border-box;
     color: $button-text-color;

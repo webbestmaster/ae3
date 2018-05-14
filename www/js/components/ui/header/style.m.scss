@@ -1,6 +1,7 @@
 @import './../button/style.m';
 
-.header {
+.header,
+%header {
     @extend %button;
 
     cursor: auto;
