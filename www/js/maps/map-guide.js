@@ -38,6 +38,10 @@ export type MapGuideType = {|
             pathReduce: 1,
             armor: 0
         |},
+        bridge: {|
+            pathReduce: 1,
+            armor: 0
+        |},
         terra: {|
             pathReduce: 1,
             armor: 1
@@ -113,6 +117,10 @@ const mapGuide: MapGuideType = {
     },
     landscape: {
         road: {
+            pathReduce: 1,
+            armor: 0
+        },
+        bridge: {
             pathReduce: 1,
             armor: 0
         },

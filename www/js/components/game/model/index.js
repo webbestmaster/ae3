@@ -452,10 +452,11 @@ export default class Game {
         console.log('---> take turn, but NOT for me');
     }
 
-    async syncMapWithServerUserList(message: SocketMessageType): Promise<void> {
+    async syncMapWithServerUserList(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
         const game = this; // eslint-disable-line consistent-this
 
         const newMap = game.getMapState();
+        const currentMap = JSON.parse(JSON.stringify(newMap));
 
         if (newMap === null) {
             return;
@@ -510,6 +511,10 @@ export default class Game {
             });
         });
 
+        if (isEqual(currentMap, newMap)) {
+            return;
+        }
+
         game.gameView.addDisableReason('sync-map-with-server-user-list');
 
         serverApi
@@ -526,7 +531,7 @@ export default class Game {
                 }
             )
             .then((response: mixed) => {
-                console.log('---> unit action move pushed');
+                console.log('---> user action sync-map-with-server-user-list');
                 console.log(response);
             })
             .catch((error: Error) => {
@@ -1862,6 +1867,8 @@ export default class Game {
             line.forEach((landscapeItem: LandscapeType, tileX: number) => {
                 const landscapeImageType = map.landscape[tileY][tileX];
                 const landscapeType = landscapeImageType.replace(/-\d$/, '');
+
+                console.log(landscapeType);
                 const pathReduce = mapGuide.landscape[landscapeType].pathReduce;
 
                 pathMap[tileY].push(pathReduce);

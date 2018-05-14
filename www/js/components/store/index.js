@@ -122,7 +122,7 @@ class Store extends Component<PropsType, StateType> {
                 }
             )
             .then((response: mixed) => {
-                console.log('---> unit action move pushed');
+                console.log('---> user action buy unit');
                 console.log(response);
             })
             .catch((error: Error) => {
