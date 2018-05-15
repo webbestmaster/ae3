@@ -20,11 +20,11 @@ const IS_PRODUCTION = NODE_ENV === PRODUCTION;
 
 const CWD = __dirname;
 
-// const definePluginParams = {
-// NODE_ENV: JSON.stringify(NODE_ENV)
-// IS_PRODUCTION: JSON.stringify(IS_PRODUCTION)
-// IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
-// };
+const definePluginParams = {
+    NODE_ENV: JSON.stringify(NODE_ENV),
+    IS_PRODUCTION: JSON.stringify(IS_PRODUCTION)
+    // IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
+};
 
 const fileRETest = /\.(png|jpg|jpeg|gif|svg)(\?[a-z0-9=&.]+)?$/;
 
@@ -129,7 +129,7 @@ const webpackConfig = {
         ]
     },
     plugins: [
-        // new webpack.DefinePlugin(definePluginParams),
+        new webpack.DefinePlugin(definePluginParams),
         new HtmlWebpackPlugin({
             template: './www/index.html',
             minify: {

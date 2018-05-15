@@ -1,5 +1,5 @@
 // @flow
-/* global window */
+/* global window, IS_PRODUCTION */
 
 export type AppConstType = {|
     +api: {|
@@ -7,10 +7,11 @@ export type AppConstType = {|
     |}
 |};
 
+const {hostname, origin} = window.location;
 
 const appConst: AppConstType = {
     api: {
-        url: 'http://' + window.location.hostname + ':3001'
+        url: IS_PRODUCTION ? origin : 'http://' + hostname + ':3001' // eslint-disable-line id-match
     }
 };
 
