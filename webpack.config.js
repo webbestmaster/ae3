@@ -6,7 +6,6 @@ const webpack = require('webpack');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer'); // eslint-disable-line no-unused-vars
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 
 const DEVELOPMENT = 'development';
@@ -21,11 +20,11 @@ const IS_PRODUCTION = NODE_ENV === PRODUCTION;
 
 const CWD = __dirname;
 
-const definePluginParams = {
-    NODE_ENV: JSON.stringify(NODE_ENV)
-    // IS_PRODUCTION: JSON.stringify(IS_PRODUCTION)
-    // IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
-};
+// const definePluginParams = {
+// NODE_ENV: JSON.stringify(NODE_ENV)
+// IS_PRODUCTION: JSON.stringify(IS_PRODUCTION)
+// IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
+// };
 
 const fileRETest = /\.(png|jpg|jpeg|gif|svg)(\?[a-z0-9=&.]+)?$/;
 
@@ -130,7 +129,7 @@ const webpackConfig = {
         ]
     },
     plugins: [
-        new webpack.DefinePlugin(definePluginParams),
+        // new webpack.DefinePlugin(definePluginParams),
         new HtmlWebpackPlugin({
             template: './www/index.html',
             minify: {
@@ -151,7 +150,6 @@ const webpackConfig = {
 
 if (IS_PRODUCTION) {
     webpackConfig.plugins.push(
-        new LodashModuleReplacementPlugin(),
         new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
     );
 }
