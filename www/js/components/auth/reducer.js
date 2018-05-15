@@ -8,7 +8,7 @@ import {combineReducers} from 'redux';
 import type {SetSocketType, SetUserType} from './action';
 
 export type UserType = {|
-    id: string
+    +id: string
 |};
 
 const defaultUserState: UserType = {
@@ -17,7 +17,7 @@ const defaultUserState: UserType = {
 
 
 export type SocketType = {|
-    id: string
+    +id: string
 |};
 
 const defaultSocketState: SocketType = {

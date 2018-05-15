@@ -1867,8 +1867,6 @@ export default class Game {
             line.forEach((landscapeItem: LandscapeType, tileX: number) => {
                 const landscapeImageType = map.landscape[tileY][tileX];
                 const landscapeType = landscapeImageType.replace(/-\d$/, '');
-
-                console.log(landscapeType);
                 const pathReduce = mapGuide.landscape[landscapeType].pathReduce;
 
                 pathMap[tileY].push(pathReduce);

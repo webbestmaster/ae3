@@ -2,9 +2,9 @@
 /* global window */
 
 export type AppConstType = {|
-    api: {
-        url: string
-    }
+    +api: {|
+        +url: string
+    |}
 |};
 
 
