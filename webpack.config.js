@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer'); // eslint-disable-line no-unused-vars
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const DEVELOPMENT = 'development';
 const PRODUCTION = 'production';
@@ -144,7 +145,8 @@ const webpackConfig = {
         new ScriptExtHtmlWebpackPlugin({
             defaultAttribute: 'defer'
             // defaultAttribute: IS_PRODUCTION ? 'async' : 'defer'
-        })
+        }),
+        new CopyWebpackPlugin([{from: './www/favicon.ico', to: './favicon.ico'}], {debug: 'info'})
     ]
 };
 
