@@ -37,8 +37,8 @@ const webpackConfig = {
         IS_PRODUCTION ? './www/js/index-prod.js' : './www/js/index-dev.js'
     ],
     output: {
-        path: path.join(CWD, '/dist')
-        // filename: '[name].js'
+        path: path.join(CWD, '/dist'),
+        publicPath: '/'
     },
 
     devtool: IS_DEVELOPMENT ? 'source-map' : false,
@@ -52,26 +52,26 @@ const webpackConfig = {
                         main: {
                             chunks: 'initial',
                             name: 'main',
-                            priority: -20,
+                            priority: -25,
                             reuseExistingChunk: true
                         },
                         style: {
                             chunks: 'initial',
                             name: 'style',
-                            priority: -15,
+                            priority: -20,
                             reuseExistingChunk: true,
                             test: /\.scss$/
                         },
                         file: {
                             chunks: 'initial',
                             name: 'file',
-                            priority: -10,
+                            priority: -15,
                             test: fileRETest
                         },
                         vendor: {
                             chunks: 'initial',
                             name: 'vendor',
-                            priority: -5,
+                            priority: -10,
                             test: /node_modules/
                         }
                     }
