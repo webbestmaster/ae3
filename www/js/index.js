@@ -7,6 +7,8 @@ import {BrowserRouter} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import {applyMiddleware, combineReducers, createStore} from 'redux';
+import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
+
 import App from './app';
 import {initializeEnvironment} from './app/helper.js';
 
@@ -18,9 +20,11 @@ const reducer = combineReducers({
     ...reducers
 });
 
-// TODO: wait for flow-typed redux@4.x.x
-// $FlowFixMe
-const store = createStore(reducer, applyMiddleware(thunk));
+const composeEnhancers = composeWithDevTools({
+    // options like actionSanitizer, stateSanitizer
+});
+
+const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
 
 render(
     <Provider store={store}>

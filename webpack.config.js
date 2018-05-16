@@ -23,7 +23,7 @@ const IS_PRODUCTION = NODE_ENV === PRODUCTION;
 const CWD = __dirname;
 
 const definePluginParams = {
-    NODE_ENV: JSON.stringify(NODE_ENV),
+    // NODE_ENV: JSON.stringify(NODE_ENV),
     IS_PRODUCTION: JSON.stringify(IS_PRODUCTION)
     // IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
 };
@@ -34,7 +34,7 @@ const webpackConfig = {
     entry: [
         'babel-polyfill',
         './www/css/root.scss',
-        IS_PRODUCTION ? './www/js/index-prod.js' : './www/js/index-dev.js'
+        './www/js/index.js'
     ],
     output: {
         path: path.join(CWD, '/dist'),
@@ -158,6 +158,6 @@ if (IS_PRODUCTION) {
     );
 }
 
-// webpackConfig.plugins.push(new BundleAnalyzerPlugin());
+webpackConfig.plugins.push(new BundleAnalyzerPlugin());
 
 module.exports = webpackConfig;
