@@ -13,9 +13,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const DEVELOPMENT = 'development';
 const PRODUCTION = 'production';
 
-process.env.NODE_ENV = process.env.NODE_ENV || DEVELOPMENT;
-
-const NODE_ENV = process.env.NODE_ENV;
+const NODE_ENV = process.env.NODE_ENV || DEVELOPMENT;
 
 const IS_DEVELOPMENT = NODE_ENV === DEVELOPMENT;
 const IS_PRODUCTION = NODE_ENV === PRODUCTION;
