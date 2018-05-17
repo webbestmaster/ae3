@@ -101,12 +101,11 @@ export default class Render {
         app.stage.addChild(viewport);
 
         viewport
-            .drag({clampWheel: true})
+            .drag()
             .wheel()
             .pinch()
             .decelerate()
-            .bounce()
-            .resize();
+            .bounce();
 
         const mainContainer = new PIXI.Container();
 
