@@ -42,7 +42,7 @@ const webpackConfig = {
         publicPath: '/'
     },
 
-    devtool: IS_PRODUCTION ? false: 'source-map',
+    devtool: IS_PRODUCTION ? false : 'source-map',
 
     optimization: Object.assign(
         {},
@@ -152,15 +152,10 @@ const webpackConfig = {
             defaultAttribute: 'defer'
             // defaultAttribute: IS_PRODUCTION ? 'async' : 'defer'
         }),
-        new CopyWebpackPlugin([{from: './www/favicon.ico', to: './favicon.ico'}], {debug: 'info'})
+        new CopyWebpackPlugin([{from: './www/favicon.ico', to: './favicon.ico'}], {debug: 'info'}),
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
     ]
 };
-
-if (IS_PRODUCTION) {
-    webpackConfig.plugins.push(
-        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
-    );
-}
 
 // webpackConfig.plugins.push(new BundleAnalyzerPlugin());
 
