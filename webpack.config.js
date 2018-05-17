@@ -42,7 +42,7 @@ const webpackConfig = {
         publicPath: '/'
     },
 
-    devtool: IS_DEVELOPMENT ? 'source-map' : false,
+    devtool: IS_PRODUCTION ? false: 'source-map',
 
     optimization: Object.assign(
         {},
