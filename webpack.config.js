@@ -147,8 +147,7 @@ const webpackConfig = {
             // filename: IS_PRODUCTION ? './../index.html' : './index.html'
         }),
         new ScriptExtHtmlWebpackPlugin({
-            defaultAttribute: 'defer'
-            // defaultAttribute: IS_PRODUCTION ? 'async' : 'defer'
+            defaultAttribute: IS_PRODUCTION ? 'async' : 'defer'
         }),
         new CopyWebpackPlugin([{from: './www/favicon.ico', to: './favicon.ico'}], {debug: 'info'}),
         new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
