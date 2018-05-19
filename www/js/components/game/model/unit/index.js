@@ -795,7 +795,7 @@ export default class Unit {
         });
     }
 
-    move(x: number, y: number, movePath: PathType): Promise<void> {
+    move(x: number, y: number, movePath: PathType, callback?: (x: number, y: number) => void): Promise<void> {
         const unit = this;
         const {attr, gameAttr} = unit;
         const {square} = mapGuide.size;
@@ -807,6 +807,12 @@ export default class Unit {
 
         return tweenList(movePath, defaultUnitData.animation.moveStep, (pathPoint: PointType) => {
             gameAttr.container.position.set(pathPoint[0] * square, pathPoint[1] * square);
+
+            if (typeof callback !== 'function') {
+                return;
+            }
+
+            callback(pathPoint[0], pathPoint[1]);
         })
             .then(() => {
             });

@@ -621,7 +621,14 @@ export default class Game {
             return Promise.resolve();
         }
 
-        await unitModel.move(state.to.x, state.to.y, state.path);
+        const isMyUnit = unitModel.getUserId() === user.getId();
+
+        await unitModel.move(state.to.x, state.to.y, state.path, (x: number, y: number) => {
+            if (isMyUnit) {
+                return;
+            }
+            game.render.moveWorldTo(x, y);
+        });
 
         game.onUnitClick(unitModel);
 
@@ -989,6 +996,12 @@ export default class Game {
         const newGameUnit = game.createUnit(state.newMapUnit);
 
         game.onUnitClick(newGameUnit);
+
+        const isMyUnit = newGameUnit.getUserId() === user.getId();
+
+        if (!isMyUnit) {
+            game.render.moveWorldTo(newGameUnit.attr.x, newGameUnit.attr.y);
+        }
 
         return Promise.resolve();
     }

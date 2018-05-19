@@ -141,6 +141,15 @@ export default class Render {
         render.moveCenterTo(worldSize.width / 2, worldSize.height / 2);
     }
 
+    // x, y - game world coordinates
+    moveWorldTo(x: number, y: number) {
+        const render = this;
+        const {square} = mapGuide.size;
+        const halfSquare = square / 2;
+
+        render.moveCenterTo(x * square + halfSquare + stagePadding.left, y * square + halfSquare + stagePadding.top);
+    }
+
     getWorldSize(): { width: number, height: number } {
         const render = this;
         const {map} = render;
