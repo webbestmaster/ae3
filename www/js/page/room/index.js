@@ -196,7 +196,7 @@ class Room extends Component<PropsType, StateType> {
 
             case 'room__push-state':
                 if (message.states.last.state.isGameStart === true) {
-                    console.warn('---> The game has begun!!!');
+                    console.log('---> The game has begun!!!');
 
                     view.unbindEventListeners();
 

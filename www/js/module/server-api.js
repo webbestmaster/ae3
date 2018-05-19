@@ -68,7 +68,7 @@ export type SetAllRoomSettingsType = {|
 
 export function setAllRoomSettings(roomId: string,
                                    allRoomSettings: AllRoomSettingsType): Promise<SetAllRoomSettingsType> {
-    console.warn('---> use this method in room only, not in game or other views');
+    // WARNING: use this method in room only, not in game or other views
 
     return fetch(url + '/api/room/set-all-settings/' + roomId, {
         method: 'POST',
@@ -96,7 +96,7 @@ export type SetRoomSettingType = {|
 
 export function setRoomSetting(roomId: string,
                                roomSetting: RoomSettingUserListType | RoomSettingMapType): Promise<SetRoomSettingType> {
-    console.warn('---> use this method in room only, not in game or other views');
+    // WARNING: use this method in room only, not in game or other views
 
     return fetch(url + '/api/room/set-setting/' + roomId, {
         method: 'POST',

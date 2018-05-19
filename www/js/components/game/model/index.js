@@ -190,12 +190,6 @@ export default class Game {
                 game.onMessageQueue.push(async (): Promise<void> => {
                     game.gameView.addDisableReason('server-receive-message');
 
-                    // TODO: CATCH error response !!!
-                    // TODO: how I can get error response from web-socket ???
-                    // console.warn('CATCH error response !!!');
-                    console.warn('check message.states.length', message.states.length);
-                    console.warn('every next message should be bigger by 1 then previous');
-
                     await game.onMessage(message);
 
                     game.gameView.removeDisableReason('server-receive-message');
@@ -1141,7 +1135,7 @@ export default class Game {
 
         game.buildingList.push(building);
 
-        console.warn('TODO: pass from game in props callback for on castle click');
+        // console.warn('pass from game in props callback for on castle click');
 
         building.gameAttr.container.on(getEventName('click'), () => {
             if (building.attr.type !== 'castle') {
@@ -1170,9 +1164,8 @@ export default class Game {
 
             game.render.cleanActionsList();
 
-            // TODO: pass from game in props callback for on castle click
-            console.warn('TODO: pass from game in props callback for on castle click');
-            console.log('click on building - castle');
+            // console.warn('pass from game in props callback for on castle click');
+            // console.log('click on building - castle');
         });
 
         game.render.addBuilding(building.gameAttr.container);

@@ -204,8 +204,8 @@ const webpackConfig = {
                 minifyCSS: IS_PRODUCTION,
                 minifyJS: IS_PRODUCTION
             },
-            hash: true
-            // filename: IS_PRODUCTION ? './../index.html' : './index.html'
+            hash: true,
+            filename: './index.html'
         }),
         new ScriptExtHtmlWebpackPlugin({
             defaultAttribute: IS_PRODUCTION ? 'async' : 'defer'
