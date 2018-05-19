@@ -19,6 +19,7 @@ $button-shadow-color: #222;
     text-shadow: 4px 6px $button-shadow-color;
     text-transform: uppercase;
     transition: color 0.5s;
+    user-select: none;
     z-index: 0;
 
     &:before,

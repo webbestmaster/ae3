@@ -12,6 +12,16 @@ import {defaultOptions, getPath} from './../../../lib/a-star-finder';
 import type {MapType, UnitType} from './../../../maps/type';
 import find from 'lodash/find';
 import type {BuildingType, MapUserType} from '../../../maps/type';
+import * as PIXI from 'pixi.js';
+
+type InteractionEventType = {|
+    +data: {|
+        +global: {|
+            +x: number,
+            +y: number
+        |}
+    |}
+|};
 
 export function getUserIndex(userId: string, userList: Array<MapUserType>): number | null {
     let userIndex = 0;
@@ -265,22 +275,54 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
     };
 }
 
-export function getEventName(pcEventName: 'click'): 'click' | 'tap' {
-    const eventNameMap = {
-        click: 'tap'
+type MouseEventNameType = 'click' | 'mousedown' | 'mouseup';
+type TouchEventNameType = 'tap' | 'touchstart' | 'touchend';
+type EventNameMapType = { +[key: MouseEventNameType]: TouchEventNameType };
+
+function getEventName(MouseEventName: MouseEventNameType): MouseEventNameType | TouchEventNameType {
+    const eventNameMap: EventNameMapType = {
+        click: 'tap',
+        mousedown: 'touchstart',
+        mouseup: 'touchend'
     };
 
-    const hasInMap = typeof eventNameMap[pcEventName] === 'string';
+    const hasInMap = typeof eventNameMap[MouseEventName] === 'string';
 
     // check for mobile events
     if ('ontouchstart' in document) {
-        if (hasInMap) {
-            return eventNameMap[pcEventName];
-        }
-        return 'tap';
+        return hasInMap ? eventNameMap[MouseEventName] : 'tap';
     }
 
-    return hasInMap ? pcEventName : 'click';
+    return hasInMap ? MouseEventName : 'click';
+}
+
+export function bindClick(container: PIXI.Container, callback: () => void) {
+    const containerEvent = {
+        startTouch: {
+            x: NaN,
+            y: NaN
+        }
+    };
+
+    container.on(getEventName('mousedown'), (interactionEvent: InteractionEventType) => {
+        containerEvent.startTouch.x = interactionEvent.data.global.x;
+        containerEvent.startTouch.y = interactionEvent.data.global.y;
+    });
+
+    container.on(getEventName('mouseup'), (interactionEvent: InteractionEventType) => {
+        const startX = containerEvent.startTouch.x;
+        const startY = containerEvent.startTouch.y;
+        const endX = interactionEvent.data.global.x;
+        const endY = interactionEvent.data.global.y;
+        const deltaX = startX - endX;
+        const deltaY = startY - endY;
+
+        if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) > 100) { // move delta > 10px - no click
+            return;
+        }
+
+        callback();
+    });
 }
 
 export function procedureMakeGraveForMapUnit(newMap: MapType, mapUnit: AttackResultUnitType) {

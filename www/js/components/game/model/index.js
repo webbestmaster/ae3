@@ -9,7 +9,7 @@ import {unitActionStateDefaultValue} from './../../../maps/type';
 import type {AllRoomSettingsType, ServerUserType} from './../../../module/server-api';
 import * as serverApi from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
-import {countHealHitPointOnBuilding, getEventName, getMatchResult, procedureMakeGraveForMapUnit} from './helper';
+import {bindClick, countHealHitPointOnBuilding, getMatchResult, procedureMakeGraveForMapUnit} from './helper';
 import Render from './render';
 import Building from './building';
 import Grave from './grave';
@@ -1135,9 +1135,7 @@ export default class Game {
 
         game.buildingList.push(building);
 
-        // console.warn('pass from game in props callback for on castle click');
-
-        building.gameAttr.container.on(getEventName('click'), () => {
+        bindClick(building.gameAttr.container, () => {
             if (building.attr.type !== 'castle') {
                 console.log('NOT a castle');
                 return;
@@ -1163,9 +1161,6 @@ export default class Game {
                 '&y=' + building.attr.y);
 
             game.render.cleanActionsList();
-
-            // console.warn('pass from game in props callback for on castle click');
-            // console.log('click on building - castle');
         });
 
         game.render.addBuilding(building.gameAttr.container);
@@ -1198,8 +1193,6 @@ export default class Game {
         } else {
             console.error('grave did NOT removed', grave, graveList);
         }
-
-        // console.warn('Add/update grave here is needed');
 
         game.render.layer.graves.removeChild(grave.gameAttr.container);
         grave.destroy();
@@ -1283,7 +1276,7 @@ export default class Game {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
                 unitActionList.forEach((unitAction: UnitActionType) => {
                     if (unitAction.container) {
-                        unitAction.container.on(getEventName('click'), () => { // eslint-disable-line complexity
+                        bindClick(unitAction.container, () => { // eslint-disable-line complexity
                             switch (unitAction.type) {
                                 case 'move':
                                     game.bindOnClickUnitActionMove(unitAction, actionsList);

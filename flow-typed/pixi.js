@@ -30,13 +30,25 @@ type TextStyleConstructorType = {
     wordWrapWidth?: number
 };
 
+type InteractionEventType = {|
+    +data: {|
+        +global: {|
+            +x: number,
+            +y: number
+        |}
+    |}
+|};
+
+type MouseEventNameType = 'click' | 'mousedown' | 'mouseup';
+type TouchEventNameType = 'tap' | 'touchstart' | 'touchend';
+
 declare module 'pixi.js' {
     declare export var settings: {|
         SCALE_MODE: 0 | 1
     |};
 
     declare class PixiObject {
-        on(string: 'click' | 'tap', callback: () => void): void,
+        on(eventName: MouseEventNameType | TouchEventNameType, callback: (evt: InteractionEventType) => void): void,
         width: number,
         height: number,
         interactive: boolean,

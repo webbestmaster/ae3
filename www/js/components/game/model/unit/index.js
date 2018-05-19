@@ -5,7 +5,7 @@
 import * as PIXI from 'pixi.js';
 import type {MapType, MapUserType, UnitActionStateType, UnitType} from './../../../../maps/type';
 import type {AttackResultUnitType} from './../helper';
-import {getAttackResult, getEventName, getMoviePath, getUserColor} from './../helper';
+import {bindClick, getAttackResult, getMoviePath, getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import type {UnitGuideDataType} from './unit-guide';
 import unitGuide, {defaultUnitData} from './unit-guide';
@@ -789,7 +789,7 @@ export default class Unit {
         unitContainer.interactive = true;
         unitContainer.buttonMode = true;
 
-        unitContainer.on(getEventName('click'), () => {
+        bindClick(unitContainer, () => {
             console.log('click on unit', unit);
             unit.gameAttr.event.click(unit);
         });
