@@ -1,5 +1,7 @@
 // @flow
 
+/* eslint consistent-this: ["error", "unit", "aggressor"] */
+
 import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './../index';
 import Unit from './../index';
 import {getMoviePath} from './../../helper';
@@ -34,7 +36,7 @@ function getItemOfLine(index: number, line: Array<Array<UnitActionType>>): Array
 
 export default class Catapult extends Unit {
     getActions(gameData: GameDataType): UnitActionsMapType | null {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         if (unit.getDidMove()) {
             return null;
@@ -44,7 +46,7 @@ export default class Catapult extends Unit {
     }
 
     getAllAvailableAttack(gameData: GameDataType): AvailablePathMapType {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {x, y, type} = unit.attr;
 
         console.log('catapult');
@@ -78,7 +80,7 @@ export default class Catapult extends Unit {
     }
 
     canAttack(defender: Unit): boolean {
-        const aggressor = this; // eslint-disable-line consistent-this
+        const aggressor = this;
         const range = aggressor.getGuideData().attack.range;
 
         const coordinatesDifferent = Math.abs(defender.attr.x - aggressor.attr.x) +

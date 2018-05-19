@@ -2,13 +2,13 @@
 
 /* global window */
 
-// import * as PIXI from 'pixi.js';
+/* eslint consistent-this: ["error", "game"] */
+
 import type {BuildingType, GraveType, LandscapeType, MapType, MapUserType, UnitType} from './../../../maps/type';
 import {unitActionStateDefaultValue} from './../../../maps/type';
 import type {AllRoomSettingsType, ServerUserType} from './../../../module/server-api';
 import * as serverApi from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
-// import imageMap from './../image/image-map';
 import {countHealHitPointOnBuilding, getEventName, getMatchResult, procedureMakeGraveForMapUnit} from './helper';
 import Render from './render';
 import Building from './building';
@@ -75,7 +75,7 @@ export default class Game {
     |}
 
     constructor() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.initializeProperties();
     }
@@ -83,7 +83,7 @@ export default class Game {
     // '@private' is not works, but it needed to code understanding
     // @private
     initializeProperties() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.onMessageQueue = new Queue();
         game.render = new Render();
@@ -107,7 +107,7 @@ export default class Game {
     }
 
     initialize(renderSetting: RenderSettingType) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.settings.map.units = game.settings.map.units.filter((mapUnitData: UnitType): boolean => {
             return typeof mapUnitData.userId === 'string';
@@ -154,7 +154,7 @@ export default class Game {
     }
 
     bindEventListeners() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {model} = game;
 
         model.listenTo(socket.attr.model,
@@ -201,7 +201,7 @@ export default class Game {
     }
 
     getLastSocketMessage(): SocketMessageType | null {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const messageList = game.message.list;
         const messageListLength = messageList.length;
 
@@ -213,7 +213,7 @@ export default class Game {
     }
 
     getEarnedMoney(userId: string): number | null {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         const newMap = game.getMapState();
 
@@ -239,7 +239,7 @@ export default class Game {
     }
 
     async refreshUnitActionState(): Promise<void> { // eslint-disable-line complexity, max-statements
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.render.cleanActionsList();
 
@@ -372,7 +372,7 @@ export default class Game {
     }
 
     async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         if (message.states.last.state && message.states.last.state.map) {
             game.setMapState(message.states.last.state.map);
@@ -421,7 +421,7 @@ export default class Game {
     }
 
     async handleServerTakeTurn(message: SocketMessageTakeTurnType): Promise<void> {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.render.cleanActionsList();
 
@@ -447,7 +447,7 @@ export default class Game {
     }
 
     async syncMapWithServerUserList(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         const newMap = game.getMapState();
         const currentMap = JSON.parse(JSON.stringify(newMap));
@@ -538,7 +538,7 @@ export default class Game {
     }
 
     async handleServerPushState(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         if (typeof message.states.last.state.type !== 'string') {
             console.error('message.states.last.state.type should be string', message);
@@ -597,7 +597,7 @@ export default class Game {
     }
 
     async handleServerPushStateMove(message: SocketMessagePushStateType): Promise<void> {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const state = message.states.last.state;
 
         if (state.type !== 'move') {
@@ -629,7 +629,7 @@ export default class Game {
     }
 
     async handleServerPushStateAttack(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const state = message.states.last.state;
 
         if (state.type !== 'attack') {
@@ -753,7 +753,7 @@ export default class Game {
     }
 
     async handleServerPushStateFixBuilding(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const state = message.states.last.state;
 
         if (state.type !== 'fix-building') {
@@ -795,7 +795,7 @@ export default class Game {
     }
 
     async handleServerPushStateOccupyBuilding(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements, id-length
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const state = message.states.last.state;
 
         if (state.type !== 'occupy-building') {
@@ -842,7 +842,7 @@ export default class Game {
     }
 
     async handleServerPushStateRaiseSkeleton(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements, id-length
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const state = message.states.last.state;
 
         if (state.type !== 'raise-skeleton') {
@@ -911,7 +911,7 @@ export default class Game {
     }
 
     async handleServerPushStateDestroyBuilding(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements, id-length
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const state = message.states.last.state;
 
         if (state.type !== 'destroy-building') {
@@ -973,7 +973,7 @@ export default class Game {
     }
 
     async handleServerPushStateBuyUnit(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements, id-length
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const state = message.states.last.state;
 
         if (state.type !== 'buy-unit') {
@@ -994,7 +994,7 @@ export default class Game {
     }
 
     async handleServerPushStateSyncMapWithServerUserList(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements, id-length
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const state = message.states.last.state;
 
         if (state.type !== 'sync-map-with-server-user-list') {
@@ -1031,7 +1031,7 @@ export default class Game {
     }
 
     async handleServerRefreshUnitList(message: SocketMessagePushStateType): Promise<void> {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {unitList} = game;
         const socketMapState = message.states.last.state.map;
 
@@ -1123,7 +1123,7 @@ export default class Game {
     }
 
     createBuilding(buildingData: BuildingType) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const mapState = game.getMapState();
 
         if (mapState === null) {
@@ -1172,7 +1172,7 @@ export default class Game {
     }
 
     createGrave(graveData: GraveType) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const grave = new Grave({graveData});
 
         game.graveList.push(grave);
@@ -1181,7 +1181,7 @@ export default class Game {
     }
 
     removeGrave(grave: Grave) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {graveList} = game;
 
         const lengthBeforeRemove = graveList.length;
@@ -1206,7 +1206,7 @@ export default class Game {
     }
 
     createUnit(unitData: UnitType): Unit {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const mapState = game.getMapState();
 
         if (mapState === null) {
@@ -1231,7 +1231,7 @@ export default class Game {
     }
 
     removeUnit(unit: Unit) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {unitList} = game;
 
         const lengthBeforeRemove = unitList.length;
@@ -1256,7 +1256,7 @@ export default class Game {
     }
 
     onUnitClick(unit: Unit) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const unitUserId = typeof unit.attr.userId === 'string' ? unit.attr.userId : null;
 
         if (unitUserId === null) {
@@ -1323,7 +1323,7 @@ export default class Game {
     }
 
     bindOnClickUnitActionMove(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType) { // eslint-disable-line complexity, max-statements
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.render.cleanActionsList();
 
@@ -1405,7 +1405,7 @@ export default class Game {
     }
 
     bindOnClickUnitActionAttack(unitAction: UnitActionAttackType) { // eslint-disable-line complexity, max-statements
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.render.cleanActionsList();
 
@@ -1513,7 +1513,7 @@ export default class Game {
     }
 
     bindOnClickUnitActionFixBuilding(unitAction: UnitActionFixBuildingType) { // eslint-disable-line max-statements, complexity
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.render.cleanActionsList();
 
@@ -1573,7 +1573,7 @@ export default class Game {
     }
 
     bindOnClickUnitActionOccupyBuilding(unitAction: UnitActionOccupyBuildingType) { // eslint-disable-line max-statements, complexity, id-length
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.render.cleanActionsList();
 
@@ -1633,7 +1633,7 @@ export default class Game {
     }
 
     bindOnClickUnitActionRaiseSkeleton(unitAction: UnitActionRaiseSkeletonType) { // eslint-disable-line max-statements, complexity, id-length
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.render.cleanActionsList();
 
@@ -1709,7 +1709,7 @@ export default class Game {
     }
 
     bindOnClickUnitActionDestroyBuilding(unitAction: UnitActionDestroyBuildingType) { // eslint-disable-line max-statements, complexity, id-length
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.render.cleanActionsList();
 
@@ -1790,31 +1790,31 @@ export default class Game {
     }
 
     setSettings(settings: AllRoomSettingsType) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.settings = settings;
     }
 
     setUserList(userList: Array<ServerUserType>) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.userList = userList;
     }
 
     setRoomId(roomId: string) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.roomId = roomId;
     }
 
     setMapState(map: MapType) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.mapState = map;
     }
 
     getMapState(): MapType | null {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         if (game.mapState) {
             return JSON.parse(JSON.stringify(game.mapState));
@@ -1824,19 +1824,19 @@ export default class Game {
     }
 
     setCanvasSize(width: number, height: number) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.render.setCanvasSize(width, height - bottomBarData.height);
     }
 
     setGameView(gameView: GameView) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.gameView = gameView;
     }
 
     initializePathMaps() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.initializeEmptyActionMap();
 
@@ -1851,7 +1851,7 @@ export default class Game {
     }
 
     initializePathMapWalk() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {map} = game.settings;
         const pathMap = [];
 
@@ -1869,7 +1869,7 @@ export default class Game {
     }
 
     initializePathMapFlow() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {map} = game.settings;
         const pathMap = [];
 
@@ -1890,7 +1890,7 @@ export default class Game {
     }
 
     initializePathMapFly() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {map} = game.settings;
         const pathMap = [];
 
@@ -1905,7 +1905,7 @@ export default class Game {
     }
 
     initializeArmorMapWalk() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {map} = game.settings;
         const armorMap = [];
 
@@ -1924,7 +1924,7 @@ export default class Game {
     }
 
     initializeArmorMapFlow() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {map} = game.settings;
         const armorMap = [];
 
@@ -1945,7 +1945,7 @@ export default class Game {
     }
 
     initializeArmorMapFly() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {map} = game.settings;
         const armorMap = [];
 
@@ -1964,7 +1964,7 @@ export default class Game {
     }
 
     initializeEmptyActionMap() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {map} = game.settings;
         const emptyActionMap = [];
 
@@ -1979,7 +1979,7 @@ export default class Game {
     }
 
     checkMapStateUnit(socketMapState: MapType) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {unitList} = game;
 
         // check unit length
@@ -2024,7 +2024,7 @@ export default class Game {
     }
 
     checkMapStateBuilding(socketMapState: MapType) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const {buildingList} = game;
 
         // check building length
@@ -2069,7 +2069,7 @@ export default class Game {
     }
 
     checkMapStateGrave(socketMapState: MapType) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         const {graveList} = game;
 
@@ -2108,7 +2108,7 @@ export default class Game {
     }
 
     checkMapState(socketMapState: MapType) {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.checkMapStateUnit(socketMapState);
         game.checkMapStateBuilding(socketMapState);
@@ -2116,7 +2116,7 @@ export default class Game {
     }
 
     refreshWispAura() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         const gameData = game.getGameData();
 
@@ -2126,7 +2126,7 @@ export default class Game {
     }
 
     getGameData(): GameDataType {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         const mapState = game.getMapState();
 
@@ -2146,7 +2146,7 @@ export default class Game {
     }
 
     async detectAndHandleEndGame(): Promise<void> {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
         const mapState = game.getMapState();
 
         if (mapState === null) {
@@ -2183,7 +2183,7 @@ export default class Game {
     }
 
     destroy() {
-        const game = this; // eslint-disable-line consistent-this
+        const game = this;
 
         game.model.destroy();
 

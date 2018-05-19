@@ -1,6 +1,8 @@
 // @flow
 /* global localStorage, KeyValue */
 
+/* eslint consistent-this: ["error", "user"] */
+
 type UserAttrType = {|
     id: string
 |};
@@ -15,7 +17,7 @@ export default class User {
     attr: UserAttrType;
 
     constructor() {
-        const user = this; // eslint-disable-line consistent-this
+        const user = this;
 
         const attr: UserAttrType = {
             id: ''
@@ -33,7 +35,7 @@ export default class User {
     }
 
     setId(id: string): User {
-        const user = this; // eslint-disable-line consistent-this
+        const user = this;
 
         user.attr.id = id;
 

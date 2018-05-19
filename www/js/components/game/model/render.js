@@ -2,6 +2,8 @@
 
 /* global window */
 
+/* eslint consistent-this: ["error", "render"] */
+
 import * as PIXI from 'pixi.js';
 import type {LandscapeType, MapType} from './../../../maps/type';
 import mapGuide from './../../../maps/map-guide';
@@ -55,7 +57,7 @@ export default class Render {
     mainContainer: PIXI.Container;
 
     constructor() {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
 
         render.layer = {
             landscape: new PIXI.Container(),
@@ -66,8 +68,8 @@ export default class Render {
         };
     }
 
-    initialize(setting: InitializeConfigType) {
-        const render = this; // eslint-disable-line consistent-this
+    initialize(setting: InitializeConfigType) { // eslint-disable-line max-statements
+        const render = this;
 
         render.map = JSON.parse(JSON.stringify(setting.map));
 
@@ -121,10 +123,26 @@ export default class Render {
         mainContainer.addChild(render.layer.actions);
 
         viewport.addChild(mainContainer);
+
+        render.moveToCenter();
+    }
+
+    moveCenterTo(x: number, y: number) {
+        const render = this;
+
+        render.viewport.moveCenter(x, y);
+    }
+
+    moveToCenter() {
+        const render = this;
+
+        const worldSize = render.getWorldSize();
+
+        render.moveCenterTo(worldSize.width / 2, worldSize.height / 2);
     }
 
     getWorldSize(): { width: number, height: number } {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
         const {map} = render;
 
         if (!map || !map.landscape || !map.landscape[0]) {
@@ -141,7 +159,7 @@ export default class Render {
     }
 
     setCanvasSize(width: number, height: number) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
         const worldSize = render.getWorldSize();
 
         render.app.renderer.resize(width, height);
@@ -164,7 +182,7 @@ export default class Render {
     }
 
     drawLandscape(map: MapType) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
 
         const {landscape} = render.layer;
 
@@ -180,25 +198,25 @@ export default class Render {
     }
 
     addBuilding(container: PIXI.Container) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
 
         render.layer.buildings.addChild(container);
     }
 
     addUnit(container: PIXI.Container) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
 
         render.layer.units.addChild(container);
     }
 
     addGrave(container: PIXI.Container) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
 
         render.layer.graves.addChild(container);
     }
 
     drawActionsList(actionsList: UnitActionsMapType) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
 
         render.cleanActionsList();
 
@@ -240,7 +258,7 @@ export default class Render {
     }
 
     drawActionMove(unitAction: UnitActionMoveType) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
         const {to, container} = unitAction;
 
         container.position.set(to.x * mapGuide.size.square, to.y * mapGuide.size.square);
@@ -252,7 +270,7 @@ export default class Render {
     }
 
     drawActionAttack(unitAction: UnitActionAttackType) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
         const {defender, container} = unitAction;
 
         container.position.set(defender.x * mapGuide.size.square, defender.y * mapGuide.size.square);
@@ -264,7 +282,7 @@ export default class Render {
     }
 
     drawActionFixBuilding(unitAction: UnitActionFixBuildingType) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
         const {container} = unitAction;
 
         container.position.set(unitAction.x * mapGuide.size.square, unitAction.y * mapGuide.size.square);
@@ -276,7 +294,7 @@ export default class Render {
     }
 
     drawActionOccupyBuilding(unitAction: UnitActionOccupyBuildingType) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
         const {container} = unitAction;
 
         container.position.set(unitAction.x * mapGuide.size.square, unitAction.y * mapGuide.size.square);
@@ -288,7 +306,7 @@ export default class Render {
     }
 
     drawActionRaiseSkeleton(unitAction: UnitActionRaiseSkeletonType) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
         const {grave, container} = unitAction;
 
         container.position.set(grave.x * mapGuide.size.square, grave.y * mapGuide.size.square);
@@ -300,7 +318,7 @@ export default class Render {
     }
 
     drawActionDestroyBuilding(unitAction: UnitActionDestroyBuildingType) {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
         const {building, container} = unitAction;
 
         container.position.set(building.x * mapGuide.size.square, building.y * mapGuide.size.square);
@@ -312,14 +330,14 @@ export default class Render {
     }
 
     cleanActionsList() {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
 
         render.layer.actions.removeChildren();
     }
 
     async drawAttack(aggressorUnit: Unit, defenderUnit: Unit): Promise<void> {
         // TODO: DO NOT set HP here - do it in handleServerPushStateAttack
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
         // const state = message.states.last.state;
 
         /*
@@ -355,7 +373,7 @@ export default class Render {
     }
 
     async drawBuildingAttack(destroyerUnit: Unit, building: Building): Promise<void> {
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
 
         const attackSprite = PIXI.Sprite.fromImage(imageMap.other['action-destroy-building-0']);
 
@@ -376,7 +394,7 @@ export default class Render {
     }
 
     drawBorder(width: number, height: number) { // eslint-disable-line max-statements
-        const render = this; // eslint-disable-line consistent-this
+        const render = this;
         const {mainContainer} = render;
         const {square} = mapGuide.size;
 

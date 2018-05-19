@@ -1,5 +1,7 @@
 // @flow
 
+/* eslint consistent-this: ["error", "grave"] */
+
 import * as PIXI from 'pixi.js';
 import type {GraveType} from './../../../../maps/type';
 import mapGuide from './../../../../maps/map-guide';
@@ -23,7 +25,7 @@ export default class Grave {
     gameAttr: GraveGameAttrType;
 
     constructor(graveConstructor: GraveConstructorType) {
-        const grave = this; // eslint-disable-line consistent-this
+        const grave = this;
         const {graveData} = JSON.parse(JSON.stringify(graveConstructor));
 
         grave.attr = graveData;
@@ -39,7 +41,7 @@ export default class Grave {
     }
 
     initializeGraveSprite() { // eslint-disable-line complexity
-        const grave = this; // eslint-disable-line consistent-this
+        const grave = this;
         const {attr, gameAttr} = grave;
         const {square} = mapGuide.size;
 
@@ -51,7 +53,7 @@ export default class Grave {
     }
 
     setRemoveCountdown(removeCountdown: number) {
-        const grave = this; // eslint-disable-line consistent-this
+        const grave = this;
         const {attr} = grave;
 
         attr.removeCountdown = removeCountdown;

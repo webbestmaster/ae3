@@ -1,5 +1,7 @@
 // @flow
 
+/* eslint consistent-this: ["error", "view"] */
+
 // wait other players and prepare map\settings for Game view
 
 // list of settings, can NOT be changed, this is start game state
@@ -17,9 +19,6 @@ import {user} from './../../module/user';
 import {socket, type SocketMessageType} from './../../module/socket';
 import Game from './../../components/game';
 import type {AllRoomSettingsType, PushedStatePayloadType, ServerUserType} from './../../module/server-api';
-// import uiStyle from './../../components/ui/ui.scss';
-// import serviceStyle from './../../../css/service.scss';
-// import type {AuthType} from './../../components/auth/reducer';
 import * as serverApi from './../../module/server-api';
 import mapGuide from './../../maps/map-guide';
 import {getCommanderDataByUserIndex} from './../../components/game/model/helper';

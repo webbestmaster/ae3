@@ -1,5 +1,7 @@
 // @flow
 
+/* eslint consistent-this: ["error", "socket"] */
+
 const socketIoClient = require('socket.io-client');
 
 import appConst from './../app-const';
@@ -16,7 +18,7 @@ export default class Socket {
     attr: AttrType;
 
     constructor() {
-        const socket = this; // eslint-disable-line consistent-this
+        const socket = this;
 
         const initialPromise = socket.initSocket();
 
@@ -28,7 +30,7 @@ export default class Socket {
     }
 
     initSocket(): Promise<Socket> {
-        const socket = this; // eslint-disable-line consistent-this
+        const socket = this;
 
         if (socket.attr && socket.attr.socket) {
             return Promise.resolve(socket);
@@ -58,7 +60,7 @@ export default class Socket {
     }
 
     getId(): string {
-        const socket = this; // eslint-disable-line consistent-this
+        const socket = this;
         const {attr} = socket;
 
         if (attr.socket === null) {

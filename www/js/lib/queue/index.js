@@ -1,6 +1,8 @@
 // @flow
 /* global window */
 
+/* eslint consistent-this: ["error", "queue"] */
+
 type CallBackType = () => Promise<void> | void;
 
 export default class Queue {
@@ -8,7 +10,7 @@ export default class Queue {
     isInProgress: boolean = false;
 
     push(func: CallBackType) {
-        const queue = this; // eslint-disable-line consistent-this
+        const queue = this;
 
         queue.list.push(func);
 
@@ -20,7 +22,7 @@ export default class Queue {
     }
 
     run() {
-        const queue = this; // eslint-disable-line consistent-this
+        const queue = this;
 
         if (queue.list.length === 0) {
             queue.isInProgress = false;
@@ -43,7 +45,7 @@ export default class Queue {
 
     runCallBack() {
         // window.setTimeout(() => this.run(), 0);
-        const queue = this; // eslint-disable-line consistent-this
+        const queue = this;
 
         window.requestAnimationFrame(() => {
             window.requestIdleCallback(() => {

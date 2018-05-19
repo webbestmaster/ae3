@@ -1,6 +1,10 @@
 // @flow
+
 /* global module */
-/* eslint-disable consistent-this, complexity */
+
+/* eslint-disable complexity */
+
+/* eslint consistent-this: ["error", "model"] */
 
 // $FlowFixMe
 type AttrValueType = any; // eslint-disable-line flowtype/no-weak-types

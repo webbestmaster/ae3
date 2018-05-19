@@ -1,5 +1,7 @@
 // @flow
 
+/* eslint consistent-this: ["error", "view"] */
+
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
@@ -16,9 +18,6 @@ import Form from './../../components/ui/form';
 import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
 import * as mapHash from './../../maps/default/map-list';
-
-// const mapReqContext = require.context('./../../maps/default/maps/', true, /\.json$/);
-// const mapList: Array<MapType> = mapReqContext.keys().map(mapReqContext);
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 

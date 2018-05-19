@@ -2,6 +2,8 @@
 
 /* global window */
 
+/* eslint consistent-this: ["error", "view"] */
+
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
@@ -149,12 +151,14 @@ export class GameView extends Component<PropsType, StateType> {
         state.game.drawUnits(settings.settings.map, users.users);
         */
 
+        state.game.render.moveToCenter();
+
         view.bindEventListeners();
 
         return roomId;
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps: PropsType, prevState: StateType) {
         const view = this;
         const {props, state} = view;
 
@@ -583,13 +587,12 @@ export class GameView extends Component<PropsType, StateType> {
 
             <canvas
                 className={classnames({
-                    hidden: storeState.isOpen,
-                    disabled: isCanvasDisabled
+                    hidden: storeState.isOpen
                 })}
                 key="canvas"
                 ref="canvas"
                 style={{
-                    transition: 'opacity ease-out 0.3s',
+                    pointerEvents: isCanvasDisabled ? 'none' : 'auto',
                     width: props.system.screen.width,
                     height: props.system.screen.height - bottomBarData.height
                 }}/>

@@ -2,6 +2,8 @@
 
 /* global window */
 
+/* eslint consistent-this: ["error", "view"] */
+
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
@@ -12,8 +14,6 @@ import {user} from './../../module/user';
 import {socket} from './../../module/socket';
 import type {GlobalStateType} from './../../app-reducer';
 import type {AuthType} from './reducer';
-// import * as authAction from './action';
-// import {store} from './../../index';
 
 type PropsType = {|
     setUser: (userState: UserType) => SetUserType,

@@ -24,7 +24,11 @@ _before-4
 /flow-coverage
 
 # example
+
+# /* eslint consistent-this: ["error", "unit", "aggressor"] */
+
 # /* eslint-disable no-unused-vars */
 # var React = require('react');
 # /* eslint-enable no-unused-vars */
+
 # var React = require('react'); // eslint-disable-line no-unused-vars

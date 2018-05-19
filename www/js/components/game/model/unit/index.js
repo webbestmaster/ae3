@@ -1,5 +1,7 @@
 // @flow
 
+/* eslint consistent-this: ["error", "unit", "aggressor"] */
+
 import * as PIXI from 'pixi.js';
 import type {MapType, MapUserType, UnitActionStateType, UnitType} from './../../../../maps/type';
 import type {AttackResultUnitType} from './../helper';
@@ -15,7 +17,6 @@ import type {PathType, PointType} from './../../../../lib/a-star-finder';
 import {tweenList} from './../../../../lib/tween';
 import find from 'lodash/find';
 import Grave from './../grave';
-// import {getAttackResult} from './../helper';
 
 export type UnitActionMoveType = {|
     type: 'move',
@@ -172,7 +173,7 @@ export default class Unit {
     gameAttr: UnitGameAttrType;
 
     constructor(unitConstructor: UnitConstructorType): Unit {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         unit.initialize(unitConstructor);
 
@@ -180,7 +181,7 @@ export default class Unit {
     }
 
     initialize(unitConstructor: UnitConstructorType) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {unitData} = unitConstructor;
 
         if (typeof unitData.userId !== 'string' || typeof unitData.id !== 'string') {
@@ -215,7 +216,7 @@ export default class Unit {
     }
 
     initializeUnitSprite() { // eslint-disable-line complexity
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr, gameAttr} = unit;
         const {square} = mapGuide.size;
 
@@ -245,7 +246,7 @@ export default class Unit {
     }
 
     initializeHitPointsSprite() {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr, gameAttr} = unit;
         const hitPoints = unit.getHitPoints();
 
@@ -261,7 +262,7 @@ export default class Unit {
     }
 
     initializePoisonCountdownSprite() {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr, gameAttr} = unit;
         const poisonCountdown = unit.getPoisonCountdown();
         const {square} = mapGuide.size;
@@ -285,7 +286,7 @@ export default class Unit {
     }
 
     getActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity, max-statements
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         if (unit.getDidAttack() ||
             unit.getDidFixBuilding() ||
@@ -394,7 +395,7 @@ export default class Unit {
     }
 
     getMoveActions(gameData: GameDataType): UnitActionsMapType {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const moveMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = typeof attr.id === 'string' ? attr.id : null;
@@ -424,7 +425,7 @@ export default class Unit {
     }
 
     getAttackActions(gameData: GameDataType): UnitActionsMapType {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const attackMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = typeof attr.id === 'string' ? attr.id : null;
@@ -461,7 +462,7 @@ export default class Unit {
     }
 
     getFixBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const fixBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = typeof attr.id === 'string' ? attr.id : null;
@@ -511,7 +512,7 @@ export default class Unit {
     }
 
     getOccupyBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const occupyBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = typeof attr.id === 'string' ? attr.id : null;
@@ -563,7 +564,7 @@ export default class Unit {
     }
 
     getDestroyBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const destroyBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = typeof attr.id === 'string' ? attr.id : null;
@@ -628,7 +629,7 @@ export default class Unit {
     }
 
     getRaiseSkeletonActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const raiseSkeletonMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = typeof attr.id === 'string' ? attr.id : null;
@@ -707,7 +708,7 @@ export default class Unit {
     }
 
     getAllEnemyUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const {unitList} = gameData;
         const userId = typeof attr.userId === 'string' ? attr.userId : null;
@@ -726,7 +727,7 @@ export default class Unit {
 
     getAvailablePath(gameData: GameDataType): AvailablePathMapType {
         console.warn('---> reduce path if unit poisoned!');
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {x, y, type} = unit.attr;
 
         if (!unitGuide.hasOwnProperty(type)) {
@@ -746,7 +747,7 @@ export default class Unit {
     }
 
     getAvailableAttack(gameData: GameDataType): AvailablePathMapType {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {x, y, type} = unit.attr;
 
         if (!unitGuide.hasOwnProperty(type)) {
@@ -765,7 +766,7 @@ export default class Unit {
     }
 
     getAllAvailableAttack(gameData: GameDataType): AvailablePathMapType {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {x, y, type} = unit.attr;
 
         if (!unitGuide.hasOwnProperty(type)) {
@@ -779,7 +780,7 @@ export default class Unit {
     }
 
     bindUnitEventListeners() { // eslint-disable-line complexity
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr, gameAttr} = unit;
         const {square} = mapGuide.size;
 
@@ -795,7 +796,7 @@ export default class Unit {
     }
 
     move(x: number, y: number, movePath: PathType): Promise<void> {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr, gameAttr} = unit;
         const {square} = mapGuide.size;
 
@@ -812,7 +813,7 @@ export default class Unit {
     }
 
     async setActionState(actionState: UnitActionStateType | null): Promise<void> { // eslint-disable-line complexity
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const currentActionState = unit.attr.action || null;
 
         if (actionState === null && currentActionState === null) {
@@ -888,7 +889,7 @@ export default class Unit {
     }
 
     setDidMove(didMove: boolean) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -897,7 +898,7 @@ export default class Unit {
     }
 
     getDidMove(): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -905,7 +906,7 @@ export default class Unit {
     }
 
     setDidAttack(didAttack: boolean) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -914,7 +915,7 @@ export default class Unit {
     }
 
     getDidAttack(): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -922,7 +923,7 @@ export default class Unit {
     }
 
     setDidFixBuilding(didFixBuilding: boolean) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -931,7 +932,7 @@ export default class Unit {
     }
 
     getDidFixBuilding(): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -939,7 +940,7 @@ export default class Unit {
     }
 
     setDidOccupyBuilding(didOccupyBuilding: boolean) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -948,7 +949,7 @@ export default class Unit {
     }
 
     getDidOccupyBuilding(): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -956,7 +957,7 @@ export default class Unit {
     }
 
     setDidDestroyBuilding(didDestroyBuilding: boolean) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -965,7 +966,7 @@ export default class Unit {
     }
 
     getDidDestroyBuilding(): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -973,7 +974,7 @@ export default class Unit {
     }
 
     setDidRaiseSkeleton(didRaiseSkeleton: boolean) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -982,7 +983,7 @@ export default class Unit {
     }
 
     getDidRaiseSkeleton(): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -990,7 +991,7 @@ export default class Unit {
     }
 
     setDamageGiven(damageGiven: number) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         unit.attr.damage = unit.attr.damage || {};
 
@@ -998,13 +999,13 @@ export default class Unit {
     }
 
     setDamageGivenUpdateBy(damageGivenDelta: number) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         unit.setDamageGiven(unit.getDamageGiven() + damageGivenDelta);
     }
 
     getDamageGiven(): number {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {damage} = unit.attr;
 
         return damage && typeof damage.given === 'number' ? damage.given : 0;
@@ -1012,7 +1013,7 @@ export default class Unit {
 
 
     setDamageReceived(damageReceived: number) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         unit.attr.damage = unit.attr.damage || {};
 
@@ -1020,20 +1021,20 @@ export default class Unit {
     }
 
     setDamageReceivedUpdateBy(damageReceivedDelta: number) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         unit.setDamageReceived(unit.getDamageReceived() + damageReceivedDelta);
     }
 
     getDamageReceived(): number {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {damage} = unit.attr;
 
         return damage && typeof damage.received === 'number' ? damage.received : 0;
     }
 
     setPoisonCountdown(poisonCountdown: number) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr, gameAttr} = unit;
 
         attr.poisonCountdown = poisonCountdown;
@@ -1044,7 +1045,7 @@ export default class Unit {
     }
 
     decreasePoisonCountdown() {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         const poisonCountdown = unit.getPoisonCountdown();
 
@@ -1056,7 +1057,7 @@ export default class Unit {
     }
 
     getPoisonCountdown(): number {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         return typeof unit.attr.poisonCountdown === 'number' ?
             unit.attr.poisonCountdown :
@@ -1065,13 +1066,13 @@ export default class Unit {
 
 
     hasId(): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         return typeof unit.attr.id === 'string' && unit.attr.id.length > 0;
     }
 
     getId(): string | null {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         if (typeof unit.attr.id === 'string' && unit.attr.id.length > 0) {
             return unit.attr.id;
@@ -1083,13 +1084,13 @@ export default class Unit {
     }
 
     hasUserId(): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         return typeof unit.attr.userId === 'string' && unit.attr.userId.length > 0;
     }
 
     getUserId(): string | null {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         if (typeof unit.attr.userId === 'string' && unit.attr.userId.length > 0) {
             return unit.attr.userId;
@@ -1101,19 +1102,19 @@ export default class Unit {
     }
 
     setLevel(level: number) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         unit.attr.level = level;
     }
 
     getLevel(): number {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         return typeof unit.attr.level === 'number' ? unit.attr.level : defaultUnitData.level;
     }
 
     getPoisonAttack(): number {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const guideData = unit.getGuideData();
 
         return typeof guideData.poisonAttack === 'number' ? guideData.poisonAttack : 0;
@@ -1121,7 +1122,7 @@ export default class Unit {
 
     /*
     set___(___: boolean) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -1130,7 +1131,7 @@ export default class Unit {
     }
 
     get___(): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const unitActionState = attr.hasOwnProperty('action') && attr.action ? attr.action : {};
 
@@ -1139,7 +1140,7 @@ export default class Unit {
     */
 
     setHitPoints(hitPoints: number) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr, gameAttr} = unit;
 
         if (hitPoints > defaultUnitData.hitPoints) {
@@ -1158,7 +1159,7 @@ export default class Unit {
     }
 
     getHitPoints(): number {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
 
         if (typeof attr.hitPoints === 'number') {
@@ -1168,7 +1169,7 @@ export default class Unit {
     }
 
     setIsActionAvailable(isActionAvailable: boolean) {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {gameAttr} = unit;
 
         gameAttr.isActionAvailable = isActionAvailable;
@@ -1177,14 +1178,14 @@ export default class Unit {
     }
 
     getIsActionAvailable(): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {gameAttr} = unit;
 
         return gameAttr.isActionAvailable;
     }
 
     getGuideData(): UnitGuideDataType {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {attr} = unit;
         const {type} = attr;
 
@@ -1192,13 +1193,13 @@ export default class Unit {
     }
 
     hasWispAura(): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
 
         return unit.gameAttr.hasWispAura;
     }
 
     refreshWispAura(gameData: GameDataType): boolean {
-        const unit = this; // eslint-disable-line consistent-this
+        const unit = this;
         const {square} = mapGuide.size;
         const unitUserId = typeof unit.attr.userId === 'string' ? unit.attr.userId : null;
 
@@ -1264,7 +1265,7 @@ export default class Unit {
     }
 
     canAttack(defender: Unit): boolean {
-        const aggressor = this; // eslint-disable-line consistent-this
+        const aggressor = this;
         const range = aggressor.getGuideData().attack.range;
 
         return Math.abs(defender.attr.x - aggressor.attr.x) + Math.abs(defender.attr.y - aggressor.attr.y) <= range;

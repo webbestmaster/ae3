@@ -1,8 +1,9 @@
 // @flow
 
+/* eslint consistent-this: ["error", "building"] */
+
 import * as PIXI from 'pixi.js';
 import type {BuildingAttrTypeType, BuildingType, MapUserType} from './../../../../maps/type';
-// import type {ServerUserType} from './../../../../module/server-api';
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import imageMap from './../../image/image-map';
@@ -27,7 +28,7 @@ export default class Building {
     gameAttr: BuildingGameAttrType;
 
     constructor(buildingConstructor: BuildingConstructorType) {
-        const building = this; // eslint-disable-line consistent-this
+        const building = this;
         const {buildingData} = JSON.parse(JSON.stringify(buildingConstructor));
 
         if (typeof buildingData.userId !== 'string' || typeof buildingData.id !== 'string') {
@@ -49,7 +50,7 @@ export default class Building {
     }
 
     initializeBuildingSprite() { // eslint-disable-line complexity
-        const building = this; // eslint-disable-line consistent-this
+        const building = this;
         const {attr, gameAttr} = building;
         const {square} = mapGuide.size;
 
@@ -83,7 +84,7 @@ export default class Building {
     }
 
     defineEventListeners() {
-        const building = this; // eslint-disable-line consistent-this
+        const building = this;
         const {attr, gameAttr} = building;
         const {square} = mapGuide.size;
 
@@ -97,7 +98,7 @@ export default class Building {
     }
 
     setType(type: BuildingAttrTypeType) {
-        const building = this; // eslint-disable-line consistent-this
+        const building = this;
         const {attr, gameAttr} = building;
 
         attr.type = type;
@@ -108,7 +109,7 @@ export default class Building {
     }
 
     setUserId(userId: string) {
-        const building = this; // eslint-disable-line consistent-this
+        const building = this;
         const {attr, gameAttr} = building;
 
         attr.userId = userId;
@@ -119,14 +120,14 @@ export default class Building {
     }
 
     getUserId(): string {
-        const building = this; // eslint-disable-line consistent-this
+        const building = this;
         const {attr} = building;
 
         return typeof attr.userId === 'string' ? attr.userId : 'no-user-id';
     }
 
     setAttr(newAttr: BuildingAttrType) {
-        const building = this; // eslint-disable-line consistent-this
+        const building = this;
         const {gameAttr} = building;
 
         building.attr = newAttr;
@@ -137,7 +138,7 @@ export default class Building {
     }
 
     setNoManAttr() {
-        const building = this; // eslint-disable-line consistent-this
+        const building = this;
         const {gameAttr} = building;
 
         building.attr = {
