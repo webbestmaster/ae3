@@ -110,13 +110,13 @@ const webpackConfig = {
                                     quality: 80, // 0..100
                                     progressive: true
                                 },
-                                optipng: {
-                                    optimizationLevel: 7 // 0..7
-                                },
-                                pngquant: {
-                                    quality: '60-80', // 0..100
-                                    speed: 1 // 1..10
-                                },
+                                // optipng: {
+                                //     optimizationLevel: 7 // 0..7
+                                // },
+                                // pngquant: {
+                                //     quality: '60-80', // 0..100
+                                //     speed: 1 // 1..10
+                                // },
                                 svgo: {}, // no set up needed
                                 gifsicle: {
                                     optimizationLevel: 3 // 1..3
@@ -148,13 +148,13 @@ const webpackConfig = {
                                     quality: 80,
                                     progressive: true
                                 },
-                                optipng: {
-                                    optimizationLevel: 1
-                                },
-                                pngquant: {
-                                    quality: '60-80',
-                                    speed: 10
-                                },
+                                // optipng: {
+                                //     optimizationLevel: 1
+                                // },
+                                // pngquant: {
+                                //     quality: '60-80',
+                                //     speed: 10
+                                // },
                                 svgo: {}, // no set up needed
                                 gifsicle: {
                                     optimizationLevel: 1

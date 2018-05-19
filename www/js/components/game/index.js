@@ -305,12 +305,13 @@ export class GameView extends Component<PropsType, StateType> {
         const userId = user.getId();
 
         if (mapState === null) {
-            return <div>no map state for renderSupplyState</div>;
+            return null;
         }
 
         const supplyState = getSupplyState(mapState, userId);
 
-        return ['Units:', supplyState.unitCount, '/', supplyState.unitLimit].join(' ');
+        // return ['Units:', supplyState.unitCount, '/', supplyState.unitLimit].join(' ');
+        return [supplyState.unitCount, '/', supplyState.unitLimit, '웃'].join(' ');
     }
 
     renderMoneyState(): Node {
@@ -320,7 +321,7 @@ export class GameView extends Component<PropsType, StateType> {
         const mapState = state.game.getMapState();
 
         if (mapState === null) {
-            return <div>no map state for renderMoneyState</div>;
+            return null;
         }
 
         const mapUserData = find(mapState.userList, {userId: user.getId()}) || null;
@@ -329,7 +330,8 @@ export class GameView extends Component<PropsType, StateType> {
             return null;
         }
 
-        return ['Money:', mapUserData.money].join(' ');
+        // return ['Money:', mapUserData.money].join(' ');
+        return mapUserData.money + '$'; // , mapUserData.money].join(' ');
     }
 
     showEndGame() {
