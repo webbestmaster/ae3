@@ -151,6 +151,16 @@ export default class Render {
             worldSize.width,
             worldSize.height
         );
+
+        const worldSizeQ = 500;
+        const worldSizScaleQ = 2.8;
+
+        render.viewport.clampZoom({
+            minWidth: worldSize.width / worldSizScaleQ * (width / worldSizeQ),
+            minHeight: worldSize.height / worldSizScaleQ * (height / worldSizeQ),
+            maxWidth: worldSize.width * (width / worldSizeQ),
+            maxHeight: worldSize.height * (height / worldSizeQ)
+        });
     }
 
     drawLandscape(map: MapType) {
