@@ -7,12 +7,6 @@ node_modules
 # flow
 flow-typed/npm
 
-# before
-_before
-_before-2
-_before-3
-_before-4
-
 # dist
 /dist/
 /prod/

@@ -1,6 +1,5 @@
 [ignore]
-./_before/**/
-./_before_/**/
+./_res
 
 [include]
 ./flow-typed/**/
