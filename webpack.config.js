@@ -39,7 +39,7 @@ const webpackConfig = {
         path: path.join(CWD, '/dist'),
         publicPath: '/',
         filename: '[name].js',
-        chunkFilename: '[name].async-import.js' // read about code splitting here: https://webpack.js.org/guides/code-splitting/
+        chunkFilename: '[name].async-import.js'
     },
 
     devtool: IS_PRODUCTION ? false : 'source-map',

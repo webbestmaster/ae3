@@ -1,0 +1,5 @@
+async modules and code splitting
+https://webpack.js.org/guides/code-splitting/
+
+async component
+https://medium.com/front-end-hacking/loading-components-asynchronously-in-react-app-with-an-hoc-61ca27c4fda7
