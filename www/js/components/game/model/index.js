@@ -2193,6 +2193,6 @@ export default class Game {
 
         game.model.destroy();
 
-        game.initializeProperties();
+        game.render.destroy();
     }
 }

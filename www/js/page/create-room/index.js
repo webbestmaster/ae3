@@ -103,7 +103,8 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         return <Page>
             <Header>Create Game</Header>
-            <Form>
+
+            <Form className="grow-1">
 
                 <Fieldset>
                     <FormHeader>
@@ -141,15 +142,14 @@ class CreateRoom extends Component<PropsType, StateType> {
                             {unitLimit} {unitLimit === state.unitLimit ? '<-' : ''}
                         </div>)}
                 </Fieldset>
-
-                <Button
-                    onClick={async (): Promise<void> => {
-                        const result = await view.createRoom();
-                    }}>
-                    create room
-                </Button>
-
             </Form>
+
+            <Button
+                onClick={async (): Promise<void> => {
+                    const result = await view.createRoom();
+                }}>
+                create room
+            </Button>
         </Page>;
     }
 }

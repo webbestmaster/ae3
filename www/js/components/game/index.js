@@ -512,15 +512,20 @@ export class GameView extends Component<PropsType, StateType> {
     renderStore(): Node | null {
         const view = this;
         const {props, state} = view;
+        const {game} = state;
+        const {render} = game;
         const queryData = queryString.parse(props.location.search);
 
         const storeState = view.getStoreState();
 
         if (!storeState.isOpen) {
+            render.startViewportPluginList();
             return null;
         }
 
-        const mapState = state.game.getMapState();
+        render.stopViewportPluginList();
+
+        const mapState = game.getMapState();
 
         if (mapState === null) {
             console.error('No mapState for renderStore');
@@ -528,6 +533,7 @@ export class GameView extends Component<PropsType, StateType> {
         }
 
         return <Store
+            key="store"
             x={parseInt(queryData.x, 10)}
             y={parseInt(queryData.y, 10)}
             map={mapState}/>;
@@ -545,14 +551,16 @@ export class GameView extends Component<PropsType, StateType> {
 
         const storeState = view.getStoreState();
 
-        return <Page className={style.game_page}>
+        return [
+            view.renderStore(),
+            <Page
+                key="game-page"
+                className={classnames(style.game_page, {hidden: storeState.isOpen})}>
 
-            {view.renderStore()}
+                {view.renderEndGameDialog()}
+                {view.renderPopupChangeActiveUserDialog()}
 
-            {view.renderEndGameDialog()}
-            {view.renderPopupChangeActiveUserDialog()}
-
-            {/*
+                {/*
                 <h2>server activeUserId: {state.activeUserId}</h2>
                 <h3>mapActiveUser: {mapActiveUserId}</h3>
 
@@ -563,46 +571,43 @@ export class GameView extends Component<PropsType, StateType> {
                 <h2>map user list:</h2>
 
                 {mapState ? <ReactJson src={mapState.userList}/> : <h1>no map</h1>}
-            */}
+                */}
 
-            <div
-                className={classnames(
-                    style.end_turn,
-                    {hidden: storeState.isOpen || isCanvasDisabled}
-                )}
-                onClick={async (): Promise<void> => {
-                    await view.endTurn();
-                }}>
-                >|
-            </div>
+                <div
+                    className={classnames(
+                        style.end_turn,
+                        {hidden: isCanvasDisabled}
+                    )}
+                    onClick={async (): Promise<void> => {
+                        await view.endTurn();
+                    }}>
+                    >|
+                </div>
 
-            {/* <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>*/}
+                {/* <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>*/}
 
-            {/*
+                {/*
                 <div>mapActiveUserId === state(server).activeUserId :
                     {mapActiveUserId === state.activeUserId ? ' YES' : ' NO'}</div>
                 */}
 
-            {/* <div>{JSON.stringify(state.disabledByList)}</div> */}
+                {/* <div>{JSON.stringify(state.disabledByList)}</div> */}
 
-            <canvas
-                className={classnames({
-                    hidden: storeState.isOpen
-                })}
-                key="canvas"
-                ref="canvas"
-                style={{
-                    pointerEvents: isCanvasDisabled ? 'none' : 'auto',
-                    width: props.system.screen.width,
-                    height: props.system.screen.height - bottomBarData.height
-                }}/>
-            <BottomBar
-                className={classnames('ta-l', {hidden: storeState.isOpen})}>
-                {view.renderSupplyState()}
-                &nbsp;|&nbsp;
-                {view.renderMoneyState()}
-            </BottomBar>
-        </Page>;
+                <canvas
+                    key="canvas"
+                    ref="canvas"
+                    style={{
+                        pointerEvents: isCanvasDisabled ? 'none' : 'auto',
+                        width: props.system.screen.width,
+                        height: props.system.screen.height - bottomBarData.height
+                    }}/>
+                <BottomBar
+                    className="ta-l">
+                    {view.renderSupplyState()}
+                    &nbsp;|&nbsp;
+                    {view.renderMoneyState()}
+                </BottomBar>
+            </Page>];
     }
 }
 

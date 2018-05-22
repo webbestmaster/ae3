@@ -1,4 +1,19 @@
+/* stylelint-disable selector-pseudo-class-no-unknown */
+
 @import './var';
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+}
+
+:global .app-wrapper {
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+}
 
 body {
     color: $main-text-color;

@@ -2,9 +2,12 @@ $page-back-ground-color: #333;
 
 .page {
     background-color: $page-back-ground-color;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     left: 0;
-    min-height: 100%;
     position: absolute;
     top: 0;
     width: 100%;
+    z-index: 1;
 }

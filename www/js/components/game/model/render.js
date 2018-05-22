@@ -53,7 +53,7 @@ export default class Render {
         actions: PIXI.Container
     |};
     map: MapType;
-    viewport: Viewport;
+    viewport: Viewport | null;
     mainContainer: PIXI.Container;
 
     constructor() {
@@ -102,12 +102,7 @@ export default class Render {
 
         app.stage.addChild(viewport);
 
-        viewport
-            .drag()
-            .wheel()
-            .pinch()
-            .decelerate()
-            .bounce();
+        render.startViewportPluginList();
 
         const mainContainer = new PIXI.Container();
 
@@ -129,8 +124,14 @@ export default class Render {
 
     moveCenterTo(x: number, y: number) {
         const render = this;
+        const {viewport} = render;
 
-        render.viewport.moveCenter(x, y);
+        if (!viewport) {
+            console.error('viewport is not define, moveCenterTo', render);
+            return;
+        }
+
+        viewport.moveCenter(x, y);
     }
 
     moveToCenter() {
@@ -170,9 +171,15 @@ export default class Render {
     setCanvasSize(width: number, height: number) {
         const render = this;
         const worldSize = render.getWorldSize();
+        const {viewport} = render;
+
+        if (!viewport) {
+            console.error('viewport is not define, setCanvasSize', render);
+            return;
+        }
 
         render.app.renderer.resize(width, height);
-        render.viewport.resize(
+        viewport.resize(
             width,
             height,
             worldSize.width,
@@ -182,7 +189,7 @@ export default class Render {
         const worldSizeQ = 500;
         const worldSizScaleQ = 2.8;
 
-        render.viewport.clampZoom({
+        viewport.clampZoom({
             minWidth: worldSize.width / worldSizScaleQ * (width / worldSizeQ),
             minHeight: worldSize.height / worldSizScaleQ * (height / worldSizeQ),
             maxWidth: worldSize.width * (width / worldSizeQ),
@@ -453,5 +460,44 @@ export default class Render {
         border.addChild(borderSprite9);
 
         mainContainer.addChild(border);
+    }
+
+    stopViewportPluginList() {
+        const render = this;
+        const {viewport} = render;
+
+        if (!viewport) {
+            console.log('viewport is not define, stopViewportPluginList', render);
+            return;
+        }
+
+        viewport.removePlugin('drag');
+        viewport.removePlugin('wheel');
+        viewport.removePlugin('pinch');
+        viewport.removePlugin('decelerate');
+        viewport.removePlugin('bounce');
+    }
+
+    startViewportPluginList() {
+        const render = this;
+        const {viewport} = render;
+
+        if (!viewport) {
+            console.log('viewport is not define, startViewportPluginList', render);
+            return;
+        }
+
+        viewport
+            .drag()
+            .wheel()
+            .pinch()
+            .decelerate()
+            .bounce();
+    }
+
+    destroy() {
+        const render = this;
+
+        render.stopViewportPluginList();
     }
 }

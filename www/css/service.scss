@@ -1,7 +1,7 @@
 /* stylelint-disable selector-pseudo-class-no-unknown, max-nesting-depth */
 
 :global {
-    body {
+    .app-wrapper {
         .hidden {
             display: none !important;
         }
@@ -69,6 +69,18 @@
             margin-left: auto;
             margin-right: auto;
             width: 75%;
+        }
+
+        .grow-0 {
+            display: block;
+            flex-grow: 0;
+            overflow: auto;
+        }
+
+        .grow-1 {
+            display: block;
+            flex-grow: 1;
+            overflow: auto;
         }
     }
 

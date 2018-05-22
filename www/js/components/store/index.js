@@ -25,6 +25,7 @@ import {getSupplyState, isCommanderLive} from '../game/model/helper';
 import Page from './../../components/ui/page';
 import Button from './../../components/ui/button';
 import Header from './../../components/ui/header';
+import BottomBar from './../../components/ui/bottom-bar';
 
 const storeViewId = 'store';
 
@@ -245,27 +246,35 @@ class Store extends Component<PropsType, StateType> {
         }
 
         return <Page>
-            <Header>
+            <Header className="ta-r">
+                <div
+                    onClick={() => {
+                        props.history.goBack();
+                    }}
+                    style={{
+                        position: 'relative',
+                        fontSize: 'inherit',
+                        zIndex: 1,
+                        cursor: 'pointer'
+                    }}
+                    className="fl-l">
+                    &lt;&lt;
+                </div>
                 Store
-                &nbsp;|&nbsp;
-                Money: {state.mapUserData.money}
-                &nbsp;|&nbsp;
-                Units: {supplyState.unitCount} / {supplyState.unitLimit}
             </Header>
 
-            <br/>
+            <div className="grow-1">
+                <div>
+                    {view.renderUnitList()}
+                </div>
+            </div>
 
-            {view.renderUnitList()}
-
-            <Button
-                className="w50-c"
-                onClick={() => {
-                    props.history.goBack();
-                }}>
-                [ &larr; BACK ]
-            </Button>
-
-            <br/>
+            <BottomBar
+                className="ta-l">
+                Money: {state.mapUserData && state.mapUserData.money ? state.mapUserData.money : 0} $
+                &nbsp;|&nbsp;
+                {supplyState.unitCount} / {supplyState.unitLimit} 웃
+            </BottomBar>
         </Page>;
     }
 }
