@@ -35,11 +35,13 @@ type InitializeConfigType = {|
     map: MapType
 |};
 
+const squareSize = mapGuide.size.square;
+
 const stagePadding = {
-    top: 100,
-    right: 100,
-    left: 100,
-    bottom: 100
+    top: squareSize,
+    right: squareSize,
+    left: squareSize,
+    bottom: squareSize
 };
 // const sprite = require('./image.png');
 
@@ -170,13 +172,14 @@ export default class Render {
 
     setCanvasSize(width: number, height: number) {
         const render = this;
-        const worldSize = render.getWorldSize();
         const {viewport} = render;
 
         if (!viewport) {
             console.error('viewport is not define, setCanvasSize', render);
             return;
         }
+
+        const worldSize = render.getWorldSize();
 
         render.app.renderer.resize(width, height);
         viewport.resize(
@@ -186,8 +189,9 @@ export default class Render {
             worldSize.height
         );
 
-        const worldSizeQ = 500;
-        const worldSizScaleQ = 2.8;
+        const {square} = mapGuide.size;
+        const worldSizeQ = square * 12;
+        const worldSizScaleQ = 4;
 
         viewport.clampZoom({
             minWidth: worldSize.width / worldSizScaleQ * (width / worldSizeQ),

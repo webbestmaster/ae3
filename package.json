@@ -15,16 +15,17 @@
     "stylelint": "stylelint ./**/*.scss",
     "stylelint-fix": "stylelint ./**/*.scss --fix",
     "flow": "flow",
+    "flow-typed": "flow-typed install @material-ui/core@1.x.x",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@material-ui/core": "^1.0.0",
     "@tweenjs/tween.js": "^17.2.0",
     "classnames": "^2.2.5",
     "fastclick": "^1.0.6",
     "lodash": "^4.17.10",
-    "material-ui": "^1.0.0-beta.47",
     "pixi-viewport": "^2.0.2",
     "pixi.js": "^4.7.3",
     "query-string": "^6.0.0",
