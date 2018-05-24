@@ -69,8 +69,8 @@ export type UnitType = {|
         received?: number
     |},
     userId?: UserIdType,
-    id?: string,
-    level?: number
+    id?: string
+    // level?: number
 |};
 
 export type GraveType = {|

@@ -1107,16 +1107,23 @@ export default class Unit {
         return null;
     }
 
-    setLevel(level: number) {
-        const unit = this;
+    /*
+        setLevel(level: number) {
+            const unit = this;
 
-        unit.attr.level = level;
-    }
+            unit.attr.level = level;
+        }
+    */
 
     getLevel(): number {
         const unit = this;
+        const damageGiven = unit.getDamageGiven();
+        const maxLevel = defaultUnitData.level.max;
+        const countedLevel = Math.round(damageGiven / 9);
 
-        return typeof unit.attr.level === 'number' ? unit.attr.level : defaultUnitData.level;
+        // TODO: implement method to count level
+        console.warn('implement method to count level');
+        return Math.min(countedLevel || defaultUnitData.level.min, maxLevel);
     }
 
     getPoisonAttack(): number {

@@ -339,7 +339,10 @@ const defaultUnitData = {
     render: {
         spriteAnimatedSpeed: 0.08
     },
-    level: 1,
+    level: {
+        min: 1,
+        max: 9
+    },
     animation: {
         moveStep: 100,
         attack: 500
