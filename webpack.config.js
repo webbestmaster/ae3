@@ -173,7 +173,15 @@ const webpackConfig = {
             {
                 test: /\.scss$/,
                 use: [
-                    {loader: 'style-loader', options: {sourceMap: IS_DEVELOPMENT}},
+                    {
+                        loader: 'style-loader', options: {
+                            sourceMap: IS_DEVELOPMENT,
+                            singleton: true,
+                            attrs: {
+                                'class': 'my-css-module'
+                            }
+                        }
+                    },
                     {
                         loader: 'css-loader', options: {
                             sourceMap: IS_DEVELOPMENT,
