@@ -9,6 +9,7 @@ const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer'); // eslint-dis
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const DEVELOPMENT = 'development';
 const PRODUCTION = 'production';
@@ -173,16 +174,20 @@ const webpackConfig = {
             {
                 test: /\.scss$/,
                 use: [
-                    {
-                        loader: 'style-loader',
-                        options: {
-                            sourceMap: IS_DEVELOPMENT,
-                            singleton: true,
-                            attrs: {
-                                'class': 'my-css-module'
-                            }
-                        }
-                    },
+
+                    /*
+                                        {
+                                            loader: 'style-loader',
+                                            options: {
+                                                sourceMap: IS_DEVELOPMENT,
+                                                singleton: true,
+                                                attrs: {
+                                                    'class': 'my-css-module'
+                                                }
+                                            }
+                                        },
+                    */
+                    MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader', options: {
                             sourceMap: IS_DEVELOPMENT,
@@ -217,6 +222,12 @@ const webpackConfig = {
             },
             hash: true,
             filename: './index.html'
+        }),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: '[name].[hash].css',
+            chunkFilename: '[id].[hash].css'
         }),
         new ScriptExtHtmlWebpackPlugin({
             defaultAttribute: IS_PRODUCTION ? 'async' : 'defer'
