@@ -174,20 +174,18 @@ const webpackConfig = {
             {
                 test: /\.scss$/,
                 use: [
-
-                    /*
-                                        {
-                                            loader: 'style-loader',
-                                            options: {
-                                                sourceMap: IS_DEVELOPMENT,
-                                                singleton: true,
-                                                attrs: {
-                                                    'class': 'my-css-module'
-                                                }
-                                            }
-                                        },
-                    */
-                    MiniCssExtractPlugin.loader,
+                    IS_PRODUCTION ?
+                        MiniCssExtractPlugin.loader :
+                        {
+                            loader: 'style-loader',
+                            options: {
+                                sourceMap: IS_DEVELOPMENT,
+                                singleton: true,
+                                attrs: {
+                                    'class': 'my-css-module'
+                                }
+                            }
+                        },
                     {
                         loader: 'css-loader',
                         options: {
