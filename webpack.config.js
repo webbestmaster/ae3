@@ -228,8 +228,8 @@ const webpackConfig = {
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            filename: '[name].[hash].css',
-            chunkFilename: '[id].[hash].css'
+            filename: IS_DEVELOPMENT ? '[name].css' : '[name].[hash:6].css',
+            chunkFilename: IS_DEVELOPMENT ? '[id].css' : '[id].[hash:6].css'
         }),
         new ScriptExtHtmlWebpackPlugin({
             defaultAttribute: IS_PRODUCTION ? 'async' : 'defer'
