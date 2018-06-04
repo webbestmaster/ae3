@@ -705,6 +705,8 @@ export default class Game {
 
             game.removeUnit(defenderUnit);
 
+            await aggressorUnit.actualizeLevel();
+
             game.onUnitClick(aggressorUnit);
 
             return Promise.resolve();
@@ -716,7 +718,11 @@ export default class Game {
 
         if (state.defender.canAttack === false) {
             console.log('defender can NOT attack');
+
+            await aggressorUnit.actualizeLevel();
+
             game.onUnitClick(aggressorUnit);
+
             return Promise.resolve();
         }
 
@@ -749,11 +755,17 @@ export default class Game {
 
             game.removeUnit(aggressorUnit);
 
+            await defenderUnit.actualizeLevel();
+
             return Promise.resolve();
         }
 
         aggressorUnit.setHitPoints(state.aggressor.hitPoints);
         aggressorUnit.setPoisonCountdown(state.aggressor.poisonCountdown);
+
+        await aggressorUnit.actualizeLevel();
+        await defenderUnit.actualizeLevel();
+
         game.onUnitClick(aggressorUnit);
 
         return Promise.resolve();

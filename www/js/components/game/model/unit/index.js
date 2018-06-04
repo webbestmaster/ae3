@@ -18,6 +18,12 @@ import {tweenList} from './../../../../lib/tween';
 import find from 'lodash/find';
 import Grave from './../grave';
 
+type LevelUpAnimationDataType = {|
+    x: number,
+    y: number,
+    alpha: number
+|};
+
 export type UnitActionMoveType = {|
     type: 'move',
     from: {
@@ -115,6 +121,7 @@ type UnitGameAttrType = {|
     sprite: {|
         unit: PIXI.extras.AnimatedSprite,
         hitPoints: PIXI.Text,
+        level: PIXI.Text,
         poisonCountdown: PIXI.Text,
         wispAura: PIXI.Sprite
     |},
@@ -198,6 +205,7 @@ export default class Unit {
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1'])
                 ]),
                 hitPoints: new PIXI.Text('', textStyle),
+                level: new PIXI.Text('', textStyle),
                 poisonCountdown: new PIXI.Text('', textStyleRed),
                 wispAura: PIXI.Sprite.fromImage(imageMap.other['under-wisp-aura'])
             },
@@ -211,6 +219,7 @@ export default class Unit {
 
         unit.initializeUnitSprite();
         unit.initializeHitPointsSprite();
+        unit.initializeLevelSprite();
         unit.initializePoisonCountdownSprite();
         unit.bindUnitEventListeners();
     }
@@ -259,6 +268,26 @@ export default class Unit {
         }
 
         gameAttr.container.addChild(gameAttr.sprite.hitPoints);
+    }
+
+    initializeLevelSprite() {
+        const unit = this;
+        const {attr, gameAttr} = unit;
+        const level = unit.getLevel();
+        const {square} = mapGuide.size;
+
+        if (level > defaultUnitData.level.max) {
+            console.error('level bigger than defaultUnitData.level.max!', unit);
+        }
+
+        if (level !== defaultUnitData.level.min) {
+            gameAttr.sprite.level.text = level;
+        }
+
+        gameAttr.sprite.level.position.set(0, square);
+        gameAttr.sprite.level.anchor.set(0, 1);
+
+        gameAttr.container.addChild(gameAttr.sprite.level);
     }
 
     initializePoisonCountdownSprite() {
@@ -1107,24 +1136,85 @@ export default class Unit {
         return null;
     }
 
-    /*
-        setLevel(level: number) {
-            const unit = this;
+    async setLevel(level: number): Promise<void> {
+        const unit = this;
+        const {attr, gameAttr} = unit;
+        const visibleLevel = parseInt(gameAttr.sprite.level.text, 10) || 0;
 
-            unit.attr.level = level;
+        if (visibleLevel === level) {
+            console.log('set new level is not needed, new level and current level the same');
+            return;
         }
-    */
+
+        if (level > defaultUnitData.level.max) {
+            console.error('too high level', level, unit);
+            await unit.setLevel(defaultUnitData.level.max);
+            return;
+        }
+
+        await unit.showLevelUp();
+
+        gameAttr.sprite.level.text = level === defaultUnitData.level.min ? '' : level;
+    }
+
+    actualizeLevel(): Promise<void> {
+        const unit = this;
+
+        return unit.setLevel(unit.getLevel());
+    }
 
     getLevel(): number {
         const unit = this;
         const damageGiven = unit.getDamageGiven();
         const maxLevel = defaultUnitData.level.max;
-        const countedLevel = Math.round(damageGiven / 9);
+        const countedLevel = Math.floor(damageGiven / 55);
 
         // TODO: implement method to count level
         console.warn('implement method to count level');
 
         return Math.min(countedLevel || defaultUnitData.level.min, maxLevel);
+    }
+
+    async showLevelUp(): Promise<void> {
+        const unit = this;
+        const {attr, gameAttr} = unit;
+        const {square} = mapGuide.size;
+
+        const levelUpSprite = PIXI.Sprite.fromImage(imageMap.other['level-up']);
+
+        gameAttr.container.addChild(levelUpSprite);
+
+        levelUpSprite.anchor.set(0.5, 1);
+        levelUpSprite.position.set(square / 2, square);
+        levelUpSprite.alpha = 0;
+
+        const animationFrom: LevelUpAnimationDataType = {
+            x: square / 2,
+            y: square,
+            alpha: 0
+        };
+
+        const animationShow: LevelUpAnimationDataType = {
+            x: square / 2,
+            y: 0,
+            alpha: 1
+        };
+
+        const animationTo: LevelUpAnimationDataType = {
+            x: square / 2,
+            y: square / 2,
+            alpha: 0
+        };
+
+        await tweenList(
+            [animationFrom, animationShow, animationShow, animationTo],
+            defaultUnitData.animation.levelUp,
+            (animationCurrent: LevelUpAnimationDataType) => {
+                levelUpSprite.position.set(animationCurrent.x, animationCurrent.y);
+                levelUpSprite.alpha = animationCurrent.alpha;
+            });
+
+        gameAttr.container.removeChild(levelUpSprite);
     }
 
     getPoisonAttack(): number {

@@ -57,6 +57,9 @@ declare module 'pixi.js' {
         position: {
             set(x: number, y: number): void
         },
+        anchor: {
+            set(x: number, y: number): void
+        },
         scale: {
             set(x: number, y: number): void
         },
