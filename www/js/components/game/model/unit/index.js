@@ -1123,6 +1123,7 @@ export default class Unit {
 
         // TODO: implement method to count level
         console.warn('implement method to count level');
+
         return Math.min(countedLevel || defaultUnitData.level.min, maxLevel);
     }
 

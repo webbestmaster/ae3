@@ -191,11 +191,11 @@ export default class Render {
 
         const {square} = mapGuide.size;
         const worldSizeQ = square * 12;
-        const worldSizScaleQ = 4;
+        const worldSizeMaxScaleQ = 4;
 
         viewport.clampZoom({
-            minWidth: worldSize.width / worldSizScaleQ * (width / worldSizeQ),
-            minHeight: worldSize.height / worldSizScaleQ * (height / worldSizeQ),
+            minWidth: worldSize.width / worldSizeMaxScaleQ * (width / worldSizeQ),
+            minHeight: worldSize.height / worldSizeMaxScaleQ * (height / worldSizeQ),
             maxWidth: worldSize.width * (width / worldSizeQ),
             maxHeight: worldSize.height * (height / worldSizeQ)
         });

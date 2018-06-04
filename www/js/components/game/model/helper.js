@@ -184,21 +184,25 @@ function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataFor
     // 3 - add bonus damage by unit level, count unit level from damage given/received
     console.warn('getAttackDamage - 1 - add bonus damage archer vs fly unit');
     console.warn('getAttackDamage - 2 - add bonus damage wisp vs skeleton');
-    console.warn('getAttackDamage - 3 - add bonus damage by unit level, count unit level from damage given/received');
 
     const minDamage = 1;
     const aggressorScale = aggressor.hitPoints / defaultUnitData.hitPoints;
-    const aggressorSelfAttack = Math.random() * (aggressor.attack.max - aggressor.attack.min) + aggressor.attack.min;
+    const aggressorSelfAttack = Math.random() * (aggressor.attack.max - aggressor.attack.min) +
+        aggressor.attack.min +
+        // level damage
+        aggressor.level / (defaultUnitData.level.max + 1) * ((aggressor.attack.max + aggressor.attack.min) / 2);
     const aggressorAttackBonusWistAura = aggressor.hasWispAura ? additionalUnitData.wispAttackBonus : 0;
     const aggressorPoisonAttackReduce = aggressor.poisonCountdown > 0 ? additionalUnitData.poisonAttackReduce : 0;
     const aggressorEndAttack = aggressorScale *
         (aggressorSelfAttack + aggressorAttackBonusWistAura - aggressorPoisonAttackReduce);
 
     const defenderScale = defender.hitPoints / defaultUnitData.hitPoints;
-    const defenderSelfArmor = defender.armor;
+    const defenderSelfArmor = defender.armor +
+        // level armor
+        defender.level * defaultUnitData.armor.perLevel;
     const defenderPoisonArmorReduce = defender.poisonCountdown > 0 ? additionalUnitData.poisonArmorReduce : 0;
     const defenderPlaceArmor = defender.placeArmor;
-    const defenderEndArmor = defenderScale * (defenderSelfArmor - defenderPoisonArmorReduce + defenderPlaceArmor);
+    const defenderEndArmor = defenderScale * (defenderSelfArmor - defenderPoisonArmorReduce) + defenderPlaceArmor;
 
     return Math.max(Math.round(aggressorEndAttack - defenderEndArmor), minDamage);
 }

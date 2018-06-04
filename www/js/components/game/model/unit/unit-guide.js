@@ -340,8 +340,11 @@ const defaultUnitData = {
         spriteAnimatedSpeed: 0.08
     },
     level: {
-        min: 1,
+        min: 0,
         max: 9
+    },
+    armor: {
+        perLevel: 5
     },
     animation: {
         moveStep: 100,
