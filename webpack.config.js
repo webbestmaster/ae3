@@ -62,7 +62,7 @@ const webpackConfig = {
                             name: 'style',
                             priority: -20,
                             reuseExistingChunk: true,
-                            test: /\.scss$/
+                            test: /\.scss|\.css$/
                         },
                         image: {
                             chunks: 'initial',
@@ -93,83 +93,44 @@ const webpackConfig = {
             },
             {
                 test: imageRETest,
-                use: IS_PRODUCTION ?
-                    [
-                        {
-                            loader: 'base64-inline-loader',
-                            // - limit - The limit can be specified with a query parameter. (Defaults to no limit).
-                            // If the file is greater than the limit (in bytes) the file-loader is used and
-                            // all query parameters are passed to it.
-                            // - name - The name is a standard option.
-                            query: {
-                                limit: 10e3, // 10k bytes
-                                name: 'img/img-[name]-[hash:6].[ext]'
-                            }
-                        },
-                        {
-                            loader: 'image-webpack-loader',
-                            options: {
-                                mozjpeg: {
-                                    quality: 80, // 0..100
-                                    progressive: true
-                                },
-                                // optipng: {
-                                //     optimizationLevel: 7 // 0..7
-                                // },
-                                // pngquant: {
-                                //     quality: '60-80', // 0..100
-                                //     speed: 1 // 1..10
-                                // },
-                                svgo: {}, // no set up needed
-                                gifsicle: {
-                                    optimizationLevel: 3 // 1..3
-                                }
-                                // webp brake MS Edge
-                                // webp: {
-                                //     quality: 75,
-                                //     method: 6
-                                // }
-                            }
+                use: [
+                    {
+                        loader: 'base64-inline-loader',
+                        // - limit - The limit can be specified with a query parameter. (Defaults to no limit).
+                        // If the file is greater than the limit (in bytes) the file-loader is used and
+                        // all query parameters are passed to it.
+                        // - name - The name is a standard option.
+                        query: {
+                            limit: 10e3, // 10k bytes
+                            name: 'img/img-[name]-[hash:6].[ext]'
                         }
-                    ] :
-                    [
-                        {
-                            loader: 'base64-inline-loader',
-                            // - limit - The limit can be specified with a query parameter. (Defaults to no limit).
-                            // If the file is greater than the limit (in bytes) the file-loader is used and
-                            // all query parameters are passed to it.
-                            // - name - The name is a standard option.
-                            query: {
-                                limit: 10e3, // 10k bytes
-                                name: 'img/img-[name]-[hash:6].[ext]'
+                    },
+                    {
+                        loader: 'image-webpack-loader',
+                        options: {
+                            mozjpeg: {
+                                quality: 80, // 0..100
+                                progressive: true
+                            },
+                            // optipng: {
+                            //     optimizationLevel: 7 // 0..7
+                            // },
+                            // pngquant: {
+                            //     quality: '60-80', // 0..100
+                            //     speed: 1 // 1..10
+                            // },
+                            svgo: {}, // no set up needed
+                            gifsicle: {
+                                optimizationLevel: 3 // 1..3
                             }
-                        },
-                        {
-                            loader: 'image-webpack-loader',
-                            options: {
-                                mozjpeg: {
-                                    quality: 80,
-                                    progressive: true
-                                },
-                                // optipng: {
-                                //     optimizationLevel: 1
-                                // },
-                                // pngquant: {
-                                //     quality: '60-80',
-                                //     speed: 10
-                                // },
-                                svgo: {}, // no set up needed
-                                gifsicle: {
-                                    optimizationLevel: 1
-                                }
-                                // webp brake MS Edge
-                                // webp: {
-                                //     quality: 75,
-                                //     method: 6
-                                // }
-                            }
+                            // webp brake MS Edge
+                            // webp: {
+                            //     quality: 75,
+                            //     method: 6
+                            // }
                         }
-                    ]
+                    }
+                ]
             },
             {
                 test: /\.scss$/,
@@ -182,16 +143,17 @@ const webpackConfig = {
                                 sourceMap: IS_DEVELOPMENT,
                                 singleton: true,
                                 attrs: {
-                                    'class': 'my-css-module'
+                                    'class': 'my-scss-module'
                                 }
                             }
                         },
+
                     {
                         loader: 'css-loader',
                         options: {
                             sourceMap: IS_DEVELOPMENT,
                             modules: true,
-                            localIdentName: IS_DEVELOPMENT ? '[local]----[path]--[name]--[hash:6]' : '[hash:6]',
+                            localIdentName: IS_DEVELOPMENT ? '[local]----[hash:6]' : '[hash:6]', // '[local]----[path]--[name]--[hash:6]'
                             minimize: IS_PRODUCTION
                         }
                     },
@@ -205,6 +167,44 @@ const webpackConfig = {
                         }
                     },
                     {loader: 'sass-loader', options: {sourceMap: IS_DEVELOPMENT}}
+
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    IS_PRODUCTION ?
+                        MiniCssExtractPlugin.loader :
+                        {
+                            loader: 'style-loader',
+                            options: {
+                                sourceMap: IS_DEVELOPMENT,
+                                singleton: true,
+                                attrs: {
+                                    'class': 'my-css-module'
+                                }
+                            }
+                        },
+
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: IS_DEVELOPMENT,
+                            modules: true,
+                            localIdentName: '[local]',
+                            minimize: IS_PRODUCTION
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: true,
+                            config: {
+                                path: './postcss.config.js'
+                            }
+                        }
+                    }
+
                 ]
             }
         ]
@@ -229,9 +229,7 @@ const webpackConfig = {
             filename: IS_DEVELOPMENT ? '[name].css' : '[name].[hash:6].css',
             chunkFilename: IS_DEVELOPMENT ? '[id].css' : '[id].[hash:6].css'
         }),
-        new ScriptExtHtmlWebpackPlugin({
-            defaultAttribute: IS_PRODUCTION ? 'async' : 'defer'
-        }),
+        new ScriptExtHtmlWebpackPlugin({defaultAttribute: 'defer'}),
         new CopyWebpackPlugin([{from: './www/favicon.ico', to: './favicon.ico'}], {debug: 'info'}),
         new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
     ]

@@ -56,21 +56,21 @@ declare module 'pixi.js' {
         hitArea: Rectangle,
         position: {
             set(x: number, y: number): void
-        };
+        },
         scale: {
             set(x: number, y: number): void
-        };
+        },
         alpha: number,
         removeChildren(startIndex?: number, endIndex?: number): void
     }
 
     declare export class Texture {
-        constructor(): Texture;
+        constructor(): Texture,
         static fromImage(spriteName: string): Texture
     }
 
     declare export class Sprite extends PixiObject {
-        constructor(): Sprite;
+        constructor(): Sprite,
         static fromImage(spriteName: string): Sprite
     }
 
@@ -83,7 +83,7 @@ declare module 'pixi.js' {
     }
 
     declare export class Text extends PixiObject {
-        constructor(text: string | number, style?: TextStyle): Text;
+        constructor(text: string | number, style?: TextStyle): Text,
         text: string | number
     }
 
@@ -94,17 +94,17 @@ declare module 'pixi.js' {
     }
 
     declare export class Application {
-        constructor(width: number, height: number, options?: ApplicationOptionsType): Application;
-        view: HTMLElement;
-        stage: Container;
+        constructor(width: number, height: number, options?: ApplicationOptionsType): Application,
+        view: HTMLElement,
+        stage: Container,
         renderer: {
             resize(width: number, height: number): void
         }
     }
 
     declare class AnimatedSprite extends PixiObject {
-        constructor(textureList: Array<Texture>): AnimatedSprite;
-        animationSpeed: number;
+        constructor(textureList: Array<Texture>): AnimatedSprite,
+        animationSpeed: number,
         play(): void
     }
 

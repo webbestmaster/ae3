@@ -135,20 +135,20 @@ export type UnitConstructorType = {|
 |};
 
 export type GameDataType = {|
-    +userList: Array<MapUserType>;
-    +buildingList: Array<Building>;
-    +unitList: Array<Unit>; // eslint-disable-line no-use-before-define
-    +graveList: Array<Grave>; // eslint-disable-line no-use-before-define
+    +userList: Array<MapUserType>,
+    +buildingList: Array<Building>,
+    +unitList: Array<Unit>, // eslint-disable-line no-use-before-define
+    +graveList: Array<Grave>, // eslint-disable-line no-use-before-define
     +pathMap: {
         +walk: Array<Array<number>>,
         +flow: Array<Array<number>>,
         +fly: Array<Array<number>>
-    };
+    },
     +armorMap: {
         +walk: Array<Array<number>>,
         +flow: Array<Array<number>>,
         +fly: Array<Array<number>>
-    };
+    },
     +emptyActionMap: Array<Array<[]>>
 |};
 
