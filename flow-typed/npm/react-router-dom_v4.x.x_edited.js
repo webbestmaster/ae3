@@ -1,6 +1,22 @@
 // flow-typed signature: 25e4ee422b9f0108f151f2c05dd2471d
 // flow-typed version: 107feb8c45/react-router-dom_v4.x.x/flow_>=v0.53.x
 
+declare module 'react-router-dom/BrowserRouter' {
+    declare export type GetUserConfirmation = (
+        message: string,
+        callback: (confirmed: boolean) => void
+    ) => void;
+
+    declare export default class BrowserRouter extends React$Component<{
+        basename?: string,
+        forceRefresh?: boolean,
+        getUserConfirmation?: GetUserConfirmation,
+        keyLength?: number,
+        children?: React$Node
+    }> {
+    }
+}
+
 declare module 'react-router-dom' {
   declare export class BrowserRouter extends React$Component<{
     basename?: string,

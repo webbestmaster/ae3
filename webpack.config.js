@@ -29,10 +29,11 @@ const definePluginParams = {
 
 const imageRETest = /\.(png|jpg|jpeg|gif|svg)(\?[a-z0-9=&.]+)?$/;
 
+const polyfills = IS_PRODUCTION ? ['babel-polyfill', 'whatwg-fetch'] : [];
+
 const webpackConfig = {
     entry: [
-        'babel-polyfill',
-        'whatwg-fetch',
+        ...polyfills,
         './www/css/root.scss',
         './www/js/index.js'
     ],
