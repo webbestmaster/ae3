@@ -63,6 +63,15 @@ export type UnitActionOccupyBuildingType = {|
     container: PIXI.Container
 |};
 
+export type UnitActionOpenStoreType = {|
+    type: 'open-store',
+    x: number,
+    y: number,
+    id: string,
+    userId: string,
+    container: PIXI.Container
+|};
+
 export type UnitActionRaiseSkeletonType = {|
     type: 'raise-skeleton',
     raiser: {|
@@ -104,13 +113,15 @@ export type RefreshUnitListType = {|
     activeUserId: string
 |};
 
-export type UnitActionType = UnitActionMoveType
+export type UnitActionType =
+    | UnitActionMoveType
     | UnitActionAttackType
     | RefreshUnitListType
     | UnitActionFixBuildingType
     | UnitActionOccupyBuildingType
     | UnitActionRaiseSkeletonType
-    | UnitActionDestroyBuildingType;
+    | UnitActionDestroyBuildingType
+    | UnitActionOpenStoreType;
 
 export type UnitActionsMapType = Array<Array<Array<UnitActionType>>>;
 
@@ -423,6 +434,28 @@ export default class Unit {
         return actionMap;
     }
 
+    getOpenStoreActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity, max-statements
+        const unit = this;
+        const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+
+        const actionMapOpenStore = unit.getOpenStoreMapActions(gameData);
+
+        if (actionMapOpenStore === null) {
+            return null;
+        }
+
+        actionMapOpenStore.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
+            lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
+                // actionMap[yCell][xCell].push(...cellAction);
+                if (cellAction[0]) {
+                    actionMap[yCell][xCell][0] = cellAction[0];
+                }
+            });
+        });
+
+        return actionMap;
+    }
+
     getMoveActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this;
         const {attr} = unit;
@@ -590,6 +623,50 @@ export default class Unit {
         });
 
         return occupyBuildingMap;
+    }
+
+    getOpenStoreMapActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity, max-statements
+        const unit = this;
+        const {attr} = unit;
+        const openStoreMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const unitId = typeof attr.id === 'string' ? attr.id : null;
+        const userId = typeof attr.userId === 'string' ? attr.userId : null;
+
+        if (unitId === null) {
+            console.error('unit has no id', unit);
+            return openStoreMap;
+        }
+
+        if (userId === null) {
+            console.error('unit has no userId', unit);
+            return openStoreMap;
+        }
+
+        // find building to open store
+        const unitX = attr.x;
+        const unitY = attr.y;
+
+        const building = find(gameData.buildingList, (buildingInList: Building): boolean => {
+            return buildingInList.attr.x === unitX &&
+                buildingInList.attr.y === unitY &&
+                buildingInList.attr.userId === userId &&
+                buildingInList.attr.type === 'castle';
+        }) || null;
+
+        if (building === null) {
+            return null;
+        }
+
+        openStoreMap[unitY][unitX].push({
+            type: 'open-store',
+            id: unitId,
+            userId,
+            x: unitX,
+            y: unitY,
+            container: new PIXI.Container()
+        });
+
+        return openStoreMap;
     }
 
     getDestroyBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements

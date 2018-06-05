@@ -494,3 +494,51 @@ export function getLevel(damageGiven: number): number {
 
     return level;
 }
+
+function cloneActionList(actionList: UnitActionsMapType): UnitActionsMapType {
+    const newActionList = [];
+
+    actionList.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
+        newActionList[yCell] = new Array(lineAction.length);
+        lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
+            // actionMap[yCell][xCell].push(...cellAction);
+            newActionList[yCell][xCell] = [];
+            if (cellAction[0]) {
+                newActionList[yCell][xCell][0] = cellAction[0];
+            }
+        });
+    });
+
+    return newActionList;
+}
+
+export function mergeActionList(actionListSource: UnitActionsMapType | null, // eslint-disable-line complexity
+                                actionListExtend: UnitActionsMapType | null): UnitActionsMapType | null {
+    if (actionListSource === null && actionListExtend !== null) {
+        return cloneActionList(actionListExtend);
+    }
+
+    if (actionListSource !== null && actionListExtend === null) {
+        return cloneActionList(actionListSource);
+    }
+
+    if (actionListSource === null || actionListExtend === null) {
+        return null;
+    }
+
+    const newActionList = cloneActionList(actionListSource);
+
+    actionListExtend.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
+        newActionList[yCell] = newActionList[yCell] || new Array(lineAction.length);
+
+        lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
+            newActionList[yCell][xCell] = newActionList[yCell][xCell] || [];
+
+            if (cellAction[0]) {
+                newActionList[yCell][xCell][0] = cellAction[0];
+            }
+        });
+    });
+
+    return newActionList;
+}

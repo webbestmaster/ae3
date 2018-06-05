@@ -8,7 +8,7 @@ import * as PIXI from 'pixi.js';
 import type {LandscapeType, MapType} from './../../../maps/type';
 import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
-import type {UnitActionsMapType, UnitActionType} from './unit/index';
+import type {UnitActionOpenStoreType, UnitActionsMapType, UnitActionType} from './unit/index';
 import type {
     UnitActionAttackType, UnitActionDestroyBuildingType, UnitActionFixBuildingType, UnitActionMoveType,
     UnitActionOccupyBuildingType, UnitActionRaiseSkeletonType
@@ -269,6 +269,10 @@ export default class Render {
                             render.drawActionDestroyBuilding(unitAction);
                             break;
 
+                        case 'open-store':
+                            render.drawActionOpenStore(unitAction);
+                            break;
+
                         default:
                             console.error('unsupported unit action type', unitAction);
                     }
@@ -309,6 +313,18 @@ export default class Render {
         container.buttonMode = true;
         container.interactive = true;
         container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-fix-building']));
+
+        render.layer.actions.addChild(unitAction.container);
+    }
+
+    drawActionOpenStore(unitAction: UnitActionOpenStoreType) {
+        const render = this;
+        const {container} = unitAction;
+
+        container.position.set(unitAction.x * mapGuide.size.square, unitAction.y * mapGuide.size.square);
+        container.buttonMode = true;
+        container.interactive = true;
+        container.addChild(PIXI.Sprite.fromImage(imageMap.other['open-store']));
 
         render.layer.actions.addChild(unitAction.container);
     }

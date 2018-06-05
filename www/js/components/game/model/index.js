@@ -9,13 +9,26 @@ import {unitActionStateDefaultValue} from './../../../maps/type';
 import type {AllRoomSettingsType, ServerUserType} from './../../../module/server-api';
 import * as serverApi from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
-import {bindClick, countHealHitPointOnBuilding, getMatchResult, procedureMakeGraveForMapUnit} from './helper';
+import {
+    bindClick,
+    countHealHitPointOnBuilding,
+    getMatchResult,
+    mergeActionList,
+    procedureMakeGraveForMapUnit
+} from './helper';
 import Render from './render';
 import Building from './building';
 import Grave from './grave';
 import type {
-    GameDataType, UnitActionAttackType, UnitActionDestroyBuildingType, UnitActionFixBuildingType,
-    UnitActionMoveType, UnitActionOccupyBuildingType, UnitActionRaiseSkeletonType, UnitActionsMapType, UnitActionType
+    GameDataType,
+    UnitActionAttackType,
+    UnitActionDestroyBuildingType,
+    UnitActionFixBuildingType,
+    UnitActionMoveType,
+    UnitActionOccupyBuildingType, UnitActionOpenStoreType,
+    UnitActionRaiseSkeletonType,
+    UnitActionsMapType,
+    UnitActionType
 } from './unit';
 import Unit from './unit';
 import {user} from './../../../module/user';
@@ -1181,11 +1194,9 @@ export default class Game {
                 return;
             }
 
-            game.gameView.props.history.push('?viewId=' + storeViewId +
-                '&x=' + building.attr.x +
-                '&y=' + building.attr.y);
+            console.log('---> open store by building');
 
-            game.render.cleanActionsList();
+            game.openStore(building.attr.x, building.attr.y);
         });
 
         game.render.addBuilding(building.gameAttr.container);
@@ -1273,7 +1284,7 @@ export default class Game {
         unit.destroy();
     }
 
-    onUnitClick(unit: Unit) {
+    onUnitClick(unit: Unit) { // eslint-disable-line complexity
         const game = this;
         const unitUserId = typeof unit.attr.userId === 'string' ? unit.attr.userId : null;
 
@@ -1287,24 +1298,40 @@ export default class Game {
             return;
         }
 
-        const actionsList = unit.getActions(game.getGameData());
 
-        if (actionsList === null) {
+        const gameData = game.getGameData();
+
+        // get unit's action
+        const unitActionsList = unit.getActions(gameData);
+
+        if (unitActionsList === null) {
             console.log('---> unit already done - set unit GRAY state');
             unit.setIsActionAvailable(false);
+        }
+
+        const openStoreActionList = unit.getOpenStoreActions(gameData);
+
+        /* you can add logic for openStoreActionList here */
+
+        const mergedActionList = mergeActionList(unitActionsList, openStoreActionList);
+
+        if (mergedActionList === null) {
+            game.render.cleanActionsList();
             return;
         }
 
-        game.render.drawActionsList(actionsList);
+        game.render.drawActionsList(mergedActionList);
 
-        actionsList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
+        mergedActionList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
                 unitActionList.forEach((unitAction: UnitActionType) => {
                     if (unitAction.container) {
                         bindClick(unitAction.container, () => { // eslint-disable-line complexity
                             switch (unitAction.type) {
                                 case 'move':
-                                    game.bindOnClickUnitActionMove(unitAction, actionsList);
+                                    if (unitActionsList !== null) {
+                                        game.bindOnClickUnitActionMove(unitAction, unitActionsList);
+                                    }
                                     break;
 
                                 case 'attack':
@@ -1325,6 +1352,10 @@ export default class Game {
 
                                 case 'destroy-building':
                                     game.bindOnClickUnitActionDestroyBuilding(unitAction);
+                                    break;
+
+                                case 'open-store':
+                                    game.bindOnClickUnitActionOpenStore(unitAction);
                                     break;
 
                                 default:
@@ -1588,6 +1619,14 @@ export default class Game {
             .then(() => {
                 game.gameView.removeDisableReason('client-push-state');
             });
+    }
+
+    bindOnClickUnitActionOpenStore(unitAction: UnitActionOpenStoreType) { // eslint-disable-line max-statements, complexity
+        const game = this;
+
+        console.log('---> open store by bindOnClickUnitActionOpenStore');
+
+        game.openStore(unitAction.x, unitAction.y);
     }
 
     bindOnClickUnitActionOccupyBuilding(unitAction: UnitActionOccupyBuildingType) { // eslint-disable-line max-statements, complexity, id-length
@@ -2198,6 +2237,18 @@ export default class Game {
     async loadMapState(map: MapType): Promise<void> {
         // TODO: implement load map state
         console.error('implement load map state');
+    }
+
+    openStore(x: number, y: number) {
+        const game = this;
+
+        game.gameView.props.history.push('?viewId=' + storeViewId +
+            '&x=' + x +
+            '&y=' + y);
+
+        window.requestAnimationFrame(() => {
+            game.render.cleanActionsList();
+        });
     }
 
     destroy() {

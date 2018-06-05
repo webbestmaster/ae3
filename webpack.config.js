@@ -43,7 +43,8 @@ const webpackConfig = {
         chunkFilename: '[name].async-import.js'
     },
 
-    devtool: IS_PRODUCTION ? false : 'source-map',
+    // devtool: IS_PRODUCTION ? false : 'source-map',
+    devtool: 'source-map', // needed to deploy in test server
 
     optimization: Object.assign(
         {},
