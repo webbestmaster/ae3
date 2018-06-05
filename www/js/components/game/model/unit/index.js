@@ -657,6 +657,8 @@ export default class Unit {
             return null;
         }
 
+        console.error('TODO: check can open store here');
+
         openStoreMap[unitY][unitX].push({
             type: 'open-store',
             id: unitId,

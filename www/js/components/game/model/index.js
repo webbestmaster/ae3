@@ -1194,6 +1194,8 @@ export default class Game {
                 return;
             }
 
+            console.error('TODO: check can open store here');
+
             console.log('---> open store by building');
 
             game.openStore(building.attr.x, building.attr.y);
@@ -2242,6 +2244,8 @@ export default class Game {
     openStore(x: number, y: number) {
         const game = this;
 
+        console.error('TODO: check can open store here');
+
         game.gameView.props.history.push('?viewId=' + storeViewId +
             '&x=' + x +
             '&y=' + y);
@@ -2249,6 +2253,10 @@ export default class Game {
         window.requestAnimationFrame(() => {
             game.render.cleanActionsList();
         });
+    }
+
+    canOpenStore(x: number, y: number): boolean {
+        return true;
     }
 
     destroy() {
