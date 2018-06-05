@@ -341,7 +341,9 @@ const defaultUnitData = {
     },
     level: {
         min: 0,
-        max: 9
+        max: 9,
+        base: 45,
+        scale: 1.05
     },
     armor: {
         perLevel: 5

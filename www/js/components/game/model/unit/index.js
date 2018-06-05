@@ -5,7 +5,7 @@
 import * as PIXI from 'pixi.js';
 import type {MapType, MapUserType, UnitActionStateType, UnitType} from './../../../../maps/type';
 import type {AttackResultUnitType} from './../helper';
-import {bindClick, getAttackResult, getMoviePath, getUserColor} from './../helper';
+import {bindClick, getAttackResult, getMoviePath, getUserColor, getLevel} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import type {UnitGuideDataType} from './unit-guide';
 import unitGuide, {defaultUnitData} from './unit-guide';
@@ -1166,13 +1166,8 @@ export default class Unit {
     getLevel(): number {
         const unit = this;
         const damageGiven = unit.getDamageGiven();
-        const maxLevel = defaultUnitData.level.max;
-        const countedLevel = Math.floor(damageGiven / 55);
 
-        // TODO: implement method to count level
-        console.warn('implement method to count level');
-
-        return Math.min(countedLevel || defaultUnitData.level.min, maxLevel);
+        return getLevel(damageGiven);
     }
 
     async showLevelUp(): Promise<void> {

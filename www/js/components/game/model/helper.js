@@ -475,3 +475,22 @@ export function getMatchResult(map: MapType): MathResultType | null {
 
     return null;
 }
+
+export function getLevel(damageGiven: number): number {
+    const maxLevelForCount = defaultUnitData.level.max;
+    const levelScale = defaultUnitData.level.scale;
+    const base = defaultUnitData.level.base;
+
+    let level = 0;
+    let levelSize = base;
+
+    for (; level < maxLevelForCount; level += 1) {
+        if (levelSize > damageGiven) {
+            return level;
+        }
+
+        levelSize += base * Math.pow(levelScale, level);
+    }
+
+    return level;
+}
