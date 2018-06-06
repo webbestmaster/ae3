@@ -1,5 +1,7 @@
 // @flow
 
+/* eslint-disable id-match */
+
 // add your declare module here
 
 declare module '@material-ui/core/Button' {
