@@ -14,7 +14,9 @@ import {
     countHealHitPointOnBuilding,
     getMatchResult,
     mergeActionList,
-    procedureMakeGraveForMapUnit
+    procedureMakeGraveForMapUnit,
+    isStoreOpen,
+    canOpenStore
 } from './helper';
 import Render from './render';
 import Building from './building';
@@ -42,7 +44,6 @@ import * as unitMaster from './unit/master';
 import {defaultUnitData} from './unit/unit-guide';
 import {bottomBarData, GameView} from './../../game/index';
 import {storeViewId} from './../../store';
-import queryString from 'query-string';
 import Queue from './../../../lib/queue';
 
 type RenderSettingType = {|
@@ -1173,7 +1174,7 @@ export default class Game {
 
         game.buildingList.push(building);
 
-        bindClick(building.gameAttr.container, () => {
+        bindClick(building.gameAttr.container, () => { // eslint-disable-line complexity
             if (building.attr.type !== 'castle') {
                 console.log('NOT a castle');
                 return;
@@ -1189,12 +1190,15 @@ export default class Game {
                 return;
             }
 
-            if (queryString.parse(window.location.search).viewId === storeViewId) {
+            if (isStoreOpen()) {
                 console.error('store already open', window.location.search);
                 return;
             }
 
-            console.error('TODO: check can open store here');
+            if (!canOpenStore(building.attr.x, building.attr.y, game.getGameData())) {
+                console.log('can not open store from click on building');
+                return;
+            }
 
             console.log('---> open store by building');
 
@@ -2244,7 +2248,9 @@ export default class Game {
     openStore(x: number, y: number) {
         const game = this;
 
-        console.error('TODO: check can open store here');
+        if (!canOpenStore(x, y, game.getGameData())) {
+            return;
+        }
 
         game.gameView.props.history.push('?viewId=' + storeViewId +
             '&x=' + x +
@@ -2253,10 +2259,6 @@ export default class Game {
         window.requestAnimationFrame(() => {
             game.render.cleanActionsList();
         });
-    }
-
-    canOpenStore(x: number, y: number): boolean {
-        return true;
     }
 
     destroy() {

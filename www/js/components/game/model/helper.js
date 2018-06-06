@@ -1,5 +1,5 @@
 // @flow
-/* global document */
+/* global document, window */
 
 import type {TeamIdType} from './../../../maps/map-guide';
 import mapGuide from './../../../maps/map-guide';
@@ -13,6 +13,8 @@ import type {MapType, UnitType} from './../../../maps/type';
 import find from 'lodash/find';
 import type {BuildingType, MapUserType} from '../../../maps/type';
 import * as PIXI from 'pixi.js';
+import {storeViewId} from './../../store';
+import queryString from 'query-string';
 
 type InteractionEventType = {|
     +data: {|
@@ -541,4 +543,58 @@ export function mergeActionList(actionListSource: UnitActionsMapType | null, // 
     });
 
     return newActionList;
+}
+
+export function isStoreOpen(): boolean {
+    return queryString.parse(window.location.search).viewId === storeViewId;
+}
+
+type PlaceForNewUnitType = {|
+    +x: number,
+    +y: number
+|};
+
+function hasPlaceForNewUnit(x: number, y: number, gameData: GameDataType): boolean {
+    // count cross around store
+    const neededCoordinates: Array<PlaceForNewUnitType> = [
+        {x: x - 1, y},
+        {x, y: y - 1},
+        {x: x + 1, y},
+        {x, y: y + 1},
+        {x, y}
+    ];
+
+    return neededCoordinates.some((place: PlaceForNewUnitType): boolean => {
+        // check has map needed coordinates
+        const emptyActionMap = gameData.emptyActionMap;
+        const placeX = place.x;
+        const placeY = place.y;
+
+        if (!emptyActionMap[placeY] || !emptyActionMap[placeY][placeX]) {
+            console.log('?hasPlaceForNewUnit ---> map has no coordinate:', 'x:', placeX, 'y:', placeY);
+            return false;
+        }
+
+        // check unit free place
+        if (find(gameData.unitList, (unit: Unit): boolean => unit.attr.x === placeX && unit.attr.y === placeY)) {
+            console.log('?hasPlaceForNewUnit ---> unit on:', 'x:', placeX, 'y:', placeY);
+            return false;
+        }
+
+        return true;
+    });
+}
+
+export function canOpenStore(x: number, y: number, gameData: GameDataType): boolean {
+    if (isStoreOpen()) {
+        console.log('? canOpenStore ---> store already open');
+        return false;
+    }
+
+    if (!hasPlaceForNewUnit(x, y, gameData)) {
+        console.log('? canOpenStore ---> has place for new unit');
+        return false;
+    }
+
+    return true;
 }

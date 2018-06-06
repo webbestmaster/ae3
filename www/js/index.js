@@ -1,6 +1,9 @@
 // @flow
 /* global window */
 
+import {initializeEnvironment} from './app/helper.js';
+initializeEnvironment();
+
 import React from 'react';
 import {render} from 'react-dom';
 import BrowserRouter from 'react-router-dom/BrowserRouter';
@@ -10,9 +13,6 @@ import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
 
 import App from './app';
-import {initializeEnvironment} from './app/helper.js';
-
-initializeEnvironment();
 
 import * as reducers from './app-reducer';
 

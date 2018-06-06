@@ -5,7 +5,7 @@
 import * as PIXI from 'pixi.js';
 import type {MapType, MapUserType, UnitActionStateType, UnitType} from './../../../../maps/type';
 import type {AttackResultUnitType} from './../helper';
-import {bindClick, getAttackResult, getMoviePath, getUserColor, getLevel} from './../helper';
+import {bindClick, getAttackResult, getMoviePath, getUserColor, getLevel, canOpenStore} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import type {UnitGuideDataType} from './unit-guide';
 import unitGuide, {defaultUnitData} from './unit-guide';
@@ -657,7 +657,9 @@ export default class Unit {
             return null;
         }
 
-        console.error('TODO: check can open store here');
+        if (!canOpenStore(building.attr.x, building.attr.y, gameData)) {
+            return null;
+        }
 
         openStoreMap[unitY][unitX].push({
             type: 'open-store',
