@@ -18,6 +18,7 @@ import {defaultUnitData} from './unit/unit-guide';
 import Building from './building';
 import {tween} from './../../../lib/tween';
 import Viewport from 'pixi-viewport';
+import {bindClick} from './helper';
 
 import borderImage1 from './../i/border/1.png';
 import borderImage2 from './../i/border/2.png';
@@ -201,18 +202,28 @@ export default class Render {
         });
     }
 
-    drawLandscape(map: MapType) {
+    drawLandscape(map: MapType, onClick: (x: number, y: number) => void) {
         const render = this;
 
         const {landscape} = render.layer;
 
         map.landscape.forEach((list: Array<LandscapeType>, tileY: number) => {
             list.forEach((landscapeItem: LandscapeType, tileX: number) => {
+                const container = new PIXI.Container();
                 const sprite = PIXI.Sprite.fromImage(imageMap.landscape[landscapeItem]);
 
-                sprite.position.set(tileX * mapGuide.size.square, tileY * mapGuide.size.square);
+                container.addChild(sprite);
 
-                landscape.addChild(sprite);
+                container.position.set(tileX * mapGuide.size.square, tileY * mapGuide.size.square);
+
+                landscape.addChild(container);
+
+                container.buttonMode = true;
+                container.interactive = true;
+
+                bindClick(container, (): void => onClick(tileX, tileY));
+
+                // TODO: draw here corner and other landscape parts
             });
         });
     }

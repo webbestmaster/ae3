@@ -86,7 +86,7 @@ export default class Game {
     |};
     message: {|
         list: Array<SocketMessageType>
-    |}
+    |};
 
     constructor() {
         const game = this;
@@ -132,7 +132,10 @@ export default class Game {
         game.render.initialize(renderSetting);
 
         // draw landscape
-        game.render.drawLandscape(game.settings.map);
+        game.render.drawLandscape(game.settings.map, (x: number, y: number) => {
+            console.log('landscape clicked in', x, y);
+            console.log('todo: show landscape date', x, y);
+        });
 
         // add buildings
         game.settings.map.buildings.forEach((buildingData: BuildingType) => {
@@ -1175,6 +1178,8 @@ export default class Game {
         game.buildingList.push(building);
 
         bindClick(building.gameAttr.container, () => { // eslint-disable-line complexity
+            console.log('TODO: show data bout building', building.attr);
+
             if (building.attr.type !== 'castle') {
                 console.log('NOT a castle');
                 return;

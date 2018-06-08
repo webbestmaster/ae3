@@ -88,13 +88,12 @@ export default class Building {
         const {attr, gameAttr} = building;
         const {square} = mapGuide.size;
 
-        if (attr.type !== 'castle') {
-            return;
-        }
-
         gameAttr.container.interactive = true;
         gameAttr.container.buttonMode = true;
-        gameAttr.container.hitArea = new PIXI.Rectangle(0, square, square, square);
+
+        gameAttr.container.hitArea = attr.type === 'castle' ?
+            new PIXI.Rectangle(0, square, square, square) :
+            new PIXI.Rectangle(0, 0, square, square);
     }
 
     setType(type: BuildingAttrTypeType) {
