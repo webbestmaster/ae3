@@ -20,7 +20,7 @@ import type {ContextRouter} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
 import Store from './../store';
 import queryString from 'query-string';
-import {getMatchResult, getSupplyState, getUserColor} from './model/helper';
+import {getMatchResult, getSupplyState, getUserColor, getWrongStateList} from './model/helper';
 import style from './style.m.scss';
 import classnames from 'classnames';
 
@@ -248,6 +248,16 @@ export class GameView extends Component<PropsType, StateType> {
     async endTurn(): Promise<void> {
         const view = this;
         const {props, state} = view;
+        const {model, game} = state;
+
+        const wrongStateList = getWrongStateList(game.getGameData());
+
+        if (wrongStateList !== null) {
+            game.showWrongState(wrongStateList[0]);
+            // TODO: add snack bar with error state;
+            window.alert('Please, resolve a problem:' + JSON.stringify(wrongStateList[0])); // eslint-disable-line no-alert
+            return Promise.resolve();
+        }
 
         view.addDisableReason('client-drop-turn');
 

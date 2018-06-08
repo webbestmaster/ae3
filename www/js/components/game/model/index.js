@@ -1044,6 +1044,12 @@ export default class Game {
             game.render.moveWorldTo(newGameUnit.attr.x, newGameUnit.attr.y);
         }
 
+        const wrongStateList = getWrongStateList(game.getGameData());
+
+        if (wrongStateList !== null) {
+            game.showWrongState(wrongStateList[0]);
+        }
+
         return Promise.resolve();
     }
 
@@ -1440,6 +1446,7 @@ export default class Game {
         const moveActionList = unit.getMoveActions(game.getGameData());
 
         game.render.drawActionsList(moveActionList);
+        game.render.moveWorldTo(unit.attr.x, unit.attr.y);
 
         moveActionList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
