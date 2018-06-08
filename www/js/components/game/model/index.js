@@ -135,6 +135,7 @@ export default class Game {
         game.render.drawLandscape(game.settings.map, (x: number, y: number) => {
             console.log('landscape clicked in', x, y);
             console.log('todo: show landscape date', x, y);
+            game.render.cleanActionsList();
         });
 
         // add buildings
@@ -1179,6 +1180,11 @@ export default class Game {
 
         bindClick(building.gameAttr.container, () => { // eslint-disable-line complexity
             console.log('TODO: show data bout building', building.attr);
+
+            // this is fix bug with open store; bug: store open twice
+            window.requestAnimationFrame(() => {
+                game.render.cleanActionsList();
+            });
 
             if (building.attr.type !== 'castle') {
                 console.log('NOT a castle');
