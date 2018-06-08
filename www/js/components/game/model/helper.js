@@ -598,3 +598,53 @@ export function canOpenStore(x: number, y: number, gameData: GameDataType): bool
 
     return true;
 }
+
+
+export type WrongStateTypeUnitOnUnitType = {|
+    type: 'unit-on-unit',
+    x: number,
+    y: number
+|};
+
+export type WrongStateType = WrongStateTypeUnitOnUnitType;
+
+export function getUnitOverUnit(gameData: GameDataType): Array<WrongStateTypeUnitOnUnitType> | null {
+    const wrongStateList: Array<WrongStateTypeUnitOnUnitType> = [];
+
+    gameData.unitList.forEach((unitInList: Unit) => {
+        const unitInListX = unitInList.attr.x;
+        const unitInListY = unitInList.attr.y;
+
+        const unitForTest = find(gameData.unitList, (unit: Unit): boolean => unitInList !== unit &&
+            unitInListX === unit.attr.x &&
+            unitInListY === unit.attr.y);
+
+        if (!unitForTest) {
+            return;
+        }
+
+        const newWrongState = {
+            type: 'unit-on-unit',
+            x: unitInListX,
+            y: unitInListY
+        };
+
+        if (find(wrongStateList, newWrongState)) {
+            return;
+        }
+
+        wrongStateList.push(newWrongState);
+    });
+
+    return wrongStateList.length === 0 ? null : wrongStateList;
+}
+
+export function getWrongStateList(gameData: GameDataType): Array<WrongStateType> | null {
+    const wrongStateList: Array<WrongStateType> = [];
+
+    const unitOverUnitList = getUnitOverUnit(gameData) || [];
+
+    wrongStateList.push(...unitOverUnitList);
+
+    return wrongStateList.length === 0 ? null : wrongStateList;
+}

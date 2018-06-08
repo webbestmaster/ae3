@@ -16,8 +16,10 @@ import {
     mergeActionList,
     procedureMakeGraveForMapUnit,
     isStoreOpen,
-    canOpenStore
+    canOpenStore,
+    getWrongStateList
 } from './helper';
+import type {WrongStateType, WrongStateTypeUnitOnUnitType} from './helper';
 import Render from './render';
 import Building from './building';
 import Grave from './grave';
@@ -35,6 +37,7 @@ import type {
 import Unit from './unit';
 import {user} from './../../../module/user';
 import find from 'lodash/find';
+import findLast from 'lodash/findLast';
 import isEqual from 'lodash/isEqual';
 import remove from 'lodash/remove';
 import type {SocketMessagePushStateType, SocketMessageTakeTurnType, SocketMessageType} from './../../../module/socket';
@@ -135,7 +138,15 @@ export default class Game {
         game.render.drawLandscape(game.settings.map, (x: number, y: number) => {
             console.log('landscape clicked in', x, y);
             console.log('todo: show landscape date', x, y);
+
             game.render.cleanActionsList();
+
+            const wrongStateList = getWrongStateList(game.getGameData());
+
+            if (wrongStateList !== null) {
+                game.showWrongState(wrongStateList[0]);
+                return;
+            }
         });
 
         // add buildings
@@ -1178,8 +1189,15 @@ export default class Game {
 
         game.buildingList.push(building);
 
-        bindClick(building.gameAttr.container, () => { // eslint-disable-line complexity
+        bindClick(building.gameAttr.container, () => { // eslint-disable-line complexity, max-statements
             console.log('TODO: show data bout building', building.attr);
+
+            const wrongStateList = getWrongStateList(game.getGameData());
+
+            if (wrongStateList !== null) {
+                game.showWrongState(wrongStateList[0]);
+                return;
+            }
 
             // this is fix bug with open store; bug: store open twice
             window.requestAnimationFrame(() => {
@@ -1301,9 +1319,16 @@ export default class Game {
         unit.destroy();
     }
 
-    onUnitClick(unit: Unit) { // eslint-disable-line complexity
+    onUnitClick(unit: Unit) { // eslint-disable-line complexity, max-statements
         const game = this;
         const unitUserId = typeof unit.attr.userId === 'string' ? unit.attr.userId : null;
+
+        const wrongStateList = getWrongStateList(game.getGameData());
+
+        if (wrongStateList !== null) {
+            game.showWrongState(wrongStateList[0]);
+            return;
+        }
 
         if (unitUserId === null) {
             console.error('userId is not exists in unit', unit);
@@ -1383,6 +1408,52 @@ export default class Game {
                     }
 
                     console.error('no container to add onClick', unitAction);
+                });
+            });
+        });
+    }
+
+    showWrongState(wrongState: WrongStateType) {
+        const game = this;
+
+        if (wrongState.type === 'unit-on-unit') {
+            game.showWrongStateUnitOnUnit(wrongState);
+            return;
+        }
+
+        console.error('unknow wrong state', wrongState);
+    }
+
+    showWrongStateUnitOnUnit(wrongState: WrongStateTypeUnitOnUnitType) {
+        const game = this;
+
+        console.log('show wrong state', wrongState);
+
+        const unit = findLast(game.unitList, (unitInList: Unit): boolean => unitInList.attr.x === wrongState.x &&
+            unitInList.attr.y === wrongState.y) || null;
+
+        if (unit === null) {
+            console.log('can not find unit with for wrong state', wrongState);
+            return;
+        }
+
+        const moveActionList = unit.getMoveActions(game.getGameData());
+
+        game.render.drawActionsList(moveActionList);
+
+        moveActionList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
+            unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
+                unitActionList.forEach((unitAction: UnitActionType) => {
+                    if (!unitAction.container) {
+                        return;
+                    }
+
+                    bindClick(unitAction.container, () => {
+                        if (unitAction.type !== 'move') {
+                            return;
+                        }
+                        game.bindOnClickUnitActionMove(unitAction, moveActionList);
+                    });
                 });
             });
         });
