@@ -202,7 +202,7 @@ export default class Render {
         });
     }
 
-    drawLandscape(map: MapType, onClick: (x: number, y: number) => void) {
+    drawLandscape(map: MapType, onClick: (x: number, y: number) => Promise<void>) {
         const render = this;
 
         const {landscape} = render.layer;
@@ -221,7 +221,9 @@ export default class Render {
                 container.buttonMode = true;
                 container.interactive = true;
 
-                bindClick(container, (): void => onClick(tileX, tileY));
+                bindClick(container, async (): Promise<void> => {
+                    await onClick(tileX, tileY);
+                });
 
                 // TODO: draw here corner and other landscape parts
             });
@@ -246,10 +248,10 @@ export default class Render {
         render.layer.graves.addChild(container);
     }
 
-    drawActionsList(actionsList: UnitActionsMapType) {
+    async drawActionsList(actionsList: UnitActionsMapType): Promise<void> {
         const render = this;
 
-        render.cleanActionsList();
+        await render.cleanActionsList();
 
         actionsList.forEach((mapLine: Array<Array<UnitActionType>>) => {
             mapLine.forEach((actionList: Array<UnitActionType>) => {
@@ -376,10 +378,15 @@ export default class Render {
         render.layer.actions.addChild(unitAction.container);
     }
 
-    cleanActionsList() {
+    async cleanActionsList(): Promise<void> {
         const render = this;
 
-        render.layer.actions.removeChildren();
+        await new Promise((resolve: () => void) => {
+            window.requestAnimationFrame(() => {
+                render.layer.actions.removeChildren();
+                resolve();
+            });
+        });
     }
 
     async drawAttack(aggressorUnit: Unit, defenderUnit: Unit): Promise<void> {

@@ -138,7 +138,7 @@ type UnitGameAttrType = {|
     |},
     userList: Array<MapUserType>,
     event: {|
-        click: (unit: Unit) => void // eslint-disable-line no-use-before-define
+        click: (unit: Unit) => Promise<void> // eslint-disable-line no-use-before-define
     |},
     hasWispAura: boolean,
     isActionAvailable: boolean
@@ -148,7 +148,7 @@ export type UnitConstructorType = {|
     unitData: UnitType,
     userList: Array<MapUserType>,
     event: {|
-        click: (unit: Unit) => void // eslint-disable-line no-use-before-define
+        click: (unit: Unit) => Promise<void> // eslint-disable-line no-use-before-define
     |}
 |};
 
@@ -899,9 +899,9 @@ export default class Unit {
         unitContainer.interactive = true;
         unitContainer.buttonMode = true;
 
-        bindClick(unitContainer, () => {
+        bindClick(unitContainer, async (): Promise<void> => {
             console.log('click on unit', unit);
-            unit.gameAttr.event.click(unit);
+            await unit.gameAttr.event.click(unit);
         });
     }
 

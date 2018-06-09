@@ -302,7 +302,7 @@ function getEventName(MouseEventName: MouseEventNameType): MouseEventNameType | 
     return hasInMap ? MouseEventName : 'click';
 }
 
-export function bindClick(container: PIXI.Container, callback: () => void) {
+export function bindClick(container: PIXI.Container, callback: () => Promise<void>) {
     const containerEvent = {
         startTouch: {
             x: NaN,

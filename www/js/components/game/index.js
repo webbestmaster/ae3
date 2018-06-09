@@ -253,7 +253,7 @@ export class GameView extends Component<PropsType, StateType> {
         const wrongStateList = getWrongStateList(game.getGameData());
 
         if (wrongStateList !== null) {
-            game.showWrongState(wrongStateList[0]);
+            await game.showWrongState(wrongStateList[0]);
             // TODO: add snack bar with error state;
             window.alert('Please, resolve a problem:' + JSON.stringify(wrongStateList[0])); // eslint-disable-line no-alert
             return Promise.resolve();

@@ -135,19 +135,20 @@ export default class Game {
         game.render.initialize(renderSetting);
 
         // draw landscape
-        game.render.drawLandscape(game.settings.map, (x: number, y: number) => {
-            console.log('landscape clicked in', x, y);
-            console.log('todo: show landscape date', x, y);
+        game.render
+            .drawLandscape(game.settings.map, async (x: number, y: number): Promise<void> => {
+                console.log('landscape clicked in', x, y);
+                console.log('todo: show landscape date', x, y);
 
-            game.render.cleanActionsList();
+                await game.render.cleanActionsList();
 
-            const wrongStateList = getWrongStateList(game.getGameData());
+                const wrongStateList = getWrongStateList(game.getGameData());
 
-            if (wrongStateList !== null) {
-                game.showWrongState(wrongStateList[0]);
-                return;
-            }
-        });
+                if (wrongStateList !== null) {
+                    await game.showWrongState(wrongStateList[0]);
+                    return;
+                }
+            });
 
         // add buildings
         game.settings.map.buildings.forEach((buildingData: BuildingType) => {
@@ -270,7 +271,7 @@ export default class Game {
     async refreshUnitActionState(): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this;
 
-        game.render.cleanActionsList();
+        await game.render.cleanActionsList();
 
         const newMap = game.getMapState();
 
@@ -413,7 +414,7 @@ export default class Game {
                 break;
 
             case 'room__drop-turn':
-                game.render.cleanActionsList();
+                await game.render.cleanActionsList();
                 break;
 
             case 'room__join-into-room':
@@ -452,7 +453,7 @@ export default class Game {
     async handleServerTakeTurn(message: SocketMessageTakeTurnType): Promise<void> {
         const game = this;
 
-        game.render.cleanActionsList();
+        await game.render.cleanActionsList();
 
         game.unitList.forEach((unitInList: Unit) => {
             unitInList.setIsActionAvailable(true);
@@ -1047,7 +1048,7 @@ export default class Game {
         const wrongStateList = getWrongStateList(game.getGameData());
 
         if (wrongStateList !== null) {
-            game.showWrongState(wrongStateList[0]);
+            await game.showWrongState(wrongStateList[0]);
         }
 
         return Promise.resolve();
@@ -1195,20 +1196,17 @@ export default class Game {
 
         game.buildingList.push(building);
 
-        bindClick(building.gameAttr.container, () => { // eslint-disable-line complexity, max-statements
+        bindClick(building.gameAttr.container, async (): Promise<void> => { // eslint-disable-line complexity, max-statements
             console.log('TODO: show data bout building', building.attr);
 
             const wrongStateList = getWrongStateList(game.getGameData());
 
             if (wrongStateList !== null) {
-                game.showWrongState(wrongStateList[0]);
+                await game.showWrongState(wrongStateList[0]);
                 return;
             }
 
-            // this is fix bug with open store; bug: store open twice
-            window.requestAnimationFrame(() => {
-                game.render.cleanActionsList();
-            });
+            await game.render.cleanActionsList();
 
             if (building.attr.type !== 'castle') {
                 console.log('NOT a castle');
@@ -1237,7 +1235,7 @@ export default class Game {
 
             console.log('---> open store by building');
 
-            game.openStore(building.attr.x, building.attr.y);
+            await game.openStore(building.attr.x, building.attr.y);
         });
 
         game.render.addBuilding(building.gameAttr.container);
@@ -1287,8 +1285,8 @@ export default class Game {
             unitData,
             userList: mapState === null ? [] : mapState.userList,
             event: {
-                click: (clickedUnit: Unit) => {
-                    game.onUnitClick(clickedUnit);
+                click: async (clickedUnit: Unit): Promise<void> => {
+                    await game.onUnitClick(clickedUnit);
                 }
             }
         });
@@ -1325,14 +1323,14 @@ export default class Game {
         unit.destroy();
     }
 
-    onUnitClick(unit: Unit) { // eslint-disable-line complexity, max-statements
+    async onUnitClick(unit: Unit): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this;
         const unitUserId = typeof unit.attr.userId === 'string' ? unit.attr.userId : null;
 
         const wrongStateList = getWrongStateList(game.getGameData());
 
         if (wrongStateList !== null) {
-            game.showWrongState(wrongStateList[0]);
+            await game.showWrongState(wrongStateList[0]);
             return;
         }
 
@@ -1364,46 +1362,46 @@ export default class Game {
         const mergedActionList = mergeActionList(unitActionsList, openStoreActionList);
 
         if (mergedActionList === null) {
-            game.render.cleanActionsList();
+            await game.render.cleanActionsList();
             return;
         }
 
-        game.render.drawActionsList(mergedActionList);
+        await game.render.drawActionsList(mergedActionList);
 
         mergedActionList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
                 unitActionList.forEach((unitAction: UnitActionType) => {
                     if (unitAction.container) {
-                        bindClick(unitAction.container, () => { // eslint-disable-line complexity
+                        bindClick(unitAction.container, async (): Promise<void> => { // eslint-disable-line complexity
                             switch (unitAction.type) {
                                 case 'move':
                                     if (unitActionsList !== null) {
-                                        game.bindOnClickUnitActionMove(unitAction, unitActionsList);
+                                        await game.bindOnClickUnitActionMove(unitAction, unitActionsList);
                                     }
                                     break;
 
                                 case 'attack':
-                                    game.bindOnClickUnitActionAttack(unitAction);
+                                    await game.bindOnClickUnitActionAttack(unitAction);
                                     break;
 
                                 case 'fix-building':
-                                    game.bindOnClickUnitActionFixBuilding(unitAction);
+                                    await game.bindOnClickUnitActionFixBuilding(unitAction);
                                     break;
 
                                 case 'occupy-building':
-                                    game.bindOnClickUnitActionOccupyBuilding(unitAction);
+                                    await game.bindOnClickUnitActionOccupyBuilding(unitAction);
                                     break;
 
                                 case 'raise-skeleton':
-                                    game.bindOnClickUnitActionRaiseSkeleton(unitAction);
+                                    await game.bindOnClickUnitActionRaiseSkeleton(unitAction);
                                     break;
 
                                 case 'destroy-building':
-                                    game.bindOnClickUnitActionDestroyBuilding(unitAction);
+                                    await game.bindOnClickUnitActionDestroyBuilding(unitAction);
                                     break;
 
                                 case 'open-store':
-                                    game.bindOnClickUnitActionOpenStore(unitAction);
+                                    await game.bindOnClickUnitActionOpenStore(unitAction);
                                     break;
 
                                 default:
@@ -1419,18 +1417,18 @@ export default class Game {
         });
     }
 
-    showWrongState(wrongState: WrongStateType) {
+    async showWrongState(wrongState: WrongStateType): Promise<void> {
         const game = this;
 
         if (wrongState.type === 'unit-on-unit') {
-            game.showWrongStateUnitOnUnit(wrongState);
+            await game.showWrongStateUnitOnUnit(wrongState);
             return;
         }
 
         console.error('unknow wrong state', wrongState);
     }
 
-    showWrongStateUnitOnUnit(wrongState: WrongStateTypeUnitOnUnitType) {
+    async showWrongStateUnitOnUnit(wrongState: WrongStateTypeUnitOnUnitType): Promise<void> {
         const game = this;
 
         console.log('show wrong state', wrongState);
@@ -1445,7 +1443,7 @@ export default class Game {
 
         const moveActionList = unit.getMoveActions(game.getGameData());
 
-        game.render.drawActionsList(moveActionList);
+        await game.render.drawActionsList(moveActionList);
         game.render.moveWorldTo(unit.attr.x, unit.attr.y);
 
         moveActionList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
@@ -1455,21 +1453,21 @@ export default class Game {
                         return;
                     }
 
-                    bindClick(unitAction.container, () => {
+                    bindClick(unitAction.container, async (): Promise<void> => {
                         if (unitAction.type !== 'move') {
                             return;
                         }
-                        game.bindOnClickUnitActionMove(unitAction, moveActionList);
+                        await game.bindOnClickUnitActionMove(unitAction, moveActionList);
                     });
                 });
             });
         });
     }
 
-    bindOnClickUnitActionMove(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType) { // eslint-disable-line complexity, max-statements
+    async bindOnClickUnitActionMove(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this;
 
-        game.render.cleanActionsList();
+        await game.render.cleanActionsList();
 
         const newMap = game.getMapState();
 
@@ -1510,7 +1508,7 @@ export default class Game {
 
         game.gameView.addDisableReason('client-push-state');
 
-        serverApi
+        await serverApi
             .pushState(
                 game.roomId,
                 user.getId(),
@@ -1548,10 +1546,10 @@ export default class Game {
             });
     }
 
-    bindOnClickUnitActionAttack(unitAction: UnitActionAttackType) { // eslint-disable-line complexity, max-statements
+    async bindOnClickUnitActionAttack(unitAction: UnitActionAttackType): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this;
 
-        game.render.cleanActionsList();
+        await game.render.cleanActionsList();
 
         const newMap = game.getMapState();
 
@@ -1656,10 +1654,10 @@ export default class Game {
             });
     }
 
-    bindOnClickUnitActionFixBuilding(unitAction: UnitActionFixBuildingType) { // eslint-disable-line max-statements, complexity
+    async bindOnClickUnitActionFixBuilding(unitAction: UnitActionFixBuildingType): Promise<void> { // eslint-disable-line max-statements, complexity
         const game = this;
 
-        game.render.cleanActionsList();
+        await game.render.cleanActionsList();
 
         const newMap = game.getMapState();
 
@@ -1689,7 +1687,7 @@ export default class Game {
 
         game.gameView.addDisableReason('client-push-state');
 
-        serverApi
+        await serverApi
             .pushState(
                 game.roomId,
                 user.getId(),
@@ -1716,18 +1714,18 @@ export default class Game {
             });
     }
 
-    bindOnClickUnitActionOpenStore(unitAction: UnitActionOpenStoreType) { // eslint-disable-line max-statements, complexity
+    async bindOnClickUnitActionOpenStore(unitAction: UnitActionOpenStoreType): Promise<void> { // eslint-disable-line max-statements, complexity
         const game = this;
 
         console.log('---> open store by bindOnClickUnitActionOpenStore');
 
-        game.openStore(unitAction.x, unitAction.y);
+        await game.openStore(unitAction.x, unitAction.y);
     }
 
-    bindOnClickUnitActionOccupyBuilding(unitAction: UnitActionOccupyBuildingType) { // eslint-disable-line max-statements, complexity, id-length
+    async bindOnClickUnitActionOccupyBuilding(unitAction: UnitActionOccupyBuildingType): Promise<void> { // eslint-disable-line max-statements, complexity, id-length
         const game = this;
 
-        game.render.cleanActionsList();
+        await game.render.cleanActionsList();
 
         const newMap = game.getMapState();
 
@@ -1757,7 +1755,7 @@ export default class Game {
 
         game.gameView.addDisableReason('client-push-state');
 
-        serverApi
+        await serverApi
             .pushState(
                 game.roomId,
                 user.getId(),
@@ -1784,10 +1782,10 @@ export default class Game {
             });
     }
 
-    bindOnClickUnitActionRaiseSkeleton(unitAction: UnitActionRaiseSkeletonType) { // eslint-disable-line max-statements, complexity, id-length
+    async bindOnClickUnitActionRaiseSkeleton(unitAction: UnitActionRaiseSkeletonType): Promise<void> { // eslint-disable-line max-statements, complexity, id-length
         const game = this;
 
-        game.render.cleanActionsList();
+        await game.render.cleanActionsList();
 
         const newMap = game.getMapState();
 
@@ -1832,7 +1830,7 @@ export default class Game {
 
         game.gameView.addDisableReason('client-push-state');
 
-        serverApi
+        await serverApi
             .pushState(
                 game.roomId,
                 user.getId(),
@@ -1860,10 +1858,10 @@ export default class Game {
             });
     }
 
-    bindOnClickUnitActionDestroyBuilding(unitAction: UnitActionDestroyBuildingType) { // eslint-disable-line max-statements, complexity, id-length
+    async bindOnClickUnitActionDestroyBuilding(unitAction: UnitActionDestroyBuildingType): Promise<void> { // eslint-disable-line max-statements, complexity, id-length
         const game = this;
 
-        game.render.cleanActionsList();
+        await game.render.cleanActionsList();
 
         const newMap = game.getMapState();
 
@@ -1913,7 +1911,7 @@ export default class Game {
 
         game.gameView.addDisableReason('client-push-state');
 
-        serverApi
+        await serverApi
             .pushState(
                 game.roomId,
                 user.getId(),
@@ -2334,7 +2332,7 @@ export default class Game {
         console.error('implement load map state');
     }
 
-    openStore(x: number, y: number) {
+    async openStore(x: number, y: number): Promise<void> {
         const game = this;
 
         if (!canOpenStore(x, y, game.getGameData())) {
@@ -2345,9 +2343,7 @@ export default class Game {
             '&x=' + x +
             '&y=' + y);
 
-        window.requestAnimationFrame(() => {
-            game.render.cleanActionsList();
-        });
+        await game.render.cleanActionsList();
     }
 
     destroy() {
