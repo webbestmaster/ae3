@@ -146,12 +146,25 @@ export default class Render {
     }
 
     // x, y - game world coordinates
-    moveWorldTo(x: number, y: number) {
+    async moveWorldTo(x: number, y: number): Promise<void> {
         const render = this;
         const {square} = mapGuide.size;
         const halfSquare = square / 2;
 
         render.moveCenterTo(x * square + halfSquare + stagePadding.left, y * square + halfSquare + stagePadding.top);
+    }
+
+    // x, y - game world coordinates
+    moveWorldToInstantly(x: number, y: number) {
+        console.log('moveWorldToInstantly is needless and disabled');
+
+        /*
+        const render = this;
+        const {square} = mapGuide.size;
+        const halfSquare = square / 2;
+
+        render.moveCenterTo(x * square + halfSquare + stagePadding.left, y * square + halfSquare + stagePadding.top);
+        */
     }
 
     getWorldSize(): { width: number, height: number } {

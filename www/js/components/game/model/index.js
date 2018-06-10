@@ -653,11 +653,13 @@ export default class Game {
 
         const isMyUnit = unitModel.getUserId() === user.getId();
 
+        // await game.render.moveWorldTo(state.to.x, state.to.y);
+
         await unitModel.move(state.to.x, state.to.y, state.path, (x: number, y: number) => {
             if (isMyUnit) {
                 return;
             }
-            game.render.moveWorldTo(x, y);
+            // game.render.moveWorldToInstantly(x, y);
         });
 
         await game.onUnitClick(unitModel);
@@ -1044,7 +1046,7 @@ export default class Game {
             return Promise.resolve();
         }
 
-        game.render.moveWorldTo(newGameUnit.attr.x, newGameUnit.attr.y);
+        // await game.render.moveWorldTo(newGameUnit.attr.x, newGameUnit.attr.y);
 
         /*
         const wrongStateList = getWrongStateList(game.getGameData());
@@ -1052,7 +1054,7 @@ export default class Game {
         if (wrongStateList !== null) {
             await game.showWrongState(wrongStateList[0]);
         }
-*/
+        */
 
         return Promise.resolve();
     }
@@ -1447,7 +1449,7 @@ export default class Game {
         const moveActionList = unit.getMoveActions(game.getGameData());
 
         await game.render.drawActionsList(moveActionList);
-        game.render.moveWorldTo(unit.attr.x, unit.attr.y);
+        await game.render.moveWorldTo(unit.attr.x, unit.attr.y);
 
         moveActionList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
