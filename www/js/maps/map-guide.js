@@ -7,7 +7,7 @@ export type MapGuideType = {|
     defaultUnitLimitList: Array<number>,
     // userIdList: Array<string>,
     teamIdList: ['team-0', 'team-1', 'team-2', 'team-3'],
-    colorList: ['black', 'blue', 'green', 'red'],
+    colorList: ['red', 'blue', 'green', 'black'],
     size: {|
         square: number
     |},
@@ -85,10 +85,10 @@ const mapGuide: MapGuideType = {
         'team-3'
     ],
     colorList: [
-        'black',
+        'red',
         'blue',
         'green',
-        'red'
+        'black'
     ],
     size: {
         square: 24

@@ -504,13 +504,16 @@ export class GameView extends Component<PropsType, StateType> {
             //     view.popupChangeActiveUser({isOpen: false});
             // }}
             onClick={() => {
+                if (popup.changeActiveUser.isOpen === false) {
+                    console.warn('popup.changeActiveUser.isOpen is already CLOSED, you click on popup too fast :)');
+                    return;
+                }
                 view.popupChangeActiveUser({
                     isOpen: false
                 });
             }}
             aria-labelledby="alert-dialog-slide-title"
-            aria-describedby="alert-dialog-slide-description"
-        >
+            aria-describedby="alert-dialog-slide-description">
             <DialogTitle id="alert-dialog-slide-title">
                 {activeUserId === userId ?
                     'your turn' + earnedString :
