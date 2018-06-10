@@ -6,7 +6,9 @@
 type CallBackType = () => Promise<void> | void;
 
 function requestIdleCallbackPolyfill(callback: () => {}) {
-    window.setTimeout(callback, 0);
+    window.requestAnimationFrame(() => {
+        window.setTimeout(callback, 0);
+    });
 }
 
 window.requestIdleCallback = window.requestIdleCallback || requestIdleCallbackPolyfill;
