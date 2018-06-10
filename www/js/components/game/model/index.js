@@ -660,7 +660,7 @@ export default class Game {
             game.render.moveWorldTo(x, y);
         });
 
-        game.onUnitClick(unitModel);
+        await game.onUnitClick(unitModel);
 
         return Promise.resolve();
     }
@@ -737,7 +737,7 @@ export default class Game {
 
             await aggressorUnit.actualizeLevel();
 
-            game.onUnitClick(aggressorUnit);
+            await game.onUnitClick(aggressorUnit);
 
             return Promise.resolve();
         }
@@ -751,7 +751,7 @@ export default class Game {
 
             await aggressorUnit.actualizeLevel();
 
-            game.onUnitClick(aggressorUnit);
+            await game.onUnitClick(aggressorUnit);
 
             return Promise.resolve();
         }
@@ -796,7 +796,7 @@ export default class Game {
         await aggressorUnit.actualizeLevel();
         await defenderUnit.actualizeLevel();
 
-        game.onUnitClick(aggressorUnit);
+        await game.onUnitClick(aggressorUnit);
 
         return Promise.resolve();
     }
@@ -838,7 +838,7 @@ export default class Game {
         gameBuilding.setType(mapBuilding.type);
         gameUnit.setDidFixBuilding(true);
 
-        game.onUnitClick(gameUnit);
+        await game.onUnitClick(gameUnit);
 
         return Promise.resolve();
     }
@@ -885,7 +885,7 @@ export default class Game {
         gameBuilding.setUserId(mapBuilding.userId);
         gameUnit.setDidOccupyBuilding(true);
 
-        game.onUnitClick(gameUnit);
+        await game.onUnitClick(gameUnit);
 
         return Promise.resolve();
     }
@@ -953,8 +953,8 @@ export default class Game {
             }
         });
 
-        game.onUnitClick(gameRaiser);
-        game.onUnitClick(newSkeleton);
+        await game.onUnitClick(gameRaiser);
+        await game.onUnitClick(newSkeleton);
 
         return Promise.resolve();
     }
@@ -1016,7 +1016,7 @@ export default class Game {
             id: mapBuilding.id
         });
 
-        game.onUnitClick(gameDestroyer);
+        await game.onUnitClick(gameDestroyer);
 
         return Promise.resolve();
     }
@@ -1037,19 +1037,22 @@ export default class Game {
 
         const newGameUnit = game.createUnit(state.newMapUnit);
 
-        game.onUnitClick(newGameUnit);
-
         const isMyUnit = newGameUnit.getUserId() === user.getId();
 
-        if (!isMyUnit) {
-            game.render.moveWorldTo(newGameUnit.attr.x, newGameUnit.attr.y);
+        if (isMyUnit) {
+            await game.onUnitClick(newGameUnit);
+            return Promise.resolve();
         }
 
+        game.render.moveWorldTo(newGameUnit.attr.x, newGameUnit.attr.y);
+
+        /*
         const wrongStateList = getWrongStateList(game.getGameData());
 
         if (wrongStateList !== null) {
             await game.showWrongState(wrongStateList[0]);
         }
+*/
 
         return Promise.resolve();
     }

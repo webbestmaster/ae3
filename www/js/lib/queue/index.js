@@ -5,6 +5,12 @@
 
 type CallBackType = () => Promise<void> | void;
 
+function requestIdleCallbackPolyfill(callback: () => {}) {
+    window.setTimeout(callback, 0);
+}
+
+window.requestIdleCallback = window.requestIdleCallback || requestIdleCallbackPolyfill;
+
 export default class Queue {
     list: Array<CallBackType> = [];
     isInProgress: boolean = false;
