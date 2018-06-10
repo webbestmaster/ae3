@@ -137,6 +137,11 @@ export default class Game {
         // draw landscape
         game.render
             .drawLandscape(game.settings.map, async (x: number, y: number): Promise<void> => {
+                if (!game.isMyTurn()) {
+                    console.log('click on landscape: not your turn');
+                    return;
+                }
+
                 console.log('landscape clicked in', x, y);
                 console.log('todo: show landscape date', x, y);
 
@@ -228,6 +233,17 @@ export default class Game {
                 });
             }
         );
+    }
+
+    isMyTurn(): boolean {
+        const game = this;
+        const mapState = game.getMapState();
+
+        if (mapState === null) {
+            return false;
+        }
+
+        return mapState.activeUserId === user.getId();
     }
 
     getLastSocketMessage(): SocketMessageType | null {
@@ -1202,6 +1218,11 @@ export default class Game {
         game.buildingList.push(building);
 
         bindClick(building.gameAttr.container, async (): Promise<void> => { // eslint-disable-line complexity, max-statements
+            if (!game.isMyTurn()) {
+                console.log('click on building: not your turn');
+                return;
+            }
+
             console.log('TODO: show data bout building', building.attr);
 
             const wrongStateList = getWrongStateList(game.getGameData());
@@ -1291,6 +1312,11 @@ export default class Game {
             userList: mapState === null ? [] : mapState.userList,
             event: {
                 click: async (clickedUnit: Unit): Promise<void> => {
+                    if (!game.isMyTurn()) {
+                        console.log('click on unit: not your turn');
+                        return;
+                    }
+
                     await game.onUnitClick(clickedUnit);
                 }
             }

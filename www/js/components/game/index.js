@@ -610,7 +610,7 @@ export class GameView extends Component<PropsType, StateType> {
                     key="canvas"
                     ref="canvas"
                     style={{
-                        pointerEvents: isCanvasDisabled ? 'none' : 'auto',
+                        // pointerEvents: isCanvasDisabled ? 'none' : 'auto',
                         width: props.system.screen.width,
                         height: props.system.screen.height - bottomBarData.height
                     }}/>
