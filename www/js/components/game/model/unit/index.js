@@ -1350,19 +1350,42 @@ export default class Unit {
 
     setIsActionAvailable(isActionAvailable: boolean) {
         const unit = this;
-        const {gameAttr} = unit;
+        const {attr, gameAttr} = unit;
 
-        gameAttr.isActionAvailable = isActionAvailable;
+        // gameAttr.isActionAvailable = isActionAvailable;
 
-        gameAttr.sprite.unit.alpha = isActionAvailable ? 1 : 0.65;
+        const animationSprite = gameAttr.sprite.unit;
+
+        animationSprite.alpha = isActionAvailable ? 1 : 0.8;
+
+        if (!isActionAvailable) {
+            animationSprite
+                .textures[0] = PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-0']);
+            animationSprite
+                .textures[1] = PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1']);
+            return;
+        }
+
+        if (typeof attr.userId === 'string') {
+            const userColor = getUserColor(attr.userId, gameAttr.userList);
+
+            if (typeof userColor === 'string') {
+                animationSprite
+                    .textures[0] = PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-' + userColor + '-0']);
+                animationSprite
+                    .textures[1] = PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-' + userColor + '-1']);
+            }
+        }
     }
 
+    /*
     getIsActionAvailable(): boolean {
         const unit = this;
         const {gameAttr} = unit;
 
         return gameAttr.isActionAvailable;
     }
+    */
 
     getGuideData(): UnitGuideDataType {
         const unit = this;
