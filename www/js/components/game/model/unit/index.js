@@ -132,7 +132,7 @@ type UnitGameAttrType = {|
     sprite: {|
         unit: PIXI.extras.AnimatedSprite,
         hitPoints: PIXI.Container,
-        level: PIXI.Text,
+        level: PIXI.Container,
         poisonCountdown: PIXI.Text,
         wispAura: PIXI.Sprite
     |},
@@ -170,6 +170,7 @@ export type GameDataType = {|
     +emptyActionMap: Array<Array<[]>>
 |};
 
+/*
 const textStyle = new PIXI.TextStyle({
     fontFamily: 'monospace',
     fill: '#cccc00',
@@ -177,6 +178,7 @@ const textStyle = new PIXI.TextStyle({
     stroke: '#000000',
     strokeThickness: 4
 });
+*/
 
 const textStyleRed = new PIXI.TextStyle({
     fontFamily: 'monospace',
@@ -216,7 +218,7 @@ export default class Unit {
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1'])
                 ]),
                 hitPoints: new PIXI.Container(),
-                level: new PIXI.Text('', textStyle),
+                level: new PIXI.Container(),
                 poisonCountdown: new PIXI.Text('', textStyleRed),
                 wispAura: PIXI.Sprite.fromImage(imageMap.other['under-wisp-aura'])
             },
@@ -301,13 +303,19 @@ export default class Unit {
         const unit = this;
         const {attr, gameAttr} = unit;
         const level = unit.getLevel();
+        const levelNumberSprite = PIXI.Sprite.fromImage(imageMap.font.unit.space);
+
+        gameAttr.sprite.level.addChild(levelNumberSprite);
 
         if (level > defaultUnitData.level.max) {
             console.error('level bigger than defaultUnitData.level.max!', unit);
         }
 
         if (level !== defaultUnitData.level.min) {
-            gameAttr.sprite.level.text = level;
+            unit.setLevel(level)
+                .then(() => {
+                    console.log('level has benn set');
+                });
         }
 
         gameAttr.container.addChild(gameAttr.sprite.level);
@@ -1229,12 +1237,19 @@ export default class Unit {
         return null;
     }
 
-    async setLevel(level: number): Promise<void> {
+    async setLevel(level: number): Promise<void> { // eslint-disable-line complexity
         const unit = this;
         const {attr, gameAttr} = unit;
-        const visibleLevel = parseInt(gameAttr.sprite.level.text, 10) || 0;
+        const currentSpriteNumber = gameAttr.sprite.level.getChildAt(0) || null;
+        const newSpriteNumber = PIXI.Sprite.fromImage(imageMap.font.unit[level]);
 
-        if (visibleLevel === level) {
+        if (level === 0) {
+            console.log('no set zero level');
+            return;
+        }
+
+        if (currentSpriteNumber !== null &&
+            currentSpriteNumber.texture === newSpriteNumber.texture) {
             console.log('set new level is not needed, new level and current level the same');
             return;
         }
@@ -1245,9 +1260,14 @@ export default class Unit {
             return;
         }
 
+        if (currentSpriteNumber === null) {
+            console.error('currentSpriteNumber is not exist');
+            return;
+        }
+
         await unit.showLevelUp();
 
-        gameAttr.sprite.level.text = level === defaultUnitData.level.min ? '' : level;
+        currentSpriteNumber.texture = newSpriteNumber.texture;
     }
 
     actualizeLevel(): Promise<void> {
