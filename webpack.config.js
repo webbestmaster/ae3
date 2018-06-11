@@ -10,6 +10,7 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const DEVELOPMENT = 'development';
 const PRODUCTION = 'production';
@@ -43,8 +44,7 @@ const webpackConfig = {
         chunkFilename: '[name].async-import.js'
     },
 
-    // devtool: IS_PRODUCTION ? false : 'source-map',
-    devtool: 'source-map', // needed to deploy in test server
+    devtool: IS_PRODUCTION ? false : 'source-map',
 
     optimization: Object.assign(
         {},
@@ -80,7 +80,17 @@ const webpackConfig = {
                     }
                 }
             } :
-            null
+            {
+                minimizer: [
+                    new UglifyJsPlugin({
+                        uglifyOptions: {
+                            compress: {
+                                drop_console: true // eslint-disable-line camelcase
+                            }
+                        }
+                    })
+                ]
+            }
     ),
     module: {
         rules: [
@@ -236,6 +246,6 @@ const webpackConfig = {
     ]
 };
 
-// webpackConfig.plugins.push(new BundleAnalyzerPlugin());
+webpackConfig.plugins.push(new BundleAnalyzerPlugin());
 
 module.exports = webpackConfig;
