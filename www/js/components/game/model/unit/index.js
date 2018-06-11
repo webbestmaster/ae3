@@ -269,14 +269,20 @@ export default class Unit {
         const unit = this;
         const {attr, gameAttr} = unit;
         const hitPoints = unit.getHitPoints();
+        const {square} = mapGuide.size;
 
+        const number0 = PIXI.Sprite.fromImage(imageMap.font.unit.space);
         const number1 = PIXI.Sprite.fromImage(imageMap.font.unit.space);
-        const number2 = PIXI.Sprite.fromImage(imageMap.font.unit.space);
 
+        number0.position.set(0, square);
+        number0.anchor.set(0, 1);
+        number1.position.set(mapGuide.font.unit.width, square);
+        number1.anchor.set(0, 1);
+
+        gameAttr.sprite.hitPoints.addChild(number0);
         gameAttr.sprite.hitPoints.addChild(number1);
-        gameAttr.sprite.hitPoints.addChild(number2);
 
-        number2.position.set(mapGuide.font.unit.width, 0);
+        gameAttr.container.addChild(gameAttr.sprite.hitPoints);
 
         if (hitPoints !== defaultUnitData.hitPoints) {
             // here is not needed 'await'
@@ -289,15 +295,12 @@ export default class Unit {
         if (hitPoints > defaultUnitData.hitPoints) {
             console.error('hitPoints bigger than default hitPoints!', unit);
         }
-
-        gameAttr.container.addChild(gameAttr.sprite.hitPoints);
     }
 
     initializeLevelSprite() {
         const unit = this;
         const {attr, gameAttr} = unit;
         const level = unit.getLevel();
-        const {square} = mapGuide.size;
 
         if (level > defaultUnitData.level.max) {
             console.error('level bigger than defaultUnitData.level.max!', unit);
@@ -306,9 +309,6 @@ export default class Unit {
         if (level !== defaultUnitData.level.min) {
             gameAttr.sprite.level.text = level;
         }
-
-        gameAttr.sprite.level.position.set(0, square);
-        gameAttr.sprite.level.anchor.set(0, 1);
 
         gameAttr.container.addChild(gameAttr.sprite.level);
     }
@@ -1348,13 +1348,18 @@ export default class Unit {
 
         attr.hitPoints = hitPoints;
 
-        const number1 = gameAttr.sprite.hitPoints.getChildAt(0);
-        const number2 = gameAttr.sprite.hitPoints.getChildAt(1);
+        const number0 = gameAttr.sprite.hitPoints.getChildAt(0);
+        const number1 = gameAttr.sprite.hitPoints.getChildAt(1);
 
-        number1.texture = PIXI.Texture.fromImage(imageMap.font.unit['1']);
-        number2.texture = PIXI.Texture.fromImage(imageMap.font.unit['2']);
+        if (!number0 || !number1) {
+            console.error('unit has NO sprites for health');
+            return;
+        }
 
-        // gameAttr.sprite.hitPoints.text = hitPoints === defaultUnitData.hitPoints ? '' : hitPoints;
+        const hitPointString = hitPoints.toString(10).padStart(2, ' ');
+
+        number0.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[0]]);
+        number1.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[1]]);
     }
 
     getHitPoints(): number {

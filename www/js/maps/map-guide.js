@@ -102,8 +102,8 @@ const mapGuide: MapGuideType = {
     },
     font: {
         unit: {
-            width: 8,
-            height: 11
+            width: 6,
+            height: 7
         }
     },
     building: {

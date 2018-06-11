@@ -74,6 +74,7 @@ declare module 'pixi.js' {
 
     declare export class Sprite extends PixiObject {
         constructor(): Sprite,
+        texture: Texture,
         static fromImage(spriteName: string): Sprite
     }
 
@@ -93,7 +94,8 @@ declare module 'pixi.js' {
     declare export class Container extends PixiObject {
         constructor(): Container,
         addChild(pixiObject: PixiObject): void,
-        removeChild(pixiObject: PixiObject): void
+        removeChild(pixiObject: PixiObject): void,
+        getChildAt(index: number): Sprite | void
     }
 
     declare export class Application {
