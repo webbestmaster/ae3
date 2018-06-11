@@ -17,7 +17,7 @@ import type {MapType, MapUserType} from './../../maps/type';
 import type {UnitTypeAllType} from './../game/model/unit/unit-guide';
 import guideUnitData, {additionalUnitData} from './../game/model/unit/unit-guide';
 import type {ContextRouter} from 'react-router-dom';
-import {withRouter} from 'react-router-dom';
+import withRouter from 'react-router-dom/withRouter';
 import type {UnitType} from '../../maps/type';
 import classnames from 'classnames';
 import {getSupplyState, isCommanderLive} from '../game/model/helper';

@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
 import style from './../button/style.m.scss';
 
-import {Link} from 'react-router-dom';
+import Link from 'react-router-dom/Link';
 
 type PropsType = {|
     children: Node,

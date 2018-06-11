@@ -17,7 +17,7 @@ import type {ServerUserType} from './../../module/server-api';
 import * as serverApi from './../../module/server-api';
 import MainModel from './../../lib/main-model';
 import type {ContextRouter} from 'react-router-dom';
-import {withRouter} from 'react-router-dom';
+import withRouter from 'react-router-dom/withRouter';
 import Store from './../store';
 import queryString from 'query-string';
 import {getMatchResult, getSupplyState, getUserColor, getWrongStateList} from './model/helper';
