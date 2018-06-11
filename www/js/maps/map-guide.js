@@ -3,65 +3,72 @@
 export type TeamIdType = 'team-0' | 'team-1' | 'team-2' | 'team-3';
 
 export type MapGuideType = {|
-    defaultMoneyList: Array<number>,
-    defaultUnitLimitList: Array<number>,
+    +defaultMoneyList: Array<number>,
+    +defaultUnitLimitList: Array<number>,
     // userIdList: Array<string>,
-    teamIdList: ['team-0', 'team-1', 'team-2', 'team-3'],
-    colorList: ['red', 'blue', 'green', 'black'],
-    size: {|
-        square: number
+    +teamIdList: ['team-0', 'team-1', 'team-2', 'team-3'],
+    +colorList: ['red', 'blue', 'green', 'black'],
+    +size: {|
+        +square: number
     |},
-    building: {|
-        farm: {|
-            moneyBonus: 20,
-            hitPointsBonus: 20
-        |},
-        castle: {|
-            moneyBonus: 30,
-            hitPointsBonus: 30
-        |},
-        'farm-destroyed': {|
-            moneyBonus: 0,
-            hitPointsBonus: 0
-        |},
-        temple: {|
-            moneyBonus: 0,
-            hitPointsBonus: 20
-        |},
-        well: {|
-            moneyBonus: 0,
-            hitPointsBonus: 20
+    +font: {|
+        +unit: {|
+            +width: number,
+            +height: number
         |}
     |},
-    landscape: {|
-        road: {|
-            pathReduce: 1,
-            armor: 0
+
+    +building: {|
+        +farm: {|
+            +moneyBonus: 20,
+            +hitPointsBonus: 20
         |},
-        bridge: {|
-            pathReduce: 1,
-            armor: 0
+        +castle: {|
+            +moneyBonus: 30,
+            +hitPointsBonus: 30
         |},
-        terra: {|
-            pathReduce: 1,
-            armor: 1
+        +'farm-destroyed': {|
+            +moneyBonus: 0,
+            +hitPointsBonus: 0
         |},
-        forest: {|
-            pathReduce: 2,
-            armor: 2
+        +temple: {|
+            +moneyBonus: 0,
+            +hitPointsBonus: 20
         |},
-        stone: {|
-            pathReduce: 3,
-            armor: 3
+        +well: {|
+            +moneyBonus: 0,
+            +hitPointsBonus: 20
+        |}
+    |},
+    +landscape: {|
+        +road: {|
+            +pathReduce: 1,
+            +armor: 0
         |},
-        water: {|
-            pathReduce: 3,
-            armor: 0,
-            flowArmor: 3
+        +bridge: {|
+            +pathReduce: 1,
+            +armor: 0
         |},
-        hill: {|
-            pathReduce: 2,
-            armor: 0
+        +terra: {|
+            +pathReduce: 1,
+            +armor: 1
+        |},
+        +forest: {|
+            +pathReduce: 2,
+            +armor: 2
+        |},
+        +stone: {|
+            +pathReduce: 3,
+            +armor: 3
+        |},
+        +water: {|
+            +pathReduce: 3,
+            +armor: 0,
+            +flowArmor: 3
+        |},
+        +hill: {|
+            +pathReduce: 2,
+            +armor: 0
         |}
     |}
 |};
@@ -92,6 +99,12 @@ const mapGuide: MapGuideType = {
     ],
     size: {
         square: 24
+    },
+    font: {
+        unit: {
+            width: 8,
+            height: 11
+        }
     },
     building: {
         farm: {

@@ -12,6 +12,11 @@ type ImageMapType = {|
     },
     unit: {
         [key: string]: string
+    },
+    font: {
+        unit: {
+            [key: string]: string
+        }
     }
 |};
 
@@ -19,7 +24,10 @@ const imageMap: ImageMapType = {
     building: {},
     landscape: {},
     other: {},
-    unit: {}
+    unit: {},
+    font: {
+        unit: {}
+    }
 };
 
 
@@ -66,6 +74,16 @@ unitReqContext.keys()
         );
     });
 
+
+const fontUnitReqContext = require.context('./../i/font/unit/', true, /\.png$/);
+
+fontUnitReqContext.keys()
+    .forEach((fileName: string) => {
+        Object.assign(
+            imageMap.font.unit,
+            {[fileName.replace('./', '').replace('.png', '')]: fontUnitReqContext(fileName)}
+        );
+    });
 
 /*
 const ____ReqContext = require.context('./landscape/', true, /\.png$/);

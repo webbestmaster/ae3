@@ -760,7 +760,7 @@ export default class Game {
             return Promise.resolve();
         }
 
-        defenderUnit.setHitPoints(state.defender.hitPoints);
+        await defenderUnit.setHitPoints(state.defender.hitPoints);
         defenderUnit.setPoisonCountdown(state.defender.poisonCountdown);
 
 
@@ -808,7 +808,7 @@ export default class Game {
             return Promise.resolve();
         }
 
-        aggressorUnit.setHitPoints(state.aggressor.hitPoints);
+        await aggressorUnit.setHitPoints(state.aggressor.hitPoints);
         aggressorUnit.setPoisonCountdown(state.aggressor.poisonCountdown);
 
         await aggressorUnit.actualizeLevel();
@@ -1156,7 +1156,7 @@ export default class Game {
                 );
 
                 if (healHitPointOnBuilding !== null) {
-                    unit.setHitPoints(unit.getHitPoints() + healHitPointOnBuilding);
+                    await unit.setHitPoints(unit.getHitPoints() + healHitPointOnBuilding);
                 }
             }
 

@@ -131,7 +131,7 @@ type UnitGameAttrType = {|
     container: PIXI.Container,
     sprite: {|
         unit: PIXI.extras.AnimatedSprite,
-        hitPoints: PIXI.Text,
+        hitPoints: PIXI.Container,
         level: PIXI.Text,
         poisonCountdown: PIXI.Text,
         wispAura: PIXI.Sprite
@@ -215,7 +215,7 @@ export default class Unit {
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-0']),
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1'])
                 ]),
-                hitPoints: new PIXI.Text('', textStyle),
+                hitPoints: new PIXI.Container(),
                 level: new PIXI.Text('', textStyle),
                 poisonCountdown: new PIXI.Text('', textStyleRed),
                 wispAura: PIXI.Sprite.fromImage(imageMap.other['under-wisp-aura'])
@@ -270,8 +270,20 @@ export default class Unit {
         const {attr, gameAttr} = unit;
         const hitPoints = unit.getHitPoints();
 
+        const number1 = PIXI.Sprite.fromImage(imageMap.font.unit.space);
+        const number2 = PIXI.Sprite.fromImage(imageMap.font.unit.space);
+
+        gameAttr.sprite.hitPoints.addChild(number1);
+        gameAttr.sprite.hitPoints.addChild(number2);
+
+        number2.position.set(mapGuide.font.unit.width, 0);
+
         if (hitPoints !== defaultUnitData.hitPoints) {
-            unit.setHitPoints(hitPoints);
+            // here is not needed 'await'
+            unit.setHitPoints(hitPoints)
+                .then(() => {
+                    console.log('setHitPoints has been set', unit);
+                });
         }
 
         if (hitPoints > defaultUnitData.hitPoints) {
@@ -1319,13 +1331,13 @@ export default class Unit {
     }
     */
 
-    setHitPoints(hitPoints: number) {
+    async setHitPoints(hitPoints: number): Promise<void> {
         const unit = this;
         const {attr, gameAttr} = unit;
 
         if (hitPoints > defaultUnitData.hitPoints) {
             console.error('too many hitPoints', hitPoints, unit);
-            unit.setHitPoints(defaultUnitData.hitPoints);
+            await unit.setHitPoints(defaultUnitData.hitPoints);
             return;
         }
 
@@ -1335,7 +1347,14 @@ export default class Unit {
         }
 
         attr.hitPoints = hitPoints;
-        gameAttr.sprite.hitPoints.text = hitPoints === defaultUnitData.hitPoints ? '' : hitPoints;
+
+        const number1 = gameAttr.sprite.hitPoints.getChildAt(0);
+        const number2 = gameAttr.sprite.hitPoints.getChildAt(1);
+
+        number1.texture = PIXI.Texture.fromImage(imageMap.font.unit['1']);
+        number2.texture = PIXI.Texture.fromImage(imageMap.font.unit['2']);
+
+        // gameAttr.sprite.hitPoints.text = hitPoints === defaultUnitData.hitPoints ? '' : hitPoints;
     }
 
     getHitPoints(): number {
