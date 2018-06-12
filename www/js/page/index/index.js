@@ -11,27 +11,37 @@ import ButtonLink from './../../components/ui/button-link';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
 import Header from './../../components/ui/header';
 
-class Index extends Component<void, void> {
-    render(): Node {
-        return <Page>
-            <Header>Index</Header>
+function Index(): Node {
+    return (
+        <Page>
+            <Header>
+                Index
+            </Header>
             <ButtonListWrapper>
                 <ButtonLink
-                    to={routes.multiPlayer}>
+                    to={routes.multiPlayer}
+                >
                     multi player
                 </ButtonLink>
 
-                <Button className={'disabled'}>
+                <Button className="disabled">
                     single player
                 </Button>
 
-                <Button className={'disabled'}>
+                <Button className="disabled">
                     settings
                 </Button>
             </ButtonListWrapper>
-        </Page>;
+        </Page>
+    );
+}
+
+/*
+class Index extends Component<void, void> {
+    render(): Node {
     }
 }
+*/
 
 export default connect(
     (state: {}): {} => ({

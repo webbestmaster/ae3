@@ -33,10 +33,13 @@ export class ButtonListWrapper extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
-        return <div
-            className={style.button_list_wrapper + additionClass}>
-            {props.children}
-        </div>;
+        return (
+            <div
+                className={style.button_list_wrapper + additionClass}
+            >
+                {props.children}
+            </div>
+        );
     }
 }
 

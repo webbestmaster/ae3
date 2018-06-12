@@ -29,7 +29,7 @@ const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
 render(
     <Provider store={store}>
         <BrowserRouter>
-            <App/>
+            <App />
         </BrowserRouter>
     </Provider>,
     window.document.querySelector('.js-app-wrapper')

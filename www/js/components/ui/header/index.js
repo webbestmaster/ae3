@@ -27,11 +27,14 @@ export class Header extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
-        return <h2
-            className={style.header + additionClass}
-            onClick={typeof props.onClick === 'function' ? props.onClick : null}>
-            {props.children}
-        </h2>;
+        return (
+            <h2
+                className={style.header + additionClass}
+                onClick={typeof props.onClick === 'function' ? props.onClick : null}
+            >
+                {props.children}
+            </h2>
+        );
     }
 }
 

@@ -48,9 +48,10 @@ class CreateRoom extends Component<PropsType, StateType> {
         };
     }
 
-    async createRoom(): Promise<string | null> {
+    async createRoom(): Promise<string | null> { // eslint-disable-line max-statements
         const view = this;
         const {props, state} = view;
+        const {auth, history} = props;
 
         const createRoomResult = await serverApi.createRoom();
 
@@ -61,8 +62,8 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         const {mapIndex, defaultMoney, unitLimit} = state;
         const map: MapType = JSON.parse(JSON.stringify(mapList[mapIndex]));
-        const socketId = props.auth.socket.id;
-        const userId = props.auth.user.id;
+        const socketId = auth.socket.id;
+        const userId = auth.user.id;
 
         map.unitLimit = unitLimit;
         map.defaultMoney = defaultMoney;
@@ -92,7 +93,7 @@ class CreateRoom extends Component<PropsType, StateType> {
             return null;
         }
 
-        props.history.push(routes.room.replace(':roomId', joinRoomResult.roomId));
+        history.push(routes.room.replace(':roomId', joinRoomResult.roomId));
 
         return joinRoomResult.roomId;
     }
@@ -101,56 +102,86 @@ class CreateRoom extends Component<PropsType, StateType> {
         const view = this;
         const {state} = view;
 
-        return <Page>
-            <Header>Create Game</Header>
+        return (
+            <Page>
+                <Header>
+                    Create Game
+                </Header>
 
-            <Form className="grow-1">
+                <Form className="grow-1">
 
-                <Fieldset>
-                    <FormHeader>
-                        select map
-                    </FormHeader>
+                    <Fieldset>
+                        <FormHeader>
+                            select map
+                        </FormHeader>
 
-                    {mapList
-                        .map((map: MapType, mapIndex: number): Node => <div
-                            onClick={(): void => view.setState({mapIndex})}
-                            key={map.meta.en.name}>
-                            <h3>{map.meta.en.name} {mapIndex === state.mapIndex ? '<-' : ''}</h3>
-                        </div>)}
-                </Fieldset>
+                        {mapList
+                            .map((map: MapType, mapIndex: number): Node => {
+                                return (
+                                    <div
+                                        onClick={(): void => view.setState({mapIndex})}
+                                        key={map.meta.en.name}
+                                    >
+                                        <h3>
+                                            {map.meta.en.name}
+                                            {' '}
+                                            {mapIndex === state.mapIndex ? '<-' : ''}
+                                        </h3>
+                                    </div>
+                                );
+                            })}
+                    </Fieldset>
 
-                <Fieldset>
-                    <FormHeader>
-                        Money
-                    </FormHeader>
+                    <Fieldset>
+                        <FormHeader>
+                            Money
+                        </FormHeader>
 
-                    {mapGuide.defaultMoneyList
-                        .map((defaultMoney: number): Node => <div
-                            onClick={(): void => view.setState({defaultMoney})}
-                            key={defaultMoney}>
-                            {defaultMoney} {defaultMoney === state.defaultMoney ? '<-' : ''}
-                        </div>)}
-                </Fieldset>
+                        {mapGuide.defaultMoneyList
+                            .map((defaultMoney: number): Node => {
+                                return (
+                                    <div
+                                        onClick={(): void => view.setState({defaultMoney})}
+                                        key={defaultMoney}
+                                    >
+                                        {defaultMoney}
+                                        {' '}
+                                        {defaultMoney === state.defaultMoney ? '<-' : ''}
+                                    </div>
+                                );
+                            })}
+                    </Fieldset>
 
-                <Fieldset>
-                    <FormHeader>Unit Limit</FormHeader>
+                    <Fieldset>
+                        <FormHeader>
+                            Unit Limit
+                        </FormHeader>
 
-                    {mapGuide.defaultUnitLimitList
-                        .map((unitLimit: number): Node => <div
-                            onClick={(): void => view.setState({unitLimit})}
-                            key={unitLimit}>
-                            {unitLimit} {unitLimit === state.unitLimit ? '<-' : ''}
-                        </div>)}
-                </Fieldset>
-            </Form>
+                        {mapGuide.defaultUnitLimitList
+                            .map((unitLimit: number): Node => {
+                                return (
+                                    <div
+                                        onClick={(): void => view.setState({unitLimit})}
+                                        key={unitLimit}
+                                    >
+                                        {unitLimit}
+                                        {' '}
+                                        {unitLimit === state.unitLimit ? '<-' : ''}
+                                    </div>
+                                );
+                            })}
+                    </Fieldset>
+                </Form>
 
-            <Button
-                onClick={async (): Promise<void> => {
-                    const result = await view.createRoom();
-                }}>
-                create room
-            </Button>
-        </Page>;
+                <Button
+                    onClick={async (): Promise<void> => {
+                        const result = await view.createRoom();
+                    }}
+                >
+                    create room
+                </Button>
+            </Page>
+        );
     }
 }
 

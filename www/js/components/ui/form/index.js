@@ -26,9 +26,11 @@ export class Form extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
-        return <form className={style.form + additionClass}>
-            {props.children}
-        </form>;
+        return (
+            <form className={style.form + additionClass}>
+                {props.children}
+            </form>
+        );
     }
 }
 

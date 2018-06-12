@@ -17,13 +17,33 @@ import routes from './routes';
 
 export default (): Node[] =>
     [
-        <Auth key="auth"/>,
-        <System key="system"/>,
+        <Auth key="auth" />,
+        <System key="system" />,
         <Switch key="switch">
-            <Route path={routes.index} component={Index} exact/>
-            <Route path={routes.multiPlayer} component={MultiPlayer} exact/>
-            <Route path={routes.createRoom} component={CreateRoom} exact/>
-            <Route path={routes.joinRoom} component={JoinRoom} exact/>
-            <Route path={routes.room} component={Room} exact/>
+            <Route
+                component={Index}
+                exact
+                path={routes.index}
+            />
+            <Route
+                component={MultiPlayer}
+                exact
+                path={routes.multiPlayer}
+            />
+            <Route
+                component={CreateRoom}
+                exact
+                path={routes.createRoom}
+            />
+            <Route
+                component={JoinRoom}
+                exact
+                path={routes.joinRoom}
+            />
+            <Route
+                component={Room}
+                exact
+                path={routes.room}
+            />
         </Switch>
     ];

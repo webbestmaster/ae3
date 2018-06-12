@@ -155,21 +155,30 @@ class Store extends Component<PropsType, StateType> {
 
         const supplyState = getSupplyState(props.map, user.getId());
 
-        return <Button
-            className={classnames('w75-c', 'ta-l', {disabled: mapUserData.money < unitCost || supplyState.isFull})}
-            onClick={() => {
-                view.buyUnit(unitType);
-            }}
-            key={unitType}>
-            <pre>
-                {padEnd(unitType, 10, ' ')}
-                &nbsp;|&nbsp;
-                attack: {unitData.attack.min} - {unitData.attack.max}<br/>
-                COST: {padStart(String(unitCost), 4, ' ')}
-                &nbsp;|&nbsp;
-                move: {unitData.move}
-            </pre>
-        </Button>;
+        return (
+            <Button
+                className={classnames('w75-c', 'ta-l', {disabled: mapUserData.money < unitCost || supplyState.isFull})}
+                onClick={() => {
+                    view.buyUnit(unitType);
+                }}
+                key={unitType}
+            >
+                <span>
+                    {padEnd(unitType, 10, ' ')}
+                    &nbsp;|&nbsp;
+                    attack:
+                    {unitData.attack.min}
+                    -
+                    {unitData.attack.max}
+                    <br />
+                    COST:
+                    {padStart(String(unitCost), 4, ' ')}
+                    &nbsp;|&nbsp;
+                    move:
+                    {unitData.move}
+                </span>
+            </Button>
+        );
     }
 
     getUnitCost(unitType: UnitTypeAllType): number | null { // eslint-disable-line complexity, max-statements
@@ -234,48 +243,69 @@ class Store extends Component<PropsType, StateType> {
 
         if (state.mapUserData === null) {
             console.error('ERROR with state.mapUserData', state);
-            return <Page>
-                <Header>ERROR with state.mapUserData</Header>
-            </Page>;
+            return (
+                <Page>
+                    <Header>
+                        ERROR with state.mapUserData
+                    </Header>
+                </Page>
+            );
         }
 
         if (state.isInProgress) {
-            return <Page>
-                <Header>Waiting...</Header>
-            </Page>;
+            return (
+                <Page>
+                    <Header>
+                        Waiting...
+                    </Header>
+                </Page>
+            );
         }
 
-        return <Page>
-            <Header className="ta-r">
-                <div
-                    onClick={() => {
-                        props.history.goBack();
-                    }}
-                    style={{
-                        position: 'relative',
-                        fontSize: 'inherit',
-                        zIndex: 1,
-                        cursor: 'pointer'
-                    }}
-                    className="fl-l">
-                    &lt;&lt;
-                </div>
-                Store
-            </Header>
+        return (
+            <Page>
+                <Header className="ta-r">
+                    <div
+                        onClick={() => {
+                            props.history.goBack();
+                        }}
+                        style={{
+                            position: 'relative',
+                            fontSize: 'inherit',
+                            zIndex: 1,
+                            cursor: 'pointer'
+                        }}
+                        className="fl-l"
+                    >
+                        &lt;&lt;
+                    </div>
+                    Store
+                </Header>
 
-            <div className="grow-1">
-                <div>
-                    {view.renderUnitList()}
+                <div className="grow-1">
+                    <div>
+                        {view.renderUnitList()}
+                    </div>
                 </div>
-            </div>
 
-            <BottomBar
-                className="ta-l">
-                Money: {state.mapUserData && state.mapUserData.money ? state.mapUserData.money : 0} $
-                &nbsp;|&nbsp;
-                {supplyState.unitCount} / {supplyState.unitLimit} 웃
-            </BottomBar>
-        </Page>;
+                <BottomBar
+                    className="ta-l"
+                >
+                    Money:
+                    {' '}
+                    {state.mapUserData && state.mapUserData.money ? state.mapUserData.money : 0}
+                    {' '}
+                    $
+                    &nbsp;|&nbsp;
+                    {supplyState.unitCount}
+                    {' '}
+                    /
+                    {supplyState.unitLimit}
+                    {' '}
+                    웃
+                </BottomBar>
+            </Page>
+        );
     }
 }
 

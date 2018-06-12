@@ -30,11 +30,14 @@ export class ButtonLink extends Component<PropsType, StateType> {
 
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
-        return <Link
-            to={props.to}
-            className={style.button + additionClass}>
-            {props.children}
-        </Link>;
+        return (
+            <Link
+                to={props.to}
+                className={style.button + additionClass}
+            >
+                {props.children}
+            </Link>
+        );
     }
 }
 

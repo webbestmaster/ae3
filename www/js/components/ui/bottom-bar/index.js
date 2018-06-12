@@ -27,11 +27,14 @@ export class BottomBar extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
-        return <div
-            className={style.bottom_bar + additionClass}
-            onClick={typeof props.onClick === 'function' ? props.onClick : null}>
-            {props.children}
-        </div>;
+        return (
+            <div
+                className={style.bottom_bar + additionClass}
+                onClick={typeof props.onClick === 'function' ? props.onClick : null}
+            >
+                {props.children}
+            </div>
+        );
     }
 }
 

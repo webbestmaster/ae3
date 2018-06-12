@@ -80,7 +80,7 @@ type StateType = {|
 |};
 
 type RefsType = {|
-    canvas: HTMLElement
+    canvas: HTMLElement | null
 |};
 
 export class GameView extends Component<PropsType, StateType> {
@@ -116,7 +116,7 @@ export class GameView extends Component<PropsType, StateType> {
         const view = this;
         const {props, state, refs} = view;
 
-        const {roomId} = props;
+        const {roomId, system} = props;
 
         const {settings} = await serverApi.getAllRoomSettings(roomId);
         const {users} = await serverApi.getAllRoomUsers(roomId);
@@ -129,14 +129,19 @@ export class GameView extends Component<PropsType, StateType> {
         // initialize game's data
         state.game.setSettings(settings);
         state.game.setUserList(users);
-        state.game.setRoomId(props.roomId);
+        state.game.setRoomId(roomId);
         state.game.setGameView(view);
+
+        if (refs.canvas === null) {
+            console.error('Canvas is not exists!');
+            return '';
+        }
 
         // actually initialize game's render
         state.game.initialize({
             view: refs.canvas,
-            width: props.system.screen.width,
-            height: props.system.screen.height,
+            width: system.screen.width,
+            height: system.screen.height,
             map: settings.map
         });
 
@@ -249,7 +254,7 @@ export class GameView extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
         const {model, game} = state;
-
+        const {roomId} = props;
         const wrongStateList = getWrongStateList(game.getGameData());
 
         if (wrongStateList !== null) {
@@ -261,7 +266,7 @@ export class GameView extends Component<PropsType, StateType> {
 
         view.addDisableReason('client-drop-turn');
 
-        return serverApi.dropTurn(props.roomId, user.getId())
+        return serverApi.dropTurn(roomId, user.getId())
             .catch((error: Error) => {
                 console.error('Drop turn error');
                 console.log(error);
@@ -395,23 +400,25 @@ export class GameView extends Component<PropsType, StateType> {
 
         const isWinner = matchResult.winner.teamId === mapUser.teamId;
 
-        return <Dialog
-            open={popup.endGame.isOpen}
-            // transition={Transition}
-            keepMounted
-            onClose={() => {
-                view.leaveGame();
-            }}
-            onClick={() => {
-                view.leaveGame();
-            }}
-            aria-labelledby="alert-dialog-slide-title"
-            aria-describedby="alert-dialog-slide-description"
-        >
-            <DialogTitle id="alert-dialog-slide-title">
-                {isWinner ? 'You win!' : 'You loose :('}
-            </DialogTitle>
-        </Dialog>;
+        return (
+            <Dialog
+                open={popup.endGame.isOpen}
+                // transition={Transition}
+                keepMounted
+                onClose={() => {
+                    view.leaveGame();
+                }}
+                onClick={() => {
+                    view.leaveGame();
+                }}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle id="alert-dialog-slide-title">
+                    {isWinner ? 'You win!' : 'You loose :('}
+                </DialogTitle>
+            </Dialog>
+        );
     }
 
     getStoreState(): {| isOpen: boolean |} {
@@ -496,30 +503,33 @@ export class GameView extends Component<PropsType, StateType> {
 
         const earnedString = popup.changeActiveUser.showMoney ? ', earned: ' + earnedMoney : '';
 
-        return <Dialog
-            open={popup.changeActiveUser.isOpen}
-            // transition={Transition}
-            keepMounted
-            // onClose={() => {
-            //     view.popupChangeActiveUser({isOpen: false});
-            // }}
-            onClick={() => {
-                if (popup.changeActiveUser.isOpen === false) {
-                    console.warn('popup.changeActiveUser.isOpen is already CLOSED, you click on popup too fast :)');
-                    return;
-                }
-                view.popupChangeActiveUser({
-                    isOpen: false
-                });
-            }}
-            aria-labelledby="alert-dialog-slide-title"
-            aria-describedby="alert-dialog-slide-description">
-            <DialogTitle id="alert-dialog-slide-title">
-                {activeUserId === userId ?
-                    'your turn' + earnedString :
-                    'wait for: ' + activeUserColor}
-            </DialogTitle>
-        </Dialog>;
+        return (
+            <Dialog
+                open={popup.changeActiveUser.isOpen}
+                // transition={Transition}
+                keepMounted
+                // onClose={() => {
+                //     view.popupChangeActiveUser({isOpen: false});
+                // }}
+                onClick={() => {
+                    if (popup.changeActiveUser.isOpen === false) {
+                        console.warn('popup.changeActiveUser.isOpen is already CLOSED, you click on popup too fast :)');
+                        return;
+                    }
+                    view.popupChangeActiveUser({
+                        isOpen: false
+                    });
+                }}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle id="alert-dialog-slide-title">
+                    {activeUserId === userId ?
+                        'your turn' + earnedString :
+                        'wait for: ' + activeUserColor}
+                </DialogTitle>
+            </Dialog>
+        );
     }
 
     renderStore(): Node | null {
@@ -545,11 +555,14 @@ export class GameView extends Component<PropsType, StateType> {
             return null;
         }
 
-        return <Store
-            key="store"
-            x={parseInt(queryData.x, 10)}
-            y={parseInt(queryData.y, 10)}
-            map={mapState}/>;
+        return (
+            <Store
+                key="store"
+                x={parseInt(queryData.x, 10)}
+                y={parseInt(queryData.y, 10)}
+                map={mapState}
+            />
+        );
     }
 
     render(): Node { // eslint-disable-line complexity
@@ -564,16 +577,18 @@ export class GameView extends Component<PropsType, StateType> {
 
         const storeState = view.getStoreState();
 
-        return [
-            view.renderStore(),
-            <Page
-                key="game-page"
-                className={classnames(style.game_page, {hidden: storeState.isOpen})}>
+        return (
+            [
+                view.renderStore(),
+                <Page
+                    className={classnames(style.game_page, {hidden: storeState.isOpen})}
+                    key="game-page"
+                >
 
-                {view.renderEndGameDialog()}
-                {view.renderPopupChangeActiveUserDialog()}
+                    {view.renderEndGameDialog()}
+                    {view.renderPopupChangeActiveUserDialog()}
 
-                {/*
+                    {/*
                 <h2>server activeUserId: {state.activeUserId}</h2>
                 <h3>mapActiveUser: {mapActiveUserId}</h3>
 
@@ -586,41 +601,52 @@ export class GameView extends Component<PropsType, StateType> {
                 {mapState ? <ReactJson src={mapState.userList}/> : <h1>no map</h1>}
                 */}
 
-                <div
-                    className={classnames(
-                        style.end_turn,
-                        {hidden: isCanvasDisabled}
-                    )}
-                    onClick={async (): Promise<void> => {
-                        await view.endTurn();
-                    }}>
-                    >|
-                </div>
+                    <div
+                        className={classnames(
+                            style.end_turn,
+                            {hidden: isCanvasDisabled}
+                        )}
+                        onClick={async (): Promise<void> => {
+                            await view.endTurn();
+                        }}
+                    >
+                        {'>|'}
+                    </div>
 
-                {/* <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>*/}
+                    {/* <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>*/}
 
-                {/*
+                    {/*
                 <div>mapActiveUserId === state(server).activeUserId :
                     {mapActiveUserId === state.activeUserId ? ' YES' : ' NO'}</div>
                 */}
 
-                {/* <div>{JSON.stringify(state.disabledByList)}</div> */}
+                    {/* <div>{JSON.stringify(state.disabledByList)}</div> */}
 
-                <canvas
-                    key="canvas"
-                    ref="canvas"
-                    style={{
-                        // pointerEvents: isCanvasDisabled ? 'none' : 'auto',
-                        width: props.system.screen.width,
-                        height: props.system.screen.height - bottomBarData.height
-                    }}/>
-                <BottomBar
-                    className="ta-l">
-                    {view.renderSupplyState()}
-                    &nbsp;|&nbsp;
-                    {view.renderMoneyState()}
-                </BottomBar>
-            </Page>];
+                    <canvas
+                        key="canvas"
+                        ref={(canvas: HTMLElement | null) => {
+                            if (!view.refs || !view.refs.canvas && canvas !== null) {
+                                view.refs = {canvas};
+                            }
+                        }}
+                        style={{
+                            // pointerEvents: isCanvasDisabled ? 'none' : 'auto',
+                            width: props.system.screen.width,
+                            height: props.system.screen.height - bottomBarData.height
+                        }}
+                    />
+                    <BottomBar
+                        className="ta-l"
+                    >
+                        <span>
+                            {view.renderSupplyState()}
+                        </span>
+                        &nbsp;|&nbsp;
+                        {view.renderMoneyState()}
+                    </BottomBar>
+                </Page>
+            ]
+        );
     }
 }
 

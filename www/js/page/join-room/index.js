@@ -31,10 +31,17 @@ type PropsType = {|
 
 class JoinRoom extends Component<PropsType, StateType> {
     props: PropsType;
-    state: StateType = {
-        // roomIds: [],
-        roomDataList: []
-    };
+    state: StateType;
+
+    constructor() {
+        super();
+
+        const view = this;
+
+        view.state = {
+            roomDataList: []
+        };
+    }
 
     async componentDidMount(): Promise<void> {
         const view = this;
@@ -53,8 +60,9 @@ class JoinRoom extends Component<PropsType, StateType> {
     async joinRoom(roomId: string): Promise<void> {
         const view = this;
         const {props, state} = view;
-        const socketId = props.auth.socket.id;
-        const userId = props.auth.user.id;
+        const {auth, history} = props;
+        const socketId = auth.socket.id;
+        const userId = auth.user.id;
 
         const roomState = await getRoomState(roomId);
 
@@ -70,7 +78,7 @@ class JoinRoom extends Component<PropsType, StateType> {
             return;
         }
 
-        props.history.push(routes.room.replace(':roomId', joinRoomResult.roomId));
+        history.push(routes.room.replace(':roomId', joinRoomResult.roomId));
     }
 
     render(): Node {
@@ -78,40 +86,56 @@ class JoinRoom extends Component<PropsType, StateType> {
         const {props, state} = view;
 
         if (state.roomDataList.length === 0) {
-            return <Page>
-                <Header>Join Into Room</Header>
-                <Form>
-                    <Fieldset>
-                        No Open Rooms, create your own room...
-                    </Fieldset>
-                </Form>
-            </Page>;
+            return (
+                <Page>
+                    <Header>
+                        Join Into Room
+                    </Header>
+                    <Form>
+                        <Fieldset>
+                            No Open Rooms, create your own room...
+                        </Fieldset>
+                    </Form>
+                </Page>
+            );
         }
 
-        return <Page>
-            <Header>Join Into Room</Header>
+        return (
+            <Page>
+                <Header>
+                    Join Into Room
+                </Header>
 
-            <Form>
-                <Fieldset>
-                    {state.roomDataList
-                        .map((roomData: RoomDataType): Node => <p
-                            style={{
-                                padding: 10,
-                                cursor: 'pointer'
-                            }}
-                            onClick={async (): Promise<void> => {
-                                const result = view.joinRoom(roomData.roomId);
-                            }}
-                            key={roomData.roomId}>
-                            {roomData.roomId}
-                            {' - '}
-                            {roomData.settings.map.meta.en.name}
-                            {' - '}
-                            {roomData.userList.length} / {roomData.maxUserSize}
-                        </p>)}
-                </Fieldset>
-            </Form>
-        </Page>;
+                <Form>
+                    <Fieldset>
+                        {state.roomDataList
+                            .map((roomData: RoomDataType): Node => {
+                                return (
+                                    <p
+                                        style={{
+                                            padding: 10,
+                                            cursor: 'pointer'
+                                        }}
+                                        onClick={async (): Promise<void> => {
+                                            const result = view.joinRoom(roomData.roomId);
+                                        }}
+                                        key={roomData.roomId}
+                                    >
+                                        {roomData.roomId}
+                                        {' - '}
+                                        {roomData.settings.map.meta.en.name}
+                                        {' - '}
+                                        {roomData.userList.length}
+                                        {' '}
+                                        /
+                                        {roomData.maxUserSize}
+                                    </p>
+                                );
+                            })}
+                    </Fieldset>
+                </Form>
+            </Page>
+        );
     }
 }
 

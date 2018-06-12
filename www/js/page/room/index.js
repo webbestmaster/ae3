@@ -47,17 +47,26 @@ type PropsType = {|
 
 class Room extends Component<PropsType, StateType> {
     props: PropsType;
-    state: StateType = {
-        userList: [],
-        model: new MainModel(),
-        isGameStart: false
-    };
+    state: StateType;
+
+    constructor() {
+        super();
+
+        const view = this;
+
+        view.state = {
+            userList: [],
+            model: new MainModel(),
+            isGameStart: false
+        };
+    }
 
     async componentDidMount(): Promise<void> {
         const view = this;
         const {props, state} = view;
+        const {match, history} = props;
 
-        const roomId = props.match.params.roomId || '';
+        const roomId = match.params.roomId || '';
 
         if (roomId === '') {
             console.error('room id is not define!!!');
@@ -68,7 +77,7 @@ class Room extends Component<PropsType, StateType> {
 
         if (roomState === null || roomState.userList.length > roomState.maxUserSize) {
             console.error('roomState is null or room state is fool', roomState);
-            props.history.goBack();
+            history.goBack();
             return;
         }
 
@@ -94,7 +103,8 @@ class Room extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
         const {model} = state;
-        const roomId = props.match.params.roomId || '';
+        const {match} = props;
+        const roomId = match.params.roomId || '';
 
         model.destroy();
 
@@ -123,7 +133,8 @@ class Room extends Component<PropsType, StateType> {
     async onServerUserListChange(): Promise<void> {
         const view = this;
         const {props, state} = view;
-        const roomId = props.match.params.roomId || '';
+        const {match} = props;
+        const roomId = match.params.roomId || '';
 
         if (roomId === '') {
             console.error('room id is not define!!!');
@@ -220,7 +231,8 @@ class Room extends Component<PropsType, StateType> {
     async startGame(): Promise<void> {
         const view = this;
         const {props, state} = view;
-        const roomId = props.match.params.roomId || '';
+        const {match} = props;
+        const roomId = match.params.roomId || '';
 
         const userList: Array<ServerUserType> = state.userList
             .map((userItem: ServerUserType, userIndex: number): ServerUserType => ({
@@ -292,46 +304,67 @@ class Room extends Component<PropsType, StateType> {
             .indexOf(user.getId()) === 0;
 
         if (state.isGameStart === true) {
-            return <Game roomId={roomId}/>;
+            return <Game roomId={roomId} />;
         }
 
-        return <Page>
-            <Header>Room</Header>
+        return (
+            <Page>
+                <Header>
+                    Room
+                </Header>
 
-            <Form>
+                <Form>
 
-                <Fieldset>
-                    <FormHeader>Map:</FormHeader>
-                    {state.settings && state.settings.map.meta.en.name}
-                </Fieldset>
+                    <Fieldset>
+                        <FormHeader>
+                            Map:
+                        </FormHeader>
+                        {state.settings && state.settings.map.meta.en.name}
+                    </Fieldset>
 
-                <Fieldset>
-                    <FormHeader>User List:</FormHeader>
+                    <Fieldset>
+                        <FormHeader>
+                            User List:
+                        </FormHeader>
 
-                    {(state.userList && state.userList || [])
-                        .map((userData: ServerUserType, userIndex: number): Node => <div key={userData.userId}>
-                            {userIndex === 0 ? <hr/> : null}
-                            userId: {userData.userId}<br/>
-                            teamId: {userData.teamId}<br/>
-                            socketId: {userData.socketId}
-                            <hr/>
-                        </div>)}
+                        {(state.userList && state.userList || [])
+                            .map((userData: ServerUserType, userIndex: number): Node => {
+                                return (
+                                    <div key={userData.userId}>
+                                        {userIndex === 0 ? <hr /> : null}
+                                        userId:
+                                        {' '}
+                                        {userData.userId}
+                                        <br />
+                                        teamId:
+                                        {' '}
+                                        {userData.teamId}
+                                        <br />
+                                        socketId:
+                                        {' '}
+                                        {userData.socketId}
+                                        <hr />
+                                    </div>
+                                );
+                            })}
 
-                </Fieldset>
+                    </Fieldset>
 
-                {amIMasterPlayer ?
-                    <Button
-                        onClick={async (): Promise<void> => {
-                            await view.startGame();
-                        }}>
-                        start
-                    </Button> :
-                    <BottomBar>
-                        wait for start...
-                    </BottomBar>}
+                    {amIMasterPlayer ?
+                        <Button
+                            onClick={async (): Promise<void> => {
+                                await view.startGame();
+                            }}
+                        >
+                            start
+                        </Button> :
+                        <BottomBar>
+                            wait for start...
+                        </BottomBar>}
 
-            </Form>
-        </Page>;
+                </Form>
+            </Page>
+        );
     }
 }
 

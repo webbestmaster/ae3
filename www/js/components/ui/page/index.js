@@ -26,9 +26,11 @@ export class Page extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
-        return <div className={style.page + additionClass}>
-            {props.children}
-        </div>;
+        return (
+            <div className={style.page + additionClass}>
+                {props.children}
+            </div>
+        );
     }
 }
 

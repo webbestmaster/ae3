@@ -5,7 +5,8 @@
     "parser": "babel-eslint",
     "extends": [
         "eslint:recommended",
-        "plugin:flowtype/recommended"
+        "plugin:flowtype/recommended",
+        "plugin:react/all"
     ],
     "globals": {
         "require": true,
@@ -13,7 +14,8 @@
         "console": true
     },
     "plugins": [
-        "flowtype"
+        "flowtype",
+        "react"
     ],
     "env": {
         "es6": true,
@@ -81,6 +83,43 @@
         ],
         "flowtype/use-flow-type": 1,
         "flowtype/valid-syntax": 1,
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx"
+                ]
+            }
+        ],
+        "react/no-unused-prop-types": 0,
+        "react/sort-comp": 0,
+        "react/jsx-sort-props": 0,
+        //        "react/jsx-wrap-multilines": 0,
+        "react/jsx-no-bind": [
+            1,
+            {
+                "ignoreRefs": true,
+                "allowArrowFunctions": true,
+                "allowFunctions": false,
+                "allowBind": false
+            }
+        ],
+        "react/jsx-closing-bracket-location": [
+            1,
+            "line-aligned"
+        ],
+        "react/forbid-component-props": 0,
+        "react/jsx-no-literals": 0,
+        "react/require-default-props": 0,
+        "react/require-optimization": 0,
+        "react/jsx-max-depth": [
+            1,
+            {
+                "max": 3
+            }
+        ],
+        //        "react/destructuring-assignment": [1, "never"],
         "no-console": 0,
         "no-empty-label": 0,
         "no-warning-comments": 0,
