@@ -1241,7 +1241,8 @@ export default class Unit {
         const unit = this;
         const {attr, gameAttr} = unit;
         const currentSpriteNumber = gameAttr.sprite.level.getChildAt(0) || null;
-        const newSpriteNumber = PIXI.Sprite.fromImage(imageMap.font.unit[level]);
+        const levelSting = String(level);
+        const newSpriteNumber = PIXI.Sprite.fromImage(imageMap.font.unit[levelSting]);
 
         if (level === 0) {
             console.log('no set zero level');
