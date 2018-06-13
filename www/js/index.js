@@ -2,6 +2,7 @@
 /* global window */
 
 import {initializeEnvironment} from './app/helper.js';
+
 initializeEnvironment();
 
 import React from 'react';

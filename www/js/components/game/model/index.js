@@ -1125,7 +1125,7 @@ export default class Game {
             return;
         }
 
-        unitList.forEach(async (unit: Unit): Promise<void> => { // eslint-disable-line complexity
+        unitList.forEach((unit: Unit) => { // eslint-disable-line complexity
             const unitId = unit.attr.id;
 
             if (typeof unitId !== 'string' || unitId === '') {
@@ -1156,11 +1156,15 @@ export default class Game {
                 );
 
                 if (healHitPointOnBuilding !== null) {
-                    await unit.setHitPoints(unit.getHitPoints() + healHitPointOnBuilding);
+                    unit.setHitPoints(unit.getHitPoints() + healHitPointOnBuilding).then(() => {
+                        console.log('unit.setHitPoints - done');
+                    });
                 }
             }
 
-            await unit.setActionState(mapUnit.action || null);
+            unit.setActionState(mapUnit.action || null).then(() => {
+                console.log('unit.setActionState - done');
+            });
         });
 
         const {graveList} = game;
@@ -1175,7 +1179,7 @@ export default class Game {
 
         const graveListToRemove: Array<Grave> = [];
 
-        graveList.forEach(async (grave: Grave): Promise<void> => { // eslint-disable-line complexity
+        graveList.forEach((grave: Grave) => { // eslint-disable-line complexity
             const mapGrave = find(socketMapState.graves, {x: grave.attr.x, y: grave.attr.y});
 
             if (!mapGrave) {
@@ -1196,7 +1200,7 @@ export default class Game {
                 return;
             }
 
-            await grave.setRemoveCountdown(mapGrave.removeCountdown);
+            grave.setRemoveCountdown(mapGrave.removeCountdown);
         });
 
         while (graveListToRemove.length > 0) {
@@ -2186,10 +2190,10 @@ export default class Game {
                 return false;
             }
 
-            const isUnitEqual = isEqual(mapUnit, unit.attr);
+            const isUnitEqual = isEqual(JSON.parse(JSON.stringify(mapUnit)), JSON.parse(JSON.stringify(unit.attr)));
 
             if (isUnitEqual === false) {
-                console.error('units is not equal', mapUnit, unit.attr);
+                console.error('units is not equal', JSON.parse(JSON.stringify(mapUnit)), JSON.parse(JSON.stringify(unit.attr)));
                 return false;
             }
 

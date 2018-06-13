@@ -1352,7 +1352,7 @@ export default class Unit {
     }
     */
 
-    async setHitPoints(hitPoints: number): Promise<void> {
+    async setHitPoints(hitPoints: number): Promise<void> { // eslint-disable-line complexity, max-statements
         const unit = this;
         const {attr, gameAttr} = unit;
 
@@ -1367,7 +1367,12 @@ export default class Unit {
             return;
         }
 
+        const currentHitPoints = typeof attr.hitPoints === 'number' ? attr.hitPoints : defaultUnitData.hitPoints;
+        const hitPointsDelta = hitPoints - currentHitPoints;
+
         attr.hitPoints = hitPoints;
+
+        await unit.showDeltaHitPoints(hitPointsDelta);
 
         const number0 = gameAttr.sprite.hitPoints.getChildAt(0);
         const number1 = gameAttr.sprite.hitPoints.getChildAt(1);
@@ -1377,10 +1382,15 @@ export default class Unit {
             return;
         }
 
-        const hitPointString = hitPoints.toString(10).padStart(2, ' ');
+        if (hitPoints === defaultUnitData.hitPoints) {
+            number0.texture = PIXI.Texture.fromImage(imageMap.font.unit.space);
+            number1.texture = PIXI.Texture.fromImage(imageMap.font.unit.space);
+        } else {
+            const hitPointString = hitPoints.toString(10).padStart(2, ' ');
 
-        number0.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[0]]);
-        number1.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[1]]);
+            number0.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[0] || 'space']);
+            number1.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[1] || 'space']);
+        }
     }
 
     getHitPoints(): number {
@@ -1391,6 +1401,85 @@ export default class Unit {
             return attr.hitPoints;
         }
         return defaultUnitData.hitPoints;
+    }
+
+    async showDeltaHitPoints(hitPointsDelta: number): Promise<void> { // eslint-disable-line complexity, max-statements
+        if (hitPointsDelta === 0) {
+            console.log('hitPointsDelta is === 0');
+            return;
+        }
+
+        const hitPointsDeltaString = String(Math.abs(hitPointsDelta));
+
+        if (hitPointsDeltaString.length > 3) {
+            console.error('hitPointsDelta is >= 100, unit has 2 digits to show delta hp only');
+            return;
+        }
+
+        const unit = this;
+        const {attr, gameAttr} = unit;
+        const {square} = mapGuide.size;
+        const negativeTint = 0xcc0000;
+        const isPositive = hitPointsDelta > 0;
+
+
+        const sign = PIXI.Sprite.fromImage(imageMap.font.popup[isPositive ? 'plus' : 'minus']);
+        const number0 = PIXI.Sprite.fromImage(imageMap.font.popup[hitPointsDeltaString[0] || 'space']);
+        const number1 = PIXI.Sprite.fromImage(imageMap.font.popup[hitPointsDeltaString[1] || 'space']);
+
+        [sign, number0, number1].forEach((sprite: PIXI.Sprite) => {
+            if (isPositive) {
+                return;
+            }
+            sprite.tint = negativeTint; // eslint-disable-line no-param-reassign
+        });
+
+        if (hitPointsDeltaString.length === 1) {
+            sign.position.set(square / 6, 0);
+            number0.position.set(square / 6 + square / 3, 0);
+            number1.position.set(0, 0);
+        } else {
+            sign.position.set(0, 0);
+            number0.position.set(square / 3, 0);
+            number1.position.set(square / 3 * 2, 0);
+        }
+
+        const hitPointsContainer = new PIXI.Container();
+
+        hitPointsContainer.addChild(sign);
+        hitPointsContainer.addChild(number0);
+        hitPointsContainer.addChild(number1);
+        gameAttr.container.addChild(hitPointsContainer);
+
+        hitPointsContainer.alpha = 0;
+
+        const animationFrom: LevelUpAnimationDataType = {
+            x: 0,
+            y: square,
+            alpha: 0
+        };
+
+        const animationShow: LevelUpAnimationDataType = {
+            x: 0,
+            y: -square / 12,
+            alpha: 1
+        };
+
+        const animationTo: LevelUpAnimationDataType = {
+            x: 0,
+            y: -square / 12,
+            alpha: 0
+        };
+
+        await tweenList(
+            [animationFrom, animationShow, animationShow, animationTo],
+            defaultUnitData.animation.deltaHitPoints,
+            (animationCurrent: LevelUpAnimationDataType) => {
+                hitPointsContainer.position.set(animationCurrent.x, animationCurrent.y);
+                hitPointsContainer.alpha = animationCurrent.alpha;
+            });
+
+        gameAttr.container.removeChild(hitPointsContainer);
     }
 
     setIsActionAvailable(isActionAvailable: boolean) {

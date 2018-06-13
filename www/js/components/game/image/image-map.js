@@ -16,6 +16,9 @@ type ImageMapType = {|
     font: {
         unit: {
             [key: string]: string
+        },
+        popup: {
+            [key: string]: string
         }
     }
 |};
@@ -26,7 +29,8 @@ const imageMap: ImageMapType = {
     other: {},
     unit: {},
     font: {
-        unit: {}
+        unit: {},
+        popup: {}
     }
 };
 
@@ -82,6 +86,17 @@ fontUnitReqContext.keys()
         Object.assign(
             imageMap.font.unit,
             {[fileName.replace('./', '').replace('.png', '')]: fontUnitReqContext(fileName)}
+        );
+    });
+
+
+const fontPopupReqContext = require.context('./../i/font/popup/', true, /\.png$/);
+
+fontPopupReqContext.keys()
+    .forEach((fileName: string) => {
+        Object.assign(
+            imageMap.font.popup,
+            {[fileName.replace('./', '').replace('.png', '')]: fontPopupReqContext(fileName)}
         );
     });
 

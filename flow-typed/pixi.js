@@ -1,6 +1,6 @@
 // @flow
 
-import {Rectangle, Texture} from 'pixi.js';
+import {Container, Rectangle, Texture} from 'pixi.js';
 
 type ApplicationOptionsType = {|
     autoStart?: boolean,
@@ -75,6 +75,7 @@ declare module 'pixi.js' {
     declare export class Sprite extends PixiObject {
         constructor(): Sprite,
         texture: Texture,
+        tint: number,
         static fromImage(spriteName: string): Sprite
     }
 
@@ -91,11 +92,20 @@ declare module 'pixi.js' {
         text: string | number
     }
 
-    declare export class Container extends PixiObject {
+    declare export class Container {
         constructor(): Container,
-        addChild(pixiObject: PixiObject): void,
-        removeChild(pixiObject: PixiObject): void,
-        getChildAt(index: number): Sprite | void
+        on(eventName: MouseEventNameType | TouchEventNameType, callback: (evt: InteractionEventType) => void): void,
+        addChild(pixiObject: PixiObject | Container): void,
+        removeChild(pixiObject: PixiObject | Container): void,
+        removeChildren(startIndex?: number, endIndex?: number): void,
+        getChildAt(index: number): Sprite | void,
+        interactive: boolean,
+        buttonMode: boolean,
+        hitArea: Rectangle,
+        alpha: number,
+        position: {
+            set(x: number, y: number): void
+        }
     }
 
     declare export class Application {

@@ -351,7 +351,8 @@ const defaultUnitData = {
     animation: {
         moveStep: 100,
         attack: 500,
-        levelUp: 350
+        levelUp: 250,
+        deltaHitPoints: 250
     }
 };
 

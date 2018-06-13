@@ -128,6 +128,7 @@ class JoinRoom extends Component<PropsType, StateType> {
                                         {roomData.userList.length}
                                         {' '}
                                         /
+                                        {' '}
                                         {roomData.maxUserSize}
                                     </p>
                                 );
