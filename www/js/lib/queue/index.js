@@ -14,8 +14,15 @@ function requestIdleCallbackPolyfill(callback: () => {}) {
 window.requestIdleCallback = window.requestIdleCallback || requestIdleCallbackPolyfill;
 
 export default class Queue {
-    list: Array<CallBackType> = [];
-    isInProgress: boolean = false;
+    list: Array<CallBackType>;
+    isInProgress: boolean;
+
+    constructor() {
+        const queue = this;
+
+        queue.list = [];
+        queue.isInProgress = false;
+    }
 
     push(func: CallBackType) {
         const queue = this;
