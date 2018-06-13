@@ -85,7 +85,8 @@ const webpackConfig = {
                     new UglifyJsPlugin({
                         uglifyOptions: {
                             compress: {
-                                drop_console: true // eslint-disable-line camelcase
+                                drop_console: true, // eslint-disable-line camelcase
+                                passes: 3
                             }
                         }
                     })
