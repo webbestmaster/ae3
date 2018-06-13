@@ -1271,10 +1271,10 @@ export default class Unit {
         currentSpriteNumber.texture = newSpriteNumber.texture;
     }
 
-    actualizeLevel(): Promise<void> {
+    async actualizeLevel(): Promise<void> {
         const unit = this;
 
-        return unit.setLevel(unit.getLevel());
+        await unit.setLevel(unit.getLevel());
     }
 
     getLevel(): number {

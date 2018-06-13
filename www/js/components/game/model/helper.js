@@ -497,6 +497,16 @@ export function getLevel(damageGiven: number): number {
     return level;
 }
 
+/*
+console.log('getLevel test: begin');
+
+new Array(1000).join('.').split('').forEach((value: string, index: number) => {
+    console.log(String(index).padStart(3, ' '), getLevel(index));
+});
+
+console.log('get:evel test: end');
+*/
+
 function cloneActionList(actionList: UnitActionsMapType): UnitActionsMapType {
     const newActionList = [];
 
