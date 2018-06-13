@@ -7,7 +7,7 @@ import Switch from 'react-router-dom/Switch';
 import System from './../components/system';
 import Auth from './../components/auth';
 
-import Index from './../page/index';
+import Home from './../page/home';
 import MultiPlayer from './../page/multi-player';
 import CreateRoom from './../page/create-room';
 import JoinRoom from './../page/join-room';
@@ -21,7 +21,7 @@ export default (): Node[] =>
         <System key="system" />,
         <Switch key="switch">
             <Route
-                component={Index}
+                component={Home}
                 exact
                 path={routes.index}
             />

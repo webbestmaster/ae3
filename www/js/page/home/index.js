@@ -11,11 +11,11 @@ import ButtonLink from './../../components/ui/button-link';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
 import Header from './../../components/ui/header';
 
-function Index(): Node {
+function Home(): Node {
     return (
         <Page>
             <Header>
-                Index
+                Home
             </Header>
             <ButtonListWrapper>
                 <ButtonLink
@@ -48,4 +48,4 @@ export default connect(
         // app: state.app
     }),
     {}
-)(Index);
+)(Home);
