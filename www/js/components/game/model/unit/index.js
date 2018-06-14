@@ -1377,11 +1377,17 @@ export default class Unit {
         if (hitPoints === defaultUnitData.hitPoints) {
             number0.texture = PIXI.Texture.fromImage(imageMap.font.unit.space);
             number1.texture = PIXI.Texture.fromImage(imageMap.font.unit.space);
-        } else {
-            const hitPointString = hitPoints.toString(10).padStart(2, ' ');
+            return;
+        }
 
-            number0.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[0] || 'space']);
-            number1.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[1] || 'space']);
+        const hitPointString = hitPoints.toString(10);
+
+        if (hitPointString.length === 2) {
+            number0.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[0]]);
+            number1.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[1]]);
+        } else {
+            number0.texture = PIXI.Texture.fromImage(imageMap.font.unit.space);
+            number1.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[0]]);
         }
     }
 
