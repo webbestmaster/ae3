@@ -133,7 +133,7 @@ type UnitGameAttrType = {|
         unit: PIXI.extras.AnimatedSprite,
         hitPoints: PIXI.Container,
         level: PIXI.Container,
-        poisonCountdown: PIXI.Text,
+        poisonCountdown: PIXI.Sprite,
         wispAura: PIXI.Sprite
     |},
     userList: Array<MapUserType>,
@@ -219,7 +219,7 @@ export default class Unit {
                 ]),
                 hitPoints: new PIXI.Container(),
                 level: new PIXI.Container(),
-                poisonCountdown: new PIXI.Text('', textStyleRed),
+                poisonCountdown: PIXI.Sprite.fromImage(imageMap.other['under-poison']),
                 wispAura: PIXI.Sprite.fromImage(imageMap.other['under-wisp-aura'])
             },
             userList: JSON.parse(JSON.stringify(unitConstructor.userList)),
@@ -327,20 +327,14 @@ export default class Unit {
         const poisonCountdown = unit.getPoisonCountdown();
         const {square} = mapGuide.size;
 
+        gameAttr.sprite.poisonCountdown.position.set(square, 0);
+        gameAttr.sprite.poisonCountdown.anchor.set(1, 0);
+        gameAttr.sprite.poisonCountdown.alpha = 0;
 
         // if (poisonCountdown !== defaultUnitData.poisonCountdown) {
         if (typeof attr.poisonCountdown === 'number') {
             unit.setPoisonCountdown(poisonCountdown);
         }
-        // }
-
-        /*
-                if (hitPoints > defaultUnitData.hitPoints) {
-                    console.error('hitPoints bigger than default hitPoints!', unit);
-                }
-        */
-
-        gameAttr.sprite.poisonCountdown.position.set(square * 0.75, 0);
 
         gameAttr.container.addChild(gameAttr.sprite.poisonCountdown);
     }
@@ -1175,9 +1169,7 @@ export default class Unit {
 
         attr.poisonCountdown = poisonCountdown;
 
-        gameAttr.sprite.poisonCountdown.text = poisonCountdown === defaultUnitData.poisonCountdown ?
-            '' :
-            poisonCountdown;
+        gameAttr.sprite.poisonCountdown.alpha = poisonCountdown === defaultUnitData.poisonCountdown ? 0 : 1;
     }
 
     decreasePoisonCountdown() {
