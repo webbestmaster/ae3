@@ -1,7 +1,7 @@
 // @flow
 
 /* eslint camelcase: [0, { "properties": "always" }] */
-/* eslint id-match: [1, "^[a-zA-Z0-9_]+$", { "onlyDeclarations": false, "properties": true }] */
+/* eslint id-match: [1, "^\$?[a-zA-Z0-9_]+$", { "onlyDeclarations": false, "properties": true }] */
 
 import type {LangTranslateType} from './../index';
 

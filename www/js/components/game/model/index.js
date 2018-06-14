@@ -2190,10 +2190,12 @@ export default class Game {
                 return false;
             }
 
-            const isUnitEqual = isEqual(JSON.parse(JSON.stringify(mapUnit)), JSON.parse(JSON.stringify(unit.attr)));
+            const isUnitEqual = isEqual(mapUnit, unit.attr);
 
             if (isUnitEqual === false) {
-                console.error('units is not equal', JSON.parse(JSON.stringify(mapUnit)), JSON.parse(JSON.stringify(unit.attr)));
+                console.error('units is not equal',
+                    JSON.parse(JSON.stringify(mapUnit)),
+                    JSON.parse(JSON.stringify(unit.attr)));
                 return false;
             }
 
