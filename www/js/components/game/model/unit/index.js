@@ -305,6 +305,8 @@ export default class Unit {
         const level = unit.getLevel();
         const levelNumberSprite = PIXI.Sprite.fromImage(imageMap.font.unit.space);
 
+        levelNumberSprite.tint = 0xcccc00;
+
         gameAttr.sprite.level.addChild(levelNumberSprite);
 
         if (level > defaultUnitData.level.max) {
