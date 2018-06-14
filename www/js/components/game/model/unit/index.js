@@ -5,7 +5,7 @@
 import * as PIXI from 'pixi.js';
 import type {MapType, MapUserType, UnitActionStateType, UnitType} from './../../../../maps/type';
 import type {AttackResultUnitType} from './../helper';
-import {bindClick, getAttackResult, getMoviePath, getUserColor, getLevel, canOpenStore} from './../helper';
+import {bindClick, canOpenStore, getAttackResult, getLevel, getMoviePath, getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import type {UnitGuideDataType} from './unit-guide';
 import unitGuide, {defaultUnitData} from './unit-guide';

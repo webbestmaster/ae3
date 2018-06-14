@@ -9,17 +9,17 @@ import {unitActionStateDefaultValue} from './../../../maps/type';
 import type {AllRoomSettingsType, ServerUserType} from './../../../module/server-api';
 import * as serverApi from './../../../module/server-api';
 import mapGuide from './../../../maps/map-guide';
+import type {WrongStateType, WrongStateTypeUnitOnUnitType} from './helper';
 import {
     bindClick,
+    canOpenStore,
     countHealHitPointOnBuilding,
     getMatchResult,
-    mergeActionList,
-    procedureMakeGraveForMapUnit,
+    getWrongStateList,
     isStoreOpen,
-    canOpenStore,
-    getWrongStateList
+    mergeActionList,
+    procedureMakeGraveForMapUnit
 } from './helper';
-import type {WrongStateType, WrongStateTypeUnitOnUnitType} from './helper';
 import Render from './render';
 import Building from './building';
 import Grave from './grave';
@@ -29,7 +29,8 @@ import type {
     UnitActionDestroyBuildingType,
     UnitActionFixBuildingType,
     UnitActionMoveType,
-    UnitActionOccupyBuildingType, UnitActionOpenStoreType,
+    UnitActionOccupyBuildingType,
+    UnitActionOpenStoreType,
     UnitActionRaiseSkeletonType,
     UnitActionsMapType,
     UnitActionType

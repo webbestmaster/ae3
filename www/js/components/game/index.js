@@ -26,7 +26,6 @@ import classnames from 'classnames';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 // import Slide from 'material-ui/transitions/Slide';
 import Page from './../../components/ui/page';
 import BottomBar from './../../components/ui/bottom-bar';

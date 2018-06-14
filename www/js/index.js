@@ -2,9 +2,6 @@
 /* global window */
 
 import {initializeEnvironment} from './app/helper.js';
-
-initializeEnvironment();
-
 import React from 'react';
 import {render} from 'react-dom';
 import BrowserRouter from 'react-router-dom/BrowserRouter';
@@ -16,6 +13,8 @@ import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
 import App from './app';
 
 import * as reducers from './app-reducer';
+
+initializeEnvironment();
 
 const reducer = combineReducers({
     ...reducers

@@ -7,13 +7,12 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {setSocket, setUser} from './action';
 import type {SetSocketType, SetUserType} from './action';
-import type {SocketType, UserType} from './reducer';
+import {setSocket, setUser} from './action';
+import type {AuthType, SocketType, UserType} from './reducer';
 import {user} from './../../module/user';
 import {socket} from './../../module/socket';
 import type {GlobalStateType} from './../../app-reducer';
-import type {AuthType} from './reducer';
 
 type PropsType = {|
     setUser: (userState: UserType) => SetUserType,
