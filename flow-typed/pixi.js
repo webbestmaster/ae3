@@ -35,6 +35,12 @@ type InteractionEventType = {|
         +global: {|
             +x: number,
             +y: number
+        |},
+        +originalEvent: {|
+            touches?: Array<{|
+                +x: number,
+                +y: number
+            |}>
         |}
     |}
 |};

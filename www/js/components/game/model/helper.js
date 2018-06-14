@@ -21,6 +21,12 @@ type InteractionEventType = {|
         +global: {|
             +x: number,
             +y: number
+        |},
+        +originalEvent: {|
+            touches?: Array<{|
+                +x: number,
+                +y: number
+            |}>
         |}
     |}
 |};
@@ -313,6 +319,14 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
     container.on(getEventName('mousedown'), (interactionEvent: InteractionEventType) => {
         containerEvent.startTouch.x = interactionEvent.data.global.x;
         containerEvent.startTouch.y = interactionEvent.data.global.y;
+
+        const {originalEvent} = interactionEvent.data;
+
+        // this is not fix problem, but make problem more hard reproducible
+        if (Array.isArray(originalEvent.touches) && originalEvent.touches.length > 1) {
+            containerEvent.startTouch.x = NaN;
+            containerEvent.startTouch.y = NaN;
+        }
     });
 
     container.on(getEventName('mouseup'), (interactionEvent: InteractionEventType) => {
@@ -322,6 +336,10 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
         const endY = interactionEvent.data.global.y;
         const deltaX = startX - endX;
         const deltaY = startY - endY;
+
+        if (Number.isNaN(deltaX) || Number.isNaN(deltaY)) {
+            return;
+        }
 
         if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) > 100) { // move delta > 10px - no click
             return;
