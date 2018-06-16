@@ -1,5 +1,7 @@
 // @flow
 
+/* global BUILD_DATE */
+
 import type {Node} from 'react';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -14,8 +16,11 @@ import Header from './../../components/ui/header';
 function Home(): Node {
     return (
         <Page>
-            <Header>
-                Home
+            <Header className="ta-c">
+                {/* Home, */}
+                Build of
+                {' '}
+                {new Date(BUILD_DATE).toLocaleString()}
             </Header>
             <ButtonListWrapper>
                 <ButtonLink

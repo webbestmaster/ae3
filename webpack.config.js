@@ -23,6 +23,7 @@ const IS_PRODUCTION = NODE_ENV === PRODUCTION;
 const CWD = __dirname;
 
 const definePluginParams = {
+    BUILD_DATE: Date.now(),
     // NODE_ENV: JSON.stringify(NODE_ENV),
     IS_PRODUCTION: JSON.stringify(IS_PRODUCTION)
     // IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
