@@ -308,13 +308,18 @@ function getEventName(MouseEventName: MouseEventNameType): MouseEventNameType | 
     return hasInMap ? MouseEventName : 'click';
 }
 
-export function bindClick(container: PIXI.Container, callback: () => Promise<void>) {
+function noop() {
+}
+
+export function bindClick(container: PIXI.Container, callback: () => Promise<void>, smthWrongCallback?: () => void) {
     const containerEvent = {
         startTouch: {
             x: NaN,
             y: NaN
         }
     };
+
+    const smthWrongCallbackfunction = smthWrongCallback || noop;
 
     container.on(getEventName('mousedown'), (interactionEvent: InteractionEventType) => {
         containerEvent.startTouch.x = interactionEvent.data.global.x;
@@ -326,10 +331,11 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
         if (Array.isArray(originalEvent.touches) && originalEvent.touches.length > 1) {
             containerEvent.startTouch.x = NaN;
             containerEvent.startTouch.y = NaN;
+            smthWrongCallbackfunction();
         }
     });
 
-    container.on(getEventName('mouseup'), (interactionEvent: InteractionEventType) => {
+    container.on(getEventName('mouseup'), (interactionEvent: InteractionEventType) => { // eslint-disable-line complexity
         const startX = containerEvent.startTouch.x;
         const startY = containerEvent.startTouch.y;
         const endX = interactionEvent.data.global.x;
@@ -337,7 +343,11 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
         const deltaX = startX - endX;
         const deltaY = startY - endY;
 
-        if (Number.isNaN(deltaX) || Number.isNaN(deltaY)) {
+        const {originalEvent} = interactionEvent.data;
+
+        if (Number.isNaN(deltaX) || Number.isNaN(deltaY) ||
+            Array.isArray(originalEvent.touches) && originalEvent.touches.length !== 0) {
+            smthWrongCallbackfunction();
             return;
         }
 

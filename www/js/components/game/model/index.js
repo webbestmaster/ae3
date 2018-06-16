@@ -1407,8 +1407,13 @@ export default class Game {
         mergedActionList.forEach((unitActionLine: Array<Array<UnitActionType>>) => {
             unitActionLine.forEach((unitActionList: Array<UnitActionType>) => {
                 unitActionList.forEach((unitAction: UnitActionType) => {
-                    if (unitAction.container) {
-                        bindClick(unitAction.container, async (): Promise<void> => { // eslint-disable-line complexity
+                    if (!unitAction.container) {
+                        console.error('no container to add onClick', unitAction);
+                        return;
+                    }
+                    bindClick(
+                        unitAction.container,
+                        async (): Promise<void> => { // eslint-disable-line complexity
                             switch (unitAction.type) {
                                 case 'move':
                                     if (unitActionsList !== null) {
@@ -1443,11 +1448,9 @@ export default class Game {
                                 default:
                                     console.error('unknown action', unitAction);
                             }
-                        });
-                        return;
-                    }
-
-                    console.error('no container to add onClick', unitAction);
+                        },
+                        (): void => game.render.cleanActionsListSync() // eslint-disable-line no-sync
+                    );
                 });
             });
         });

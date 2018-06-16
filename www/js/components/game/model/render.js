@@ -406,6 +406,12 @@ export default class Render {
         });
     }
 
+    cleanActionsListSync() {
+        const render = this;
+
+        render.layer.actions.removeChildren();
+    }
+
     async drawAttack(aggressorUnit: Unit, defenderUnit: Unit): Promise<void> {
         // TODO: DO NOT set HP here - do it in handleServerPushStateAttack
         const render = this;
