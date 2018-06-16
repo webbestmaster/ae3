@@ -319,7 +319,7 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
         }
     };
 
-    const smthWrongCallbackfunction = smthWrongCallback || noop;
+    const smthWrongCallbackFunction = smthWrongCallback || noop;
 
     container.on(getEventName('mousedown'), (interactionEvent: InteractionEventType) => {
         containerEvent.startTouch.x = interactionEvent.data.global.x;
@@ -331,7 +331,7 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
         if (Array.isArray(originalEvent.touches) && originalEvent.touches.length > 1) {
             containerEvent.startTouch.x = NaN;
             containerEvent.startTouch.y = NaN;
-            smthWrongCallbackfunction();
+            smthWrongCallbackFunction();
         }
     });
 
@@ -347,7 +347,7 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
 
         if (Number.isNaN(deltaX) || Number.isNaN(deltaY) ||
             Array.isArray(originalEvent.touches) && originalEvent.touches.length !== 0) {
-            smthWrongCallbackfunction();
+            smthWrongCallbackFunction();
             return;
         }
 
