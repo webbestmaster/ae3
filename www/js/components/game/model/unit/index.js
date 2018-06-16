@@ -1391,6 +1391,17 @@ export default class Unit {
             number0.texture = PIXI.Texture.fromImage(imageMap.font.unit.space);
             number1.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[0]]);
         }
+
+        let hitPointsTint = 0xdddd00; // yellow;
+
+        if (hitPoints >= 80) {
+            hitPointsTint = 0x00dd00; // green
+        } else if (hitPoints < 40) {
+            hitPointsTint = 0xdd0000; // red
+        }
+
+        number0.tint = hitPointsTint;
+        number1.tint = hitPointsTint;
     }
 
     getHitPoints(): number {
