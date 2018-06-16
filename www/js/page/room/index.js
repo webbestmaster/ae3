@@ -304,7 +304,7 @@ class Room extends Component<PropsType, StateType> {
             .indexOf(user.getId()) === 0;
 
         if (state.isGameStart === true) {
-            return <Game roomId={roomId} />;
+            return <Game roomId={roomId}/>;
         }
 
         return (
@@ -331,19 +331,19 @@ class Room extends Component<PropsType, StateType> {
                             .map((userData: ServerUserType, userIndex: number): Node => {
                                 return (
                                     <div key={userData.userId}>
-                                        {userIndex === 0 ? <hr /> : null}
+                                        {userIndex === 0 ? <hr/> : null}
                                         userId:
                                         {' '}
                                         {userData.userId}
-                                        <br />
+                                        <br/>
                                         teamId:
                                         {' '}
                                         {userData.teamId}
-                                        <br />
+                                        <br/>
                                         socketId:
                                         {' '}
                                         {userData.socketId}
-                                        <hr />
+                                        <hr/>
                                     </div>
                                 );
                             })}

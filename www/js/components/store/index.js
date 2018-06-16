@@ -26,6 +26,7 @@ import Page from './../../components/ui/page';
 import Button from './../../components/ui/button';
 import Header from './../../components/ui/header';
 import BottomBar from './../../components/ui/bottom-bar';
+import {storeAction} from './provider';
 
 const storeViewId = 'store';
 
@@ -67,7 +68,16 @@ class Store extends Component<PropsType, StateType> {
     }
 
     componentDidMount() {
+        const view = this;
+        const {props} = view;
+        const {history} = props;
 
+        if (storeAction.getState().openFromGame === true) {
+            storeAction.setOpenFromGame(false);
+            return;
+        }
+
+        history.goBack();
     }
 
     buyUnit(unitType: UnitTypeAllType): Promise<void> { // eslint-disable-line max-statements
@@ -170,7 +180,7 @@ class Store extends Component<PropsType, StateType> {
                     {unitData.attack.min}
                     -
                     {unitData.attack.max}
-                    <br />
+                    <br/>
                     COST:
                     {padStart(String(unitCost), 4, ' ')}
                     &nbsp;|&nbsp;

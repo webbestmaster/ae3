@@ -49,6 +49,7 @@ import {defaultUnitData} from './unit/unit-guide';
 import {bottomBarData, GameView} from './../../game/index';
 import {storeViewId} from './../../store';
 import Queue from './../../../lib/queue';
+import {storeAction} from './../../store/provider';
 
 type RenderSettingType = {|
     width: number,
@@ -2379,6 +2380,8 @@ export default class Game {
         if (!canOpenStore(x, y, game.getGameData())) {
             return;
         }
+
+        storeAction.setOpenFromGame(true);
 
         game.gameView.props.history.push('?viewId=' + storeViewId +
             '&x=' + x +

@@ -17,8 +17,8 @@ import routes from './routes';
 
 export default (): Node[] =>
     [
-        <Auth key="auth" />,
-        <System key="system" />,
+        <Auth key="auth"/>,
+        <System key="system"/>,
         <Switch key="switch">
             <Route
                 component={Home}
