@@ -345,6 +345,9 @@ const defaultUnitData = {
         base: 45,
         scale: 1.05
     },
+    experience: {
+        destroyBuilding: 60
+    },
     armor: {
         perLevel: 5
     },

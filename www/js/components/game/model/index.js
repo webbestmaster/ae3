@@ -1029,6 +1029,23 @@ export default class Game {
 
         await game.render.drawBuildingAttack(gameDestroyer, gameBuilding);
 
+        const destroyerInMap = find(state.map.units, mapDestroyer) || null;
+
+        if (destroyerInMap === null) {
+            console.error('NO destroyerInMap');
+            return Promise.resolve();
+        }
+
+        const givenDamage = destroyerInMap.damage && typeof destroyerInMap.damage.given === 'number' ?
+            destroyerInMap.damage.given :
+            0;
+
+        gameDestroyer.setDamageGiven(givenDamage);
+
+        gameDestroyer.actualizeLevel().then(() => {
+            console.log('level actualized');
+        });
+
         gameBuilding.setAttr({
             type: mapBuilding.type,
             x: mapBuilding.x,
@@ -1948,6 +1965,10 @@ export default class Game {
 
         mapUnit.action = mapUnit.action || {};
         mapUnit.action.didDestroyBuilding = true;
+
+        mapUnit.damage = mapUnit.damage || {};
+        mapUnit.damage.given = mapUnit.damage.given || 0;
+        mapUnit.damage.given += defaultUnitData.experience.destroyBuilding;
 
         game.gameView.addDisableReason('client-push-state');
 
