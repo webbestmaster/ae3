@@ -15,7 +15,8 @@ import Link from 'react-router-dom/Link';
 type PropsType = {|
     children: Node,
     to: string,
-    className?: string
+    className?: string,
+    onClick?: () => void
 |};
 
 type StateType = {||};
@@ -29,11 +30,14 @@ export class ButtonLink extends Component<PropsType, StateType> {
         const {props, state} = view;
 
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
+        const onClick = typeof props.onClick === 'function' ? props.onClick : () => {
+        };
 
         return (
             <Link
                 to={props.to}
                 className={style.button + additionClass}
+                onClick={onClick}
             >
                 {props.children}
             </Link>

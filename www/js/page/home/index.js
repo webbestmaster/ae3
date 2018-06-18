@@ -23,14 +23,16 @@ function Home(): Node {
                 {new Date(BUILD_DATE).toLocaleString()}
             </Header>
             <ButtonListWrapper>
-                <ButtonLink
-                    to={routes.multiPlayer}
-                >
-                    multi player
+                <ButtonLink to={routes.multiPlayer}>
+                    online game
+                </ButtonLink>
+
+                <ButtonLink to={routes.createRoom}>
+                    offline game
                 </ButtonLink>
 
                 <Button className="disabled">
-                    single player
+                    companies
                 </Button>
 
                 <Button className="disabled">
