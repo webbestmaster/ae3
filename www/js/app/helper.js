@@ -5,6 +5,8 @@
 import FastClick from 'fastclick';
 import TWEEN from '@tweenjs/tween.js';
 
+import {run as runLocalServer} from './../module/serer-local-api';
+
 export function initializeEnvironment() {
     const {document} = window;
 
@@ -20,4 +22,9 @@ export function initializeEnvironment() {
     document.addEventListener('gesturestart', (evt: Event) => {
         evt.preventDefault();
     });
+
+    runLocalServer()
+        .then(() => {
+            console.log('Local Server has been run.');
+        });
 }

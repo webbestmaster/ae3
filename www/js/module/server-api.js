@@ -6,6 +6,8 @@ import type {BuildingAttrTypeType, BuildingType, MapType, UnitType} from './../m
 import mapGuide from './../maps/map-guide';
 import type {PathType} from './../components/game/model/unit/path-master';
 import type {AttackResultUnitType} from './../components/game/model/helper';
+import {isOnLineRoomType} from './../components/game/model/helper';
+import {localServerUrl, localGet, localPost} from './serer-local-api';
 
 const {api} = appConst;
 const {url} = api;
@@ -21,13 +23,19 @@ export type CreateRoomType = {|
 |};
 
 export function createRoom(): Promise<CreateRoomType> {
-    return fetch(url + '/api/room/create')
-        .then((blob: Response): Promise<CreateRoomType> => blob.json())
+    if (isOnLineRoomType()) {
+        return fetch(url + '/api/room/create')
+            .then((blob: Response): Promise<CreateRoomType> => blob.json())
+            .then((result: CreateRoomType): CreateRoomType => ({
+                roomId: typeof result.roomId === 'string' ? result.roomId : ''
+            }));
+    }
+
+    return localGet(localServerUrl + '/api/room/create')
         .then((result: CreateRoomType): CreateRoomType => ({
             roomId: typeof result.roomId === 'string' ? result.roomId : ''
         }));
 }
-
 
 export type JoinRoomType = {|
     roomId: string
