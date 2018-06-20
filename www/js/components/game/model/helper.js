@@ -15,6 +15,7 @@ import type {BuildingType, MapUserType} from '../../../maps/type';
 import * as PIXI from 'pixi.js';
 import {storeViewId} from './../../store';
 import queryString from 'query-string';
+import type {RoomTypeType} from './../../../module/server-api';
 
 type InteractionEventType = {|
     +data: {|
@@ -685,4 +686,12 @@ export function getWrongStateList(gameData: GameDataType): Array<WrongStateType>
     wrongStateList.push(...unitOverUnitList);
 
     return wrongStateList.length === 0 ? null : wrongStateList;
+}
+
+export function isOnLineRoomType(): boolean {
+    return window.location.href.includes('/on-line/');
+}
+
+export function getRoomType(): RoomTypeType {
+    return isOnLineRoomType() ? 'on-line' : 'off-line';
 }

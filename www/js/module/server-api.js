@@ -55,8 +55,11 @@ export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType
 }
 
 
+export type RoomTypeType = 'on-line' | 'off-line';
+
 export type AllRoomSettingsType = {|
-    map: MapType
+    map: MapType,
+    type: RoomTypeType
     // defaultMoney: number,
     // unitLimit: number,
     // userList: Array<ServerUserType>

@@ -16,6 +16,7 @@ import Fieldset from './../../components/ui/fieldset';
 import type {RoomDataType} from './helper';
 import {getRoomState} from './helper';
 import type {ContextRouter} from 'react-router-dom';
+import {isOnLineRoomType} from '../../components/game/model/helper';
 
 type StateType = {|
     // roomIds: Array<string>,
@@ -78,7 +79,11 @@ class JoinRoom extends Component<PropsType, StateType> {
             return;
         }
 
-        history.push(routes.room.replace(':roomId', joinRoomResult.roomId));
+        if (isOnLineRoomType()) {
+            history.push(routes.roomOnLine.replace(':roomId', joinRoomResult.roomId));
+        } else {
+            history.push(routes.roomOffLine.replace(':roomId', joinRoomResult.roomId));
+        }
     }
 
     render(): Node {

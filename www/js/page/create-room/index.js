@@ -19,6 +19,7 @@ import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
 import * as mapHash from './../../maps/default/map-list';
 import type {ContextRouter} from 'react-router-dom';
+import {getRoomType, isOnLineRoomType} from './../../components/game/model/helper';
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
@@ -80,7 +81,8 @@ class CreateRoom extends Component<PropsType, StateType> {
         map.activeUserId = userId;
 
         const setAllRoomSettingsResult = await serverApi.setAllRoomSettings(createRoomResult.roomId, {
-            map
+            map,
+            type: getRoomType()
             // userList: [{
             //     userId,
             //     socketId,
@@ -94,7 +96,11 @@ class CreateRoom extends Component<PropsType, StateType> {
             return null;
         }
 
-        history.push(routes.room.replace(':roomId', joinRoomResult.roomId));
+        if (isOnLineRoomType()) {
+            history.push(routes.roomOnLine.replace(':roomId', joinRoomResult.roomId));
+        } else {
+            history.push(routes.roomOffLine.replace(':roomId', joinRoomResult.roomId));
+        }
 
         return joinRoomResult.roomId;
     }

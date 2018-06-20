@@ -22,40 +22,38 @@ export default (): Node[] =>
         <Switch key="switch">
             <Route
                 component={Home}
-                exact
                 path={routes.index}
+                exact
             />
             <Route
                 component={MultiPlayer}
-                exact
                 path={routes.multiPlayer}
+                exact
             />
             <Route
                 component={CreateRoom}
-                exact
                 path={routes.createRoomOnline}
+                exact
             />
             <Route
                 component={CreateRoom}
+                path={routes.createRoomOffline}
                 exact
-                path={routes.createRoomOnline}
             />
             <Route
                 component={JoinRoom}
-                exact
                 path={routes.joinRoom}
+                exact
             />
-            {/*
-                <Route
-                    component={SinglePlayer}
-                    exact
-                    path={routes.singlePlayer}
-                />
-            */}
             <Route
                 component={Room}
+                path={routes.roomOnLine}
                 exact
-                path={routes.room}
+            />
+            <Route
+                component={Room}
+                path={routes.roomOffLine}
+                exact
             />
         </Switch>
     ];
