@@ -34,18 +34,25 @@ export default (): Node[] =>
             <Route
                 component={CreateRoom}
                 exact
-                path={routes.createRoom}
+                path={routes.createRoomOnline}
+            />
+            <Route
+                component={CreateRoom}
+                exact
+                path={routes.createRoomOnline}
             />
             <Route
                 component={JoinRoom}
                 exact
                 path={routes.joinRoom}
             />
-            <Route
-                component={SinglePlayer}
-                exact
-                path={routes.singlePlayer}
-            />
+            {/*
+                <Route
+                    component={SinglePlayer}
+                    exact
+                    path={routes.singlePlayer}
+                />
+            */}
             <Route
                 component={Room}
                 exact

@@ -27,7 +27,7 @@ function Home(): Node {
                     online game
                 </ButtonLink>
 
-                <ButtonLink to={routes.createRoom}>
+                <ButtonLink to={routes.createRoomOffline}>
                     offline game
                 </ButtonLink>
 

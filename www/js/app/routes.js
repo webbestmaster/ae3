@@ -3,8 +3,9 @@
 type RoutesType = {|
     index: string,
     multiPlayer: string,
-    singlePlayer: string,
-    createRoom: string,
+    // singlePlayer: string,
+    createRoomOnline: string,
+    createRoomOffline: string,
     joinRoom: string,
     room: string
 |};
@@ -12,8 +13,9 @@ type RoutesType = {|
 const routes: RoutesType = {
     index: '/',
     multiPlayer: '/multi-player',
-    singlePlayer: '/single-player',
-    createRoom: '/create-room',
+    // singlePlayer: '/single-player',
+    createRoomOnline: '/create-room/on-line',
+    createRoomOffline: '/create-room/off-line',
     joinRoom: '/join-room',
     room: '/room/:roomId'
 };

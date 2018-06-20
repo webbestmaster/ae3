@@ -18,7 +18,7 @@ function MultiPlayer(): Node {
             </Header>
             <ButtonListWrapper>
                 <ButtonLink
-                    to={routes.createRoom}
+                    to={routes.createRoomOnline}
                 >
                     create game
                 </ButtonLink>
