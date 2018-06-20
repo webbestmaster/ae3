@@ -21,15 +21,3 @@ const routes: RoutesType = {
 };
 
 export default routes;
-
-export type HistoryType = {|
-    push: (route: string) => void
-|};
-
-export type MatchType = {|
-    params: {
-        roomId?: string
-    },
-    path: string,
-    url: string
-|};

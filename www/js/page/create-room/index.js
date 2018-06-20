@@ -10,7 +10,7 @@ import mapGuide from './../../maps/map-guide';
 import * as serverApi from './../../module/server-api';
 import type {GlobalStateType} from './../../app-reducer';
 import type {AuthType} from './../../components/auth/reducer';
-import routes, {type HistoryType} from './../../app/routes';
+import routes from './../../app/routes';
 import Page from './../../components/ui/page';
 import Button from './../../components/ui/button';
 import Header from './../../components/ui/header';
@@ -18,6 +18,7 @@ import Form from './../../components/ui/form';
 import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
 import * as mapHash from './../../maps/default/map-list';
+import type {ContextRouter} from 'react-router-dom';
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
@@ -28,8 +29,8 @@ type StateType = {|
 |};
 
 type PropsType = {|
-    auth: AuthType,
-    history: HistoryType
+    ...ContextRouter,
+    auth: AuthType
 |};
 
 class CreateRoom extends Component<PropsType, StateType> {

@@ -9,7 +9,6 @@ import Auth from './../components/auth';
 
 import Home from './../page/home';
 import MultiPlayer from './../page/multi-player';
-import SinglePlayer from './../page/single-player';
 import CreateRoom from './../page/create-room';
 import JoinRoom from './../page/join-room';
 import Room from './../page/room';

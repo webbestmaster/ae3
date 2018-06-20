@@ -5,7 +5,6 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import type {HistoryType} from './../../app/routes';
 import routes from './../../app/routes';
 import * as serverApi from './../../module/server-api';
 import type {GlobalStateType} from './../../app-reducer';
@@ -16,6 +15,7 @@ import Form from './../../components/ui/form';
 import Fieldset from './../../components/ui/fieldset';
 import type {RoomDataType} from './helper';
 import {getRoomState} from './helper';
+import type {ContextRouter} from 'react-router-dom';
 
 type StateType = {|
     // roomIds: Array<string>,
@@ -25,8 +25,8 @@ type StateType = {|
 |};
 
 type PropsType = {|
-    auth: AuthType,
-    history: HistoryType
+    ...ContextRouter,
+    auth: AuthType
 |};
 
 class JoinRoom extends Component<PropsType, StateType> {

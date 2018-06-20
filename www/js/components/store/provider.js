@@ -2,8 +2,8 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import React, {Component} from 'react';
 import type {Node} from 'react';
+import React, {Component} from 'react';
 
 type StoreValueStateType = {|
     +openFromGame: boolean
