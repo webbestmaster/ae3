@@ -3,9 +3,9 @@
 /* global setTimeout */
 
 /* eslint consistent-this: ["error", "localRequest"] */
-const {localMaster} = require('../local-master/index');
+const {localMaster} = require('./../local-master');
 
-import type {PushedStateType} from '../room/index';
+import type {PushedStateType} from './../room/index';
 
 export type RequestCallBackType = (error: Error | null, response: mixed, body: string) => void;
 

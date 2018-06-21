@@ -13,6 +13,7 @@ type AttrType = {|
     +mask: Array<string>
 |};
 
+
 class UrlMask {
     attr: AttrType;
 

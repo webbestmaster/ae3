@@ -4,11 +4,11 @@
 
 /* global __dirname */
 
-const {LocalExpress} = require('../local-express/index');
-const {LocalSocketIoServer} = require('../local-socket-io-server/index');
-const {LocalHttpServer} = require('../local-http-server/index');
+const {LocalExpress} = require('./../local-express');
+const {LocalSocketIoServer} = require('../local-socket-io-server');
+const {LocalHttpServer} = require('./../local-http-server');
 const apiRouter = require('./api-router').apiRouter;
-const roomMaster = require('../room/master').roomMaster;
+const roomMaster = require('./../room/master').roomMaster;
 
 type ServerConstructorOptionsType = {|
     port: number

@@ -3,11 +3,11 @@
 /* global setTimeout */
 
 /* eslint consistent-this: ["error", "httpServer"] */
-import type {RequestCallBackType} from '../local-request/index';
-import type {PushedStateType} from '../room/index';
+import type {RequestCallBackType} from './../local-request';
+import type {PushedStateType} from './../room/index';
 
-const {localMaster} = require('../local-master/index');
-const {LocalExpress} = require('../local-express/index');
+const {localMaster} = require('./../local-master');
+const {LocalExpress} = require('./../local-express');
 // const {LocalExpressRequest} = require('./request');
 // const {LocalExpressResponse} = require('./response');
 

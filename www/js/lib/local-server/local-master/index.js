@@ -2,13 +2,13 @@
 
 /* eslint consistent-this: ["error", "localMaster"] */
 
-const {LocalHttpServer} = require('../local-http-server/index');
-const {LocalSocketIoServer} = require('../local-socket-io-server/index');
-const {getPort} = require('../helper');
+const {LocalHttpServer} = require('./../local-http-server');
+const {LocalSocketIoServer} = require('./../local-socket-io-server');
+const {getPort} = require('./../helper');
 
-import type {PushedStateType} from '../room/index';
+import type {PushedStateType} from './../room/index';
 
-import type {RequestCallBackType} from '../local-request/index';
+import type {RequestCallBackType} from './../local-request';
 
 type AttrType = {|
     +httpServerList: Array<LocalHttpServer>,

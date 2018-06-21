@@ -3,8 +3,8 @@
 /* global setTimeout, URL */
 
 /* eslint consistent-this: ["error", "localSocketIoClient"] */
-const {localMaster} = require('../local-master/index');
-const {LocalSocketIoServer} = require('../local-socket-io-server/index');
+const {localMaster} = require('./../local-master');
+const {LocalSocketIoServer} = require('./../local-socket-io-server');
 
 type EventNameType = 'message' | 'connect' | 'disconnect';
 

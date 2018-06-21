@@ -2,7 +2,7 @@
 
 /* eslint consistent-this: ["error", "localExpressResponse"] */
 
-import type {RequestCallBackType} from '../local-request/index';
+import type {RequestCallBackType} from '../local-request';
 
 type AttrType = {|
     +callBack: RequestCallBackType

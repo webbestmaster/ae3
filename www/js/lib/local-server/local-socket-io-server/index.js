@@ -4,10 +4,10 @@
 
 /* eslint consistent-this: ["error", "localSocketIoServer"] */
 
-const {LocalHttpServer} = require('../local-http-server/index');
-const {LocalSocketIoClient} = require('../local-socket-io-client/index');
+const {LocalHttpServer} = require('./../local-http-server');
+const {LocalSocketIoClient} = require('./../local-socket-io-client');
 
-const {localMaster} = require('../local-master/index');
+const {localMaster} = require('./../local-master');
 
 /*
 return socketIoServer.sockets.connected[socketId] || null;

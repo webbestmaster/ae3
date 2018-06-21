@@ -1,7 +1,7 @@
 // @flow
 const {Server} = require('./index');
-const {LocalExpressRequest} = require('../local-express/request');
-const {LocalExpressResponse} = require('../local-express/response');
+const {LocalExpressRequest} = require('./../local-express/request');
+const {LocalExpressResponse} = require('./../local-express/response');
 
 const apiRoomCreate = require('./api/room/create');
 const apiRoomGetIds = require('./api/room/get-ids');

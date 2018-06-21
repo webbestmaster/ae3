@@ -10,7 +10,7 @@
     "check": "npm run eslint; npm run stylelint; npm run flow;",
     "check:fix": "npm run eslint:fix; npm run stylelint:fix; npm run flow; npm run fnlint;",
     "webpack": "webpack --mode development --progress",
-    "start-dev-server": "webpack-dev-server --mode development --content-base dist/ --host 0.0.0.0 --port 8181 --progress --no-inline --history-api-fallback",
+    "start-dev-server": "webpack-dev-server --mode development --content-base dist/ --host 0.0.0.0 --port 8182 --progress --no-inline --history-api-fallback",
     "start-dev-server-hot-css": "webpack-dev-server --mode development --inline --hot --content-base dist/ --host 0.0.0.0 --port 8181 --progress --history-api-fallback",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",
@@ -23,7 +23,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@material-ui/core": "^1.2.2",
+    "@material-ui/core": "^1.2.3",
     "@tweenjs/tween.js": "^17.2.0",
     "classnames": "^2.2.6",
     "fastclick": "^1.0.6",

@@ -131,12 +131,12 @@ export type PushedStateType = {|
     userId?: string,
     +socketId?: string,
     meta?: MetaType
-|};
+|} | null;
 
 
 const {roomMaster} = require('./master');
-const {RoomConnection} = require('./room-connection/index');
-const {Server} = require('../server/index');
+const {RoomConnection} = require('./room-connection');
+const {Server} = require('./../server/index');
 const find = require('lodash/find');
 const sha1 = require('sha1');
 const messageConst = require('./message-data.js');
@@ -329,7 +329,7 @@ class Room {
         const states = room.getStates();
 
         // check room is destroyed
-        if (states === null) {
+        if (states === null || state === null) {
             return state;
         }
 
@@ -406,7 +406,7 @@ class Room {
         const states = room.getStates();
 
         return find(states, (state: PushedStateType): boolean => {
-            if (!state.meta) {
+            if (state === null || !state.meta) {
                 return false;
             }
 
@@ -456,7 +456,13 @@ class Room {
     }
 
     getSetting(key: string): mixed {
-        return this.getAttr().settings[key];
+        const {settings} = this.getAttr();
+
+        if (settings === null) {
+            return null;
+        }
+
+        return settings[key];
     }
 
     setSettings(settings: SettingsType): Room {
