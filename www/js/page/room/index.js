@@ -21,7 +21,7 @@ import Game from './../../components/game';
 import type {AllRoomSettingsType, PushedStatePayloadType, ServerUserType} from './../../module/server-api';
 import * as serverApi from './../../module/server-api';
 import mapGuide from './../../maps/map-guide';
-import {getCommanderDataByUserIndex} from './../../components/game/model/helper';
+import {getCommanderDataByUserIndex, isOnLineRoomType} from './../../components/game/model/helper';
 import type {BuildingType, MapType, MapUserType, UnitType} from './../../maps/type';
 
 import Page from './../../components/ui/page';
@@ -33,6 +33,7 @@ import Fieldset from './../../components/ui/fieldset';
 import BottomBar from './../../components/ui/bottom-bar';
 import {getRoomState} from './../join-room/helper';
 import type {ContextRouter} from 'react-router-dom';
+import {localSocketIoClient} from './../../module/socket-local';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -107,6 +108,7 @@ class Room extends Component<PropsType, StateType> {
         const roomId = match.params.roomId || '';
 
         model.destroy();
+        localSocketIoClient.removeAllListeners();
 
         // needed if game did not started
         const leaveRoomResult = await serverApi.leaveRoom(roomId, user.getId());
@@ -117,9 +119,15 @@ class Room extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {model} = state;
 
-        model.listenTo(socket.attr.model, 'message', async (message: SocketMessageType): Promise<void> => {
-            await view.onMessage(message);
-        });
+        if (isOnLineRoomType()) {
+            model.listenTo(socket.attr.model, 'message', async (message: SocketMessageType): Promise<void> => {
+                await view.onMessage(message);
+            });
+        } else {
+            localSocketIoClient.on('message', async (message: SocketMessageType): Promise<void> => {
+                await view.onMessage(message);
+            });
+        }
     }
 
     unbindEventListeners() {
@@ -128,6 +136,7 @@ class Room extends Component<PropsType, StateType> {
         const {model} = state;
 
         model.stopListening();
+        localSocketIoClient.removeAllListeners();
     }
 
     async onServerUserListChange(): Promise<void> {

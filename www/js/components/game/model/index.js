@@ -15,7 +15,7 @@ import {
     canOpenStore,
     countHealHitPointOnBuilding,
     getMatchResult,
-    getWrongStateList,
+    getWrongStateList, isOnLineRoomType,
     isStoreOpen,
     mergeActionList,
     procedureMakeGraveForMapUnit
@@ -50,6 +50,7 @@ import {bottomBarData, GameView} from './../../game/index';
 import {storeViewId} from './../../store';
 import Queue from './../../../lib/queue';
 import {storeAction} from './../../store/provider';
+import {localSocketIoClient} from '../../../module/socket-local';
 
 type RenderSettingType = {|
     width: number,
@@ -194,47 +195,20 @@ export default class Game {
         const game = this;
         const {model} = game;
 
-        model.listenTo(socket.attr.model,
-            'message',
-            (message: SocketMessageType) => { // eslint-disable-line complexity
-                const lastSavedSocketMessage = game.getLastSocketMessage();
-                const messageMap = message.states.last.state && message.states.last.state.map ?
-                    message.states.last.state.map :
-                    null;
-
-                // check for messed message
-                if (lastSavedSocketMessage !== null &&
-                    message.states.length - 1 !== lastSavedSocketMessage.states.length) {
-                    console.error(
-                        'you have missed message(s)',
-                        message.states.length - 1 - lastSavedSocketMessage.states.length,
-                        message,
-                        lastSavedSocketMessage);
-
-                    if (messageMap !== null) {
-                        game.onMessageQueue.push(async (): Promise<void> => {
-                            await game.loadMapState(messageMap);
-                            game.message.list.push(message);
-                        });
-                    } else {
-                        console.error('message has no map to loadMapState, wait for map', message);
-                    }
-                    return;
+        if (isOnLineRoomType()) {
+            model.listenTo(socket.attr.model,
+                'message',
+                async (message: SocketMessageType): Promise<void> => {
+                    await game.onMessageWrapper(message);
                 }
-
-                game.message.list.push(message);
-
-                game.onMessageQueue.push(async (): Promise<void> => {
-                    game.gameView.addDisableReason('server-receive-message');
-
-                    await game.onMessage(message);
-
-                    game.gameView.removeDisableReason('server-receive-message');
-
-                    await game.detectAndHandleEndGame();
-                });
-            }
-        );
+            );
+        } else {
+            localSocketIoClient.on('message',
+                async (message: SocketMessageType): Promise<void> => {
+                    await game.onMessageWrapper(message);
+                }
+            );
+        }
     }
 
     isMyTurn(): boolean {
@@ -466,6 +440,46 @@ export default class Game {
             default:
                 console.error('---> view - game - unsupported message type: ', message);
         }
+    }
+
+    async onMessageWrapper(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
+        const game = this;
+        const lastSavedSocketMessage = game.getLastSocketMessage();
+        const messageMap = message.states.last.state && message.states.last.state.map ?
+            message.states.last.state.map :
+            null;
+
+        // check for messed message
+        if (lastSavedSocketMessage !== null &&
+            message.states.length - 1 !== lastSavedSocketMessage.states.length) {
+            console.error(
+                'you have missed message(s)',
+                message.states.length - 1 - lastSavedSocketMessage.states.length,
+                message,
+                lastSavedSocketMessage);
+
+            if (messageMap !== null) {
+                game.onMessageQueue.push(async (): Promise<void> => {
+                    await game.loadMapState(messageMap);
+                    game.message.list.push(message);
+                });
+            } else {
+                console.error('message has no map to loadMapState, wait for map', message);
+            }
+            return;
+        }
+
+        game.message.list.push(message);
+
+        game.onMessageQueue.push(async (): Promise<void> => {
+            game.gameView.addDisableReason('server-receive-message');
+
+            await game.onMessage(message);
+
+            game.gameView.removeDisableReason('server-receive-message');
+
+            await game.detectAndHandleEndGame();
+        });
     }
 
     async handleServerTakeTurn(message: SocketMessageTakeTurnType): Promise<void> {
@@ -2417,5 +2431,6 @@ export default class Game {
         game.model.destroy();
 
         game.render.destroy();
+        localSocketIoClient.removeAllListeners();
     }
 }

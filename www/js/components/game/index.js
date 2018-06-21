@@ -20,7 +20,7 @@ import type {ContextRouter} from 'react-router-dom';
 import withRouter from 'react-router-dom/withRouter';
 import Store from './../store';
 import queryString from 'query-string';
-import {getMatchResult, getSupplyState, getUserColor, getWrongStateList} from './model/helper';
+import {getMatchResult, getSupplyState, getUserColor, getWrongStateList, isOnLineRoomType} from './model/helper';
 import style from './style.m.scss';
 import classnames from 'classnames';
 
@@ -30,6 +30,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Page from './../../components/ui/page';
 import BottomBar from './../../components/ui/bottom-bar';
 import find from 'lodash/find';
+import {localSocketIoClient} from '../../module/socket-local';
 
 // function Transition(props: mixed): Node {
 //     return <Slide direction="up" {...props} />;
@@ -177,12 +178,20 @@ export class GameView extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {model} = state;
 
-        model.listenTo(socket.attr.model,
-            'message',
-            async (message: SocketMessageType): Promise<void> => {
-                await view.onMessage(message);
-            }
-        );
+        if (isOnLineRoomType()) {
+            model.listenTo(socket.attr.model,
+                'message',
+                async (message: SocketMessageType): Promise<void> => {
+                    await view.onMessage(message);
+                }
+            );
+        } else {
+            localSocketIoClient.on('message',
+                async (message: SocketMessageType): Promise<void> => {
+                    await view.onMessage(message);
+                }
+            );
+        }
     }
 
     async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
@@ -245,6 +254,8 @@ export class GameView extends Component<PropsType, StateType> {
         game.destroy();
 
         model.destroy();
+
+        localSocketIoClient.removeAllListeners();
 
         const leaveRoomResult = await serverApi.leaveRoom(roomId, user.getId());
     }
