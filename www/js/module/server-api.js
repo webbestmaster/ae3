@@ -7,7 +7,8 @@ import mapGuide from './../maps/map-guide';
 import type {PathType} from './../components/game/model/unit/path-master';
 import type {AttackResultUnitType} from './../components/game/model/helper';
 import {isOnLineRoomType} from './../components/game/model/helper';
-import {localServerUrl, localGet, localPost} from './serer-local-api';
+import {localServerUrl, localGet, localPost} from './server-local-api';
+import {localSocketIoClient} from './socket-local';
 
 const {api} = appConst;
 const {url} = api;
@@ -52,7 +53,7 @@ export function joinRoom(roomId: string, userId: string, socketId: string): Prom
             }));
     }
 
-    return localGet(localServerUrl + '/api/room/join/' + [roomId, userId, socketId].join('/'))
+    return localGet(localServerUrl + '/api/room/join/' + [roomId, userId, localSocketIoClient.id].join('/'))
         .then((result: string): JoinRoomType => JSON.parse(result));
 }
 
@@ -196,7 +197,7 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
 
             const users = serverUserList.map((user: ServerUserType, userIndex: number): ServerUserType => {
                 return {
-                    socketId: user.socketId,
+                    socketId: localSocketIoClient.id,
                     userId: user.userId,
                     teamId: user.teamId || mapGuide.teamIdList[userIndex]
                 };

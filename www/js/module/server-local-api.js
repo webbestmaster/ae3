@@ -3,7 +3,7 @@ import {Server as LocalServer} from './../lib/local-server/server';
 import {localRequest} from './../lib/local-server/local-request';
 import type {PushedStateType} from './../lib/local-server/room';
 
-const localServerOptions = {
+export const localServerOptions = {
     port: 8080
 };
 
@@ -41,8 +41,7 @@ export function localGet(localUrl: string): Promise<string> {
 }
 
 export function localPost(localUrl: string, form: string): Promise<string> {
-    // $FlowFixMe
-    const parsedForm: PushedStateType = JSON.stringify(form);
+    const parsedForm: PushedStateType = JSON.parse(form);
 
     return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {
         localRequest.post(
