@@ -261,7 +261,7 @@ export default class Game {
         return earnedMoney;
     }
 
-    async refreshUnitActionState(): Promise<void> { // eslint-disable-line complexity, max-statements
+    async refreshUnitActionState(userId: string): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this;
 
         await game.render.cleanActionsList();
@@ -282,7 +282,7 @@ export default class Game {
             return;
         }
 
-        newMap.activeUserId = user.getId();
+        newMap.activeUserId = userId;
 
         // refresh action state
         mapUnitList.forEach((mapUnit: UnitType) => {
@@ -311,7 +311,7 @@ export default class Game {
 
         // add hit point for units under building
         mapUnitList.forEach((mapUnit: UnitType) => {
-            if (mapUnit.userId !== user.getId()) {
+            if (mapUnit.userId !== userId) {
                 return;
             }
 
@@ -348,7 +348,7 @@ export default class Game {
         });
 
 
-        const userId = user.getId();
+        // const userId = user.getId();
         const mapUser = find(newMap.userList, {userId}) || null;
 
         if (mapUser === null) {
@@ -371,13 +371,13 @@ export default class Game {
         await serverApi
             .pushState(
                 game.roomId,
-                user.getId(),
+                userId,
                 {
                     type: 'room__push-state',
                     state: {
                         type: 'refresh-unit-list',
                         map: newMap,
-                        activeUserId: user.getId()
+                        activeUserId: userId
                     }
                 }
             )
@@ -483,7 +483,7 @@ export default class Game {
         });
     }
 
-    async handleServerTakeTurn(message: SocketMessageTakeTurnType): Promise<void> {
+    async handleServerTakeTurn(message: SocketMessageTakeTurnType): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this;
 
         await game.render.cleanActionsList();
@@ -492,16 +492,42 @@ export default class Game {
             unitInList.setIsActionAvailable(true);
         });
 
-        const isMyTurn = message.states.last.activeUserId === user.getId();
+        const getAllRoomUsersResult = await serverApi.getAllRoomUsers(game.roomId);
+
+        const {activeUserId} = message.states.last;
+
+        const userId = user.getId();
+        const isMyTurn = activeUserId === userId;
 
         if (isMyTurn) {
             console.log('---> take turn, and it\'s ME!!!');
             // TODO: check here map users and server users, only if your turn
             console.warn('check here map users and server users, only if your turn');
-            await game.refreshUnitActionState();
+            await game.refreshUnitActionState(userId);
             console.log('---> unit and users - refreshed');
             // await game.refreshUnitPoisonCountdown();
             // await game.refreshGraveCountdown();
+        } else {
+            // try to defect bot
+            const activePlayerData = find(getAllRoomUsersResult.users, {userId: activeUserId}) || null;
+
+            if (activePlayerData === null) {
+                console.error('It is impossible active player should be in user list');
+                return;
+            }
+
+            if (activePlayerData.type === 'bot') {
+                const firstHuman = find(getAllRoomUsersResult.users, {type: 'human'}) || null;
+
+                if (firstHuman === null) {
+                    console.error('It is impossible room without human!');
+                    return;
+                }
+                if (firstHuman.userId === userId) {
+                    console.log('---> update game instead of bot');
+                    await game.refreshUnitActionState(activeUserId);
+                }
+            }
         }
 
         game.gameView.popupChangeActiveUser({isOpen: true});

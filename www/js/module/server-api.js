@@ -16,7 +16,8 @@ const {url} = api;
 export type ServerUserType = {|
     socketId: string,
     userId: string,
-    teamId: string
+    teamId: string,
+    type: 'human' | 'bot'
 |};
 
 export type RoomTypeType = 'on-line' | 'off-line';
@@ -54,6 +55,19 @@ export function joinRoom(roomId: string, userId: string, socketId: string): Prom
     }
 
     return localGet(localServerUrl + '/api/room/join/' + [roomId, userId, localSocketIoClient.id].join('/'))
+        .then((result: string): JoinRoomType => JSON.parse(result));
+}
+
+export function makeBot(roomId: string): Promise<JoinRoomType> {
+    if (isOnLineRoomType()) {
+        return fetch(url + '/api/room/make-bot/' + roomId)
+            .then((blob: Response): Promise<JoinRoomType> => blob.json())
+            .then((result: JoinRoomType): JoinRoomType => ({
+                roomId: typeof result.roomId === 'string' ? result.roomId : ''
+            }));
+    }
+
+    return localGet(localServerUrl + '/api/room/make-bot/' + roomId)
         .then((result: string): JoinRoomType => JSON.parse(result));
 }
 
@@ -175,7 +189,8 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
                     return {
                         socketId: user.socketId,
                         userId: user.userId,
-                        teamId: user.teamId || mapGuide.teamIdList[userIndex]
+                        teamId: user.teamId || mapGuide.teamIdList[userIndex],
+                        type: user.type
                     };
                 });
 
@@ -199,7 +214,8 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
                 return {
                     socketId: localSocketIoClient.id,
                     userId: user.userId,
-                    teamId: user.teamId || mapGuide.teamIdList[userIndex]
+                    teamId: user.teamId || mapGuide.teamIdList[userIndex],
+                    type: user.type
                 };
             });
 

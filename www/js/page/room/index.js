@@ -247,7 +247,8 @@ class Room extends Component<PropsType, StateType> {
             .map((userItem: ServerUserType, userIndex: number): ServerUserType => ({
                 socketId: userItem.socketId,
                 userId: userItem.userId,
-                teamId: mapGuide.teamIdList[userIndex]
+                teamId: mapGuide.teamIdList[userIndex],
+                type: userItem.type
             }));
 
         const takeTurnResult = await serverApi.takeTurn(roomId, user.getId());
@@ -360,13 +361,23 @@ class Room extends Component<PropsType, StateType> {
                     </Fieldset>
 
                     {amIMasterPlayer ?
-                        <Button
-                            onClick={async (): Promise<void> => {
-                                await view.startGame();
-                            }}
-                        >
-                            start
-                        </Button> :
+                        <div>
+                            <Button
+                                onClick={async (): Promise<void> => {
+                                    await serverApi.makeBot(roomId);
+                                }}
+                            >
+                                add bot
+                            </Button>
+
+                            <Button
+                                onClick={async (): Promise<void> => {
+                                    await view.startGame();
+                                }}
+                            >
+                                start
+                            </Button>
+                        </div> :
                         <BottomBar>
                             wait for start...
                         </BottomBar>}
