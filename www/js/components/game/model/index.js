@@ -15,7 +15,8 @@ import {
     canOpenStore,
     countHealHitPointOnBuilding,
     getMatchResult,
-    getWrongStateList, isOnLineRoomType,
+    getWrongStateList,
+    isOnLineRoomType,
     isStoreOpen,
     mergeActionList,
     procedureMakeGraveForMapUnit

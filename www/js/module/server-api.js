@@ -7,7 +7,7 @@ import mapGuide from './../maps/map-guide';
 import type {PathType} from './../components/game/model/unit/path-master';
 import type {AttackResultUnitType} from './../components/game/model/helper';
 import {isOnLineRoomType} from './../components/game/model/helper';
-import {localServerUrl, localGet, localPost} from './server-local-api';
+import {localGet, localPost, localServerUrl} from './server-local-api';
 import {localSocketIoClient} from './socket-local';
 
 const {api} = appConst;
