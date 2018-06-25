@@ -362,6 +362,7 @@ class Room extends Component<PropsType, StateType> {
 
                     {amIMasterPlayer ?
                         <div>
+
                             <Button
                                 onClick={async (): Promise<void> => {
                                     await serverApi.makeUser('bot', roomId);
@@ -369,6 +370,18 @@ class Room extends Component<PropsType, StateType> {
                             >
                                 add bot
                             </Button>
+
+                            {
+                                isOnLineRoomType() ?
+                                    null :
+                                    <Button
+                                        onClick={async (): Promise<void> => {
+                                            await serverApi.makeUser('human', roomId);
+                                        }}
+                                    >
+                                        add human
+                                    </Button>
+                            }
 
                             <Button
                                 onClick={async (): Promise<void> => {
