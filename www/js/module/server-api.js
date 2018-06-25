@@ -58,16 +58,16 @@ export function joinRoom(roomId: string, userId: string, socketId: string): Prom
         .then((result: string): JoinRoomType => JSON.parse(result));
 }
 
-export function makeBot(roomId: string): Promise<JoinRoomType> {
+export function makeUser(type: 'human' | 'bot', roomId: string): Promise<JoinRoomType> {
     if (isOnLineRoomType()) {
-        return fetch(url + '/api/room/make-bot/' + roomId)
+        return fetch(url + '/api/room/make/' + type + '/' + roomId)
             .then((blob: Response): Promise<JoinRoomType> => blob.json())
             .then((result: JoinRoomType): JoinRoomType => ({
                 roomId: typeof result.roomId === 'string' ? result.roomId : ''
             }));
     }
 
-    return localGet(localServerUrl + '/api/room/make-bot/' + roomId)
+    return localGet(localServerUrl + '/api/room/make/' + type + '/' + roomId)
         .then((result: string): JoinRoomType => JSON.parse(result));
 }
 

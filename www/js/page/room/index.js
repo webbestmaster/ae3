@@ -364,7 +364,7 @@ class Room extends Component<PropsType, StateType> {
                         <div>
                             <Button
                                 onClick={async (): Promise<void> => {
-                                    await serverApi.makeBot(roomId);
+                                    await serverApi.makeUser('bot', roomId);
                                 }}
                             >
                                 add bot
