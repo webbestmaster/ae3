@@ -86,12 +86,16 @@ type RefsType = {|
 export class GameView extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
-    refs: RefsType;
+    node: RefsType;
 
     constructor() {
         super();
 
         const view = this;
+
+        view.node = {
+            canvas: null
+        };
 
         view.state = {
             userList: [],
@@ -114,12 +118,18 @@ export class GameView extends Component<PropsType, StateType> {
 
     async componentDidMount(): Promise<string> {
         const view = this;
-        const {props, state, refs} = view;
+        const {props, state, node} = view;
 
         const {roomId, system} = props;
+        const {game} = state;
+        const {canvas} = node;
 
         const {settings} = await serverApi.getAllRoomSettings(roomId);
         const {users} = await serverApi.getAllRoomUsers(roomId);
+
+        if (canvas === null) {
+            return '';
+        }
 
         view.setState({
             userList: users,
@@ -127,19 +137,14 @@ export class GameView extends Component<PropsType, StateType> {
         });
 
         // initialize game's data
-        state.game.setSettings(settings);
-        state.game.setUserList(users);
-        state.game.setRoomId(roomId);
-        state.game.setGameView(view);
-
-        if (refs.canvas === null) {
-            console.error('Canvas is not exists!');
-            return '';
-        }
+        game.setSettings(settings);
+        game.setUserList(users);
+        game.setRoomId(roomId);
+        game.setGameView(view);
 
         // actually initialize game's render
-        state.game.initialize({
-            view: refs.canvas,
+        game.initialize({
+            view: canvas,
             width: system.screen.width,
             height: system.screen.height,
             map: settings.map
@@ -156,7 +161,7 @@ export class GameView extends Component<PropsType, StateType> {
         state.game.drawUnits(settings.settings.map, users.users);
         */
 
-        state.game.render.moveToCenter();
+        game.render.moveToCenter();
 
         view.bindEventListeners();
 
@@ -635,9 +640,7 @@ export class GameView extends Component<PropsType, StateType> {
                     <canvas
                         key="canvas"
                         ref={(canvas: HTMLElement | null) => {
-                            if (!view.refs || !view.refs.canvas && canvas !== null) {
-                                view.refs = {canvas};
-                            }
+                            view.node.canvas = canvas;
                         }}
                         style={{
                             // pointerEvents: isCanvasDisabled ? 'none' : 'auto',
