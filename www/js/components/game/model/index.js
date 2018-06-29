@@ -404,6 +404,8 @@ export default class Game {
         switch (message.type) {
             case 'room__take-turn':
                 await game.handleServerTakeTurn(message);
+                game.gameView.popupChangeActiveUser({isOpen: true});
+
                 break;
 
             case 'room__drop-turn':
@@ -507,32 +509,40 @@ export default class Game {
             console.log('---> unit and users - refreshed');
             // await game.refreshUnitPoisonCountdown();
             // await game.refreshGraveCountdown();
-        } else {
-            // try to defect bot
-            const activePlayerData = find(getAllRoomUsersResult.users, {userId: activeUserId}) || null;
-
-            if (activePlayerData === null) {
-                console.error('It is impossible active player should be in user list');
-                return;
-            }
-
-            if (activePlayerData.type === 'bot') {
-                const firstHuman = find(getAllRoomUsersResult.users, {type: 'human'}) || null;
-
-                if (firstHuman === null) {
-                    console.error('It is impossible room without human!');
-                    return;
-                }
-                if (firstHuman.userId === userId) {
-                    console.log('---> update game instead of bot');
-                    await game.refreshUnitActionState(activeUserId);
-                }
-            }
+            return;
         }
 
-        game.gameView.popupChangeActiveUser({isOpen: true});
+        // try to defect bot
+        const activePlayerData = find(getAllRoomUsersResult.users, {userId: activeUserId}) || null;
 
-        console.log('---> take turn, but NOT for me');
+        if (activePlayerData === null) {
+            console.error('It is impossible active player should be in user list');
+            return;
+        }
+
+        const firstHuman = find(getAllRoomUsersResult.users, {type: 'human'}) || null;
+
+        if (firstHuman === null) {
+            console.error('It is impossible room without human!');
+            return;
+        }
+
+        if (activePlayerData.type === 'bot') {
+            if (firstHuman.userId === userId) {
+                await game.refreshUnitActionState(activeUserId);
+                console.log('---> update game instead of bot here');
+            }
+            return;
+        }
+
+        // you can add human only for offline game
+        if (activePlayerData.type === 'human' && !isOnLineRoomType()) {
+            user.setId(activeUserId);
+            await game.refreshUnitActionState(activeUserId);
+            return;
+        }
+
+        console.error('NO variant to pass here!');
     }
 
     async syncMapWithServerUserList(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
