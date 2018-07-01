@@ -1,0 +1,32 @@
+.button,
+%button {
+    background-color: #242a45;
+    border-radius: 5px;
+    box-shadow: 2px 2px 0 #000;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    font-size: 18px;
+    line-height: 25px;
+    margin-bottom: 6px;
+    min-height: 41px;
+    min-width: 195px;
+    padding: 9px 5px 4px 6px;
+    text-align: left;
+    text-decoration: none;
+    text-shadow: 3px 3px 0 #000;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &:hover {
+        box-shadow: none;
+        text-shadow: none;
+    }
+
+    &:active {
+        background-color: #39384e;
+    }
+}

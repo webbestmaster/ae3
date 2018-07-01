@@ -8,7 +8,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
-import style from './../button/style.m.scss';
+import uiStyle from './../ui.scss';
 
 import Link from 'react-router-dom/Link';
 
@@ -36,7 +36,7 @@ export class ButtonLink extends Component<PropsType, StateType> {
         return (
             <Link
                 to={props.to}
-                className={style.button + additionClass}
+                className={uiStyle.button + additionClass}
                 onClick={onClick}
             >
                 {props.children}

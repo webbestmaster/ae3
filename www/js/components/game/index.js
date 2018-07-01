@@ -21,7 +21,7 @@ import withRouter from 'react-router-dom/withRouter';
 import Store from './../store';
 import queryString from 'query-string';
 import {getMatchResult, getSupplyState, getUserColor, getWrongStateList, isOnLineRoomType} from './model/helper';
-import style from './style.m.scss';
+import style from './style.scss';
 import classnames from 'classnames';
 import serviceStyle from './../../../css/service.scss';
 import Dialog from '@material-ui/core/Dialog';

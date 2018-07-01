@@ -1,5 +1,5 @@
-@import './../button/style.m';
-@import './../header/style.m';
+@import './../ui';
+@import './../header/style';
 
 .bottom_bar {
     @extend %button;

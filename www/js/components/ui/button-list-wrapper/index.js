@@ -8,7 +8,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
-import style from './style.m.scss';
+import style from './style.scss';
 
 type PropsType = {|
     children: Node,
@@ -17,12 +17,14 @@ type PropsType = {|
 
 type StateType = {||};
 
+/*
 type StyleType = {|
     position?: 'absolute',
     transform?: 'translate3d(-50%, -50%, 0)',
     left?: '50%',
     top?: '50%'
 |} | null;
+*/
 
 export class ButtonListWrapper extends Component<PropsType, StateType> {
     props: PropsType;
