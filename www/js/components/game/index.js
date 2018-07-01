@@ -23,7 +23,7 @@ import queryString from 'query-string';
 import {getMatchResult, getSupplyState, getUserColor, getWrongStateList, isOnLineRoomType} from './model/helper';
 import style from './style.m.scss';
 import classnames from 'classnames';
-
+import serviceStyle from './../../../css/service.scss';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 // import Slide from 'material-ui/transitions/Slide';
@@ -596,7 +596,7 @@ export class GameView extends Component<PropsType, StateType> {
             [
                 view.renderStore(),
                 <Page
-                    className={classnames(style.game_page, {hidden: storeState.isOpen})}
+                    className={classnames(style.game_page, {[serviceStyle.hidden]: storeState.isOpen})}
                     key="game-page"
                 >
 
@@ -619,7 +619,7 @@ export class GameView extends Component<PropsType, StateType> {
                     <div
                         className={classnames(
                             style.end_turn,
-                            {hidden: isCanvasDisabled}
+                            {[serviceStyle.hidden]: isCanvasDisabled}
                         )}
                         onClick={async (): Promise<void> => {
                             await view.endTurn();
@@ -649,7 +649,7 @@ export class GameView extends Component<PropsType, StateType> {
                         }}
                     />
                     <BottomBar
-                        className="ta-l"
+                        className={serviceStyle.ta_l}
                     >
                         <span>
                             {view.renderSupplyState()}

@@ -20,6 +20,7 @@ import Fieldset from './../../components/ui/fieldset';
 import * as mapHash from './../../maps/default/map-list';
 import type {ContextRouter} from 'react-router-dom';
 import {getRoomType, isOnLineRoomType} from './../../components/game/model/helper';
+import serviceStyle from './../../../css/service.scss';
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
@@ -115,7 +116,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                     Create Game
                 </Header>
 
-                <Form className="grow-1">
+                <Form className={serviceStyle.grow_1}>
 
                     <Fieldset>
                         <FormHeader>

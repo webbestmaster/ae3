@@ -1,92 +1,107 @@
 /* stylelint-disable selector-pseudo-class-no-unknown, max-nesting-depth */
 
-:global {
-    .app-wrapper {
-        .hidden {
-            display: none !important;
-        }
+.hidden {
+    display: none !important;
+}
 
-        .disabled {
-            opacity: 0.5;
-            pointer-events: none; // see Can I Use
-        }
+.disabled {
+    opacity: 0.5;
+    pointer-events: none; // see Can I Use
+}
 
-        .clear-self {
-            &:after {
-                clear: both;
-                content: '';
-                display: block;
-            }
-        }
+/*
+.clear_self {
+    &:after {
+        clear: both;
+        content: '';
+        display: block;
+    }
+}
+*/
 
-        .clear-full {
-            clear: both;
+/*
+.clear_full {
+    clear: both;
 
-            &:after {
-                clear: both;
-                content: '';
-                display: block;
-            }
-        }
+    &:after {
+        clear: both;
+        content: '';
+        display: block;
+    }
+}
+*/
 
-        .ellipsis {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+/*
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+*/
 
-        .ta-c {
-            text-align: center;
-        }
+.ta_c {
+    text-align: center;
+}
 
-        .ta-l {
-            text-align: left;
-        }
+.ta_l {
+    text-align: left;
+}
 
-        .ta-r {
-            text-align: right;
-        }
+.ta_r {
+    text-align: right;
+}
 
-        .fl-l {
+.fl_l {
+    float: left;
+}
+
+.fl_r {
+    float: right;
+}
+
+.fl_n {
+    float: none;
+}
+
+.w50_c {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.w75_c {
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+}
+
+.grow_1 {
+    display: block;
+    flex-grow: 1;
+    overflow: auto;
+}
+
+.two_blocks_wrapper {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    .two_blocks_container {
+        height: 50%;
+        position: relative;
+        width: 100%;
+        z-index: 0;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .two_blocks_wrapper {
+        .two_blocks_container {
             float: left;
-        }
-
-        .fl-r {
-            float: right;
-        }
-
-        .fl-n {
-            float: none;
-        }
-
-        .w50-c {
-            margin-left: auto;
-            margin-right: auto;
+            height: 100%;
             width: 50%;
         }
-
-        .w75-c {
-            margin-left: auto;
-            margin-right: auto;
-            width: 75%;
-        }
-
-        .grow-0 {
-            display: block;
-            flex-grow: 0;
-            overflow: auto;
-        }
-
-        .grow-1 {
-            display: block;
-            flex-grow: 1;
-            overflow: auto;
-        }
     }
-
-    /*
-    .json {
-        word-break: break-all;
-    }
-    */
 }

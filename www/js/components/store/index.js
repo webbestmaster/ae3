@@ -21,7 +21,7 @@ import withRouter from 'react-router-dom/withRouter';
 import type {UnitType} from '../../maps/type';
 import classnames from 'classnames';
 import {getSupplyState, isCommanderLive} from '../game/model/helper';
-
+import serviceStyle from './../../../css/service.scss';
 import Page from './../../components/ui/page';
 import Button from './../../components/ui/button';
 import Header from './../../components/ui/header';
@@ -167,7 +167,11 @@ class Store extends Component<PropsType, StateType> {
 
         return (
             <Button
-                className={classnames('w75-c', 'ta-l', {disabled: mapUserData.money < unitCost || supplyState.isFull})}
+                className={classnames(
+                    serviceStyle.w75_c,
+                    serviceStyle.ta_l,
+                    {[serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull}
+                )}
                 onClick={() => {
                     view.buyUnit(unitType);
                 }}
@@ -274,7 +278,7 @@ class Store extends Component<PropsType, StateType> {
 
         return (
             <Page>
-                <Header className="ta-r">
+                <Header className={serviceStyle.ta_r}>
                     <div
                         onClick={() => {
                             props.history.goBack();
@@ -285,21 +289,21 @@ class Store extends Component<PropsType, StateType> {
                             zIndex: 1,
                             cursor: 'pointer'
                         }}
-                        className="fl-l"
+                        className={serviceStyle.fl_l}
                     >
                         &lt;&lt;
                     </div>
                     Store
                 </Header>
 
-                <div className="grow-1">
+                <div className={serviceStyle.grow_1}>
                     <div>
                         {view.renderUnitList()}
                     </div>
                 </div>
 
                 <BottomBar
-                    className="ta-l"
+                    className={serviceStyle.ta_l}
                 >
                     Money:
                     {' '}
