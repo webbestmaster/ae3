@@ -135,18 +135,32 @@ export default class Render {
         const render = this;
 
         wrapper.addEventListener(
-            getEventName('mousedown'),
-            (evt: TouchEvent | MouseEvent) => {
+            'touchstart',
+            async (evt: TouchEvent): Promise<void> => {
                 const {touches} = evt;
 
-                if (!touches) {
-                    return;
-                }
-
                 if (touches.length > 1) {
-                    render.cleanActionsList().then(() => {
-                        console.log('action list clear');
-                    });
+                    await render.cleanActionsList();
+                }
+            });
+
+        wrapper.addEventListener(
+            'touchend',
+            async (evt: TouchEvent): Promise<void> => {
+                const {touches} = evt;
+
+                if (touches.length !== 0) {
+                    await render.cleanActionsList();
+                }
+            });
+
+        wrapper.addEventListener(
+            'touchcancel',
+            async (evt: TouchEvent): Promise<void> => {
+                const {touches} = evt;
+
+                if (touches.length !== 0) {
+                    await render.cleanActionsList();
                 }
             });
     }
