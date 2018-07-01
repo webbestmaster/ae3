@@ -22,7 +22,7 @@ import {defaultUnitData} from './unit/unit-guide';
 import Building from './building';
 import {tween} from './../../../lib/tween';
 import Viewport from 'pixi-viewport';
-import {bindClick} from './helper';
+import {bindClick, getEventName} from './helper';
 
 import borderImage1 from './../i/border/1.png';
 import borderImage2 from './../i/border/2.png';
@@ -127,6 +127,28 @@ export default class Render {
         viewport.addChild(mainContainer);
 
         render.moveToCenter();
+
+        render.fixBugWithExtraTouch(setting.view);
+    }
+
+    fixBugWithExtraTouch(wrapper: HTMLElement) {
+        const render = this;
+
+        wrapper.addEventListener(
+            getEventName('mousedown'),
+            (evt: TouchEvent | MouseEvent) => {
+                const {touches} = evt;
+
+                if (!touches) {
+                    return;
+                }
+
+                if (touches.length > 1) {
+                    render.cleanActionsList().then(() => {
+                        console.log('action list clear');
+                    });
+                }
+            });
     }
 
     moveCenterTo(x: number, y: number) {

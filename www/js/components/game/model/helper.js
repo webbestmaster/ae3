@@ -292,7 +292,7 @@ type MouseEventNameType = 'click' | 'mousedown' | 'mouseup';
 type TouchEventNameType = 'tap' | 'touchstart' | 'touchend';
 type EventNameMapType = { +[key: MouseEventNameType]: TouchEventNameType };
 
-function getEventName(MouseEventName: MouseEventNameType): MouseEventNameType | TouchEventNameType {
+export function getEventName(MouseEventName: MouseEventNameType): MouseEventNameType | TouchEventNameType {
     const eventNameMap: EventNameMapType = {
         click: 'tap',
         mousedown: 'touchstart',
