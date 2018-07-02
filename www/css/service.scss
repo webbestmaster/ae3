@@ -1,5 +1,7 @@
 /* stylelint-disable selector-pseudo-class-no-unknown, max-nesting-depth */
 
+@import './var';
+
 .hidden {
     display: none !important;
 }
@@ -31,13 +33,16 @@
 }
 */
 
-/*
 .ellipsis {
+    display: block;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-*/
 
 .ta_c {
     text-align: center;
@@ -82,11 +87,14 @@
 }
 
 .two_blocks_wrapper {
+    box-sizing: border-box;
     height: 100%;
     left: 0;
+    padding-top: $bar-height;
     position: absolute;
     top: 0;
     width: 100%;
+    z-index: 0;
 
     .two_blocks_container {
         height: 50%;

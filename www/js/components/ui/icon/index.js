@@ -10,9 +10,6 @@ import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
 import style from './style.scss';
 
-import onlineGameIcon from './list/online-game.svg';
-import offlineGameIcon from './list/offline-game.svg';
-
 const iconsReqContext = require.context('./list/', true, /\.svg$/);
 
 const iconMap = {};

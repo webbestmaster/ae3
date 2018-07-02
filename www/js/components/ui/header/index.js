@@ -8,11 +8,12 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
-import style from './style.scss';
+import iuStyle from './../ui.scss';
+import servicesStyle from './../../../../css/service.scss';
+import BackButton from './back-button';
 
 type PropsType = {|
-    children: Node,
-    onClick?: () => void,
+    children: Node[],
     className?: string
 |};
 
@@ -28,12 +29,14 @@ export class Header extends Component<PropsType, StateType> {
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
         return (
-            <h2
-                className={style.header + additionClass}
-                onClick={typeof props.onClick === 'function' ? props.onClick : null}
-            >
-                {props.children}
-            </h2>
+            <div className={iuStyle.header + additionClass}>
+                <BackButton/>
+                <div className={iuStyle.header_text}>
+                    <h3 className={servicesStyle.ellipsis}>
+                        {props.children}
+                    </h3>
+                </div>
+            </div>
         );
     }
 }

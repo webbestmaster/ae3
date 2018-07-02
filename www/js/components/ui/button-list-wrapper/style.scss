@@ -9,3 +9,10 @@
     transform: translate3d(-50%, 0, 0);
     z-index: 0;
 }
+
+@media screen and (orientation: landscape) {
+    .button_list_wrapper {
+        top: 50%;
+        transform: translate3d(-50%, -50%, 0);
+    }
+}

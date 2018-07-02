@@ -1,9 +1,8 @@
-@import './../ui';
-@import './../header/style';
+//@import './../ui';
 
 .bottom_bar {
-    @extend %button;
-    @extend %header;
+    //@extend %button;
+    //@extend %header;
 
     background-color: #333;
 }

@@ -14,11 +14,8 @@ import Button from './../../components/ui/button';
 import ButtonLink from './../../components/ui/button-link';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
 import Icon from './../../components/ui/icon';
-import Header from './../../components/ui/header';
-import classnames from 'classnames';
 import style from './style.scss';
 import serviceStyle from './../../../css/service.scss';
-import iconOnlineGame from './../../components/ui/icon/list/online-game.svg';
 
 import logoSrc from './i/logo.png';
 
@@ -26,7 +23,6 @@ class Home extends Component<void, void> {
     static renderPartLogo(): Node {
         return (
             <div className={serviceStyle.two_blocks_container}>
-                <br/>
                 &nbsp;&nbsp;Build of&nbsp;
                 {new Date(BUILD_DATE).toLocaleString()}
 

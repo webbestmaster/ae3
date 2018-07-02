@@ -22,7 +22,7 @@ import {defaultUnitData} from './unit/unit-guide';
 import Building from './building';
 import {tween} from './../../../lib/tween';
 import Viewport from 'pixi-viewport';
-import {bindClick, getEventName} from './helper';
+import {bindClick} from './helper';
 
 import borderImage1 from './../i/border/1.png';
 import borderImage2 from './../i/border/2.png';
