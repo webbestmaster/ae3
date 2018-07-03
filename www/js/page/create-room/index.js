@@ -17,6 +17,7 @@ import Header from './../../components/ui/header';
 import Form from './../../components/ui/form';
 import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
+import Select from './../../components/ui/select';
 import * as mapHash from './../../maps/default/map-list';
 import type {ContextRouter} from 'react-router-dom';
 import {getRoomType, isOnLineRoomType} from './../../components/game/model/helper';
@@ -106,80 +107,111 @@ class CreateRoom extends Component<PropsType, StateType> {
         return joinRoomResult.roomId;
     }
 
-    render(): Node {
+    senderMoneySelect(): Node {
+        const view = this;
+
+        return (
+            <Fieldset className={serviceStyle.line_item}>
+                <FormHeader>
+                    Money
+                </FormHeader>
+
+                <Select
+                    onChange={(defaultMoney: string) => {
+                        view.setState({defaultMoney: parseInt(defaultMoney, 10)});
+                    }}
+                >
+                    {mapGuide.defaultMoneyList
+                        .map((defaultMoney: number): Node => {
+                            return (
+                                <option
+                                    value={defaultMoney}
+                                    key={defaultMoney}
+                                >
+                                    {defaultMoney}
+                                </option>
+                            );
+                        })}
+                </Select>
+            </Fieldset>
+        );
+    }
+
+    senderUnitLimitSelect(): Node {
+        const view = this;
+
+        return (
+            <Fieldset className={serviceStyle.line_item}>
+                <FormHeader>
+                    Unit Limit
+                </FormHeader>
+
+                <Select
+                    onChange={(unitLimit: string) => {
+                        view.setState({unitLimit: parseInt(unitLimit, 10)});
+                    }}
+                >
+                    {mapGuide.defaultUnitLimitList
+                        .map((unitLimit: number): Node => {
+                            return (
+                                <option
+                                    value={unitLimit}
+                                    key={unitLimit}
+                                >
+                                    {unitLimit}
+                                </option>
+                            );
+                        })}
+                </Select>
+            </Fieldset>
+        );
+    }
+
+    renderSelectMap(): Node {
         const view = this;
         const {state} = view;
+
+        return (
+            <Fieldset>
+                <FormHeader>
+                    select map
+                </FormHeader>
+
+                {mapList
+                    .map((map: MapType, mapIndex: number): Node => {
+                        return (
+                            <div
+                                onClick={(): void => view.setState({mapIndex})}
+                                key={map.meta.en.name}
+                            >
+                                <h3>
+                                    {map.meta.en.name}
+                                    {' '}
+                                    {mapIndex === state.mapIndex ? '<-' : ''}
+                                </h3>
+                            </div>
+                        );
+                    })}
+            </Fieldset>
+        );
+    }
+
+    render(): Node {
+        const view = this;
 
         return (
             <Page>
                 <Header>
                     Create Game
                 </Header>
-
                 <Form className={serviceStyle.grow_1}>
-
-                    <Fieldset>
-                        <FormHeader>
-                            select map
-                        </FormHeader>
-
-                        {mapList
-                            .map((map: MapType, mapIndex: number): Node => {
-                                return (
-                                    <div
-                                        onClick={(): void => view.setState({mapIndex})}
-                                        key={map.meta.en.name}
-                                    >
-                                        <h3>
-                                            {map.meta.en.name}
-                                            {' '}
-                                            {mapIndex === state.mapIndex ? '<-' : ''}
-                                        </h3>
-                                    </div>
-                                );
-                            })}
-                    </Fieldset>
-
-                    <Fieldset>
-                        <FormHeader>
-                            Money
-                        </FormHeader>
-
-                        {mapGuide.defaultMoneyList
-                            .map((defaultMoney: number): Node => {
-                                return (
-                                    <div
-                                        onClick={(): void => view.setState({defaultMoney})}
-                                        key={defaultMoney}
-                                    >
-                                        {defaultMoney}
-                                        {' '}
-                                        {defaultMoney === state.defaultMoney ? '<-' : ''}
-                                    </div>
-                                );
-                            })}
-                    </Fieldset>
-
-                    <Fieldset>
-                        <FormHeader>
-                            Unit Limit
-                        </FormHeader>
-
-                        {mapGuide.defaultUnitLimitList
-                            .map((unitLimit: number): Node => {
-                                return (
-                                    <div
-                                        onClick={(): void => view.setState({unitLimit})}
-                                        key={unitLimit}
-                                    >
-                                        {unitLimit}
-                                        {' '}
-                                        {unitLimit === state.unitLimit ? '<-' : ''}
-                                    </div>
-                                );
-                            })}
-                    </Fieldset>
+                    <div className={serviceStyle.line}>
+                        {view.senderMoneySelect()}
+                        {view.senderUnitLimitSelect()}
+                    </div>
                 </Form>
+
+                {view.renderSelectMap()}
 
                 <Button
                     onClick={async (): Promise<void> => {
