@@ -13,7 +13,7 @@ import Page from './../../components/ui/page';
 import Button from './../../components/ui/button';
 import ButtonLink from './../../components/ui/button-link';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
-import Icon from './../../components/ui/icon';
+// import Icon from './../../components/ui/icon';
 import style from './style.scss';
 import serviceStyle from './../../../css/service.scss';
 
@@ -40,22 +40,22 @@ class Home extends Component<void, void> {
             <div className={serviceStyle.two_blocks_container}>
                 <ButtonListWrapper>
                     <ButtonLink to={routes.multiPlayer}>
-                        <Icon src="online-game"/>
+                        {/* <Icon src="online-game"/>*/}
                          online game
                     </ButtonLink>
 
                     <ButtonLink to={routes.createRoomOffline}>
-                        <Icon src="offline-game"/>
+                        {/* <Icon src="offline-game"/>*/}
                         offline game
                     </ButtonLink>
 
                     <Button className={serviceStyle.disabled}>
-                        <Icon src="online-game"/>
+                        {/* <Icon src="online-game"/>*/}
                         companies
                     </Button>
 
                     <Button className={serviceStyle.disabled}>
-                        <Icon src="online-game"/>
+                        {/* <Icon src="online-game"/>*/}
                         settings
                     </Button>
                 </ButtonListWrapper>

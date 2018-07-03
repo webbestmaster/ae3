@@ -1,6 +1,5 @@
 @import './../../../css/var';
-
-$main-background-color: #242a45;
+@import './ui-var';
 
 .button,
 %button {
@@ -17,7 +16,7 @@ $main-background-color: #242a45;
     min-height: 41px;
     min-width: 195px;
     padding: 9px 5px 4px 6px;
-    text-align: left;
+    text-align: center;
     text-decoration: none;
     text-shadow: 3px 3px 0 #000;
 

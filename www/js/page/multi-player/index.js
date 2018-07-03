@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import routes from './../../app/routes';
 
-import Icon from './../../components/ui/icon';
+// import Icon from './../../components/ui/icon';
 import Page from './../../components/ui/page';
 import ButtonLink from './../../components/ui/button-link';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
@@ -34,14 +34,14 @@ class MultiPlayer extends Component<void, void> {
                     <ButtonLink
                         to={routes.createRoomOnline}
                     >
-                        <Icon src="online-game"/>
+                        {/* <Icon src="online-game"/>*/}
                         create game
                     </ButtonLink>
 
                     <ButtonLink
                         to={routes.joinRoom}
                     >
-                        <Icon src="online-game"/>
+                        {/* <Icon src="online-game"/>*/}
                         join game
                     </ButtonLink>
                 </ButtonListWrapper>

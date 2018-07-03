@@ -17,6 +17,7 @@ import type {RoomDataType} from './helper';
 import {getRoomState} from './helper';
 import type {ContextRouter} from 'react-router-dom';
 import {isOnLineRoomType} from '../../components/game/model/helper';
+import servicesStyle from './../../../css/service.scss';
 
 type StateType = {|
     // roomIds: Array<string>,
@@ -97,8 +98,12 @@ class JoinRoom extends Component<PropsType, StateType> {
                         Join Into Room
                     </Header>
                     <Form>
-                        <Fieldset>
-                            No Open Rooms, create your own room...
+                        <Fieldset className={servicesStyle.ta_c}>
+                            No open rooms,
+                            {' '}
+                            <br/>
+                            {' '}
+                            but you can create your own...
                         </Fieldset>
                     </Form>
                 </Page>
