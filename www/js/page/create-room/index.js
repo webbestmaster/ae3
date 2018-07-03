@@ -209,9 +209,9 @@ class CreateRoom extends Component<PropsType, StateType> {
                         {view.senderMoneySelect()}
                         {view.senderUnitLimitSelect()}
                     </div>
-                </Form>
+                    {view.renderSelectMap()}
 
-                {view.renderSelectMap()}
+                </Form>
 
                 <Button
                     onClick={async (): Promise<void> => {
