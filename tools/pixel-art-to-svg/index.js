@@ -2,8 +2,8 @@ const fs = require('fs'); // eslint-disable-line id-length
 const pixel = require('pixel');
 const svg = require('pixel-to-svg');
 
-const pathToSrc = 'png';
-const pathToSvg = 'svg';
+const pathToSrc = 'png/unit';
+const pathToSvg = 'svg/unit';
 
 async function convert(imageName) {
     return new Promise((resolve, reject) => {
