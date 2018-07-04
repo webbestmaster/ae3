@@ -1,0 +1,15 @@
+{
+  "name": "pixel-art-to-svg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pixel": "0.0.4",
+    "pixel-to-svg": "0.0.0"
+  }
+}
