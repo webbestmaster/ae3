@@ -22,6 +22,7 @@ import * as mapHash from './../../maps/default/map-list';
 import type {ContextRouter} from 'react-router-dom';
 import {getRoomType, isOnLineRoomType} from './../../components/game/model/helper';
 import serviceStyle from './../../../css/service.scss';
+import uiStyle from './../../components/ui/ui.scss';
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
@@ -213,13 +214,15 @@ class CreateRoom extends Component<PropsType, StateType> {
 
                 </Form>
 
-                <Button
-                    onClick={async (): Promise<void> => {
-                        const result = await view.createRoom();
-                    }}
-                >
-                    create room
-                </Button>
+                <div className={uiStyle.single_button_wrapper}>
+                    <Button
+                        onClick={async (): Promise<void> => {
+                            const result = await view.createRoom();
+                        }}
+                    >
+                        create room
+                    </Button>
+                </div>
             </Page>
         );
     }

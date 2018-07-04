@@ -15,7 +15,7 @@
     margin-bottom: 6px;
     min-height: 41px;
     min-width: 195px;
-    padding: 9px 5px 4px 6px;
+    padding: 9px 15px 5px;
     text-align: center;
     text-decoration: none;
     text-shadow: 3px 3px 0 #000;
@@ -32,6 +32,13 @@
     &:active {
         background-color: #39384e;
     }
+}
+
+.single_button_wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px;
 }
 
 .header,
