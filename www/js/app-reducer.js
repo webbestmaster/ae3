@@ -14,20 +14,17 @@ import system from './components/system/reducer';
 import type {AuthType} from './components/auth/reducer';
 import auth from './components/auth/reducer';
 
-export {
-    system,
-    auth
+import type {LocaleType} from './components/locale/reducer';
+import locale from './components/locale/reducer';
 
-/*
-    app,
-    clubsCatalog,
-    subscriptionsCatalog,
-    trainingsCatalog,
-    auth
-*/
+export {
+    auth,
+    system,
+    locale
 };
 
 export type GlobalStateType = {|
+    auth: AuthType,
     system: SystemType,
-    auth: AuthType
+    locale: LocaleType
 |};

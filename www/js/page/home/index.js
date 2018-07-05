@@ -16,7 +16,7 @@ import ButtonListWrapper from './../../components/ui/button-list-wrapper';
 // import Icon from './../../components/ui/icon';
 import style from './style.scss';
 import serviceStyle from './../../../css/service.scss';
-
+import Locale from './../../components/locale';
 import logoSrc from './i/logo.png';
 
 class Home extends Component<void, void> {
@@ -38,6 +38,7 @@ class Home extends Component<void, void> {
     static renderPartButtonList(): Node {
         return (
             <div className={serviceStyle.two_blocks_container}>
+                <Locale/>
                 <ButtonListWrapper>
                     <ButtonLink to={routes.multiPlayer}>
                         {/* <Icon src="online-game"/>*/}

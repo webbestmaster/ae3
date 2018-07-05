@@ -3,7 +3,6 @@
 /* global window */
 
 import {combineReducers} from 'redux';
-// screen
 import type {OnResizeType} from './action';
 import {systemConst} from './const';
 
@@ -19,9 +18,9 @@ const defaultScreenState: ScreenType = {
 };
 
 // module
-export type SystemType = {
-    screen: ScreenType
-};
+export type SystemType = {|
+    +screen: ScreenType
+|};
 
 export default combineReducers({
     screen: (screenState: ScreenType = defaultScreenState,
