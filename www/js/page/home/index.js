@@ -18,6 +18,7 @@ import style from './style.scss';
 import serviceStyle from './../../../css/service.scss';
 import Locale from './../../components/locale';
 import logoSrc from './i/logo.png';
+import type {LangKeyType} from './../../components/locale/translation/type';
 
 class Home extends Component<void, void> {
     static renderPartLogo(): Node {
@@ -38,11 +39,10 @@ class Home extends Component<void, void> {
     static renderPartButtonList(): Node {
         return (
             <div className={serviceStyle.two_blocks_container}>
-                <Locale/>
                 <ButtonListWrapper>
                     <ButtonLink to={routes.multiPlayer}>
                         {/* <Icon src="online-game"/>*/}
-                         online game
+                        <Locale stringKey={('HOME_PAGE__ONLINE_GAME': LangKeyType)}/>
                     </ButtonLink>
 
                     <ButtonLink to={routes.createRoomOffline}>
