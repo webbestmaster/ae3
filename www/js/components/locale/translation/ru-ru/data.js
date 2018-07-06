@@ -7,6 +7,7 @@ export const ruRu: LangDataType = {
     HOME_PAGE__ONLINE_GAME: 'Сетевая Игра',
     HOME_PAGE__OFFLINE_GAME: 'Локальная Игра',
     HOME_PAGE__SETTINGS: 'Настройки',
+    LANGUAGE: 'Язык',
     SPACE: ' '
     /* eslint-enable id-match */
 };

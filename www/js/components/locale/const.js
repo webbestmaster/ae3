@@ -20,5 +20,17 @@ export const localeConst = {
             localeName: PROJECT_ID + '-locale-name' // eslint-disable-line id-match
         }
     },
-    localeNameList
+    localeNameList,
+    langName: {
+        'ru-RU': 'Русский',
+        'en-US': 'English'
+    }
+};
+
+import {ruRu} from './translation/ru-ru/data';
+import {enUs} from './translation/en-us/data';
+
+export const allLocales = {
+    'en-US': enUs,
+    'ru-RU': ruRu
 };

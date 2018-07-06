@@ -9,17 +9,8 @@ import type {Node} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../app-reducer';
 import type {LocaleType} from './reducer';
-import type {LocaleNameType} from './action';
+import {allLocales} from './const';
 import type {LangKeyType} from './translation/type';
-// import type {LangDataType} from './translation/type';
-
-import {ruRu} from './translation/ru-ru/data';
-import {enUs} from './translation/en-us/data';
-
-const allLocales = {
-    'en-US': enUs,
-    'ru-RU': ruRu
-};
 
 type StateType = {};
 type PropsType = {|
@@ -42,7 +33,7 @@ export class Locale extends Component<PropsType, StateType> {
                 return 'TEXT';
             }
 
-            if (!enUs.hasOwnProperty(stringKey)) {
+            if (!allLocales['en-US'].hasOwnProperty(stringKey)) {
                 console.error('has no key stringKey', stringKey);
                 return stringKey;
             }
