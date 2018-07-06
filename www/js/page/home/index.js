@@ -47,18 +47,18 @@ class Home extends Component<void, void> {
 
                     <ButtonLink to={routes.createRoomOffline}>
                         {/* <Icon src="offline-game"/>*/}
-                        offline game
+                        <Locale stringKey={('HOME_PAGE__OFFLINE_GAME': LangKeyType)}/>
                     </ButtonLink>
 
                     <Button className={serviceStyle.disabled}>
                         {/* <Icon src="online-game"/>*/}
-                        companies
+                        %companies%
                     </Button>
 
-                    <Button className={serviceStyle.disabled}>
+                    <ButtonLink to={routes.settings}>
                         {/* <Icon src="online-game"/>*/}
-                        settings
-                    </Button>
+                        <Locale stringKey={('HOME_PAGE__SETTINGS': LangKeyType)}/>
+                    </ButtonLink>
                 </ButtonListWrapper>
             </div>
         );

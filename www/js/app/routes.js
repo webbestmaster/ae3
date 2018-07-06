@@ -11,7 +11,8 @@ type RoutesType = {|
     createRoomOffline: string,
     joinRoom: string,
     roomOnLine: string,
-    roomOffLine: string
+    roomOffLine: string,
+    settings: string
 |};
 
 const routes: RoutesType = {
@@ -22,7 +23,8 @@ const routes: RoutesType = {
     createRoomOffline: offLinePrefix + '/create-room',
     joinRoom: onLinePrefix + '/join-room',
     roomOnLine: onLinePrefix + '/room/:roomId',
-    roomOffLine: offLinePrefix + '/room/:roomId'
+    roomOffLine: offLinePrefix + '/room/:roomId',
+    settings: '/settings'
 };
 
 export default routes;

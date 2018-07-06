@@ -12,6 +12,7 @@ import MultiPlayer from './../page/multi-player';
 import CreateRoom from './../page/create-room';
 import JoinRoom from './../page/join-room';
 import Room from './../page/room';
+import Settings from './../page/settings';
 
 import routes from './routes';
 
@@ -53,6 +54,11 @@ export default (): Node[] =>
             <Route
                 component={Room}
                 path={routes.roomOffLine}
+                exact
+            />
+            <Route
+                component={Settings}
+                path={routes.settings}
                 exact
             />
         </Switch>
