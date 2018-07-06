@@ -4,7 +4,7 @@
 
 import type {LocaleNameType} from './action';
 
-const localeNameList: Array<LocaleNameType> = ['ru-RU', 'en-US'];
+const localeNameList: Array<LocaleNameType> = ['en-US', 'ru-RU'];
 
 export const localeConst = {
     action: {

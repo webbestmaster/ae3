@@ -13,6 +13,7 @@ import Page from './../../components/ui/page';
 import Button from './../../components/ui/button';
 import ButtonLink from './../../components/ui/button-link';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
+import buttonListWrapperStyle from './../../components/ui/button-list-wrapper/style.scss';
 // import Icon from './../../components/ui/icon';
 import style from './style.scss';
 import serviceStyle from './../../../css/service.scss';
@@ -39,7 +40,7 @@ class Home extends Component<void, void> {
     static renderPartButtonList(): Node {
         return (
             <div className={serviceStyle.two_blocks_container}>
-                <ButtonListWrapper>
+                <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                     <ButtonLink to={routes.multiPlayer}>
                         {/* <Icon src="online-game"/>*/}
                         <Locale stringKey={('HOME_PAGE__ONLINE_GAME': LangKeyType)}/>

@@ -2,16 +2,20 @@
 
 .button_list_wrapper {
     display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.button_list_container {
+    display: flex;
     flex-direction: column;
-    left: 50%;
-    position: absolute;
-    top: 0;
-    transform: translate3d(-50%, 0, 0);
-    z-index: 0;
+    max-width: 75%;
 }
 
 @media screen and (orientation: landscape) {
-    .button_list_wrapper {
+    .button_list_wrapper_single {
+        left: 50%;
+        position: absolute;
         top: 50%;
         transform: translate3d(-50%, -50%, 0);
     }

@@ -16,35 +16,44 @@ import {localeConst} from './../../components/locale/const';
 import type {LocaleNameType} from '../../components/locale/action';
 import * as localeAction from './../../components/locale/action';
 import {allLocales} from './../../components/locale/const';
+import Form from './../../components/ui/form';
+import Fieldset from './../../components/ui/fieldset';
+import FormHeader from './../../components/ui/form-header';
+import ButtonListWrapper from './../../components/ui/button-list-wrapper';
+import serviceStyle from './../../../css/service.scss';
 
 class Settings extends Component<void, void> {
     renderLanguageList(): Node {
         const view = this;
         const {props} = view;
 
-        return (
-            <div>
-                {localeConst.localeNameList.map((localeName: LocaleNameType): Node => {
-                    return (
-                        <span key={localeName}>
-                            {allLocales[localeName].LANGUAGE}
-                        </span>
-                    );
-                })}
+        const headerString = localeConst.localeNameList
+            .map((localeName: LocaleNameType): string => allLocales[localeName].LANGUAGE)
+            .join(' / ');
 
-                {localeConst.localeNameList.map((localeName: LocaleNameType): Node => {
-                    return (
-                        <Button
-                            key={localeName}
-                            onClick={() => {
-                                props.setLocale(localeName);
-                            }}
-                        >
-                            {localeName}
-                        </Button>
-                    );
-                })}
-            </div>
+        return (
+            <Fieldset>
+                <FormHeader>
+                    {headerString}
+                    {':'}
+                </FormHeader>
+
+                <ButtonListWrapper>
+                    {localeConst.localeNameList
+                        .map((localeName: LocaleNameType): Node => {
+                            return (
+                                <Button
+                                    key={localeName}
+                                    onClick={() => {
+                                        props.setLocale(localeName);
+                                    }}
+                                >
+                                    {localeConst.langName[localeName]}
+                                </Button>
+                            );
+                        })}
+                </ButtonListWrapper>
+            </Fieldset>
         );
     }
 
@@ -56,7 +65,9 @@ class Settings extends Component<void, void> {
                 <Header>
                     <Locale stringKey={('HOME_PAGE__SETTINGS': LangKeyType)}/>
                 </Header>
-                {view.renderLanguageList()}
+                <Form className={serviceStyle.grow_1}>
+                    {view.renderLanguageList()}
+                </Form>
             </Page>
         );
     }
