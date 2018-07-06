@@ -25,7 +25,8 @@ const CWD = __dirname;
 const definePluginParams = {
     BUILD_DATE: Date.now(),
     // NODE_ENV: JSON.stringify(NODE_ENV),
-    IS_PRODUCTION: JSON.stringify(IS_PRODUCTION)
+    IS_PRODUCTION: JSON.stringify(IS_PRODUCTION),
+    PROJECT_ID: JSON.stringify('my-best-project')
     // IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
 };
 
