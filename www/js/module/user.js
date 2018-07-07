@@ -1,5 +1,5 @@
 // @flow
-/* global localStorage, KeyValue */
+/* global localStorage, KeyValue, PROJECT_ID */
 
 /* eslint consistent-this: ["error", "user"] */
 
@@ -11,7 +11,7 @@ type SavedDataType = {|
     id?: string
 |};
 
-const userLocalStorageField = 'user-data-v.0.1';
+const userLocalStorageField = PROJECT_ID + '-user-data-v.1.0'; // eslint-disable-line id-match
 
 export default class User {
     attr: UserAttrType;
@@ -19,11 +19,9 @@ export default class User {
     constructor() {
         const user = this;
 
-        const attr: UserAttrType = {
+        user.attr = {
             id: ''
         };
-
-        user.attr = attr;
 
         const userId: string = User.getData().id || 'user-id-' + String(Math.random()).substr(2);
 

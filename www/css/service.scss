@@ -1,5 +1,4 @@
 /* stylelint-disable selector-pseudo-class-no-unknown, max-nesting-depth */
-
 @import './var';
 
 .hidden {
@@ -88,18 +87,13 @@
 
 .two_blocks_wrapper {
     box-sizing: border-box;
-    height: 100%;
-    left: 0;
-    padding-top: $bar-height;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 
     .two_blocks_container {
-        height: 50%;
+        flex-grow: 1;
         position: relative;
-        width: 100%;
         z-index: 0;
     }
 }
@@ -117,10 +111,6 @@
 
 @media screen and (orientation: landscape) {
     .two_blocks_wrapper {
-        .two_blocks_container {
-            float: left;
-            height: 100%;
-            width: 50%;
-        }
+        flex-direction: row;
     }
 }

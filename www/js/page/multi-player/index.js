@@ -4,8 +4,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import routes from './../../app/routes';
-
-// import Icon from './../../components/ui/icon';
+import buttonListWrapperStyle from './../../components/ui/button-list-wrapper/style.scss';
 import Page from './../../components/ui/page';
 import ButtonLink from './../../components/ui/button-link';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
@@ -30,17 +29,13 @@ class MultiPlayer extends Component<void, void> {
     static renderPartButtonList(): Node {
         return (
             <div className={serviceStyle.two_blocks_container}>
-                <ButtonListWrapper>
-                    <ButtonLink
-                        to={routes.createRoomOnline}
-                    >
+                <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
+                    <ButtonLink to={routes.createRoomOnline}>
                         {/* <Icon src="online-game"/>*/}
                         create game
                     </ButtonLink>
 
-                    <ButtonLink
-                        to={routes.joinRoom}
-                    >
+                    <ButtonLink to={routes.joinRoom}>
                         {/* <Icon src="online-game"/>*/}
                         join game
                     </ButtonLink>

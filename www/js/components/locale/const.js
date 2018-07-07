@@ -17,7 +17,7 @@ export const localeConst = {
     },
     key: {
         localStorage: {
-            localeName: PROJECT_ID + '-locale-name' // eslint-disable-line id-match
+            localeName: PROJECT_ID + '-locale-name-v.1.0' // eslint-disable-line id-match
         }
     },
     localeNameList,
