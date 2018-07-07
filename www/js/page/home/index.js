@@ -43,12 +43,12 @@ class Home extends Component<void, void> {
                 <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                     <ButtonLink to={routes.multiPlayer}>
                         {/* <Icon src="online-game"/>*/}
-                        <Locale stringKey={('HOME_PAGE__ONLINE_GAME': LangKeyType)}/>
+                        <Locale stringKey={('ONLINE_GAME': LangKeyType)}/>
                     </ButtonLink>
 
                     <ButtonLink to={routes.createRoomOffline}>
                         {/* <Icon src="offline-game"/>*/}
-                        <Locale stringKey={('HOME_PAGE__OFFLINE_GAME': LangKeyType)}/>
+                        <Locale stringKey={('OFFLINE_GAME': LangKeyType)}/>
                     </ButtonLink>
 
                     <Button className={serviceStyle.disabled}>
@@ -58,7 +58,7 @@ class Home extends Component<void, void> {
 
                     <ButtonLink to={routes.settings}>
                         {/* <Icon src="online-game"/>*/}
-                        <Locale stringKey={('HOME_PAGE__SETTINGS': LangKeyType)}/>
+                        <Locale stringKey={('SETTINGS': LangKeyType)}/>
                     </ButtonLink>
                 </ButtonListWrapper>
             </div>

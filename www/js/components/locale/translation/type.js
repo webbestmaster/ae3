@@ -2,9 +2,9 @@
 
 export type LangDataType = {|
     /* eslint-disable id-match */
-    +HOME_PAGE__ONLINE_GAME: string,
-    +HOME_PAGE__OFFLINE_GAME: string,
-    +HOME_PAGE__SETTINGS: string,
+    +ONLINE_GAME: string,
+    +OFFLINE_GAME: string,
+    +SETTINGS: string,
     +LANGUAGE: string,
     +SPACE: ' '
     /* eslint-enable id-match */

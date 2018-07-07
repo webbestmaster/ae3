@@ -63,7 +63,7 @@ class Settings extends Component<void, void> {
         return (
             <Page>
                 <Header>
-                    <Locale stringKey={('HOME_PAGE__SETTINGS': LangKeyType)}/>
+                    <Locale stringKey={('SETTINGS': LangKeyType)}/>
                 </Header>
                 <Form className={serviceStyle.grow_1}>
                     {view.renderLanguageList()}
