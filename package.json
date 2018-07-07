@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "weinre": "weinre --boundHost 172.21.1.215 --httpPort 8081",
-    "build-nix": "NODE_ENV=production webpack --mode production --progress",
-    "build-win": "set NODE_ENV=production& webpack --mode production --progress",
+    "build": "cross-env NODE_ENV=production webpack --mode production --progress",
     "check": "npm run eslint; npm run stylelint; npm run flow;",
     "check:fix": "npm run eslint:fix; npm run stylelint:fix; npm run flow; npm run fnlint;",
     "webpack": "webpack --mode development --progress",
@@ -53,6 +52,7 @@
     "base64-inline-loader": "^1.1.1",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.2",
+    "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "css-module-flow": "^1.0.0",
     "eslint": "^5.0.1",
