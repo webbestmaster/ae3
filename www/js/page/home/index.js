@@ -8,13 +8,11 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import routes from './../../app/routes';
-
 import Page from './../../components/ui/page';
 import Button from './../../components/ui/button';
 import ButtonLink from './../../components/ui/button-link';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
 import buttonListWrapperStyle from './../../components/ui/button-list-wrapper/style.scss';
-// import Icon from './../../components/ui/icon';
 import style from './style.scss';
 import serviceStyle from './../../../css/service.scss';
 import Locale from './../../components/locale';
@@ -42,22 +40,18 @@ class Home extends Component<void, void> {
             <div className={serviceStyle.two_blocks_container}>
                 <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                     <ButtonLink to={routes.multiPlayer}>
-                        {/* <Icon src="online-game"/>*/}
                         <Locale stringKey={('ONLINE_GAME': LangKeyType)}/>
                     </ButtonLink>
 
                     <ButtonLink to={routes.createRoomOffline}>
-                        {/* <Icon src="offline-game"/>*/}
                         <Locale stringKey={('OFFLINE_GAME': LangKeyType)}/>
                     </ButtonLink>
 
                     <Button className={serviceStyle.disabled}>
-                        {/* <Icon src="online-game"/>*/}
                         %companies%
                     </Button>
 
                     <ButtonLink to={routes.settings}>
-                        {/* <Icon src="online-game"/>*/}
                         <Locale stringKey={('SETTINGS': LangKeyType)}/>
                     </ButtonLink>
                 </ButtonListWrapper>

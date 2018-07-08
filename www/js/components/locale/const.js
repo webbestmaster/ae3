@@ -3,6 +3,8 @@
 /* global window, PROJECT_ID */
 
 import type {LocaleNameType} from './action';
+import {ruRu} from './translation/ru-ru/data';
+import {enUs} from './translation/en-us/data';
 
 const localeNameList: Array<LocaleNameType> = ['en-US', 'ru-RU'];
 
@@ -26,9 +28,6 @@ export const localeConst = {
         'en-US': 'English'
     }
 };
-
-import {ruRu} from './translation/ru-ru/data';
-import {enUs} from './translation/en-us/data';
 
 export const allLocales = {
     'en-US': enUs,

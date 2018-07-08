@@ -4,8 +4,8 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import React, {Component} from 'react';
 import type {Node} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../app-reducer';
 import type {LocaleType} from './reducer';

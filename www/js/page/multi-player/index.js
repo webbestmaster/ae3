@@ -12,6 +12,8 @@ import Header from './../../components/ui/header';
 import serviceStyle from './../../../css/service.scss';
 import logoSrc from './../home/i/logo.png';
 import homeStyle from './../home/style.scss';
+import type {LangKeyType} from './../../components/locale/translation/type';
+import Locale from './../../components/locale';
 
 class MultiPlayer extends Component<void, void> {
     static renderPartLogo(): Node {
@@ -31,13 +33,11 @@ class MultiPlayer extends Component<void, void> {
             <div className={serviceStyle.two_blocks_container}>
                 <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                     <ButtonLink to={routes.createRoomOnline}>
-                        {/* <Icon src="online-game"/>*/}
-                        create game
+                        <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
                     </ButtonLink>
 
                     <ButtonLink to={routes.joinRoom}>
-                        {/* <Icon src="online-game"/>*/}
-                        join game
+                        <Locale stringKey={('JOIN_GAME': LangKeyType)}/>
                     </ButtonLink>
                 </ButtonListWrapper>
             </div>
@@ -48,7 +48,7 @@ class MultiPlayer extends Component<void, void> {
         return (
             <Page>
                 <Header>
-                    Multi Player
+                    <Locale stringKey={('ONLINE_GAME': LangKeyType)}/>
                 </Header>
                 <div className={serviceStyle.two_blocks_wrapper}>
                     {MultiPlayer.renderPartLogo()}

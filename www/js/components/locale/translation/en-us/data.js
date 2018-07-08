@@ -8,6 +8,8 @@ export const enUs: LangDataType = {
     OFFLINE_GAME: 'Offline Game',
     SETTINGS: 'Settings',
     LANGUAGE: 'Language',
+    CREATE_GAME: 'Create Game',
+    JOIN_GAME: 'Join Game',
     SPACE: ' '
     /* eslint-enable id-match */
 };

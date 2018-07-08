@@ -8,6 +8,8 @@ export const ruRu: LangDataType = {
     OFFLINE_GAME: 'Локальная Игра',
     SETTINGS: 'Настройки',
     LANGUAGE: 'Язык',
+    CREATE_GAME: 'Создать игру',
+    JOIN_GAME: 'Подключиться к игре',
     SPACE: ' '
     /* eslint-enable id-match */
 };
