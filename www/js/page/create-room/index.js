@@ -77,13 +77,6 @@ class CreateRoom extends Component<PropsType, StateType> {
         map.defaultMoney = defaultMoney;
         map.userList = [];
 
-        /*
-        map.userList = [{
-            userId,
-            teamId: mapGuide.teamIdList[0],
-            money: defaultMoney
-        }];
-        */
         map.activeUserId = userId;
 
         const setAllRoomSettingsResult = await serverApi.setAllRoomSettings(createRoomResult.roomId, {
@@ -171,23 +164,25 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         return (
             <Fieldset>
-                <FormHeader>
-                    <Locale stringKey={('MAPS': LangKeyType)}/>
-                    :
-                </FormHeader>
-
-                {'                                                 '.split('').map((): Node[] => {
+                {new Array(100).join('-').split('').map((): Node[] => {
                     return mapList
                         .map((map: MapType, mapIndex: number): Node => {
                             return (
-                                <div
-                                    onClick={(): void => view.setState({mapIndex})}
-                                    key={map.meta.en.name}
-                                >
+                                <div key={map.meta.en.name}>
                                     <h3>
                                         {map.meta.en.name}
-                                        {mapIndex === state.mapIndex ? ' <-' : ' '}
                                     </h3>
+                                    <br/>
+                                    <Button
+                                        onClick={async (): Promise<void> => {
+                                            view.setState({mapIndex});
+                                            const result = await view.createRoom();
+                                        }}
+                                    >
+                                        <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
+                                    </Button>
+                                    <br/>
+                                    <br/>
                                 </div>
                             );
                         });
@@ -206,22 +201,19 @@ class CreateRoom extends Component<PropsType, StateType> {
                     <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
                 </Header>
 
-                <Form className={serviceStyle.grow_1}>
+                <Form>
                     <div className={serviceStyle.line}>
                         {view.senderMoneySelect()}
                         {view.senderUnitLimitSelect()}
                     </div>
-                    {view.renderSelectMap()}
+                    <FormHeader>
+                        <Locale stringKey={('MAPS': LangKeyType)}/>
+                        :
+                    </FormHeader>
                 </Form>
 
-                <div className={uiStyle.single_button_wrapper}>
-                    <Button
-                        onClick={async (): Promise<void> => {
-                            const result = await view.createRoom();
-                        }}
-                    >
-                        <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
-                    </Button>
+                <div className={serviceStyle.grow_1}>
+                    {view.renderSelectMap()}
                 </div>
             </Page>
         );
