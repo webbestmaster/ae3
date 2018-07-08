@@ -23,6 +23,8 @@ import type {ContextRouter} from 'react-router-dom';
 import {getRoomType, isOnLineRoomType} from './../../components/game/model/helper';
 import serviceStyle from './../../../css/service.scss';
 import uiStyle from './../../components/ui/ui.scss';
+import type {LangKeyType} from './../../components/locale/translation/type';
+import Locale from './../../components/locale';
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
@@ -114,7 +116,8 @@ class CreateRoom extends Component<PropsType, StateType> {
         return (
             <Fieldset className={serviceStyle.line_item}>
                 <FormHeader>
-                    Money
+                    <Locale stringKey={('MONEY': LangKeyType)}/>
+                    :
                 </FormHeader>
 
                 <Select
@@ -144,7 +147,8 @@ class CreateRoom extends Component<PropsType, StateType> {
         return (
             <Fieldset className={serviceStyle.line_item}>
                 <FormHeader>
-                    Unit Limit
+                    <Locale stringKey={('UNIT_LIMIT': LangKeyType)}/>
+                    :
                 </FormHeader>
 
                 <Select
@@ -175,7 +179,8 @@ class CreateRoom extends Component<PropsType, StateType> {
         return (
             <Fieldset>
                 <FormHeader>
-                    select map
+                    <Locale stringKey={('MAPS': LangKeyType)}/>
+                    :
                 </FormHeader>
 
                 {mapList
@@ -187,8 +192,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                             >
                                 <h3>
                                     {map.meta.en.name}
-                                    {' '}
-                                    {mapIndex === state.mapIndex ? '<-' : ''}
+                                    {mapIndex === state.mapIndex ? ' <-' : ' '}
                                 </h3>
                             </div>
                         );
@@ -203,15 +207,15 @@ class CreateRoom extends Component<PropsType, StateType> {
         return (
             <Page>
                 <Header>
-                    Create Game
+                    <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
                 </Header>
+
                 <Form className={serviceStyle.grow_1}>
                     <div className={serviceStyle.line}>
                         {view.senderMoneySelect()}
                         {view.senderUnitLimitSelect()}
                     </div>
                     {view.renderSelectMap()}
-
                 </Form>
 
                 <div className={uiStyle.single_button_wrapper}>
@@ -220,7 +224,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                             const result = await view.createRoom();
                         }}
                     >
-                        create room
+                        <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
                     </Button>
                 </div>
             </Page>
