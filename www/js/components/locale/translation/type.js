@@ -9,8 +9,6 @@ export type LangDataType = {|
     +CREATE_GAME: string,
     +JOIN_GAME: string,
     +MAPS: string,
-    +MONEY: string,
-    +UNIT_LIMIT: string,
     +SPACE: ' '
     /* eslint-enable id-match */
 |};

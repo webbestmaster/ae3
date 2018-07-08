@@ -1,16 +1,19 @@
 // @flow
 
-/* global window */
+/* global window, IS_PRODUCTION */
 
 /* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import style from './style.scss';
+import type {SelectIconNameType} from './icon';
+import {icon} from './icon';
 
 type PropsType = {|
     +children: Node,
-    +onChange: (value: string) => void
+    +onChange: (value: string) => void,
+    +icon?: SelectIconNameType
     // className?: string
 |};
 
@@ -58,10 +61,33 @@ export default class Select extends Component<PropsType, StateType> {
             return;
         }
 
-        console.log(selectNode);
-
         view.setState({visibleString: selectNode.value});
         props.onChange(selectNode.value);
+    }
+
+    renderIcon(): Node | null {
+        const view = this;
+        const {props, state} = view;
+        const iconPath = typeof props.icon === 'string' ? props.icon : null;
+
+        if (iconPath === null) {
+            return null;
+        }
+
+        if (!IS_PRODUCTION) { // eslint-disable-line id-match
+            if (!icon.hasOwnProperty(iconPath)) {
+                console.error('unsupported iconPath', iconPath);
+                return null;
+            }
+        }
+
+        return (
+            <img
+                className={style.icon}
+                src={icon[iconPath]}
+                alt=""
+            />
+        );
     }
 
     render(): Node {
@@ -69,7 +95,8 @@ export default class Select extends Component<PropsType, StateType> {
         const {props, state} = view;
 
         return (
-            <div className={style.wrapper}>
+            <label className={style.wrapper}>
+                {view.renderIcon()}
                 {
                     state.visibleString.length > 0 ?
                         <p className={style.current_selected}>
@@ -90,7 +117,7 @@ export default class Select extends Component<PropsType, StateType> {
                 >
                     {props.children}
                 </select>
-            </div>
+            </label>
         );
     }
 }

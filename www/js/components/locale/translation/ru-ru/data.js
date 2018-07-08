@@ -11,8 +11,6 @@ export const ruRu: LangDataType = {
     CREATE_GAME: 'Создать Игру',
     JOIN_GAME: 'Подключиться к Игре',
     MAPS: 'Карты',
-    MONEY: 'Деньги',
-    UNIT_LIMIT: 'Лимит Бойцов',
     SPACE: ' '
     /* eslint-enable id-match */
 };

@@ -1,7 +1,8 @@
 @import './../ui-var';
 
 .wrapper {
-    min-width: 121px;
+    display: block;
+    min-width: 140px;
     position: relative;
 }
 
@@ -35,4 +36,15 @@
         width: 0;
         z-index: 0;
     }
+}
+
+.icon {
+    float: left;
+    height: 24px;
+    left: 5px;
+    pointer-events: none;
+    position: relative;
+    top: 5px;
+    width: 24px;
+    z-index: 1;
 }

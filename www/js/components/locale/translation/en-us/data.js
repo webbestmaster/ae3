@@ -11,8 +11,6 @@ export const enUs: LangDataType = {
     CREATE_GAME: 'Create Game',
     JOIN_GAME: 'Join Game',
     MAPS: 'Maps',
-    MONEY: 'Money',
-    UNIT_LIMIT: 'Unit Limit',
     SPACE: ' '
     /* eslint-enable id-match */
 };

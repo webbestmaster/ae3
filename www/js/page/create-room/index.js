@@ -18,6 +18,7 @@ import Form from './../../components/ui/form';
 import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
 import Select from './../../components/ui/select';
+import type {SelectIconNameType} from './../../components/ui/select/icon';
 import * as mapHash from './../../maps/default/map-list';
 import type {ContextRouter} from 'react-router-dom';
 import {getRoomType, isOnLineRoomType} from './../../components/game/model/helper';
@@ -115,12 +116,8 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         return (
             <Fieldset className={serviceStyle.line_item}>
-                <FormHeader>
-                    <Locale stringKey={('MONEY': LangKeyType)}/>
-                    :
-                </FormHeader>
-
                 <Select
+                    icon={('MONEY': SelectIconNameType)}
                     onChange={(defaultMoney: string) => {
                         view.setState({defaultMoney: parseInt(defaultMoney, 10)});
                     }}
@@ -146,12 +143,8 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         return (
             <Fieldset className={serviceStyle.line_item}>
-                <FormHeader>
-                    <Locale stringKey={('UNIT_LIMIT': LangKeyType)}/>
-                    :
-                </FormHeader>
-
                 <Select
+                    icon={('UNIT': SelectIconNameType)}
                     onChange={(unitLimit: string) => {
                         view.setState({unitLimit: parseInt(unitLimit, 10)});
                     }}
@@ -183,20 +176,23 @@ class CreateRoom extends Component<PropsType, StateType> {
                     :
                 </FormHeader>
 
-                {mapList
-                    .map((map: MapType, mapIndex: number): Node => {
-                        return (
-                            <div
-                                onClick={(): void => view.setState({mapIndex})}
-                                key={map.meta.en.name}
-                            >
-                                <h3>
-                                    {map.meta.en.name}
-                                    {mapIndex === state.mapIndex ? ' <-' : ' '}
-                                </h3>
-                            </div>
-                        );
-                    })}
+                {'                                                 '.split('').map((): Node[] => {
+                    return mapList
+                        .map((map: MapType, mapIndex: number): Node => {
+                            return (
+                                <div
+                                    onClick={(): void => view.setState({mapIndex})}
+                                    key={map.meta.en.name}
+                                >
+                                    <h3>
+                                        {map.meta.en.name}
+                                        {mapIndex === state.mapIndex ? ' <-' : ' '}
+                                    </h3>
+                                </div>
+                            );
+                        });
+                })}
+
             </Fieldset>
         );
     }
