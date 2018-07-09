@@ -11,6 +11,7 @@ export const ruRu: LangDataType = {
     CREATE_GAME: 'Создать Игру',
     JOIN_GAME: 'Подключиться к Игре',
     MAPS: 'Карты',
+    MESSAGE__NO_OPEN_GAME: 'Нет доступных игр, но Вы можете сделать свою...',
     SPACE: ' '
     /* eslint-enable id-match */
 };

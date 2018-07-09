@@ -18,6 +18,11 @@ import {getRoomState} from './helper';
 import type {ContextRouter} from 'react-router-dom';
 import {isOnLineRoomType} from '../../components/game/model/helper';
 import servicesStyle from './../../../css/service.scss';
+import type {LangKeyType} from '../../components/locale/translation/type';
+import Locale from './../../components/locale';
+import {ButtonListWrapper} from '../../components/ui/button-list-wrapper';
+import buttonListWrapperStyle from '../../components/ui/button-list-wrapper/style.scss';
+import {ButtonLink} from '../../components/ui/button-link';
 
 type StateType = {|
     // roomIds: Array<string>,
@@ -87,6 +92,14 @@ class JoinRoom extends Component<PropsType, StateType> {
         }
     }
 
+    renderHeader(): Node {
+        return (
+            <Header>
+                <Locale stringKey={('JOIN_GAME': LangKeyType)}/>
+            </Header>
+        );
+    }
+
     render(): Node {
         const view = this;
         const {props, state} = view;
@@ -94,28 +107,22 @@ class JoinRoom extends Component<PropsType, StateType> {
         if (state.roomDataList.length === 0) {
             return (
                 <Page>
-                    <Header>
-                        Join Into Room
-                    </Header>
-                    <Form>
+                    {view.renderHeader()}
+                    <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                         <Fieldset className={servicesStyle.ta_c}>
-                            No open rooms,
-                            {' '}
-                            <br/>
-                            {' '}
-                            but you can create your own...
+                            <Locale stringKey={('MESSAGE__NO_OPEN_GAME': LangKeyType)}/>
                         </Fieldset>
-                    </Form>
+                        <ButtonLink to={routes.createRoomOnline}>
+                            <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
+                        </ButtonLink>
+                    </ButtonListWrapper>
                 </Page>
             );
         }
 
         return (
             <Page>
-                <Header>
-                    Join Into Room
-                </Header>
-
+                {view.renderHeader()}
                 <Form>
                     <Fieldset>
                         {state.roomDataList
