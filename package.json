@@ -65,6 +65,7 @@
     "image-webpack-loader": "^4.3.1",
     "mini-css-extract-plugin": "^0.4.1",
     "node-sass": "^4.9.2",
+    "optimize-css-assets-webpack-plugin": "^4.0.3",
     "postcss-loader": "^2.1.6",
     "redux-devtools-extension": "^2.13.5",
     "sass-loader": "^7.0.3",
