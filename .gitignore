@@ -10,10 +10,10 @@ npm-debug.log*
 
 # npm
 node_modules
-/package-lock.json
+package-lock.json
 
 # Dist
 /dist/
 
 # reports
-/flow-coverage
+flow-coverage
