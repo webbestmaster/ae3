@@ -94,7 +94,7 @@ class JoinRoom extends Component<PropsType, StateType> {
         }
     }
 
-    renderHeader(): Node {
+    static renderHeader(): Node {
         return (
             <Header>
                 <Locale stringKey={('JOIN_GAME': LangKeyType)}/>
@@ -109,7 +109,7 @@ class JoinRoom extends Component<PropsType, StateType> {
         if (state.roomDataList.length === 0) {
             return (
                 <Page>
-                    {view.renderHeader()}
+                    {JoinRoom.renderHeader()}
                     <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                         <Fieldset className={servicesStyle.ta_c}>
                             <Locale stringKey={('MESSAGE__NO_OPEN_GAME': LangKeyType)}/>
@@ -124,7 +124,7 @@ class JoinRoom extends Component<PropsType, StateType> {
 
         return (
             <Page>
-                {view.renderHeader()}
+                {JoinRoom.renderHeader()}
                 <Form>
                     <Fieldset>
                         {state.roomDataList
