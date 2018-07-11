@@ -6,12 +6,10 @@ import type {MapType} from './../../type';
 
 export const myFirstMap: MapType = {
     meta: {
-        en: {
-            local: 'en',
+        'en-US': {
             name: 'my first map'
         },
-        ru: {
-            local: 'ru',
+        'ru-RU': {
             name: 'моя первая карта'
         }
     },

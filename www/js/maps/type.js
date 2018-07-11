@@ -92,12 +92,10 @@ export type MapUserType = {|
 
 export type MapType = {|
     meta: {
-        en: {
-            local: string,
+        'en-US': {
             name: string
         },
-        ru: {
-            local: string,
+        'ru-RU': {
             name: string
         }
     },

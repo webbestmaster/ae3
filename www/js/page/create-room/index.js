@@ -26,6 +26,7 @@ import serviceStyle from './../../../css/service.scss';
 import uiStyle from './../../components/ui/ui.scss';
 import type {LangKeyType} from './../../components/locale/translation/type';
 import Locale from './../../components/locale';
+import type {LocaleType} from './../../components/locale/reducer';
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
@@ -37,7 +38,8 @@ type StateType = {|
 
 type PropsType = {|
     ...ContextRouter,
-    auth: AuthType
+    auth: AuthType,
+    locale: LocaleType
 |};
 
 class CreateRoom extends Component<PropsType, StateType> {
@@ -160,7 +162,7 @@ class CreateRoom extends Component<PropsType, StateType> {
 
     renderSelectMap(): Node {
         const view = this;
-        const {state} = view;
+        const {props} = view;
 
         return (
             <Fieldset>
@@ -168,9 +170,9 @@ class CreateRoom extends Component<PropsType, StateType> {
                     return mapList
                         .map((map: MapType, mapIndex: number): Node => {
                             return (
-                                <div key={map.meta.en.name}>
+                                <div key={map.meta['en-US'].name}>
                                     <h3>
-                                        {map.meta.en.name}
+                                        {map.meta[props.locale.name].name}
                                     </h3>
                                     <br/>
                                     <Button
@@ -222,7 +224,8 @@ class CreateRoom extends Component<PropsType, StateType> {
 
 export default connect(
     (state: GlobalStateType): {} => ({
-        auth: state.auth
+        auth: state.auth,
+        locale: state.locale
     }),
     {}
 )(CreateRoom);

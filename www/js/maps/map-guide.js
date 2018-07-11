@@ -2,7 +2,7 @@
 
 export type TeamIdType = 'team-0' | 'team-1' | 'team-2' | 'team-3';
 
-export type MapGuideType = {|
+type MapGuideType = {|
     +defaultMoneyList: Array<number>,
     +defaultUnitLimitList: Array<number>,
     // userIdList: Array<string>,

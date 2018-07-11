@@ -23,6 +23,7 @@ import Locale from './../../components/locale';
 import {ButtonListWrapper} from '../../components/ui/button-list-wrapper';
 import buttonListWrapperStyle from '../../components/ui/button-list-wrapper/style.scss';
 import {ButtonLink} from '../../components/ui/button-link';
+import type {LocaleType} from './../../components/locale/reducer';
 
 type StateType = {|
     // roomIds: Array<string>,
@@ -33,7 +34,8 @@ type StateType = {|
 
 type PropsType = {|
     ...ContextRouter,
-    auth: AuthType
+    auth: AuthType,
+    locale: LocaleType
 |};
 
 class JoinRoom extends Component<PropsType, StateType> {
@@ -140,7 +142,7 @@ class JoinRoom extends Component<PropsType, StateType> {
                                     >
                                         {roomData.roomId}
                                         {' - '}
-                                        {roomData.settings.map.meta.en.name}
+                                        {roomData.settings.map.meta[props.locale.name].name}
                                         {' - '}
                                         {roomData.userList.length}
                                         {' '}
@@ -159,7 +161,8 @@ class JoinRoom extends Component<PropsType, StateType> {
 
 export default connect(
     (state: GlobalStateType): {} => ({
-        auth: state.auth
+        auth: state.auth,
+        locale: state.locale
     }),
     {}
 )(JoinRoom);

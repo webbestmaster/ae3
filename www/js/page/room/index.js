@@ -34,6 +34,8 @@ import BottomBar from './../../components/ui/bottom-bar';
 import {getRoomState} from './../join-room/helper';
 import type {ContextRouter} from 'react-router-dom';
 import {localSocketIoClient} from './../../module/socket-local';
+import type {GlobalStateType} from './../../app-reducer';
+import type {LocaleType} from './../../components/locale/reducer';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -43,7 +45,8 @@ type StateType = {|
 |};
 
 type PropsType = {|
-    ...ContextRouter
+    ...ContextRouter,
+    locale: LocaleType
 |};
 
 class Room extends Component<PropsType, StateType> {
@@ -329,7 +332,7 @@ class Room extends Component<PropsType, StateType> {
                         <FormHeader>
                             Map:
                         </FormHeader>
-                        {state.settings && state.settings.map.meta.en.name}
+                        {state.settings && state.settings.map.meta[props.locale.name].name}
                     </Fieldset>
 
                     <Fieldset>
@@ -402,8 +405,8 @@ class Room extends Component<PropsType, StateType> {
 }
 
 export default connect(
-    (state: {}): {} => ({
-        // app: state.app
+    (state: GlobalStateType): {} => ({
+        locale: state.locale
     }),
     {}
 )(Room);
