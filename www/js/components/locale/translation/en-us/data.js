@@ -12,6 +12,7 @@ export const enUs: LangDataType = {
     JOIN_GAME: 'Join Game',
     MAPS: 'Maps',
     MESSAGE__NO_OPEN_GAME: 'No open games, but you can create your own...',
+    LOADING: 'Loading',
     SPACE: ' '
     /* eslint-enable id-match */
 };

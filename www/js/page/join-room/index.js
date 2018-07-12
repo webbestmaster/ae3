@@ -17,7 +17,7 @@ import type {RoomDataType} from './helper';
 import {getRoomState} from './helper';
 import type {ContextRouter} from 'react-router-dom';
 import {isOnLineRoomType} from '../../components/game/model/helper';
-import servicesStyle from './../../../css/service.scss';
+import serviceStyle from './../../../css/service.scss';
 import type {LangKeyType} from '../../components/locale/translation/type';
 import Locale from './../../components/locale';
 import {ButtonListWrapper} from '../../components/ui/button-list-wrapper';
@@ -27,7 +27,7 @@ import type {LocaleType} from './../../components/locale/reducer';
 
 type StateType = {|
     // roomIds: Array<string>,
-    roomDataList: Array<RoomDataType>
+    roomDataList: Array<RoomDataType> | null
     // settings: AllRoomSettingsType,
     // userList: Array<ServerUserType>
 |};
@@ -48,7 +48,7 @@ class JoinRoom extends Component<PropsType, StateType> {
         const view = this;
 
         view.state = {
-            roomDataList: []
+            roomDataList: null
         };
     }
 
@@ -105,13 +105,31 @@ class JoinRoom extends Component<PropsType, StateType> {
     render(): Node {
         const view = this;
         const {props, state} = view;
+        const {roomDataList} = state;
 
-        if (state.roomDataList.length === 0) {
+        if (roomDataList === null) {
             return (
                 <Page>
                     {JoinRoom.renderHeader()}
                     <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
-                        <Fieldset className={servicesStyle.ta_c}>
+                        <Fieldset className={serviceStyle.ta_c}>
+                            <span className={serviceStyle.zero_opacity}>
+                                ...
+                            </span>
+                            <Locale stringKey={('LOADING': LangKeyType)}/>
+                            ...
+                        </Fieldset>
+                    </ButtonListWrapper>
+                </Page>
+            );
+        }
+
+        if (roomDataList.length === 0) {
+            return (
+                <Page>
+                    {JoinRoom.renderHeader()}
+                    <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
+                        <Fieldset className={serviceStyle.ta_c}>
                             <Locale stringKey={('MESSAGE__NO_OPEN_GAME': LangKeyType)}/>
                         </Fieldset>
                         <ButtonLink to={routes.createRoomOnline}>
@@ -125,35 +143,33 @@ class JoinRoom extends Component<PropsType, StateType> {
         return (
             <Page>
                 {JoinRoom.renderHeader()}
-                <Form>
-                    <Fieldset>
-                        {state.roomDataList
-                            .map((roomData: RoomDataType): Node => {
-                                return (
-                                    <p
-                                        style={{
-                                            padding: 10,
-                                            cursor: 'pointer'
-                                        }}
-                                        onClick={async (): Promise<void> => {
-                                            const result = view.joinRoom(roomData.roomId);
-                                        }}
-                                        key={roomData.roomId}
-                                    >
-                                        {roomData.roomId}
-                                        {' - '}
-                                        {roomData.settings.map.meta[props.locale.name].name}
-                                        {' - '}
-                                        {roomData.userList.length}
-                                        {' '}
-                                        /
-                                        {' '}
-                                        {roomData.maxUserSize}
-                                    </p>
-                                );
-                            })}
-                    </Fieldset>
-                </Form>
+                <div className={serviceStyle.grow_1}>
+                    {roomDataList
+                        .map((roomData: RoomDataType): Node => {
+                            return (
+                                <p
+                                    style={{
+                                        padding: 10,
+                                        cursor: 'pointer'
+                                    }}
+                                    onClick={async (): Promise<void> => {
+                                        const result = view.joinRoom(roomData.roomId);
+                                    }}
+                                    key={roomData.roomId}
+                                >
+                                    {roomData.roomId}
+                                    {' - '}
+                                    {roomData.settings.map.meta[props.locale.name].name}
+                                    {' - '}
+                                    {roomData.userList.length}
+                                    {' '}
+                                    /
+                                    {' '}
+                                    {roomData.maxUserSize}
+                                </p>
+                            );
+                        })}
+                </div>
             </Page>
         );
     }
