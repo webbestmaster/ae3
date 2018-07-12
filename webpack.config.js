@@ -246,7 +246,7 @@ const webpackConfig = {
             chunkFilename: IS_DEVELOPMENT ? '[id].css' : '[id].[hash:6].css'
         }),
         new ScriptExtHtmlWebpackPlugin({defaultAttribute: 'defer'}),
-        new CopyWebpackPlugin([{from: './www/favicon.ico', to: './favicon.ico'}], {debug: 'info'}),
+        new CopyWebpackPlugin([{from: './www/favicon.ico', to: './favicon.ico'}], {debug: false}),
         new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
     ]
 };
