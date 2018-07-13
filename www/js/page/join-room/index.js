@@ -163,40 +163,6 @@ class JoinRoom extends Component<PropsType, StateType> {
                 {JoinRoom.renderHeader()}
                 <Scroll>
                     <div className={serviceStyle.grow_1}>
-                        {new Array(100).join(' ').split('').map((): Node => {
-                            return (
-                                <div
-                                    key={Math.random()}
-                                    className={serviceStyle.grow_1}
-                                >
-                                    {roomDataList
-                                        .map((roomData: RoomDataType): Node => {
-                                            return (
-                                                <Button
-                                                    onClick={async (): Promise<void> => {
-                                                        const result = await view.joinRoom(roomData.roomId);
-                                                    }}
-                                                    className={style.open_room_item}
-                                                    key={roomData.roomId}
-                                                >
-                                                    <div className={style.right_arrow}>
-                                                        &gt;&gt;
-                                                    </div>
-                                                    <p className={serviceStyle.ellipsis}>
-                                                        {'['}
-                                                        {roomData.userList.length}
-                                                        {'/'}
-                                                        {roomData.maxUserSize}
-                                                        {'] '}
-                                                        {roomData.settings.map.meta[props.locale.name].name}
-                                                    </p>
-                                                </Button>
-                                            );
-                                        })}
-                                </div>
-                            );
-                        })}
-
                         {roomDataList
                             .map((roomData: RoomDataType): Node => {
                                 return (
@@ -218,7 +184,6 @@ class JoinRoom extends Component<PropsType, StateType> {
                                             {'] '}
                                             {roomData.settings.map.meta[props.locale.name].name}
                                         </p>
-                                        <p/>
                                     </Button>
                                 );
                             })}

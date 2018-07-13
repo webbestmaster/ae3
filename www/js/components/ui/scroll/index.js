@@ -65,13 +65,7 @@ export default class Scroll extends Component<StateType, PropsType> {
             mousewheel: true
         });
 
-        return new Promise((resolve: () => void) => {
-            // need to fix swiper size
-            requestAnimationFrame(() => {
-                window.dispatchEvent(new Event('resize'));
-                resolve();
-            });
-        });
+        return view.recount();
     }
 
     componentDidMount() {
@@ -81,6 +75,23 @@ export default class Scroll extends Component<StateType, PropsType> {
             .then(() => {
                 console.log('swiper initialized');
             });
+    }
+
+    componentDidUpdate() {
+        const view = this;
+
+        view.recount().then(() => {
+            console.log('swiper recounted');
+        });
+    }
+
+    async recount(): Promise<void> {
+        return new Promise((resolve: () => void) => {
+            requestAnimationFrame(() => {
+                window.dispatchEvent(new Event('resize'));
+                requestAnimationFrame(resolve);
+            });
+        });
     }
 
     renderSwiper(): Node {

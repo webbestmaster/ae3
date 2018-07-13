@@ -27,6 +27,8 @@ import Button from './../../components/ui/button';
 import Header from './../../components/ui/header';
 import BottomBar from './../../components/ui/bottom-bar';
 import {storeAction} from './provider';
+import Scroll from './../../components/ui/scroll';
+import style from './style.scss';
 
 const storeViewId = 'store';
 
@@ -279,27 +281,13 @@ class Store extends Component<PropsType, StateType> {
         return (
             <Page>
                 <Header className={serviceStyle.ta_r}>
-                    <div
-                        onClick={() => {
-                            props.history.goBack();
-                        }}
-                        style={{
-                            position: 'relative',
-                            fontSize: 'inherit',
-                            zIndex: 1,
-                            cursor: 'pointer'
-                        }}
-                        className={serviceStyle.fl_l}
-                    >
-                        &lt;&lt;
-                    </div>
                     Store
                 </Header>
 
-                <div className={serviceStyle.grow_1}>
-                    <div>
+                <div className={style.unit_list_wrapper}>
+                    <Scroll>
                         {view.renderUnitList()}
-                    </div>
+                    </Scroll>
                 </div>
 
                 <BottomBar

@@ -36,6 +36,8 @@ import type {ContextRouter} from 'react-router-dom';
 import {localSocketIoClient} from './../../module/socket-local';
 import type {GlobalStateType} from './../../app-reducer';
 import type {LocaleType} from './../../components/locale/reducer';
+import Scroll from './../../components/ui/scroll';
+import style from './style.scss';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -339,7 +341,11 @@ class Room extends Component<PropsType, StateType> {
                         <FormHeader>
                             User List:
                         </FormHeader>
+                    </Fieldset>
+                </Form>
 
+                <div className={style.player_list_wrapper}>
+                    <Scroll>
                         {(state.userList && state.userList || [])
                             .map((userData: ServerUserType, userIndex: number): Node => {
                                 return (
@@ -360,45 +366,44 @@ class Room extends Component<PropsType, StateType> {
                                     </div>
                                 );
                             })}
+                    </Scroll>
+                </div>
 
-                    </Fieldset>
+                {amIMasterPlayer ?
+                    <div>
 
-                    {amIMasterPlayer ?
-                        <div>
+                        <Button
+                            onClick={async (): Promise<void> => {
+                                await serverApi.makeUser('bot', roomId);
+                            }}
+                        >
+                            add bot
+                        </Button>
 
-                            <Button
-                                onClick={async (): Promise<void> => {
-                                    await serverApi.makeUser('bot', roomId);
-                                }}
-                            >
-                                add bot
-                            </Button>
+                        {
+                            isOnLineRoomType() ?
+                                null :
+                                <Button
+                                    onClick={async (): Promise<void> => {
+                                        await serverApi.makeUser('human', roomId);
+                                    }}
+                                >
+                                    add human
+                                </Button>
+                        }
 
-                            {
-                                isOnLineRoomType() ?
-                                    null :
-                                    <Button
-                                        onClick={async (): Promise<void> => {
-                                            await serverApi.makeUser('human', roomId);
-                                        }}
-                                    >
-                                        add human
-                                    </Button>
-                            }
+                        <Button
+                            onClick={async (): Promise<void> => {
+                                await view.startGame();
+                            }}
+                        >
+                            start
+                        </Button>
+                    </div> :
+                    <BottomBar>
+                        wait for start...
+                    </BottomBar>}
 
-                            <Button
-                                onClick={async (): Promise<void> => {
-                                    await view.startGame();
-                                }}
-                            >
-                                start
-                            </Button>
-                        </div> :
-                        <BottomBar>
-                            wait for start...
-                        </BottomBar>}
-
-                </Form>
             </Page>
         );
     }

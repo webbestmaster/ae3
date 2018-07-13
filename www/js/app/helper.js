@@ -5,8 +5,8 @@
 import FastClick from 'fastclick';
 import TWEEN from '@tweenjs/tween.js';
 
-import {run as runLocalServer} from '../module/server-local-api';
-import {run as runLocalSocket} from '../module/socket-local';
+import {run as runLocalServer} from './../module/server-local-api';
+import {run as runLocalSocket} from './../module/socket-local';
 
 export async function initializeEnvironment(): Promise<void> {
     const {document} = window;
@@ -14,6 +14,7 @@ export async function initializeEnvironment(): Promise<void> {
     // reduce 300ms delay
     FastClick.attach(window.document.body);
 
+    // run Tween.js updater
     (function animate() {
         window.requestAnimationFrame(animate);
         TWEEN.update();
@@ -23,6 +24,11 @@ export async function initializeEnvironment(): Promise<void> {
     document.addEventListener('gesturestart', (evt: Event) => {
         evt.preventDefault();
     });
+
+    // disable extra scroll on iOS, use Scroll component
+    document.addEventListener('touchmove', (evt: Event) => {
+        evt.preventDefault();
+    }, false);
 
     await runLocalServer()
         .then(() => {

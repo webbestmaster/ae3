@@ -23,10 +23,11 @@ import * as mapHash from './../../maps/default/map-list';
 import type {ContextRouter} from 'react-router-dom';
 import {getRoomType, isOnLineRoomType} from './../../components/game/model/helper';
 import serviceStyle from './../../../css/service.scss';
-import uiStyle from './../../components/ui/ui.scss';
+import style from './style.scss';
 import type {LangKeyType} from './../../components/locale/translation/type';
 import Locale from './../../components/locale';
 import type {LocaleType} from './../../components/locale/reducer';
+import Scroll from './../../components/ui/scroll';
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
@@ -165,32 +166,29 @@ class CreateRoom extends Component<PropsType, StateType> {
         const {props} = view;
 
         return (
-            <Fieldset>
-                {new Array(100).join('-').split('').map((): Node[] => {
-                    return mapList
-                        .map((map: MapType, mapIndex: number): Node => {
-                            return (
-                                <div key={map.meta['en-US'].name}>
-                                    <h3>
-                                        {map.meta[props.locale.name].name}
-                                    </h3>
-                                    <br/>
-                                    <Button
-                                        onClick={async (): Promise<void> => {
-                                            view.setState({mapIndex});
-                                            const result = await view.createRoom();
-                                        }}
-                                    >
-                                        <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
-                                    </Button>
-                                    <br/>
-                                    <br/>
-                                </div>
-                            );
-                        });
-                })}
-
-            </Fieldset>
+            <Scroll>
+                {mapList
+                    .map((map: MapType, mapIndex: number): Node => {
+                        return (
+                            <div key={map.meta['en-US'].name}>
+                                <h3>
+                                    {map.meta[props.locale.name].name}
+                                </h3>
+                                <br/>
+                                <Button
+                                    onClick={async (): Promise<void> => {
+                                        view.setState({mapIndex});
+                                        const result = await view.createRoom();
+                                    }}
+                                >
+                                    <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
+                                </Button>
+                                <br/>
+                                <br/>
+                            </div>
+                        );
+                    })}
+            </Scroll>
         );
     }
 
@@ -214,7 +212,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                     </FormHeader>
                 </Form>
 
-                <div className={serviceStyle.grow_1}>
+                <div className={style.map_list_wrapper}>
                     {view.renderSelectMap()}
                 </div>
             </Page>
