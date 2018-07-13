@@ -1,6 +1,6 @@
 // @flow
 
-type OptionsType = {|
+type SocketIoOptionsType = {|
     transports: ['websocket'],
     'force new connection': true
 |};
@@ -13,5 +13,5 @@ type SocketType = {|
 |};
 
 declare module 'socket.io-client' {
-    declare export function connect(url: string, options: OptionsType): SocketType;
+    declare export function connect(url: string, options: SocketIoOptionsType): SocketType;
 }

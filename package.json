@@ -38,6 +38,7 @@
     "redux-thunk": "^2.3.0",
     "sha1": "^1.1.1",
     "socket.io-client": "^2.1.1",
+    "swiper": "^4.3.3",
     "timer-stopwatch": "^0.2.0"
   },
   "devDependencies": {

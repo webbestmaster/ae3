@@ -26,6 +26,7 @@ import {ButtonLink} from '../../components/ui/button-link';
 import {Button} from '../../components/ui/button';
 import type {LocaleType} from './../../components/locale/reducer';
 import style from './style.scss';
+import Scroll from './../../components/ui/scroll';
 
 type StateType = {|
     // roomIds: Array<string>,
@@ -160,68 +161,69 @@ class JoinRoom extends Component<PropsType, StateType> {
         return (
             <Page className={pageClassName}>
                 {JoinRoom.renderHeader()}
-
-                <div className={serviceStyle.grow_1}>
-                    {new Array(100).join(' ').split('').map((): Node => {
-                        return (
-                            <div
-                                key={Math.random()}
-                                className={serviceStyle.grow_1}
-                            >
-                                {roomDataList
-                                    .map((roomData: RoomDataType): Node => {
-                                        return (
-                                            <Button
-                                                onClick={async (): Promise<void> => {
-                                                    const result = await view.joinRoom(roomData.roomId);
-                                                }}
-                                                className={style.open_room_item}
-                                                key={roomData.roomId}
-                                            >
-                                                <div className={style.right_arrow}>
-                                                    &gt;&gt;
-                                                </div>
-                                                <p className={serviceStyle.ellipsis}>
-                                                    {'['}
-                                                    {roomData.userList.length}
-                                                    {'/'}
-                                                    {roomData.maxUserSize}
-                                                    {'] '}
-                                                    {roomData.settings.map.meta[props.locale.name].name}
-                                                </p>
-                                            </Button>
-                                        );
-                                    })}
-                            </div>
-                        );
-                    })}
-
-                    {roomDataList
-                        .map((roomData: RoomDataType): Node => {
+                <Scroll>
+                    <div className={serviceStyle.grow_1}>
+                        {new Array(100).join(' ').split('').map((): Node => {
                             return (
-                                <Button
-                                    onClick={async (): Promise<void> => {
-                                        const result = await view.joinRoom(roomData.roomId);
-                                    }}
-                                    className={style.open_room_item}
-                                    key={roomData.roomId}
+                                <div
+                                    key={Math.random()}
+                                    className={serviceStyle.grow_1}
                                 >
-                                    <div className={style.right_arrow}>
-                                        &gt;&gt;
-                                    </div>
-                                    <p className={serviceStyle.ellipsis}>
-                                        {'['}
-                                        {roomData.userList.length}
-                                        {'/'}
-                                        {roomData.maxUserSize}
-                                        {'] '}
-                                        {roomData.settings.map.meta[props.locale.name].name}
-                                    </p>
-                                    <p/>
-                                </Button>
+                                    {roomDataList
+                                        .map((roomData: RoomDataType): Node => {
+                                            return (
+                                                <Button
+                                                    onClick={async (): Promise<void> => {
+                                                        const result = await view.joinRoom(roomData.roomId);
+                                                    }}
+                                                    className={style.open_room_item}
+                                                    key={roomData.roomId}
+                                                >
+                                                    <div className={style.right_arrow}>
+                                                        &gt;&gt;
+                                                    </div>
+                                                    <p className={serviceStyle.ellipsis}>
+                                                        {'['}
+                                                        {roomData.userList.length}
+                                                        {'/'}
+                                                        {roomData.maxUserSize}
+                                                        {'] '}
+                                                        {roomData.settings.map.meta[props.locale.name].name}
+                                                    </p>
+                                                </Button>
+                                            );
+                                        })}
+                                </div>
                             );
                         })}
-                </div>
+
+                        {roomDataList
+                            .map((roomData: RoomDataType): Node => {
+                                return (
+                                    <Button
+                                        onClick={async (): Promise<void> => {
+                                            const result = await view.joinRoom(roomData.roomId);
+                                        }}
+                                        className={style.open_room_item}
+                                        key={roomData.roomId}
+                                    >
+                                        <div className={style.right_arrow}>
+                                            &gt;&gt;
+                                        </div>
+                                        <p className={serviceStyle.ellipsis}>
+                                            {'['}
+                                            {roomData.userList.length}
+                                            {'/'}
+                                            {roomData.maxUserSize}
+                                            {'] '}
+                                            {roomData.settings.map.meta[props.locale.name].name}
+                                        </p>
+                                        <p/>
+                                    </Button>
+                                );
+                            })}
+                    </div>
+                </Scroll>
             </Page>
         );
     }

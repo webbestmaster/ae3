@@ -1,0 +1,24 @@
+.wrapper {
+    flex-grow: 1;
+    position: relative;
+}
+
+.container {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+.swiper_container {
+    height: 100%;
+    position: relative;
+}
+
+.swiper_wrapper {
+    //display: block;
+}
+
+.swiper_slide {
+    //display: block;
+    height: auto;
+}

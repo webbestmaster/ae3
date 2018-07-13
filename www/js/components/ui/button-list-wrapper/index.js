@@ -11,7 +11,7 @@ import type {GlobalStateType} from './../../../app-reducer';
 import style from './style.scss';
 
 type PropsType = {|
-    children: Node,
+    children: Array<Node>,
     className?: string
 |};
 
