@@ -189,7 +189,6 @@ class JoinRoom extends Component<PropsType, StateType> {
                                                     {'] '}
                                                     {roomData.settings.map.meta[props.locale.name].name}
                                                 </p>
-                                                <p/>
                                             </Button>
                                         );
                                     })}
