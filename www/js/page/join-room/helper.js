@@ -41,7 +41,7 @@ export async function getRoomState(roomId: string): Promise<RoomDataType | null>
     };
 }
 
-function getMaxUserListSize(map: MapType): number {
+export function getMaxUserListSize(map: MapType): number {
     const idList: Array<string> = [];
 
     map.units.forEach((unit: UnitType) => {

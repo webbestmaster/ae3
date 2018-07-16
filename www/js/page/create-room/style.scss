@@ -1,4 +1,28 @@
-.map_list_wrapper {
-    display: flex;
-    flex-grow: 1;
+.map_item {
+    border: 1px solid #fff;
+    display: block;
+    margin: 0 8px 10px;
+    padding: 4px 3px 0;
+}
+
+.map_item__map_name {
+    display: block;
+    font-size: 16px;
+    padding-top: 11px;
+}
+
+.button__show_info,
+%button--show-info {
+    float: left;
+    margin-right: 5px;
+    min-width: auto;
+    width: auto;
+}
+
+.button__create_room {
+    @extend %button--show-info;
+
+    float: right;
+    margin-left: 6px;
+    margin-right: 0;
 }

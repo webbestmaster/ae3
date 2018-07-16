@@ -28,13 +28,16 @@ import type {LangKeyType} from './../../components/locale/translation/type';
 import Locale from './../../components/locale';
 import type {LocaleType} from './../../components/locale/reducer';
 import Scroll from './../../components/ui/scroll';
+import {getMaxUserListSize} from './../join-room/helper';
+import classnames from 'classnames';
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
 type StateType = {|
     mapIndex: number,
     defaultMoney: number,
-    unitLimit: number
+    unitLimit: number,
+    openShowInfoMapList: Array<string>
 |};
 
 type PropsType = {|
@@ -55,8 +58,39 @@ class CreateRoom extends Component<PropsType, StateType> {
         view.state = {
             mapIndex: 0,
             defaultMoney: mapGuide.defaultMoneyList[0],
-            unitLimit: mapGuide.defaultUnitLimitList[0]
+            unitLimit: mapGuide.defaultUnitLimitList[0],
+            openShowInfoMapList: []
         };
+    }
+
+    addToShowInfoMapList(mapName: string) {
+        const view = this;
+        const {state} = view;
+        const currentRoomList = JSON.parse(JSON.stringify(state.openShowInfoMapList));
+
+        if (currentRoomList.includes(mapName)) {
+            console.error(mapName, 'already in openShowInfoMapList');
+            return;
+        }
+
+        currentRoomList.push(mapName);
+
+        view.setState({openShowInfoMapList: currentRoomList});
+    }
+
+    removeFromShowInfoMapList(mapName: string) {
+        const view = this;
+        const {state} = view;
+        const currentRoomList = JSON.parse(JSON.stringify(state.openShowInfoMapList));
+
+        if (!currentRoomList.includes(mapName)) {
+            console.error(mapName, 'has no exists in openShowInfoMapList');
+            return;
+        }
+
+        currentRoomList.splice(currentRoomList.indexOf(mapName), 1);
+
+        view.setState({openShowInfoMapList: currentRoomList});
     }
 
     async createRoom(): Promise<string | null> { // eslint-disable-line max-statements
@@ -163,28 +197,52 @@ class CreateRoom extends Component<PropsType, StateType> {
 
     renderSelectMap(): Node {
         const view = this;
-        const {props} = view;
+        const {props, state} = view;
+        const {openShowInfoMapList} = state;
 
         return (
             <Scroll>
                 {mapList
                     .map((map: MapType, mapIndex: number): Node => {
+                        const mapId = map.meta['en-US'].name;
+
                         return (
-                            <div key={map.meta['en-US'].name}>
-                                <h3>
-                                    {map.meta[props.locale.name].name}
-                                </h3>
-                                <br/>
+                            <div
+                                key={mapId}
+                                className={classnames(style.map_item, serviceStyle.clear_self)}
+                            >
+                                {
+                                    openShowInfoMapList.includes(mapId) ?
+                                        <Button
+                                            onClick={(): void => view.removeFromShowInfoMapList(mapId)}
+                                            className={style.button__show_info}
+                                        >
+                                            [-]
+                                        </Button> :
+                                        <Button
+                                            onClick={(): void => view.addToShowInfoMapList(mapId)}
+                                            className={style.button__show_info}
+                                        >
+                                            [+]
+                                        </Button>
+                                }
+
                                 <Button
                                     onClick={async (): Promise<void> => {
                                         view.setState({mapIndex});
                                         const result = await view.createRoom();
                                     }}
+                                    className={style.button__create_room}
                                 >
-                                    <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
+                                    &gt;&gt;
                                 </Button>
-                                <br/>
-                                <br/>
+
+                                <div className={style.map_item__map_name}>
+                                    <p className={serviceStyle.ellipsis}>
+                                        {'[' + getMaxUserListSize(map) + '] '}
+                                        {map.meta[props.locale.name].name}
+                                    </p>
+                                </div>
                             </div>
                         );
                     })}
@@ -212,9 +270,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                     </FormHeader>
                 </Form>
 
-                <div className={style.map_list_wrapper}>
-                    {view.renderSelectMap()}
-                </div>
+                {view.renderSelectMap()}
             </Page>
         );
     }
