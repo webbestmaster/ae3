@@ -116,5 +116,9 @@
 @media screen and (orientation: landscape) {
     .two_blocks_wrapper {
         flex-direction: row;
+
+        .two_blocks_container {
+            width: 50%;
+        }
     }
 }
