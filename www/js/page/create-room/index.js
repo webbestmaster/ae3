@@ -239,7 +239,7 @@ class CreateRoom extends Component<PropsType, StateType> {
 
                                 <div className={style.map_item__map_name}>
                                     <p className={serviceStyle.ellipsis}>
-                                        {'[' + getMaxUserListSize(map) + '] '}
+                                        {'(' + getMaxUserListSize(map) + ') '}
                                         {map.meta[props.locale.name].name}
                                     </p>
                                 </div>
