@@ -58,7 +58,7 @@ export default class Scroll extends Component<StateType, PropsType> {
             direction: 'vertical',
             slidesPerView: 'auto',
             freeMode: true,
-            // watchOverflow: true, // disable this cause swiper has scroll bar and bug after resize
+            watchOverflow: true, // disable this cause swiper has scroll bar and bug after resize
             scrollbar: {
                 el: '.swiper-scrollbar' // eslint-disable-line id-length
             },
