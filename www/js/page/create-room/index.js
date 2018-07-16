@@ -38,7 +38,8 @@ type StateType = {|
     mapIndex: number,
     defaultMoney: number,
     unitLimit: number,
-    openShowInfoMapList: Array<string>
+    openShowInfoMapList: Array<string>,
+    isRoomCreating: boolean
 |};
 
 type PropsType = {|
@@ -60,7 +61,8 @@ class CreateRoom extends Component<PropsType, StateType> {
             mapIndex: 0,
             defaultMoney: mapGuide.defaultMoneyList[0],
             unitLimit: mapGuide.defaultUnitLimitList[0],
-            openShowInfoMapList: []
+            openShowInfoMapList: [],
+            isRoomCreating: false
         };
     }
 
@@ -99,9 +101,13 @@ class CreateRoom extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {auth, history} = props;
 
+        view.setState({isRoomCreating: true});
+
         const createRoomResult = await serverApi.createRoom();
 
-        if (createRoomResult.roomId === null) {
+        view.setState({isRoomCreating: false});
+
+        if (createRoomResult.roomId === '') {
             console.error('can not create a room');
             return null;
         }
@@ -117,6 +123,8 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         map.activeUserId = userId;
 
+        view.setState({isRoomCreating: true});
+
         const setAllRoomSettingsResult = await serverApi.setAllRoomSettings(createRoomResult.roomId, {
             map,
             type: getRoomType()
@@ -128,6 +136,8 @@ class CreateRoom extends Component<PropsType, StateType> {
         });
 
         const joinRoomResult = await serverApi.joinRoom(createRoomResult.roomId, userId, socketId);
+
+        view.setState({isRoomCreating: false});
 
         if (joinRoomResult.roomId === '') {
             return null;
@@ -253,13 +263,11 @@ class CreateRoom extends Component<PropsType, StateType> {
 
     render(): Node {
         const view = this;
-        const isOpen = false;
+        const {state} = view;
 
         return (
             <Page>
-                <Spinner
-                    isOpen={isOpen}
-                />
+                <Spinner isOpen={state.isRoomCreating}/>
                 <Header>
                     <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
                 </Header>

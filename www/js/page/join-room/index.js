@@ -28,6 +28,7 @@ import type {LocaleType} from './../../components/locale/reducer';
 import style from './style.scss';
 import Scroll from './../../components/ui/scroll';
 import classnames from 'classnames';
+import Spinner from './../../components/ui/spinner';
 
 type StateType = {|
     // roomIds: Array<string>,
@@ -162,6 +163,7 @@ class JoinRoom extends Component<PropsType, StateType> {
         return (
             <Page className={pageClassName}>
                 {JoinRoom.renderHeader()}
+                <Spinner isOpen={isRoomsFetching}/>
                 <Scroll>
                     {roomDataList
                         .map((roomData: RoomDataType): Node => {

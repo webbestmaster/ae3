@@ -1,0 +1,28 @@
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner {
+    height: 36px;
+    position: relative;
+    width: 36px;
+
+    &:before {
+        animation: spin 0.5s linear infinite;
+        border: 3px solid #ccc;
+        border-radius: 50%;
+        border-top-color: transparent;
+        box-sizing: border-box;
+        content: '';
+        height: 36px;
+        left: 50%;
+        margin-left: -18px;
+        margin-top: -18px;
+        position: absolute;
+        top: 50%;
+        width: 36px;
+    }
+}
+

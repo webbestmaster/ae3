@@ -33,7 +33,11 @@ export function createRoom(): Promise<CreateRoomType> {
             .then((blob: Response): Promise<CreateRoomType> => blob.json())
             .then((result: CreateRoomType): CreateRoomType => ({
                 roomId: typeof result.roomId === 'string' ? result.roomId : ''
-            }));
+            }))
+            .catch((error: Error): CreateRoomType => {
+                console.error(error);
+                return {roomId: ''};
+            });
     }
 
     return localGet(localServerUrl + '/api/room/create')
@@ -51,7 +55,11 @@ export function joinRoom(roomId: string, userId: string, socketId: string): Prom
             .then((blob: Response): Promise<JoinRoomType> => blob.json())
             .then((result: JoinRoomType): JoinRoomType => ({
                 roomId: typeof result.roomId === 'string' ? result.roomId : ''
-            }));
+            }))
+            .catch((error: Error): JoinRoomType => {
+                console.error(error);
+                return {roomId: ''};
+            });
     }
 
     return localGet(localServerUrl + '/api/room/join/' + [roomId, userId, localSocketIoClient.id].join('/'))
@@ -114,7 +122,11 @@ export function setAllRoomSettings(roomId: string,
             .then((blob: Response): Promise<SetAllRoomSettingsType> => blob.json())
             .then((result: SetAllRoomSettingsType): SetAllRoomSettingsType => ({
                 roomId: typeof result.roomId === 'string' ? result.roomId : ''
-            }));
+            }))
+            .catch((error: Error): SetAllRoomSettingsType => {
+                console.error(error);
+                return {roomId: ''};
+            });
     }
 
     return localPost(localServerUrl + '/api/room/set-all-settings/' + roomId, JSON.stringify(allRoomSettings))

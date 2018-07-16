@@ -5,6 +5,21 @@
 import React, {Component} from 'react';
 import type {Node} from 'react';
 import Dialog from '@material-ui/core/Dialog';
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import style from './style.scss';
+
+const theme = createMuiTheme({
+    overrides: {
+        MuiPaper: { // Name of the component ⚛️ / style sheet
+            root: { // Name of the rule
+                // Some CSS
+                boxShadow: 'none !important',
+                backgroundColor: 'transparent !important'
+            }
+        }
+    }
+});
 
 type StateType = void;
 type PropsType = {|
@@ -20,22 +35,17 @@ export default class Spinner extends Component<PropsType, StateType> {
         const {props} = view;
 
         return (
-            <Dialog
-                open={props.isOpen}
-                keepMounted
-                aria-labelledby="alert-dialog-slide-title"
-                aria-describedby="alert-dialog-slide-description"
-            >
-                <div style={{color: '#c00'}}>
-                    smth
-                </div>
-                <div style={{color: '#c00'}}>
-                    smth
-                </div>
-                <div style={{color: '#c00'}}>
-                    smth
-                </div>
-            </Dialog>
+            <MuiThemeProvider theme={theme}>
+                <Dialog
+                    open={props.isOpen}
+                    keepMounted
+                    aria-labelledby="alert-dialog-slide-title"
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <div className={style.spinner}/>
+                </Dialog>
+            </MuiThemeProvider>
+
         );
     }
 }
