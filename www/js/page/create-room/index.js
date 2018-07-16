@@ -30,6 +30,7 @@ import type {LocaleType} from './../../components/locale/reducer';
 import Scroll from './../../components/ui/scroll';
 import {getMaxUserListSize} from './../join-room/helper';
 import classnames from 'classnames';
+import Spinner from './../../components/ui/spinner';
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
@@ -252,9 +253,13 @@ class CreateRoom extends Component<PropsType, StateType> {
 
     render(): Node {
         const view = this;
+        const isOpen = true;
 
         return (
             <Page>
+                <Spinner
+                    // isOpen={isOpen}
+                />
                 <Header>
                     <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
                 </Header>
