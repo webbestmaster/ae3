@@ -1,11 +1,28 @@
+$border-style: 1px solid #fff;
+
+.map_list__form {
+    position: relative;
+    z-index: 2;
+
+    &:after {
+        border-bottom: $border-style;
+        bottom: -1px;
+        content: '';
+        height: 0;
+        left: 0;
+        position: absolute;
+        width: 100%;
+    }
+}
+
 .map_item {
-    border-top: 1px solid #fff;
+    border-top: $border-style;
     display: block;
     //margin: 0 8px 10px;
     padding: 6px 9px 0;
 
     &:last-child {
-        border-bottom: 1px solid #fff;
+        border-bottom: $border-style;
     }
 }
 
@@ -20,7 +37,9 @@
     float: left;
     margin-right: 5px;
     min-width: auto;
-    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+    width: 47px;
 }
 
 .button__create_room {

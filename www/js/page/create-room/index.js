@@ -272,7 +272,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                     <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
                 </Header>
 
-                <Form>
+                <Form className={style.map_list__form}>
                     <div className={serviceStyle.line}>
                         {view.senderMoneySelect()}
                         {view.senderUnitLimitSelect()}
@@ -282,7 +282,6 @@ class CreateRoom extends Component<PropsType, StateType> {
                         :
                     </FormHeader>
                 </Form>
-
                 {view.renderSelectMap()}
             </Page>
         );
