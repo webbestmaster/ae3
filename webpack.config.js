@@ -35,9 +35,9 @@ const imageRETest = /\.(png|jpg|jpeg|gif|svg)(\?[a-z0-9=&.]+)?$/;
 
 const webpackConfig = {
     entry: [
+        './www/css/root.scss',
         'babel-polyfill',
         'whatwg-fetch',
-        './www/css/root.scss',
         './www/js/index.js'
     ],
     output: {
