@@ -38,6 +38,7 @@ import type {GlobalStateType} from './../../app-reducer';
 import type {LocaleType} from './../../components/locale/reducer';
 import Scroll from './../../components/ui/scroll';
 import style from './style.scss';
+import {getMaxUserListSize} from '../join-room/helper';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -310,64 +311,85 @@ class Room extends Component<PropsType, StateType> {
         });
     }
 
+    renderUserList(): Array<Node> | null {
+        const view = this;
+        const {state} = view;
+        const {userList} = state;
+
+        if (!userList || userList.length === 0) {
+            return null;
+        }
+
+        return userList
+            .map((userData: ServerUserType, userIndex: number): Node => {
+                return (
+                    <div key={userData.userId}>
+                        {userIndex === 0 ? <hr/> : null}
+                        userId:
+                        {' '}
+                        {userData.userId}
+                        <br/>
+                        teamId:
+                        {' '}
+                        {userData.teamId}
+                        <br/>
+                        socketId:
+                        {' '}
+                        {userData.socketId}
+                        <hr/>
+                    </div>
+                );
+            });
+    }
+
+    renderForm(): Node {
+        const view = this;
+        const {props, state} = view;
+        const {settings} = state;
+
+        return (
+            <Form>
+                <Fieldset>
+                    <FormHeader>
+                        Map:
+                    </FormHeader>
+                    {settings && settings.map.meta[props.locale.name].name}
+                </Fieldset>
+
+                <Fieldset>
+                    <FormHeader>
+                        User List:
+                    </FormHeader>
+                    {view.renderUserList()}
+                </Fieldset>
+            </Form>
+        );
+    }
+
     render(): Node { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
+        const {settings, userList, isGameStart} = state;
         const roomId = props.match.params.roomId || '';
-        const amIMasterPlayer = (state.userList && state.userList || [])
+        const amIMasterPlayer = (userList && userList || [])
             .map((userData: ServerUserType): string => userData.userId)
             .indexOf(user.getId()) === 0;
 
-        if (state.isGameStart === true) {
+        if (isGameStart === true) {
             return <Game roomId={roomId}/>;
         }
 
         return (
             <Page>
                 <Header>
-                    Room
+                    {settings ?
+                        '(' + getMaxUserListSize(settings.map) + ') ' + settings.map.meta[props.locale.name].name :
+                        '\u00A0'
+                    }
                 </Header>
-
-                <Form>
-
-                    <Fieldset>
-                        <FormHeader>
-                            Map:
-                        </FormHeader>
-                        {state.settings && state.settings.map.meta[props.locale.name].name}
-                    </Fieldset>
-
-                    <Fieldset>
-                        <FormHeader>
-                            User List:
-                        </FormHeader>
-                    </Fieldset>
-                </Form>
-
-                <div className={style.player_list_wrapper}>
-                    <Scroll>
-                        {(state.userList && state.userList || [])
-                            .map((userData: ServerUserType, userIndex: number): Node => {
-                                return (
-                                    <div key={userData.userId}>
-                                        {userIndex === 0 ? <hr/> : null}
-                                        userId:
-                                        {' '}
-                                        {userData.userId}
-                                        <br/>
-                                        teamId:
-                                        {' '}
-                                        {userData.teamId}
-                                        <br/>
-                                        socketId:
-                                        {' '}
-                                        {userData.socketId}
-                                        <hr/>
-                                    </div>
-                                );
-                            })}
-                    </Scroll>
-                </div>
+                <Scroll>
+                    {view.renderForm()}
+                </Scroll>
 
                 {amIMasterPlayer ?
                     <div>
