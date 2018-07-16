@@ -10,6 +10,8 @@ import thunk from 'redux-thunk';
 import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
 import {StoreProvider} from './components/store/provider';
+import muiTheme from './components/ui/mui-theme';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 import App from './app';
 
@@ -27,13 +29,17 @@ const composeEnhancers = composeWithDevTools({
 
 const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
 
+/* eslint-disable react/jsx-max-depth */
 render(
     <Provider store={store}>
         <BrowserRouter>
             <StoreProvider>
-                <App/>
+                <MuiThemeProvider theme={muiTheme}>
+                    <App/>
+                </MuiThemeProvider>
             </StoreProvider>
         </BrowserRouter>
     </Provider>,
     window.document.querySelector('.js-app-wrapper')
 );
+/* eslint-enable react/jsx-max-depth */

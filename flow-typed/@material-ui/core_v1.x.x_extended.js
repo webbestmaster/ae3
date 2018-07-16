@@ -29,6 +29,15 @@ declare module '@material-ui/core/DialogTitle' {
 }
 
 
+declare module '@material-ui/core/styles/createMuiTheme' {
+    declare module.exports: $Exports<'material-ui/styles/createMuiTheme'>;
+}
+
+declare module '@material-ui/core/styles/MuiThemeProvider' {
+    declare module.exports: $Exports<'material-ui/styles/MuiThemeProvider'>;
+}
+
+
 // Filename aliases (copy from original file)
 
 /*

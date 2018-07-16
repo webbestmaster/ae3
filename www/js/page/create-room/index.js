@@ -253,12 +253,12 @@ class CreateRoom extends Component<PropsType, StateType> {
 
     render(): Node {
         const view = this;
-        const isOpen = true;
+        const isOpen = false;
 
         return (
             <Page>
                 <Spinner
-                    // isOpen={isOpen}
+                    isOpen={isOpen}
                 />
                 <Header>
                     <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
