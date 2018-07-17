@@ -120,7 +120,11 @@ declare module 'pixi.js' {
         stage: Container,
         renderer: {
             resize(width: number, height: number): void
-        }
+        },
+        stop: () => void,
+        start: () => void,
+        destroy: () => void,
+        render: () => void
     }
 
     declare class AnimatedSprite extends PixiObject {

@@ -67,16 +67,22 @@ export default class MapPreview extends Component<PropsType, StateType> {
             mapSize.width * mapGuide.size.square,
             mapSize.height * mapGuide.size.square,
             {
-                autoStart: false,
                 view: canvas,
-                clearBeforeRender: true,
-                sharedTicker: true,
+                autoStart: false,
+                clearBeforeRender: false,
+                sharedTicker: false,
                 sharedLoader: true,
                 transparent: true,
                 backgroundColor: 0x1099bb,
                 resolution: 1
             }
         );
+
+        // can not find normal way to stop rendering ((
+
+        window.setTimeout(() => {
+            view.app.render();
+        }, 0);
     }
 
     drawLandscape() {
