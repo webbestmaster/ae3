@@ -7,9 +7,12 @@ import TWEEN from '@tweenjs/tween.js';
 
 import {run as runLocalServer} from './../module/server-local-api';
 import {run as runLocalSocket} from './../module/socket-local';
+import * as PIXI from 'pixi.js';
 
 export async function initializeEnvironment(): Promise<void> {
     const {document} = window;
+
+    PIXI.settings.SCALE_MODE = 1; // eslint-disable-line id-match
 
     // reduce 300ms delay
     FastClick.attach(window.document.body);

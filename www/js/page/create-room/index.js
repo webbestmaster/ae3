@@ -18,10 +18,11 @@ import Form from './../../components/ui/form';
 import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
 import Select from './../../components/ui/select';
+import MapPreview from './../../components/ui/map-preview';
 import type {SelectIconNameType} from './../../components/ui/select/icon';
 import * as mapHash from './../../maps/default/map-list';
 import type {ContextRouter} from 'react-router-dom';
-import {getRoomType, isOnLineRoomType} from './../../components/game/model/helper';
+import {getRoomType, isOnLineRoomType, getMapSize} from './../../components/game/model/helper';
 import serviceStyle from './../../../css/service.scss';
 import style from './style.scss';
 import type {LangKeyType} from './../../components/locale/translation/type';
@@ -216,6 +217,8 @@ class CreateRoom extends Component<PropsType, StateType> {
                 {mapList
                     .map((map: MapType, mapIndex: number): Node => {
                         const mapId = map.meta['en-US'].name;
+                        const isAdditionalInfoOpen = openShowInfoMapList.includes(mapId);
+                        const mapSize = getMapSize(map);
 
                         return (
                             <div
@@ -223,7 +226,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                                 className={classnames(style.map_item, serviceStyle.clear_self)}
                             >
                                 {
-                                    openShowInfoMapList.includes(mapId) ?
+                                    isAdditionalInfoOpen ?
                                         <Button
                                             onClick={(): void => view.removeFromShowInfoMapList(mapId)}
                                             className={style.button__show_info}
@@ -239,9 +242,12 @@ class CreateRoom extends Component<PropsType, StateType> {
                                 }
 
                                 <Button
-                                    onClick={async (): Promise<void> => {
-                                        view.setState({mapIndex});
-                                        const result = await view.createRoom();
+                                    onClick={() => {
+                                        view.setState({mapIndex},
+                                            async (): Promise<void> => {
+                                                const result = await view.createRoom();
+                                            }
+                                        );
                                     }}
                                     className={style.button__create_room}
                                 >
@@ -253,7 +259,22 @@ class CreateRoom extends Component<PropsType, StateType> {
                                         {'(' + getMaxUserListSize(map) + ') '}
                                         {map.meta[props.locale.name].name}
                                     </p>
+                                    <p className={style.map_size}>
+                                        {'['}
+                                        {mapSize.width}
+                                        {' x '}
+                                        {mapSize.height}
+                                        {']'}
+                                    </p>
                                 </div>
+
+                                {isAdditionalInfoOpen ?
+                                    <MapPreview
+                                        className={style.map_preview}
+                                        key="map-preview"
+                                        map={map}
+                                    /> :
+                                    null}
                             </div>
                         );
                     })}

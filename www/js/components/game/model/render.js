@@ -82,8 +82,6 @@ export default class Render {
 
         const worldSize = render.getWorldSize();
 
-        PIXI.settings.SCALE_MODE = 1; // eslint-disable-line id-match
-
         const app = new PIXI.Application(setting.width, setting.height, {
             view: setting.view,
             clearBeforeRender: true,

@@ -28,8 +28,18 @@ $border-style: 1px solid #fff;
 
 .map_item__map_name {
     display: block;
-    font-size: 16px;
-    padding-top: 11px;
+    font-size: 14px;
+    line-height: 21px;
+    padding-top: 3px;
+}
+
+.map_size {
+    display: block;
+    font-size: 14px;
+}
+
+.map_preview {
+    padding: 10px;
 }
 
 .button__show_info,

@@ -1,7 +1,5 @@
 // @flow
 
-/* global window */
-
 /* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';

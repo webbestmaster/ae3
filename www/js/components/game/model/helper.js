@@ -695,3 +695,35 @@ export function isOnLineRoomType(): boolean {
 export function getRoomType(): RoomTypeType {
     return isOnLineRoomType() ? 'on-line' : 'off-line';
 }
+
+type MapSizeDataType = {|
+    +width: number,
+    +height: number,
+    +aspectRatio: number
+|};
+
+export function getMapSize(map: MapType): MapSizeDataType {
+    const defaultData = {
+        width: 0,
+        height: 0,
+        aspectRatio: 0
+    };
+
+    const height = map.landscape.length;
+
+    if (height === 0) {
+        return defaultData;
+    }
+
+    const width = map.landscape[0].length;
+
+    if (width === 0) {
+        return defaultData;
+    }
+
+    return {
+        width,
+        height,
+        aspectRatio: height / width
+    };
+}
