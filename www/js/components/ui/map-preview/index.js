@@ -17,7 +17,8 @@ import {getMapSize} from '../../game/model/helper';
 type StateType = void;
 type PropsType = {|
     map: MapType,
-    className?: string
+    className?: string,
+    canvasClassName?: string
 |};
 
 type NodeType = {|
@@ -118,11 +119,12 @@ export default class MapPreview extends Component<PropsType, StateType> {
         const view = this;
         const {props, node} = view;
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
+        const additionCanvasClassName = typeof props.canvasClassName === 'string' ? ' ' + props.canvasClassName : '';
 
         return (
             <div className={style.wrapper + additionClass}>
                 <canvas
-                    className={style.canvas}
+                    className={style.canvas + additionCanvasClassName}
                     ref={(canvas: HTMLElement | null) => {
                         node.canvas = canvas;
                     }}

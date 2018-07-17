@@ -271,6 +271,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                                 {isAdditionalInfoOpen ?
                                     <MapPreview
                                         className={style.map_preview}
+                                        canvasClassName={style.map_preview_canvas}
                                         key="map-preview"
                                         map={map}
                                     /> :
