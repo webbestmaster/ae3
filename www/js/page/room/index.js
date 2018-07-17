@@ -31,6 +31,7 @@ import Form from './../../components/ui/form';
 import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
 import BottomBar from './../../components/ui/bottom-bar';
+import Spinner from './../../components/ui/spinner';
 import {getRoomState} from './../join-room/helper';
 import type {ContextRouter} from 'react-router-dom';
 import {localSocketIoClient} from './../../module/socket-local';
@@ -44,7 +45,8 @@ type StateType = {|
     settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
     model: MainModel,
-    isGameStart: boolean
+    isGameStart: boolean,
+    isRoomDataFetching: boolean
 |};
 
 type PropsType = {|
@@ -64,7 +66,8 @@ class Room extends Component<PropsType, StateType> {
         view.state = {
             userList: [],
             model: new MainModel(),
-            isGameStart: false
+            isGameStart: false,
+            isRoomDataFetching: true
         };
     }
 
@@ -80,7 +83,11 @@ class Room extends Component<PropsType, StateType> {
             return;
         }
 
+        view.setState({isRoomDataFetching: true});
+
         const roomState = await getRoomState(roomId);
+
+        view.setState({isRoomDataFetching: false});
 
         if (roomState === null || roomState.userList.length > roomState.maxUserSize) {
             console.error('roomState is null or room state is fool', roomState);
@@ -156,6 +163,8 @@ class Room extends Component<PropsType, StateType> {
             return Promise.resolve();
         }
 
+        view.setState({isRoomDataFetching: true});
+
         const roomDataSettings = await serverApi.getAllRoomSettings(roomId);
         const defaultMoney = roomDataSettings.settings.map.defaultMoney;
         const roomDataUsers = await serverApi.getAllRoomUsers(roomId);
@@ -184,6 +193,8 @@ class Room extends Component<PropsType, StateType> {
         view.setState({
             settings: roomDataSettings.settings
         });
+
+        view.setState({isRoomDataFetching: false});
 
         return Promise.resolve();
     }
@@ -369,7 +380,7 @@ class Room extends Component<PropsType, StateType> {
     render(): Node { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
-        const {settings, userList, isGameStart} = state;
+        const {settings, userList, isGameStart, isRoomDataFetching} = state;
         const roomId = props.match.params.roomId || '';
         const amIMasterPlayer = (userList && userList || [])
             .map((userData: ServerUserType): string => userData.userId)
@@ -381,6 +392,7 @@ class Room extends Component<PropsType, StateType> {
 
         return (
             <Page>
+                <Spinner isOpen={isRoomDataFetching}/>
                 <Header>
                     {settings ?
                         '(' + getMaxUserListSize(settings.map) + ') ' + settings.map.meta[props.locale.name].name :
