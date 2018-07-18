@@ -14,6 +14,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import MainModel from './../../lib/main-model/index';
+import classnames from 'classnames';
 
 import {user} from './../../module/user';
 import {socket, type SocketMessageType} from './../../module/socket';
@@ -41,6 +42,7 @@ import type {GlobalStateType} from './../../app-reducer';
 import type {LocaleType} from './../../components/locale/reducer';
 import Scroll from './../../components/ui/scroll';
 import style from './style.scss';
+import serviceStyle from './../../../css/service.scss';
 import createRoomStyle from './../create-room/style.scss';
 import {getMaxUserListSize} from './../join-room/helper';
 import type {LangKeyType} from './../../components/locale/translation/type';
@@ -156,6 +158,16 @@ class Room extends Component<PropsType, StateType> {
 
         model.stopListening();
         localSocketIoClient.removeAllListeners();
+    }
+
+    getMyPlayerIndex(): number {
+        const view = this;
+        const {state} = view;
+        const {userList} = state;
+
+        return userList
+            .map((userData: ServerUserType): string => userData.userId)
+            .indexOf(user.getId());
     }
 
     async onServerUserListChange(): Promise<void> {
@@ -328,35 +340,56 @@ class Room extends Component<PropsType, StateType> {
         });
     }
 
-    renderUserList(): Array<Node> | null {
+    renderUserList(): Node | null {
         const view = this;
         const {state} = view;
         const {userList} = state;
+        const myPlayerIndex = view.getMyPlayerIndex();
 
         if (userList.length === 0) {
             return null;
         }
 
-        return userList
-            .map((userData: ServerUserType, userIndex: number): Node => {
-                return (
-                    <div key={userData.userId}>
-                        {userIndex === 0 ? <hr/> : null}
-                        userId:
-                        {' '}
-                        {userData.userId}
-                        <br/>
-                        teamId:
-                        {' '}
-                        {userData.teamId}
-                        <br/>
-                        socketId:
-                        {' '}
-                        {userData.socketId}
-                        <hr/>
-                    </div>
-                );
-            });
+        return (
+            <div className={style.user_list__wrapper}>
+                {userList
+                    .map((userData: ServerUserType, userIndex: number): Node => {
+                        return (
+                            <div
+                                className={style.user_list__item + ' ' + serviceStyle.clear_self}
+                                key={userData.userId}
+                            >
+                                {myPlayerIndex === 0 && myPlayerIndex !== userIndex ?
+                                    <Button className={style.user_list__remove_user_button}>
+                                        X
+                                    </Button> :
+                                    null
+                                }
+                                <div className={style.user_list__text}>
+                                    <p className={serviceStyle.ellipsis}>
+                                        {userIndex + 1}
+                                        {': '}
+                                        <Locale
+                                            stringKey={((userData.type === 'human' ? 'HUMAN' : 'BOT'): LangKeyType)}
+                                        />
+                                        {myPlayerIndex === userIndex ?
+                                            [
+                                                ' (',
+                                                <Locale
+                                                    key="you"
+                                                    stringKey={('YOU': LangKeyType)}
+                                                />,
+                                                ')'
+                                            ] :
+                                            null
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                        );
+                    })}
+            </div>
+        );
     }
 
     renderForm(): Node {
@@ -410,6 +443,9 @@ class Room extends Component<PropsType, StateType> {
         const buttonList = [
             <Button
                 key="start-button"
+                className={classnames({
+                    [serviceStyle.disabled]: userList.length === 1
+                })}
                 onClick={async (): Promise<void> => {
                     view.setState({isRoomDataFetching: true});
                     await view.startGame();
@@ -460,9 +496,7 @@ class Room extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {settings, userList, isGameStart, isRoomDataFetching} = state;
         const roomId = props.match.params.roomId || '';
-        const myPlayerIndex = userList
-            .map((userData: ServerUserType): string => userData.userId)
-            .indexOf(user.getId());
+        const myPlayerIndex = view.getMyPlayerIndex();
 
         if (isGameStart === true) {
             return <Game roomId={roomId}/>;

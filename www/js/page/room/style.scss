@@ -6,4 +6,39 @@
 .map_preview {
     margin-bottom: -40px;
     padding-bottom: 0;
+    padding-top: 15px;
+}
+
+.user_list__wrapper {
+    display: block;
+    padding-bottom: 10px;
+}
+
+.user_list__item {
+    border-bottom: 1px solid #fff;
+    display: block;
+    min-height: 37px;
+    padding: 6px 9px 0 0;
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+.user_list__text {
+    display: block;
+    font-size: 14px;
+    line-height: 21px;
+    padding-top: 5px;
+}
+
+.user_list__remove_user_button {
+    float: right;
+    line-height: 18px;
+    margin-left: 6px;
+    margin-right: 0;
+    min-height: auto;
+    min-width: auto;
+    padding: 7px 0 5px;
+    width: 47px;
 }
