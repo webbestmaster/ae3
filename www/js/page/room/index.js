@@ -18,7 +18,12 @@ import MainModel from './../../lib/main-model/index';
 import {user} from './../../module/user';
 import {socket, type SocketMessageType} from './../../module/socket';
 import Game from './../../components/game';
-import type {AllRoomSettingsType, PushedStatePayloadType, ServerUserType} from './../../module/server-api';
+import type {
+    AllRoomSettingsType,
+    CreateRoomType,
+    PushedStatePayloadType,
+    ServerUserType
+} from './../../module/server-api';
 import * as serverApi from './../../module/server-api';
 import mapGuide from './../../maps/map-guide';
 import {getCommanderDataByUserIndex, isOnLineRoomType} from './../../components/game/model/helper';
@@ -32,6 +37,7 @@ import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
 import BottomBar from './../../components/ui/bottom-bar';
 import Spinner from './../../components/ui/spinner';
+import MapPreview from './../../components/ui/map-preview';
 import Locale from './../../components/locale';
 import {getRoomState} from './../join-room/helper';
 import type {ContextRouter} from 'react-router-dom';
@@ -39,10 +45,13 @@ import {localSocketIoClient} from './../../module/socket-local';
 import type {GlobalStateType} from './../../app-reducer';
 import type {LocaleType} from './../../components/locale/reducer';
 import Scroll from './../../components/ui/scroll';
+import serviceStyle from './../../../css/service.scss';
 import style from './style.scss';
+import createRoomStyle from './../create-room/style.scss';
 import {getMaxUserListSize} from '../join-room/helper';
 import type {LangKeyType} from './../../components/locale/translation/type';
 import {ButtonListWrapper} from '../../components/ui/button-list-wrapper';
+import {getMapSize} from '../../components/game/model/helper';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -359,24 +368,38 @@ class Room extends Component<PropsType, StateType> {
     renderForm(): Node {
         const view = this;
         const {props, state} = view;
-        const {settings} = state;
+        const {settings, userList} = state;
+
+        if (!settings) {
+            return null;
+        }
+
+        const {map} = settings;
+        const mapSize = getMapSize(map);
 
         return (
             <Form>
                 <Fieldset>
                     <FormHeader>
+                        <Locale stringKey={('PLAYERS': LangKeyType)}/>
+                        {[' (', userList.length, '/', getMaxUserListSize(map), '):'].join('')}
+                    </FormHeader>
+                    {view.renderUserList()}
+
+                    <FormHeader>
                         <Locale stringKey={('MAP': LangKeyType)}/>
                         :
                     </FormHeader>
-                    {settings && settings.map.meta[props.locale.name].name}
-                </Fieldset>
-
-                <Fieldset>
-                    <FormHeader>
-                        <Locale stringKey={('PLAYERS': LangKeyType)}/>
-                        :
-                    </FormHeader>
-                    {view.renderUserList()}
+                    <p className={createRoomStyle.map_size}>
+                        {['(', getMaxUserListSize(map), ') [', mapSize.width, ' x ', mapSize.height, '] '].join('')}
+                        {map.meta[props.locale.name].name}
+                    </p>
+                    <MapPreview
+                        className={createRoomStyle.map_preview + ' ' + style.map_preview}
+                        canvasClassName={createRoomStyle.map_preview_canvas}
+                        key="map-preview"
+                        map={settings.map}
+                    />
                 </Fieldset>
             </Form>
         );
