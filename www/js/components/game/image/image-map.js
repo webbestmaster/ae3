@@ -1,5 +1,7 @@
 // @flow
 
+import * as PIXI from 'pixi.js';
+
 type ImageMapType = {|
     building: {
         [key: string]: string
@@ -39,10 +41,15 @@ const buildingReqContext = require.context('./building/', true, /\.png$/);
 
 buildingReqContext.keys()
     .forEach((fileName: string) => {
+        const base64Data = buildingReqContext(fileName);
+
         Object.assign(
             imageMap.building,
-            {[fileName.replace('./', '').replace('.png', '')]: buildingReqContext(fileName)}
+            {[fileName.replace('./', '').replace('.png', '')]: base64Data}
         );
+
+        // init sprite
+        PIXI.Sprite.fromImage(base64Data);
     });
 
 
@@ -50,10 +57,15 @@ const landscapeReqContext = require.context('./landscape/', true, /\.png$/);
 
 landscapeReqContext.keys()
     .forEach((fileName: string) => {
+        const base64Data = landscapeReqContext(fileName);
+
         Object.assign(
             imageMap.landscape,
-            {[fileName.replace('./', '').replace('.png', '')]: landscapeReqContext(fileName)}
+            {[fileName.replace('./', '').replace('.png', '')]: base64Data}
         );
+
+        // init sprite
+        PIXI.Sprite.fromImage(base64Data);
     });
 
 
@@ -61,10 +73,15 @@ const otherReqContext = require.context('./other/', true, /\.png$/);
 
 otherReqContext.keys()
     .forEach((fileName: string) => {
+        const base64Data = otherReqContext(fileName);
+
         Object.assign(
             imageMap.other,
-            {[fileName.replace('./', '').replace('.png', '')]: otherReqContext(fileName)}
+            {[fileName.replace('./', '').replace('.png', '')]: base64Data}
         );
+
+        // init sprite
+        PIXI.Sprite.fromImage(base64Data);
     });
 
 
@@ -72,10 +89,15 @@ const unitReqContext = require.context('./unit/', true, /\.png$/);
 
 unitReqContext.keys()
     .forEach((fileName: string) => {
+        const base64Data = unitReqContext(fileName);
+
         Object.assign(
             imageMap.unit,
-            {[fileName.replace('./', '').replace('.png', '')]: unitReqContext(fileName)}
+            {[fileName.replace('./', '').replace('.png', '')]: base64Data}
         );
+
+        // init sprite
+        PIXI.Sprite.fromImage(base64Data);
     });
 
 
@@ -83,10 +105,15 @@ const fontUnitReqContext = require.context('./../i/font/unit/', true, /\.png$/);
 
 fontUnitReqContext.keys()
     .forEach((fileName: string) => {
+        const base64Data = fontUnitReqContext(fileName);
+
         Object.assign(
             imageMap.font.unit,
-            {[fileName.replace('./', '').replace('.png', '')]: fontUnitReqContext(fileName)}
+            {[fileName.replace('./', '').replace('.png', '')]: base64Data}
         );
+
+        // init sprite
+        PIXI.Sprite.fromImage(base64Data);
     });
 
 
@@ -94,10 +121,15 @@ const fontPopupReqContext = require.context('./../i/font/popup/', true, /\.png$/
 
 fontPopupReqContext.keys()
     .forEach((fileName: string) => {
+        const base64Data = fontPopupReqContext(fileName);
+
         Object.assign(
             imageMap.font.popup,
-            {[fileName.replace('./', '').replace('.png', '')]: fontPopupReqContext(fileName)}
+            {[fileName.replace('./', '').replace('.png', '')]: base64Data}
         );
+
+        // init sprite
+        PIXI.Sprite.fromImage(base64Data);
     });
 
 /*

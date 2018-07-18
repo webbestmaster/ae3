@@ -78,11 +78,19 @@ export default class MapPreview extends Component<PropsType, StateType> {
             }
         );
 
-        // can not find normal way to stop rendering ((
+        // can not find normal way to detect render map or not ((
+        (function tryToRender(count: number) {
+            if (count < 0) {
+                return;
+            }
 
-        window.setTimeout(() => {
-            view.app.render();
-        }, 0);
+            window.requestAnimationFrame(() => {
+                view.app.render();
+                window.requestAnimationFrame(() => {
+                    tryToRender(count - 1);
+                });
+            });
+        })(10);
     }
 
     drawLandscape() {
