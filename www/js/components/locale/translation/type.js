@@ -11,6 +11,7 @@ export type LangDataType = {|
     +MAPS: string,
     +MESSAGE__NO_OPEN_GAME: string,
     +LOADING: string,
+    +REFRESH: string,
     +SPACE: ' '
     /* eslint-enable id-match */
 |};

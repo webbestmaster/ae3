@@ -1,5 +1,7 @@
 // @flow
 
+/* global window */
+
 /* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
@@ -153,6 +155,23 @@ class JoinRoom extends Component<PropsType, StateType> {
                         <ButtonLink to={routes.createRoomOnline}>
                             <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
                         </ButtonLink>
+                        <Button
+                            onClick={() => {
+                                view.setState(
+                                    {roomDataList: null},
+                                    () => {
+                                        // I added setTimeout cause room list updates too fast
+                                        window.setTimeout(() => {
+                                            view.componentDidMount().then(() => {
+                                                console.log('room updated');
+                                            });
+                                        }, 1e3);
+                                    }
+                                );
+                            }}
+                        >
+                            <Locale stringKey={('REFRESH': LangKeyType)}/>
+                        </Button>
                     </ButtonListWrapper>
                 </Page>
             );
