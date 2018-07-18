@@ -5,9 +5,10 @@
 }
 
 .spinner {
-    height: 36px;
+    // bigger than 36(size) + 2 * 3(border size) to fix extra scroll
+    height: 52px;
     position: relative;
-    width: 36px;
+    width: 52px;
 
     &:before {
         animation: spin 0.5s linear infinite;
