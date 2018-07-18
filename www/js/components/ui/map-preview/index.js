@@ -6,13 +6,15 @@
 
 import React, {Component} from 'react';
 import type {Node} from 'react';
-import type {MapType} from './../../../maps/type';
+import type {BuildingType, MapType} from './../../../maps/type';
 import style from './style.scss';
 import * as PIXI from 'pixi.js';
 import imageMap from './../../game/image/image-map';
 import mapGuide from './../../../maps/map-guide';
 import type {LandscapeType} from './../../../maps/type';
-import {getMapSize} from '../../game/model/helper';
+import {getMapSize, getUserColor} from '../../game/model/helper';
+import type {TeamIdType} from '../../../maps/map-guide';
+import type {MapUserType} from '../../../maps/type';
 
 type StateType = void;
 type PropsType = {|
@@ -26,7 +28,9 @@ type NodeType = {|
 |};
 
 type LayerListType = {|
-    +landscape: PIXI.Container
+    +landscape: PIXI.Container,
+    +unitList: PIXI.Container,
+    +buildingList: PIXI.Container
 |};
 
 export default class MapPreview extends Component<PropsType, StateType> {
@@ -46,13 +50,15 @@ export default class MapPreview extends Component<PropsType, StateType> {
         };
 
         view.layer = {
-            landscape: new PIXI.Container()
+            landscape: new PIXI.Container(),
+            unitList: new PIXI.Container(),
+            buildingList: new PIXI.Container()
         };
     }
 
     initApp() {
         const view = this;
-        const {props, node} = view;
+        const {props, node, layer} = view;
         const {canvas} = node;
         const {map} = props;
 
@@ -63,7 +69,7 @@ export default class MapPreview extends Component<PropsType, StateType> {
 
         const mapSize = getMapSize(map);
 
-        view.app = new PIXI.Application(
+        const app = new PIXI.Application(
             mapSize.width * mapGuide.size.square,
             mapSize.height * mapGuide.size.square,
             {
@@ -78,22 +84,86 @@ export default class MapPreview extends Component<PropsType, StateType> {
             }
         );
 
-        // can not find normal way to detect render map or not ((
-        (function tryToRender(count: number) {
-            if (count < 0) {
-                return;
-            }
+        app.stage.addChild(layer.landscape);
+        app.stage.addChild(layer.buildingList);
+        app.stage.addChild(layer.unitList);
 
-            window.requestAnimationFrame(() => {
-                view.app.render();
-                window.requestAnimationFrame(() => {
-                    tryToRender(count - 1);
-                });
-            });
-        })(10);
+        view.app = app;
     }
 
     drawLandscape() {
+        const view = this;
+        const {props, layer} = view;
+        const {map} = props;
+        const {landscape} = layer;
+
+        map.landscape.forEach((list: Array<LandscapeType>, tileY: number) => {
+            list.forEach((landscapeItem: LandscapeType, tileX: number) => {
+                const container = new PIXI.Container();
+                const sprite = PIXI.Sprite.fromImage(imageMap.landscape[landscapeItem]);
+
+                container.addChild(sprite);
+
+                container.position.set(tileX * mapGuide.size.square, tileY * mapGuide.size.square);
+
+                landscape.addChild(container);
+            });
+        });
+    }
+
+    drawBuildingList() {
+        const view = this;
+        const {props, layer} = view;
+        const {map} = props;
+        const {buildingList} = layer;
+        const {square} = mapGuide.size;
+
+        const userList: Array<MapUserType> = [0, 1, 2, 3].map((index: number): MapUserType => ({
+            userId: String(index),
+            money: 0,
+            teamId: mapGuide.teamIdList[index]
+        }));
+
+        map.buildings.forEach((building: BuildingType) => { // eslint-disable-line complexity
+            const {type} = building;
+
+            let sprite: PIXI.Sprite | null = null;
+
+            if (['castle', 'farm'].includes(type)) {
+                let color = 'gray';
+
+                if (typeof building.userId === 'string') {
+                    const userColor = getUserColor(building.userId, userList);
+
+                    if (typeof userColor === 'string') {
+                        color = userColor;
+                    }
+                }
+
+                sprite = PIXI.Sprite.fromImage(imageMap.building[type + '-' + color]);
+            }
+
+            if (['well', 'temple', 'farm-destroyed'].includes(type)) {
+                sprite = PIXI.Sprite.fromImage(imageMap.building[type]);
+            }
+
+            if (sprite === null) {
+                console.error('can not detect sprite');
+                return;
+            }
+
+            if (type === 'castle') {
+                sprite.position.set(building.x * square, building.y * square - square);
+            } else {
+                sprite.position.set(building.x * square, building.y * square);
+            }
+
+            buildingList.addChild(sprite);
+        });
+    }
+
+    /*
+    drawUnitList() {
         const view = this;
         const {props, app, layer} = view;
         const {map} = props;
@@ -111,9 +181,8 @@ export default class MapPreview extends Component<PropsType, StateType> {
                 landscape.addChild(container);
             });
         });
-
-        app.stage.addChild(landscape);
     }
+*/
 
     componentDidMount() {
         const view = this;
@@ -127,6 +196,10 @@ export default class MapPreview extends Component<PropsType, StateType> {
 
         view.initApp();
         view.drawLandscape();
+        view.drawBuildingList();
+        // view.drawUnitList();
+
+        view.app.render();
     }
 
     render(): Node {
