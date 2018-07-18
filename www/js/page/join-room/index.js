@@ -13,7 +13,6 @@ import type {GlobalStateType} from './../../app-reducer';
 import type {AuthType} from './../../components/auth/reducer';
 import Page from './../../components/ui/page';
 import Header from './../../components/ui/header';
-import Form from './../../components/ui/form';
 import Fieldset from './../../components/ui/fieldset';
 import type {RoomDataType} from './helper';
 import {getRoomState} from './helper';

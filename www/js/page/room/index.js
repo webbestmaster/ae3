@@ -18,12 +18,7 @@ import MainModel from './../../lib/main-model/index';
 import {user} from './../../module/user';
 import {socket, type SocketMessageType} from './../../module/socket';
 import Game from './../../components/game';
-import type {
-    AllRoomSettingsType,
-    CreateRoomType,
-    PushedStatePayloadType,
-    ServerUserType
-} from './../../module/server-api';
+import type {AllRoomSettingsType, PushedStatePayloadType, ServerUserType} from './../../module/server-api';
 import * as serverApi from './../../module/server-api';
 import mapGuide from './../../maps/map-guide';
 import {getCommanderDataByUserIndex, isOnLineRoomType} from './../../components/game/model/helper';
@@ -45,7 +40,6 @@ import {localSocketIoClient} from './../../module/socket-local';
 import type {GlobalStateType} from './../../app-reducer';
 import type {LocaleType} from './../../components/locale/reducer';
 import Scroll from './../../components/ui/scroll';
-import serviceStyle from './../../../css/service.scss';
 import style from './style.scss';
 import createRoomStyle from './../create-room/style.scss';
 import {getMaxUserListSize} from '../join-room/helper';

@@ -4,17 +4,14 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import React, {Component} from 'react';
 import type {Node} from 'react';
-import type {BuildingType, MapType} from './../../../maps/type';
+import React, {Component} from 'react';
+import type {BuildingType, LandscapeType, MapType, MapUserType, UnitType} from './../../../maps/type';
 import style from './style.scss';
 import * as PIXI from 'pixi.js';
 import imageMap from './../../game/image/image-map';
 import mapGuide from './../../../maps/map-guide';
-import type {LandscapeType} from './../../../maps/type';
 import {getMapSize, getUserColor} from './../../game/model/helper';
-import type {MapUserType} from './../../../maps/type';
-import type {UnitType} from './../../../maps/type';
 
 type StateType = void;
 type PropsType = {|

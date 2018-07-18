@@ -22,7 +22,7 @@ import MapPreview from './../../components/ui/map-preview';
 import type {SelectIconNameType} from './../../components/ui/select/icon';
 import * as mapHash from './../../maps/default/map-list';
 import type {ContextRouter} from 'react-router-dom';
-import {getRoomType, isOnLineRoomType, getMapSize} from './../../components/game/model/helper';
+import {getMapSize, getRoomType, isOnLineRoomType} from './../../components/game/model/helper';
 import serviceStyle from './../../../css/service.scss';
 import style from './style.scss';
 import type {LangKeyType} from './../../components/locale/translation/type';

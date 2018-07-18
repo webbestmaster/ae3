@@ -4,8 +4,8 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import React, {Component} from 'react';
 import type {Node} from 'react';
+import React, {Component} from 'react';
 import Swiper from 'swiper';
 import classnames from 'classnames';
 import swiperStyle from 'swiper/dist/css/swiper.min.css';

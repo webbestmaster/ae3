@@ -2,8 +2,8 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import React, {Component} from 'react';
 import type {Node} from 'react';
+import React, {Component} from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
