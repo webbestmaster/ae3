@@ -42,6 +42,7 @@ import Scroll from './../../components/ui/scroll';
 import style from './style.scss';
 import {getMaxUserListSize} from '../join-room/helper';
 import type {LangKeyType} from './../../components/locale/translation/type';
+import {ButtonListWrapper} from '../../components/ui/button-list-wrapper';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -329,7 +330,7 @@ class Room extends Component<PropsType, StateType> {
         const {state} = view;
         const {userList} = state;
 
-        if (!userList || userList.length === 0) {
+        if (userList.length === 0) {
             return null;
         }
 
@@ -364,14 +365,16 @@ class Room extends Component<PropsType, StateType> {
             <Form>
                 <Fieldset>
                     <FormHeader>
-                        Map:
+                        <Locale stringKey={('MAP': LangKeyType)}/>
+                        :
                     </FormHeader>
                     {settings && settings.map.meta[props.locale.name].name}
                 </Fieldset>
 
                 <Fieldset>
                     <FormHeader>
-                        User List:
+                        <Locale stringKey={('PLAYERS': LangKeyType)}/>
+                        :
                     </FormHeader>
                     {view.renderUserList()}
                 </Fieldset>
@@ -379,14 +382,70 @@ class Room extends Component<PropsType, StateType> {
         );
     }
 
+    renderMasterButtonList(): Array<Node> {
+        const view = this;
+        const {props, state} = view;
+        const {settings, userList} = state;
+        const roomId = props.match.params.roomId || '';
+        const maxPlayerListSize = settings ? getMaxUserListSize(settings.map) : 0;
+        const isMapPlayerSizeExceed = userList.length >= maxPlayerListSize;
+
+        const buttonList = [
+            <Button
+                key="start-button"
+                onClick={async (): Promise<void> => {
+                    view.setState({isRoomDataFetching: true});
+                    await view.startGame();
+                    view.setState({isRoomDataFetching: false});
+                }}
+            >
+                <Locale stringKey={('START': LangKeyType)}/>
+            </Button>
+        ];
+
+        if (isMapPlayerSizeExceed) {
+            return buttonList;
+        }
+
+        buttonList.unshift(
+            <Button
+                key="add-bot-button"
+                onClick={async (): Promise<void> => {
+                    view.setState({isRoomDataFetching: true});
+                    await serverApi.makeUser('bot', roomId);
+                    view.setState({isRoomDataFetching: false});
+                }}
+            >
+                <Locale stringKey={('ADD_BOT': LangKeyType)}/>
+            </Button>
+        );
+
+        if (!isOnLineRoomType()) {
+            buttonList.unshift(
+                <Button
+                    key="add-human-button"
+                    onClick={async (): Promise<void> => {
+                        view.setState({isRoomDataFetching: true});
+                        await serverApi.makeUser('human', roomId);
+                        view.setState({isRoomDataFetching: false});
+                    }}
+                >
+                    <Locale stringKey={('ADD_HUMAN': LangKeyType)}/>
+                </Button>
+            );
+        }
+
+        return buttonList;
+    }
+
     render(): Node { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
         const {settings, userList, isGameStart, isRoomDataFetching} = state;
         const roomId = props.match.params.roomId || '';
-        const amIMasterPlayer = (userList && userList || [])
+        const myPlayerIndex = userList
             .map((userData: ServerUserType): string => userData.userId)
-            .indexOf(user.getId()) === 0;
+            .indexOf(user.getId());
 
         if (isGameStart === true) {
             return <Game roomId={roomId}/>;
@@ -397,7 +456,8 @@ class Room extends Component<PropsType, StateType> {
                 <Spinner isOpen={isRoomDataFetching}/>
                 <Header>
                     {settings ?
-                        '(' + getMaxUserListSize(settings.map) + ') ' + settings.map.meta[props.locale.name].name :
+                        ['(', userList.length, '/', getMaxUserListSize(settings.map), ') '].join('') +
+                        settings.map.meta[props.locale.name].name :
                         '\u00A0'
                     }
                 </Header>
@@ -405,47 +465,13 @@ class Room extends Component<PropsType, StateType> {
                     {view.renderForm()}
                 </Scroll>
 
-                {amIMasterPlayer ?
-                    <div>
-
-                        <Button
-                            onClick={async (): Promise<void> => {
-                                view.setState({isRoomDataFetching: true});
-                                await serverApi.makeUser('bot', roomId);
-                                view.setState({isRoomDataFetching: false});
-                            }}
-                        >
-                            <Locale stringKey={('ADD_BOT': LangKeyType)}/>
-                        </Button>
-
-                        {
-                            isOnLineRoomType() ?
-                                null :
-                                <Button
-                                    onClick={async (): Promise<void> => {
-                                        view.setState({isRoomDataFetching: true});
-                                        await serverApi.makeUser('human', roomId);
-                                        view.setState({isRoomDataFetching: false});
-                                    }}
-                                >
-                                    <Locale stringKey={('ADD_HUMAN': LangKeyType)}/>
-                                </Button>
-                        }
-
-                        <Button
-                            onClick={async (): Promise<void> => {
-                                view.setState({isRoomDataFetching: true});
-                                await view.startGame();
-                                view.setState({isRoomDataFetching: false});
-                            }}
-                        >
-                            <Locale stringKey={('START': LangKeyType)}/>
-                        </Button>
-                    </div> :
+                {myPlayerIndex === 0 ?
+                    <ButtonListWrapper className={style.button_list_wrapper}>
+                        {view.renderMasterButtonList()}
+                    </ButtonListWrapper> :
                     <BottomBar>
                         <Locale stringKey={('WAIT_FOR_START': LangKeyType)}/>
                     </BottomBar>}
-
             </Page>
         );
     }
