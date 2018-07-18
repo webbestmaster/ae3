@@ -12,9 +12,9 @@ import * as PIXI from 'pixi.js';
 import imageMap from './../../game/image/image-map';
 import mapGuide from './../../../maps/map-guide';
 import type {LandscapeType} from './../../../maps/type';
-import {getMapSize, getUserColor} from '../../game/model/helper';
-import type {TeamIdType} from '../../../maps/map-guide';
-import type {MapUserType} from '../../../maps/type';
+import {getMapSize, getUserColor} from './../../game/model/helper';
+import type {MapUserType} from './../../../maps/type';
+import type {UnitType} from './../../../maps/type';
 
 type StateType = void;
 type PropsType = {|
@@ -162,27 +162,37 @@ export default class MapPreview extends Component<PropsType, StateType> {
         });
     }
 
-    /*
     drawUnitList() {
         const view = this;
-        const {props, app, layer} = view;
+        const {props, layer} = view;
         const {map} = props;
-        const {landscape} = layer;
+        const {unitList} = layer;
+        const {square} = mapGuide.size;
 
-        map.landscape.forEach((list: Array<LandscapeType>, tileY: number) => {
-            list.forEach((landscapeItem: LandscapeType, tileX: number) => {
-                const container = new PIXI.Container();
-                const sprite = PIXI.Sprite.fromImage(imageMap.landscape[landscapeItem]);
+        const userList: Array<MapUserType> = [0, 1, 2, 3].map((index: number): MapUserType => ({
+            userId: String(index),
+            money: 0,
+            teamId: mapGuide.teamIdList[index]
+        }));
 
-                container.addChild(sprite);
+        map.units.forEach((unit: UnitType) => {
+            let color = 'gray';
 
-                container.position.set(tileX * mapGuide.size.square, tileY * mapGuide.size.square);
+            if (typeof unit.userId === 'string') {
+                const userColor = getUserColor(unit.userId, userList);
 
-                landscape.addChild(container);
-            });
+                if (typeof userColor === 'string') {
+                    color = userColor;
+                }
+            }
+
+            const sprite = PIXI.Sprite.fromImage(imageMap.unit[unit.type + '-' + color + '-0']);
+
+            sprite.position.set(unit.x * square, unit.y * square);
+
+            unitList.addChild(sprite);
         });
     }
-*/
 
     componentDidMount() {
         const view = this;
@@ -197,7 +207,7 @@ export default class MapPreview extends Component<PropsType, StateType> {
         view.initApp();
         view.drawLandscape();
         view.drawBuildingList();
-        // view.drawUnitList();
+        view.drawUnitList();
 
         view.app.render();
     }
