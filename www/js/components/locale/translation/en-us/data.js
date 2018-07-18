@@ -14,6 +14,10 @@ export const enUs: LangDataType = {
     MESSAGE__NO_OPEN_GAME: 'No open games, but you can create your own...',
     LOADING: 'Loading',
     REFRESH: 'Refresh',
+    ADD_HUMAN: 'Add Human',
+    ADD_BOT: 'Add Bot',
+    START: 'Start',
+    WAIT_FOR_START: 'Wait for Start',
     SPACE: ' '
     /* eslint-enable id-match */
 };

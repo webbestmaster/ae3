@@ -14,6 +14,10 @@ export const ruRu: LangDataType = {
     MESSAGE__NO_OPEN_GAME: 'Нет доступных игр, но Вы можете создать свою...',
     LOADING: 'Загрузка',
     REFRESH: 'Обновить',
+    ADD_HUMAN: 'Добавить Игрока',
+    ADD_BOT: 'Добавить Бота',
+    START: 'Старт',
+    WAIT_FOR_START: 'Ожидание старта',
     SPACE: ' '
     /* eslint-enable id-match */
 };

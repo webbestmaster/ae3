@@ -32,6 +32,7 @@ import FormHeader from './../../components/ui/form-header';
 import Fieldset from './../../components/ui/fieldset';
 import BottomBar from './../../components/ui/bottom-bar';
 import Spinner from './../../components/ui/spinner';
+import Locale from './../../components/locale';
 import {getRoomState} from './../join-room/helper';
 import type {ContextRouter} from 'react-router-dom';
 import {localSocketIoClient} from './../../module/socket-local';
@@ -40,6 +41,7 @@ import type {LocaleType} from './../../components/locale/reducer';
 import Scroll from './../../components/ui/scroll';
 import style from './style.scss';
 import {getMaxUserListSize} from '../join-room/helper';
+import type {LangKeyType} from './../../components/locale/translation/type';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -408,10 +410,12 @@ class Room extends Component<PropsType, StateType> {
 
                         <Button
                             onClick={async (): Promise<void> => {
+                                view.setState({isRoomDataFetching: true});
                                 await serverApi.makeUser('bot', roomId);
+                                view.setState({isRoomDataFetching: false});
                             }}
                         >
-                            add bot
+                            <Locale stringKey={('ADD_BOT': LangKeyType)}/>
                         </Button>
 
                         {
@@ -419,23 +423,27 @@ class Room extends Component<PropsType, StateType> {
                                 null :
                                 <Button
                                     onClick={async (): Promise<void> => {
+                                        view.setState({isRoomDataFetching: true});
                                         await serverApi.makeUser('human', roomId);
+                                        view.setState({isRoomDataFetching: false});
                                     }}
                                 >
-                                    add human
+                                    <Locale stringKey={('ADD_HUMAN': LangKeyType)}/>
                                 </Button>
                         }
 
                         <Button
                             onClick={async (): Promise<void> => {
+                                view.setState({isRoomDataFetching: true});
                                 await view.startGame();
+                                view.setState({isRoomDataFetching: false});
                             }}
                         >
-                            start
+                            <Locale stringKey={('START': LangKeyType)}/>
                         </Button>
                     </div> :
                     <BottomBar>
-                        wait for start...
+                        <Locale stringKey={('WAIT_FOR_START': LangKeyType)}/>
                     </BottomBar>}
 
             </Page>
