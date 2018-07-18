@@ -5,7 +5,7 @@
 /* global __dirname */
 
 const {LocalExpress} = require('./../local-express');
-const {LocalSocketIoServer} = require('../local-socket-io-server');
+const {LocalSocketIoServer} = require('./../local-socket-io-server');
 const {LocalHttpServer} = require('./../local-http-server');
 const apiRouter = require('./api-router').apiRouter;
 const roomMaster = require('./../room/master').roomMaster;

@@ -51,7 +51,7 @@ import {bottomBarData, GameView} from './../../game/index';
 import {storeViewId} from './../../store';
 import Queue from './../../../lib/queue';
 import {storeAction} from './../../store/provider';
-import {localSocketIoClient} from '../../../module/socket-local';
+import {localSocketIoClient} from './../../../module/socket-local';
 
 type RenderSettingType = {|
     width: number,

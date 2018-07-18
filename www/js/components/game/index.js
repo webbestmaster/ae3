@@ -30,7 +30,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Page from './../../components/ui/page';
 import BottomBar from './../../components/ui/bottom-bar';
 import find from 'lodash/find';
-import {localSocketIoClient} from '../../module/socket-local';
+import {localSocketIoClient} from './../../module/socket-local';
 
 // function Transition(props: mixed): Node {
 //     return <Slide direction="up" {...props} />;

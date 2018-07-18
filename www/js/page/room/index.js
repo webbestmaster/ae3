@@ -42,10 +42,10 @@ import type {LocaleType} from './../../components/locale/reducer';
 import Scroll from './../../components/ui/scroll';
 import style from './style.scss';
 import createRoomStyle from './../create-room/style.scss';
-import {getMaxUserListSize} from '../join-room/helper';
+import {getMaxUserListSize} from './../join-room/helper';
 import type {LangKeyType} from './../../components/locale/translation/type';
-import {ButtonListWrapper} from '../../components/ui/button-list-wrapper';
-import {getMapSize} from '../../components/game/model/helper';
+import {ButtonListWrapper} from './../../components/ui/button-list-wrapper';
+import {getMapSize} from './../../components/game/model/helper';
 
 type StateType = {|
     settings?: AllRoomSettingsType,

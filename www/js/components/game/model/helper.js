@@ -11,7 +11,7 @@ import type {PathType} from './../../../lib/a-star-finder';
 import {defaultOptions, getPath} from './../../../lib/a-star-finder';
 import type {MapType, UnitType} from './../../../maps/type';
 import find from 'lodash/find';
-import type {BuildingType, MapUserType} from '../../../maps/type';
+import type {BuildingType, MapUserType} from './../../../maps/type';
 import * as PIXI from 'pixi.js';
 import {storeViewId} from './../../store';
 import queryString from 'query-string';

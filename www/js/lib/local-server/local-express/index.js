@@ -4,7 +4,7 @@
 
 // expressApp.get('/api/room/create', (req, res) => apiRoomCreate(req, res, server));
 
-import type {RequestCallBackType} from '../local-request';
+import type {RequestCallBackType} from './../local-request';
 import type {PushedStateType} from './../room/index';
 
 const {LocalExpressRequest} = require('./request');

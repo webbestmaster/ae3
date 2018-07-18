@@ -13,7 +13,7 @@ import Button from './../../components/ui/button';
 import Locale from './../../components/locale';
 import type {LangKeyType} from './../../components/locale/translation/type';
 import {allLocales, localeConst} from './../../components/locale/const';
-import type {LocaleNameType} from '../../components/locale/action';
+import type {LocaleNameType} from './../../components/locale/action';
 import * as localeAction from './../../components/locale/action';
 import Form from './../../components/ui/form';
 import Fieldset from './../../components/ui/fieldset';

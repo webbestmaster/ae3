@@ -4,7 +4,7 @@ const roomMaster = require('./../../../room/master').roomMaster;
 const {LocalExpressRequest} = require('./../../../local-express/request');
 const {LocalExpressResponse} = require('./../../../local-express/response');
 const {RoomConnection} = require('./../../../room/room-connection/index');
-const error = require('../error-data.js');
+const error = require('./../error-data.js');
 
 type ServerUserType = {|
     userId: string,
