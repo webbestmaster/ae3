@@ -1,5 +1,7 @@
 // @flow
 
+/* global window */
+
 /* eslint consistent-this: ["error", "view"] */
 
 // wait other players and prepare map\settings for Game view
@@ -15,7 +17,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import MainModel from './../../lib/main-model/index';
 import classnames from 'classnames';
-
+import isEqual from 'lodash/isEqual';
+import find from 'lodash/find';
 import {user} from './../../module/user';
 import {socket, type SocketMessageType} from './../../module/socket';
 import Game from './../../components/game';
@@ -62,9 +65,16 @@ type PropsType = {|
     locale: LocaleType
 |};
 
+type AttrType = {|
+    watcher: {|
+        isUserListEnable: boolean
+    |}
+|};
+
 class Room extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
+    attr: AttrType;
 
     constructor() {
         super();
@@ -76,6 +86,12 @@ class Room extends Component<PropsType, StateType> {
             model: new MainModel(),
             isGameStart: false,
             isRoomDataFetching: true
+        };
+
+        view.attr = {
+            watcher: {
+                isUserListEnable: false
+            }
         };
     }
 
@@ -128,6 +144,8 @@ class Room extends Component<PropsType, StateType> {
         const {match} = props;
         const roomId = match.params.roomId || '';
 
+        view.unbindEventListeners();
+
         model.destroy();
         localSocketIoClient.removeAllListeners();
 
@@ -137,8 +155,10 @@ class Room extends Component<PropsType, StateType> {
 
     bindEventListeners() {
         const view = this;
-        const {props, state} = view;
+        const {props, state, attr} = view;
         const {model} = state;
+        const {match, history} = props;
+        const roomId = match.params.roomId || '';
 
         if (isOnLineRoomType()) {
             model.listenTo(socket.attr.model, 'message', async (message: SocketMessageType): Promise<void> => {
@@ -149,12 +169,41 @@ class Room extends Component<PropsType, StateType> {
                 await view.onMessage(message);
             });
         }
+
+        // start user list watch
+        attr.watcher.isUserListEnable = true;
+
+        (async function watchUserList(): Promise<void> {
+            if (view.attr.watcher.isUserListEnable === false) {
+                return;
+            }
+
+            const roomDataUsers = await serverApi.getAllRoomUsers(roomId);
+            const {userList} = view.state;
+
+            if (!isEqual(userList, roomDataUsers.users)) {
+                await view.onServerUserListChange();
+            }
+
+            const myUserItem = find(roomDataUsers.users, {userId: user.getId()}) || null;
+
+            if (myUserItem === null) {
+                view.attr.watcher.isUserListEnable = false;
+                await serverApi.leaveRoom(roomId, user.getId());
+                history.goBack();
+                return;
+            }
+
+            window.setTimeout(watchUserList, 1e3); // the best time out
+        })();
     }
 
     unbindEventListeners() {
         const view = this;
-        const {props, state} = view;
+        const {props, state, attr} = view;
         const {model} = state;
+
+        attr.watcher.isUserListEnable = false;
 
         model.stopListening();
         localSocketIoClient.removeAllListeners();
