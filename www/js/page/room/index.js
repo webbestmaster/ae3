@@ -65,16 +65,9 @@ type PropsType = {|
     locale: LocaleType
 |};
 
-type AttrType = {|
-    watcher: {|
-        isUserListEnable: boolean
-    |}
-|};
-
 class Room extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
-    attr: AttrType;
 
     constructor() {
         super();
@@ -86,12 +79,6 @@ class Room extends Component<PropsType, StateType> {
             model: new MainModel(),
             isGameStart: false,
             isRoomDataFetching: true
-        };
-
-        view.attr = {
-            watcher: {
-                isUserListEnable: false
-            }
         };
     }
 
@@ -169,41 +156,12 @@ class Room extends Component<PropsType, StateType> {
                 await view.onMessage(message);
             });
         }
-
-        // start user list watch
-        attr.watcher.isUserListEnable = true;
-
-        (async function watchUserList(): Promise<void> {
-            if (view.attr.watcher.isUserListEnable === false) {
-                return;
-            }
-
-            const roomDataUsers = await serverApi.getAllRoomUsers(roomId);
-            const {userList} = view.state;
-
-            if (!isEqual(userList, roomDataUsers.users)) {
-                await view.onServerUserListChange();
-            }
-
-            const myUserItem = find(roomDataUsers.users, {userId: user.getId()}) || null;
-
-            if (myUserItem === null) {
-                view.attr.watcher.isUserListEnable = false;
-                await serverApi.leaveRoom(roomId, user.getId());
-                history.goBack();
-                return;
-            }
-
-            window.setTimeout(watchUserList, 1e3); // the best time out
-        })();
     }
 
     unbindEventListeners() {
         const view = this;
-        const {props, state, attr} = view;
+        const {props, state} = view;
         const {model} = state;
-
-        attr.watcher.isUserListEnable = false;
 
         model.stopListening();
         localSocketIoClient.removeAllListeners();
@@ -233,6 +191,29 @@ class Room extends Component<PropsType, StateType> {
         return new Promise((resolve: () => void) => {
             view.setState({isRoomDataFetching: false}, resolve);
         });
+    }
+
+    async removeUser(userId: string): Promise<void> {
+        const view = this;
+        const {props, state} = view;
+        const {match} = props;
+        const {settings} = view;
+        const roomId = match.params.roomId || '';
+
+        if (!settings) {
+            return;
+        }
+
+        await serverApi.pushState(roomId, userId, {
+            type: 'room__push-state',
+            state: {
+                type: 'remove-user',
+                map: settings.map,
+                userId
+            }
+        });
+
+        await serverApi.leaveRoom(roomId, userId);
     }
 
     async onServerUserListChange(): Promise<void> {
@@ -314,6 +295,11 @@ class Room extends Component<PropsType, StateType> {
                 break;
 
             case 'room__push-state':
+                if (message.states.last.state.type === 'remove-user') {
+                    console.log('---> remove the user');
+                    return Promise.resolve();
+                }
+
                 if (message.states.last.state.isGameStart === true) {
                     console.log('---> The game has begun!!!');
 
@@ -431,7 +417,7 @@ class Room extends Component<PropsType, StateType> {
                                         className={style.user_list__remove_user_button}
                                         onClick={async (): Promise<void> => {
                                             await view.showSpinner();
-                                            await serverApi.leaveRoom(roomId, userData.userId);
+                                            await view.removeUser(userData.userId);
                                             await view.hideSpinner();
                                         }}
                                     >

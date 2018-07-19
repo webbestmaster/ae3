@@ -360,6 +360,12 @@ export type PushedStatePayloadSyncMapWithServerUserListType = {|
     +activeUserId: string
 |};
 
+export type PushedStateRemoveUserType = {|
+    +type: 'remove-user',
+    +map: MapType,
+    +userId: string
+|};
+
 export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType
     | PushedStatePayloadUnitMoveType
     | PushedStatePayloadUnitAttackType
@@ -369,7 +375,8 @@ export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType
     | PushedStatePayloadRaiseSkeletonType
     | PushedStatePayloadDestroyBuildingType
     | PushedStatePayloadBuyUnitType
-    | PushedStatePayloadSyncMapWithServerUserListType;
+    | PushedStatePayloadSyncMapWithServerUserListType
+    | PushedStateRemoveUserType;
 
 export type PushStateType = {|
     roomId: string,
