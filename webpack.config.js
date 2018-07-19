@@ -87,6 +87,10 @@ const webpackConfig = {
                 minimizer: [
                     new UglifyJsPlugin({
                         uglifyOptions: {
+                            output: {
+                                comments: false,
+                                beautify: false
+                            },
                             compress: {
                                 drop_console: true, // eslint-disable-line camelcase
                                 passes: 3
@@ -250,16 +254,16 @@ const webpackConfig = {
         new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
     ]
 
-/*
-    devServer: {
-        proxy: {
-            '/proxi-api': {
-                target: 'https://www.the-external-server.com/',
-                changeOrigin: true // for this option only: see documentations here https://github.com/chimurai/http-proxy-middleware#http-proxy-middleware-options
+    /*
+        devServer: {
+            proxy: {
+                '/proxi-api': {
+                    target: 'https://www.the-external-server.com/',
+                    changeOrigin: true // for this option only: see documentations here https://github.com/chimurai/http-proxy-middleware#http-proxy-middleware-options
+                }
             }
         }
-    }
-*/
+    */
 
 };
 
