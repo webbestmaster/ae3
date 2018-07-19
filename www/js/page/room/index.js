@@ -91,11 +91,11 @@ class Room extends Component<PropsType, StateType> {
             return;
         }
 
-        view.setState({isRoomDataFetching: true});
+        await view.showSpinner();
 
         const roomState = await getRoomState(roomId);
 
-        view.setState({isRoomDataFetching: false});
+        await view.hideSpinner();
 
         if (roomState === null || roomState.userList.length > roomState.maxUserSize) {
             console.error('roomState is null or room state is fool', roomState);
@@ -170,6 +170,22 @@ class Room extends Component<PropsType, StateType> {
             .indexOf(user.getId());
     }
 
+    async showSpinner(): Promise<void> {
+        const view = this;
+
+        return new Promise((resolve: () => void) => {
+            view.setState({isRoomDataFetching: true}, resolve);
+        });
+    }
+
+    async hideSpinner(): Promise<void> {
+        const view = this;
+
+        return new Promise((resolve: () => void) => {
+            view.setState({isRoomDataFetching: false}, resolve);
+        });
+    }
+
     async onServerUserListChange(): Promise<void> {
         const view = this;
         const {props, state} = view;
@@ -181,7 +197,7 @@ class Room extends Component<PropsType, StateType> {
             return Promise.resolve();
         }
 
-        view.setState({isRoomDataFetching: true});
+        await view.showSpinner();
 
         const roomDataSettings = await serverApi.getAllRoomSettings(roomId);
         const defaultMoney = roomDataSettings.settings.map.defaultMoney;
@@ -212,7 +228,7 @@ class Room extends Component<PropsType, StateType> {
             settings: roomDataSettings.settings
         });
 
-        view.setState({isRoomDataFetching: false});
+        await view.hideSpinner();
 
         return Promise.resolve();
     }
@@ -342,9 +358,11 @@ class Room extends Component<PropsType, StateType> {
 
     renderUserList(): Node | null {
         const view = this;
-        const {state} = view;
+        const {props, state} = view;
         const {userList} = state;
+        const {match} = props;
         const myPlayerIndex = view.getMyPlayerIndex();
+        const roomId = match.params.roomId || '';
 
         if (userList.length === 0) {
             return null;
@@ -360,7 +378,14 @@ class Room extends Component<PropsType, StateType> {
                                 key={userData.userId}
                             >
                                 {myPlayerIndex === 0 && myPlayerIndex !== userIndex ?
-                                    <Button className={style.user_list__remove_user_button}>
+                                    <Button
+                                        className={style.user_list__remove_user_button}
+                                        onClick={async (): Promise<void> => {
+                                            await view.showSpinner();
+                                            await serverApi.leaveRoom(roomId, userData.userId);
+                                            await view.hideSpinner();
+                                        }}
+                                    >
                                         X
                                     </Button> :
                                     null
@@ -447,9 +472,9 @@ class Room extends Component<PropsType, StateType> {
                     [serviceStyle.disabled]: userList.length === 1
                 })}
                 onClick={async (): Promise<void> => {
-                    view.setState({isRoomDataFetching: true});
+                    await view.showSpinner();
                     await view.startGame();
-                    view.setState({isRoomDataFetching: false});
+                    await view.hideSpinner();
                 }}
             >
                 <Locale stringKey={('START': LangKeyType)}/>
@@ -464,9 +489,9 @@ class Room extends Component<PropsType, StateType> {
             <Button
                 key="add-bot-button"
                 onClick={async (): Promise<void> => {
-                    view.setState({isRoomDataFetching: true});
+                    await view.showSpinner();
                     await serverApi.makeUser('bot', roomId);
-                    view.setState({isRoomDataFetching: false});
+                    await view.hideSpinner();
                 }}
             >
                 <Locale stringKey={('ADD_BOT': LangKeyType)}/>
@@ -478,9 +503,9 @@ class Room extends Component<PropsType, StateType> {
                 <Button
                     key="add-human-button"
                     onClick={async (): Promise<void> => {
-                        view.setState({isRoomDataFetching: true});
+                        await view.showSpinner();
                         await serverApi.makeUser('human', roomId);
-                        view.setState({isRoomDataFetching: false});
+                        await view.hideSpinner();
                     }}
                 >
                     <Locale stringKey={('ADD_HUMAN': LangKeyType)}/>
