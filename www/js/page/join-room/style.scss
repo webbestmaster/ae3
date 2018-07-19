@@ -9,3 +9,15 @@
     font-size: 20px;
     line-height: 23px;
 }
+
+.bottom_button_list_wrapper {
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.bottom_button_list_wrapper__no_rooms {
+    bottom: 5px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}

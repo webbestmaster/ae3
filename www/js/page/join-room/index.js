@@ -60,23 +60,39 @@ class JoinRoom extends Component<PropsType, StateType> {
         };
     }
 
+    async showSpinner(): Promise<void> {
+        const view = this;
+
+        return new Promise((resolve: () => void) => {
+            view.setState({isRoomsFetching: true}, () => {
+                // user have to see spinner
+                window.setTimeout(resolve, 1e3);
+            });
+        });
+    }
+
+    async hideSpinner(): Promise<void> {
+        const view = this;
+
+        return new Promise((resolve: () => void) => {
+            view.setState({isRoomsFetching: false}, resolve);
+        });
+    }
+
     async componentDidMount(): Promise<void> {
         const view = this;
-        const {props, state} = view;
 
-        view.setState({isRoomsFetching: true});
+        await view.showSpinner();
 
         const getAllRoomIdsResult = await serverApi.getAllRoomIds();
         const roomDataList = [];
 
-        for (let ii = 0; ii < getAllRoomIdsResult.roomIds.length; ii += 1) {
-            roomDataList.push(await getRoomState(getAllRoomIdsResult.roomIds[ii]));
+        for (let roomIndex = 0; roomIndex < getAllRoomIdsResult.roomIds.length; roomIndex += 1) {
+            roomDataList.push(await getRoomState(getAllRoomIdsResult.roomIds[roomIndex]));
         }
 
-        view.setState({
-            roomDataList,
-            isRoomsFetching: false
-        });
+        view.setState({roomDataList});
+        await view.hideSpinner();
     }
 
     async joinRoom(roomId: string): Promise<void> {
@@ -86,20 +102,15 @@ class JoinRoom extends Component<PropsType, StateType> {
         const socketId = auth.socket.id;
         const userId = auth.user.id;
 
-        view.setState({isRoomsFetching: true});
-
         const roomState = await getRoomState(roomId);
 
         if (roomState === null || roomState.userList.length === roomState.maxUserSize) {
             console.error('roomState is null or room state is fool', roomState);
-            view.setState({isRoomsFetching: false});
             await view.componentDidMount();
             return;
         }
 
         const joinRoomResult = await serverApi.joinRoom(roomId, userId, socketId);
-
-        view.setState({isRoomsFetching: false});
 
         if (joinRoomResult.roomId === '') {
             console.error('Did not join into room with id', roomId);
@@ -118,6 +129,32 @@ class JoinRoom extends Component<PropsType, StateType> {
             <Header>
                 <Locale stringKey={('JOIN_GAME': LangKeyType)}/>
             </Header>
+        );
+    }
+
+    renderRefreshButton(): Node {
+        const view = this;
+        const {state} = view;
+        const {roomDataList} = state;
+
+        if (roomDataList === null) {
+            return null;
+        }
+
+        return (
+            <ButtonListWrapper
+                className={roomDataList.length === 0 ?
+                    style.bottom_button_list_wrapper__no_rooms :
+                    style.bottom_button_list_wrapper}
+            >
+                <Button
+                    onClick={async (): Promise<void> => {
+                        await view.componentDidMount();
+                    }}
+                >
+                    <Locale stringKey={('REFRESH': LangKeyType)}/>
+                </Button>
+            </ButtonListWrapper>
         );
     }
 
@@ -147,6 +184,7 @@ class JoinRoom extends Component<PropsType, StateType> {
             return (
                 <Page>
                     {JoinRoom.renderHeader()}
+                    <Spinner isOpen={isRoomsFetching}/>
                     <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                         <Fieldset className={serviceStyle.ta_c}>
                             <Locale stringKey={('MESSAGE__NO_OPEN_GAME': LangKeyType)}/>
@@ -154,32 +192,14 @@ class JoinRoom extends Component<PropsType, StateType> {
                         <ButtonLink to={routes.createRoomOnline}>
                             <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
                         </ButtonLink>
-                        <Button
-                            onClick={() => {
-                                view.setState(
-                                    {roomDataList: null},
-                                    () => {
-                                        // I added setTimeout cause room list updates too fast
-                                        window.setTimeout(() => {
-                                            view.componentDidMount().then(() => {
-                                                console.log('room updated');
-                                            });
-                                        }, 1e3);
-                                    }
-                                );
-                            }}
-                        >
-                            <Locale stringKey={('REFRESH': LangKeyType)}/>
-                        </Button>
                     </ButtonListWrapper>
+                    {view.renderRefreshButton()}
                 </Page>
             );
         }
 
-        const pageClassName = isRoomsFetching ? serviceStyle.disabled : '';
-
         return (
-            <Page className={pageClassName}>
+            <Page>
                 {JoinRoom.renderHeader()}
                 <Spinner isOpen={isRoomsFetching}/>
                 <Scroll>
@@ -188,9 +208,15 @@ class JoinRoom extends Component<PropsType, StateType> {
                             return (
                                 <Button
                                     onClick={async (): Promise<void> => {
-                                        const result = await view.joinRoom(roomData.roomId);
+                                        await view.showSpinner();
+                                        await view.joinRoom(roomData.roomId);
+                                        await view.hideSpinner();
                                     }}
-                                    className={style.open_room_item}
+                                    className={classnames(style.open_room_item,
+                                        {
+                                            [serviceStyle.disabled]: roomData.userList.length === roomData.maxUserSize
+                                        }
+                                    )}
                                     key={roomData.roomId}
                                 >
                                     <div className={style.right_arrow}>
@@ -208,6 +234,7 @@ class JoinRoom extends Component<PropsType, StateType> {
                             );
                         })}
                 </Scroll>
+                {view.renderRefreshButton()}
             </Page>
         );
     }
