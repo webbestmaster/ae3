@@ -90,7 +90,14 @@ export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType
             .then((blob: Response): Promise<LeaveRoomType> => blob.json())
             .then((result: LeaveRoomType): LeaveRoomType => ({
                 roomId: typeof result.roomId === 'string' ? result.roomId : ''
-            }));
+            }))
+            .catch((error: Error): LeaveRoomType => {
+                console.error(error);
+
+                return {
+                    roomId: ''
+                };
+            });
     }
 
     return localGet(localServerUrl + '/api/room/leave/' + [roomId, userId].join('/'))

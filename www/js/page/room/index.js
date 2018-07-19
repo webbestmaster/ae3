@@ -532,7 +532,6 @@ class Room extends Component<PropsType, StateType> {
                 <Spinner isOpen={isRoomDataFetching}/>
                 <Header>
                     {settings ?
-                        ['(', userList.length, '/', getMaxUserListSize(settings.map), ') '].join('') +
                         settings.map.meta[props.locale.name].name :
                         '\u00A0'
                     }
