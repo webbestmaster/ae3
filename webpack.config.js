@@ -249,6 +249,18 @@ const webpackConfig = {
         new CopyWebpackPlugin([{from: './www/favicon.ico', to: './favicon.ico'}], {debug: false}),
         new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
     ]
+
+/*
+    devServer: {
+        proxy: {
+            '/proxi-api': {
+                target: 'https://www.the-external-server.com/',
+                changeOrigin: true // for this option only: see documentations here https://github.com/chimurai/http-proxy-middleware#http-proxy-middleware-options
+            }
+        }
+    }
+*/
+
 };
 
 // webpackConfig.plugins.push(new BundleAnalyzerPlugin());
