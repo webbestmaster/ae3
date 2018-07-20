@@ -122,6 +122,8 @@ class Room extends Component<PropsType, StateType> {
         view.bindEventListeners();
 
         await view.onServerUserListChange();
+
+        await serverApi.takeTurn(roomId, user.getId());
     }
 
     async componentWillUnmount(): Promise<void> {
@@ -197,14 +199,14 @@ class Room extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
         const {match} = props;
-        const {settings} = view;
+        const {settings} = state;
         const roomId = match.params.roomId || '';
 
         if (!settings) {
             return;
         }
 
-        await serverApi.pushState(roomId, userId, {
+        await serverApi.pushState(roomId, user.getId(), {
             type: 'room__push-state',
             state: {
                 type: 'remove-user',
@@ -213,6 +215,7 @@ class Room extends Component<PropsType, StateType> {
             }
         });
 
+        // needed to kick bot and force to kick user
         await serverApi.leaveRoom(roomId, userId);
     }
 
@@ -266,8 +269,8 @@ class Room extends Component<PropsType, StateType> {
     async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity, max-statements
         const view = this;
         const {props, state} = view;
-        // const {model} = state;
-        // const roomId = props.match.params.roomId || '';
+        const {match, history} = props;
+        const roomId = match.params.roomId || '';
 
         /*
         if (!state.settings) {
@@ -280,6 +283,8 @@ class Room extends Component<PropsType, StateType> {
             console.error('unbindEventListeners should prevent this IF');
             return Promise.resolve();
         }
+
+        const lastState = message.type === 'room__push-state' ? message.states.last.state : null;
 
         switch (message.type) {
             case 'room__take-turn':
@@ -295,12 +300,18 @@ class Room extends Component<PropsType, StateType> {
                 break;
 
             case 'room__push-state':
-                if (message.states.last.state.type === 'remove-user') {
-                    console.log('---> remove the user');
+                // kicked from room
+                if (lastState !== null &&
+                    lastState.type === 'remove-user' &&
+                    lastState.userId === user.getId()) {
+                    view.unbindEventListeners();
+                    await serverApi.leaveRoom(roomId, user.getId());
+                    history.goBack();
                     return Promise.resolve();
                 }
 
-                if (message.states.last.state.isGameStart === true) {
+                if (lastState !== null &&
+                    lastState.isGameStart === true) {
                     console.log('---> The game has begun!!!');
 
                     view.unbindEventListeners();
@@ -337,7 +348,6 @@ class Room extends Component<PropsType, StateType> {
                 type: userItem.type
             }));
 
-        const takeTurnResult = await serverApi.takeTurn(roomId, user.getId());
 
         const map: MapType | void = state.settings && state.settings.map;
 
