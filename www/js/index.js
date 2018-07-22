@@ -17,7 +17,9 @@ import App from './app';
 
 import * as reducers from './app-reducer';
 
-initializeEnvironment();
+initializeEnvironment().then(() => {
+    console.log('Environment is initialized!');
+});
 
 const reducer = combineReducers({
     ...reducers
