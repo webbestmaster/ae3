@@ -12,7 +12,7 @@ import * as PIXI from 'pixi.js';
 export async function initializeEnvironment(): Promise<void> {
     const {document} = window;
 
-    PIXI.settings.SCALE_MODE = 1; // eslint-disable-line id-match
+    PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST; // eslint-disable-line id-match
 
     // reduce 300ms delay
     FastClick.attach(window.document.body);

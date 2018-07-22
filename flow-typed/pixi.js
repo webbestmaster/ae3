@@ -49,6 +49,11 @@ type MouseEventNameType = 'click' | 'mousedown' | 'mouseup';
 type TouchEventNameType = 'tap' | 'touchstart' | 'touchend';
 
 declare module 'pixi.js' {
+    declare export var SCALE_MODES: {| // eslint-disable-line id-match
+        +LINEAR: 0,
+        +NEAREST: 1
+    |};
+
     declare export var settings: {|
         SCALE_MODE: 0 | 1
     |};

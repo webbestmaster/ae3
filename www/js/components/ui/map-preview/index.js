@@ -214,10 +214,15 @@ export default class MapPreview extends Component<PropsType, StateType> {
         const {props, node} = view;
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
         const additionCanvasClassName = typeof props.canvasClassName === 'string' ? ' ' + props.canvasClassName : '';
+        const mapSize = getMapSize(props.map);
 
         return (
             <div className={style.wrapper + additionClass}>
                 <canvas
+                    style={{
+                        width: mapSize.width * mapGuide.size.square,
+                        height: mapSize.height * mapGuide.size.square
+                    }}
                     className={style.canvas + additionCanvasClassName}
                     ref={(canvas: HTMLElement | null) => {
                         node.canvas = canvas;
