@@ -150,9 +150,7 @@ export default class Game {
                 console.log('landscape clicked in', x, y);
                 console.log('todo: show landscape date', x, y);
 
-                const landscapeTileName: LandscapeType = map.landscape[y][x];
-
-                game.gameView.setState({activeLandscapeTile: landscapeTileName});
+                game.gameView.setState({activeLandscapeTile: {x, y}});
 
                 await game.render.cleanActionsList();
 
@@ -2111,7 +2109,6 @@ export default class Game {
         game.initializePathMapFlow();
         game.initializePathMapFly();
 
-        console.warn('---> add building in armor map');
         game.initializeArmorMapWalk();
         game.initializeArmorMapFlow();
         game.initializeArmorMapFly();
@@ -2125,11 +2122,18 @@ export default class Game {
         map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
             pathMap.push([]);
             line.forEach((landscapeItem: LandscapeType, tileX: number) => {
-                const landscapeImageType = map.landscape[tileY][tileX];
-                const landscapeType = landscapeImageType.replace(/-\d$/, '');
-                const pathReduce = mapGuide.landscape[landscapeType].pathReduce;
+                const building = find(map.buildings, {x: tileX, y: tileY}) || null;
 
-                pathMap[tileY].push(pathReduce);
+                if (building === null) {
+                    const landscapeImageType = map.landscape[tileY][tileX];
+                    const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                    const pathReduce = mapGuide.landscape[landscapeType].pathReduce;
+
+                    pathMap[tileY].push(pathReduce);
+                    return;
+                }
+
+                pathMap[tileY].push(mapGuide.landscapeUnderBuilding.pathReduce);
             });
         });
         game.pathMap.walk = pathMap;
@@ -2143,13 +2147,20 @@ export default class Game {
         map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
             pathMap.push([]);
             line.forEach((landscapeItem: LandscapeType, tileX: number) => {
-                const landscapeImageType = map.landscape[tileY][tileX];
-                const landscapeType = landscapeImageType.replace(/-\d$/, '');
-                const pathReduce = landscapeType === 'water' ?
-                    1 :
-                    mapGuide.landscape[landscapeType].pathReduce;
+                const building = find(map.buildings, {x: tileX, y: tileY}) || null;
 
-                pathMap[tileY].push(pathReduce);
+                if (building === null) {
+                    const landscapeImageType = map.landscape[tileY][tileX];
+                    const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                    const pathReduce = landscapeType === 'water' ?
+                        1 :
+                        mapGuide.landscape[landscapeType].pathReduce;
+
+                    pathMap[tileY].push(pathReduce);
+                    return;
+                }
+
+                pathMap[tileY].push(mapGuide.landscapeUnderBuilding.pathReduce);
             });
         });
 
@@ -2179,11 +2190,18 @@ export default class Game {
         map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
             armorMap.push([]);
             line.forEach((landscapeItem: LandscapeType, tileX: number) => {
-                const landscapeImageType = map.landscape[tileY][tileX];
-                const landscapeType = landscapeImageType.replace(/-\d$/, '');
-                const placeArmor = mapGuide.landscape[landscapeType].armor;
+                const building = find(map.buildings, {x: tileX, y: tileY}) || null;
 
-                armorMap[tileY].push(placeArmor);
+                if (building === null) {
+                    const landscapeImageType = map.landscape[tileY][tileX];
+                    const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                    const placeArmor = mapGuide.landscape[landscapeType].armor;
+
+                    armorMap[tileY].push(placeArmor);
+                    return;
+                }
+
+                armorMap[tileY].push(mapGuide.landscapeUnderBuilding.armor);
             });
         });
 
@@ -2198,13 +2216,20 @@ export default class Game {
         map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
             armorMap.push([]);
             line.forEach((landscapeItem: LandscapeType, tileX: number) => {
-                const landscapeImageType = map.landscape[tileY][tileX];
-                const landscapeType = landscapeImageType.replace(/-\d$/, '');
-                const placeArmor = landscapeType === 'water' ?
-                    mapGuide.landscape[landscapeType].flowArmor :
-                    mapGuide.landscape[landscapeType].armor;
+                const building = find(map.buildings, {x: tileX, y: tileY}) || null;
 
-                armorMap[tileY].push(placeArmor);
+                if (building === null) {
+                    const landscapeImageType = map.landscape[tileY][tileX];
+                    const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                    const placeArmor = landscapeType === 'water' ?
+                        mapGuide.landscape[landscapeType].flowArmor :
+                        mapGuide.landscape[landscapeType].armor;
+
+                    armorMap[tileY].push(placeArmor);
+                    return;
+                }
+
+                armorMap[tileY].push(mapGuide.landscapeUnderBuilding.armor);
             });
         });
 
@@ -2219,11 +2244,18 @@ export default class Game {
         map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
             armorMap.push([]);
             line.forEach((landscapeItem: LandscapeType, tileX: number) => {
-                const landscapeImageType = map.landscape[tileY][tileX];
-                const landscapeType = landscapeImageType.replace(/-\d$/, '');
-                const placeArmor = mapGuide.landscape[landscapeType].armor;
+                const building = find(map.buildings, {x: tileX, y: tileY}) || null;
 
-                armorMap[tileY].push(placeArmor);
+                if (building === null) {
+                    const landscapeImageType = map.landscape[tileY][tileX];
+                    const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                    const placeArmor = mapGuide.landscape[landscapeType].armor;
+
+                    armorMap[tileY].push(placeArmor);
+                    return;
+                }
+
+                armorMap[tileY].push(mapGuide.landscapeUnderBuilding.armor);
             });
         });
 

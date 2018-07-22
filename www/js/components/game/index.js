@@ -99,7 +99,10 @@ type StateType = {|
             showMoney: boolean
         |}
     |},
-    activeLandscapeTile: LandscapeType
+    activeLandscapeTile: {|
+        x: number,
+        y: number
+    |}
     // map: MapType | null
 |};
 
@@ -137,7 +140,10 @@ export class GameView extends Component<PropsType, StateType> {
                     showMoney: true
                 }
             },
-            activeLandscapeTile: 'terra-0'
+            activeLandscapeTile: {
+                x: 0,
+                y: 0
+            }
         };
     }
 
@@ -573,8 +579,9 @@ export class GameView extends Component<PropsType, StateType> {
         const view = this;
         const {state} = view;
         const mapState = state.game.getMapState();
+        const gameData = state.game.getGameData();
 
-        if (mapState === null) {
+        if (mapState === null || gameData === null) {
             return null;
         }
 
@@ -592,7 +599,12 @@ export class GameView extends Component<PropsType, StateType> {
         // &nbsp; after {mapUserData.money} needed cause .ellipsis wrapper reduce shadow on last symbol
         return (
             <div className={style.bottom_bar__wrapper}>
-                <LandscapeInfo tile={(state.activeLandscapeTile: LandscapeType)}/>
+                <LandscapeInfo
+                    map={mapState}
+                    gameData={gameData}
+                    x={state.activeLandscapeTile.x}
+                    y={state.activeLandscapeTile.y}
+                />
                 <BottomBar className={classnames(style.bottom_bar, bottomBarColorMap[activeUserColor])}>
                     <img
                         className={style.bottom_bar__icon}

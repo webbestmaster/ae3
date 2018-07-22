@@ -69,8 +69,12 @@ type MapGuideType = {|
         |},
         +hill: {|
             +pathReduce: 2,
-            +armor: 0
+            +armor: 2
         |}
+    |},
+    +landscapeUnderBuilding: {|
+        +pathReduce: 1,
+        +armor: 3
     |}
 |};
 
@@ -157,8 +161,12 @@ const mapGuide: MapGuideType = {
         },
         hill: {
             pathReduce: 2,
-            armor: 0
+            armor: 2
         }
+    },
+    landscapeUnderBuilding: {
+        pathReduce: 1,
+        armor: 3
     }
 };
 
