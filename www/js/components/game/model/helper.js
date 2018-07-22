@@ -16,6 +16,7 @@ import * as PIXI from 'pixi.js';
 import {storeViewId} from './../../store';
 import queryString from 'query-string';
 import type {RoomTypeType} from './../../../module/server-api';
+import type {UserColorType} from './../../../maps/map-guide';
 
 type InteractionEventType = {|
     +data: {|
@@ -47,7 +48,7 @@ export function getUserIndex(userId: string, userList: Array<MapUserType>): numb
     return userIndex;
 }
 
-export function getUserColor(userId: string, userList: Array<MapUserType>): string | null {
+export function getUserColor(userId: string, userList: Array<MapUserType>): UserColorType | null {
     const userIndex = getUserIndex(userId, userList);
 
     if (userIndex === null) {

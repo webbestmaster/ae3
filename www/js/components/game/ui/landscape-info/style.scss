@@ -1,1 +1,9 @@
-// my best css file
+@import './../../../ui/ui-var';
+
+.wrapper {
+    background-color: #333;
+    box-sizing: border-box;
+    float: right;
+    height: $bar-height;
+    width: $bar-height;
+}

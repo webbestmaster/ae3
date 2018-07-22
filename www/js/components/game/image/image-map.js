@@ -2,7 +2,7 @@
 
 import * as PIXI from 'pixi.js';
 
-PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST; // eslint-disable-line id-match
 
 type ImageMapType = {|
     building: {

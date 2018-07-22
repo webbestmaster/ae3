@@ -1,6 +1,7 @@
 // @flow
 
 export type TeamIdType = 'team-0' | 'team-1' | 'team-2' | 'team-3';
+export type UserColorType = 'red' | 'blue' | 'green' | 'black';
 
 type MapGuideType = {|
     +defaultMoneyList: Array<number>,

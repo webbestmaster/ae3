@@ -31,13 +31,35 @@ import Page from './../../components/ui/page';
 import BottomBar from './../../components/ui/bottom-bar';
 import find from 'lodash/find';
 import {localSocketIoClient} from './../../module/socket-local';
+import type {UserColorType} from './../../maps/map-guide';
+import LandscapeInfo from './ui/landscape-info';
+
+import iconMoney from './ui/icon/money.svg';
+import iconUnitRed from './ui/icon/unit-red.svg';
+import iconUnitBlue from './ui/icon/unit-blue.svg';
+import iconUnitGreen from './ui/icon/unit-green.svg';
+import iconUnitBlack from './ui/icon/unit-black.svg';
+
+const unitIconMap: { [key: UserColorType]: string } = {
+    red: iconUnitRed,
+    blue: iconUnitBlue,
+    green: iconUnitGreen,
+    black: iconUnitBlack
+};
+
+const bottomBarColorMap: { [key: UserColorType]: string } = {
+    red: style.bottom_bar__color_red,
+    blue: style.bottom_bar__color_blue,
+    green: style.bottom_bar__color_green,
+    black: style.bottom_bar__color_black
+};
 
 // function Transition(props: mixed): Node {
 //     return <Slide direction="up" {...props} />;
 // }
 
 export const bottomBarData = {
-    height: 64
+    height: 52
 };
 
 type PropsType = {|
@@ -332,42 +354,6 @@ export class GameView extends Component<PropsType, StateType> {
         });
     }
 
-    renderSupplyState(): Node {
-        const view = this;
-        const {props, state} = view;
-        const mapState = state.game.getMapState();
-        const userId = user.getId();
-
-        if (mapState === null) {
-            return null;
-        }
-
-        const supplyState = getSupplyState(mapState, userId);
-
-        // return ['Units:', supplyState.unitCount, '/', supplyState.unitLimit].join(' ');
-        return [supplyState.unitCount, '/', supplyState.unitLimit, '웃'].join(' ');
-    }
-
-    renderMoneyState(): Node {
-        const view = this;
-        const {props, state} = view;
-
-        const mapState = state.game.getMapState();
-
-        if (mapState === null) {
-            return null;
-        }
-
-        const mapUserData = find(mapState.userList, {userId: user.getId()}) || null;
-
-        if (mapUserData === null) {
-            return null;
-        }
-
-        // return ['Money:', mapUserData.money].join(' ');
-        return mapUserData.money + '$'; // , mapUserData.money].join(' ');
-    }
-
     showEndGame() {
         const view = this;
         const {props, state} = view;
@@ -451,7 +437,7 @@ export class GameView extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
-        props.history.go(-1);
+        props.history.goBack();
     }
 
     popupChangeActiveUser(state: PopupParameterType) {
@@ -580,6 +566,53 @@ export class GameView extends Component<PropsType, StateType> {
         );
     }
 
+    renderBottomBar(): Node { // eslint-disable-line complexity
+        const view = this;
+        const {state} = view;
+        const mapState = state.game.getMapState();
+
+        if (mapState === null) {
+            return null;
+        }
+
+        const activeUserId = isOnLineRoomType() ? user.getId() : mapState.activeUserId;
+
+        const activeUserColor = getUserColor(activeUserId, mapState.userList);
+        const mapUserData = find(mapState.userList, {userId: activeUserId}) || null;
+
+        if (activeUserColor === null || mapUserData === null) {
+            return null;
+        }
+
+        const supplyState = getSupplyState(mapState, activeUserId);
+
+        // &nbsp; after {mapUserData.money} needed cause .ellipsis wrapper reduce shadow on last symbol
+        return (
+            <div className={style.bottom_bar__wrapper}>
+                <LandscapeInfo/>
+                <BottomBar className={classnames(style.bottom_bar, bottomBarColorMap[activeUserColor])}>
+                    <img
+                        className={style.bottom_bar__icon}
+                        src={unitIconMap[activeUserColor]}
+                        alt=""
+                    />
+                    <span className={style.bottom_bar__text}>
+                        {supplyState.unitCount + '/' + supplyState.unitLimit}
+                    </span>
+                    <img
+                        className={style.bottom_bar__icon}
+                        src={iconMoney}
+                        alt=""
+                    />
+                    <span className={style.bottom_bar__text}>
+                        {mapUserData.money}
+                        &nbsp;
+                    </span>
+                </BottomBar>
+            </div>
+        );
+    }
+
     render(): Node { // eslint-disable-line complexity
         const view = this;
         const {props, state} = view;
@@ -619,7 +652,7 @@ export class GameView extends Component<PropsType, StateType> {
                     <div
                         className={classnames(
                             style.end_turn,
-                            {[serviceStyle.hidden]: isCanvasDisabled}
+                            {[serviceStyle.disabled]: isCanvasDisabled}
                         )}
                         onClick={async (): Promise<void> => {
                             await view.endTurn();
@@ -643,20 +676,13 @@ export class GameView extends Component<PropsType, StateType> {
                             view.node.canvas = canvas;
                         }}
                         style={{
+                            // TODO: uncomment this for production
                             // pointerEvents: isCanvasDisabled ? 'none' : 'auto',
                             width: props.system.screen.width,
                             height: props.system.screen.height - bottomBarData.height
                         }}
                     />
-                    <BottomBar
-                        className={serviceStyle.ta_l}
-                    >
-                        <span>
-                            {view.renderSupplyState()}
-                        </span>
-                        &nbsp;|&nbsp;
-                        {view.renderMoneyState()}
-                    </BottomBar>
+                    {view.renderBottomBar()}
                 </Page>
             ]
         );

@@ -1,8 +1,9 @@
 @import './../ui/ui';
+@import './../ui/ui-var';
 @import './../../../css/var';
 
 .end_turn {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.75);
     color: $main-text-color;
     font-family: $main-font-family;
     font-size: 40px;
@@ -30,4 +31,49 @@
     background-repeat: no-repeat;
     background-size: cover;
     overflow: hidden;
+}
+
+.bottom_bar__wrapper {
+    height: $bar-height;
+}
+
+.bottom_bar {
+    background-position: 0 50%;
+    background-size: 100% $bar-height;
+    display: flex;
+    justify-content: center;
+    margin-right: $bar-height;
+    width: auto;
+}
+
+.bottom_bar__icon {
+    float: left;
+    height: 24px;
+    margin: 1px 5px 0 0;
+}
+
+.bottom_bar__text {
+    float: left;
+    font-size: inherit;
+    margin: 3px 10px 0 0;
+
+    &:last-child {
+        margin-right: 0;
+    }
+}
+
+.bottom_bar__color_red {
+    background-image: linear-gradient(to bottom, #a10070, $main-background-color);
+}
+
+.bottom_bar__color_blue {
+    background-image: linear-gradient(to bottom, #0064c6, $main-background-color);
+}
+
+.bottom_bar__color_green {
+    background-image: linear-gradient(to bottom, #009937, $main-background-color);
+}
+
+.bottom_bar__color_black {
+    background-image: linear-gradient(to bottom, #002b4b, $main-background-color);
 }

@@ -20,8 +20,8 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
 
     render(): Node {
         return (
-            <div>
-                {'\u00A0'}
+            <div className={style.wrapper}>
+                landscape info
             </div>
         );
     }
