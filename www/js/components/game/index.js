@@ -39,6 +39,7 @@ import iconUnitRed from './ui/icon/unit-red.svg';
 import iconUnitBlue from './ui/icon/unit-blue.svg';
 import iconUnitGreen from './ui/icon/unit-green.svg';
 import iconUnitBlack from './ui/icon/unit-black.svg';
+import type {LandscapeType} from './../../maps/type';
 
 const unitIconMap: { [key: UserColorType]: string } = {
     red: iconUnitRed,
@@ -97,7 +98,8 @@ type StateType = {|
             isOpen: boolean,
             showMoney: boolean
         |}
-    |}
+    |},
+    activeLandscapeTile: LandscapeType
     // map: MapType | null
 |};
 
@@ -134,7 +136,8 @@ export class GameView extends Component<PropsType, StateType> {
                     isOpen: false,
                     showMoney: true
                 }
-            }
+            },
+            activeLandscapeTile: 'terra-0'
         };
     }
 
@@ -589,7 +592,7 @@ export class GameView extends Component<PropsType, StateType> {
         // &nbsp; after {mapUserData.money} needed cause .ellipsis wrapper reduce shadow on last symbol
         return (
             <div className={style.bottom_bar__wrapper}>
-                <LandscapeInfo/>
+                <LandscapeInfo tile={(state.activeLandscapeTile: LandscapeType)}/>
                 <BottomBar className={classnames(style.bottom_bar, bottomBarColorMap[activeUserColor])}>
                     <img
                         className={style.bottom_bar__icon}

@@ -2,8 +2,18 @@
 
 .wrapper {
     background-color: #333;
+    border: 3px solid #b0b6ac;
+    box-shadow: inset 0 0 0 2px #6c6d7d;
     box-sizing: border-box;
     float: right;
     height: $bar-height;
     width: $bar-height;
+}
+
+.image {
+    display: block;
+    height: $bar-height - 10;
+    margin-left: 2px;
+    margin-top: 2px;
+    width: $bar-height - 10;
 }

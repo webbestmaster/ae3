@@ -2,6 +2,8 @@
 @import './../ui/ui-var';
 @import './../../../css/var';
 
+$bottom-bar--border-color: #404757;
+
 .end_turn {
     background-color: rgba(0, 0, 0, 0.75);
     color: $main-text-color;
@@ -34,6 +36,8 @@
 }
 
 .bottom_bar__wrapper {
+    background-color: $bottom-bar--border-color;
+    border-top: 1px solid $bottom-bar--border-color;
     height: $bar-height;
 }
 
@@ -42,7 +46,7 @@
     background-size: 100% $bar-height;
     display: flex;
     justify-content: center;
-    margin-right: $bar-height;
+    margin-right: $bar-height + 1; // + 1 to make border between bar and landscape info
     width: auto;
 }
 

@@ -129,18 +129,19 @@ export default class Game {
 
     initialize(renderSetting: RenderSettingType) {
         const game = this;
+        const {map} = game.settings;
 
-        game.settings.map.units = game.settings.map.units.filter((mapUnitData: UnitType): boolean => {
+        map.units = map.units.filter((mapUnitData: UnitType): boolean => {
             return typeof mapUnitData.userId === 'string';
         });
 
-        game.setMapState(game.settings.map);
+        game.setMapState(map);
 
         game.render.initialize(renderSetting);
 
         // draw landscape
         game.render
-            .drawLandscape(game.settings.map, async (x: number, y: number): Promise<void> => {
+            .drawLandscape(map, async (x: number, y: number): Promise<void> => {
                 if (!game.isMyTurn()) {
                     console.log('click on landscape: not your turn');
                     return;
@@ -148,6 +149,10 @@ export default class Game {
 
                 console.log('landscape clicked in', x, y);
                 console.log('todo: show landscape date', x, y);
+
+                const landscapeTileName: LandscapeType = map.landscape[y][x];
+
+                game.gameView.setState({activeLandscapeTile: landscapeTileName});
 
                 await game.render.cleanActionsList();
 
@@ -160,12 +165,12 @@ export default class Game {
             });
 
         // add buildings
-        game.settings.map.buildings.forEach((buildingData: BuildingType) => {
+        map.buildings.forEach((buildingData: BuildingType) => {
             game.createBuilding(buildingData);
         });
 
         // add units
-        game.settings.map.units.forEach((unitData: UnitType) => {
+        map.units.forEach((unitData: UnitType) => {
             if (typeof unitData.userId !== 'string') {
                 console.error('unit has no userId');
                 return;
@@ -174,7 +179,7 @@ export default class Game {
         });
 
         // add graves
-        game.settings.map.graves.forEach((graveData: GraveType) => {
+        map.graves.forEach((graveData: GraveType) => {
             game.createGrave(graveData);
         });
 
