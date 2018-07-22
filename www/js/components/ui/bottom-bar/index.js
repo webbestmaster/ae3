@@ -8,6 +8,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
+import servicesStyle from './../../../../css/service.scss';
 import style from './style.scss';
 
 type PropsType = {|
@@ -32,7 +33,11 @@ export class BottomBar extends Component<PropsType, StateType> {
                 className={style.bottom_bar + additionClass}
                 onClick={typeof props.onClick === 'function' ? props.onClick : null}
             >
-                {props.children}
+                <div className={style.bottom_bar__text}>
+                    <p className={servicesStyle.ellipsis}>
+                        {props.children}
+                    </p>
+                </div>
             </div>
         );
     }

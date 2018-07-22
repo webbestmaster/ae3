@@ -170,10 +170,10 @@ class JoinRoom extends Component<PropsType, StateType> {
                     <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                         <Fieldset className={serviceStyle.ta_c}>
                             <span className={serviceStyle.zero_opacity}>
-                                ...
+                                {'\u2026'}
                             </span>
                             <Locale stringKey={('LOADING': LangKeyType)}/>
-                            ...
+                            {'\u2026'}
                         </Fieldset>
                     </ButtonListWrapper>
                 </Page>

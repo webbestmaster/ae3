@@ -1,0 +1,33 @@
+@import './../ui-var';
+
+.button {
+    background-color: $main-background-color;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    font-size: 18px;
+    line-height: 25px;
+    margin-bottom: 6px;
+    min-height: 41px;
+    min-width: 195px;
+    padding: 9px 15px 5px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 3px 3px 0 #000;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &:hover {
+        box-shadow: none;
+        text-shadow: none;
+    }
+
+    &:active {
+        background-color: #39384e;
+    }
+}

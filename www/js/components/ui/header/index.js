@@ -8,7 +8,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
-import iuStyle from './../ui.scss';
+import style from './style.scss';
 import servicesStyle from './../../../../css/service.scss';
 import BackButton from './back-button';
 
@@ -29,9 +29,9 @@ export class Header extends Component<PropsType, StateType> {
         const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
 
         return (
-            <div className={iuStyle.header + additionClass}>
+            <div className={style.header + additionClass}>
                 <BackButton/>
-                <div className={iuStyle.header_text}>
+                <div className={style.header_text}>
                     <h3 className={servicesStyle.ellipsis}>
                         {props.children}
                     </h3>

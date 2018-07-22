@@ -14,7 +14,7 @@ export const ruRu: LangDataType = {
     MAPS: 'Карты',
     PLAYER: 'Игрок',
     PLAYERS: 'Игроки',
-    MESSAGE__NO_OPEN_GAME: 'Нет доступных игр, но Вы можете создать свою...',
+    MESSAGE__NO_OPEN_GAME: 'Нет доступных игр, но Вы можете создать свою\u2026',
     LOADING: 'Загрузка',
     REFRESH: 'Обновить',
     YOU: 'Вы',

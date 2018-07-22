@@ -14,7 +14,7 @@ export const enUs: LangDataType = {
     MAPS: 'Maps',
     PLAYER: 'Player',
     PLAYERS: 'Players',
-    MESSAGE__NO_OPEN_GAME: 'No open games, but you can create your own...',
+    MESSAGE__NO_OPEN_GAME: 'No open games, but you can create your own\u2026',
     LOADING: 'Loading',
     REFRESH: 'Refresh',
     YOU: 'You',

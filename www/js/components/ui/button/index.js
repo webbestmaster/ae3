@@ -6,7 +6,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
-import uiStyle from './../ui.scss';
+import style from './style.scss';
 
 type PropsType = {|
     children: Node,
@@ -27,7 +27,7 @@ export class Button extends Component<PropsType, StateType> {
 
         return (
             <div
-                className={uiStyle.button + additionClass}
+                className={style.button + additionClass}
                 onClick={typeof props.onClick === 'function' ? props.onClick : null}
             >
                 {props.children}
