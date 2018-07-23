@@ -17,7 +17,7 @@ type PropsType = {|
     map: MapType
 |};
 
-const iconsReqContext = require.context('./i/', true, /\.svg$/);
+const iconsReqContext = require.context('./i/landscape', true, /\.svg$/);
 
 const iconMap = {};
 
@@ -54,9 +54,11 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
                     {x}
                     {'/'}
                     {y}
-                    {' - armor:' + gameData.armorMap.walk[y][x]}
                     {'- tile:' + map.landscape[y][x]}
                 </div>
+                <span>
+                    {'armor: ' + gameData.armorMap.walk[y][x]}
+                </span>
                 <img
                     className={style.image}
                     src={iconMap[map.landscape[y][x]]}
