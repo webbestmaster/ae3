@@ -19,19 +19,16 @@
     width: $bar-height - 10;
 }
 
-.armor_icon {
-    left: 2px;
+.armor {
+    background-image: url('./i/armor.svg');
+    background-position: 0 2px;
+    background-repeat: no-repeat;
+    background-size: 12px auto;
+    bottom: 0;
+    font-size: 14px;
+    padding: 1px 3px 1px 14px;
     position: absolute;
-    top: 2px;
-    width: 12px;
-    z-index: 1;
-}
-
-.armor_value {
-    font-size: 12px;
-    left: 16px;
-    position: absolute;
+    right: 0;
     text-shadow: 1px 1px 0 #333, -1px -1px 0 #333, 1px -1px 0 #333, -1px 1px 0 #333, 0 1px 0 #333, 1px 0 0 #333, 0 -1px 0 #333, -1px 0 0 #333;
-    top: 3px;
     z-index: 1;
 }

@@ -8,8 +8,6 @@ import style from './style.scss';
 import type {GameDataType} from './../../model/unit';
 import type {MapType} from './../../../../maps/type';
 
-import armorIcon from './i/armor.svg';
-
 type StateType = {};
 type PropsType = {|
     x: number,
@@ -51,12 +49,7 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
 
         return (
             <div className={style.wrapper}>
-                <img
-                    className={style.armor_icon}
-                    src={armorIcon}
-                    alt=""
-                />
-                <p className={style.armor_value}>
+                <p className={style.armor}>
                     {gameData.armorMap.walk[y][x]}
                 </p>
                 <img
