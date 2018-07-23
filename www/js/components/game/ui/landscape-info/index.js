@@ -5,9 +5,10 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import style from './style.scss';
-import find from 'lodash/find';
 import type {GameDataType} from './../../model/unit';
 import type {MapType} from './../../../../maps/type';
+
+import armorIcon from './i/armor.svg';
 
 type StateType = {};
 type PropsType = {|
@@ -50,15 +51,14 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
 
         return (
             <div className={style.wrapper}>
-                <div style={{display: 'none'}}>
-                    {x}
-                    {'/'}
-                    {y}
-                    {'- tile:' + map.landscape[y][x]}
-                </div>
-                <span>
-                    {'armor: ' + gameData.armorMap.walk[y][x]}
-                </span>
+                <img
+                    className={style.armor_icon}
+                    src={armorIcon}
+                    alt=""
+                />
+                <p className={style.armor_value}>
+                    {gameData.armorMap.walk[y][x]}
+                </p>
                 <img
                     className={style.image}
                     src={iconMap[map.landscape[y][x]]}

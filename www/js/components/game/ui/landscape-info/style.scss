@@ -7,6 +7,7 @@
     box-sizing: border-box;
     float: right;
     height: $bar-height;
+    position: relative;
     width: $bar-height;
 }
 
@@ -16,4 +17,21 @@
     margin-left: 2px;
     margin-top: 2px;
     width: $bar-height - 10;
+}
+
+.armor_icon {
+    left: 2px;
+    position: absolute;
+    top: 2px;
+    width: 12px;
+    z-index: 1;
+}
+
+.armor_value {
+    font-size: 12px;
+    left: 16px;
+    position: absolute;
+    text-shadow: 1px 1px 0 #333, -1px -1px 0 #333, 1px -1px 0 #333, -1px 1px 0 #333, 0 1px 0 #333, 1px 0 0 #333, 0 -1px 0 #333, -1px 0 0 #333;
+    top: 3px;
+    z-index: 1;
 }

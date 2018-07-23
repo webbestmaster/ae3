@@ -579,9 +579,14 @@ export class GameView extends Component<PropsType, StateType> {
         const view = this;
         const {state} = view;
         const mapState = state.game.getMapState();
+
+        if (mapState === null) {
+            return null;
+        }
+
         const gameData = state.game.getGameData();
 
-        if (mapState === null || gameData === null) {
+        if (gameData === null) {
             return null;
         }
 
