@@ -88,6 +88,7 @@ export default class Render {
             sharedTicker: true,
             sharedLoader: true,
             transparent: true,
+            roundPixels: true,
             // backgroundColor: 0x1099bb,
             resolution: window.devicePixelRatio || 1
         });

@@ -9,6 +9,7 @@ type ApplicationOptionsType = {|
     view?: HTMLElement,
     resolution?: number,
     clearBeforeRender?: boolean,
+    roundPixels?: boolean,
     sharedTicker?: boolean,
     sharedLoader?: boolean
 |};

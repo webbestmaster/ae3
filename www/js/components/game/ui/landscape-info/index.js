@@ -45,8 +45,6 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
         const {props, state} = view;
         const {map, gameData, x, y} = props;
 
-        console.warn('LandscapeInfo - show armor (and path reduce)');
-
         return (
             <div className={style.wrapper}>
                 <p className={style.armor}>
