@@ -156,12 +156,8 @@ export default class Render {
 
         wrapper.addEventListener(
             'touchcancel',
-            async (evt: TouchEvent): Promise<void> => {
-                const {touches} = evt;
-
-                if (touches.length !== 0) {
-                    await render.cleanActionsList();
-                }
+            async (): Promise<void> => {
+                await render.cleanActionsList();
             });
     }
 

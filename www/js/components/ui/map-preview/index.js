@@ -12,6 +12,7 @@ import * as PIXI from 'pixi.js';
 import imageMap from './../../game/image/image-map';
 import mapGuide from './../../../maps/map-guide';
 import {getMapSize, getUserColor} from './../../game/model/helper';
+import {getDefaultUserList} from './helper';
 
 type StateType = void;
 type PropsType = {|
@@ -115,11 +116,7 @@ export default class MapPreview extends Component<PropsType, StateType> {
         const {buildingList} = layer;
         const {square} = mapGuide.size;
 
-        const userList: Array<MapUserType> = [0, 1, 2, 3].map((index: number): MapUserType => ({
-            userId: String(index),
-            money: 0,
-            teamId: mapGuide.teamIdList[index]
-        }));
+        const userList = getDefaultUserList();
 
         map.buildings.forEach((building: BuildingType) => { // eslint-disable-line complexity
             const {type} = building;
@@ -166,11 +163,7 @@ export default class MapPreview extends Component<PropsType, StateType> {
         const {unitList} = layer;
         const {square} = mapGuide.size;
 
-        const userList: Array<MapUserType> = [0, 1, 2, 3].map((index: number): MapUserType => ({
-            userId: String(index),
-            money: 0,
-            teamId: mapGuide.teamIdList[index]
-        }));
+        const userList = getDefaultUserList();
 
         map.units.forEach((unit: UnitType) => {
             let color = 'gray';

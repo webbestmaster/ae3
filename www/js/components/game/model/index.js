@@ -264,7 +264,7 @@ export default class Game {
         return earnedMoney;
     }
 
-    async refreshUnitActionState(userId: string): Promise<void> { // eslint-disable-line complexity, max-statements
+    async refreshUnitActionState(userId: string): Promise<void> { // eslint-disable-line complexity, max-statements, sonarjs/cognitive-complexity
         const game = this;
 
         await game.render.cleanActionsList();
@@ -737,7 +737,7 @@ export default class Game {
         return Promise.resolve();
     }
 
-    async handleServerPushStateAttack(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
+    async handleServerPushStateAttack(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements, sonarjs/cognitive-complexity
         const game = this;
         const state = message.states.last.state;
 
@@ -1186,7 +1186,7 @@ export default class Game {
         return Promise.resolve();
     }
 
-    async handleServerRefreshUnitList(message: SocketMessagePushStateType): Promise<void> {
+    async handleServerRefreshUnitList(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line sonarjs/cognitive-complexity
         const game = this;
         const {unitList} = game;
         const socketMapState = message.states.last.state.map;
@@ -1438,7 +1438,7 @@ export default class Game {
         unit.destroy();
     }
 
-    async onUnitClick(unit: Unit): Promise<void> { // eslint-disable-line complexity, max-statements
+    async onUnitClick(unit: Unit): Promise<void> { // eslint-disable-line complexity, max-statements, sonarjs/cognitive-complexity
         const game = this;
         const unitUserId = typeof unit.attr.userId === 'string' ? unit.attr.userId : null;
 
@@ -1663,7 +1663,7 @@ export default class Game {
             });
     }
 
-    async bindOnClickUnitActionAttack(unitAction: UnitActionAttackType): Promise<void> { // eslint-disable-line complexity, max-statements
+    async bindOnClickUnitActionAttack(unitAction: UnitActionAttackType): Promise<void> { // eslint-disable-line complexity, max-statements, sonarjs/cognitive-complexity
         const game = this;
 
         await game.render.cleanActionsList();
@@ -2110,9 +2110,8 @@ export default class Game {
         game.initializePathMapFlow();
         game.initializePathMapFly();
 
-        game.initializeArmorMapWalk();
+        game.initializeArmorMapWalkAndFly();
         game.initializeArmorMapFlow();
-        game.initializeArmorMapFly();
     }
 
     initializePathMapWalk() {
@@ -2183,7 +2182,7 @@ export default class Game {
         game.pathMap.fly = pathMap;
     }
 
-    initializeArmorMapWalk() {
+    initializeArmorMapWalkAndFly() {
         const game = this;
         const {map} = game.settings;
         const armorMap = [];
@@ -2207,6 +2206,7 @@ export default class Game {
         });
 
         game.armorMap.walk = armorMap;
+        game.armorMap.fly = armorMap;
     }
 
     initializeArmorMapFlow() {
@@ -2235,32 +2235,6 @@ export default class Game {
         });
 
         game.armorMap.flow = armorMap;
-    }
-
-    initializeArmorMapFly() {
-        const game = this;
-        const {map} = game.settings;
-        const armorMap = [];
-
-        map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
-            armorMap.push([]);
-            line.forEach((landscapeItem: LandscapeType, tileX: number) => {
-                const building = find(map.buildings, {x: tileX, y: tileY}) || null;
-
-                if (building === null) {
-                    const landscapeImageType = map.landscape[tileY][tileX];
-                    const landscapeType = landscapeImageType.replace(/-\d$/, '');
-                    const placeArmor = mapGuide.landscape[landscapeType].armor;
-
-                    armorMap[tileY].push(placeArmor);
-                    return;
-                }
-
-                armorMap[tileY].push(mapGuide.landscapeUnderBuilding.armor);
-            });
-        });
-
-        game.armorMap.fly = armorMap;
     }
 
     initializeEmptyActionMap() {

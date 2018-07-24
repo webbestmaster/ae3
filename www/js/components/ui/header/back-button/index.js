@@ -16,7 +16,7 @@ type PropsType = {|
 
 type StateType = void;
 
-export default class BackButton extends Component<PropsType, StateType> {
+class BackButton extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -27,7 +27,7 @@ export default class BackButton extends Component<PropsType, StateType> {
         return (
             <div
                 onClick={() => {
-                    props.history.go(-1);
+                    props.history.goBack();
                 }}
                 className={style.wrapper}
             >
@@ -36,3 +36,5 @@ export default class BackButton extends Component<PropsType, StateType> {
         );
     }
 }
+
+export default withRouter(BackButton);

@@ -17,6 +17,7 @@ import type {PathType, PointType} from './../../../../lib/a-star-finder';
 import {tweenList} from './../../../../lib/tween';
 import find from 'lodash/find';
 import Grave from './../grave';
+import {fillActionMap} from './helper';
 
 type LevelUpAnimationDataType = {|
     x: number,
@@ -262,7 +263,6 @@ export default class Unit {
         gameAttr.sprite.unit.animationSpeed = defaultUnitData.render.spriteAnimatedSpeed;
 
         gameAttr.sprite.unit.play();
-        // attr.sprite.unit = PIXI.Sprite.fromImage(imageMap.unit[attr.type + '-' + color + '-0']);
 
         gameAttr.container.addChild(gameAttr.sprite.unit);
     }
@@ -345,7 +345,7 @@ export default class Unit {
         gameAttr.container.addChild(gameAttr.sprite.poisonCountdown);
     }
 
-    getActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity, max-statements
+    getActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity, max-statements, sonarjs/cognitive-complexity
         const unit = this;
 
         if (unit.getDidAttack() ||
@@ -370,14 +370,7 @@ export default class Unit {
             // add move
             const actionMapMove = unit.getMoveActions(gameData);
 
-            actionMapMove.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
-                lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
-                    // actionMap[yCell][xCell].push(...cellAction);
-                    if (cellAction[0]) {
-                        actionMap[yCell][xCell][0] = cellAction[0];
-                    }
-                });
-            });
+            fillActionMap(actionMapMove, actionMap);
         }
 
         // add attack
@@ -464,14 +457,7 @@ export default class Unit {
             return null;
         }
 
-        actionMapOpenStore.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
-            lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
-                // actionMap[yCell][xCell].push(...cellAction);
-                if (cellAction[0]) {
-                    actionMap[yCell][xCell][0] = cellAction[0];
-                }
-            });
-        });
+        fillActionMap(actionMapOpenStore, actionMap);
 
         return actionMap;
     }
@@ -886,13 +872,12 @@ export default class Unit {
         }
 
         const enemyUnitCoordinates = unit.getAllEnemyUnitsCoordinates(gameData);
-        const allAvailableAttack = unit.getAllAvailableAttack(gameData).filter((mapPoint: PointType): boolean => {
+
+        return unit.getAllAvailableAttack(gameData).filter((mapPoint: PointType): boolean => {
             return enemyUnitCoordinates.some((unitCoordinates: [number, number]): boolean => {
                 return unitCoordinates[0] === mapPoint[0] && unitCoordinates[1] === mapPoint[1];
             });
         });
-
-        return allAvailableAttack;
     }
 
     getAllAvailableAttack(gameData: GameDataType): AvailablePathMapType {
@@ -1023,7 +1008,7 @@ export default class Unit {
         });
 
         return Promise.all(promiseList)
-            .then((): void => console.error('unit setActionState done'))
+            .then((): void => console.log('unit setActionState done'))
             .catch((error: Error) => {
                 console.error('error (in list) with unit setActionState');
                 console.error(error);

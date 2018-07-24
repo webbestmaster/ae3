@@ -63,6 +63,7 @@
     "eslint-plugin-no-use-extend-native": "^0.3.12",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-react": "^7.10.0",
+    "eslint-plugin-sonarjs": "^0.1.0",
     "file-name-linter": "^1.0.2",
     "flow-bin": "^0.77.0",
     "flow-typed": "^2.5.1",

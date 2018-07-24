@@ -56,14 +56,12 @@ export default class Catapult extends Unit {
                 return [x + coordinates[0], y + coordinates[1]];
             });
 
-        const allAvailableAttack = super.getAllAvailableAttack(gameData)
+        return super.getAllAvailableAttack(gameData)
             .filter((coordinates: [number, number]): boolean => {
                 return !disArray.some((disArrayCoordinates: [number, number]): boolean => {
                     return coordinates[0] === disArrayCoordinates[0] && coordinates[1] === disArrayCoordinates[1];
                 });
             });
-
-        return allAvailableAttack;
     }
 
     getMoviePath(unitAction: UnitActionMoveType,

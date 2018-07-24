@@ -32,7 +32,7 @@ export function localGet(localUrl: string): Promise<string> {
             null,
             (error: Error | null, response: mixed, body: string) => {
                 if (error) {
-                    reject(new Error('can not create room'));
+                    reject(new Error('local get error'));
                     return;
                 }
                 resolve(body);
@@ -49,7 +49,7 @@ export function localPost(localUrl: string, form: string): Promise<string> {
             parsedForm,
             (error: Error | null, response: mixed, body: string) => {
                 if (error) {
-                    reject(new Error('can not create room'));
+                    reject(new Error('local post error'));
                     return;
                 }
                 resolve(body);
