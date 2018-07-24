@@ -25,4 +25,7 @@ flow-typed/npm
 # var React = require('react');
 # /* eslint-enable no-unused-vars */
 
+# // eslint-disable-next-line no-unused-vars
+# var React = require('react');
+
 # var React = require('react'); // eslint-disable-line no-unused-vars

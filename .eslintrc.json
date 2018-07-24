@@ -28,7 +28,8 @@
         "sonarjs",
         "lodash",
         "optimize-regex",
-        "unicorn"
+        "unicorn",
+        "no-loops"
     ],
     "env": {
         "es6": true,
@@ -41,6 +42,7 @@
         }
     },
     "rules": {
+        "no-loops/no-loops": 2,
         "optimize-regex/optimize-regex": 1,
         "lodash/prefer-lodash-method": 0,
         "lodash/prefer-constant": 0,

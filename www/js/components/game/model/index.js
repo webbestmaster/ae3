@@ -1265,6 +1265,7 @@ export default class Game {
             grave.setRemoveCountdown(mapGrave.removeCountdown);
         });
 
+        // eslint-disable-next-line no-loops/no-loops
         while (graveListToRemove.length > 0) {
             game.removeGrave(graveListToRemove.pop());
         }

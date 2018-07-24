@@ -50,6 +50,7 @@ fs.readdir(pathToSrc, async (err, files) => {
         return;
     }
 
+    // eslint-disable-next-line no-loops/no-loops
     while (files.length) {
         await convert(files.pop());
     }

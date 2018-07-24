@@ -28,6 +28,7 @@ function hasArrayCell(array: Array<[number, number]>, x: number, y: number): boo
     let cell = null;
     const length = array.length;
 
+    // eslint-disable-next-line no-loops/no-loops
     for (; ii < length; ii += 1) {
         cell = array[ii];
         if (cell[0] === x && cell[1] === y) {
@@ -43,6 +44,7 @@ function pushToCurrentProgress(x: number, y: number, mapNoPath: MapNoPathType, c
     let cell = null;
     const length = currentProgress.length;
 
+    // eslint-disable-next-line no-loops/no-loops
     for (; ii < length; ii += 1) {
         cell = currentProgress[ii];
         if (cell[0] === x && cell[1] === y) {
@@ -73,6 +75,7 @@ function getAvailablePath(startX: number, // eslint-disable-line max-params
     const disArray = [0, -1, -1, 0, 1, 0, 0, 1];
     const disArrayLength = disArray.length;
 
+    // eslint-disable-next-line no-loops/no-loops
     for (; ii < disArrayLength; ii += 2) {
         const x = startX + disArray[ii];
         const y = startY + disArray[ii + 1];

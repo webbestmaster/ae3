@@ -87,6 +87,7 @@ class JoinRoom extends Component<PropsType, StateType> {
         const getAllRoomIdsResult = await serverApi.getAllRoomIds();
         const roomDataList = [];
 
+        // eslint-disable-next-line no-loops/no-loops
         for (let roomIndex = 0; roomIndex < getAllRoomIdsResult.roomIds.length; roomIndex += 1) {
             roomDataList.push(await getRoomState(getAllRoomIdsResult.roomIds[roomIndex]));
         }

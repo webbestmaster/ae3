@@ -70,6 +70,7 @@ class RoomMaster {
         const attr = roomMaster.getAttr();
         const {rooms} = attr;
 
+        // eslint-disable-next-line no-loops/no-loops
         while (rooms.length) {
             rooms[rooms.length - 1].destroy();
         }

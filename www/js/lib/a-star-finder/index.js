@@ -92,6 +92,7 @@ function checkPathsForSolution(paths: Array<PathType>, target: PointType): PathT
     let lastCell = null;
     let path = null;
 
+    // eslint-disable-next-line no-loops/no-loops
     for (; ii < len; ii += 1) {
         path = paths[ii];
         lastCell = path[path.length - 1];
@@ -120,6 +121,7 @@ function createPaths(map: MapType, path: PathType, options: OptionsType, selfDat
     let ii = 0;
     let newPath = null;
 
+    // eslint-disable-next-line no-loops/no-loops
     for (; ii < len; ii += 1) {
         cell = cells[ii];
         cellMask = [cell[0], cell[1]].join('-');
@@ -143,6 +145,7 @@ function createPathsFromList(map: MapType,
     const {push} = Array.prototype;
     let ii = 0;
 
+    // eslint-disable-next-line no-loops/no-loops
     for (; ii < len; ii += 1) {
         Reflect.apply(
             push,
@@ -171,6 +174,7 @@ function getNearCells(map: MapType, start: PointType, options: OptionsType): Arr
     let y = 0; // eslint-disable-line id-length
     let cell = null;
 
+    // eslint-disable-next-line no-loops/no-loops
     for (; ii < disArrayLength; ii += 2) {
         x = startX + disArray[ii];
         y = startY + disArray[ii + 1];

@@ -44,6 +44,7 @@ export function getUserIndex(userId: string, userList: Array<MapUserType>): numb
     let userIndex = 0;
     const maxIndex = 4;
 
+    // eslint-disable-next-line no-loops/no-loops
     while (userList[userIndex] && userList[userIndex].userId !== userId && userIndex < maxIndex) {
         userIndex += 1;
     }
@@ -523,6 +524,7 @@ export function getLevel(damageGiven: number): number {
     let level = 0;
     let levelSize = base;
 
+    // eslint-disable-next-line no-loops/no-loops
     for (; level < maxLevelForCount; level += 1) {
         if (levelSize > damageGiven) {
             return level;
