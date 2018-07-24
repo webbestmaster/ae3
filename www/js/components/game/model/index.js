@@ -384,16 +384,15 @@ export default class Game {
                     }
                 }
             )
-            .then((response: mixed) => {
-                console.log('---> refresh unit list pushed');
-                console.log(response);
-            })
+            .then((response: mixed): void => console.log('---> refresh unit list pushed', response))
             .catch((error: Error) => {
-                console.error('client-push-state error');
+                console.error('error with refresh unit list pushed');
                 console.log(error);
             })
-            .then(() => {
-                game.gameView.removeDisableReason('client-push-state');
+            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .catch((error: Error) => {
+                console.error('error with removeDisableReason client-push-state');
+                console.error(error);
             });
     }
 
@@ -626,16 +625,15 @@ export default class Game {
                     }
                 }
             )
-            .then((response: mixed) => {
-                console.log('---> user action sync-map-with-server-user-list');
-                console.log(response);
-            })
+            .then((response: mixed): void => console.log('---> user action sync-map-with-server-user-list', response))
             .catch((error: Error) => {
                 console.error('client-push-state error');
                 console.log(error);
             })
-            .then(() => {
-                game.gameView.removeDisableReason('sync-map-with-server-user-list');
+            .then((): void => game.gameView.removeDisableReason('sync-map-with-server-user-list'))
+            .catch((error: Error) => {
+                console.error('error with removeDisableReason sync-map-with-server-user-list');
+                console.log(error);
             });
     }
 
@@ -1096,9 +1094,12 @@ export default class Game {
 
         gameDestroyer.setDamageGiven(givenDamage);
 
-        gameDestroyer.actualizeLevel().then(() => {
-            console.log('level actualized');
-        });
+        gameDestroyer.actualizeLevel()
+            .then((): void => console.log('level actualized'))
+            .catch((error: Error) => {
+                console.error('error with actualizeLevel()');
+                console.error(error);
+            });
 
         gameBuilding.setAttr({
             type: mapBuilding.type,
@@ -1229,15 +1230,21 @@ export default class Game {
                 );
 
                 if (healHitPointOnBuilding !== null) {
-                    unit.setHitPoints(unit.getHitPoints() + healHitPointOnBuilding).then(() => {
-                        console.log('unit.setHitPoints - done');
-                    });
+                    unit.setHitPoints(unit.getHitPoints() + healHitPointOnBuilding)
+                        .then((): void => console.log('unit.setHitPoints - done'))
+                        .catch((error: Error) => {
+                            console.error('error with unit.setHitPoints');
+                            console.error(error);
+                        });
                 }
             }
 
-            unit.setActionState(mapUnit.action || null).then(() => {
-                console.log('unit.setActionState - done');
-            });
+            unit.setActionState(mapUnit.action || null)
+                .then((): void => console.log('unit.setActionState - done'))
+                .catch((error: Error) => {
+                    console.error('error with unit.setActionState');
+                    console.error(error);
+                });
         });
 
         const {graveList} = game;
@@ -1644,16 +1651,15 @@ export default class Game {
                     }
                 }
             )
-            .then((response: mixed) => {
-                console.log('---> unit action move pushed');
-                console.log(response);
-            })
+            .then((response: mixed): void => console.log('---> unit action move pushed', response))
             .catch((error: Error) => {
-                console.error('client-push-state error');
+                console.error('error with refresh unit action move pushed');
                 console.log(error);
             })
-            .then(() => {
-                game.gameView.removeDisableReason('client-push-state');
+            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .catch((error: Error) => {
+                console.error('error with removeDisableReason client-push-state');
+                console.error(error);
             });
     }
 
@@ -1752,16 +1758,15 @@ export default class Game {
                     }
                 }
             )
-            .then((response: mixed) => {
-                console.log('---> unit action attack pushed');
-                console.log(response);
-            })
+            .then((response: mixed): void => console.log('---> unit action attack pushed', response))
             .catch((error: Error) => {
-                console.error('client-push-state error');
+                console.error('error with unit action attack pushed');
                 console.log(error);
             })
-            .then(() => {
-                game.gameView.removeDisableReason('client-push-state');
+            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .catch((error: Error) => {
+                console.error('error with removeDisableReason client-push-state');
+                console.log(error);
             });
     }
 
@@ -1812,16 +1817,15 @@ export default class Game {
                     }
                 }
             )
-            .then((response: mixed) => {
-                console.log('---> unit action fix building pushed');
-                console.log(response);
-            })
+            .then((response: mixed): void => console.log('---> unit action fix building pushed', response))
             .catch((error: Error) => {
-                console.error('client-push-state error');
+                console.error('error with unit action fix building pushed');
                 console.log(error);
             })
-            .then(() => {
-                game.gameView.removeDisableReason('client-push-state');
+            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .catch((error: Error) => {
+                console.error('error with removeDisableReason client-push-state');
+                console.log(error);
             });
     }
 
@@ -1880,16 +1884,15 @@ export default class Game {
                     }
                 }
             )
-            .then((response: mixed) => {
-                console.log('---> unit action occupy building pushed');
-                console.log(response);
-            })
+            .then((response: mixed): void => console.log('---> unit action occupy building pushed', response))
             .catch((error: Error) => {
-                console.error('client-push-state error');
+                console.error('error with unit action occupy building pushed');
                 console.log(error);
             })
-            .then(() => {
-                game.gameView.removeDisableReason('client-push-state');
+            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .catch((error: Error) => {
+                console.error('error with removeDisableReason client-push-state');
+                console.log(error);
             });
     }
 
@@ -1956,16 +1959,15 @@ export default class Game {
                     }
                 }
             )
-            .then((response: mixed) => {
-                console.log('---> unit action raise skeleton pushed');
-                console.log(response);
-            })
+            .then((response: mixed): void => console.log('---> unit action raise skeleton pushed', response))
             .catch((error: Error) => {
-                console.error('client-push-state error');
+                console.error('error with unit action raise skeleton pushed');
                 console.log(error);
             })
-            .then(() => {
-                game.gameView.removeDisableReason('client-push-state');
+            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .catch((error: Error) => {
+                console.error('error with removeDisableReason client-push-state');
+                console.log(error);
             });
     }
 
@@ -2041,16 +2043,15 @@ export default class Game {
                     }
                 }
             )
-            .then((response: mixed) => {
-                console.log('---> unit action destroy building pushed');
-                console.log(response);
-            })
+            .then((response: mixed): void => console.log('---> unit action destroy building pushed', response))
             .catch((error: Error) => {
-                console.error('client-push-state error');
+                console.error('error with unit action destroy building pushed');
                 console.log(error);
             })
-            .then(() => {
-                game.gameView.removeDisableReason('client-push-state');
+            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .catch((error: Error) => {
+                console.error('error with removeDisableReason client-push-state');
+                console.log(error);
             });
     }
 
