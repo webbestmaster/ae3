@@ -18,9 +18,16 @@ import {tweenList} from './../../../../lib/tween';
 import find from 'lodash/find';
 import Grave from './../grave';
 import {fillActionMap} from './helper';
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../../../lib/is';
 
 type LevelUpAnimationDataType = {|
     x: number,
@@ -208,7 +215,7 @@ export default class Unit {
         const unit = this;
         const {unitData} = unitConstructor;
 
-        if (!isString(unitData.userId) || !isString(unitData.id)) {
+        if (isNotString(unitData.userId) || isNotString(unitData.id)) {
             console.error('---> unitData has NO .userId or/and .id', unitData);
         }
 
@@ -755,7 +762,7 @@ export default class Unit {
 
         const unitGuideData = unit.getGuideData();
 
-        if (!isNumber(unitGuideData.raiseSkeletonRange)) {
+        if (isNotNumber(unitGuideData.raiseSkeletonRange)) {
             console.log('unit can not raise skeleton');
             return raiseSkeletonMap;
         }
@@ -911,7 +918,7 @@ export default class Unit {
         return tweenList(movePath, defaultUnitData.animation.moveStep, (pathPoint: PointType) => {
             gameAttr.container.position.set(pathPoint[0] * square, pathPoint[1] * square);
 
-            if (!isFunction(callback)) {
+            if (typeof callback !== 'function') {
                 return;
             }
 

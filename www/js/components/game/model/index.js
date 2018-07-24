@@ -52,9 +52,16 @@ import {storeViewId} from './../../store';
 import Queue from './../../../lib/queue';
 import {storeAction} from './../../store/provider';
 import {localSocketIoClient} from './../../../module/socket-local';
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../../lib/is';
 
 type RenderSettingType = {|
     width: number,
@@ -134,9 +141,7 @@ export default class Game {
         const game = this;
         const {map} = game.settings;
 
-        map.units = map.units.filter((mapUnitData: UnitType): boolean => {
-            return isString(mapUnitData.userId);
-        });
+        map.units = map.units.filter((mapUnitData: UnitType): boolean => isString(mapUnitData.userId));
 
         game.setMapState(map);
 
@@ -172,7 +177,7 @@ export default class Game {
 
         // add units
         map.units.forEach((unitData: UnitType) => {
-            if (!isString(unitData.userId)) {
+            if (isNotString(unitData.userId)) {
                 console.error('unit has no userId');
                 return;
             }
@@ -306,7 +311,7 @@ export default class Game {
 
         // refresh poison countdown
         mapUnitList.forEach((mapUnit: UnitType) => {
-            if (!isNumber(mapUnit.poisonCountdown)) {
+            if (isNotNumber(mapUnit.poisonCountdown)) {
                 return;
             }
             if (mapUnit.poisonCountdown === 0) {
@@ -560,7 +565,7 @@ export default class Game {
             return;
         }
 
-        const messageActiveUserId = isString(message.states.last.activeUserId) ?
+        const messageActiveUserId = typeof message.states.last.activeUserId === 'string' ?
             message.states.last.activeUserId :
             newMap.activeUserId;
 
@@ -643,7 +648,7 @@ export default class Game {
     async handleServerPushState(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this;
 
-        if (!isString(message.states.last.state.type)) {
+        if (typeof message.states.last.state.type !== 'string') {
             console.error('message.states.last.state.type should be string', message);
             return;
         }
@@ -708,7 +713,7 @@ export default class Game {
             return Promise.resolve();
         }
 
-        if (!state.unit || !isString(state.unit.id)) {
+        if (!state.unit || isNotString(state.unit.id)) {
             console.error('---> Wrong socket message', message);
             return Promise.resolve();
         }
@@ -937,7 +942,7 @@ export default class Game {
             return Promise.resolve();
         }
 
-        if (!isString(mapBuilding.userId)) {
+        if (isNotString(mapBuilding.userId)) {
             console.error('userId is not defined', message);
             return Promise.resolve();
         }
@@ -986,7 +991,7 @@ export default class Game {
         }
 
 
-        if (!isFunction(gameRaiser.setDidRaiseSkeleton)) {
+        if (isNotFunction(gameRaiser.setDidRaiseSkeleton)) {
             console.error('raiser has not method setDidRaiseSkeleton', message);
             return Promise.resolve();
         }
@@ -1049,7 +1054,7 @@ export default class Game {
             return Promise.resolve();
         }
 
-        if (!isFunction(gameDestroyer.setDidDestroyBuilding)) {
+        if (isNotFunction(gameDestroyer.setDidDestroyBuilding)) {
             console.error('destroyer has not method setDidDestroyBuilding', message);
             return Promise.resolve();
         }
@@ -1179,7 +1184,7 @@ export default class Game {
         unitList.forEach((unit: Unit) => { // eslint-disable-line complexity
             const unitId = unit.attr.id;
 
-            if (!isString(unitId) || unitId === '') {
+            if (isNotString(unitId) || unitId === '') {
                 console.error('Unit has no id:', unitId);
                 return;
             }
@@ -2241,7 +2246,7 @@ export default class Game {
         const isUnitListStateEqual = unitList.every((unit: Unit): boolean => {
             const unitId = unit.attr.id;
 
-            if (!isString(unitId) || unitId === '') {
+            if (isNotString(unitId) || unitId === '') {
                 console.error('Unit has no id:', unitId);
                 return false;
             }
@@ -2288,7 +2293,7 @@ export default class Game {
         const isBuildingListStateEqual = buildingList.every((building: Building): boolean => {
             const buildingId = building.attr.id;
 
-            if (!isString(buildingId) || buildingId === '') {
+            if (isNotString(buildingId) || buildingId === '') {
                 console.error('Building has no id:', buildingId);
                 return false;
             }

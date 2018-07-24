@@ -28,10 +28,16 @@ import BottomBar from './../../components/ui/bottom-bar';
 import {storeAction} from './provider';
 import Scroll from './../../components/ui/scroll';
 import style from './style.scss';
-import isNumber from 'lodash/isNumber';
-import isBoolean from 'lodash/isBoolean';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../lib/is';
 
 const storeViewId = 'store';
 

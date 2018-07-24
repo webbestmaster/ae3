@@ -14,9 +14,16 @@ import * as PIXI from 'pixi.js';
 import {storeViewId} from './../../store';
 import queryString from 'query-string';
 import type {RoomTypeType} from './../../../module/server-api';
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../../lib/is';
 
 type InteractionEventType = {|
     +data: {|
@@ -393,7 +400,7 @@ export function countHealHitPointOnBuilding(newMap: MapType, mapUnit: UnitType):
         return null;
     }
 
-    if (!isNumber(mapUnit.hitPoints)) {
+    if (isNotNumber(mapUnit.hitPoints)) {
         return null;
     }
 

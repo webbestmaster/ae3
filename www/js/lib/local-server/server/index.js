@@ -10,9 +10,16 @@ const {LocalHttpServer} = require('./../local-http-server');
 const apiRouter = require('./api-router').apiRouter;
 const roomMaster = require('./../room/master').roomMaster;
 
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../../lib/is';
 
 type ServerConstructorOptionsType = {|
     port: number

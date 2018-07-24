@@ -40,6 +40,7 @@
     "rules": {
         "lodash/prefer-lodash-method": 0,
         "lodash/prefer-constant": 0,
+        "lodash/prefer-lodash-typecheck": 0,
         "no-use-extend-native/no-use-extend-native": 2,
         "flowtype/boolean-style": [
             2,

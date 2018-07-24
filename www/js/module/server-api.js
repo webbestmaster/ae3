@@ -9,7 +9,16 @@ import type {AttackResultUnitType} from './../components/game/model/helper';
 import {isOnLineRoomType} from './../components/game/model/helper';
 import {localGet, localPost, localServerUrl} from './server-local-api';
 import {localSocketIoClient} from './socket-local';
-import isString from 'lodash/isString';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../lib/is';
 
 const {api} = appConst;
 const {url} = api;

@@ -33,8 +33,6 @@ import {getMaxUserListSize} from './../join-room/helper';
 import classnames from 'classnames';
 import Spinner from './../../components/ui/spinner';
 
-console.log(mapHash);
-
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
 type StateType = {|

@@ -13,9 +13,16 @@ import imageMap from './../../game/image/image-map';
 import mapGuide from './../../../maps/map-guide';
 import {getMapSize, getUserColor} from './../../game/model/helper';
 import {getDefaultUserList} from './helper';
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../../lib/is';
 
 type StateType = void;
 type PropsType = {|

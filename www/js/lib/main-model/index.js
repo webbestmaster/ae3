@@ -6,9 +6,16 @@
 
 /* eslint consistent-this: ["error", "model"] */
 
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../lib/is';
 
 // $FlowFixMe
 type AttrValueType = any; // eslint-disable-line flowtype/no-weak-types
@@ -141,7 +148,7 @@ export default class MainModel {
         const argsLength = arguments.length;
 
         // key did not passed
-        if (!isString(key)) {
+        if (isNotString(key)) {
             model.listeners = {};
             return model;
         }
@@ -154,7 +161,7 @@ export default class MainModel {
             return model;
         }
 
-        if (!isFunction(action)) {
+        if (isNotFunction(action)) {
             return model;
         }
 

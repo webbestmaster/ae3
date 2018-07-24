@@ -33,10 +33,16 @@ import find from 'lodash/find';
 import {localSocketIoClient} from './../../module/socket-local';
 import type {UserColorType} from './../../maps/map-guide';
 import LandscapeInfo from './ui/landscape-info';
-import isBoolean from 'lodash/isBoolean';
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../lib/is';
 
 import iconMoney from './ui/icon/money.svg';
 import iconUnitRed from './ui/icon/unit-red.svg';

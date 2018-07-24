@@ -10,9 +10,16 @@ import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
 import servicesStyle from './../../../../css/service.scss';
 import style from './style.scss';
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../../lib/is';
 
 type PropsType = {|
     children: Node,

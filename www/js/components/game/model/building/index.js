@@ -7,9 +7,16 @@ import type {BuildingAttrTypeType, BuildingType, MapUserType} from './../../../.
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import imageMap from './../../image/image-map';
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../../../lib/is';
 
 type BuildingAttrType = BuildingType;
 
@@ -34,7 +41,7 @@ export default class Building {
         const building = this;
         const {buildingData} = JSON.parse(JSON.stringify(buildingConstructor));
 
-        if (!isString(buildingData.userId) || !isString(buildingData.id)) {
+        if (isNotString(buildingData.userId) || isNotString(buildingData.id)) {
             console.warn('---> buildingData has NO .userId or/and .id', buildingData);
         }
 

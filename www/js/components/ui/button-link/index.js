@@ -9,9 +9,16 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
 import buttonStyle from './../button/style.scss';
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../../lib/is';
 import noop from 'lodash/noop';
 import Link from 'react-router-dom/Link';
 

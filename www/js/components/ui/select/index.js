@@ -9,9 +9,16 @@ import React, {Component} from 'react';
 import style from './style.scss';
 import type {SelectIconNameType} from './icon';
 import {icon} from './icon';
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../../lib/is';
 
 type PropsType = {|
     +children: Node,

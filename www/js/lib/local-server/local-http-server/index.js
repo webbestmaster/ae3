@@ -5,9 +5,16 @@
 /* eslint consistent-this: ["error", "httpServer"] */
 import type {RequestCallBackType} from './../local-request';
 import type {PushedStateType} from './../room/index';
-import isNumber from 'lodash/isNumber';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
+import {
+    isBoolean,
+    isNumber,
+    isString,
+    isFunction,
+    isNotBoolean,
+    isNotNumber,
+    isNotString,
+    isNotFunction
+} from './../../../lib/is';
 
 const {localMaster} = require('./../local-master');
 const {LocalExpress} = require('./../local-express');
