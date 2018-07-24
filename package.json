@@ -8,7 +8,7 @@
     "start-hot": "webpack-dev-server --mode development --inline --hot --content-base dist/ --host 0.0.0.0 --port 8181 --progress --history-api-fallback",
     "build": "cross-env NODE_ENV=production webpack --mode production --progress",
     "webpack": "webpack --mode development --progress",
-    "check": "npm run eslint; npm run stylelint; npm run flow;",
+    "check": "npm run eslint; npm run stylelint; npm run flow; npm run fnlint;",
     "check:fix": "npm run eslint:fix; npm run stylelint:fix; npm run flow; npm run fnlint;",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",
