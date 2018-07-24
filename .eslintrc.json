@@ -16,6 +16,7 @@
         "console": true
     },
     "plugins": [
+        "no-use-extend-native",
         "import",
         "flowtype",
         "react"
@@ -31,6 +32,7 @@
         }
     },
     "rules": {
+        "no-use-extend-native/no-use-extend-native": 2,
         "flowtype/boolean-style": [
             2,
             "boolean"
