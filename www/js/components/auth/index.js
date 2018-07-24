@@ -32,9 +32,12 @@ class Auth extends Component<PropsType, StateType> {
 
         props.setUser({id: user.getId()});
 
-        socket.attr.initialPromise.then(() => {
-            props.setSocket({id: socket.getId()});
-        });
+        socket.attr.initialPromise
+            .then((): mixed => props.setSocket({id: socket.getId()}))
+            .catch((error: Error) => {
+                console.error('set socket error!');
+                console.error(error);
+            });
     }
 
     render(): Node {

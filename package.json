@@ -61,6 +61,7 @@
     "eslint-plugin-flowtype": "^2.49.3",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-no-use-extend-native": "^0.3.12",
+    "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-react": "^7.10.0",
     "file-name-linter": "^1.0.2",
     "flow-bin": "^0.77.0",

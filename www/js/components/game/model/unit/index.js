@@ -289,8 +289,10 @@ export default class Unit {
         if (hitPoints !== defaultUnitData.hitPoints) {
             // here is not needed 'await'
             unit.setHitPoints(hitPoints)
-                .then(() => {
-                    console.log('setHitPoints has been set', unit);
+                .then((): void => console.log('setHitPoints has been set', unit))
+                .catch((error: Error) => {
+                    console.error('error with unit setHitPoints');
+                    console.error(error);
                 });
         }
 
@@ -315,8 +317,10 @@ export default class Unit {
 
         if (level !== defaultUnitData.level.min) {
             unit.setLevel(level)
-                .then(() => {
-                    console.log('level has benn set');
+                .then((): void => console.log('level has been set'))
+                .catch((error: Error) => {
+                    console.error('error with unit setLevel');
+                    console.error(error);
                 });
         }
 
@@ -940,7 +944,10 @@ export default class Unit {
 
             callback(pathPoint[0], pathPoint[1]);
         })
-            .then(() => {
+            .then((): void => console.log('unit move is end'))
+            .catch((error: Error) => {
+                console.error('error with unit move');
+                console.error(error);
             });
     }
 
@@ -1016,7 +1023,10 @@ export default class Unit {
         });
 
         return Promise.all(promiseList)
-            .then(() => {
+            .then((): void => console.error('unit setActionState done'))
+            .catch((error: Error) => {
+                console.error('error (in list) with unit setActionState');
+                console.error(error);
             });
     }
 

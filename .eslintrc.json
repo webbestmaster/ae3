@@ -8,7 +8,8 @@
         "plugin:flowtype/recommended",
         "plugin:react/all",
         "plugin:import/errors",
-        "plugin:import/warnings"
+        "plugin:import/warnings",
+        "plugin:promise/recommended"
     ],
     "globals": {
         "require": true,
@@ -19,7 +20,8 @@
         "no-use-extend-native",
         "import",
         "flowtype",
-        "react"
+        "react",
+        "promise"
     ],
     "env": {
         "es6": true,

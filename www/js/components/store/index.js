@@ -135,16 +135,15 @@ class Store extends Component<PropsType, StateType> {
                     }
                 }
             )
-            .then((response: mixed) => {
-                console.log('---> user action buy unit');
-                console.log(response);
-            })
+            .then((response: mixed): void => console.log('---> user action buy unit', response))
             .catch((error: Error) => {
                 console.error('store-push-state error');
                 console.log(error);
             })
-            .then(() => {
-                props.history.goBack();
+            .then((): void => props.history.goBack())
+            .catch((error: Error) => {
+                console.error('error with props.history.goBack()');
+                console.error(error);
             });
     }
 

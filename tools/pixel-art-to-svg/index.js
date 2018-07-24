@@ -30,12 +30,16 @@ async function convert(imageName) {
                     if (err) {
                         console.log('error:', imageName);
                         console.error(err);
-                        reject();
+                        reject(err);
                         return;
                     }
                     console.log('done:', imageName);
                     resolve();
                 });
+                return true;
+            })
+            .catch(error => {
+                console.error(error);
             });
     });
 }

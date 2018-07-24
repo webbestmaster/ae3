@@ -31,12 +31,16 @@ export async function initializeEnvironment(): Promise<void> {
     }, false);
 
     await runLocalServer()
-        .then(() => {
-            console.log('Local Server has been run.');
+        .then((): void => console.log('Local Server has been run.'))
+        .catch((error: Error) => {
+            console.log('Local Server has NOT been run.');
+            console.error(error);
         });
 
     await runLocalSocket()
-        .then(() => {
-            console.log('Local Socket has been run.');
+        .then((): void => console.log('Local Socket has been run.'))
+        .catch((error: Error) => {
+            console.log('Local Socket has NOT been run.');
+            console.error(error);
         });
 }

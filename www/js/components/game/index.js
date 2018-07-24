@@ -317,8 +317,10 @@ export class GameView extends Component<PropsType, StateType> {
                 console.error('Drop turn error');
                 console.log(error);
             })
-            .then(() => {
-                view.removeDisableReason('client-drop-turn');
+            .then((): void => view.removeDisableReason('client-drop-turn'))
+            .catch((error: Error) => {
+                console.error('client-drop-turn error');
+                console.log(error);
             });
     }
 
