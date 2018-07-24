@@ -16,6 +16,7 @@
         "console": true
     },
     "plugins": [
+        "import",
         "flowtype",
         "react"
     ],
