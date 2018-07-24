@@ -11,7 +11,8 @@
         "plugin:import/warnings",
         "plugin:promise/recommended",
         "plugin:sonarjs/recommended",
-        "plugin:lodash/recommended"
+        "plugin:lodash/recommended",
+        "plugin:unicorn/recommended"
     ],
     "globals": {
         "require": true,
@@ -26,7 +27,8 @@
         "promise",
         "sonarjs",
         "lodash",
-        "optimize-regex"
+        "optimize-regex",
+        "unicorn"
     ],
     "env": {
         "es6": true,

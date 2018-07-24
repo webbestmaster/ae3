@@ -146,7 +146,7 @@ export type PushedStateType = {|
 
 const {roomMaster} = require('./master');
 const {RoomConnection} = require('./room-connection');
-const {Server} = require('./../server/index');
+const {Server} = require('./../server');
 const find = require('lodash/find');
 const sha1 = require('sha1');
 const messageConst = require('./message-data.js');

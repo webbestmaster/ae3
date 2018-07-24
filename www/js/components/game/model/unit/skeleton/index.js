@@ -1,5 +1,5 @@
 // @flow
-import Unit from './../index';
+import Unit from './..';
 
 export default class Skeleton extends Unit {
 }

@@ -87,7 +87,7 @@ export default class MapPreview extends Component<PropsType, StateType> {
                 sharedTicker: false,
                 sharedLoader: true,
                 transparent: true,
-                backgroundColor: 0x1099bb,
+                backgroundColor: 0x1099BB,
                 resolution: window.devicePixelRatio || 1
             }
         );

@@ -12,7 +12,7 @@ import type {SocketMessageType} from './../../module/socket';
 import {socket} from './../../module/socket';
 import type {GlobalStateType} from './../../app-reducer';
 import type {SystemType} from './../system/reducer';
-import Game from './model/index';
+import Game from './model';
 import type {ServerUserType} from './../../module/server-api';
 import * as serverApi from './../../module/server-api';
 import MainModel from './../../lib/main-model';

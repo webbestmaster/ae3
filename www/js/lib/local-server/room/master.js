@@ -4,7 +4,7 @@
 
 const find = require('lodash/find');
 
-const {Room} = require('./index');
+const {Room} = require('.');
 
 type AttrType = {|
     +rooms: Array<Room>

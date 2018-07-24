@@ -2,8 +2,8 @@
 
 /* eslint consistent-this: ["error", "unit", "aggressor"] */
 
-import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './../index';
-import Unit from './../index';
+import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './..';
+import Unit from './..';
 import {getMoviePath} from './../../helper';
 import type {PathType} from './../../../../../lib/a-star-finder';
 import type {AvailablePathMapType} from './../path-master';

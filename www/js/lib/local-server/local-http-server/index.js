@@ -4,7 +4,7 @@
 
 /* eslint consistent-this: ["error", "httpServer"] */
 import type {RequestCallBackType} from './../local-request';
-import type {PushedStateType} from './../room/index';
+import type {PushedStateType} from './../room';
 import {
     isBoolean,
     isNumber,

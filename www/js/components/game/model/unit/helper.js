@@ -1,6 +1,6 @@
 // @flow
 
-import type {UnitActionType, UnitActionsMapType} from './index';
+import type {UnitActionType, UnitActionsMapType} from '.';
 
 export function fillActionMap(src: UnitActionsMapType, target: UnitActionsMapType) {
     src.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {

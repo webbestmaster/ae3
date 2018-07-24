@@ -317,7 +317,7 @@ export default class Unit {
         const level = unit.getLevel();
         const levelNumberSprite = PIXI.Sprite.fromImage(imageMap.font.unit.space);
 
-        levelNumberSprite.tint = 0xeeee00;
+        levelNumberSprite.tint = 0xEEEE00;
 
         gameAttr.sprite.level.addChild(levelNumberSprite);
 
@@ -1382,12 +1382,12 @@ export default class Unit {
             number1.texture = PIXI.Texture.fromImage(imageMap.font.unit[hitPointString[0]]);
         }
 
-        let hitPointsTint = 0xdddd00; // yellow;
+        let hitPointsTint = 0xDDDD00; // yellow;
 
         if (hitPoints >= 80) {
-            hitPointsTint = 0x00dd00; // green
+            hitPointsTint = 0x00DD00; // green
         } else if (hitPoints < 40) {
-            hitPointsTint = 0xdd0000; // red
+            hitPointsTint = 0xDD0000; // red
         }
 
         number0.tint = hitPointsTint;
@@ -1420,7 +1420,7 @@ export default class Unit {
         const unit = this;
         const {attr, gameAttr} = unit;
         const {square} = mapGuide.size;
-        const negativeTint = 0xcc0000;
+        const negativeTint = 0xCC0000;
         const isPositive = hitPointsDelta > 0;
 
 

@@ -1,7 +1,7 @@
 // @flow
 
-import type {UnitConstructorType} from './index';
-import Unit from './index';
+import type {UnitConstructorType} from '.';
+import Unit from '.';
 import UnitArcher from './archer';
 import UnitCatapult from './catapult';
 import UnitCrystal from './crystal';

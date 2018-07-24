@@ -47,7 +47,7 @@ import {socket} from './../../../module/socket';
 import MainModel from './../../../lib/main-model';
 import * as unitMaster from './unit/master';
 import {defaultUnitData} from './unit/unit-guide';
-import {bottomBarData, GameView} from './../../game/index';
+import {bottomBarData, GameView} from './../../game';
 import {storeViewId} from './../../store';
 import Queue from './../../../lib/queue';
 import {storeAction} from './../../store/provider';
