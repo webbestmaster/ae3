@@ -18,7 +18,7 @@ type PropsType = {|
     +stringKey: LangKeyType
 |};
 
-export class Locale extends Component<PropsType, StateType> {
+class Locale extends Component<PropsType, StateType> {
     state: StateType;
     props: PropsType;
 

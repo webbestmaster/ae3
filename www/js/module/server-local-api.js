@@ -1,6 +1,6 @@
 // @flow
 import {Server as LocalServer} from './../lib/local-server/server';
-import {localRequest} from './../lib/local-server/local-request';
+import * as localRequest from './../lib/local-server/local-request';
 import type {PushedStateType} from './../lib/local-server/room';
 
 export const localServerOptions = {

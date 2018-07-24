@@ -59,6 +59,7 @@
     "css-module-flow": "^1.0.0",
     "eslint": "^5.2.0",
     "eslint-plugin-flowtype": "^2.49.3",
+    "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-react": "^7.10.0",
     "file-name-linter": "^1.0.2",
     "flow-bin": "^0.77.0",

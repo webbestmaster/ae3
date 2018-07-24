@@ -26,7 +26,7 @@ type StyleType = {|
 |} | null;
 */
 
-export class ButtonListWrapper extends Component<PropsType, StateType> {
+export default class ButtonListWrapper extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -44,12 +44,3 @@ export class ButtonListWrapper extends Component<PropsType, StateType> {
         );
     }
 }
-
-export default connect(
-    (state: GlobalStateType): {} => ({
-        // auth: state.auth
-    }),
-    {
-        // setUser
-    }
-)(ButtonListWrapper);

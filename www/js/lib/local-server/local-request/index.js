@@ -14,12 +14,10 @@ function request(requestType: 'get' | 'post',
     setTimeout((): void => localMaster.triggerHttp(requestType, url, form, requestCallBack), 0);
 }
 
-function get(url: string, form: PushedStateType, requestCallBack: RequestCallBackType) {
+export function get(url: string, form: PushedStateType, requestCallBack: RequestCallBackType) {
     request('get', url, form, requestCallBack);
 }
 
-function post(url: string, form: PushedStateType, requestCallBack: RequestCallBackType) {
+export function post(url: string, form: PushedStateType, requestCallBack: RequestCallBackType) {
     request('post', url, form, requestCallBack);
 }
-
-module.exports.localRequest = {get, post};

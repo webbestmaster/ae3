@@ -6,7 +6,9 @@
     "extends": [
         "eslint:recommended",
         "plugin:flowtype/recommended",
-        "plugin:react/all"
+        "plugin:react/all",
+        "plugin:import/errors",
+        "plugin:import/warnings"
     ],
     "globals": {
         "require": true,

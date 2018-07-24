@@ -16,7 +16,7 @@ type PropsType = {|
 
 type StateType = {||};
 
-export class Button extends Component<PropsType, StateType> {
+export default class Button extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -35,12 +35,3 @@ export class Button extends Component<PropsType, StateType> {
         );
     }
 }
-
-export default connect(
-    (state: GlobalStateType): {} => ({
-        // auth: state.auth
-    }),
-    {
-        // setUser
-    }
-)(Button);

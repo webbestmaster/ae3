@@ -19,58 +19,20 @@ type OptionsType = {|
     callBack?: AsyncCallbackType
 |};
 
-const defaultOptions: OptionsType = {
+export const defaultOptions: OptionsType = {
     noPath: '#'
 };
-
-module.exports.defaultOptions = defaultOptions;
 
 const defaultSelfData: SelfDataType = {
     collectedCells: []
 };
 
-
-module.exports.getPath = (map: MapType,
-                          start: PointType,
-                          end: PointType,
-                          options?: OptionsType): PathType | null => {
-    return getPath(
-        map,
-        start,
-        end,
-        [[start]],
-        {
-            noPath: options && typeof options.noPath === 'string' ? options.noPath : defaultOptions.noPath
-        },
-        clone(defaultSelfData)
-    );
-};
-
-module.exports.getPathAsync = (map: MapType,
-                               start: PointType,
-                               end: PointType,
-                               callBack: AsyncCallbackType,
-                               options?: OptionsType) => {
-    getPathAsync(
-        map,
-        start,
-        end,
-        [[start]],
-        {
-            noPath: options && typeof options.noPath === 'string' ? options.noPath : defaultOptions.noPath,
-            callBack
-        },
-        // Object.assign({}, defaultOptions, options || {}, {callBack}),
-        clone(defaultSelfData)
-    );
-};
-
-function getPath(map: MapType, // eslint-disable-line max-params
-                 start: PointType,
-                 target: PointType,
-                 paths: Array<PathType>,
-                 options: OptionsType,
-                 selfData: SelfDataType): PathType | null { // eslint-disable-line max-params
+function getPathSelf(map: MapType, // eslint-disable-line max-params
+                     start: PointType,
+                     target: PointType,
+                     paths: Array<PathType>,
+                     options: OptionsType,
+                     selfData: SelfDataType): PathType | null { // eslint-disable-line max-params
     const solution = checkPathsForSolution(paths, target);
 
     if (solution !== null) {
@@ -83,15 +45,15 @@ function getPath(map: MapType, // eslint-disable-line max-params
         return null;
     }
 
-    return getPath(map, start, target, newPaths, options, selfData);
+    return getPathSelf(map, start, target, newPaths, options, selfData);
 }
 
-function getPathAsync(map: MapType, // eslint-disable-line max-params
-                      start: PointType,
-                      target: PointType,
-                      paths: Array<PathType>,
-                      options: OptionsType,
-                      selfData: SelfDataType) {
+function getPathAsyncSelf(map: MapType, // eslint-disable-line max-params
+                          start: PointType,
+                          target: PointType,
+                          paths: Array<PathType>,
+                          options: OptionsType,
+                          selfData: SelfDataType) {
     const solution = checkPathsForSolution(paths, target);
 
     if (solution !== null && typeof options.callBack === 'function') {
@@ -107,7 +69,7 @@ function getPathAsync(map: MapType, // eslint-disable-line max-params
     }
 
     setTimeout(() => {
-        getPathAsync(map, start, target, newPaths, options, selfData);
+        getPathAsyncSelf(map, start, target, newPaths, options, selfData);
     }, 0);
 }
 
@@ -235,4 +197,39 @@ function getCell(x: number, y: number, map: MapType): string | null { // eslint-
     }
 
     return getItem(x, stringToArray(line));
+}
+
+export function getPath(map: MapType,
+                        start: PointType,
+                        end: PointType,
+                        options?: OptionsType): PathType | null {
+    return getPathSelf(
+        map,
+        start,
+        end,
+        [[start]],
+        {
+            noPath: options && typeof options.noPath === 'string' ? options.noPath : defaultOptions.noPath
+        },
+        clone(defaultSelfData)
+    );
+}
+
+export function getPathAsync(map: MapType,
+                             start: PointType,
+                             end: PointType,
+                             callBack: AsyncCallbackType,
+                             options?: OptionsType) {
+    getPathAsyncSelf(
+        map,
+        start,
+        end,
+        [[start]],
+        {
+            noPath: options && typeof options.noPath === 'string' ? options.noPath : defaultOptions.noPath,
+            callBack
+        },
+        // Object.assign({}, defaultOptions, options || {}, {callBack}),
+        clone(defaultSelfData)
+    );
 }

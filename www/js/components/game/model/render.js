@@ -8,16 +8,17 @@ import * as PIXI from 'pixi.js';
 import type {LandscapeType, MapType} from './../../../maps/type';
 import mapGuide from './../../../maps/map-guide';
 import imageMap from './../image/image-map';
-import type {UnitActionOpenStoreType, UnitActionsMapType, UnitActionType} from './unit/index';
-import type {
-    UnitActionAttackType,
-    UnitActionDestroyBuildingType,
-    UnitActionFixBuildingType,
-    UnitActionMoveType,
-    UnitActionOccupyBuildingType,
-    UnitActionRaiseSkeletonType
+import Unit, {
+    type UnitActionAttackType,
+    type UnitActionDestroyBuildingType,
+    type UnitActionFixBuildingType,
+    type UnitActionMoveType,
+    type UnitActionOccupyBuildingType,
+    type UnitActionOpenStoreType,
+    type UnitActionRaiseSkeletonType,
+    type UnitActionsMapType,
+    type UnitActionType
 } from './unit';
-import Unit from './unit';
 import {defaultUnitData} from './unit/unit-guide';
 import Building from './building';
 import {tween} from './../../../lib/tween';

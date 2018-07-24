@@ -16,7 +16,7 @@ type PropsType = {|
 
 type StateType = void;
 
-export class BackButton extends Component<PropsType, StateType> {
+export default class BackButton extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -36,12 +36,3 @@ export class BackButton extends Component<PropsType, StateType> {
         );
     }
 }
-
-export default withRouter(connect(
-    (state: GlobalStateType): {} => ({
-        // auth: state.auth
-    }),
-    {
-        // setUser
-    }
-)(BackButton));

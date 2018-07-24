@@ -19,7 +19,7 @@ type PropsType = {|
 
 type StateType = {||};
 
-export class BottomBar extends Component<PropsType, StateType> {
+class BottomBar extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 

@@ -17,7 +17,7 @@ type PropsType = {|
 
 type StateType = {||};
 
-export class Fieldset extends Component<PropsType, StateType> {
+export default class Fieldset extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -33,12 +33,3 @@ export class Fieldset extends Component<PropsType, StateType> {
         );
     }
 }
-
-export default connect(
-    (state: GlobalStateType): {} => ({
-        // auth: state.auth
-    }),
-    {
-        // setUser
-    }
-)(Fieldset);

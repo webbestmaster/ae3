@@ -17,7 +17,7 @@ type PropsType = {|
 
 type StateType = {||};
 
-export class Page extends Component<PropsType, StateType> {
+class Page extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 

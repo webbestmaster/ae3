@@ -20,7 +20,7 @@ import Fieldset from './../../components/ui/fieldset';
 import Select from './../../components/ui/select';
 import MapPreview from './../../components/ui/map-preview';
 import type {SelectIconNameType} from './../../components/ui/select/icon';
-import * as mapHash from './../../maps/default/map-list';
+import mapHash from './../../maps/default/map-list';
 import type {ContextRouter} from 'react-router-dom';
 import {getMapSize, getRoomType, isOnLineRoomType} from './../../components/game/model/helper';
 import serviceStyle from './../../../css/service.scss';
@@ -32,6 +32,8 @@ import Scroll from './../../components/ui/scroll';
 import {getMaxUserListSize} from './../join-room/helper';
 import classnames from 'classnames';
 import Spinner from './../../components/ui/spinner';
+
+console.log(mapHash);
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 

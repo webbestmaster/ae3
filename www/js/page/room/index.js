@@ -17,15 +17,13 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import MainModel from './../../lib/main-model/index';
 import classnames from 'classnames';
-import isEqual from 'lodash/isEqual';
-import find from 'lodash/find';
 import {user} from './../../module/user';
 import {socket, type SocketMessageType} from './../../module/socket';
 import Game from './../../components/game';
 import type {AllRoomSettingsType, PushedStatePayloadType, ServerUserType} from './../../module/server-api';
 import * as serverApi from './../../module/server-api';
 import mapGuide from './../../maps/map-guide';
-import {getCommanderDataByUserIndex, isOnLineRoomType} from './../../components/game/model/helper';
+import {getCommanderDataByUserIndex, getMapSize, isOnLineRoomType} from './../../components/game/model/helper';
 import type {BuildingType, MapType, MapUserType, UnitType} from './../../maps/type';
 
 import Page from './../../components/ui/page';
@@ -38,7 +36,7 @@ import BottomBar from './../../components/ui/bottom-bar';
 import Spinner from './../../components/ui/spinner';
 import MapPreview from './../../components/ui/map-preview';
 import Locale from './../../components/locale';
-import {getRoomState} from './../join-room/helper';
+import {getMaxUserListSize, getRoomState} from './../join-room/helper';
 import type {ContextRouter} from 'react-router-dom';
 import {localSocketIoClient} from './../../module/socket-local';
 import type {GlobalStateType} from './../../app-reducer';
@@ -47,10 +45,8 @@ import Scroll from './../../components/ui/scroll';
 import style from './style.scss';
 import serviceStyle from './../../../css/service.scss';
 import createRoomStyle from './../create-room/style.scss';
-import {getMaxUserListSize} from './../join-room/helper';
 import type {LangKeyType} from './../../components/locale/translation/type';
-import {ButtonListWrapper} from './../../components/ui/button-list-wrapper';
-import {getMapSize} from './../../components/game/model/helper';
+import ButtonListWrapper from './../../components/ui/button-list-wrapper';
 
 type StateType = {|
     settings?: AllRoomSettingsType,

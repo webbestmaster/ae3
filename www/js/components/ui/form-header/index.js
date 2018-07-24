@@ -17,7 +17,7 @@ type PropsType = {|
 
 type StateType = {||};
 
-export class FormHeader extends Component<PropsType, StateType> {
+export default class FormHeader extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -33,12 +33,3 @@ export class FormHeader extends Component<PropsType, StateType> {
         );
     }
 }
-
-export default connect(
-    (state: GlobalStateType): {} => ({
-        // auth: state.auth
-    }),
-    {
-        // setUser
-    }
-)(FormHeader);
