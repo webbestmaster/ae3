@@ -31,7 +31,7 @@ const definePluginParams = {
     // IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
 };
 
-const imageRETest = /\.(png|jpg|jpeg|gif|svg)(\?[a-z0-9=&.]+)?$/;
+const imageRETest = /\.(png|jpg|jpeg|gif|svg)(\?[\d&.=a-z]+)?$/;
 
 const webpackConfig = {
     entry: [
@@ -66,7 +66,7 @@ const webpackConfig = {
                             name: 'style',
                             priority: -20,
                             reuseExistingChunk: true,
-                            test: /\.scss|\.css$/
+                            test: /\.scs{2}|\.cs{2}$/
                         },
                         image: {
                             chunks: 'initial',
@@ -108,7 +108,7 @@ const webpackConfig = {
                 // exclude: /node_modules/,
                 // query-string: query-string|strict-uri-encode
                 // pixi-viewport: pixi-viewport|yy-[\w]+
-                exclude: /node_modules(?!(\/|\\)(query-string|strict-uri-encode|pixi-viewport|yy-[\w]+))/,
+                exclude: /node_modules(?!([/\\])(query-string|strict-uri-encode|pixi-viewport|y{2}-\w+))/,
                 loader: 'babel-loader'
             },
             {
@@ -153,7 +153,7 @@ const webpackConfig = {
                 ]
             },
             {
-                test: /\.scss$/,
+                test: /\.scs{2}$/,
                 use: [
                     IS_PRODUCTION ?
                         MiniCssExtractPlugin.loader :
@@ -191,7 +191,7 @@ const webpackConfig = {
                 ]
             },
             {
-                test: /\.css$/,
+                test: /\.cs{2}$/,
                 use: [
                     IS_PRODUCTION ?
                         MiniCssExtractPlugin.loader :

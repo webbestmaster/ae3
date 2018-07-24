@@ -25,7 +25,8 @@
         "react",
         "promise",
         "sonarjs",
-        "lodash"
+        "lodash",
+        "optimize-regex"
     ],
     "env": {
         "es6": true,
@@ -38,6 +39,7 @@
         }
     },
     "rules": {
+        "optimize-regex/optimize-regex": 1,
         "lodash/prefer-lodash-method": 0,
         "lodash/prefer-constant": 0,
         "lodash/prefer-lodash-typecheck": 0,

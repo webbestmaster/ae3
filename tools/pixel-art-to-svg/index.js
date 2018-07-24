@@ -12,11 +12,11 @@ async function convert(imageName) {
             .then(images => {
                 const svgData = svg.convert(images[0])
                     .replace( // rgba to rgb
-                        /fill="rgba\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d{1,3})\)"/gi,
+                        /fil{2}="rgba\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d{1,3})\)"/gi,
                         'fill="rgb($1,$2,$3)"'
                     )
                     .replace( // remove full black square
-                        /<path fill="rgb\(0,0,0\)"[\s\S]+?\/>/,
+                        /<path fil{2}="rgb\((?:0,){2}0\)"[\S\s]+?\/>/,
                         ''
                     )
                     .replace( // remove <g/> tag
@@ -24,7 +24,7 @@ async function convert(imageName) {
                         ''
                     );
 
-                const svgFileName = imageName.replace(/\.[\S]+?$/, '') + '.svg';
+                const svgFileName = imageName.replace(/\.\S+?$/, '') + '.svg';
 
                 fs.writeFile(pathToSvg + '/' + svgFileName, svgData, {encoding: 'utf8'}, err => {
                     if (err) {

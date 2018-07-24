@@ -1,7 +1,7 @@
 // @flow
 
 function getPort(originalUrl: string): number { // eslint-disable-line complexity
-    const matches = originalUrl.match(/^(([a-z]+:)?(\/\/)?[^/]+).*$/);
+    const matches = originalUrl.match(/^(([a-z]+:)?(\/{2})?[^/]+).*$/);
     const url = matches ? matches[1] : originalUrl;
     const parts = url.split(':');
     const port = parseInt(parts[parts.length - 1], 10);
