@@ -9,6 +9,7 @@ import type {AttackResultUnitType} from './../components/game/model/helper';
 import {isOnLineRoomType} from './../components/game/model/helper';
 import {localGet, localPost, localServerUrl} from './server-local-api';
 import {localSocketIoClient} from './socket-local';
+import isString from 'lodash/isString';
 
 const {api} = appConst;
 const {url} = api;
@@ -32,7 +33,7 @@ export function createRoom(): Promise<CreateRoomType> {
         return fetch(url + '/api/room/create')
             .then((blob: Response): Promise<CreateRoomType> => blob.json())
             .then((result: CreateRoomType): CreateRoomType => ({
-                roomId: typeof result.roomId === 'string' ? result.roomId : ''
+                roomId: isString(result.roomId) ? result.roomId : ''
             }))
             .catch((error: Error): CreateRoomType => {
                 console.error(error);
@@ -54,7 +55,7 @@ export function joinRoom(roomId: string, userId: string, socketId: string): Prom
         return fetch(url + '/api/room/join/' + [roomId, userId, socketId].join('/'))
             .then((blob: Response): Promise<JoinRoomType> => blob.json())
             .then((result: JoinRoomType): JoinRoomType => ({
-                roomId: typeof result.roomId === 'string' ? result.roomId : ''
+                roomId: isString(result.roomId) ? result.roomId : ''
             }))
             .catch((error: Error): JoinRoomType => {
                 console.error(error);
@@ -71,7 +72,7 @@ export function makeUser(type: 'human' | 'bot', roomId: string): Promise<JoinRoo
         return fetch(url + '/api/room/make/' + type + '/' + roomId)
             .then((blob: Response): Promise<JoinRoomType> => blob.json())
             .then((result: JoinRoomType): JoinRoomType => ({
-                roomId: typeof result.roomId === 'string' ? result.roomId : ''
+                roomId: isString(result.roomId) ? result.roomId : ''
             }));
     }
 
@@ -89,7 +90,7 @@ export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType
         return fetch(url + '/api/room/leave/' + [roomId, userId].join('/'))
             .then((blob: Response): Promise<LeaveRoomType> => blob.json())
             .then((result: LeaveRoomType): LeaveRoomType => ({
-                roomId: typeof result.roomId === 'string' ? result.roomId : ''
+                roomId: isString(result.roomId) ? result.roomId : ''
             }))
             .catch((error: Error): LeaveRoomType => {
                 console.error(error);
@@ -128,7 +129,7 @@ export function setAllRoomSettings(roomId: string,
         })
             .then((blob: Response): Promise<SetAllRoomSettingsType> => blob.json())
             .then((result: SetAllRoomSettingsType): SetAllRoomSettingsType => ({
-                roomId: typeof result.roomId === 'string' ? result.roomId : ''
+                roomId: isString(result.roomId) ? result.roomId : ''
             }))
             .catch((error: Error): SetAllRoomSettingsType => {
                 console.error(error);
@@ -163,7 +164,7 @@ export function setRoomSetting(roomId: string,
         })
             .then((blob: Response): Promise<SetRoomSettingType> => blob.json())
             .then((result: SetRoomSettingType): SetRoomSettingType => ({
-                roomId: typeof result.roomId === 'string' ? result.roomId : ''
+                roomId: isString(result.roomId) ? result.roomId : ''
             }));
     }
 

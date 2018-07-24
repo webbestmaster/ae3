@@ -9,6 +9,9 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
 import style from './style.scss';
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 const iconsReqContext = require.context('./list/', true, /\.svg$/);
 
@@ -27,7 +30,7 @@ console.log(iconMap);
 function getIconPath(iconType: string): string {
     const iconPath = iconMap[iconType];
 
-    if (typeof iconPath === 'string') {
+    if (isString(iconPath)) {
         return iconPath;
     }
 
@@ -50,7 +53,7 @@ class Icon extends Component<PropsType, StateType> {
     render(): Node {
         const view = this;
         const {props, state} = view;
-        const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
+        const additionClass = isString(props.className) ? ' ' + props.className : '';
 
         return (
             <div

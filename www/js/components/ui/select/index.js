@@ -9,6 +9,9 @@ import React, {Component} from 'react';
 import style from './style.scss';
 import type {SelectIconNameType} from './icon';
 import {icon} from './icon';
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 type PropsType = {|
     +children: Node,
@@ -68,7 +71,7 @@ export default class Select extends Component<PropsType, StateType> {
     renderIcon(): Node | null {
         const view = this;
         const {props, state} = view;
-        const iconPath = typeof props.icon === 'string' ? props.icon : null;
+        const iconPath = isString(props.icon) ? props.icon : null;
 
         if (iconPath === null) {
             return null;

@@ -28,6 +28,10 @@ import BottomBar from './../../components/ui/bottom-bar';
 import {storeAction} from './provider';
 import Scroll from './../../components/ui/scroll';
 import style from './style.scss';
+import isNumber from 'lodash/isNumber';
+import isBoolean from 'lodash/isBoolean';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 const storeViewId = 'store';
 
@@ -205,14 +209,14 @@ class Store extends Component<PropsType, StateType> {
             return null;
         }
 
-        const cost = typeof unitData.cost === 'number' ? unitData.cost : null;
+        const cost = isNumber(unitData.cost) ? unitData.cost : null;
 
         if (cost === null) {
             console.error('unit canBeBuy but without cost');
             return null;
         }
 
-        const isCommander = typeof unitData.isCommander === 'boolean' && unitData.isCommander;
+        const isCommander = isBoolean(unitData.isCommander) && unitData.isCommander;
 
         if (!isCommander) {
             return cost;

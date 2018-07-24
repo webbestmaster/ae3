@@ -2,6 +2,10 @@
 
 /* global setTimeout */
 
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
+
 type MapType = Array<string>;
 
 export type PointType = [number, number];
@@ -56,14 +60,14 @@ function getPathAsyncSelf(map: MapType, // eslint-disable-line max-params
                           selfData: SelfDataType) {
     const solution = checkPathsForSolution(paths, target);
 
-    if (solution !== null && typeof options.callBack === 'function') {
+    if (solution !== null && isFunction(options.callBack)) {
         options.callBack(solution);
         return;
     }
 
     const newPaths = createPathsFromList(map, paths, options, selfData);
 
-    if (newPaths.length === 0 && typeof options.callBack === 'function') {
+    if (newPaths.length === 0 && isFunction(options.callBack)) {
         options.callBack(null);
         return;
     }
@@ -112,7 +116,7 @@ function createPaths(map: MapType, path: PathType, options: OptionsType, selfDat
     for (; ii < len; ii += 1) {
         cell = cells[ii];
         cellMask = [cell[0], cell[1]].join('-');
-        if (collectedCells.indexOf(cellMask) === -1) {
+        if (!collectedCells.includes(cellMask)) {
             collectedCells.push(cellMask);
             newPath = clone(path);
             newPath.push(cell);
@@ -209,7 +213,7 @@ export function getPath(map: MapType,
         end,
         [[start]],
         {
-            noPath: options && typeof options.noPath === 'string' ? options.noPath : defaultOptions.noPath
+            noPath: options && isString(options.noPath) ? options.noPath : defaultOptions.noPath
         },
         clone(defaultSelfData)
     );
@@ -226,7 +230,7 @@ export function getPathAsync(map: MapType,
         end,
         [[start]],
         {
-            noPath: options && typeof options.noPath === 'string' ? options.noPath : defaultOptions.noPath,
+            noPath: options && isString(options.noPath) ? options.noPath : defaultOptions.noPath,
             callBack
         },
         // Object.assign({}, defaultOptions, options || {}, {callBack}),

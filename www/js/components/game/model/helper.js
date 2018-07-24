@@ -14,6 +14,9 @@ import * as PIXI from 'pixi.js';
 import {storeViewId} from './../../store';
 import queryString from 'query-string';
 import type {RoomTypeType} from './../../../module/server-api';
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 type InteractionEventType = {|
     +data: {|
@@ -56,7 +59,7 @@ export function getUserColor(userId: string, userList: Array<MapUserType>): User
 }
 
 function unitActionMapToPathMap(actionsList: UnitActionsMapType): Array<string> {
-    const noPath = typeof defaultOptions.noPath === 'string' ? defaultOptions.noPath : null;
+    const noPath = isString(defaultOptions.noPath) ? defaultOptions.noPath : null;
 
     if (noPath === null) {
         console.error('noPath is not defined');
@@ -227,8 +230,8 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
         },
         poisonAttack: aggressor.getPoisonAttack(),
         type: aggressor.attr.type,
-        id: typeof aggressor.attr.id === 'string' ? aggressor.attr.id : 'no-aggressor-id-' + Math.random(),
-        userId: typeof aggressor.attr.userId === 'string' ?
+        id: isString(aggressor.attr.id) ? aggressor.attr.id : 'no-aggressor-id-' + Math.random(),
+        userId: isString(aggressor.attr.userId) ?
             aggressor.attr.userId :
             'no-aggressor-user-id-' + Math.random(),
         armor: aggressorGuideData.armor,
@@ -243,7 +246,7 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
             received: aggressor.getDamageReceived()
         },
         level: aggressor.getLevel(),
-        placeArmor: typeof aggressorGuideData.moveType === 'string' ?
+        placeArmor: isString(aggressorGuideData.moveType) ?
             gameData.armorMap[aggressorGuideData.moveType][aggressor.attr.y][aggressor.attr.x] :
             gameData.armorMap.walk[aggressor.attr.y][aggressor.attr.x]
     };
@@ -259,8 +262,8 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
         },
         poisonAttack: defender.getPoisonAttack(),
         type: defender.attr.type,
-        id: typeof defender.attr.id === 'string' ? defender.attr.id : 'no-defender-id-' + Math.random(),
-        userId: typeof defender.attr.userId === 'string' ?
+        id: isString(defender.attr.id) ? defender.attr.id : 'no-defender-id-' + Math.random(),
+        userId: isString(defender.attr.userId) ?
             defender.attr.userId :
             'no-defender-user-id-' + Math.random(),
         armor: defenderGuideData.armor,
@@ -275,7 +278,7 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
             received: defender.getDamageReceived()
         },
         level: defender.getLevel(),
-        placeArmor: typeof defenderGuideData.moveType === 'string' ?
+        placeArmor: isString(defenderGuideData.moveType) ?
             gameData.armorMap[defenderGuideData.moveType][defender.attr.y][defender.attr.x] :
             gameData.armorMap.walk[defender.attr.y][defender.attr.x]
     };
@@ -297,7 +300,7 @@ export function getEventName(MouseEventName: MouseEventNameType): MouseEventName
         mouseup: 'touchend'
     };
 
-    const hasInMap = typeof eventNameMap[MouseEventName] === 'string';
+    const hasInMap = isString(eventNameMap[MouseEventName]);
 
     // check for mobile events
     if ('ontouchstart' in document) {
@@ -390,7 +393,7 @@ export function countHealHitPointOnBuilding(newMap: MapType, mapUnit: UnitType):
         return null;
     }
 
-    if (typeof mapUnit.hitPoints !== 'number') {
+    if (!isNumber(mapUnit.hitPoints)) {
         return null;
     }
 
@@ -410,8 +413,8 @@ export function countHealHitPointOnBuilding(newMap: MapType, mapUnit: UnitType):
     }
 
     if (['farm', 'castle'].includes(buildingType) &&
-        typeof building.userId === 'string' &&
-        typeof mapUnit.userId === 'string' &&
+        isString(building.userId) &&
+        isString(mapUnit.userId) &&
         building.userId === mapUnit.userId) {
         additionalHitPoints = mapGuide.building[buildingType].hitPointsBonus;
     }
@@ -613,7 +616,8 @@ function hasPlaceForNewUnit(x: number, y: number, gameData: GameDataType): boole
         }
 
         // check unit free place
-        if (find(gameData.unitList, (unit: Unit): boolean => unit.attr.x === placeX && unit.attr.y === placeY)) {
+        // if (find(gameData.unitList, (unit: Unit): boolean => unit.attr.x === placeX && unit.attr.y === placeY)) {
+        if (find(gameData.unitList, {attr: {x: placeX, y: placeY}})) {
             console.log('?hasPlaceForNewUnit ---> unit on:', 'x:', placeX, 'y:', placeY);
             return false;
         }

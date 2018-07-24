@@ -52,6 +52,9 @@ import {storeViewId} from './../../store';
 import Queue from './../../../lib/queue';
 import {storeAction} from './../../store/provider';
 import {localSocketIoClient} from './../../../module/socket-local';
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 type RenderSettingType = {|
     width: number,
@@ -132,7 +135,7 @@ export default class Game {
         const {map} = game.settings;
 
         map.units = map.units.filter((mapUnitData: UnitType): boolean => {
-            return typeof mapUnitData.userId === 'string';
+            return isString(mapUnitData.userId);
         });
 
         game.setMapState(map);
@@ -169,7 +172,7 @@ export default class Game {
 
         // add units
         map.units.forEach((unitData: UnitType) => {
-            if (typeof unitData.userId !== 'string') {
+            if (!isString(unitData.userId)) {
                 console.error('unit has no userId');
                 return;
             }
@@ -303,7 +306,7 @@ export default class Game {
 
         // refresh poison countdown
         mapUnitList.forEach((mapUnit: UnitType) => {
-            if (typeof mapUnit.poisonCountdown !== 'number') {
+            if (!isNumber(mapUnit.poisonCountdown)) {
                 return;
             }
             if (mapUnit.poisonCountdown === 0) {
@@ -557,7 +560,7 @@ export default class Game {
             return;
         }
 
-        const messageActiveUserId = typeof message.states.last.activeUserId === 'string' ?
+        const messageActiveUserId = isString(message.states.last.activeUserId) ?
             message.states.last.activeUserId :
             newMap.activeUserId;
 
@@ -640,7 +643,7 @@ export default class Game {
     async handleServerPushState(message: SocketMessagePushStateType): Promise<void> { // eslint-disable-line complexity, max-statements
         const game = this;
 
-        if (typeof message.states.last.state.type !== 'string') {
+        if (!isString(message.states.last.state.type)) {
             console.error('message.states.last.state.type should be string', message);
             return;
         }
@@ -705,16 +708,14 @@ export default class Game {
             return Promise.resolve();
         }
 
-        if (!state.unit || typeof state.unit.id !== 'string') {
+        if (!state.unit || !isString(state.unit.id)) {
             console.error('---> Wrong socket message', message);
             return Promise.resolve();
         }
 
         const unitState = state.unit;
         const unitId = unitState.id;
-        const unitModel = find(game.unitList, (unitModelInList: Unit): boolean => {
-            return unitId === unitModelInList.attr.id;
-        });
+        const unitModel = find(game.unitList, {attr: {id: unitId}});
 
         if (!unitModel) {
             console.error('---> Can not find unitModel', message, game.unitList);
@@ -751,8 +752,8 @@ export default class Game {
             return Promise.resolve();
         }
 
-        const aggressorId = typeof state.aggressor.id === 'string' ? state.aggressor.id : null;
-        const defenderId = typeof state.defender.id === 'string' ? state.defender.id : null;
+        const aggressorId = isString(state.aggressor.id) ? state.aggressor.id : null;
+        const defenderId = isString(state.defender.id) ? state.defender.id : null;
 
         if (aggressorId === null || defenderId === null) {
             console.error('aggressor or defender has no Id', state);
@@ -760,13 +761,8 @@ export default class Game {
         }
 
         const {unitList} = game;
-        const aggressorUnit = find(unitList, (unitInList: Unit): boolean => {
-            return unitInList.attr.id === aggressorId;
-        }) || null;
-
-        const defenderUnit = find(unitList, (unitInList: Unit): boolean => {
-            return unitInList.attr.id === defenderId;
-        }) || null;
+        const aggressorUnit = find(unitList, {attr: {id: aggressorId}}) || null;
+        const defenderUnit = find(unitList, {attr: {id: defenderId}}) || null;
 
         if (aggressorUnit === null || defenderUnit === null) {
             console.error('can not find aggressor or defender', state);
@@ -790,8 +786,8 @@ export default class Game {
             const defenderUnitGuideData = defenderUnit.getGuideData();
 
             if (defenderUnitGuideData.withoutGrave !== true) {
-                const currentDefenderGrave = find(game.graveList, (grave: Grave): boolean => {
-                    return grave.attr.x === defenderUnit.attr.x && grave.attr.y === defenderUnit.attr.y;
+                const currentDefenderGrave = find(game.graveList, {
+                    attr: {x: defenderUnit.attr.x, y: defenderUnit.attr.y}
                 }) || null;
 
                 if (currentDefenderGrave === null) {
@@ -840,8 +836,8 @@ export default class Game {
             const aggressorUnitGuideData = aggressorUnit.getGuideData();
 
             if (aggressorUnitGuideData.withoutGrave !== true) {
-                const currentAggressorGrave = find(game.graveList, (grave: Grave): boolean => {
-                    return grave.attr.x === aggressorUnit.attr.x && grave.attr.y === aggressorUnit.attr.y;
+                const currentAggressorGrave = find(game.graveList, {
+                    attr: {x: aggressorUnit.attr.x, y: aggressorUnit.attr.y}
                 }) || null;
 
                 if (currentAggressorGrave === null) {
@@ -889,18 +885,14 @@ export default class Game {
 
         const mapBuilding = state.building;
 
-        const gameBuilding = find(game.buildingList, (buildingInList: Building): boolean => {
-            return buildingInList.attr.x === mapBuilding.x && buildingInList.attr.y === mapBuilding.y;
-        }) || null;
+        const gameBuilding = find(game.buildingList, {attr: {x: mapBuilding.x, y: mapBuilding.y}}) || null;
 
         if (gameBuilding === null) {
             console.error('can not find building for message', message);
             return Promise.resolve();
         }
 
-        const gameUnit = find(game.unitList, (unitInList: Unit): boolean => {
-            return unitInList.attr.x === mapBuilding.x && unitInList.attr.y === mapBuilding.y;
-        }) || null;
+        const gameUnit = find(game.unitList, {attr: {x: mapBuilding.x, y: mapBuilding.y}}) || null;
 
         if (gameUnit === null) {
             console.error('can not find building for message', message);
@@ -931,25 +923,21 @@ export default class Game {
 
         const mapBuilding = state.building;
 
-        const gameBuilding = find(game.buildingList, (buildingInList: Building): boolean => {
-            return buildingInList.attr.x === mapBuilding.x && buildingInList.attr.y === mapBuilding.y;
-        }) || null;
+        const gameBuilding = find(game.buildingList, {attr: {x: mapBuilding.x, y: mapBuilding.y}}) || null;
 
         if (gameBuilding === null) {
             console.error('can not find building for message', message);
             return Promise.resolve();
         }
 
-        const gameUnit = find(game.unitList, (unitInList: Unit): boolean => {
-            return unitInList.attr.x === mapBuilding.x && unitInList.attr.y === mapBuilding.y;
-        }) || null;
+        const gameUnit = find(game.unitList, {attr: {x: mapBuilding.x, y: mapBuilding.y}}) || null;
 
         if (gameUnit === null) {
             console.error('can not find building for message', message);
             return Promise.resolve();
         }
 
-        if (typeof mapBuilding.userId !== 'string') {
+        if (!isString(mapBuilding.userId)) {
             console.error('userId is not defined', message);
             return Promise.resolve();
         }
@@ -982,10 +970,7 @@ export default class Game {
         }
 
         const mapGrave = state.grave;
-
-        const gameGrave = find(game.graveList, (graveInList: Grave): boolean => {
-            return graveInList.attr.x === mapGrave.x && graveInList.attr.y === mapGrave.y;
-        }) || null;
+        const gameGrave = find(game.graveList, {attr: {x: mapGrave.x, y: mapGrave.y}}) || null;
 
         if (gameGrave === null) {
             console.error('can not find grave for message', message);
@@ -993,10 +978,7 @@ export default class Game {
         }
 
         const mapRaiser = state.raiser;
-
-        const gameRaiser = find(game.unitList, (unitInList: Unit): boolean => {
-            return unitInList.attr.x === mapRaiser.x && unitInList.attr.y === mapRaiser.y;
-        }) || null;
+        const gameRaiser = find(game.unitList, {attr: {x: mapRaiser.x, y: mapRaiser.y}}) || null;
 
         if (gameRaiser === null) {
             console.error('can not find raiser for message', message);
@@ -1004,7 +986,7 @@ export default class Game {
         }
 
 
-        if (typeof gameRaiser.setDidRaiseSkeleton !== 'function') {
+        if (!isFunction(gameRaiser.setDidRaiseSkeleton)) {
             console.error('raiser has not method setDidRaiseSkeleton', message);
             return Promise.resolve();
         }
@@ -1051,10 +1033,7 @@ export default class Game {
         }
 
         const mapBuilding = state.building;
-
-        const gameBuilding = find(game.buildingList, (buildingInList: Building): boolean => {
-            return buildingInList.attr.x === mapBuilding.x && buildingInList.attr.y === mapBuilding.y;
-        }) || null;
+        const gameBuilding = find(game.buildingList, {attr: {x: mapBuilding.x, y: mapBuilding.y}}) || null;
 
         if (gameBuilding === null) {
             console.error('can not find building for message', message);
@@ -1063,16 +1042,14 @@ export default class Game {
 
         const mapDestroyer = state.destroyer;
 
-        const gameDestroyer = find(game.unitList, (unitInList: Unit): boolean => {
-            return unitInList.attr.x === mapDestroyer.x && unitInList.attr.y === mapDestroyer.y;
-        }) || null;
+        const gameDestroyer = find(game.unitList, {attr: {x: mapDestroyer.x, y: mapDestroyer.y}}) || null;
 
         if (gameDestroyer === null) {
             console.error('can not find destroyer for message', message);
             return Promise.resolve();
         }
 
-        if (typeof gameDestroyer.setDidDestroyBuilding !== 'function') {
+        if (!isFunction(gameDestroyer.setDidDestroyBuilding)) {
             console.error('destroyer has not method setDidDestroyBuilding', message);
             return Promise.resolve();
         }
@@ -1088,7 +1065,7 @@ export default class Game {
             return Promise.resolve();
         }
 
-        const givenDamage = destroyerInMap.damage && typeof destroyerInMap.damage.given === 'number' ?
+        const givenDamage = destroyerInMap.damage && isNumber(destroyerInMap.damage.given) ?
             destroyerInMap.damage.given :
             0;
 
@@ -1202,7 +1179,7 @@ export default class Game {
         unitList.forEach((unit: Unit) => { // eslint-disable-line complexity
             const unitId = unit.attr.id;
 
-            if (typeof unitId !== 'string' || unitId === '') {
+            if (!isString(unitId) || unitId === '') {
                 console.error('Unit has no id:', unitId);
                 return;
             }
@@ -1362,15 +1339,13 @@ export default class Game {
 
     removeGrave(grave: Grave) {
         const game = this;
-        const {graveList} = game;
+        const graveList = game;
 
-        const lengthBeforeRemove = graveList.length;
+        const lengthBeforeRemove = game.graveList.length;
 
-        remove(graveList, (graveInList: Unit): boolean => {
-            return graveInList === grave;
-        });
+        game.graveList = game.graveList.filter((graveInList: Grave): boolean => graveInList !== grave);
 
-        const lengthAfterRemove = graveList.length;
+        const lengthAfterRemove = game.graveList.length;
 
         // check to remove ONE grave
         if (lengthAfterRemove === lengthBeforeRemove - 1) {
@@ -1415,15 +1390,13 @@ export default class Game {
 
     removeUnit(unit: Unit) {
         const game = this;
-        const {unitList} = game;
+        const unitList = game.unitList;
 
-        const lengthBeforeRemove = unitList.length;
+        const lengthBeforeRemove = game.unitList.length;
 
-        remove(unitList, (unitInList: Unit): boolean => {
-            return unitInList === unit;
-        });
+        game.unitList = game.unitList.filter((unitInList: Unit): boolean => unitInList !== unit);
 
-        const lengthAfterRemove = unitList.length;
+        const lengthAfterRemove = game.unitList.length;
 
         // check to remove ONE unit
         if (lengthAfterRemove === lengthBeforeRemove - 1) {
@@ -1440,7 +1413,7 @@ export default class Game {
 
     async onUnitClick(unit: Unit): Promise<void> { // eslint-disable-line complexity, max-statements, sonarjs/cognitive-complexity
         const game = this;
-        const unitUserId = typeof unit.attr.userId === 'string' ? unit.attr.userId : null;
+        const unitUserId = isString(unit.attr.userId) ? unit.attr.userId : null;
 
         const wrongStateList = getWrongStateList(game.getGameData());
 
@@ -1601,9 +1574,7 @@ export default class Game {
             return;
         }
 
-        const gameUnit = find(game.unitList, (unitInList: Unit): boolean => {
-            return unitInList.attr.id === unitAction.id;
-        }) || null;
+        const gameUnit = find(game.unitList, {attr: {id: unitAction.id}}) || null;
 
         if (gameUnit === null) {
             console.error('--> can not find game unit for action:', unitAction);
@@ -1705,7 +1676,8 @@ export default class Game {
 
             if (defenderActionUnit.hitPoints === 0) {
                 defenderMapUnit.hitPoints = 0;
-                remove(newMap.units, {id: defenderActionUnit.id});
+                newMap.units = newMap.units
+                    .filter((mapUnit: UnitType): boolean => mapUnit.id !== defenderActionUnit.id);
                 procedureMakeGraveForMapUnit(newMap, defenderActionUnit);
             } else {
                 defenderMapUnit.hitPoints = defenderActionUnit.hitPoints;
@@ -1717,7 +1689,7 @@ export default class Game {
         }
 
         if (defenderActionUnit.canAttack &&
-            typeof defenderMapUnit.hitPoints === 'number' &&
+            isNumber(defenderMapUnit.hitPoints) &&
             defenderMapUnit.hitPoints > 0) {
             const defenderMapUnitAction = defenderMapUnit.action || {};
 
@@ -1731,7 +1703,8 @@ export default class Game {
 
             if (aggressorActionUnit.hitPoints === 0) {
                 aggressorMapUnit.hitPoints = 0;
-                remove(newMap.units, {id: aggressorActionUnit.id});
+                newMap.units = newMap.units
+                    .filter((mapUnit: UnitType): boolean => mapUnit.id !== aggressorActionUnit.id);
                 procedureMakeGraveForMapUnit(newMap, aggressorActionUnit);
             } else {
                 aggressorMapUnit.hitPoints = aggressorActionUnit.hitPoints;
@@ -1928,7 +1901,8 @@ export default class Game {
             return;
         }
 
-        remove(newMap.graves, {x: actionGrave.x, y: actionGrave.y});
+        newMap.graves = newMap.graves
+            .filter((grave: GraveType): boolean => grave.x !== actionGrave.x || grave.y !== actionGrave.y);
 
         newMap.units.push({
             x: actionGrave.x,
@@ -2267,7 +2241,7 @@ export default class Game {
         const isUnitListStateEqual = unitList.every((unit: Unit): boolean => {
             const unitId = unit.attr.id;
 
-            if (typeof unitId !== 'string' || unitId === '') {
+            if (!isString(unitId) || unitId === '') {
                 console.error('Unit has no id:', unitId);
                 return false;
             }
@@ -2314,7 +2288,7 @@ export default class Game {
         const isBuildingListStateEqual = buildingList.every((building: Building): boolean => {
             const buildingId = building.attr.id;
 
-            if (typeof buildingId !== 'string' || buildingId === '') {
+            if (!isString(buildingId) || buildingId === '') {
                 console.error('Building has no id:', buildingId);
                 return false;
             }

@@ -33,6 +33,10 @@ import find from 'lodash/find';
 import {localSocketIoClient} from './../../module/socket-local';
 import type {UserColorType} from './../../maps/map-guide';
 import LandscapeInfo from './ui/landscape-info';
+import isBoolean from 'lodash/isBoolean';
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 import iconMoney from './ui/icon/money.svg';
 import iconUnitRed from './ui/icon/unit-red.svg';
@@ -462,7 +466,7 @@ export class GameView extends Component<PropsType, StateType> {
 
         view.setState((prevState: StateType): StateType => {
             prevState.popup.changeActiveUser.isOpen = state.isOpen; // eslint-disable-line no-param-reassign
-            prevState.popup.changeActiveUser.showMoney = typeof state.showMoney === 'boolean' ? state.showMoney : true; // eslint-disable-line no-param-reassign
+            prevState.popup.changeActiveUser.showMoney = isBoolean(state.showMoney) ? state.showMoney : true; // eslint-disable-line no-param-reassign
 
             return prevState;
         });

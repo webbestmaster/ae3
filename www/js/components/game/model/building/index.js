@@ -7,6 +7,9 @@ import type {BuildingAttrTypeType, BuildingType, MapUserType} from './../../../.
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import imageMap from './../../image/image-map';
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 type BuildingAttrType = BuildingType;
 
@@ -31,7 +34,7 @@ export default class Building {
         const building = this;
         const {buildingData} = JSON.parse(JSON.stringify(buildingConstructor));
 
-        if (typeof buildingData.userId !== 'string' || typeof buildingData.id !== 'string') {
+        if (!isString(buildingData.userId) || !isString(buildingData.id)) {
             console.warn('---> buildingData has NO .userId or/and .id', buildingData);
         }
 
@@ -63,10 +66,10 @@ export default class Building {
         if (['castle', 'farm'].includes(attr.type)) {
             let color = 'gray';
 
-            if (typeof attr.userId === 'string') {
+            if (isString(attr.userId)) {
                 const userColor = getUserColor(attr.userId, gameAttr.userList);
 
-                if (typeof userColor === 'string') {
+                if (isString(userColor)) {
                     color = userColor;
                 }
             }
@@ -122,7 +125,7 @@ export default class Building {
         const building = this;
         const {attr} = building;
 
-        return typeof attr.userId === 'string' ? attr.userId : 'no-user-id';
+        return isString(attr.userId) ? attr.userId : 'no-user-id';
     }
 
     setAttr(newAttr: BuildingAttrType) {

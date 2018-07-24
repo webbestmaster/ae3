@@ -9,6 +9,9 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
 import style from './style.scss';
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 type PropsType = {|
     children: Node,
@@ -24,7 +27,7 @@ export default class Form extends Component<PropsType, StateType> {
     render(): Node {
         const view = this;
         const {props, state} = view;
-        const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
+        const additionClass = isString(props.className) ? ' ' + props.className : '';
 
         return (
             <form className={style.form + additionClass}>

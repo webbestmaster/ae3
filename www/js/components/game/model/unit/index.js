@@ -18,6 +18,9 @@ import {tweenList} from './../../../../lib/tween';
 import find from 'lodash/find';
 import Grave from './../grave';
 import {fillActionMap} from './helper';
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 type LevelUpAnimationDataType = {|
     x: number,
@@ -205,7 +208,7 @@ export default class Unit {
         const unit = this;
         const {unitData} = unitConstructor;
 
-        if (typeof unitData.userId !== 'string' || typeof unitData.id !== 'string') {
+        if (!isString(unitData.userId) || !isString(unitData.id)) {
             console.error('---> unitData has NO .userId or/and .id', unitData);
         }
 
@@ -247,10 +250,10 @@ export default class Unit {
 
         gameAttr.container.position.set(attr.x * square, attr.y * square);
 
-        if (typeof attr.userId === 'string') {
+        if (isString(attr.userId)) {
             const userColor = getUserColor(attr.userId, gameAttr.userList);
 
-            if (typeof userColor === 'string') {
+            if (isString(userColor)) {
                 color = userColor;
             }
         }
@@ -338,7 +341,7 @@ export default class Unit {
         gameAttr.sprite.poisonCountdown.alpha = 0;
 
         // if (poisonCountdown !== defaultUnitData.poisonCountdown) {
-        if (typeof attr.poisonCountdown === 'number') {
+        if (isNumber(attr.poisonCountdown)) {
             unit.setPoisonCountdown(poisonCountdown);
         }
 
@@ -466,7 +469,7 @@ export default class Unit {
         const unit = this;
         const {attr} = unit;
         const moveMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
-        const unitId = typeof attr.id === 'string' ? attr.id : null;
+        const unitId = isString(attr.id) ? attr.id : null;
 
         if (unitId === null) {
             console.error('unit has no id', unit);
@@ -496,7 +499,7 @@ export default class Unit {
         const unit = this;
         const {attr} = unit;
         const attackMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
-        const unitId = typeof attr.id === 'string' ? attr.id : null;
+        const unitId = isString(attr.id) ? attr.id : null;
 
         if (unitId === null) {
             console.error('unit has no id', unit);
@@ -507,9 +510,7 @@ export default class Unit {
 
         // get attack fields
         attackMapPointList.forEach((cell: [number, number]) => {
-            const defender = find(gameData.unitList, (unitInList: Unit): boolean => {
-                return unitInList.attr.x === cell[0] && unitInList.attr.y === cell[1];
-            }) || null;
+            const defender = find(gameData.unitList, {attr: {x: cell[0], y: cell[1]}}) || null;
 
             if (defender === null) {
                 console.error('Can not find unit by coordinates:', cell);
@@ -533,8 +534,8 @@ export default class Unit {
         const unit = this;
         const {attr} = unit;
         const fixBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
-        const unitId = typeof attr.id === 'string' ? attr.id : null;
-        const userId = typeof attr.userId === 'string' ? attr.userId : null;
+        const unitId = isString(attr.id) ? attr.id : null;
+        const userId = isString(attr.userId) ? attr.userId : null;
 
         if (unitId === null) {
             console.error('unit has no id', unit);
@@ -557,11 +558,7 @@ export default class Unit {
         const unitX = attr.x;
         const unitY = attr.y;
 
-        const building = find(gameData.buildingList, (buildingInList: Building): boolean => {
-            return buildingInList.attr.type === 'farm-destroyed' &&
-                buildingInList.attr.x === unitX &&
-                buildingInList.attr.y === unitY;
-        }) || null;
+        const building = find(gameData.buildingList, {attr: {type: 'farm-destroyed', x: unitX, y: unitY}}) || null;
 
         if (building === null) {
             return [];
@@ -583,8 +580,8 @@ export default class Unit {
         const unit = this;
         const {attr} = unit;
         const occupyBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
-        const unitId = typeof attr.id === 'string' ? attr.id : null;
-        const userId = typeof attr.userId === 'string' ? attr.userId : null;
+        const unitId = isString(attr.id) ? attr.id : null;
+        const userId = isString(attr.userId) ? attr.userId : null;
 
         if (unitId === null) {
             console.error('unit has no id', unit);
@@ -598,7 +595,7 @@ export default class Unit {
 
         const unitGuideData = unit.getGuideData();
 
-        if (!(unitGuideData.occupyBuildingList instanceof Array)) {
+        if (!Array.isArray(unitGuideData.occupyBuildingList)) {
             console.log('unit can not occupy building');
             return [];
         }
@@ -611,7 +608,7 @@ export default class Unit {
             return buildingInList.attr.x === unitX &&
                 buildingInList.attr.y === unitY &&
                 buildingInList.attr.userId !== userId &&
-                unitGuideData.occupyBuildingList instanceof Array &&
+                Array.isArray(unitGuideData.occupyBuildingList) &&
                 unitGuideData.occupyBuildingList.includes(buildingInList.attr.type);
         }) || null;
 
@@ -635,8 +632,8 @@ export default class Unit {
         const unit = this;
         const {attr} = unit;
         const openStoreMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
-        const unitId = typeof attr.id === 'string' ? attr.id : null;
-        const userId = typeof attr.userId === 'string' ? attr.userId : null;
+        const unitId = isString(attr.id) ? attr.id : null;
+        const userId = isString(attr.userId) ? attr.userId : null;
 
         if (unitId === null) {
             console.error('unit has no id', unit);
@@ -652,12 +649,7 @@ export default class Unit {
         const unitX = attr.x;
         const unitY = attr.y;
 
-        const building = find(gameData.buildingList, (buildingInList: Building): boolean => {
-            return buildingInList.attr.x === unitX &&
-                buildingInList.attr.y === unitY &&
-                buildingInList.attr.userId === userId &&
-                buildingInList.attr.type === 'castle';
-        }) || null;
+        const building = find(gameData.buildingList, {attr: {x: unitX, y: unitY, type: 'castle', userId}}) || null;
 
         if (building === null) {
             return null;
@@ -683,8 +675,8 @@ export default class Unit {
         const unit = this;
         const {attr} = unit;
         const destroyBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
-        const unitId = typeof attr.id === 'string' ? attr.id : null;
-        const userId = typeof attr.userId === 'string' ? attr.userId : null;
+        const unitId = isString(attr.id) ? attr.id : null;
+        const userId = isString(attr.userId) ? attr.userId : null;
 
         if (unitId === null) {
             console.error('unit has no id', unit);
@@ -710,7 +702,7 @@ export default class Unit {
         attackBuildingMapPointList.forEach((cell: [number, number]) => {
             const building = find(gameData.buildingList, (buildingInList: Building): boolean => {
                 return destroyBuildingList.includes(buildingInList.attr.type) &&
-                    typeof buildingInList.attr.userId === 'string' &&
+                    isString(buildingInList.attr.userId) &&
                     buildingInList.attr.userId !== userId &&
                     buildingInList.attr.x === cell[0] &&
                     buildingInList.attr.y === cell[1];
@@ -727,7 +719,7 @@ export default class Unit {
                     x: building.attr.x,
                     y: building.attr.y,
                     type: 'farm-destroyed',
-                    id: typeof building.attr.id === 'string' ? building.attr.id : 'no-building-id-' + Math.random()
+                    id: isString(building.attr.id) ? building.attr.id : 'no-building-id-' + Math.random()
                 },
                 destroyer: {
                     x: unit.attr.x,
@@ -748,8 +740,8 @@ export default class Unit {
         const unit = this;
         const {attr} = unit;
         const raiseSkeletonMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
-        const unitId = typeof attr.id === 'string' ? attr.id : null;
-        const userId = typeof attr.userId === 'string' ? attr.userId : null;
+        const unitId = isString(attr.id) ? attr.id : null;
+        const userId = isString(attr.userId) ? attr.userId : null;
 
         if (unitId === null) {
             console.error('unit has no id', unit);
@@ -763,7 +755,7 @@ export default class Unit {
 
         const unitGuideData = unit.getGuideData();
 
-        if (typeof unitGuideData.raiseSkeletonRange !== 'number') {
+        if (!isNumber(unitGuideData.raiseSkeletonRange)) {
             console.log('unit can not raise skeleton');
             return raiseSkeletonMap;
         }
@@ -777,9 +769,7 @@ export default class Unit {
 
         // get attack fields
         raiseSkeletonMapPointList.forEach((cell: [number, number]) => {
-            const grave = find(gameData.graveList, (graveInList: Grave): boolean => {
-                return graveInList.attr.x === cell[0] && graveInList.attr.y === cell[1];
-            }) || null;
+            const grave = find(gameData.graveList, {attr: {x: cell[0], y: cell[1]}}) || null;
 
             if (grave === null) {
                 console.log('No grave by coordinates:', cell);
@@ -787,9 +777,7 @@ export default class Unit {
             }
 
             // check unit on grave
-            const unitOnGrave = find(gameData.unitList, (unitInList: Unit): boolean => {
-                return unitInList.attr.x === grave.attr.x && unitInList.attr.y === grave.attr.y;
-            }) || null;
+            const unitOnGrave = find(gameData.unitList, {attr: {x: grave.attr.x, y: grave.attr.y}}) || null;
 
             if (unitOnGrave !== null) {
                 console.log('Grave under unit, can not raise skeleton', unitOnGrave);
@@ -827,7 +815,7 @@ export default class Unit {
         const unit = this;
         const {attr} = unit;
         const {unitList} = gameData;
-        const userId = typeof attr.userId === 'string' ? attr.userId : null;
+        const userId = isString(attr.userId) ? attr.userId : null;
 
         if (userId === null) {
             console.error('unit has no user id', unit);
@@ -853,7 +841,7 @@ export default class Unit {
 
         const unitGuideData = unitGuide[type];
 
-        const moveType = typeof unitGuideData.moveType === 'string' ?
+        const moveType = isString(unitGuideData.moveType) ?
             unitGuideData.moveType :
             null;
 
@@ -923,7 +911,7 @@ export default class Unit {
         return tweenList(movePath, defaultUnitData.animation.moveStep, (pathPoint: PointType) => {
             gameAttr.container.position.set(pathPoint[0] * square, pathPoint[1] * square);
 
-            if (typeof callback !== 'function') {
+            if (!isFunction(callback)) {
                 return;
             }
 
@@ -1135,7 +1123,7 @@ export default class Unit {
         const unit = this;
         const {damage} = unit.attr;
 
-        return damage && typeof damage.given === 'number' ? damage.given : 0;
+        return damage && isNumber(damage.given) ? damage.given : 0;
     }
 
 
@@ -1157,7 +1145,7 @@ export default class Unit {
         const unit = this;
         const {damage} = unit.attr;
 
-        return damage && typeof damage.received === 'number' ? damage.received : 0;
+        return damage && isNumber(damage.received) ? damage.received : 0;
     }
 
     setPoisonCountdown(poisonCountdown: number) {
@@ -1184,7 +1172,7 @@ export default class Unit {
     getPoisonCountdown(): number {
         const unit = this;
 
-        return typeof unit.attr.poisonCountdown === 'number' ?
+        return isNumber(unit.attr.poisonCountdown) ?
             unit.attr.poisonCountdown :
             defaultUnitData.poisonCountdown;
     }
@@ -1193,13 +1181,13 @@ export default class Unit {
     hasId(): boolean {
         const unit = this;
 
-        return typeof unit.attr.id === 'string' && unit.attr.id.length > 0;
+        return isString(unit.attr.id) && unit.attr.id.length > 0;
     }
 
     getId(): string | null {
         const unit = this;
 
-        if (typeof unit.attr.id === 'string' && unit.attr.id.length > 0) {
+        if (isString(unit.attr.id) && unit.attr.id.length > 0) {
             return unit.attr.id;
         }
 
@@ -1211,13 +1199,13 @@ export default class Unit {
     hasUserId(): boolean {
         const unit = this;
 
-        return typeof unit.attr.userId === 'string' && unit.attr.userId.length > 0;
+        return isString(unit.attr.userId) && unit.attr.userId.length > 0;
     }
 
     getUserId(): string | null {
         const unit = this;
 
-        if (typeof unit.attr.userId === 'string' && unit.attr.userId.length > 0) {
+        if (isString(unit.attr.userId) && unit.attr.userId.length > 0) {
             return unit.attr.userId;
         }
 
@@ -1319,7 +1307,7 @@ export default class Unit {
         const unit = this;
         const guideData = unit.getGuideData();
 
-        return typeof guideData.poisonAttack === 'number' ? guideData.poisonAttack : 0;
+        return isNumber(guideData.poisonAttack) ? guideData.poisonAttack : 0;
     }
 
     /*
@@ -1356,7 +1344,7 @@ export default class Unit {
             return;
         }
 
-        const currentHitPoints = typeof attr.hitPoints === 'number' ? attr.hitPoints : defaultUnitData.hitPoints;
+        const currentHitPoints = isNumber(attr.hitPoints) ? attr.hitPoints : defaultUnitData.hitPoints;
         const hitPointsDelta = hitPoints - currentHitPoints;
 
         attr.hitPoints = hitPoints;
@@ -1403,7 +1391,7 @@ export default class Unit {
         const unit = this;
         const {attr} = unit;
 
-        if (typeof attr.hitPoints === 'number') {
+        if (isNumber(attr.hitPoints)) {
             return attr.hitPoints;
         }
         return defaultUnitData.hitPoints;
@@ -1506,10 +1494,10 @@ export default class Unit {
             return;
         }
 
-        if (typeof attr.userId === 'string') {
+        if (isString(attr.userId)) {
             const userColor = getUserColor(attr.userId, gameAttr.userList);
 
-            if (typeof userColor === 'string') {
+            if (isString(userColor)) {
                 animationSprite
                     .textures[0] = PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-' + userColor + '-0']);
                 animationSprite
@@ -1544,7 +1532,7 @@ export default class Unit {
     refreshWispAura(gameData: GameDataType): boolean {
         const unit = this;
         const {square} = mapGuide.size;
-        const unitUserId = typeof unit.attr.userId === 'string' ? unit.attr.userId : null;
+        const unitUserId = isString(unit.attr.userId) ? unit.attr.userId : null;
 
         if (unitUserId === null) {
             console.error('unit has no userId', unit);

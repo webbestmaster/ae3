@@ -3,6 +3,9 @@
 /* eslint consistent-this: ["error", "urlMask"] */
 
 /* global URL */
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 type ConstructorOptionsType = {|
     +initialUrl: string
@@ -56,7 +59,7 @@ class UrlMask {
                 return false;
             }
 
-            if (maskPart.indexOf(':') === 0) {
+            if (maskPart.startsWith(':') === 0) {
                 return true;
             }
 
@@ -86,7 +89,7 @@ class UrlMask {
                 return;
             }
 
-            if (maskPart.indexOf(':') !== 0) {
+            if (maskPart.startsWith(':') !== 0) {
                 return;
             }
 

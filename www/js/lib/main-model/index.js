@@ -6,6 +6,10 @@
 
 /* eslint consistent-this: ["error", "model"] */
 
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
+
 // $FlowFixMe
 type AttrValueType = any; // eslint-disable-line flowtype/no-weak-types
 
@@ -66,7 +70,7 @@ export default class MainModel {
      * @return {MainModel} instance
      */
     set(key: string | {}, value?: AttrValueType): MainModel {
-        return typeof key === 'string' ? this.setKeyValue(key, value) : this.setObject(key);
+        return isString(key) ? this.setKeyValue(key, value) : this.setObject(key);
     }
 
     /**
@@ -101,7 +105,7 @@ export default class MainModel {
         const model = this;
         const oldValue = model.get(key);
 
-        if (typeof deltaValue === 'number' && typeof oldValue === 'number') {
+        if (isNumber(deltaValue) && isNumber(oldValue)) {
             model.setKeyValue(key, oldValue + deltaValue);
         }
 
@@ -137,7 +141,7 @@ export default class MainModel {
         const argsLength = arguments.length;
 
         // key did not passed
-        if (typeof key !== 'string') {
+        if (!isString(key)) {
             model.listeners = {};
             return model;
         }
@@ -150,7 +154,7 @@ export default class MainModel {
             return model;
         }
 
-        if (typeof action !== 'function') {
+        if (!isFunction(action)) {
             return model;
         }
 

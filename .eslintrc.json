@@ -10,7 +10,8 @@
         "plugin:import/errors",
         "plugin:import/warnings",
         "plugin:promise/recommended",
-        "plugin:sonarjs/recommended"
+        "plugin:sonarjs/recommended",
+        "plugin:lodash/recommended"
     ],
     "globals": {
         "require": true,
@@ -23,7 +24,8 @@
         "flowtype",
         "react",
         "promise",
-        "sonarjs"
+        "sonarjs",
+        "lodash"
     ],
     "env": {
         "es6": true,
@@ -36,6 +38,8 @@
         }
     },
     "rules": {
+        "lodash/prefer-lodash-method": 0,
+        "lodash/prefer-constant": 0,
         "no-use-extend-native/no-use-extend-native": 2,
         "flowtype/boolean-style": [
             2,

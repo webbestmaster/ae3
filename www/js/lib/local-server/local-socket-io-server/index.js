@@ -9,6 +9,10 @@ const {LocalSocketIoClient} = require('./../local-socket-io-client');
 
 const {localMaster} = require('./../local-master');
 
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
+
 /*
 return socketIoServer.sockets.connected[socketId] || null;
 */
@@ -95,7 +99,7 @@ class LocalSocketIoServer {
             localSocketIoServer.disconnectSocket(socket);
         });
 
-        if (typeof callback === 'function') {
+        if (isFunction(callback)) {
             setTimeout(callback, 0);
         }
     }

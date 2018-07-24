@@ -1,6 +1,9 @@
 // @flow
 
 /* eslint consistent-this: ["error", "room"] */
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 type PushedStatePayloadIsGameStartedType = {|
     +isGameStart: boolean,
@@ -441,7 +444,7 @@ class Room {
                 return false;
             }
 
-            return typeof state.meta.hash === 'string' && state.meta.hash === hash;
+            return isString(state.meta.hash) && state.meta.hash === hash;
         }) ||
             null;
     }
@@ -547,7 +550,7 @@ class Room {
         Object.keys(timers).forEach((timerKey: string) => {
             const timer = timers[timerKey];
 
-            if (timer && typeof timer.stop === 'function') {
+            if (timer && isFunction(timer.stop)) {
                 timer.stop();
             }
             timers[timerKey] = null;

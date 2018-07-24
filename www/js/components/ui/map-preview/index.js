@@ -13,6 +13,9 @@ import imageMap from './../../game/image/image-map';
 import mapGuide from './../../../maps/map-guide';
 import {getMapSize, getUserColor} from './../../game/model/helper';
 import {getDefaultUserList} from './helper';
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 type StateType = void;
 type PropsType = {|
@@ -126,10 +129,10 @@ export default class MapPreview extends Component<PropsType, StateType> {
             if (['castle', 'farm'].includes(type)) {
                 let color = 'gray';
 
-                if (typeof building.userId === 'string') {
+                if (isString(building.userId)) {
                     const userColor = getUserColor(building.userId, userList);
 
-                    if (typeof userColor === 'string') {
+                    if (isString(userColor)) {
                         color = userColor;
                     }
                 }
@@ -168,10 +171,10 @@ export default class MapPreview extends Component<PropsType, StateType> {
         map.units.forEach((unit: UnitType) => {
             let color = 'gray';
 
-            if (typeof unit.userId === 'string') {
+            if (isString(unit.userId)) {
                 const userColor = getUserColor(unit.userId, userList);
 
-                if (typeof userColor === 'string') {
+                if (isString(userColor)) {
                     color = userColor;
                 }
             }
@@ -205,8 +208,8 @@ export default class MapPreview extends Component<PropsType, StateType> {
     render(): Node {
         const view = this;
         const {props, node} = view;
-        const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
-        const additionCanvasClassName = typeof props.canvasClassName === 'string' ? ' ' + props.canvasClassName : '';
+        const additionClass = isString(props.className) ? ' ' + props.className : '';
+        const additionCanvasClassName = isString(props.canvasClassName) ? ' ' + props.canvasClassName : '';
         const mapSize = getMapSize(props.map);
 
         return (

@@ -10,6 +10,10 @@ const {LocalHttpServer} = require('./../local-http-server');
 const apiRouter = require('./api-router').apiRouter;
 const roomMaster = require('./../room/master').roomMaster;
 
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
+
 type ServerConstructorOptionsType = {|
     port: number
 |};
@@ -30,7 +34,7 @@ type AttrType = {|
  * @param {Object} options - options for new TBW
  *      @param {number} options.port - port to lister
  */
-class Server {
+export class Server {
     _attr: AttrType; // eslint-disable-line no-underscore-dangle, id-match
     constructor(options: ServerConstructorOptionsType) {
         const server = this;
@@ -41,7 +45,7 @@ class Server {
 
         server._attr = { // eslint-disable-line no-underscore-dangle, id-match
             options: {
-                port: typeof options.port === 'number' ? options.port : serverDefaultOptions.port
+                port: isNumber(options.port) ? options.port : serverDefaultOptions.port
             },
             expressApp,
             httpServer,
@@ -121,5 +125,3 @@ class Server {
         return this.getAttr().options;
     }
 }
-
-module.exports.Server = Server;

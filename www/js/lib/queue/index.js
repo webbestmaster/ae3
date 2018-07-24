@@ -4,6 +4,9 @@
 /* eslint consistent-this: ["error", "queue"] */
 
 type CallBackType = () => Promise<void> | void;
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 function requestIdleCallbackPolyfill(callback: () => {}) {
     window.requestAnimationFrame(() => {
@@ -48,7 +51,7 @@ export default class Queue {
         const first = queue.list.shift();
         const result = first();
 
-        if (result && typeof result.then === 'function') {
+        if (result && isFunction(result.then)) {
             result
                 .then((): void => queue.runCallBack())
                 .catch(() => {

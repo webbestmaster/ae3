@@ -4,6 +4,7 @@
 import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
 import * as serverApi from './../../module/server-api';
 import type {BuildingType, MapType, UnitType} from './../../maps/type';
+import isString from 'lodash/isString';
 
 export type RoomDataType = {|
     roomId: string,
@@ -45,13 +46,13 @@ export function getMaxUserListSize(map: MapType): number {
     const idList: Array<string> = [];
 
     map.units.forEach((unit: UnitType) => {
-        if (typeof unit.userId === 'string' && !idList.includes(unit.userId)) {
+        if (isString(unit.userId) && !idList.includes(unit.userId)) {
             idList.push(unit.userId);
         }
     });
 
     map.buildings.forEach((building: BuildingType) => {
-        if (typeof building.userId === 'string' && !idList.includes(building.userId)) {
+        if (isString(building.userId) && !idList.includes(building.userId)) {
             idList.push(building.userId);
         }
     });

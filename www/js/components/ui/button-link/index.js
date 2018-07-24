@@ -9,7 +9,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from './../../../app-reducer';
 import buttonStyle from './../button/style.scss';
-
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
+import noop from 'lodash/noop';
 import Link from 'react-router-dom/Link';
 
 type PropsType = {|
@@ -29,9 +32,8 @@ export default class ButtonLink extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
-        const additionClass = typeof props.className === 'string' ? ' ' + props.className : '';
-        const onClick = typeof props.onClick === 'function' ? props.onClick : () => {
-        };
+        const additionClass = isString(props.className) ? ' ' + props.className : '';
+        const onClick = isFunction(props.onClick) ? props.onClick : noop;
 
         return (
             <Link

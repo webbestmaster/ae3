@@ -47,6 +47,7 @@ import serviceStyle from './../../../css/service.scss';
 import createRoomStyle from './../create-room/style.scss';
 import type {LangKeyType} from './../../components/locale/translation/type';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
+import isString from 'lodash/isString';
 
 type StateType = {|
     settings?: AllRoomSettingsType,
@@ -353,9 +354,9 @@ class Room extends Component<PropsType, StateType> {
         }
 
         [].concat(map.buildings, map.units).forEach((userItem: BuildingType | UnitType) => { // eslint-disable-line complexity
-            const userItemUserId = typeof userItem.userId === 'string' ? userItem.userId : null;
+            const userItemUserId = isString(userItem.userId) ? userItem.userId : null;
 
-            if (typeof userItem.id !== 'string' || userItem.id === '') {
+            if (!isString(userItem.id) || userItem.id === '') {
                 userItem.id = [userItem.x, userItem.y, Math.random()].join('_'); // eslint-disable-line no-param-reassign
             }
 

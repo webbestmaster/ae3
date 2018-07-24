@@ -5,6 +5,9 @@
 /* eslint consistent-this: ["error", "httpServer"] */
 import type {RequestCallBackType} from './../local-request';
 import type {PushedStateType} from './../room/index';
+import isNumber from 'lodash/isNumber';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 
 const {localMaster} = require('./../local-master');
 const {LocalExpress} = require('./../local-express');
@@ -54,7 +57,7 @@ class LocalHttpServer {
 
         httpServer.bindEventListener();
 
-        if (typeof callback === 'function') {
+        if (isFunction(callback)) {
             setTimeout(callback, 0);
         }
     }
@@ -64,7 +67,7 @@ class LocalHttpServer {
 
         httpServer.unbindEventListener();
 
-        if (typeof callback === 'function') {
+        if (isFunction(callback)) {
             setTimeout(callback, 0);
         }
     }
