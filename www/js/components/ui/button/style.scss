@@ -1,4 +1,5 @@
 @import './../ui-var';
+@import './../../../../css/var';
 
 .button {
     background-color: $main-background-color;
@@ -16,7 +17,7 @@
     padding: 9px 15px 5px;
     text-align: center;
     text-decoration: none;
-    text-shadow: 3px 3px 0 #333;
+    text-shadow: 3px 3px 0 $main-text-shadow-color;
 
     &:last-child {
         margin-bottom: 0;

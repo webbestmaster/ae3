@@ -1,4 +1,5 @@
 @import './../../../components/ui/ui-var';
+@import './../../../../css/var';
 
 .bottom_bar {
     background-color: $main-background-color;
@@ -23,5 +24,5 @@
     margin-left: 7px;
     margin-right: 7px;
     text-align: center;
-    text-shadow: 3px 3px 0 #333;
+    text-shadow: 3px 3px 0 $main-text-shadow-color;
 }

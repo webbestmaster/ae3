@@ -1,4 +1,5 @@
 @import './../ui-var';
+@import './../../../../css/var';
 
 .header {
     background-color: $main-background-color;
@@ -23,5 +24,5 @@
     margin-left: 47px;
     margin-right: 7px;
     text-align: right;
-    text-shadow: 3px 3px 0 #333;
+    text-shadow: 3px 3px 0 $main-text-shadow-color;
 }
