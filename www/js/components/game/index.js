@@ -70,7 +70,7 @@ const bottomBarColorMap: { [key: UserColorType]: string } = {
 // }
 
 export const bottomBarData = {
-    height: 52
+    height: 53 // $bar-height: 52px; + 1 top border
 };
 
 type PropsType = {|
