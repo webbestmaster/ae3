@@ -1,7 +1,9 @@
 // @flow
 import {Server as LocalServer} from './../lib/local-server/server';
-import * as localRequest from './../lib/local-server/local-request';
+
 import type {PushedStateType} from './../lib/local-server/room';
+
+const {get, post} = require('./../lib/local-server/local-request');
 
 export const localServerOptions = {
     port: 8080
@@ -27,7 +29,7 @@ export function run(): Promise<void> {
 
 export function localGet(localUrl: string): Promise<string> {
     return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {
-        localRequest.get(
+        get(
             localUrl,
             null,
             (error: Error | null, response: mixed, body: string) => {
@@ -44,7 +46,7 @@ export function localPost(localUrl: string, form: string): Promise<string> {
     const parsedForm: PushedStateType = JSON.parse(form);
 
     return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {
-        localRequest.post(
+        post(
             localUrl,
             parsedForm,
             (error: Error | null, response: mixed, body: string) => {

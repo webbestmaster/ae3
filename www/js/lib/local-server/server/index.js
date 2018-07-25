@@ -9,8 +9,7 @@ const {LocalSocketIoServer} = require('./../local-socket-io-server');
 const {LocalHttpServer} = require('./../local-http-server');
 const apiRouter = require('./api-router').apiRouter;
 const roomMaster = require('./../room/master').roomMaster;
-
-import {
+const {
     isBoolean,
     isNumber,
     isString,
@@ -19,7 +18,7 @@ import {
     isNotNumber,
     isNotString,
     isNotFunction
-} from './../../../lib/is';
+} = require('./../helper');
 
 type ServerConstructorOptionsType = {|
     port: number
@@ -41,7 +40,7 @@ type AttrType = {|
  * @param {Object} options - options for new TBW
  *      @param {number} options.port - port to lister
  */
-export class Server {
+class Server {
     _attr: AttrType; // eslint-disable-line no-underscore-dangle, id-match
     constructor(options: ServerConstructorOptionsType) {
         const server = this;
@@ -132,3 +131,5 @@ export class Server {
         return this.getAttr().options;
     }
 }
+
+module.exports.Server = Server;

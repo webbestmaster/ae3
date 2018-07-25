@@ -1,7 +1,7 @@
 // @flow
 
 /* eslint consistent-this: ["error", "room"] */
-import {
+const {
     isBoolean,
     isNumber,
     isString,
@@ -10,7 +10,7 @@ import {
     isNotNumber,
     isNotString,
     isNotFunction
-} from './../../../lib/is';
+} = require('./../helper');
 
 type PushedStatePayloadIsGameStartedType = {|
     +isGameStart: boolean,

@@ -5,7 +5,7 @@
 /* eslint consistent-this: ["error", "httpServer"] */
 import type {RequestCallBackType} from './../local-request';
 import type {PushedStateType} from './../room';
-import {
+const {
     isBoolean,
     isNumber,
     isString,
@@ -14,7 +14,7 @@ import {
     isNotNumber,
     isNotString,
     isNotFunction
-} from './../../../lib/is';
+} = require('./../helper');
 
 const {localMaster} = require('./../local-master');
 const {LocalExpress} = require('./../local-express');

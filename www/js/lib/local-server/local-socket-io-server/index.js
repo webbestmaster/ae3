@@ -9,7 +9,7 @@ const {LocalSocketIoClient} = require('./../local-socket-io-client');
 
 const {localMaster} = require('./../local-master');
 
-import {
+const {
     isBoolean,
     isNumber,
     isString,
@@ -18,7 +18,7 @@ import {
     isNotNumber,
     isNotString,
     isNotFunction
-} from './../../../lib/is';
+} = require('./../helper');
 
 /*
 return socketIoServer.sockets.connected[socketId] || null;
