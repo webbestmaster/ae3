@@ -1,5 +1,4 @@
 // @flow
 import Unit from './..';
 
-export default class Valadorn extends Unit {
-}
+export default class Valadorn extends Unit {}

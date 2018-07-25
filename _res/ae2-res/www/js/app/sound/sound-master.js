@@ -1,149 +1,127 @@
 /*jslint white: true, nomen: true */
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window */
+    /*global */
 
-	"use strict";
-	/*global window */
-	/*global */
+    win.APP = win.APP || {};
 
-	win.APP = win.APP || {};
+    var soundMaster;
 
-	var soundMaster;
+    soundMaster = {
+        init: function() {
+            var soundMaster = this;
 
-	soundMaster = {
+            soundMaster.initPlayers();
 
-		init: function () {
+            win.addEventListener('hashchange', soundMaster.playBgSound.bind(soundMaster), false);
+        },
 
-			var soundMaster = this;
+        roads: [{}, {}, {}, {}], // 4 roads
 
-			soundMaster.initPlayers();
+        initPlayers: function() {
+            // todo: detect player type here (web, android, iOS)
 
-			win.addEventListener('hashchange', soundMaster.playBgSound.bind(soundMaster), false);
+            var soundMaster = this,
+                isAndroidPlayer = win.AndAud_0,
+                isIosPlayer = win.Media, // detect cordova Media
+                player;
 
-		},
+            if (isAndroidPlayer) {
+                player = win.APP.soundMaster.androidPlayer;
+            }
 
-		roads: [{}, {}, {}, {}], // 4 roads
+            if (isIosPlayer) {
+                player = win.APP.soundMaster.iosPlayer;
+            }
 
-		initPlayers: function () {
+            player = player || win.APP.soundMaster.webPlayer; // get system player or use web player
 
-			// todo: detect player type here (web, android, iOS)
+            player.init();
 
-			var soundMaster = this,
-				isAndroidPlayer = win.AndAud_0,
-				isIosPlayer = win.Media, // detect cordova Media
-				player;
+            soundMaster.player = player;
+        },
 
-			if (isAndroidPlayer) {
-				player = win.APP.soundMaster.androidPlayer;
-			}
+        getPlayer: function() {
+            return this.player;
+        },
 
-			if (isIosPlayer) {
-				player = win.APP.soundMaster.iosPlayer;
-			}
+        playBgSound: function() {
+            var soundMaster = this,
+                gbSound = soundMaster.getCurrentBgSound();
 
-			player = player || win.APP.soundMaster.webPlayer; // get system player or use web player
+            if (!gbSound) {
+                return;
+            }
 
-			player.init();
+            soundMaster.play({
+                sound: gbSound,
+                isLoop: true,
+                road: 0
+            });
+        },
 
-			soundMaster.player = player;
+        getCurrentBgSound: function() {
+            var state = Backbone.history.fragment;
 
-		},
+            switch (state) {
+                case '':
+                case 'play':
+                case 'select-level':
+                case 'skirmish-select-map':
+                    return 'main-theme.mp3'; // file name main-theme.mp3
+            }
 
-		getPlayer: function () {
-			return this.player;
-		},
+            // if false - do not anything
+            return false;
+        },
 
-		playBgSound: function () {
+        play: function(data) {
+            var soundMaster = this,
+                player = soundMaster.getPlayer(),
+                prevState = soundMaster.roads[data.road],
+                curStr = JSON.stringify(data),
+                prevStr = JSON.stringify(prevState);
 
-			var soundMaster = this,
-				gbSound = soundMaster.getCurrentBgSound();
+            //save arguments for - do not start play the same sound
+            if (curStr === prevStr && data.isLoop) {
+                return;
+            }
 
-			if (!gbSound) {
-				return;
-			}
+            soundMaster.stop(data);
 
-			soundMaster.play({
-				sound: gbSound,
-				isLoop: true,
-				road: 0
-			});
+            soundMaster.roads[data.road] = JSON.parse(curStr);
 
-		},
+            if (win.APP.info.get('music') === 'off') {
+                return;
+            }
 
-		getCurrentBgSound: function () {
+            player.play(data);
+        },
 
-			var state = Backbone.history.fragment;
+        stop: function(data) {
+            var soundMaster = this,
+                player = soundMaster.getPlayer();
 
-			switch (state) {
+            player.stop(data);
+        },
 
-				case '':
-				case 'play':
-				case 'select-level':
-				case 'skirmish-select-map':
-					return 'main-theme.mp3'; // file name main-theme.mp3
+        stopBgSound: function() {
+            var soundMaster = this,
+                state = soundMaster.roads[0]; // 0 is bg sound
 
-			}
+            soundMaster.stop(state);
+        },
 
-			// if false - do not anything
-			return false;
+        restoreBgSound: function() {
+            var soundMaster = this,
+                state = JSON.parse(JSON.stringify(soundMaster.roads[0])); // 0 is bg sound
 
-		},
+            soundMaster.roads[0] = {}; // wipe previous state to force play sound
 
-		play: function (data) {
+            soundMaster.play(state);
+        }
+    };
 
-			var soundMaster = this,
-				player = soundMaster.getPlayer(),
-				prevState = soundMaster.roads[data.road],
-				curStr = JSON.stringify(data),
-				prevStr = JSON.stringify(prevState);
-
-			//save arguments for - do not start play the same sound
-			if (curStr === prevStr && data.isLoop) {
-				return;
-			}
-
-			soundMaster.stop(data);
-
-			soundMaster.roads[data.road] = JSON.parse(curStr);
-
-			if (win.APP.info.get('music') === 'off') {
-				return;
-			}
-
-			player.play(data);
-
-		},
-
-		stop: function (data) {
-
-			var soundMaster = this,
-				player = soundMaster.getPlayer();
-
-			player.stop(data);
-
-		},
-
-		stopBgSound: function () {
-
-			var soundMaster = this,
-				state = soundMaster.roads[0]; // 0 is bg sound
-
-			soundMaster.stop(state);
-
-		},
-
-		restoreBgSound: function () {
-
-			var soundMaster = this,
-				state = JSON.parse(JSON.stringify(soundMaster.roads[0])); // 0 is bg sound
-
-			soundMaster.roads[0] = {}; // wipe previous state to force play sound
-
-			soundMaster.play(state);
-
-		}
-
-	};
-
-	win.APP.soundMaster = soundMaster;
-
-}(window));
+    win.APP.soundMaster = soundMaster;
+})(window);

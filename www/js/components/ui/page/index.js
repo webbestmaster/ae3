@@ -36,11 +36,7 @@ class Page extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = isString(props.className) ? ' ' + props.className : '';
 
-        return (
-            <div className={style.page + additionClass}>
-                {props.children}
-            </div>
-        );
+        return <div className={style.page + additionClass}>{props.children}</div>;
     }
 }
 

@@ -1,12 +1,14 @@
 // @flow
 
-declare var module : { // eslint-disable-line no-shadow
+// eslint-disable-next-line no-shadow
+declare var module: {
 
-/*
+    /*
     hot: {
         accept(path: string, callback: () => void): void
     }
-*/
+    */
 };
 
-declare var require: any; // eslint-disable-line no-shadow, flowtype/no-weak-types
+// eslint-disable-next-line no-shadow, flowtype/no-weak-types
+declare var require: any;

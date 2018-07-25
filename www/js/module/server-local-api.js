@@ -29,16 +29,13 @@ export function run(): Promise<void> {
 
 export function localGet(localUrl: string): Promise<string> {
     return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {
-        get(
-            localUrl,
-            null,
-            (error: Error | null, response: mixed, body: string) => {
-                if (error) {
-                    reject(new Error('local get error'));
-                    return;
-                }
-                resolve(body);
-            });
+        get(localUrl, null, (error: Error | null, response: mixed, body: string) => {
+            if (error) {
+                reject(new Error('local get error'));
+                return;
+            }
+            resolve(body);
+        });
     });
 }
 
@@ -46,15 +43,12 @@ export function localPost(localUrl: string, form: string): Promise<string> {
     const parsedForm: PushedStateType = JSON.parse(form);
 
     return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {
-        post(
-            localUrl,
-            parsedForm,
-            (error: Error | null, response: mixed, body: string) => {
-                if (error) {
-                    reject(new Error('local post error'));
-                    return;
-                }
-                resolve(body);
-            });
+        post(localUrl, parsedForm, (error: Error | null, response: mixed, body: string) => {
+            if (error) {
+                reject(new Error('local post error'));
+                return;
+            }
+            resolve(body);
+        });
     });
 }

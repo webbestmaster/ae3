@@ -34,11 +34,7 @@ export class Label extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = isString(props.className) ? ' ' + props.className : '';
 
-        return (
-            <label className={style.label + additionClass}>
-                {props.children}
-            </label>
-        );
+        return <label className={style.label + additionClass}>{props.children}</label>;
     }
 }
 

@@ -51,22 +51,28 @@ export default class Catapult extends Unit {
 
         console.log('catapult');
 
-        const disArray = [[0, -1], [-1, 0], [1, 0], [0, 1], [0, 0]]
-            .map((coordinates: [number, number]): [number, number] => {
+        const disArray = [[0, -1], [-1, 0], [1, 0], [0, 1], [0, 0]].map(
+            (coordinates: [number, number]): [number, number] => {
                 return [x + coordinates[0], y + coordinates[1]];
-            });
+            }
+        );
 
-        return super.getAllAvailableAttack(gameData)
-            .filter((coordinates: [number, number]): boolean => {
-                return !disArray.some((disArrayCoordinates: [number, number]): boolean => {
-                    return coordinates[0] === disArrayCoordinates[0] && coordinates[1] === disArrayCoordinates[1];
-                });
-            });
+        return super.getAllAvailableAttack(gameData).filter(
+            (coordinates: [number, number]): boolean => {
+                return !disArray.some(
+                    (disArrayCoordinates: [number, number]): boolean => {
+                        return coordinates[0] === disArrayCoordinates[0] && coordinates[1] === disArrayCoordinates[1];
+                    }
+                );
+            }
+        );
     }
 
-    getMoviePath(unitAction: UnitActionMoveType,
-                 actionsList: UnitActionsMapType,
-                 gameData?: GameDataType): PathType | null {
+    getMoviePath(
+        unitAction: UnitActionMoveType,
+        actionsList: UnitActionsMapType,
+        gameData?: GameDataType
+    ): PathType | null {
         if (!gameData) {
             console.error('gameData is needed');
             return null;
@@ -81,8 +87,8 @@ export default class Catapult extends Unit {
         const aggressor = this;
         const range = aggressor.getGuideData().attack.range;
 
-        const coordinatesDifferent = Math.abs(defender.attr.x - aggressor.attr.x) +
-            Math.abs(defender.attr.y - aggressor.attr.y);
+        const coordinatesDifferent =
+            Math.abs(defender.attr.x - aggressor.attr.x) + Math.abs(defender.attr.y - aggressor.attr.y);
 
         return coordinatesDifferent <= range && coordinatesDifferent !== 1;
     }

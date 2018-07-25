@@ -142,11 +142,13 @@
             1,
             {
                 "closingSlash": "never",
-                "beforeSelfClosing": "never",
+                "beforeSelfClosing": "always",
                 "afterOpening": "never",
                 "beforeClosing": "never"
             }
         ],
+        "react/jsx-max-props-per-line": [1, { "maximum": 4 }],
+        "react/jsx-one-expression-per-line": 0,
         //        "react/destructuring-assignment": [1, "never"],
         "no-console": 0,
         "no-empty-label": 0,

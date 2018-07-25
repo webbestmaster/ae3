@@ -23,7 +23,8 @@ class System extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
-        window.addEventListener('resize',
+        window.addEventListener(
+            'resize',
             () => {
                 const {documentElement} = window.document;
                 const width: number = documentElement.clientWidth;
@@ -31,7 +32,8 @@ class System extends Component<PropsType, StateType> {
 
                 props.onResize(width, height);
             },
-            false);
+            false
+        );
     }
 
     render(): Node {

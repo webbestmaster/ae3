@@ -26,9 +26,13 @@ export async function initializeEnvironment(): Promise<void> {
     });
 
     // disable extra scroll on iOS, use Scroll component
-    document.addEventListener('touchmove', (evt: Event) => {
-        evt.preventDefault();
-    }, false);
+    document.addEventListener(
+        'touchmove',
+        (evt: Event) => {
+            evt.preventDefault();
+        },
+        false
+    );
 
     await runLocalServer()
         .then((): void => console.log('Local Server has been run.'))

@@ -34,12 +34,7 @@ const definePluginParams = {
 const imageRETest = /\.(png|jpg|jpeg|gif|svg)(\?[\d&.=a-z]+)?$/;
 
 const webpackConfig = {
-    entry: [
-        './www/css/root.scss',
-        'babel-polyfill',
-        'whatwg-fetch',
-        './www/js/index.js'
-    ],
+    entry: ['./www/css/root.scss', 'babel-polyfill', 'whatwg-fetch', './www/js/index.js'],
     output: {
         path: path.join(CWD, '/dist'),
         publicPath: '/',
@@ -187,7 +182,6 @@ const webpackConfig = {
                         }
                     },
                     {loader: 'sass-loader', options: {sourceMap: IS_DEVELOPMENT}}
-
                 ]
             },
             {
@@ -224,7 +218,6 @@ const webpackConfig = {
                             }
                         }
                     }
-
                 ]
             }
         ]
@@ -264,7 +257,6 @@ const webpackConfig = {
             }
         }
     */
-
 };
 
 // webpackConfig.plugins.push(new BundleAnalyzerPlugin());

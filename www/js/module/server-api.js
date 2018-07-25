@@ -32,7 +32,6 @@ export type ServerUserType = {|
 
 export type RoomTypeType = 'on-line' | 'off-line';
 
-
 export type CreateRoomType = {|
     roomId: string
 |};
@@ -41,19 +40,21 @@ export function createRoom(): Promise<CreateRoomType> {
     if (isOnLineRoomType()) {
         return fetch(url + '/api/room/create')
             .then((blob: Response): Promise<CreateRoomType> => blob.json())
-            .then((result: CreateRoomType): CreateRoomType => ({
-                roomId: isString(result.roomId) ? result.roomId : ''
-            }))
-            .catch((error: Error): CreateRoomType => {
-                console.error(error);
-                return {roomId: ''};
-            });
+            .then(
+                (result: CreateRoomType): CreateRoomType => ({
+                    roomId: isString(result.roomId) ? result.roomId : ''
+                })
+            )
+            .catch(
+                (error: Error): CreateRoomType => {
+                    console.error(error);
+                    return {roomId: ''};
+                }
+            );
     }
 
-    return localGet(localServerUrl + '/api/room/create')
-        .then((result: string): CreateRoomType => JSON.parse(result));
+    return localGet(localServerUrl + '/api/room/create').then((result: string): CreateRoomType => JSON.parse(result));
 }
-
 
 export type JoinRoomType = {|
     roomId: string
@@ -63,32 +64,39 @@ export function joinRoom(roomId: string, userId: string, socketId: string): Prom
     if (isOnLineRoomType()) {
         return fetch(url + '/api/room/join/' + [roomId, userId, socketId].join('/'))
             .then((blob: Response): Promise<JoinRoomType> => blob.json())
-            .then((result: JoinRoomType): JoinRoomType => ({
-                roomId: isString(result.roomId) ? result.roomId : ''
-            }))
-            .catch((error: Error): JoinRoomType => {
-                console.error(error);
-                return {roomId: ''};
-            });
+            .then(
+                (result: JoinRoomType): JoinRoomType => ({
+                    roomId: isString(result.roomId) ? result.roomId : ''
+                })
+            )
+            .catch(
+                (error: Error): JoinRoomType => {
+                    console.error(error);
+                    return {roomId: ''};
+                }
+            );
     }
 
-    return localGet(localServerUrl + '/api/room/join/' + [roomId, userId, localSocketIoClient.id].join('/'))
-        .then((result: string): JoinRoomType => JSON.parse(result));
+    return localGet(localServerUrl + '/api/room/join/' + [roomId, userId, localSocketIoClient.id].join('/')).then(
+        (result: string): JoinRoomType => JSON.parse(result)
+    );
 }
 
 export function makeUser(type: 'human' | 'bot', roomId: string): Promise<JoinRoomType> {
     if (isOnLineRoomType()) {
         return fetch(url + '/api/room/make/' + type + '/' + roomId)
             .then((blob: Response): Promise<JoinRoomType> => blob.json())
-            .then((result: JoinRoomType): JoinRoomType => ({
-                roomId: isString(result.roomId) ? result.roomId : ''
-            }));
+            .then(
+                (result: JoinRoomType): JoinRoomType => ({
+                    roomId: isString(result.roomId) ? result.roomId : ''
+                })
+            );
     }
 
-    return localGet(localServerUrl + '/api/room/make/' + type + '/' + roomId)
-        .then((result: string): JoinRoomType => JSON.parse(result));
+    return localGet(localServerUrl + '/api/room/make/' + type + '/' + roomId).then(
+        (result: string): JoinRoomType => JSON.parse(result)
+    );
 }
-
 
 export type LeaveRoomType = {|
     roomId: string
@@ -98,22 +106,26 @@ export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType
     if (isOnLineRoomType()) {
         return fetch(url + '/api/room/leave/' + [roomId, userId].join('/'))
             .then((blob: Response): Promise<LeaveRoomType> => blob.json())
-            .then((result: LeaveRoomType): LeaveRoomType => ({
-                roomId: isString(result.roomId) ? result.roomId : ''
-            }))
-            .catch((error: Error): LeaveRoomType => {
-                console.error(error);
+            .then(
+                (result: LeaveRoomType): LeaveRoomType => ({
+                    roomId: isString(result.roomId) ? result.roomId : ''
+                })
+            )
+            .catch(
+                (error: Error): LeaveRoomType => {
+                    console.error(error);
 
-                return {
-                    roomId: ''
-                };
-            });
+                    return {
+                        roomId: ''
+                    };
+                }
+            );
     }
 
-    return localGet(localServerUrl + '/api/room/leave/' + [roomId, userId].join('/'))
-        .then((result: string): LeaveRoomType => JSON.parse(result));
+    return localGet(localServerUrl + '/api/room/leave/' + [roomId, userId].join('/')).then(
+        (result: string): LeaveRoomType => JSON.parse(result)
+    );
 }
-
 
 export type AllRoomSettingsType = {|
     map: MapType,
@@ -127,8 +139,10 @@ export type SetAllRoomSettingsType = {|
     roomId: string
 |};
 
-export function setAllRoomSettings(roomId: string,
-                                   allRoomSettings: AllRoomSettingsType): Promise<SetAllRoomSettingsType> {
+export function setAllRoomSettings(
+    roomId: string,
+    allRoomSettings: AllRoomSettingsType
+): Promise<SetAllRoomSettingsType> {
     // WARNING: use this method in room only, not in game or other views
     if (isOnLineRoomType()) {
         return fetch(url + '/api/room/set-all-settings/' + roomId, {
@@ -137,17 +151,22 @@ export function setAllRoomSettings(roomId: string,
             headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
         })
             .then((blob: Response): Promise<SetAllRoomSettingsType> => blob.json())
-            .then((result: SetAllRoomSettingsType): SetAllRoomSettingsType => ({
-                roomId: isString(result.roomId) ? result.roomId : ''
-            }))
-            .catch((error: Error): SetAllRoomSettingsType => {
-                console.error(error);
-                return {roomId: ''};
-            });
+            .then(
+                (result: SetAllRoomSettingsType): SetAllRoomSettingsType => ({
+                    roomId: isString(result.roomId) ? result.roomId : ''
+                })
+            )
+            .catch(
+                (error: Error): SetAllRoomSettingsType => {
+                    console.error(error);
+                    return {roomId: ''};
+                }
+            );
     }
 
-    return localPost(localServerUrl + '/api/room/set-all-settings/' + roomId, JSON.stringify(allRoomSettings))
-        .then((result: string): SetAllRoomSettingsType => JSON.parse(result));
+    return localPost(localServerUrl + '/api/room/set-all-settings/' + roomId, JSON.stringify(allRoomSettings)).then(
+        (result: string): SetAllRoomSettingsType => JSON.parse(result)
+    );
 }
 
 export type RoomSettingUserListType = {|
@@ -162,8 +181,10 @@ export type SetRoomSettingType = {|
     roomId: string
 |};
 
-export function setRoomSetting(roomId: string,
-                               roomSetting: RoomSettingUserListType | RoomSettingMapType): Promise<SetRoomSettingType> {
+export function setRoomSetting(
+    roomId: string,
+    roomSetting: RoomSettingUserListType | RoomSettingMapType
+): Promise<SetRoomSettingType> {
     // WARNING: use this method in room only, not in game or other views
     if (isOnLineRoomType()) {
         return fetch(url + '/api/room/set-setting/' + roomId, {
@@ -172,15 +193,17 @@ export function setRoomSetting(roomId: string,
             headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
         })
             .then((blob: Response): Promise<SetRoomSettingType> => blob.json())
-            .then((result: SetRoomSettingType): SetRoomSettingType => ({
-                roomId: isString(result.roomId) ? result.roomId : ''
-            }));
+            .then(
+                (result: SetRoomSettingType): SetRoomSettingType => ({
+                    roomId: isString(result.roomId) ? result.roomId : ''
+                })
+            );
     }
 
-    return localPost(localServerUrl + '/api/room/set-setting/' + roomId, JSON.stringify(roomSetting))
-        .then((result: string): SetRoomSettingType => JSON.parse(result));
+    return localPost(localServerUrl + '/api/room/set-setting/' + roomId, JSON.stringify(roomSetting)).then(
+        (result: string): SetRoomSettingType => JSON.parse(result)
+    );
 }
-
 
 export type GetAllRoomSettingsType = {|
     roomId: string,
@@ -189,14 +212,15 @@ export type GetAllRoomSettingsType = {|
 
 export function getAllRoomSettings(roomId: string): Promise<GetAllRoomSettingsType> {
     if (isOnLineRoomType()) {
-        return fetch(url + '/api/room/get-all-settings/' + roomId)
-            .then((blob: Response): Promise<GetAllRoomSettingsType> => blob.json());
+        return fetch(url + '/api/room/get-all-settings/' + roomId).then(
+            (blob: Response): Promise<GetAllRoomSettingsType> => blob.json()
+        );
     }
 
-    return localGet(localServerUrl + '/api/room/get-all-settings/' + roomId)
-        .then((result: string): GetAllRoomSettingsType => JSON.parse(result));
+    return localGet(localServerUrl + '/api/room/get-all-settings/' + roomId).then(
+        (result: string): GetAllRoomSettingsType => JSON.parse(result)
+    );
 }
-
 
 export type GetAllRoomUsersType = {|
     roomId: string,
@@ -207,54 +231,61 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
     if (isOnLineRoomType()) {
         return fetch(url + '/api/room/get-users/' + roomId)
             .then((blob: Response): Promise<GetAllRoomUsersType> => blob.json())
-            .then((result: GetAllRoomUsersType): GetAllRoomUsersType => {
+            .then(
+                (result: GetAllRoomUsersType): GetAllRoomUsersType => {
+                    const serverUserList = Array.isArray(result.users) ? result.users : [];
+
+                    if (Array.isArray(result.users) === false) {
+                        console.log('getAllRoomUsers get no array', result);
+                    }
+
+                    const users = serverUserList.map(
+                        (user: ServerUserType, userIndex: number): ServerUserType => {
+                            return {
+                                socketId: user.socketId,
+                                userId: user.userId,
+                                teamId: user.teamId || mapGuide.teamIdList[userIndex],
+                                type: user.type
+                            };
+                        }
+                    );
+
+                    return {
+                        roomId: result.roomId,
+                        users
+                    };
+                }
+            );
+    }
+
+    return localGet(localServerUrl + '/api/room/get-users/' + roomId)
+        .then((result: string): GetAllRoomUsersType => JSON.parse(result))
+        .then(
+            (result: GetAllRoomUsersType): GetAllRoomUsersType => {
                 const serverUserList = Array.isArray(result.users) ? result.users : [];
 
                 if (Array.isArray(result.users) === false) {
                     console.log('getAllRoomUsers get no array', result);
                 }
 
-                const users = serverUserList.map((user: ServerUserType, userIndex: number): ServerUserType => {
-                    return {
-                        socketId: user.socketId,
-                        userId: user.userId,
-                        teamId: user.teamId || mapGuide.teamIdList[userIndex],
-                        type: user.type
-                    };
-                });
+                const users = serverUserList.map(
+                    (user: ServerUserType, userIndex: number): ServerUserType => {
+                        return {
+                            socketId: localSocketIoClient.id,
+                            userId: user.userId,
+                            teamId: user.teamId || mapGuide.teamIdList[userIndex],
+                            type: user.type
+                        };
+                    }
+                );
 
                 return {
                     roomId: result.roomId,
                     users
                 };
-            });
-    }
-
-    return localGet(localServerUrl + '/api/room/get-users/' + roomId)
-        .then((result: string): GetAllRoomUsersType => JSON.parse(result))
-        .then((result: GetAllRoomUsersType): GetAllRoomUsersType => {
-            const serverUserList = Array.isArray(result.users) ? result.users : [];
-
-            if (Array.isArray(result.users) === false) {
-                console.log('getAllRoomUsers get no array', result);
             }
-
-            const users = serverUserList.map((user: ServerUserType, userIndex: number): ServerUserType => {
-                return {
-                    socketId: localSocketIoClient.id,
-                    userId: user.userId,
-                    teamId: user.teamId || mapGuide.teamIdList[userIndex],
-                    type: user.type
-                };
-            });
-
-            return {
-                roomId: result.roomId,
-                users
-            };
-        });
+        );
 }
-
 
 export type GetAllRoomIdsType = {|
     +roomIds: Array<string>
@@ -262,12 +293,12 @@ export type GetAllRoomIdsType = {|
 
 export function getAllRoomIds(): Promise<GetAllRoomIdsType> {
     if (isOnLineRoomType()) {
-        return fetch(url + '/api/room/get-ids')
-            .then((blob: Response): Promise<GetAllRoomIdsType> => blob.json());
+        return fetch(url + '/api/room/get-ids').then((blob: Response): Promise<GetAllRoomIdsType> => blob.json());
     }
 
-    return localGet(localServerUrl + '/api/room/get-ids')
-        .then((result: string): GetAllRoomIdsType => JSON.parse(result));
+    return localGet(localServerUrl + '/api/room/get-ids').then(
+        (result: string): GetAllRoomIdsType => JSON.parse(result)
+    );
 }
 
 type PushedStatePayloadIsGameStartedType = {|
@@ -376,7 +407,8 @@ export type PushedStateRemoveUserType = {|
     +userId: string
 |};
 
-export type PushedStatePayloadType = PushedStatePayloadIsGameStartedType
+export type PushedStatePayloadType =
+    | PushedStatePayloadIsGameStartedType
     | PushedStatePayloadUnitMoveType
     | PushedStatePayloadUnitAttackType
     | PushedStatePayloadRefreshUnitListType
@@ -412,48 +444,49 @@ export type PushedStateType = {|
     // update last pushed state
     Object.assign(lastPushedState, pushedState);
 */
-export function pushState(roomId: string,
-                          userId: string,
-                          pushedState: PushedStateType): Promise<PushStateType> {
+export function pushState(roomId: string, userId: string, pushedState: PushedStateType): Promise<PushStateType> {
     if (isOnLineRoomType()) {
         return fetch(url + '/api/room/push-state/' + [roomId, userId].join('/'), {
             method: 'POST',
             body: JSON.stringify(pushedState),
             headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
-        })
-            .then((blob: Response): Promise<PushStateType> => blob.json());
+        }).then((blob: Response): Promise<PushStateType> => blob.json());
     }
 
-    return localPost(localServerUrl + '/api/room/push-state/' + [roomId, userId].join('/'), JSON.stringify(pushedState))
-        .then((result: string): PushStateType => JSON.parse(result));
+    return localPost(
+        localServerUrl + '/api/room/push-state/' + [roomId, userId].join('/'),
+        JSON.stringify(pushedState)
+    ).then((result: string): PushStateType => JSON.parse(result));
 }
 
 export type TakeTurnType = {|
     roomId: string
 |};
 
-export function takeTurn(roomId: string,
-                         userId: string): Promise<TakeTurnType> {
+export function takeTurn(roomId: string, userId: string): Promise<TakeTurnType> {
     if (isOnLineRoomType()) {
-        return fetch(url + '/api/room/take-turn/' + [roomId, userId].join('/'))
-            .then((blob: Response): Promise<TakeTurnType> => blob.json());
+        return fetch(url + '/api/room/take-turn/' + [roomId, userId].join('/')).then(
+            (blob: Response): Promise<TakeTurnType> => blob.json()
+        );
     }
 
-    return localGet(localServerUrl + '/api/room/take-turn/' + [roomId, userId].join('/'))
-        .then((result: string): TakeTurnType => JSON.parse(result));
+    return localGet(localServerUrl + '/api/room/take-turn/' + [roomId, userId].join('/')).then(
+        (result: string): TakeTurnType => JSON.parse(result)
+    );
 }
 
 export type DropTurnType = {|
     roomId: string
 |};
 
-export function dropTurn(roomId: string,
-                         userId: string): Promise<DropTurnType> {
+export function dropTurn(roomId: string, userId: string): Promise<DropTurnType> {
     if (isOnLineRoomType()) {
-        return fetch(url + '/api/room/drop-turn/' + [roomId, userId].join('/'))
-            .then((blob: Response): Promise<DropTurnType> => blob.json());
+        return fetch(url + '/api/room/drop-turn/' + [roomId, userId].join('/')).then(
+            (blob: Response): Promise<DropTurnType> => blob.json()
+        );
     }
 
-    return localGet(localServerUrl + '/api/room/drop-turn/' + [roomId, userId].join('/'))
-        .then((result: string): DropTurnType => JSON.parse(result));
+    return localGet(localServerUrl + '/api/room/drop-turn/' + [roomId, userId].join('/')).then(
+        (result: string): DropTurnType => JSON.parse(result)
+    );
 }

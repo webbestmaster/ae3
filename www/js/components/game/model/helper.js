@@ -75,15 +75,21 @@ function unitActionMapToPathMap(actionsList: UnitActionsMapType): Array<string> 
     }
 
     return actionsList
-        .map((unitActionLine: Array<Array<UnitActionType>>): Array<string> => {
-            return unitActionLine.map((unitActionList: Array<UnitActionType>): string => {
-                const hasMoveType = unitActionList.some((unitAction: UnitActionType): boolean => {
-                    return unitAction.type === 'move';
-                });
+        .map(
+            (unitActionLine: Array<Array<UnitActionType>>): Array<string> => {
+                return unitActionLine.map(
+                    (unitActionList: Array<UnitActionType>): string => {
+                        const hasMoveType = unitActionList.some(
+                            (unitAction: UnitActionType): boolean => {
+                                return unitAction.type === 'move';
+                            }
+                        );
 
-                return hasMoveType ? '.' : noPath;
-            });
-        })
+                        return hasMoveType ? '.' : noPath;
+                    }
+                );
+            }
+        )
         .map((mapLine: Array<string>): string => mapLine.join(''));
 }
 
@@ -110,7 +116,8 @@ export type UnitDataForAttackType = {|
     hitPoints: number, // will rewrite in getAttackDamage
     poisonCountdown: number,
     +hasWispAura: boolean,
-    +damage: {| // need to count level
+    +damage: {|
+        // need to count level
         given: number, // will rewrite in getAttackDamage
         received: number // will rewrite in getAttackDamage
     |},
@@ -125,7 +132,8 @@ export type AttackResultType = {|
     defender: AttackResultUnitType
 |};
 
-export function getAttackResult(gameData: GameDataType, aggressor: Unit, defender: Unit): AttackResultType { // eslint-disable-line max-statements, complexity
+// eslint-disable-next-line max-statements, complexity
+export function getAttackResult(gameData: GameDataType, aggressor: Unit, defender: Unit): AttackResultType {
     const unitsDataForAttack = getUnitsDataForAttack(gameData, aggressor, defender);
     const aggressorData = unitsDataForAttack.aggressor;
     const defenderData = unitsDataForAttack.defender;
@@ -164,7 +172,6 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
         };
     }
 
-
     const resultDefenderDamage = getAttackDamage(defenderData, aggressorData);
 
     if (resultDefenderDamage >= aggressorData.hitPoints) {
@@ -189,7 +196,6 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
     };
 }
 
-
 type UnitsDataForAttackType = {|
     +aggressor: UnitDataForAttackType,
     +defender: UnitDataForAttackType
@@ -205,17 +211,19 @@ function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataFor
 
     const minDamage = 1;
     const aggressorScale = aggressor.hitPoints / defaultUnitData.hitPoints;
-    const aggressorSelfAttack = Math.random() * (aggressor.attack.max - aggressor.attack.min) +
+    const aggressorSelfAttack =
+        Math.random() * (aggressor.attack.max - aggressor.attack.min) +
         aggressor.attack.min +
         // level damage
         aggressor.level / (defaultUnitData.level.max + 1) * ((aggressor.attack.max + aggressor.attack.min) / 2);
     const aggressorAttackBonusWistAura = aggressor.hasWispAura ? additionalUnitData.wispAttackBonus : 0;
     const aggressorPoisonAttackReduce = aggressor.poisonCountdown > 0 ? additionalUnitData.poisonAttackReduce : 0;
-    const aggressorEndAttack = aggressorScale *
-        (aggressorSelfAttack + aggressorAttackBonusWistAura - aggressorPoisonAttackReduce);
+    const aggressorEndAttack =
+        aggressorScale * (aggressorSelfAttack + aggressorAttackBonusWistAura - aggressorPoisonAttackReduce);
 
     const defenderScale = defender.hitPoints / defaultUnitData.hitPoints;
-    const defenderSelfArmor = defender.armor +
+    const defenderSelfArmor =
+        defender.armor +
         // level armor
         defender.level * defaultUnitData.armor.perLevel;
     const defenderPoisonArmorReduce = defender.poisonCountdown > 0 ? additionalUnitData.poisonArmorReduce : 0;
@@ -225,9 +233,8 @@ function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataFor
     return Math.max(Math.round(aggressorEndAttack - defenderEndArmor), minDamage);
 }
 
-function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line complexity
-                               aggressor: Unit,
-                               defender: Unit): UnitsDataForAttackType {
+// eslint-disable-next-line complexity
+function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender: Unit): UnitsDataForAttackType {
     const aggressorGuideData = aggressor.getGuideData();
 
     const aggressorData: UnitDataForAttackType = {
@@ -239,9 +246,7 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
         poisonAttack: aggressor.getPoisonAttack(),
         type: aggressor.attr.type,
         id: isString(aggressor.attr.id) ? aggressor.attr.id : 'no-aggressor-id-' + Math.random(),
-        userId: isString(aggressor.attr.userId) ?
-            aggressor.attr.userId :
-            'no-aggressor-user-id-' + Math.random(),
+        userId: isString(aggressor.attr.userId) ? aggressor.attr.userId : 'no-aggressor-user-id-' + Math.random(),
         armor: aggressorGuideData.armor,
         x: aggressor.attr.x,
         y: aggressor.attr.y,
@@ -259,7 +264,6 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
             gameData.armorMap.walk[aggressor.attr.y][aggressor.attr.x]
     };
 
-
     const defenderGuideData = defender.getGuideData();
 
     const defenderData: UnitDataForAttackType = {
@@ -271,9 +275,7 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
         poisonAttack: defender.getPoisonAttack(),
         type: defender.attr.type,
         id: isString(defender.attr.id) ? defender.attr.id : 'no-defender-id-' + Math.random(),
-        userId: isString(defender.attr.userId) ?
-            defender.attr.userId :
-            'no-defender-user-id-' + Math.random(),
+        userId: isString(defender.attr.userId) ? defender.attr.userId : 'no-defender-user-id-' + Math.random(),
         armor: defenderGuideData.armor,
         x: defender.attr.x,
         y: defender.attr.y,
@@ -299,7 +301,7 @@ function getUnitsDataForAttack(gameData: GameDataType, // eslint-disable-line co
 
 type MouseEventNameType = 'click' | 'mousedown' | 'mouseup';
 type TouchEventNameType = 'tap' | 'touchstart' | 'touchend';
-type EventNameMapType = { +[key: MouseEventNameType]: TouchEventNameType };
+type EventNameMapType = {+[key: MouseEventNameType]: TouchEventNameType};
 
 export function getEventName(MouseEventName: MouseEventNameType): MouseEventNameType | TouchEventNameType {
     const eventNameMap: EventNameMapType = {
@@ -318,8 +320,7 @@ export function getEventName(MouseEventName: MouseEventNameType): MouseEventName
     return hasInMap ? MouseEventName : 'click';
 }
 
-function noop() {
-}
+function noop() {}
 
 export function bindClick(container: PIXI.Container, callback: () => Promise<void>, smthWrongCallback?: () => void) {
     const containerEvent = {
@@ -345,7 +346,8 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
         }
     });
 
-    container.on(getEventName('mouseup'), (interactionEvent: InteractionEventType) => { // eslint-disable-line complexity
+    // eslint-disable-next-line complexity
+    container.on(getEventName('mouseup'), (interactionEvent: InteractionEventType) => {
         const startX = containerEvent.startTouch.x;
         const startY = containerEvent.startTouch.y;
         const endX = interactionEvent.data.global.x;
@@ -355,13 +357,17 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
 
         const {originalEvent} = interactionEvent.data;
 
-        if (Number.isNaN(deltaX) || Number.isNaN(deltaY) ||
-            Array.isArray(originalEvent.touches) && originalEvent.touches.length !== 0) {
+        if (
+            Number.isNaN(deltaX) ||
+            Number.isNaN(deltaY) ||
+            Array.isArray(originalEvent.touches) && originalEvent.touches.length !== 0
+        ) {
             smthWrongCallbackFunction();
             return;
         }
 
-        if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) > 100) { // move delta > 10px - no click
+        if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) > 100) {
+            // move delta > 10px - no click
             return;
         }
 
@@ -396,7 +402,8 @@ export function getCommanderDataByUserIndex(userIndex: number): UnitTypeCommande
 }
 
 // return additional hit points or null if no changes
-export function countHealHitPointOnBuilding(newMap: MapType, mapUnit: UnitType): number | null { // eslint-disable-line complexity
+// eslint-disable-next-line complexity
+export function countHealHitPointOnBuilding(newMap: MapType, mapUnit: UnitType): number | null {
     if (mapUnit.hitPoints === defaultUnitData.hitPoints) {
         return null;
     }
@@ -420,10 +427,12 @@ export function countHealHitPointOnBuilding(newMap: MapType, mapUnit: UnitType):
         additionalHitPoints = mapGuide.building[buildingType].hitPointsBonus;
     }
 
-    if (['farm', 'castle'].includes(buildingType) &&
+    if (
+        ['farm', 'castle'].includes(buildingType) &&
         isString(building.userId) &&
         isString(mapUnit.userId) &&
-        building.userId === mapUnit.userId) {
+        building.userId === mapUnit.userId
+    ) {
         additionalHitPoints = mapGuide.building[buildingType].hitPointsBonus;
     }
 
@@ -435,7 +444,6 @@ export function countHealHitPointOnBuilding(newMap: MapType, mapUnit: UnitType):
 
     return endUnitHitPoints - currentUnitHitPoints;
 }
-
 
 type UnitSupplyStateType = {|
     +unitCount: number,
@@ -457,7 +465,6 @@ export function getSupplyState(map: MapType, userId: string): UnitSupplyStateTyp
     };
 }
 
-
 type SkirmishMathResultType = {|
     winner: {|
         teamId: TeamIdType | null
@@ -467,13 +474,15 @@ type SkirmishMathResultType = {|
 type MathResultType = SkirmishMathResultType;
 
 export function isCommanderLive(userId: string, map: MapType): boolean {
-    return map.units.some((mapUnit: UnitType): boolean => mapUnit.userId === userId &&
-        unitGuideData[mapUnit.type].isCommander === true);
+    return map.units.some(
+        (mapUnit: UnitType): boolean => mapUnit.userId === userId && unitGuideData[mapUnit.type].isCommander === true
+    );
 }
 
 export function hasCastle(userId: string, map: MapType): boolean {
-    return map.buildings.some((mapBuilding: BuildingType): boolean => mapBuilding.userId === userId &&
-        mapBuilding.type === 'castle');
+    return map.buildings.some(
+        (mapBuilding: BuildingType): boolean => mapBuilding.userId === userId && mapBuilding.type === 'castle'
+    );
 }
 
 function isUserSkirmishLoose(userId: string, map: MapType): boolean {
@@ -496,8 +505,9 @@ function getSkirmishMatchResult(map: MapType): SkirmishMathResultType {
     const fullTeamList: Array<TeamIdType> = JSON.parse(JSON.stringify(mapGuide.teamIdList));
     // .filter((teamId: TeamIdType): boolean => Boolean(find(map.userList, {teamId})));
 
-    const winnerTeamList: Array<TeamIdType> = fullTeamList.filter((teamId: TeamIdType): boolean =>
-        !isTeamSkirmishLoose(teamId, map));
+    const winnerTeamList: Array<TeamIdType> = fullTeamList.filter(
+        (teamId: TeamIdType): boolean => !isTeamSkirmishLoose(teamId, map)
+    );
 
     const winnerTeamId = winnerTeamList.length === 1 ? winnerTeamList[0] : null;
 
@@ -563,8 +573,11 @@ function cloneActionList(actionList: UnitActionsMapType): UnitActionsMapType {
     return newActionList;
 }
 
-export function mergeActionList(actionListSource: UnitActionsMapType | null, // eslint-disable-line complexity
-                                actionListExtend: UnitActionsMapType | null): UnitActionsMapType | null {
+// eslint-disable-next-line complexity
+export function mergeActionList(
+    actionListSource: UnitActionsMapType | null,
+    actionListExtend: UnitActionsMapType | null
+): UnitActionsMapType | null {
     if (actionListSource === null && actionListExtend !== null) {
         return cloneActionList(actionListExtend);
     }
@@ -613,26 +626,28 @@ function hasPlaceForNewUnit(x: number, y: number, gameData: GameDataType): boole
         {x, y}
     ];
 
-    return neededCoordinates.some((place: PlaceForNewUnitType): boolean => {
-        // check has map needed coordinates
-        const emptyActionMap = gameData.emptyActionMap;
-        const placeX = place.x;
-        const placeY = place.y;
+    return neededCoordinates.some(
+        (place: PlaceForNewUnitType): boolean => {
+            // check has map needed coordinates
+            const emptyActionMap = gameData.emptyActionMap;
+            const placeX = place.x;
+            const placeY = place.y;
 
-        if (!emptyActionMap[placeY] || !emptyActionMap[placeY][placeX]) {
-            console.log('?hasPlaceForNewUnit ---> map has no coordinate:', 'x:', placeX, 'y:', placeY);
-            return false;
+            if (!emptyActionMap[placeY] || !emptyActionMap[placeY][placeX]) {
+                console.log('?hasPlaceForNewUnit ---> map has no coordinate:', 'x:', placeX, 'y:', placeY);
+                return false;
+            }
+
+            // check unit free place
+            // if (find(gameData.unitList, (unit: Unit): boolean => unit.attr.x === placeX && unit.attr.y === placeY)) {
+            if (find(gameData.unitList, {attr: {x: placeX, y: placeY}})) {
+                console.log('?hasPlaceForNewUnit ---> unit on:', 'x:', placeX, 'y:', placeY);
+                return false;
+            }
+
+            return true;
         }
-
-        // check unit free place
-        // if (find(gameData.unitList, (unit: Unit): boolean => unit.attr.x === placeX && unit.attr.y === placeY)) {
-        if (find(gameData.unitList, {attr: {x: placeX, y: placeY}})) {
-            console.log('?hasPlaceForNewUnit ---> unit on:', 'x:', placeX, 'y:', placeY);
-            return false;
-        }
-
-        return true;
-    });
+    );
 }
 
 export function canOpenStore(x: number, y: number, gameData: GameDataType): boolean {
@@ -649,7 +664,6 @@ export function canOpenStore(x: number, y: number, gameData: GameDataType): bool
     return true;
 }
 
-
 export type WrongStateTypeUnitOnUnitType = {|
     type: 'unit-on-unit',
     x: number,
@@ -665,9 +679,10 @@ export function getUnitOverUnit(gameData: GameDataType): Array<WrongStateTypeUni
         const unitInListX = unitInList.attr.x;
         const unitInListY = unitInList.attr.y;
 
-        const unitForTest = find(gameData.unitList, (unit: Unit): boolean => unitInList !== unit &&
-            unitInListX === unit.attr.x &&
-            unitInListY === unit.attr.y);
+        const unitForTest = find(
+            gameData.unitList,
+            (unit: Unit): boolean => unitInList !== unit && unitInListX === unit.attr.x && unitInListY === unit.attr.y
+        );
 
         if (!unitForTest) {
             return;

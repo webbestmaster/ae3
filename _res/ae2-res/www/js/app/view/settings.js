@@ -1,143 +1,127 @@
 /*jslint white: true, nomen: true */
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window, Backbone, $, templateMaster, setTimeout, APP, history */
 
-	"use strict";
-	/*global window, Backbone, $, templateMaster, setTimeout, APP, history */
+    win.APP = win.APP || {};
 
-	win.APP = win.APP || {};
+    win.APP.BB = win.APP.BB || {};
 
-	win.APP.BB = win.APP.BB || {};
+    APP.BB.SettingsView = APP.BB.BaseView.extend({
+        selectors: {
+            settingsWrapper: '.js-battle-settings-wrapper',
+            onOffSetting: '.js-change-on-off-setting',
+            style: '.js-game-speed-style'
+        },
 
-	APP.BB.SettingsView = APP.BB.BaseView.extend({
+        events: {
+            //'click .js-change-on-off-setting-wrapper': 'changeOnOffSetting',
+            //'click .js-change-select-setting': 'changeSelectSetting', // see base view
+            'click .js-setting-item-wrapper': 'changeSettings',
+            'hide-battle-setting': 'hide'
+        },
 
-		selectors: {
-			settingsWrapper: '.js-battle-settings-wrapper',
-			onOffSetting: '.js-change-on-off-setting',
-			style: '.js-game-speed-style'
-		},
+        initialize: function(data) {
+            var view = this,
+                isBattleState = /^battle/.test(Backbone.history.fragment);
 
-		events: {
-			//'click .js-change-on-off-setting-wrapper': 'changeOnOffSetting',
-			//'click .js-change-select-setting': 'changeSelectSetting', // see base view
-			'click .js-setting-item-wrapper': 'changeSettings',
-			'hide-battle-setting': 'hide'
-		},
+            view.$el = $(this.tmpl.settings({view: view, info: view.info, isBattleState: isBattleState}));
 
-		initialize: function (data) {
+            view.extendFromObj(data);
 
-			var view = this,
-				isBattleState = /^battle/.test(Backbone.history.fragment);
+            view.set('args', data);
 
-			view.$el = $(this.tmpl.settings({ view: view, info: view.info, isBattleState: isBattleState }));
+            view.proto.initialize.apply(view, arguments);
 
-			view.extendFromObj(data);
+            view.render();
+        },
 
-			view.set('args', data);
+        render: function() {
+            var view = this,
+                $mainWrapper = view.$wrapper,
+                $wrapper = $mainWrapper.find(view.selectors.settingsWrapper),
+                battleView = view.get('view');
 
-			view.proto.initialize.apply(view, arguments);
+            if ($wrapper.length) {
+                $wrapper.empty().append(view.$el);
+                battleView.$el.find(battleView.selectors.moveAreaContainer).addClass('hidden');
+                return;
+            }
 
-			view.render();
+            view.proto.render.call(view);
+        },
 
-		},
+        setSpeedStyle: function() {
+            var view = this,
+                speed = parseInt(view.info.get('gameSpeed'), 10),
+                time = view.info.actionTime(),
+                $style = view.tmpl['game-speed']({time: time - 100});
 
-		render: function () {
+            view.$wrapper
+                .find(view.selectors.style)
+                .remove()
+                .empty();
 
-			var view = this,
-				$mainWrapper = view.$wrapper,
-				$wrapper = $mainWrapper.find(view.selectors.settingsWrapper),
-				battleView = view.get('view');
+            view.$wrapper.append($style);
+        },
 
-			if ($wrapper.length) {
-				$wrapper.empty().append(view.$el);
-				battleView.$el.find(battleView.selectors.moveAreaContainer).addClass('hidden');
-				return;
-			}
+        autoShowBuildingSmoke: function() {
+            var view = this,
+                info = view.info,
+                smokeState = info.get('buildingSmoke'),
+                battleView = $('.js-battle-view-wrapper');
 
-			view.proto.render.call(view);
+            // todo: do the same for autoShowUnitAnimation
 
-		},
+            if (!battleView.length) {
+                return;
+            }
 
+            if (smokeState === 'on') {
+                battleView.trigger('showHouseSmoke');
+            } else {
+                battleView.trigger('hideHouseSmoke');
+            }
+        },
 
-		setSpeedStyle: function () {
+        autoShowUnitAnimation: function() {
+            var view = this,
+                info = view.info,
+                unitAnimationState = info.get('unitAnimation');
 
-			var view = this,
-				speed = parseInt(view.info.get('gameSpeed'), 10),
-				time = view.info.actionTime(),
-				$style = view.tmpl['game-speed']({time: time - 100});
+            if (unitAnimationState === 'on') {
+                view.$wrapper.removeClass('hide-unit-animation');
+            } else {
+                view.$wrapper.addClass('hide-unit-animation');
+            }
+        },
 
-			view.$wrapper.find(view.selectors.style).remove().empty();
+        autoSetFont: function() {
+            var view = this,
+                info = view.info,
+                fontId = info.get('font'),
+                allFonts = info.availableFonts,
+                font = _.find(allFonts, {id: fontId}),
+                $body = $(win.document.body);
 
-			view.$wrapper.append($style);
+            _.each(allFonts, function(font) {
+                $body.removeClass(font.cssClass);
+            });
 
-		},
+            $body.addClass(font.cssClass);
+        },
 
-		autoShowBuildingSmoke: function () {
+        autoSetMusic: function() {
+            var view = this,
+                info = view.info,
+                musicState = info.get('music'),
+                soundMaster = win.APP.soundMaster;
 
-			var view = this,
-				info = view.info,
-				smokeState = info.get('buildingSmoke'),
-				battleView = $('.js-battle-view-wrapper');
-
-			// todo: do the same for autoShowUnitAnimation
-
-			if (!battleView.length) {
-				return;
-			}
-
-			if (smokeState === 'on') {
-				battleView.trigger('showHouseSmoke');
-			} else {
-				battleView.trigger('hideHouseSmoke');
-			}
-
-		},
-
-		autoShowUnitAnimation: function () {
-
-			var view = this,
-				info = view.info,
-				unitAnimationState = info.get('unitAnimation');
-
-			if (unitAnimationState === 'on') {
-				view.$wrapper.removeClass('hide-unit-animation');
-			} else {
-				view.$wrapper.addClass('hide-unit-animation');
-			}
-
-		},
-
-		autoSetFont: function () {
-
-			var view = this,
-				info = view.info,
-				fontId = info.get('font'),
-				allFonts = info.availableFonts,
-				font = _.find(allFonts, { id: fontId }),
-				$body = $(win.document.body);
-
-			_.each(allFonts, function (font) {
-				$body.removeClass(font.cssClass);
-			});
-
-			$body.addClass(font.cssClass);
-
-		},
-
-		autoSetMusic: function () {
-
-			var view = this,
-				info = view.info,
-				musicState = info.get('music'),
-				soundMaster = win.APP.soundMaster;
-
-			if (musicState === 'on') {
-				soundMaster.restoreBgSound();
-			} else {
-				soundMaster.stopBgSound();
-			}
-
-		}
-
-	});
-
-}(window));
+            if (musicState === 'on') {
+                soundMaster.restoreBgSound();
+            } else {
+                soundMaster.stopBgSound();
+            }
+        }
+    });
+})(window);

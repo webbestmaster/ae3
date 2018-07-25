@@ -5,7 +5,7 @@ type MapNoPathType = Array<[number, number]>;
 export type PathType = Array<[number, number]>; // need for export only
 export type AvailablePathMapType = Array<[number, number]>;
 
-function getItem<T:number | Array<number>>(index: number, array: Array<T>): T | null {
+function getItem<T: number | Array<number>>(index: number, array: Array<T>): T | null {
     if (index >= 0 && index < array.length) {
         return array[index];
     }
@@ -65,12 +65,15 @@ function pushToCurrentProgress(x: number, y: number, mapNoPath: MapNoPathType, c
  * @param {Array} currentProgress - current progress
  * @return {Array} - array of cells, [[3,4], [2,3], [2,1]] // first x, then y
  */
-function getAvailablePath(startX: number, // eslint-disable-line max-params
-                          startY: number,
-                          pathLength: number,
-                          map: MapPathReduceType,
-                          mapNoPath: MapNoPathType,
-                          currentProgress: AvailablePathMapType): AvailablePathMapType {
+// eslint-disable-next-line max-params
+function getAvailablePath(
+    startX: number,
+    startY: number,
+    pathLength: number,
+    map: MapPathReduceType,
+    mapNoPath: MapNoPathType,
+    currentProgress: AvailablePathMapType
+): AvailablePathMapType {
     let ii = 0;
     const disArray = [0, -1, -1, 0, 1, 0, 0, 1];
     const disArrayLength = disArray.length;
@@ -90,11 +93,13 @@ function getAvailablePath(startX: number, // eslint-disable-line max-params
     return currentProgress;
 }
 
-export function getPath(startX: number,
-                        startY: number,
-                        pathLength: number,
-                        map: MapPathReduceType,
-                        mapNoPath: MapNoPathType): AvailablePathMapType {
+export function getPath(
+    startX: number,
+    startY: number,
+    pathLength: number,
+    map: MapPathReduceType,
+    mapNoPath: MapNoPathType
+): AvailablePathMapType {
     return getAvailablePath(startX, startY, pathLength, map, mapNoPath, []);
 }
 

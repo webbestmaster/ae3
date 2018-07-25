@@ -91,7 +91,8 @@ class Store extends Component<PropsType, StateType> {
         history.goBack();
     }
 
-    buyUnit(unitType: UnitTypeAllType): Promise<void> { // eslint-disable-line max-statements
+    // eslint-disable-next-line max-statements
+    buyUnit(unitType: UnitTypeAllType): Promise<void> {
         const view = this;
         const {props, state} = view;
         const newMap: MapType = JSON.parse(JSON.stringify(props.map));
@@ -132,19 +133,15 @@ class Store extends Component<PropsType, StateType> {
         view.setState({isInProgress: true});
 
         return serverApi
-            .pushState(
-                props.match.params.roomId,
-                user.getId(),
-                {
-                    type: 'room__push-state',
-                    state: {
-                        type: 'buy-unit',
-                        newMapUnit: newMapUnitData,
-                        map: newMap,
-                        activeUserId: user.getId()
-                    }
+            .pushState(props.match.params.roomId, user.getId(), {
+                type: 'room__push-state',
+                state: {
+                    type: 'buy-unit',
+                    newMapUnit: newMapUnitData,
+                    map: newMap,
+                    activeUserId: user.getId()
                 }
-            )
+            })
             .then((response: mixed): void => console.log('---> user action buy unit', response))
             .catch((error: Error) => {
                 console.error('store-push-state error');
@@ -177,11 +174,9 @@ class Store extends Component<PropsType, StateType> {
 
         return (
             <Button
-                className={classnames(
-                    serviceStyle.w75_c,
-                    serviceStyle.ta_l,
-                    {[serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull}
-                )}
+                className={classnames(serviceStyle.w75_c, serviceStyle.ta_l, {
+                    [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
+                })}
                 onClick={() => {
                     view.buyUnit(unitType);
                 }}
@@ -189,23 +184,22 @@ class Store extends Component<PropsType, StateType> {
             >
                 <span>
                     {padEnd(unitType, 10, ' ')}
-                    &nbsp;|&nbsp;
-                    attack:
+                    &nbsp;|&nbsp; attack:
                     {unitData.attack.min}
                     -
                     {unitData.attack.max}
-                    <br/>
+                    <br />
                     COST:
                     {padStart(String(unitCost), 4, ' ')}
-                    &nbsp;|&nbsp;
-                    move:
+                    &nbsp;|&nbsp; move:
                     {unitData.move}
                 </span>
             </Button>
         );
     }
 
-    getUnitCost(unitType: UnitTypeAllType): number | null { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    getUnitCost(unitType: UnitTypeAllType): number | null {
         const view = this;
         const {props, state} = view;
         const {mapUserData} = state;
@@ -255,8 +249,9 @@ class Store extends Component<PropsType, StateType> {
     renderUnitList(): Array<Node | null> {
         const view = this;
 
-        return Object.keys(guideUnitData)
-            .map((unitType: UnitTypeAllType): Node | null => view.renderUnitData(unitType));
+        return Object.keys(guideUnitData).map(
+            (unitType: UnitTypeAllType): Node | null => view.renderUnitData(unitType)
+        );
     }
 
     render(): Node {
@@ -269,9 +264,7 @@ class Store extends Component<PropsType, StateType> {
             console.error('ERROR with state.mapUserData', state);
             return (
                 <Page>
-                    <Header>
-                        ERROR with state.mapUserData
-                    </Header>
+                    <Header>ERROR with state.mapUserData</Header>
                 </Page>
             );
         }
@@ -279,51 +272,36 @@ class Store extends Component<PropsType, StateType> {
         if (state.isInProgress) {
             return (
                 <Page>
-                    <Header>
-                        Waiting...
-                    </Header>
+                    <Header>Waiting...</Header>
                 </Page>
             );
         }
 
         return (
             <Page>
-                <Header className={serviceStyle.ta_r}>
-                    Store
-                </Header>
+                <Header className={serviceStyle.ta_r}>Store</Header>
 
                 <div className={style.unit_list_wrapper}>
-                    <Scroll>
-                        {view.renderUnitList()}
-                    </Scroll>
+                    <Scroll>{view.renderUnitList()}</Scroll>
                 </div>
 
-                <BottomBar
-                    className={serviceStyle.ta_l}
-                >
-                    Money:
-                    {' '}
-                    {state.mapUserData && state.mapUserData.money ? state.mapUserData.money : 0}
-                    {' '}
-                    $
-                    &nbsp;|&nbsp;
-                    {supplyState.unitCount}
-                    {' '}
-                    /
-                    {supplyState.unitLimit}
-                    {' '}
-                    웃
+                <BottomBar className={serviceStyle.ta_l}>
+                    Money: {state.mapUserData && state.mapUserData.money ? state.mapUserData.money : 0} $ &nbsp;|&nbsp;
+                    {supplyState.unitCount} /
+                    {supplyState.unitLimit} 웃
                 </BottomBar>
             </Page>
         );
     }
 }
 
-export default withRouter(connect(
-    (state: GlobalStateType): {} => ({
-        system: state.system
-    }),
-    {
-        // setUser
-    }
-)(Store));
+export default withRouter(
+    connect(
+        (state: GlobalStateType): {} => ({
+            system: state.system
+        }),
+        {
+            // setUser
+        }
+    )(Store)
+);

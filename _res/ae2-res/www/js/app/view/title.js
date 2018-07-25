@@ -1,59 +1,52 @@
 /*jslint white: true, nomen: true */
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window, Backbone, $, templateMaster, setTimeout, APP, history */
 
-	"use strict";
-	/*global window, Backbone, $, templateMaster, setTimeout, APP, history */
+    win.APP = win.APP || {};
 
-	win.APP = win.APP || {};
+    win.APP.BB = win.APP.BB || {};
 
-	win.APP.BB = win.APP.BB || {};
+    APP.BB.TitleView = APP.BB.BaseView.extend({
+        events: {
+            'press .js-unlock-all-levels': 'unlockAllLevels'
+        },
 
-	APP.BB.TitleView = APP.BB.BaseView.extend({
+        selectors: {
+            unlockAllLevels: '.js-unlock-all-levels'
+        },
 
-		events: {
-			'press .js-unlock-all-levels': 'unlockAllLevels'
-		},
+        initialize: function() {
+            var view = this;
 
-		selectors: {
-			unlockAllLevels: '.js-unlock-all-levels'
-		},
+            view.$el = $(view.tmpl.title());
 
-		initialize: function () {
+            view.proto.initialize.apply(view, arguments);
 
-			var view = this;
+            view.render();
 
-			view.$el = $(view.tmpl.title());
+            log('do not show showRateUs');
+            //this.showRateUs();
+        },
 
-			view.proto.initialize.apply(view, arguments);
+        unlockAllLevels: function() {
+            var view = this;
 
-			view.render();
+            view.$el
+                .find(view.selectors.unlockAllLevels)
+                .html('Developer<br>mode enabled')
+                .css('opacity', '1');
+            view.info.set('isTestMode', true, true);
+            view.info.set('noAds', true);
+        },
 
-			log('do not show showRateUs');
-			//this.showRateUs();
-
-		},
-
-		unlockAllLevels: function () {
-
-			var view = this;
-
-			view.$el.find(view.selectors.unlockAllLevels).html('Developer<br>mode enabled').css('opacity', '1');
-			view.info.set('isTestMode', true, true);
-			view.info.set('noAds', true);
-
-		},
-
-		showRateUs: function () {
-
-			this.util.runIfConnect(function () {
-				setTimeout(function () {
-					win.APP.bb.rate = new win.APP.BB.RateView();
-					win.APP.bb.rate.show();
-				}, 50);
-			}, this);
-
-		}
-
-	});
-
-}(window));
+        showRateUs: function() {
+            this.util.runIfConnect(function() {
+                setTimeout(function() {
+                    win.APP.bb.rate = new win.APP.BB.RateView();
+                    win.APP.bb.rate.show();
+                }, 50);
+            }, this);
+        }
+    });
+})(window);

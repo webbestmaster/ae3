@@ -40,7 +40,8 @@ export default class Grave {
         grave.initializeGraveSprite();
     }
 
-    initializeGraveSprite() { // eslint-disable-line complexity
+    // eslint-disable-next-line complexity
+    initializeGraveSprite() {
         const grave = this;
         const {attr, gameAttr} = grave;
         const {square} = mapGuide.size;

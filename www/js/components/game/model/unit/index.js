@@ -149,7 +149,8 @@ type UnitGameAttrType = {|
     |},
     userList: Array<MapUserType>,
     event: {|
-        click: (unit: Unit) => Promise<void> // eslint-disable-line no-use-before-define
+        // eslint-disable-next-line no-use-before-define
+        click: (unit: Unit) => Promise<void>
     |},
     hasWispAura: boolean,
     isActionAvailable: boolean
@@ -159,15 +160,18 @@ export type UnitConstructorType = {|
     unitData: UnitType,
     userList: Array<MapUserType>,
     event: {|
-        click: (unit: Unit) => Promise<void> // eslint-disable-line no-use-before-define
+        // eslint-disable-next-line no-use-before-define
+        click: (unit: Unit) => Promise<void>
     |}
 |};
 
 export type GameDataType = {|
     +userList: Array<MapUserType>,
     +buildingList: Array<Building>,
-    +unitList: Array<Unit>, // eslint-disable-line no-use-before-define
-    +graveList: Array<Grave>, // eslint-disable-line no-use-before-define
+    // eslint-disable-next-line no-use-before-define
+    +unitList: Array<Unit>,
+    // eslint-disable-next-line no-use-before-define
+    +graveList: Array<Grave>,
     +pathMap: {
         +walk: Array<Array<number>>,
         +flow: Array<Array<number>>,
@@ -248,7 +252,8 @@ export default class Unit {
         unit.bindUnitEventListeners();
     }
 
-    initializeUnitSprite() { // eslint-disable-line complexity
+    // eslint-disable-next-line complexity
+    initializeUnitSprite() {
         const unit = this;
         const {attr, gameAttr} = unit;
         const {square} = mapGuide.size;
@@ -355,14 +360,17 @@ export default class Unit {
         gameAttr.container.addChild(gameAttr.sprite.poisonCountdown);
     }
 
-    getActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity, max-statements, sonarjs/cognitive-complexity
+    // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
+    getActions(gameData: GameDataType): UnitActionsMapType | null {
         const unit = this;
 
-        if (unit.getDidAttack() ||
+        if (
+            unit.getDidAttack() ||
             unit.getDidFixBuilding() ||
             unit.getDidOccupyBuilding() ||
             unit.getDidDestroyBuilding() ||
-            unit.getDidRaiseSkeleton()) {
+            unit.getDidRaiseSkeleton()
+        ) {
             return null;
         }
 
@@ -431,7 +439,6 @@ export default class Unit {
             });
         });
 
-
         // add raise skeleton
         const actionMapRaiseSkeleton = unit.getRaiseSkeletonActions(gameData);
 
@@ -444,20 +451,22 @@ export default class Unit {
             });
         });
 
-
-        if (isDidMoved &&
+        if (
+            isDidMoved &&
             !isAvailableAttack &&
             !isAvailableFixBuilding &&
             !isAvailableOccupyBuilding &&
             !isAvailableDestroyBuilding &&
-            !isAvailableRaiseSkeleton) {
+            !isAvailableRaiseSkeleton
+        ) {
             return null;
         }
 
         return actionMap;
     }
 
-    getOpenStoreActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    getOpenStoreActions(gameData: GameDataType): UnitActionsMapType | null {
         const unit = this;
         const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
 
@@ -537,7 +546,8 @@ export default class Unit {
         return attackMap;
     }
 
-    getFixBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    getFixBuildingActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this;
         const {attr} = unit;
         const fixBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
@@ -583,7 +593,8 @@ export default class Unit {
         return fixBuildingMap;
     }
 
-    getOccupyBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    getOccupyBuildingActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this;
         const {attr} = unit;
         const occupyBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
@@ -611,13 +622,19 @@ export default class Unit {
         const unitX = attr.x;
         const unitY = attr.y;
 
-        const building = find(gameData.buildingList, (buildingInList: Building): boolean => {
-            return buildingInList.attr.x === unitX &&
-                buildingInList.attr.y === unitY &&
-                buildingInList.attr.userId !== userId &&
-                Array.isArray(unitGuideData.occupyBuildingList) &&
-                unitGuideData.occupyBuildingList.includes(buildingInList.attr.type);
-        }) || null;
+        const building =
+            find(
+                gameData.buildingList,
+                (buildingInList: Building): boolean => {
+                    return (
+                        buildingInList.attr.x === unitX &&
+                        buildingInList.attr.y === unitY &&
+                        buildingInList.attr.userId !== userId &&
+                        Array.isArray(unitGuideData.occupyBuildingList) &&
+                        unitGuideData.occupyBuildingList.includes(buildingInList.attr.type)
+                    );
+                }
+            ) || null;
 
         if (building === null) {
             return [];
@@ -635,7 +652,8 @@ export default class Unit {
         return occupyBuildingMap;
     }
 
-    getOpenStoreMapActions(gameData: GameDataType): UnitActionsMapType | null { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    getOpenStoreMapActions(gameData: GameDataType): UnitActionsMapType | null {
         const unit = this;
         const {attr} = unit;
         const openStoreMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
@@ -678,7 +696,8 @@ export default class Unit {
         return openStoreMap;
     }
 
-    getDestroyBuildingActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    getDestroyBuildingActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this;
         const {attr} = unit;
         const destroyBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
@@ -707,13 +726,19 @@ export default class Unit {
         const attackBuildingMapPointList = unit.getAllAvailableAttack(gameData);
 
         attackBuildingMapPointList.forEach((cell: [number, number]) => {
-            const building = find(gameData.buildingList, (buildingInList: Building): boolean => {
-                return destroyBuildingList.includes(buildingInList.attr.type) &&
-                    isString(buildingInList.attr.userId) &&
-                    buildingInList.attr.userId !== userId &&
-                    buildingInList.attr.x === cell[0] &&
-                    buildingInList.attr.y === cell[1];
-            }) || null;
+            const building =
+                find(
+                    gameData.buildingList,
+                    (buildingInList: Building): boolean => {
+                        return (
+                            destroyBuildingList.includes(buildingInList.attr.type) &&
+                            isString(buildingInList.attr.userId) &&
+                            buildingInList.attr.userId !== userId &&
+                            buildingInList.attr.x === cell[0] &&
+                            buildingInList.attr.y === cell[1]
+                        );
+                    }
+                ) || null;
 
             if (building === null) {
                 // console.log('can not find building in ', cell);
@@ -739,11 +764,11 @@ export default class Unit {
             });
         });
 
-
         return destroyBuildingMap;
     }
 
-    getRaiseSkeletonActions(gameData: GameDataType): UnitActionsMapType { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    getRaiseSkeletonActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this;
         const {attr} = unit;
         const raiseSkeletonMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
@@ -772,7 +797,8 @@ export default class Unit {
             unit.attr.y,
             unitGuideData.raiseSkeletonRange,
             gameData.pathMap.fly,
-            []);
+            []
+        );
 
         // get attack fields
         raiseSkeletonMapPointList.forEach((cell: [number, number]) => {
@@ -830,9 +856,11 @@ export default class Unit {
         }
 
         return unitList
-            .filter((unitInList: Unit): boolean => {
-                return unitInList.attr.userId !== userId;
-            })
+            .filter(
+                (unitInList: Unit): boolean => {
+                    return unitInList.attr.userId !== userId;
+                }
+            )
             .map((unitInList: Unit): [number, number] => [unitInList.attr.x, unitInList.attr.y]);
     }
 
@@ -848,9 +876,7 @@ export default class Unit {
 
         const unitGuideData = unitGuide[type];
 
-        const moveType = isString(unitGuideData.moveType) ?
-            unitGuideData.moveType :
-            null;
+        const moveType = isString(unitGuideData.moveType) ? unitGuideData.moveType : null;
 
         const pathMap = moveType === null ? gameData.pathMap.walk : gameData.pathMap[moveType];
 
@@ -868,11 +894,15 @@ export default class Unit {
 
         const enemyUnitCoordinates = unit.getAllEnemyUnitsCoordinates(gameData);
 
-        return unit.getAllAvailableAttack(gameData).filter((mapPoint: PointType): boolean => {
-            return enemyUnitCoordinates.some((unitCoordinates: [number, number]): boolean => {
-                return unitCoordinates[0] === mapPoint[0] && unitCoordinates[1] === mapPoint[1];
-            });
-        });
+        return unit.getAllAvailableAttack(gameData).filter(
+            (mapPoint: PointType): boolean => {
+                return enemyUnitCoordinates.some(
+                    (unitCoordinates: [number, number]): boolean => {
+                        return unitCoordinates[0] === mapPoint[0] && unitCoordinates[1] === mapPoint[1];
+                    }
+                );
+            }
+        );
     }
 
     getAllAvailableAttack(gameData: GameDataType): AvailablePathMapType {
@@ -889,7 +919,8 @@ export default class Unit {
         return getPath(x, y, unitGuideData.attack.range, gameData.pathMap.fly, []);
     }
 
-    bindUnitEventListeners() { // eslint-disable-line complexity
+    // eslint-disable-next-line complexity
+    bindUnitEventListeners() {
         const unit = this;
         const {attr, gameAttr} = unit;
         const {square} = mapGuide.size;
@@ -899,10 +930,13 @@ export default class Unit {
         unitContainer.interactive = true;
         unitContainer.buttonMode = true;
 
-        bindClick(unitContainer, async (): Promise<void> => {
-            console.log('click on unit', unit);
-            await unit.gameAttr.event.click(unit);
-        });
+        bindClick(
+            unitContainer,
+            async (): Promise<void> => {
+                console.log('click on unit', unit);
+                await unit.gameAttr.event.click(unit);
+            }
+        );
     }
 
     move(x: number, y: number, movePath: PathType, callback?: (x: number, y: number) => void): Promise<void> {
@@ -931,7 +965,8 @@ export default class Unit {
             });
     }
 
-    async setActionState(actionState: UnitActionStateType | null): Promise<void> { // eslint-disable-line complexity
+    // eslint-disable-next-line complexity
+    async setActionState(actionState: UnitActionStateType | null): Promise<void> {
         const unit = this;
         const currentActionState = unit.attr.action || null;
 
@@ -941,8 +976,10 @@ export default class Unit {
         }
 
         if (actionState === null && currentActionState !== null) {
-            console.error('old action state !==  null, but new action state === null!!!, ' +
-                'the game has not method to remove unit\'s action');
+            console.error(
+                'old action state !==  null, but new action state === null!!!, ' +
+                    "the game has not method to remove unit's action"
+            );
             return Promise.resolve();
         }
 
@@ -953,7 +990,8 @@ export default class Unit {
 
         const promiseList = [];
 
-        Object.keys(actionState).forEach((actionName: string) => { // eslint-disable-line max-statements, complexity
+        // eslint-disable-next-line max-statements, complexity
+        Object.keys(actionState).forEach((actionName: string) => {
             const oldAction = unit.attr.action || {};
 
             if (actionState === null) {
@@ -1133,7 +1171,6 @@ export default class Unit {
         return damage && isNumber(damage.given) ? damage.given : 0;
     }
 
-
     setDamageReceived(damageReceived: number) {
         const unit = this;
 
@@ -1179,11 +1216,8 @@ export default class Unit {
     getPoisonCountdown(): number {
         const unit = this;
 
-        return isNumber(unit.attr.poisonCountdown) ?
-            unit.attr.poisonCountdown :
-            defaultUnitData.poisonCountdown;
+        return isNumber(unit.attr.poisonCountdown) ? unit.attr.poisonCountdown : defaultUnitData.poisonCountdown;
     }
-
 
     hasId(): boolean {
         const unit = this;
@@ -1221,7 +1255,8 @@ export default class Unit {
         return null;
     }
 
-    async setLevel(level: number): Promise<void> { // eslint-disable-line complexity
+    // eslint-disable-next-line complexity
+    async setLevel(level: number): Promise<void> {
         const unit = this;
         const {attr, gameAttr} = unit;
         const currentSpriteNumber = gameAttr.sprite.level.getChildAt(0) || null;
@@ -1233,8 +1268,7 @@ export default class Unit {
             return;
         }
 
-        if (currentSpriteNumber !== null &&
-            currentSpriteNumber.texture === newSpriteNumber.texture) {
+        if (currentSpriteNumber !== null && currentSpriteNumber.texture === newSpriteNumber.texture) {
             console.log('set new level is not needed, new level and current level the same');
             return;
         }
@@ -1305,7 +1339,8 @@ export default class Unit {
             (animationCurrent: LevelUpAnimationDataType) => {
                 levelUpSprite.position.set(animationCurrent.x, animationCurrent.y);
                 levelUpSprite.alpha = animationCurrent.alpha;
-            });
+            }
+        );
 
         gameAttr.container.removeChild(levelUpSprite);
     }
@@ -1336,7 +1371,8 @@ export default class Unit {
     }
     */
 
-    async setHitPoints(hitPoints: number): Promise<void> { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    async setHitPoints(hitPoints: number): Promise<void> {
         const unit = this;
         const {attr, gameAttr} = unit;
 
@@ -1404,7 +1440,8 @@ export default class Unit {
         return defaultUnitData.hitPoints;
     }
 
-    async showDeltaHitPoints(hitPointsDelta: number): Promise<void> { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    async showDeltaHitPoints(hitPointsDelta: number): Promise<void> {
         if (hitPointsDelta === 0) {
             console.log('hitPointsDelta is === 0');
             return;
@@ -1423,7 +1460,6 @@ export default class Unit {
         const negativeTint = 0xCC0000;
         const isPositive = hitPointsDelta > 0;
 
-
         const sign = PIXI.Sprite.fromImage(imageMap.font.popup[isPositive ? 'plus' : 'minus']);
         const number0 = PIXI.Sprite.fromImage(imageMap.font.popup[hitPointsDeltaString[0] || 'space']);
         const number1 = PIXI.Sprite.fromImage(imageMap.font.popup[hitPointsDeltaString[1] || 'space']);
@@ -1432,7 +1468,9 @@ export default class Unit {
             if (isPositive) {
                 return;
             }
-            sprite.tint = negativeTint; // eslint-disable-line no-param-reassign
+
+            // eslint-disable-next-line no-param-reassign
+            sprite.tint = negativeTint;
         });
 
         if (hitPointsDeltaString.length === 1) {
@@ -1478,7 +1516,8 @@ export default class Unit {
             (animationCurrent: LevelUpAnimationDataType) => {
                 hitPointsContainer.position.set(animationCurrent.x, animationCurrent.y);
                 hitPointsContainer.alpha = animationCurrent.alpha;
-            });
+            }
+        );
 
         gameAttr.container.removeChild(hitPointsContainer);
     }
@@ -1494,10 +1533,8 @@ export default class Unit {
         animationSprite.alpha = isActionAvailable ? 1 : 0.8;
 
         if (!isActionAvailable) {
-            animationSprite
-                .textures[0] = PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-0']);
-            animationSprite
-                .textures[1] = PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1']);
+            animationSprite.textures[0] = PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-0']);
+            animationSprite.textures[1] = PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1']);
             return;
         }
 
@@ -1505,10 +1542,12 @@ export default class Unit {
             const userColor = getUserColor(attr.userId, gameAttr.userList);
 
             if (isString(userColor)) {
-                animationSprite
-                    .textures[0] = PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-' + userColor + '-0']);
-                animationSprite
-                    .textures[1] = PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-' + userColor + '-1']);
+                animationSprite.textures[0] = PIXI.Texture.fromImage(
+                    imageMap.unit[unit.attr.type + '-' + userColor + '-0']
+                );
+                animationSprite.textures[1] = PIXI.Texture.fromImage(
+                    imageMap.unit[unit.attr.type + '-' + userColor + '-1']
+                );
             }
         }
     }
@@ -1550,9 +1589,11 @@ export default class Unit {
             return false;
         }
 
-        const friendWispList = gameData.unitList.filter((unitInList: Unit): boolean => {
-            return unitInList.attr.type === 'wisp' && unitInList.attr.userId === unitUserId;
-        });
+        const friendWispList = gameData.unitList.filter(
+            (unitInList: Unit): boolean => {
+                return unitInList.attr.type === 'wisp' && unitInList.attr.userId === unitUserId;
+            }
+        );
 
         const wispAuraMap: Array<[number, number]> = [];
 
@@ -1566,9 +1607,11 @@ export default class Unit {
             );
 
             wispAuraCoordinates.forEach((mapPoint: [number, number]) => {
-                const isAlreadyInWispAuraMap = wispAuraMap.some((wispAuraMapPoint: [number, number]): boolean => {
-                    return wispAuraMapPoint[0] === mapPoint[0] && wispAuraMapPoint[1] === mapPoint[1];
-                });
+                const isAlreadyInWispAuraMap = wispAuraMap.some(
+                    (wispAuraMapPoint: [number, number]): boolean => {
+                        return wispAuraMapPoint[0] === mapPoint[0] && wispAuraMapPoint[1] === mapPoint[1];
+                    }
+                );
 
                 if (isAlreadyInWispAuraMap) {
                     // console.log('already in wispAuraMap');
@@ -1579,9 +1622,11 @@ export default class Unit {
             });
         });
 
-        const hasWispAura = wispAuraMap.some((mapPoint: [number, number]): boolean => {
-            return unit.attr.x === mapPoint[0] && unit.attr.y === mapPoint[1];
-        });
+        const hasWispAura = wispAuraMap.some(
+            (mapPoint: [number, number]): boolean => {
+                return unit.attr.x === mapPoint[0] && unit.attr.y === mapPoint[1];
+            }
+        );
 
         unit.gameAttr.hasWispAura = hasWispAura;
 
@@ -1596,9 +1641,11 @@ export default class Unit {
         return hasWispAura;
     }
 
-    getMoviePath(unitAction: UnitActionMoveType,
-                 actionsList: UnitActionsMapType,
-                 gameData?: GameDataType): PathType | null {
+    getMoviePath(
+        unitAction: UnitActionMoveType,
+        actionsList: UnitActionsMapType,
+        gameData?: GameDataType
+    ): PathType | null {
         return getMoviePath(unitAction, actionsList);
     }
 

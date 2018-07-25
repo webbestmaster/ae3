@@ -27,7 +27,8 @@ class Locale extends Component<PropsType, StateType> {
         const {props} = view;
         const {locale, stringKey} = props;
 
-        if (!IS_PRODUCTION) { // eslint-disable-line id-match
+        // eslint-disable-next-line id-match
+        if (!IS_PRODUCTION) {
             if (!stringKey) {
                 console.error('stringKey is not define', stringKey);
                 return 'TEXT';
@@ -51,7 +52,9 @@ class Locale extends Component<PropsType, StateType> {
 }
 
 export default connect(
-    (state: GlobalStateType): {|
+    (
+        state: GlobalStateType
+    ): {|
         +locale: LocaleType
     |} => ({
         locale: state.locale

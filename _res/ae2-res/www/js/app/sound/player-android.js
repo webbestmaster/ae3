@@ -1,46 +1,36 @@
 /*jslint white: true, nomen: true */
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window */
+    /*global */
 
-	"use strict";
-	/*global window */
-	/*global */
+    win.APP.soundMaster = win.APP.soundMaster || {};
 
-	win.APP.soundMaster = win.APP.soundMaster || {};
+    win.APP.soundMaster.androidPlayer = {
+        pathPrefix: 'www/sounds/',
 
-	win.APP.soundMaster.androidPlayer = {
+        init: function() {},
 
-		pathPrefix: 'www/sounds/',
+        play: function(data) {
+            var player = this,
+                roadNumber = data.road,
+                isLoop = data.isLoop,
+                sound = data.sound,
+                src = player.pathPrefix + sound,
+                andAud = window['AndAud_' + roadNumber];
 
-		init: function () {
+            if (isLoop) {
+                andAud.playAudioLooping(src);
+            } else {
+                andAud.playAudio(src);
+            }
+        },
 
-		},
+        stop: function(data) {
+            var roadNumber = data.road,
+                andAud = window['AndAud_' + roadNumber];
 
-		play: function (data) {
-
-			var player = this,
-				roadNumber = data.road,
-				isLoop = data.isLoop,
-				sound = data.sound,
-				src = player.pathPrefix + sound,
-				andAud = window['AndAud_' + roadNumber];
-
-			if (isLoop) {
-				andAud.playAudioLooping(src);
-			} else {
-				andAud.playAudio(src);
-			}
-
-		},
-
-		stop: function (data) {
-
-			var roadNumber = data.road,
-				andAud = window['AndAud_' + roadNumber];
-
-			andAud.stop();
-
-		}
-
-	}
-
-}(window));
+            andAud.stop();
+        }
+    };
+})(window);

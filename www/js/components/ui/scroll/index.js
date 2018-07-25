@@ -24,7 +24,6 @@ type AttrType = {|
     swiper: Swiper | null
 |};
 
-
 export default class Scroll extends Component<StateType, PropsType> {
     state: StateType;
     props: PropsType;
@@ -60,7 +59,8 @@ export default class Scroll extends Component<StateType, PropsType> {
             freeMode: true,
             watchOverflow: true, // disable this cause swiper has scroll bar and bug after resize
             scrollbar: {
-                el: '.swiper-scrollbar' // eslint-disable-line id-length
+                // eslint-disable-next-line id-length
+                el: '.swiper-scrollbar'
             },
             mousewheel: true
         });
@@ -111,11 +111,9 @@ export default class Scroll extends Component<StateType, PropsType> {
                 }}
             >
                 <div className={classnames(swiperStyle['swiper-wrapper'], style.swiper_wrapper)}>
-                    <div className={classnames(swiperStyle['swiper-slide'], style.swiper_slide)}>
-                        {props.children}
-                    </div>
+                    <div className={classnames(swiperStyle['swiper-slide'], style.swiper_slide)}>{props.children}</div>
                 </div>
-                <div className="swiper-scrollbar"/>
+                <div className="swiper-scrollbar" />
             </div>
         );
     }
@@ -126,9 +124,7 @@ export default class Scroll extends Component<StateType, PropsType> {
 
         return (
             <div className={classnames(style.wrapper, props.className)}>
-                <div className={style.container}>
-                    {view.renderSwiper()}
-                </div>
+                <div className={style.container}>{view.renderSwiper()}</div>
             </div>
         );
     }

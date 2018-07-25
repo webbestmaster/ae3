@@ -1,41 +1,34 @@
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window, Backbone, $, templateMaster, setTimeout, APP, history */
 
-	"use strict";
-	/*global window, Backbone, $, templateMaster, setTimeout, APP, history */
+    win.APP = win.APP || {};
 
-	win.APP = win.APP || {};
+    win.APP.BB = win.APP.BB || {};
 
-	win.APP.BB = win.APP.BB || {};
+    APP.BB.PlayView = APP.BB.BaseView.extend({
+        selectors: {
+            startGame: '.js-start-game'
+        },
 
-	APP.BB.PlayView = APP.BB.BaseView.extend({
+        events: {
+            'click .js-start-game': 'startGame'
+        },
 
-		selectors: {
-			startGame: '.js-start-game'
-		},
+        initialize: function() {
+            this.$el = $(this.tmpl.play());
 
-		events: {
-			'click .js-start-game': 'startGame'
-		},
+            this.proto.initialize.apply(this, arguments);
 
-		initialize: function () {
+            this.render();
+        },
 
-			this.$el = $(this.tmpl.play());
+        startGame: function() {
+            this.routeByUrl('select-level', {trigger: false});
 
-			this.proto.initialize.apply(this, arguments);
-
-			this.render();
-
-		},
-
-		startGame: function () {
-			this.routeByUrl('select-level', {trigger: false});
-
-			new APP.BB.SelectLevelView({
-				newGame: true
-			});
-
-		}
-
-	});
-
-}(window));
+            new APP.BB.SelectLevelView({
+                newGame: true
+            });
+        }
+    });
+})(window);

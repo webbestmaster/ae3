@@ -13,6 +13,6 @@ type SwiperOptionsType = {|
 
 declare module 'swiper' {
     declare export default class Swiper {
-    constructor(node: HTMLElement, options: SwiperOptionsType): Swiper
+        constructor(node: HTMLElement, options: SwiperOptionsType): Swiper
     }
 }

@@ -1,64 +1,54 @@
 /*jslint white: true, nomen: true */
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window */
+    /*global */
 
-	"use strict";
-	/*global window */
-	/*global */
+    win.APP.soundMaster = win.APP.soundMaster || {};
 
-	win.APP.soundMaster = win.APP.soundMaster || {};
+    win.APP.soundMaster.iosPlayer = {
+        roads: new Array(4),
 
-	win.APP.soundMaster.iosPlayer = {
+        pathPrefix: 'sounds/',
 
-		roads: new Array(4),
+        init: function() {},
 
-		pathPrefix: 'sounds/',
+        play: function(data) {
+            if (data.road) {
+                return;
+            }
 
-		init: function () {
+            var player = this,
+                roadNumber = data.road,
+                isLoop = data.isLoop,
+                sound = data.sound,
+                newAudio,
+                settings = {
+                    playAudioWhenScreenIsLocked: false
+                };
 
-		},
+            player.stop(data);
 
-		play: function (data) {
+            newAudio = new Media(player.pathPrefix + sound);
 
-			if (data.road) {
-				return;
-			}
+            if (isLoop) {
+                settings.numberOfLoops = 9;
+            }
 
-			var player = this,
-				roadNumber = data.road,
-				isLoop = data.isLoop,
-				sound = data.sound,
-				newAudio,
-				settings = {
-					playAudioWhenScreenIsLocked: false
-				};
+            newAudio.play(settings); // play audio with needed settings
 
-			player.stop(data);
+            player.roads[roadNumber] = newAudio;
+        },
 
-			newAudio = new Media(player.pathPrefix + sound);
+        stop: function(data) {
+            var player = this,
+                roadNumber = data.road,
+                road = player.roads[roadNumber];
 
-			if (isLoop) {
-				settings.numberOfLoops = 9;
-			}
-
-			newAudio.play(settings); // play audio with needed settings
-
-			player.roads[roadNumber] = newAudio;
-
-		},
-
-		stop: function (data) {
-
-			var player = this,
-				roadNumber = data.road,
-				road = player.roads[roadNumber];
-
-			if ( road && road.release ) {
-				player.roads[roadNumber].stop();
-				player.roads[roadNumber].release();
-			}
-
-		}
-
-	}
-
-}(window));
+            if (road && road.release) {
+                player.roads[roadNumber].stop();
+                player.roads[roadNumber].release();
+            }
+        }
+    };
+})(window);

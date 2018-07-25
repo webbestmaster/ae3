@@ -25,12 +25,7 @@ class Home extends Component<void, void> {
             <div className={serviceStyle.two_blocks_container}>
                 &nbsp;&nbsp;Build of&nbsp;
                 {new Date(BUILD_DATE).toLocaleString()}
-
-                <img
-                    src={logoSrc}
-                    className={style.logo}
-                    alt=""
-                />
+                <img src={logoSrc} className={style.logo} alt="" />
             </div>
         );
     }
@@ -40,19 +35,17 @@ class Home extends Component<void, void> {
             <div className={serviceStyle.two_blocks_container}>
                 <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                     <ButtonLink to={routes.multiPlayer}>
-                        <Locale stringKey={('ONLINE_GAME': LangKeyType)}/>
+                        <Locale stringKey={('ONLINE_GAME': LangKeyType)} />
                     </ButtonLink>
 
                     <ButtonLink to={routes.createRoomOffline}>
-                        <Locale stringKey={('OFFLINE_GAME': LangKeyType)}/>
+                        <Locale stringKey={('OFFLINE_GAME': LangKeyType)} />
                     </ButtonLink>
 
-                    <Button className={serviceStyle.disabled}>
-                        %companies%
-                    </Button>
+                    <Button className={serviceStyle.disabled}>%companies%</Button>
 
                     <ButtonLink to={routes.settings}>
-                        <Locale stringKey={('SETTINGS': LangKeyType)}/>
+                        <Locale stringKey={('SETTINGS': LangKeyType)} />
                     </ButtonLink>
                 </ButtonListWrapper>
             </div>

@@ -84,20 +84,15 @@ export default class Select extends Component<PropsType, StateType> {
             return null;
         }
 
-        if (!IS_PRODUCTION) { // eslint-disable-line id-match
+        // eslint-disable-next-line id-match
+        if (!IS_PRODUCTION) {
             if (!icon.hasOwnProperty(iconPath)) {
                 console.error('unsupported iconPath', iconPath);
                 return null;
             }
         }
 
-        return (
-            <img
-                className={style.icon}
-                src={icon[iconPath]}
-                alt=""
-            />
-        );
+        return <img className={style.icon} src={icon[iconPath]} alt="" />;
     }
 
     render(): Node {
@@ -107,14 +102,9 @@ export default class Select extends Component<PropsType, StateType> {
         return (
             <label className={style.wrapper}>
                 {view.renderIcon()}
-                {
-                    state.visibleString.length > 0 ?
-                        <p className={style.current_selected}>
-                            {state.visibleString}
-                        </p> :
-                        <p className={style.current_selected}>
-                            &nbsp;
-                        </p>
+                {state.visibleString.length > 0 ?
+                    <p className={style.current_selected}>{state.visibleString}</p> :
+                    <p className={style.current_selected}>&nbsp;</p>
                 }
                 <select
                     ref={(select: HTMLSelectElement | null) => {

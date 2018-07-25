@@ -11,7 +11,10 @@ export async function run(): Promise<void> {
         'force new connection': true
     };
 
-    localSocketIoClient.connect('http://localhost:' + localServerOptions.port, options);
+    localSocketIoClient.connect(
+        'http://localhost:' + localServerOptions.port,
+        options
+    );
 
     return new Promise((resolve: () => void) => {
         localSocketIoClient.on('connect', resolve);

@@ -1,33 +1,27 @@
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global console, alert, window, document */
+    /*global */
 
-	"use strict";
-	/*global console, alert, window, document */
-	/*global */
+    var proto = win.APP.BB.Unit.BaseUnitModel.prototype;
 
-	var proto = win.APP.BB.Unit.BaseUnitModel.prototype;
+    win.APP.BB.Unit.SorceressModel = win.APP.BB.Unit.BaseUnitModel.extend({
+        defaults: win.APP.unitMaster.list.sorceress,
 
-	win.APP.BB.Unit.SorceressModel =  win.APP.BB.Unit.BaseUnitModel.extend({
+        getAvailablePathWithTeamUnit: function() {
+            var unit = this,
+                model = unit.get('model'),
+                graves = model.get('graves'),
+                path,
+                endPath = [];
 
-		defaults: win.APP.unitMaster.list.sorceress,
+            path = proto.getAvailablePathWithTeamUnit.apply(unit, arguments);
 
-		getAvailablePathWithTeamUnit: function () {
+            _.each(path, function(xy) {
+                return _.find(graves, xy) || endPath.push(xy);
+            });
 
-			var unit = this,
-				model = unit.get('model'),
-				graves = model.get('graves'),
-				path,
-				endPath = [];
-
-			path = proto.getAvailablePathWithTeamUnit.apply(unit, arguments);
-
-			_.each(path, function (xy) {
-				return _.find(graves, xy) || endPath.push(xy);
-			});
-
-			return endPath;
-
-		}
-
-	});
-
-}(window));
+            return endPath;
+        }
+    });
+})(window);

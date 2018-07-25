@@ -8,18 +8,23 @@ const pathToSvg = 'svg';
 async function convert(imageName) {
     return new Promise((resolve, reject) => {
         console.log('start:', imageName);
-        pixel.parse(pathToSrc + '/' + imageName)
+        pixel
+            .parse(pathToSrc + '/' + imageName)
             .then(images => {
-                const svgData = svg.convert(images[0])
-                    .replace( // rgba to rgb
+                const svgData = svg
+                    .convert(images[0])
+                    .replace(
+                        // rgba to rgb
                         /fil{2}="rgba\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d{1,3})\)"/gi,
                         'fill="rgb($1,$2,$3)"'
                     )
-                    .replace( // remove full black square
+                    .replace(
+                        // remove full black square
                         /<path fil{2}="rgb\((?:0,){2}0\)"[\S\s]+?\/>/,
                         ''
                     )
-                    .replace( // remove <g/> tag
+                    .replace(
+                        // remove <g/> tag
                         /<g>|<\/g>/gi,
                         ''
                     );
@@ -55,5 +60,3 @@ fs.readdir(pathToSrc, async (err, files) => {
         await convert(files.pop());
     }
 });
-
-

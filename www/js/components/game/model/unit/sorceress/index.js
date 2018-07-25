@@ -1,5 +1,4 @@
 // @flow
 import Unit from './..';
 
-export default class Sorceress extends Unit {
-}
+export default class Sorceress extends Unit {}

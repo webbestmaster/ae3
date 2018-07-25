@@ -36,10 +36,6 @@ export default class Form extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = isString(props.className) ? ' ' + props.className : '';
 
-        return (
-            <form className={style.form + additionClass}>
-                {props.children}
-            </form>
-        );
+        return <form className={style.form + additionClass}>{props.children}</form>;
     }
 }

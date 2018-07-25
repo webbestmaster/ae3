@@ -17,8 +17,10 @@ import {
     isNotFunction
 } from './../../lib/is';
 
+/* eslint-disable flowtype/no-weak-types */
 // $FlowFixMe
-type AttrValueType = any; // eslint-disable-line flowtype/no-weak-types
+type AttrValueType = any;
+/* eslint-enable flowtype/no-weak-types */
 
 type ActionType = (newValue: AttrValueType, oldValue: AttrValueType) => AttrValueType;
 
@@ -32,10 +34,10 @@ type ListenersType = {
     [key: string]: Array<ListenersItemType>
 };
 
-type ListeningItemType = [MainModel, string, ActionType, {}]; // eslint-disable-line no-use-before-define
+// eslint-disable-next-line no-use-before-define
+type ListeningItemType = [MainModel, string, ActionType, {}];
 
 type ListeningType = Array<ListeningItemType>;
-
 
 /**
  *
@@ -169,14 +171,14 @@ export default class MainModel {
         // context did not passed
 
         if (argsLength === 2) {
-            allListeners[key] = listenersByKey
-                .filter((listener: ListenersItemType): boolean => listener[0] !== action);
+            allListeners[key] = listenersByKey.filter((listener: ListenersItemType): boolean => listener[0] !== action);
             return model;
         }
 
         if (argsLength === 3) {
-            allListeners[key] = listenersByKey
-                .filter((listener: ListenersItemType): boolean => listener[0] !== action || listener[1] !== context);
+            allListeners[key] = listenersByKey.filter(
+                (listener: ListenersItemType): boolean => listener[0] !== action || listener[1] !== context
+            );
         }
 
         return model;
@@ -191,26 +193,32 @@ export default class MainModel {
      * @param {*} [context] of actions
      * @returns {MainModel} instance
      */
-    setValidation(key: string,
-                  test: (...args: [AttrValueType, AttrValueType]) => boolean,
-                  onValid: (...args: [AttrValueType, AttrValueType]) => void,
-                  onInvalid: (...args: [AttrValueType, AttrValueType]) => void,
-                  context?: {} = this): MainModel {
+    setValidation(
+        key: string,
+        test: (...args: [AttrValueType, AttrValueType]) => boolean,
+        onValid: (...args: [AttrValueType, AttrValueType]) => void,
+        onInvalid: (...args: [AttrValueType, AttrValueType]) => void,
+        context?: {} = this
+    ): MainModel {
         const model = this;
 
-        model.onChange(key, (newValue: AttrValueType, oldValue: AttrValueType): void => {
-            const args = [newValue, oldValue];
+        model.onChange(
+            key,
+            (newValue: AttrValueType, oldValue: AttrValueType): void => {
+                const args = [newValue, oldValue];
 
-            return Reflect.apply(test, context, args) ?
-                Reflect.apply(onValid, context, args) :
-                Reflect.apply(onInvalid, context, args);
+                return Reflect.apply(test, context, args) ?
+                    Reflect.apply(onValid, context, args) :
+                    Reflect.apply(onInvalid, context, args);
 
-            /*
+                /*
                         return test.apply(context, args) ?
                             onValid.apply(context, args) :
                             onInvalid.apply(context, args);
             */
-        }, context);
+            },
+            context
+        );
 
         return model;
     }
@@ -264,7 +272,8 @@ export default class MainModel {
         if (argsLength === 2) {
             listening.forEach(
                 ([listMainModel, listKey, listAction, listContext]: ListeningItemType): MainModel | boolean =>
-                    listMainModel === mainModel && listKey === key &&
+                    listMainModel === mainModel &&
+                    listKey === key &&
                     model.stopListening(listMainModel, listKey, listAction, listContext)
             );
             return model;
@@ -283,11 +292,13 @@ export default class MainModel {
 
         model.listening = listening.filter(
             ([listMainModel, listKey, listAction, listContext]: ListeningItemType): boolean => {
-                if (mainModel &&
+                if (
+                    mainModel &&
                     listMainModel === mainModel &&
                     listKey === key &&
                     listAction === action &&
-                    listContext === context) {
+                    listContext === context
+                ) {
                     mainModel.offChange(listKey, listAction, listContext);
                     return false;
                 }

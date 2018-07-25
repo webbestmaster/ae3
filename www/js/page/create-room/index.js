@@ -97,7 +97,8 @@ class CreateRoom extends Component<PropsType, StateType> {
         view.setState({openShowInfoMapList: currentRoomList});
     }
 
-    async createRoom(): Promise<string | null> { // eslint-disable-line max-statements
+    // eslint-disable-next-line max-statements
+    async createRoom(): Promise<string | null> {
         const view = this;
         const {props, state} = view;
         const {auth, history} = props;
@@ -164,17 +165,15 @@ class CreateRoom extends Component<PropsType, StateType> {
                         view.setState({defaultMoney: parseInt(defaultMoney, 10)});
                     }}
                 >
-                    {mapGuide.defaultMoneyList
-                        .map((defaultMoney: number): Node => {
+                    {mapGuide.defaultMoneyList.map(
+                        (defaultMoney: number): Node => {
                             return (
-                                <option
-                                    value={defaultMoney}
-                                    key={defaultMoney}
-                                >
+                                <option value={defaultMoney} key={defaultMoney}>
                                     {defaultMoney}
                                 </option>
                             );
-                        })}
+                        }
+                    )}
                 </Select>
             </Fieldset>
         );
@@ -191,17 +190,15 @@ class CreateRoom extends Component<PropsType, StateType> {
                         view.setState({unitLimit: parseInt(unitLimit, 10)});
                     }}
                 >
-                    {mapGuide.defaultUnitLimitList
-                        .map((unitLimit: number): Node => {
+                    {mapGuide.defaultUnitLimitList.map(
+                        (unitLimit: number): Node => {
                             return (
-                                <option
-                                    value={unitLimit}
-                                    key={unitLimit}
-                                >
+                                <option value={unitLimit} key={unitLimit}>
                                     {unitLimit}
                                 </option>
                             );
-                        })}
+                        }
+                    )}
                 </Select>
             </Fieldset>
         );
@@ -214,36 +211,33 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         return (
             <Scroll>
-                {mapList
-                    .map((map: MapType, mapIndex: number): Node => {
+                {mapList.map(
+                    (map: MapType, mapIndex: number): Node => {
                         const mapId = map.meta['en-US'].name;
                         const isAdditionalInfoOpen = openShowInfoMapList.includes(mapId);
                         const mapSize = getMapSize(map);
 
                         return (
-                            <div
-                                key={mapId}
-                                className={classnames(style.map_item, serviceStyle.clear_self)}
-                            >
-                                {
-                                    isAdditionalInfoOpen ?
-                                        <Button
-                                            onClick={(): void => view.removeFromShowInfoMapList(mapId)}
-                                            className={style.button__show_info}
-                                        >
-                                            [-]
-                                        </Button> :
-                                        <Button
-                                            onClick={(): void => view.addToShowInfoMapList(mapId)}
-                                            className={style.button__show_info}
-                                        >
-                                            [+]
-                                        </Button>
+                            <div key={mapId} className={classnames(style.map_item, serviceStyle.clear_self)}>
+                                {isAdditionalInfoOpen ?
+                                    <Button
+                                        onClick={(): void => view.removeFromShowInfoMapList(mapId)}
+                                        className={style.button__show_info}
+                                    >
+                                        [-]
+                                    </Button> :
+                                    <Button
+                                        onClick={(): void => view.addToShowInfoMapList(mapId)}
+                                        className={style.button__show_info}
+                                    >
+                                        [+]
+                                    </Button>
                                 }
 
                                 <Button
                                     onClick={() => {
-                                        view.setState({mapIndex},
+                                        view.setState(
+                                            {mapIndex},
                                             async (): Promise<void> => {
                                                 const result = await view.createRoom();
                                             }
@@ -278,7 +272,8 @@ class CreateRoom extends Component<PropsType, StateType> {
                                     null}
                             </div>
                         );
-                    })}
+                    }
+                )}
             </Scroll>
         );
     }
@@ -289,9 +284,9 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         return (
             <Page>
-                <Spinner isOpen={state.isRoomCreating}/>
+                <Spinner isOpen={state.isRoomCreating} />
                 <Header>
-                    <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
+                    <Locale stringKey={('CREATE_GAME': LangKeyType)} />
                 </Header>
 
                 <Form className={style.map_list__form}>
@@ -300,7 +295,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                         {view.senderUnitLimitSelect()}
                     </div>
                     <FormHeader>
-                        <Locale stringKey={('MAPS': LangKeyType)}/>
+                        <Locale stringKey={('MAPS': LangKeyType)} />
                         :
                     </FormHeader>
                 </Form>

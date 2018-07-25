@@ -16,7 +16,7 @@
  */
 
 declare module 'sha1' {
-    declare module.exports: (str: string) => string
+    declare module.exports: (str: string) => string;
 }
 
 /*

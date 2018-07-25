@@ -11,15 +11,9 @@ export type UnitTypeCommonType =
     | 'dragon'
     | 'skeleton';
 
-export type UnitTypeCommanderType =
-    | 'galamar'
-    | 'valadorn'
-    | 'demon-lord'
-    | 'saeth';
+export type UnitTypeCommanderType = 'galamar' | 'valadorn' | 'demon-lord' | 'saeth';
 
-export type UnitTypeExtraType =
-    | 'crystal'
-    | 'saeth-heavens-fury';
+export type UnitTypeExtraType = 'crystal' | 'saeth-heavens-fury';
 
 export type UnitTypeAllType = UnitTypeCommonType | UnitTypeCommanderType | UnitTypeExtraType;
 
@@ -52,8 +46,7 @@ export type UnitGuideDataType = {|
     +isCommander?: boolean
 |};
 
-type GuideUnitDataType = { +[key: UnitTypeAllType]: UnitGuideDataType };
-
+type GuideUnitDataType = {+[key: UnitTypeAllType]: UnitGuideDataType};
 
 const unitData: GuideUnitDataType = {
     soldier: {
@@ -226,10 +219,7 @@ const unitData: GuideUnitDataType = {
 
         withoutGrave: true,
         canFixBuilding: true,
-        occupyBuildingList: [
-            'farm',
-            'castle'
-        ],
+        occupyBuildingList: ['farm', 'castle'],
         isCommander: true
     },
     valadorn: {
@@ -246,10 +236,7 @@ const unitData: GuideUnitDataType = {
 
         withoutGrave: true,
         canFixBuilding: true,
-        occupyBuildingList: [
-            'farm',
-            'castle'
-        ],
+        occupyBuildingList: ['farm', 'castle'],
         isCommander: true
     },
     'demon-lord': {
@@ -266,10 +253,7 @@ const unitData: GuideUnitDataType = {
 
         withoutGrave: true,
         canFixBuilding: true,
-        occupyBuildingList: [
-            'farm',
-            'castle'
-        ],
+        occupyBuildingList: ['farm', 'castle'],
         isCommander: true
     },
     saeth: {
@@ -286,10 +270,7 @@ const unitData: GuideUnitDataType = {
 
         withoutGrave: true,
         canFixBuilding: true,
-        occupyBuildingList: [
-            'farm',
-            'castle'
-        ],
+        occupyBuildingList: ['farm', 'castle'],
         isCommander: true
     },
     'saeth-heavens-fury': {
@@ -360,7 +341,6 @@ const defaultUnitData = {
 };
 
 export {defaultUnitData};
-
 
 const additionalUnitData = {
     wispAttackBonus: 15,

@@ -36,10 +36,6 @@ export default class Fieldset extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = isString(props.className) ? ' ' + props.className : '';
 
-        return (
-            <fieldset className={style.fieldset + additionClass}>
-                {props.children}
-            </fieldset>
-        );
+        return <fieldset className={style.fieldset + additionClass}>{props.children}</fieldset>;
     }
 }

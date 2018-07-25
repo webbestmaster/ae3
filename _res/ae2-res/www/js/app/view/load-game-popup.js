@@ -1,103 +1,85 @@
 /*jslint white: true, nomen: true */ // http://www.jslint.com/lint.html#options
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window */
+    /*global $, templateMaster, APP, Backbone */
 
-	"use strict";
-	/*global window */
-	/*global $, templateMaster, APP, Backbone */
+    win.APP = win.APP || {};
 
-	win.APP = win.APP || {};
+    win.APP.BB = win.APP.BB || {};
 
-	win.APP.BB = win.APP.BB || {};
+    APP.BB.LoadGamePopupView = APP.BB.BaseView.extend({
+        selectors: {
+            closeLoadConfirm: '.js-close-load-confirm',
+            loadGame: '.js-load-game'
+        },
 
-	APP.BB.LoadGamePopupView = APP.BB.BaseView.extend({
+        events: {},
 
-		selectors: {
-			closeLoadConfirm: '.js-close-load-confirm',
-			loadGame: '.js-load-game'
-		},
+        initialize: function(data) {
+            var view = this;
 
-		events: {
+            view.extendFromObj(data);
 
-		},
+            view.proto.initialize.apply(view, arguments);
 
-		initialize: function (data) {
+            view.render();
+        },
 
-			var view = this;
+        render: function() {
+            var view = this,
+                dbMaster = win.APP.map.db;
 
-			view.extendFromObj(data);
+            view.$el = $(view.tmpl['load-game-popup']());
 
-			view.proto.initialize.apply(view, arguments);
+            dbMaster.getSavedGames().then(function(savedGames) {
+                var html = view.tmpl['load-game-popup']({savedGames: savedGames});
+                view.$el.html(html);
+                view.undelegateEvents();
+                view.bindEventListeners();
+            });
+        },
 
-			view.render();
+        bindEventListeners: function() {
+            var view = this,
+                selectors = view.selectors;
 
-		},
+            view.unbindEventListeners();
 
-		render: function () {
+            view.$el.find(selectors.loadGame).on('click', $.proxy(view, 'loadGame'));
+            view.$el.find(selectors.closeLoadConfirm).on('click', $.proxy(view, 'closeLoadConfirm'));
+        },
 
-			var view = this,
-				dbMaster = win.APP.map.db;
+        unbindEventListeners: function() {
+            var view = this,
+                selectors = view.selectors;
 
-			view.$el = $(view.tmpl['load-game-popup']());
+            view.$el.find(selectors.loadGame).off('click', view.loadGame);
+            view.$el.find(selectors.closeLoadConfirm).off('click', view.closeLoadConfirm);
+        },
 
-			dbMaster.getSavedGames().then(function (savedGames) {
-				var html = view.tmpl['load-game-popup']({ savedGames: savedGames });
-				view.$el.html(html);
-				view.undelegateEvents();
-				view.bindEventListeners();
-			});
+        closeLoadConfirm: function(e) {
+            var view = this,
+                $this = $(e.currentTarget),
+                gameName = $this.attr('data-save-name'),
+                $button = view.$el.find('.js-tab-button[data-save-name="' + gameName + '"]');
 
-		},
+            $button.trigger('click');
+        },
 
-		bindEventListeners: function () {
+        loadGame: function(e) {
+            var view = this,
+                dbMaster = win.APP.map.db,
+                $this = $(e.currentTarget),
+                gameName = $this.attr('data-save-name');
 
-			var view = this,
-				selectors = view.selectors;
+            dbMaster.getSavedGame(gameName).then(function(data) {
+                var game = JSON.parse(data.game);
+                game.fromSave = true;
+                new win.APP.BB.BattleView(game);
+            });
 
-			view.unbindEventListeners();
-
-			view.$el.find(selectors.loadGame).on('click', $.proxy(view, 'loadGame') );
-			view.$el.find(selectors.closeLoadConfirm).on('click', $.proxy(view, 'closeLoadConfirm') );
-
-		},
-
-		unbindEventListeners: function () {
-
-			var view = this,
-				selectors = view.selectors;
-
-			view.$el.find(selectors.loadGame).off('click', view.loadGame );
-			view.$el.find(selectors.closeLoadConfirm).off('click', view.closeLoadConfirm );
-
-		},
-
-		closeLoadConfirm: function (e) {
-
-			var view = this,
-				$this = $(e.currentTarget),
-				gameName = $this.attr('data-save-name'),
-				$button = view.$el.find('.js-tab-button[data-save-name="' + gameName + '"]');
-
-			$button.trigger('click');
-
-		},
-
-		loadGame: function (e) {
-
-			var view = this,
-				dbMaster = win.APP.map.db,
-				$this = $(e.currentTarget),
-				gameName = $this.attr('data-save-name');
-
-			dbMaster.getSavedGame(gameName).then(function (data) {
-				var game = JSON.parse(data.game);
-				game.fromSave = true;
-				new win.APP.BB.BattleView(game);
-			});
-
-			view.backTo('battle');
-			
-		}
-
-	});
-
-}(window));
+            view.backTo('battle');
+        }
+    });
+})(window);

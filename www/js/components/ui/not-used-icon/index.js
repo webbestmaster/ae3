@@ -17,13 +17,9 @@ const iconsReqContext = require.context('./list/', true, /\.svg$/);
 
 const iconMap = {};
 
-iconsReqContext.keys()
-    .forEach((fileName: string) => {
-        Object.assign(
-            iconMap,
-            {[fileName.replace('./', '').replace('.svg', '')]: iconsReqContext(fileName)}
-        );
-    });
+iconsReqContext.keys().forEach((fileName: string) => {
+    Object.assign(iconMap, {[fileName.replace('./', '').replace('.svg', '')]: iconsReqContext(fileName)});
+});
 
 console.log(iconMap);
 

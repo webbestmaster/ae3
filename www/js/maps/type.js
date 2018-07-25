@@ -5,22 +5,22 @@ import type {UnitTypeAllType, UnitTypeCommanderType} from './../components/game/
 export type UserIdType = string;
 
 export type LandscapeType =
-    'bridge-0' |
-    'bridge-1' |
-    'forest-0' |
-    'forest-1' |
-    'hill-0' |
-    'road-0' |
-    'stone-0' |
-    'stone-1' |
-    'terra-0' |
-    'terra-1' |
-    'terra-2' |
-    'terra-3' |
-    'terra-4' |
-    'water-0' |
-    'water-1' |
-    'water-2';
+    | 'bridge-0'
+    | 'bridge-1'
+    | 'forest-0'
+    | 'forest-1'
+    | 'hill-0'
+    | 'road-0'
+    | 'stone-0'
+    | 'stone-1'
+    | 'terra-0'
+    | 'terra-1'
+    | 'terra-2'
+    | 'terra-3'
+    | 'terra-4'
+    | 'water-0'
+    | 'water-1'
+    | 'water-2';
 
 export type BuildingAttrTypeType = 'castle' | 'farm' | 'farm-destroyed' | 'well' | 'temple';
 
@@ -109,4 +109,3 @@ export type MapType = {|
     units: Array<UnitType>,
     graves: Array<GraveType>
 |};
-

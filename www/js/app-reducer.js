@@ -17,11 +17,7 @@ import auth from './components/auth/reducer';
 import type {LocaleType} from './components/locale/reducer';
 import locale from './components/locale/reducer';
 
-export {
-    auth,
-    system,
-    locale
-};
+export {auth, system, locale};
 
 export type GlobalStateType = {|
     +auth: AuthType,

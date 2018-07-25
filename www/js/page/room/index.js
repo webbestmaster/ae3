@@ -156,13 +156,20 @@ class Room extends Component<PropsType, StateType> {
         const roomId = match.params.roomId || '';
 
         if (isOnLineRoomType()) {
-            model.listenTo(socket.attr.model, 'message', async (message: SocketMessageType): Promise<void> => {
-                await view.onMessage(message);
-            });
+            model.listenTo(
+                socket.attr.model,
+                'message',
+                async (message: SocketMessageType): Promise<void> => {
+                    await view.onMessage(message);
+                }
+            );
         } else {
-            localSocketIoClient.on('message', async (message: SocketMessageType): Promise<void> => {
-                await view.onMessage(message);
-            });
+            localSocketIoClient.on(
+                'message',
+                async (message: SocketMessageType): Promise<void> => {
+                    await view.onMessage(message);
+                }
+            );
         }
     }
 
@@ -180,9 +187,7 @@ class Room extends Component<PropsType, StateType> {
         const {state} = view;
         const {userList} = state;
 
-        return userList
-            .map((userData: ServerUserType): string => userData.userId)
-            .indexOf(user.getId());
+        return userList.map((userData: ServerUserType): string => userData.userId).indexOf(user.getId());
     }
 
     async showSpinner(): Promise<void> {
@@ -246,8 +251,8 @@ class Room extends Component<PropsType, StateType> {
             userList: roomDataUsers.users
         });
 
-        roomDataSettings.settings.map.userList = roomDataUsers
-            .users.map((serverUser: ServerUserType, userIndex: number): MapUserType => {
+        roomDataSettings.settings.map.userList = roomDataUsers.users.map(
+            (serverUser: ServerUserType, userIndex: number): MapUserType => {
                 return {
                     userId: serverUser.userId,
                     money: defaultMoney,
@@ -257,7 +262,8 @@ class Room extends Component<PropsType, StateType> {
                         buyCount: 0
                     }
                 };
-            });
+            }
+        );
 
         roomDataSettings.settings.map.activeUserId = roomDataSettings.settings.map.userList[0].userId;
 
@@ -272,7 +278,8 @@ class Room extends Component<PropsType, StateType> {
         return Promise.resolve();
     }
 
-    async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    async onMessage(message: SocketMessageType): Promise<void> {
         const view = this;
         const {props, state} = view;
         const {match, history} = props;
@@ -307,17 +314,14 @@ class Room extends Component<PropsType, StateType> {
 
             case 'room__push-state':
                 // kicked from room
-                if (lastState !== null &&
-                    lastState.type === 'remove-user' &&
-                    lastState.userId === user.getId()) {
+                if (lastState !== null && lastState.type === 'remove-user' && lastState.userId === user.getId()) {
                     view.unbindEventListeners();
                     await serverApi.leaveRoom(roomId, user.getId());
                     history.goBack();
                     return Promise.resolve();
                 }
 
-                if (lastState !== null &&
-                    lastState.isGameStart === true) {
+                if (lastState !== null && lastState.isGameStart === true) {
                     console.log('---> The game has begun!!!');
 
                     view.unbindEventListeners();
@@ -346,14 +350,14 @@ class Room extends Component<PropsType, StateType> {
         const {match} = props;
         const roomId = match.params.roomId || '';
 
-        const userList: Array<ServerUserType> = state.userList
-            .map((userItem: ServerUserType, userIndex: number): ServerUserType => ({
+        const userList: Array<ServerUserType> = state.userList.map(
+            (userItem: ServerUserType, userIndex: number): ServerUserType => ({
                 socketId: userItem.socketId,
                 userId: userItem.userId,
                 teamId: mapGuide.teamIdList[userIndex],
                 type: userItem.type
-            }));
-
+            })
+        );
 
         const map: MapType | void = state.settings && state.settings.map;
 
@@ -362,11 +366,13 @@ class Room extends Component<PropsType, StateType> {
             return;
         }
 
-        [].concat(map.buildings, map.units).forEach((userItem: BuildingType | UnitType) => { // eslint-disable-line complexity
+        // eslint-disable-next-line complexity
+        [].concat(map.buildings, map.units).forEach((userItem: BuildingType | UnitType) => {
             const userItemUserId = isString(userItem.userId) ? userItem.userId : null;
 
             if (isNotString(userItem.id) || userItem.id === '') {
-                userItem.id = [userItem.x, userItem.y, Math.random()].join('_'); // eslint-disable-line no-param-reassign
+                // eslint-disable-next-line no-param-reassign
+                userItem.id = [userItem.x, userItem.y, Math.random()].join('_');
             }
 
             if (userItemUserId === null) {
@@ -382,7 +388,8 @@ class Room extends Component<PropsType, StateType> {
                 return;
             }
 
-            userItem.userId = userData.userId; // eslint-disable-line no-param-reassign
+            // eslint-disable-next-line no-param-reassign
+            userItem.userId = userData.userId;
         });
 
         /*
@@ -421,8 +428,8 @@ class Room extends Component<PropsType, StateType> {
 
         return (
             <div className={style.user_list__wrapper}>
-                {userList
-                    .map((userData: ServerUserType, userIndex: number): Node => {
+                {userList.map(
+                    (userData: ServerUserType, userIndex: number): Node => {
                         return (
                             <div
                                 className={style.user_list__item + ' ' + serviceStyle.clear_self}
@@ -439,8 +446,7 @@ class Room extends Component<PropsType, StateType> {
                                     >
                                         X
                                     </Button> :
-                                    null
-                                }
+                                    null}
                                 <div className={style.user_list__text}>
                                     <p className={serviceStyle.ellipsis}>
                                         {userIndex + 1}
@@ -449,21 +455,14 @@ class Room extends Component<PropsType, StateType> {
                                             stringKey={((userData.type === 'human' ? 'HUMAN' : 'BOT'): LangKeyType)}
                                         />
                                         {myPlayerIndex === userIndex ?
-                                            [
-                                                ' (',
-                                                <Locale
-                                                    key="you"
-                                                    stringKey={('YOU': LangKeyType)}
-                                                />,
-                                                ')'
-                                            ] :
-                                            null
-                                        }
+                                            [' (', <Locale key="you" stringKey={('YOU': LangKeyType)} />, ')'] :
+                                            null}
                                     </p>
                                 </div>
                             </div>
                         );
-                    })}
+                    }
+                )}
             </div>
         );
     }
@@ -484,13 +483,13 @@ class Room extends Component<PropsType, StateType> {
             <Form>
                 <Fieldset>
                     <FormHeader>
-                        <Locale stringKey={('PLAYERS': LangKeyType)}/>
+                        <Locale stringKey={('PLAYERS': LangKeyType)} />
                         {[' (', userList.length, '/', getMaxUserListSize(map), '):'].join('')}
                     </FormHeader>
                     {view.renderUserList()}
 
                     <FormHeader>
-                        <Locale stringKey={('MAP': LangKeyType)}/>
+                        <Locale stringKey={('MAP': LangKeyType)} />
                         :
                     </FormHeader>
                     <p className={createRoomStyle.map_size}>
@@ -528,7 +527,7 @@ class Room extends Component<PropsType, StateType> {
                     await view.hideSpinner();
                 }}
             >
-                <Locale stringKey={('START': LangKeyType)}/>
+                <Locale stringKey={('START': LangKeyType)} />
             </Button>
         ];
 
@@ -545,7 +544,7 @@ class Room extends Component<PropsType, StateType> {
                     await view.hideSpinner();
                 }}
             >
-                <Locale stringKey={('ADD_BOT': LangKeyType)}/>
+                <Locale stringKey={('ADD_BOT': LangKeyType)} />
             </Button>
         );
 
@@ -559,7 +558,7 @@ class Room extends Component<PropsType, StateType> {
                         await view.hideSpinner();
                     }}
                 >
-                    <Locale stringKey={('ADD_HUMAN': LangKeyType)}/>
+                    <Locale stringKey={('ADD_HUMAN': LangKeyType)} />
                 </Button>
             );
         }
@@ -567,7 +566,8 @@ class Room extends Component<PropsType, StateType> {
         return buttonList;
     }
 
-    render(): Node { // eslint-disable-line complexity
+    // eslint-disable-next-line complexity
+    render(): Node {
         const view = this;
         const {props, state} = view;
         const {settings, userList, isGameStart, isRoomDataFetching} = state;
@@ -575,29 +575,23 @@ class Room extends Component<PropsType, StateType> {
         const myPlayerIndex = view.getMyPlayerIndex();
 
         if (isGameStart === true) {
-            return <Game roomId={roomId}/>;
+            return <Game roomId={roomId} />;
         }
 
         return (
             <Page>
-                <Spinner isOpen={isRoomDataFetching}/>
-                <Header>
-                    {settings ?
-                        settings.map.meta[props.locale.name].name :
-                        '\u00A0'
-                    }
-                </Header>
-                <Scroll>
-                    {view.renderForm()}
-                </Scroll>
+                <Spinner isOpen={isRoomDataFetching} />
+                <Header>{settings ? settings.map.meta[props.locale.name].name : '\u00A0'}</Header>
+                <Scroll>{view.renderForm()}</Scroll>
 
                 {myPlayerIndex === 0 ?
                     <ButtonListWrapper className={style.button_list_wrapper}>
                         {view.renderMasterButtonList()}
                     </ButtonListWrapper> :
                     <BottomBar>
-                        <Locale stringKey={('WAIT_FOR_START': LangKeyType)}/>
-                    </BottomBar>}
+                        <Locale stringKey={('WAIT_FOR_START': LangKeyType)} />
+                    </BottomBar>
+                }
             </Page>
         );
     }

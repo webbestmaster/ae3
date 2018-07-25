@@ -77,20 +77,16 @@ export default class MapPreview extends Component<PropsType, StateType> {
 
         const mapSize = getMapSize(map);
 
-        const app = new PIXI.Application(
-            mapSize.width * mapGuide.size.square,
-            mapSize.height * mapGuide.size.square,
-            {
-                view: canvas,
-                autoStart: false,
-                clearBeforeRender: false,
-                sharedTicker: false,
-                sharedLoader: true,
-                transparent: true,
-                backgroundColor: 0x1099BB,
-                resolution: window.devicePixelRatio || 1
-            }
-        );
+        const app = new PIXI.Application(mapSize.width * mapGuide.size.square, mapSize.height * mapGuide.size.square, {
+            view: canvas,
+            autoStart: false,
+            clearBeforeRender: false,
+            sharedTicker: false,
+            sharedLoader: true,
+            transparent: true,
+            backgroundColor: 0x1099BB,
+            resolution: window.devicePixelRatio || 1
+        });
 
         app.stage.addChild(layer.landscape);
         app.stage.addChild(layer.buildingList);
@@ -128,7 +124,8 @@ export default class MapPreview extends Component<PropsType, StateType> {
 
         const userList = getDefaultUserList();
 
-        map.buildings.forEach((building: BuildingType) => { // eslint-disable-line complexity
+        // eslint-disable-next-line complexity
+        map.buildings.forEach((building: BuildingType) => {
             const {type} = building;
 
             let sprite: PIXI.Sprite | null = null;

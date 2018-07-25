@@ -36,10 +36,6 @@ export default class FormHeader extends Component<PropsType, StateType> {
         const {props, state} = view;
         const additionClass = isString(props.className) ? ' ' + props.className : '';
 
-        return (
-            <h4 className={style.form_header + additionClass}>
-                {props.children}
-            </h4>
-        );
+        return <h4 className={style.form_header + additionClass}>{props.children}</h4>;
     }
 }

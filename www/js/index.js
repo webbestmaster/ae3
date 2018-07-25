@@ -40,7 +40,7 @@ render(
         <BrowserRouter>
             <StoreProvider>
                 <MuiThemeProvider theme={muiTheme}>
-                    <App/>
+                    <App />
                 </MuiThemeProvider>
             </StoreProvider>
         </BrowserRouter>

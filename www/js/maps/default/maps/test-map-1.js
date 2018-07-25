@@ -41,56 +41,186 @@ export const testMap1: MapType = {
     defaultMoney: 0,
     landscape: [
         [
-            'road-0', 'road-0', 'road-0', 'road-0', 'road-0', 'water-0',
-            'water-0', 'road-0', 'road-0', 'road-0', 'road-0', 'road-0'
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'water-0',
+            'water-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0'
         ],
         [
-            'road-0', 'terra-0', 'terra-0', 'forest-0', 'road-0', 'water-0',
-            'water-0', 'road-0', 'terra-0', 'forest-0', 'terra-0', 'road-0'
+            'road-0',
+            'terra-0',
+            'terra-0',
+            'forest-0',
+            'road-0',
+            'water-0',
+            'water-0',
+            'road-0',
+            'terra-0',
+            'forest-0',
+            'terra-0',
+            'road-0'
         ],
         [
-            'road-0', 'terra-0', 'forest-0', 'forest-0', 'road-0', 'bridge-0',
-            'bridge-0', 'road-0', 'forest-0', 'terra-0', 'hill-0', 'road-0'
+            'road-0',
+            'terra-0',
+            'forest-0',
+            'forest-0',
+            'road-0',
+            'bridge-0',
+            'bridge-0',
+            'road-0',
+            'forest-0',
+            'terra-0',
+            'hill-0',
+            'road-0'
         ],
         [
-            'road-0', 'terra-0', 'hill-0', 'stone-0', 'road-0', 'terra-0',
-            'forest-0', 'road-0', 'terra-0', 'forest-0', 'terra-0', 'road-0'
+            'road-0',
+            'terra-0',
+            'hill-0',
+            'stone-0',
+            'road-0',
+            'terra-0',
+            'forest-0',
+            'road-0',
+            'terra-0',
+            'forest-0',
+            'terra-0',
+            'road-0'
         ],
         [
-            'road-0', 'road-0', 'road-0', 'road-0', 'road-0', 'stone-0',
-            'stone-0', 'road-0', 'road-0', 'road-0', 'road-0', 'road-0'
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'stone-0',
+            'stone-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0'
         ],
         [
-            'stone-0', 'hill-0', 'road-0', 'terra-0', 'stone-0', 'terra-0',
-            'terra-0', 'stone-0', 'stone-0', 'road-0', 'forest-0', 'stone-0'
+            'stone-0',
+            'hill-0',
+            'road-0',
+            'terra-0',
+            'stone-0',
+            'terra-0',
+            'terra-0',
+            'stone-0',
+            'stone-0',
+            'road-0',
+            'forest-0',
+            'stone-0'
         ],
         [
-            'terra-0', 'stone-0', 'road-0', 'road-0', 'road-0', 'road-0',
-            'road-0', 'road-0', 'road-0', 'road-0', 'stone-0', 'terra-0'
+            'terra-0',
+            'stone-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'stone-0',
+            'terra-0'
         ],
         [
-            'stone-0', 'forest-0', 'road-0', 'stone-0', 'stone-0', 'terra-0',
-            'terra-0', 'stone-0', 'terra-0', 'road-0', 'hill-0', 'stone-0'
+            'stone-0',
+            'forest-0',
+            'road-0',
+            'stone-0',
+            'stone-0',
+            'terra-0',
+            'terra-0',
+            'stone-0',
+            'terra-0',
+            'road-0',
+            'hill-0',
+            'stone-0'
         ],
         [
-            'road-0', 'road-0', 'road-0', 'road-0', 'road-0', 'stone-0',
-            'stone-0', 'road-0', 'road-0', 'road-0', 'road-0', 'road-0'
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'stone-0',
+            'stone-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0'
         ],
         [
-            'road-0', 'terra-0', 'forest-0', 'stone-0', 'road-0', 'forest-0',
-            'terra-0', 'road-0', 'stone-0', 'hill-0', 'terra-0', 'road-0'
+            'road-0',
+            'terra-0',
+            'forest-0',
+            'stone-0',
+            'road-0',
+            'forest-0',
+            'terra-0',
+            'road-0',
+            'stone-0',
+            'hill-0',
+            'terra-0',
+            'road-0'
         ],
         [
-            'road-0', 'hill-0', 'terra-0', 'forest-0', 'road-0', 'bridge-0',
-            'bridge-0', 'road-0', 'forest-0', 'forest-0', 'terra-0', 'road-0'
+            'road-0',
+            'hill-0',
+            'terra-0',
+            'forest-0',
+            'road-0',
+            'bridge-0',
+            'bridge-0',
+            'road-0',
+            'forest-0',
+            'forest-0',
+            'terra-0',
+            'road-0'
         ],
         [
-            'road-0', 'terra-0', 'forest-0', 'terra-0', 'road-0', 'water-0',
-            'water-0', 'road-0', 'forest-0', 'terra-0', 'terra-0', 'road-0'
+            'road-0',
+            'terra-0',
+            'forest-0',
+            'terra-0',
+            'road-0',
+            'water-0',
+            'water-0',
+            'road-0',
+            'forest-0',
+            'terra-0',
+            'terra-0',
+            'road-0'
         ],
         [
-            'road-0', 'road-0', 'road-0', 'road-0', 'road-0', 'water-0',
-            'water-0', 'road-0', 'road-0', 'road-0', 'road-0', 'road-0'
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'water-0',
+            'water-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0',
+            'road-0'
         ]
     ],
     buildings: [
@@ -119,4 +249,3 @@ export const testMap1: MapType = {
     ],
     graves: []
 };
-

@@ -11,7 +11,8 @@ type SavedDataType = {|
     id?: string
 |};
 
-const userLocalStorageField = PROJECT_ID + '-user-data-v.1.0'; // eslint-disable-line id-match
+// eslint-disable-next-line id-match
+const userLocalStorageField = PROJECT_ID + '-user-data-v.1.0';
 
 export default class User {
     attr: UserAttrType;

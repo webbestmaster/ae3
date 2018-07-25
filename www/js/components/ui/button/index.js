@@ -36,10 +36,7 @@ export default class Button extends Component<PropsType, StateType> {
         const additionClass = isString(props.className) ? ' ' + props.className : '';
 
         return (
-            <div
-                className={style.button + additionClass}
-                onClick={isFunction(props.onClick) ? props.onClick : null}
-            >
+            <div className={style.button + additionClass} onClick={isFunction(props.onClick) ? props.onClick : null}>
                 {props.children}
             </div>
         );

@@ -50,7 +50,8 @@ type MouseEventNameType = 'click' | 'mousedown' | 'mouseup';
 type TouchEventNameType = 'tap' | 'touchstart' | 'touchend';
 
 declare module 'pixi.js' {
-    declare export var SCALE_MODES: {| // eslint-disable-line id-match
+    // eslint-disable-next-line id-match
+    declare export var SCALE_MODES: {|
         +LINEAR: 0,
         +NEAREST: 1
     |};
@@ -142,5 +143,5 @@ declare module 'pixi.js' {
 
     declare export var extras: {
         AnimatedSprite: typeof AnimatedSprite
-    }
+    };
 }

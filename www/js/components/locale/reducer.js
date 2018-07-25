@@ -24,8 +24,7 @@ export type LocaleType = {|
 |};
 
 export default combineReducers({
-    name: (localeName: LocaleNameType = initialLocaleName,
-           {type, payload}: SetLocaleType): LocaleNameType => {
+    name: (localeName: LocaleNameType = initialLocaleName, {type, payload}: SetLocaleType): LocaleNameType => {
         if (type !== localeConst.action.type.setLocale) {
             return localeName;
         }

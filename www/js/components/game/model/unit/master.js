@@ -19,7 +19,8 @@ import UnitSorceress from './sorceress';
 import UnitValadorn from './valadorn';
 import UnitWisp from './wisp';
 
-export function createUnit(unitConstructor: UnitConstructorType): Unit { // eslint-disable-line complexity
+// eslint-disable-next-line complexity
+export function createUnit(unitConstructor: UnitConstructorType): Unit {
     const type = unitConstructor.unitData.type;
 
     switch (type) {
@@ -77,4 +78,3 @@ export function createUnit(unitConstructor: UnitConstructorType): Unit { // esli
 
     return new UnitSoldier(unitConstructor);
 }
-

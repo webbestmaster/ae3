@@ -6,7 +6,8 @@ export function fillActionMap(src: UnitActionsMapType, target: UnitActionsMapTyp
     src.forEach((lineAction: Array<Array<UnitActionType>>, yCell: number) => {
         lineAction.forEach((cellAction: Array<UnitActionType>, xCell: number) => {
             if (cellAction[0]) {
-                target[yCell][xCell][0] = cellAction[0]; // eslint-disable-line no-param-reassign
+                // eslint-disable-next-line no-param-reassign
+                target[yCell][xCell][0] = cellAction[0];
             }
         });
     });

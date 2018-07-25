@@ -15,7 +15,6 @@ export function setUser(userState: UserType): SetUserType {
     };
 }
 
-
 export type SetSocketType = {|
     type: 'auth__set-socket-state',
     payload: SocketType

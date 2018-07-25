@@ -76,7 +76,8 @@ export default class Render {
         };
     }
 
-    initialize(setting: InitializeConfigType) { // eslint-disable-line max-statements
+    // eslint-disable-next-line max-statements
+    initialize(setting: InitializeConfigType) {
         const render = this;
 
         render.map = JSON.parse(JSON.stringify(setting.map));
@@ -142,7 +143,8 @@ export default class Render {
                 if (touches.length > 1) {
                     await render.cleanActionsList();
                 }
-            });
+            }
+        );
 
         wrapper.addEventListener(
             'touchend',
@@ -152,13 +154,15 @@ export default class Render {
                 if (touches.length !== 0) {
                     await render.cleanActionsList();
                 }
-            });
+            }
+        );
 
         wrapper.addEventListener(
             'touchcancel',
             async (): Promise<void> => {
                 await render.cleanActionsList();
-            });
+            }
+        );
     }
 
     moveCenterTo(x: number, y: number) {
@@ -203,7 +207,7 @@ export default class Render {
         */
     }
 
-    getWorldSize(): { width: number, height: number } {
+    getWorldSize(): {width: number, height: number} {
         const render = this;
         const {map} = render;
 
@@ -232,12 +236,7 @@ export default class Render {
         const worldSize = render.getWorldSize();
 
         render.app.renderer.resize(width, height);
-        viewport.resize(
-            width,
-            height,
-            worldSize.width,
-            worldSize.height
-        );
+        viewport.resize(width, height, worldSize.width, worldSize.height);
 
         const {square} = mapGuide.size;
         const worldSizeQ = square * 12;
@@ -270,9 +269,12 @@ export default class Render {
                 container.buttonMode = true;
                 container.interactive = true;
 
-                bindClick(container, async (): Promise<void> => {
-                    await onClick(tileX, tileY);
-                });
+                bindClick(
+                    container,
+                    async (): Promise<void> => {
+                        await onClick(tileX, tileY);
+                    }
+                );
 
                 // TODO: draw here corner and other landscape parts
             });
@@ -305,7 +307,8 @@ export default class Render {
         actionsList.forEach((mapLine: Array<Array<UnitActionType>>) => {
             mapLine.forEach((actionList: Array<UnitActionType>) => {
                 // check here action count, if 2 or more - make select action button
-                actionList.forEach((unitAction: UnitActionType) => { // eslint-disable-line complexity
+                // eslint-disable-next-line complexity
+                actionList.forEach((unitAction: UnitActionType) => {
                     switch (unitAction.type) {
                         case 'move':
                             render.drawActionMove(unitAction);
@@ -471,7 +474,7 @@ export default class Render {
             {x: aggressorUnit.attr.x, y: aggressorUnit.attr.y},
             {x: defenderUnit.attr.x, y: defenderUnit.attr.y},
             defaultUnitData.animation.attack,
-            (coordinates: { x: number, y: number }) => {
+            (coordinates: {x: number, y: number}) => {
                 attackSprite.position.set(coordinates.x * mapGuide.size.square, coordinates.y * mapGuide.size.square);
             }
         );
@@ -492,7 +495,7 @@ export default class Render {
             {x: destroyerUnit.attr.x, y: destroyerUnit.attr.y},
             {x: building.attr.x, y: building.attr.y},
             defaultUnitData.animation.attack,
-            (coordinates: { x: number, y: number }) => {
+            (coordinates: {x: number, y: number}) => {
                 attackSprite.position.set(coordinates.x * mapGuide.size.square, coordinates.y * mapGuide.size.square);
             }
         );
@@ -502,7 +505,8 @@ export default class Render {
         return Promise.resolve();
     }
 
-    drawBorder(width: number, height: number) { // eslint-disable-line max-statements
+    // eslint-disable-next-line max-statements
+    drawBorder(width: number, height: number) {
         const render = this;
         const {mainContainer} = render;
         const {square} = mapGuide.size;

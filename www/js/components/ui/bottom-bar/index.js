@@ -44,9 +44,7 @@ class BottomBar extends Component<PropsType, StateType> {
                 onClick={isFunction(props.onClick) ? props.onClick : null}
             >
                 <div className={style.bottom_bar__text}>
-                    <p className={servicesStyle.ellipsis}>
-                        {props.children}
-                    </p>
+                    <p className={servicesStyle.ellipsis}>{props.children}</p>
                 </div>
             </div>
         );

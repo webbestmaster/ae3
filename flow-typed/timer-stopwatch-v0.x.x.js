@@ -15,7 +15,6 @@
  * https://github.com/flowtype/flow-typed
  */
 
-
 declare module 'timer-stopwatch' {
     declare class Stopwatch {
         constructor(time: number): Stopwatch,
@@ -24,7 +23,7 @@ declare module 'timer-stopwatch' {
         onDone(callBack: () => void): void
     }
 
-    declare module.exports: (time: number) => Stopwatch
+    declare module.exports: (time: number) => Stopwatch;
 }
 
 /*

@@ -1,5 +1,4 @@
 // @flow
 import Unit from './..';
 
-export default class Golem extends Unit {
-}
+export default class Golem extends Unit {}

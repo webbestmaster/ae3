@@ -1,81 +1,75 @@
 /*jslint white: true, nomen: true */
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window */
+    /*global */
 
-	"use strict";
-	/*global window */
-	/*global */
+    win.APP.soundMaster = win.APP.soundMaster || {};
 
-	win.APP.soundMaster = win.APP.soundMaster || {};
+    win.APP.soundMaster.webPlayer = {
+        roads: new Array(4),
 
-	win.APP.soundMaster.webPlayer = {
+        pathPrefix: 'sounds/',
 
-		roads: new Array(4),
+        init: function() {
+            var player = this;
 
-		pathPrefix: 'sounds/',
+            player.roads = _.map(player.roads, function() {
+                return new Audio();
+            });
+        },
 
-		init: function () {
+        play: function(data) {
+            var player = this,
+                roadNumber = data.road,
+                isLoop = data.isLoop,
+                sound = data.sound,
+                newAudio;
 
-			var player = this;
+            player.stop(data);
 
-			player.roads = _.map(player.roads, function () {
-				return new Audio();
-			});
+            newAudio = new Audio();
+            if (isLoop) {
+                newAudio.addEventListener(
+                    'ended',
+                    function() {
+                        if (win.APP.info.get('music') === 'off') {
+                            return;
+                        }
+                        var audio = this;
+                        audio.currentTime = 0;
+                        audio.play();
+                    },
+                    false
+                );
+            }
 
-		},
+            newAudio.addEventListener('canplay', function() {
+                if (win.APP.info.get('music') === 'off') {
+                    return;
+                }
+                var audio = this;
+                audio.play();
+            });
 
-		play: function (data) {
+            player.roads[roadNumber].src = '';
+            player.roads[roadNumber] = newAudio;
 
-			var player = this,
-				roadNumber = data.road,
-				isLoop = data.isLoop,
-				sound = data.sound,
-				newAudio;
+            newAudio.src = player.pathPrefix + sound;
+        },
 
-			player.stop(data);
+        stop: function(data) {
+            var player = this,
+                roadNumber = data.road,
+                road = player.roads[roadNumber];
 
-			newAudio = new Audio();
-			if (isLoop) {
-				newAudio.addEventListener('ended', function() {
-					if ( win.APP.info.get('music') === 'off' ) {
-						return;
-					}
-					var audio = this;
-					audio.currentTime = 0;
-					audio.play();
-				}, false);
-			}
+            if (road && road.pause) {
+                road.pause();
+            }
 
-			newAudio.addEventListener('canplay', function () {
-				if ( win.APP.info.get('music') === 'off' ) {
-					return;
-				}
-				var audio = this;
-				audio.play();
-			});
-
-			player.roads[roadNumber].src = '';
-			player.roads[roadNumber] = newAudio;
-
-			newAudio.src = player.pathPrefix + sound;
-
-		},
-
-		stop: function (data) {
-
-			var player = this,
-				roadNumber = data.road,
-				road = player.roads[roadNumber];
-
-			if (road && road.pause) {
-				road.pause();
-			}
-
-			if (road && road.currentTime && road.currentTime < 0.1) {
-				road.currentTime = 0;
-			}
-
-		}
-
-	}
-
-}(window));
+            if (road && road.currentTime && road.currentTime < 0.1) {
+                road.currentTime = 0;
+            }
+        }
+    };
+})(window);

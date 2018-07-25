@@ -11,8 +11,10 @@ import style from './style.scss';
 
 const theme = createMuiTheme({
     overrides: {
-        MuiPaper: { // Name of the component ⚛️ / style sheet
-            root: { // Name of the rule
+        MuiPaper: {
+            // Name of the component ⚛️ / style sheet
+            root: {
+                // Name of the rule
                 // Some CSS
                 boxShadow: 'none !important',
                 backgroundColor: 'transparent !important'
@@ -42,10 +44,9 @@ export default class Spinner extends Component<PropsType, StateType> {
                     aria-labelledby="alert-dialog-slide-title"
                     aria-describedby="alert-dialog-slide-description"
                 >
-                    <div className={style.spinner}/>
+                    <div className={style.spinner} />
                 </Dialog>
             </MuiThemeProvider>
-
         );
     }
 }

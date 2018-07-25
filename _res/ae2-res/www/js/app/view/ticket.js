@@ -1,114 +1,97 @@
 /*jslint white: true, nomen: true */
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global console, alert, window, document, setTimeout */
+    /*global APP, $, Backbone*/
 
-	"use strict";
-	/*global console, alert, window, document, setTimeout */
-	/*global APP, $, Backbone*/
+    win.APP = win.APP || {};
 
-	win.APP = win.APP || {};
+    win.APP.BB = win.APP.BB || {};
 
-	win.APP.BB = win.APP.BB || {};
+    APP.BB.TicketView = APP.BB.BaseView.extend({
+        events: {},
 
-	APP.BB.TicketView = APP.BB.BaseView.extend({
+        selectors: {},
 
-		events: {
+        initialize: function(data) {
+            var view = this,
+                timeoutId;
 
-		},
+            view.extendFromObj(data); // popupName, parentView, popupData(objToView)
 
-		selectors: {
+            view.$el = $(view.tmpl['ticket-wrapper'](data.popupData));
 
-		},
+            if (data.cssClass) {
+                view.$el.addClass(data.cssClass);
+            }
 
-		initialize: function(data) {
+            view.proto.initialize.apply(this, arguments);
 
-			var view = this,
-				timeoutId;
+            view.bindEventListeners();
 
-			view.extendFromObj(data); // popupName, parentView, popupData(objToView)
+            view.render();
 
-			view.$el = $(view.tmpl['ticket-wrapper'](data.popupData));
+            view.showInAnimation();
 
-			if (data.cssClass) {
-				view.$el.addClass(data.cssClass);
-			}
+            timeoutId = setTimeout(function() {
+                view.hide();
+            }, view.info.actionTime() * 6);
 
-			view.proto.initialize.apply(this, arguments);
+            view.set('timeoutId', timeoutId);
+        },
 
-			view.bindEventListeners();
+        bindEventListeners: function() {
+            var view = this;
+            view.$el.on('click', $.proxy(view, 'hide'));
+        },
 
-			view.render();
+        unbindEventListeners: function() {
+            var view = this;
+            view.$el.off('click', view.hide);
+            clearTimeout(view.get('timeoutId'));
+        },
 
-			view.showInAnimation();
+        render: function() {
+            var view = this,
+                playSound = view.get('playSound');
 
-			timeoutId = setTimeout(function () {
-				view.hide();
-			}, view.info.actionTime() * 6);
+            if (playSound) {
+                win.APP.soundMaster.play(playSound);
+            }
 
-			view.set('timeoutId', timeoutId);
+            view.$wrapper.append(view.$el);
+        },
 
-		},
+        hide: function() {
+            var view = this;
 
-		bindEventListeners: function () {
-			var view = this;
-			view.$el.on('click', $.proxy(view, 'hide' ));
-		},
+            view.showOutAnimation().then(function() {
+                view.proto.hide.call(view);
+                view.get('deferred').resolve();
+            });
+        },
 
-		unbindEventListeners: function () {
-			var view = this;
-			view.$el.off('click', view.hide );
-			clearTimeout(view.get('timeoutId'));
-		},
+        showInAnimation: function() {
+            var view = this;
+            setTimeout(function() {
+                // show animation
+                view.$el.addClass('show-in');
+            }, 50);
+        },
 
-		render: function () {
+        showOutAnimation: function() {
+            var view = this,
+                $el = view.$el,
+                deferred = $.Deferred(),
+                transitionEnd = view.info.get('transitionEnd', true);
 
-			var view = this,
-				playSound = view.get('playSound');
+            $el.one(transitionEnd, function() {
+                deferred.resolve();
+            }); // work only one time
 
-			if (playSound) {
-				win.APP.soundMaster.play(playSound);
-			}
+            $el.addClass('show-out');
 
-			view.$wrapper.append(view.$el);
-
-		},
-
-		hide: function () {
-
-			var view = this;
-
-			view.showOutAnimation().then(function () {
-				view.proto.hide.call(view);
-				view.get('deferred').resolve();
-			});
-
-		},
-
-		showInAnimation: function () {
-
-			var view = this;
-			setTimeout(function () { // show animation
-				view.$el.addClass('show-in');
-			}, 50);
-
-		},
-
-		showOutAnimation: function () {
-
-			var view = this,
-				$el = view.$el,
-				deferred = $.Deferred(),
-				transitionEnd = view.info.get('transitionEnd', true);
-
-			$el.one(transitionEnd, function () {
-				deferred.resolve();
-			}); // work only one time
-
-			$el.addClass('show-out');
-
-			return deferred.promise();
-
-		}
-
-	});
-
-}(window));
+            return deferred.promise();
+        }
+    });
+})(window);

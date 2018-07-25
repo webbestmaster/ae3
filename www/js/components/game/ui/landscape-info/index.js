@@ -20,13 +20,9 @@ const iconsReqContext = require.context('./i/landscape', true, /\.svg$/);
 
 const iconMap = {};
 
-iconsReqContext.keys()
-    .forEach((fileName: string) => {
-        Object.assign(
-            iconMap,
-            {[fileName.replace('./', '').replace('.svg', '')]: iconsReqContext(fileName)}
-        );
-    });
+iconsReqContext.keys().forEach((fileName: string) => {
+    Object.assign(iconMap, {[fileName.replace('./', '').replace('.svg', '')]: iconsReqContext(fileName)});
+});
 
 export default class LandscapeInfo extends Component<PropsType, StateType> {
     props: PropsType;
@@ -47,14 +43,8 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
 
         return (
             <div className={style.wrapper}>
-                <p className={style.armor}>
-                    {gameData.armorMap.walk[y][x]}
-                </p>
-                <img
-                    className={style.image}
-                    src={iconMap[map.landscape[y][x]]}
-                    alt=""
-                />
+                <p className={style.armor}>{gameData.armorMap.walk[y][x]}</p>
+                <img className={style.image} src={iconMap[map.landscape[y][x]]} alt="" />
             </div>
         );
     }

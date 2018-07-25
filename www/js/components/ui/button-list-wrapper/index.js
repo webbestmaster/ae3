@@ -47,9 +47,7 @@ export default class ButtonListWrapper extends Component<PropsType, StateType> {
 
         return (
             <div className={style.button_list_wrapper + additionClass}>
-                <div className={style.button_list_container}>
-                    {props.children}
-                </div>
+                <div className={style.button_list_container}>{props.children}</div>
             </div>
         );
     }

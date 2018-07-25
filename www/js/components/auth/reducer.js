@@ -16,7 +16,6 @@ const defaultUserState: UserType = {
     id: ''
 };
 
-
 export type SocketType = {|
     +id: string
 |};
@@ -25,7 +24,6 @@ const defaultSocketState: SocketType = {
     id: ''
 };
 
-
 // module
 export type AuthType = {|
     +user: UserType,
@@ -33,16 +31,14 @@ export type AuthType = {|
 |};
 
 export default combineReducers({
-    user: (userState: UserType = defaultUserState,
-           {type, payload}: SetUserType): UserType => {
+    user: (userState: UserType = defaultUserState, {type, payload}: SetUserType): UserType => {
         if (type !== authConst.action.type.setUserState) {
             return userState;
         }
 
         return payload;
     },
-    socket: (socketState: SocketType = defaultSocketState,
-             {type, payload}: SetSocketType): SocketType => {
+    socket: (socketState: SocketType = defaultSocketState, {type, payload}: SetSocketType): SocketType => {
         if (type !== authConst.action.type.setSocketState) {
             return socketState;
         }

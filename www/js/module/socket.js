@@ -9,8 +9,9 @@ import MainModel from './../lib/main-model';
 import type {PushedStatePayloadType} from './server-api';
 
 type AttrType = {|
-    initialPromise: Promise<Socket>, // eslint-disable-line no-use-before-define
-    socket: { id: string } | null,
+    // eslint-disable-next-line no-use-before-define
+    initialPromise: Promise<Socket>,
+    socket: {id: string} | null,
     model: MainModel
 |};
 
@@ -42,7 +43,10 @@ export default class Socket {
                 'force new connection': true
             };
 
-            const socketIo = socketIoClient.connect(appConst.api.url, options);
+            const socketIo = socketIoClient.connect(
+                appConst.api.url,
+                options
+            );
 
             socketIo.on('message', (message: string | void) => {
                 console.log('---> SW:', message);
@@ -75,7 +79,6 @@ export default class Socket {
 const socketModel = new Socket();
 
 export {socketModel as socket};
-
 
 // socket message
 type SocketMessageJoinIntoRoomType = {|
@@ -156,7 +159,8 @@ export type SocketMessagePushStateType = {|
     |}
 |};
 
-export type SocketMessageType = SocketMessageJoinIntoRoomType
+export type SocketMessageType =
+    | SocketMessageJoinIntoRoomType
     | SocketMessageLeaveFromRoomType
     | SocketMessageUserDisconnectedFromRoomType
     | SocketMessageTakeTurnType

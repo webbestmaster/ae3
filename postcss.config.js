@@ -1,4 +1,5 @@
-module.exports = ({file, options, env}) => ({ // eslint-disable-line no-unused-vars
+module.exports = ({file, options, env}) => ({
+    // eslint-disable-line no-unused-vars
     parser: false,
     // parser: file.extname === '.sss' ? 'sugarss' : false,
 
@@ -7,13 +8,7 @@ module.exports = ({file, options, env}) => ({ // eslint-disable-line no-unused-v
         // 'postcss-cssnext': options.cssnext ? options.cssnext : false,
         autoprefixer: {
             add: true,
-            browsers: [
-                'Chrome 20',
-                'Safari 5',
-                'Edge 12',
-                'Explorer 8',
-                'Firefox 15'
-            ]
+            browsers: ['Chrome 20', 'Safari 5', 'Edge 12', 'Explorer 8', 'Firefox 15']
         }
     }
 });

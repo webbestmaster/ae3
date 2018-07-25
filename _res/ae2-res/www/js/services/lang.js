@@ -1,29 +1,25 @@
 /*jslint white: true, nomen: true */ // http://www.jslint.com/lint.html#options
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window */
+    /*global APP */
 
-	"use strict";
-	/*global window */
-	/*global APP */
+    win.APP = win.APP || {};
 
-	win.APP = win.APP || {};
+    var lang = {
+        attr: {},
 
-	var lang = {
+        set: function(lang) {
+            this.attr = APP.languages[lang];
+        },
 
-		attr: {},
+        get: function(key) {
+            return key ? this.attr[key] : this.attr;
+        }
+    };
 
-		set: function (lang) {
-			this.attr = APP.languages[lang];
-		},
+    // default language
+    lang.set(APP.info.get('language'));
 
-		get: function (key) {
-			return key ? this.attr[key] : this.attr;
-		}
-
-	};
-
-	// default language
-	lang.set( APP.info.get('language') );
-
-	APP.lang = lang;
-
-}(window));
+    APP.lang = lang;
+})(window);

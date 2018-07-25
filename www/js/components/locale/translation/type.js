@@ -26,4 +26,5 @@ export type LangDataType = {|
     /* eslint-enable id-match */
 |};
 
-export type LangKeyType = $Keys<LangDataType>; // eslint-disable-line id-match
+// eslint-disable-next-line id-match
+export type LangKeyType = $Keys<LangDataType>;

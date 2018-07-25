@@ -90,18 +90,8 @@ const mapGuide: MapGuideType = {
         '3'
     ],
     */
-    teamIdList: [
-        'team-0',
-        'team-1',
-        'team-2',
-        'team-3'
-    ],
-    colorList: [
-        'red',
-        'blue',
-        'green',
-        'black'
-    ],
+    teamIdList: ['team-0', 'team-1', 'team-2', 'team-3'],
+    colorList: ['red', 'blue', 'green', 'black'],
     size: {
         square: 24
     },

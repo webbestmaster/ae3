@@ -1,68 +1,59 @@
 /*jslint white: true, nomen: true */
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window, console */
+    /*global */
 
-	'use strict';
-	/*global window, console */
-	/*global */
+    win.Android = win.Android || {
+        displayInterstitial: function() {
+            console.log('AD - ad has been shown !!!');
+        }
+    };
 
-	win.Android = win.Android || {
-			displayInterstitial: function () {
-				console.log('AD - ad has been shown !!!');
-			}
-		};
+    var info = win.APP.info,
+        androidAds = {
+            attr: {},
+            minShowPeriod: 4 * 60e3,
+            set: function(key, value) {
+                this.attr[key] = value;
+                return this;
+            },
+            get: function(key) {
+                return this.attr[key];
+            },
+            showAd: function() {
+                var ad = this,
+                    now;
 
-	var info = win.APP.info,
+                console.log('AD - --------------');
+                console.log('AD - try to show ad');
 
-		androidAds = {
-			attr: {},
-			minShowPeriod: 4 * 60e3,
-			set: function (key, value) {
-				this.attr[key] = value;
-				return this;
-			},
-			get: function (key) {
-				return this.attr[key];
-			},
-			showAd: function () {
+                if (!info.withAds) {
+                    return;
+                }
 
-				var ad = this,
-					now;
+                console.log('AD - app WITH ads');
 
-				console.log('AD - --------------');
-				console.log('AD - try to show ad');
+                now = Date.now();
 
-				if (!info.withAds) {
-					return;
-				}
+                if (now - ad.get('lastShow') >= ad.minShowPeriod) {
+                    ad.set('lastShow', now);
+                    win.Android.displayInterstitial();
+                } else {
+                    console.log('AD - time from last show is not over');
+                }
+            },
 
-				console.log('AD - app WITH ads');
+            init: function() {
+                var ad = this;
 
-				now = Date.now();
+                ad.set('lastShow', 0);
 
-				if (now - ad.get('lastShow') >= ad.minShowPeriod) {
-					ad.set('lastShow', now);
-					win.Android.displayInterstitial();
-				} else {
-					console.log('AD - time from last show is not over');
-				}
+                ad.showAd = ad.showAd.bind(ad);
+            }
+        };
 
-			},
+    androidAds.init();
 
-			init: function () {
-
-				var ad = this;
-
-				ad.set('lastShow', 0);
-
-				ad.showAd = ad.showAd.bind(ad);
-
-			}
-
-		};
-
-	androidAds.init();
-
-	win.APP.androidAds = androidAds;
-
-}(window));
-
+    win.APP.androidAds = androidAds;
+})(window);

@@ -1,16 +1,16 @@
 // @flow
 
-
 const {Tween} = require('@tweenjs/tween.js');
 
 type TweenOptionsType = {||};
 
-
-export function tween<T>(from: T,
-                         to: T,
-                         time: number,
-                         onUpdate: (tweenObject: T) => void,
-                         options?: TweenOptionsType): Promise<T> {
+export function tween<T>(
+    from: T,
+    to: T,
+    time: number,
+    onUpdate: (tweenObject: T) => void,
+    options?: TweenOptionsType
+): Promise<T> {
     return new Promise((resolve: (from: T) => void) => {
         new Tween(from)
             .to(to, time)
@@ -24,11 +24,12 @@ export function tween<T>(from: T,
     });
 }
 
-
-export function tweenList<T>(pointList: Array<T>,
-                             timeForEachTween: number,
-                             onUpdate: (tweenObject: T) => void,
-                             options?: TweenOptionsType): Promise<T | null> {
+export function tweenList<T>(
+    pointList: Array<T>,
+    timeForEachTween: number,
+    onUpdate: (tweenObject: T) => void,
+    options?: TweenOptionsType
+): Promise<T | null> {
     let chain = Promise.resolve(null);
 
     pointList.forEach((innerTween: T, innerTweenIndex: number) => {

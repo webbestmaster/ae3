@@ -51,14 +51,14 @@ import iconUnitGreen from './ui/icon/unit-green.svg';
 import iconUnitBlack from './ui/icon/unit-black.svg';
 import type {LandscapeType} from './../../maps/type';
 
-const unitIconMap: { [key: UserColorType]: string } = {
+const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,
     blue: iconUnitBlue,
     green: iconUnitGreen,
     black: iconUnitBlack
 };
 
-const bottomBarColorMap: { [key: UserColorType]: string } = {
+const bottomBarColorMap: {[key: UserColorType]: string} = {
     red: style.bottom_bar__color_red,
     blue: style.bottom_bar__color_blue,
     green: style.bottom_bar__color_green,
@@ -225,14 +225,16 @@ export class GameView extends Component<PropsType, StateType> {
         const {model} = state;
 
         if (isOnLineRoomType()) {
-            model.listenTo(socket.attr.model,
+            model.listenTo(
+                socket.attr.model,
                 'message',
                 async (message: SocketMessageType): Promise<void> => {
                     await view.onMessage(message);
                 }
             );
         } else {
-            localSocketIoClient.on('message',
+            localSocketIoClient.on(
+                'message',
                 async (message: SocketMessageType): Promise<void> => {
                     await view.onMessage(message);
                 }
@@ -240,7 +242,8 @@ export class GameView extends Component<PropsType, StateType> {
         }
     }
 
-    async onMessage(message: SocketMessageType): Promise<void> { // eslint-disable-line complexity
+    // eslint-disable-next-line complexity
+    async onMessage(message: SocketMessageType): Promise<void> {
         const view = this;
         const {props, state} = view;
         const {model} = state;
@@ -248,14 +251,15 @@ export class GameView extends Component<PropsType, StateType> {
         let allUserResponse = null;
 
         // need just for debug
-        view.setState((prevState: StateType): StateType => {
-            prevState.socketMessageList.push(message);
-            return prevState;
-        });
+        view.setState(
+            (prevState: StateType): StateType => {
+                prevState.socketMessageList.push(message);
+                return prevState;
+            }
+        );
 
         switch (message.type) {
             case 'room__take-turn':
-
                 view.setState({activeUserId: message.states.last.activeUserId});
 
                 break;
@@ -271,7 +275,6 @@ export class GameView extends Component<PropsType, StateType> {
                 break;
 
             case 'room__push-state':
-
                 // view.forceUpdate();
                 // view.setState({activeUserId: message.states.last.state.activeUserId});
                 // if (message.states.last.state.map) {
@@ -283,7 +286,6 @@ export class GameView extends Component<PropsType, StateType> {
                 break;
 
             case 'room__drop-turn':
-
                 break;
 
             default:
@@ -316,13 +318,15 @@ export class GameView extends Component<PropsType, StateType> {
         if (wrongStateList !== null) {
             await game.showWrongState(wrongStateList[0]);
             // TODO: add snack bar with error state;
-            window.alert('Please, resolve a problem:' + JSON.stringify(wrongStateList[0])); // eslint-disable-line no-alert
+            // eslint-disable-next-line no-alert
+            window.alert('Please, resolve a problem:' + JSON.stringify(wrongStateList[0]));
             return Promise.resolve();
         }
 
         view.addDisableReason('client-drop-turn');
 
-        return serverApi.dropTurn(roomId, user.getId())
+        return serverApi
+            .dropTurn(roomId, user.getId())
             .catch((error: Error) => {
                 console.error('Drop turn error');
                 console.log(error);
@@ -338,41 +342,47 @@ export class GameView extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
-        view.setState((prevState: StateType): StateType => {
-            const newDisabledByList = JSON.parse(JSON.stringify(prevState.disabledByList));
+        view.setState(
+            (prevState: StateType): StateType => {
+                const newDisabledByList = JSON.parse(JSON.stringify(prevState.disabledByList));
 
-            if (newDisabledByList.includes(reason)) {
-                console.warn('--->', reason, 'already exists in newDisabledByList');
+                if (newDisabledByList.includes(reason)) {
+                    console.warn('--->', reason, 'already exists in newDisabledByList');
+                    return prevState;
+                }
+
+                newDisabledByList.push(reason);
+
+                // eslint-disable-next-line no-param-reassign
+                prevState.disabledByList = newDisabledByList;
+
                 return prevState;
             }
-
-            newDisabledByList.push(reason);
-
-            prevState.disabledByList = newDisabledByList; // eslint-disable-line no-param-reassign
-
-            return prevState;
-        });
+        );
     }
 
     removeDisableReason(reason: DisabledByItemType) {
         const view = this;
         const {props, state} = view;
 
-        view.setState((prevState: StateType): StateType => {
-            const newDisabledByList = JSON.parse(JSON.stringify(prevState.disabledByList));
-            const reasonIndex = newDisabledByList.indexOf(reason);
+        view.setState(
+            (prevState: StateType): StateType => {
+                const newDisabledByList = JSON.parse(JSON.stringify(prevState.disabledByList));
+                const reasonIndex = newDisabledByList.indexOf(reason);
 
-            if (reasonIndex === -1) {
-                console.error('ERROR: reason is not exists in disabledByList', reason, view);
+                if (reasonIndex === -1) {
+                    console.error('ERROR: reason is not exists in disabledByList', reason, view);
+                    return prevState;
+                }
+
+                newDisabledByList.splice(reasonIndex, 1);
+
+                // eslint-disable-next-line no-param-reassign
+                prevState.disabledByList = newDisabledByList;
+
                 return prevState;
             }
-
-            newDisabledByList.splice(reasonIndex, 1);
-
-            prevState.disabledByList = newDisabledByList; // eslint-disable-line no-param-reassign
-
-            return prevState;
-        });
+        );
     }
 
     showEndGame() {
@@ -381,14 +391,18 @@ export class GameView extends Component<PropsType, StateType> {
 
         view.addDisableReason('end-game-popup');
 
-        view.setState((prevState: StateType): StateType => {
-            prevState.popup.endGame.isOpen = true; // eslint-disable-line no-param-reassign
+        view.setState(
+            (prevState: StateType): StateType => {
+                // eslint-disable-next-line no-param-reassign
+                prevState.popup.endGame.isOpen = true;
 
-            return prevState;
-        });
+                return prevState;
+            }
+        );
     }
 
-    renderEndGameDialog(): Node | null { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    renderEndGameDialog(): Node | null {
         const view = this;
         const {props, state} = view;
         const {popup} = state;
@@ -436,14 +450,12 @@ export class GameView extends Component<PropsType, StateType> {
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle id="alert-dialog-slide-title">
-                    {isWinner ? 'You win!' : 'You loose :('}
-                </DialogTitle>
+                <DialogTitle id="alert-dialog-slide-title">{isWinner ? 'You win!' : 'You loose :('}</DialogTitle>
             </Dialog>
         );
     }
 
-    getStoreState(): {| isOpen: boolean |} {
+    getStoreState(): {|isOpen: boolean|} {
         const view = this;
         const {props, state} = view;
         const queryData = queryString.parse(props.location.search);
@@ -470,15 +482,19 @@ export class GameView extends Component<PropsType, StateType> {
             view.removeDisableReason('change-active-user-popup');
         }
 
-        view.setState((prevState: StateType): StateType => {
-            prevState.popup.changeActiveUser.isOpen = state.isOpen; // eslint-disable-line no-param-reassign
-            prevState.popup.changeActiveUser.showMoney = isBoolean(state.showMoney) ? state.showMoney : true; // eslint-disable-line no-param-reassign
-
-            return prevState;
-        });
+        view.setState(
+            (prevState: StateType): StateType => {
+                // eslint-disable-next-line no-param-reassign
+                prevState.popup.changeActiveUser.isOpen = state.isOpen;
+                // eslint-disable-next-line no-param-reassign
+                prevState.popup.changeActiveUser.showMoney = isBoolean(state.showMoney) ? state.showMoney : true;
+                return prevState;
+            }
+        );
     }
 
-    renderPopupChangeActiveUserDialog(): Node | null { // eslint-disable-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements
+    renderPopupChangeActiveUserDialog(): Node | null {
         const view = this;
         const {props, state} = view;
         const {popup} = state;
@@ -546,9 +562,7 @@ export class GameView extends Component<PropsType, StateType> {
                 aria-describedby="alert-dialog-slide-description"
             >
                 <DialogTitle id="alert-dialog-slide-title">
-                    {activeUserId === userId ?
-                        'your turn' + earnedString :
-                        'wait for: ' + activeUserColor}
+                    {activeUserId === userId ? 'your turn' + earnedString : 'wait for: ' + activeUserColor}
                 </DialogTitle>
             </Dialog>
         );
@@ -577,17 +591,11 @@ export class GameView extends Component<PropsType, StateType> {
             return null;
         }
 
-        return (
-            <Store
-                key="store"
-                x={parseInt(queryData.x, 10)}
-                y={parseInt(queryData.y, 10)}
-                map={mapState}
-            />
-        );
+        return <Store key="store" x={parseInt(queryData.x, 10)} y={parseInt(queryData.y, 10)} map={mapState} />;
     }
 
-    renderBottomBar(): Node { // eslint-disable-line complexity
+    // eslint-disable-next-line complexity
+    renderBottomBar(): Node {
         const view = this;
         const {state} = view;
         const mapState = state.game.getMapState();
@@ -623,19 +631,11 @@ export class GameView extends Component<PropsType, StateType> {
                     y={state.activeLandscapeTile.y}
                 />
                 <BottomBar className={classnames(style.bottom_bar, bottomBarColorMap[activeUserColor])}>
-                    <img
-                        className={style.bottom_bar__icon}
-                        src={unitIconMap[activeUserColor]}
-                        alt=""
-                    />
+                    <img className={style.bottom_bar__icon} src={unitIconMap[activeUserColor]} alt="" />
                     <span className={style.bottom_bar__text}>
                         {supplyState.unitCount + '/' + supplyState.unitLimit}
                     </span>
-                    <img
-                        className={style.bottom_bar__icon}
-                        src={iconMoney}
-                        alt=""
-                    />
+                    <img className={style.bottom_bar__icon} src={iconMoney} alt="" />
                     <span className={style.bottom_bar__text}>
                         {mapUserData.money}
                         &nbsp;
@@ -645,30 +645,27 @@ export class GameView extends Component<PropsType, StateType> {
         );
     }
 
-    render(): Node { // eslint-disable-line complexity
+    render(): Node {
+        // eslint-disable-next-line complexity
         const view = this;
         const {props, state} = view;
         const mapState = state.game.getMapState();
 
         const mapActiveUserId = mapState === null ? 'no-map-state-no-active-user-id' : mapState.activeUserId;
-        const isCanvasDisabled = state.activeUserId !== user.getId() || // your/not turn
+        const isCanvasDisabled =
+            state.activeUserId !== user.getId() || // your/not turn
             mapActiveUserId !== state.activeUserId || // map user id should be the same server active user id
             state.disabledByList.length > 0; // disabledByList should be empty array
 
         const storeState = view.getStoreState();
 
-        return (
-            [
-                view.renderStore(),
-                <Page
-                    className={classnames(style.game_page, {[serviceStyle.hidden]: storeState.isOpen})}
-                    key="game-page"
-                >
+        return [
+            view.renderStore(),
+            <Page className={classnames(style.game_page, {[serviceStyle.hidden]: storeState.isOpen})} key="game-page">
+                {view.renderEndGameDialog()}
+                {view.renderPopupChangeActiveUserDialog()}
 
-                    {view.renderEndGameDialog()}
-                    {view.renderPopupChangeActiveUserDialog()}
-
-                    {/*
+                {/*
                 <h2>server activeUserId: {state.activeUserId}</h2>
                 <h3>mapActiveUser: {mapActiveUserId}</h3>
 
@@ -681,51 +678,49 @@ export class GameView extends Component<PropsType, StateType> {
                 {mapState ? <ReactJson src={mapState.userList}/> : <h1>no map</h1>}
                 */}
 
-                    <div
-                        className={classnames(
-                            style.end_turn,
-                            {[serviceStyle.disabled]: isCanvasDisabled}
-                        )}
-                        onClick={async (): Promise<void> => {
-                            await view.endTurn();
-                        }}
-                    >
-                        {'>|'}
-                    </div>
+                <div
+                    className={classnames(style.end_turn, {[serviceStyle.disabled]: isCanvasDisabled})}
+                    onClick={async (): Promise<void> => {
+                        await view.endTurn();
+                    }}
+                >
+                    {'>|'}
+                </div>
 
-                    {/* <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>*/}
+                {/* <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>*/}
 
-                    {/*
+                {/*
                 <div>mapActiveUserId === state(server).activeUserId :
                     {mapActiveUserId === state.activeUserId ? ' YES' : ' NO'}</div>
                 */}
 
-                    {/* <div>{JSON.stringify(state.disabledByList)}</div> */}
+                {/* <div>{JSON.stringify(state.disabledByList)}</div> */}
 
-                    <canvas
-                        key="canvas"
-                        ref={(canvas: HTMLElement | null) => {
-                            view.node.canvas = canvas;
-                        }}
-                        style={{
-                            // TODO: uncomment this for production
-                            // pointerEvents: isCanvasDisabled ? 'none' : 'auto',
-                            width: props.system.screen.width,
-                            height: props.system.screen.height - bottomBarData.height
-                        }}
-                    />
-                    {view.renderBottomBar()}
-                </Page>
-            ]
-        );
+                <canvas
+                    key="canvas"
+                    ref={(canvas: HTMLElement | null) => {
+                        view.node.canvas = canvas;
+                    }}
+                    style={{
+                        // TODO: uncomment this for production
+                        // pointerEvents: isCanvasDisabled ? 'none' : 'auto',
+                        width: props.system.screen.width,
+                        height: props.system.screen.height - bottomBarData.height
+                    }}
+                />
+                {view.renderBottomBar()}
+            </Page>
+        ];
     }
 }
 
-export default withRouter(connect(
-    (state: GlobalStateType): {} => ({
-        system: state.system
-    }),
-    {
-        // setUser
-    }
-)(GameView));
+export default withRouter(
+    connect(
+        (state: GlobalStateType): {} => ({
+            system: state.system
+        }),
+        {
+            // setUser
+        }
+    )(GameView)
+);

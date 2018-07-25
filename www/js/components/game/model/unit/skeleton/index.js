@@ -1,5 +1,4 @@
 // @flow
 import Unit from './..';
 
-export default class Skeleton extends Unit {
-}
+export default class Skeleton extends Unit {}

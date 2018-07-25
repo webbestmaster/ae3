@@ -23,8 +23,7 @@ export type SystemType = {|
 |};
 
 export default combineReducers({
-    screen: (screenState: ScreenType = defaultScreenState,
-             {type, payload}: OnResizeType): ScreenType => {
+    screen: (screenState: ScreenType = defaultScreenState, {type, payload}: OnResizeType): ScreenType => {
         if (type !== systemConst.action.type.resize) {
             return screenState;
         }

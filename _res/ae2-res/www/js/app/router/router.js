@@ -1,223 +1,202 @@
 /*jslint white: true, nomen: true */ // http://www.jslint.com/lint.html#options
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window, setTimeout */
+    /*global Backbone, APP, $ */
 
-	"use strict";
-	/*global window, setTimeout */
-	/*global Backbone, APP, $ */
+    win.APP = win.APP || {};
 
-	win.APP = win.APP || {};
+    APP.BB = APP.BB || {};
 
-	APP.BB = APP.BB || {};
+    APP.BB.Router = Backbone.Router.extend({
+        routes: {
+            '': 'title',
+            settings: 'settings',
+            play: 'play',
+            about: 'about',
+            instructions: 'instructions',
+            'load-game': 'loadGame',
+            'select-level': 'selectLevel',
+            'skirmish-select-map': 'skirmishSelectMap',
+            'user-map-select-map': 'userMapSelectMap',
+            'mission-setup-map/:jsMapKey': 'missionSetupMap',
+            'skirmish-setup-map/:jsMapKey': 'skirmishSetupMap',
+            'user-map-setup-map/:jsMapKey': 'userMapSetupMap',
+            battle: 'battle',
+            'main-battle-menu': 'mainBattleMenu',
+            'map-editor': 'mapEditor'
+        },
 
-	APP.BB.Router = Backbone.Router.extend({
+        title: function() {
+            new APP.BB.TitleView();
+        },
 
-		routes: {
-			'': 'title',
-			'settings': 'settings',
-			'play': 'play',
-			'about': 'about',
-			'instructions': 'instructions',
-			'load-game': 'loadGame',
-			'select-level': 'selectLevel',
-			'skirmish-select-map': 'skirmishSelectMap',
-			'user-map-select-map': 'userMapSelectMap',
-			'mission-setup-map/:jsMapKey': 'missionSetupMap',
-			'skirmish-setup-map/:jsMapKey': 'skirmishSetupMap',
-			'user-map-setup-map/:jsMapKey': 'userMapSetupMap',
-			'battle': 'battle',
-			'main-battle-menu': 'mainBattleMenu',
-			'map-editor': 'mapEditor'
-		},
+        settings: function() {
+            new APP.BB.SettingsView();
+        },
 
-		title: function () {
-			new APP.BB.TitleView();
-		},
+        play: function() {
+            new APP.BB.PlayView();
+        },
 
-		settings: function () {
-			new APP.BB.SettingsView();
-		},
+        about: function() {
+            new APP.BB.AboutView();
+        },
 
-		play: function () {
-			new APP.BB.PlayView();
-		},
+        instructions: function() {
+            new APP.BB.InstructionsView();
+        },
 
-		about: function () {
-			new APP.BB.AboutView();
-		},
+        loadGame: function() {
+            new APP.BB.LoadGameView();
+        },
 
-		instructions: function () {
-			new APP.BB.InstructionsView();
-		},
+        selectLevel: function() {
+            new APP.BB.SelectLevelView();
+        },
 
-		loadGame: function () {
-			new APP.BB.LoadGameView();
-		},
+        skirmishSelectMap: function() {
+            new APP.BB.SkirmishSelectMapView();
+        },
 
-		selectLevel: function () {
-			new APP.BB.SelectLevelView();
-		},
+        userMapSelectMap: function() {
+            new APP.BB.SkirmishSelectMapView({
+                type: 'userMap'
+            });
+        },
 
-		skirmishSelectMap: function () {
-			new APP.BB.SkirmishSelectMapView();
-		},
+        skirmishSetupMap: function(jsMapKey) {
+            new APP.BB.SkirmishSetupMapView(jsMapKey);
+        },
 
-		userMapSelectMap: function () {
-			new APP.BB.SkirmishSelectMapView({
-				type: 'userMap'
-			});
-		},
+        userMapSetupMap: function(jsMapKey) {
+            new APP.BB.SkirmishSetupMapView(jsMapKey, {type: 'userMap'});
+        },
 
-		skirmishSetupMap: function (jsMapKey) {
-			new APP.BB.SkirmishSetupMapView(jsMapKey);
-		},
+        missionSetupMap: function(jsMapKey) {
+            new APP.BB.SkirmishSetupMapView(jsMapKey, {type: 'mission'});
+        },
 
-		userMapSetupMap: function (jsMapKey) {
-			new APP.BB.SkirmishSetupMapView(jsMapKey, { type: 'userMap' });
-		},
+        battle: function() {
+            $('.js-unit-store-wrapper').trigger('hide-unit-store');
 
-		missionSetupMap: function (jsMapKey) {
-			new APP.BB.SkirmishSetupMapView(jsMapKey, {type: 'mission'});
-		},
+            $('.js-battle-menu-wrapper').trigger('hide-battle-menu');
 
-		battle: function () {
+            $('.js-settings-wrapper').trigger('hide-battle-setting');
 
-			$('.js-unit-store-wrapper')
-				.trigger('hide-unit-store');
+            $('.js-move-area-container').removeClass('hidden');
+        },
 
-			$('.js-battle-menu-wrapper')
-				.trigger('hide-battle-menu');
+        mainBattleMenu: function() {},
 
-			$('.js-settings-wrapper')
-				.trigger('hide-battle-setting');
+        mapEditor: function() {
+            new APP.BB.MapEditorView();
+        },
 
-			$('.js-move-area-container')
-				.removeClass('hidden');
+        constructor: function() {
+            var router = this,
+                originalFunctions = {},
+                proto = APP.BB.Router.prototype;
 
-		},
+            function getAction() {
+                var e = window.event || {},
+                    newURL = e.newURL || '',
+                    oldURL = e.oldURL || '',
+                    reBattle = /#battle$/,
+                    reMapEditor = /#map-editor$/,
+                    popupPart = APP.BB.BaseView.prototype.popupUrl,
+                    viewAction;
 
-		mainBattleMenu: function () {
+                if (newURL.indexOf(popupPart) !== -1) {
+                    viewAction = 'showPopup';
+                }
 
-		},
+                if (oldURL.indexOf(popupPart) !== -1) {
+                    viewAction = 'hidePopup';
+                }
 
-		mapEditor: function () {
-			new APP.BB.MapEditorView();
-		},
+                if (router.isForce) {
+                    return viewAction;
+                }
 
-		constructor: function () {
+                if (reBattle.test(oldURL)) {
+                    viewAction = 'routeFromBattle';
+                }
 
-			var router = this,
-				originalFunctions = {},
-				proto = APP.BB.Router.prototype;
+                if (reMapEditor.test(oldURL)) {
+                    viewAction = 'routeFromMapEditor';
+                }
 
-			function getAction() {
+                return viewAction;
+            }
 
-				var e = window.event || {},
-					newURL = e.newURL || '',
-					oldURL = e.oldURL || '',
-					reBattle = /#battle$/,
-					reMapEditor = /#map-editor$/,
-					popupPart = APP.BB.BaseView.prototype.popupUrl,
-					viewAction;
+            _.each(this.routes, function(value) {
+                originalFunctions[value] = proto[value];
+                proto[value] = function() {
+                    var router = this,
+                        viewAction = getAction(),
+                        baseProto = win.APP.BB.BaseView.prototype,
+                        d;
+                    //battleData = win.APP.bb.battleData;
 
-				if ( newURL.indexOf(popupPart) !== -1 ) {
-					viewAction = 'showPopup';
-				}
+                    if (!viewAction) {
+                        return originalFunctions[value].apply(router, arguments);
+                    }
 
-				if ( oldURL.indexOf(popupPart) !== -1 ) {
-					viewAction = 'hidePopup';
-				}
+                    switch (viewAction) {
+                        case 'hidePopup':
+                            baseProto.hidePopup();
+                            //if ( battleData.isEndGame === 'yes' && battleData.gameTo === 'quit') {
+                            //	router.routeFromBattle();
+                            //}
 
-				if ( router.isForce ) {
-					return viewAction;
-				}
+                            break;
 
-				if ( reBattle.test(oldURL) ) {
-					viewAction = 'routeFromBattle';
-				}
+                        case 'showPopup':
+                            break;
 
-				if ( reMapEditor.test(oldURL) ) {
-					viewAction = 'routeFromMapEditor';
-				}
+                        case 'routeFromBattle':
+                            //if ( battleData.isEndGame !== 'yes' ) {
+                            baseProto.routeByUrl('battle');
+                            baseProto.showPopup({
+                                popupName: 'route-from-battle'
+                            });
+                            //}
 
-				return viewAction;
+                            break;
 
-			}
+                        case 'routeFromMapEditor':
+                            baseProto.routeByUrl('map-editor');
+                            baseProto.showPopup({
+                                popupName: 'route-from-map-editor'
+                            });
 
-			_.each(this.routes, function (value) {
-				originalFunctions[value] = proto[value];
-				proto[value] = function () {
+                            break;
+                    }
+                };
+            });
 
-					var router = this,
-						viewAction = getAction(),
-						baseProto = win.APP.BB.BaseView.prototype,
-						d;
-						//battleData = win.APP.bb.battleData;
+            return Backbone.Router.prototype.constructor.apply(this, arguments);
+        }
+        //,
+        //
+        //routeFromBattle: function () {
+        //	var baseProto = win.APP.BB.BaseView.prototype;
+        //	baseProto.routeBack();
+        //	setTimeout(function () {
+        //		baseProto.routeBack();
+        //	}, 50);
+        //
+        //}
+    });
 
-					if ( !viewAction ) {
-						return originalFunctions[value].apply(router, arguments);
-					}
-
-					switch (viewAction) {
-						
-						case 'hidePopup':
-							baseProto.hidePopup();
-							//if ( battleData.isEndGame === 'yes' && battleData.gameTo === 'quit') {
-							//	router.routeFromBattle();
-							//}
-
-							break;							
-							
-						case 'showPopup':
-
-							break;							
-							
-						case 'routeFromBattle':
-
-							//if ( battleData.isEndGame !== 'yes' ) {
-								baseProto.routeByUrl('battle');
-								baseProto.showPopup({
-									popupName: 'route-from-battle'
-								});
-							//}
-
-							break;
-
-						case 'routeFromMapEditor':
-
-							baseProto.routeByUrl('map-editor');
-							baseProto.showPopup({
-								popupName: 'route-from-map-editor'
-							});
-
-							break;
-
-					}
-
-				};
-
-			});
-
-			return Backbone.Router.prototype.constructor.apply(this, arguments);
-
-		}
-		//,
-		//
-		//routeFromBattle: function () {
-		//	var baseProto = win.APP.BB.BaseView.prototype;
-		//	baseProto.routeBack();
-		//	setTimeout(function () {
-		//		baseProto.routeBack();
-		//	}, 50);
-		//
-		//}
-
-	});
-
-
-	if ($.browser.mozilla) {
-		window.addEventListener("hashchange", function (e) {
-			window.event = e;
-		}, true);
-	}
-
-}(window));
+    if ($.browser.mozilla) {
+        window.addEventListener(
+            'hashchange',
+            function(e) {
+                window.event = e;
+            },
+            true
+        );
+    }
+})(window);

@@ -22,12 +22,14 @@ export type RoomDataType = {|
     maxUserSize: number
 |};
 
-export async function getRoomState(roomId: string): Promise<RoomDataType | null> { // eslint-disable-line complexity
+// eslint-disable-next-line complexity
+export async function getRoomState(roomId: string): Promise<RoomDataType | null> {
     const getAllRoomSettingsResult = await serverApi.getAllRoomSettings(roomId);
 
-    const map = getAllRoomSettingsResult.settings && getAllRoomSettingsResult.settings.map ?
-        getAllRoomSettingsResult.settings.map :
-        null;
+    const map =
+        getAllRoomSettingsResult.settings && getAllRoomSettingsResult.settings.map ?
+            getAllRoomSettingsResult.settings.map :
+            null;
 
     if (map === null) {
         return null;
@@ -35,9 +37,7 @@ export async function getRoomState(roomId: string): Promise<RoomDataType | null>
 
     const getAllRoomUsersResult = await serverApi.getAllRoomUsers(roomId);
 
-    const userList = Array.isArray(getAllRoomUsersResult.users) ?
-        getAllRoomUsersResult.users :
-        null;
+    const userList = Array.isArray(getAllRoomUsersResult.users) ? getAllRoomUsersResult.users : null;
 
     if (userList === null) {
         return null;

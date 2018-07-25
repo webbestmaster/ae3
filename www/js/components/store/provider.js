@@ -25,7 +25,7 @@ const defaultState: StoreValueStateType = {
 
 const defaultAction: StoreValueActionType = {
     setOpenFromGame: (openFromGame: boolean) => {
-        console.error('method not \'override\' yet');
+        console.error("method not 'override' yet");
     },
     getState: (): StoreValueStateType => defaultState
 };
@@ -79,11 +79,7 @@ class StoreProvider extends Component {
         const {props} = view;
         const {children} = props;
 
-        return (
-            <Provider value={view.getValue()}>
-                {children}
-            </Provider>
-        );
+        return <Provider value={view.getValue()}>{children}</Provider>;
     }
 }
 

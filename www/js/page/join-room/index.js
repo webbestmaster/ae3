@@ -128,7 +128,7 @@ class JoinRoom extends Component<PropsType, StateType> {
     static renderHeader(): Node {
         return (
             <Header>
-                <Locale stringKey={('JOIN_GAME': LangKeyType)}/>
+                <Locale stringKey={('JOIN_GAME': LangKeyType)} />
             </Header>
         );
     }
@@ -144,16 +144,18 @@ class JoinRoom extends Component<PropsType, StateType> {
 
         return (
             <ButtonListWrapper
-                className={roomDataList.length === 0 ?
-                    style.bottom_button_list_wrapper__no_rooms :
-                    style.bottom_button_list_wrapper}
+                className={
+                    roomDataList.length === 0 ?
+                        style.bottom_button_list_wrapper__no_rooms :
+                        style.bottom_button_list_wrapper
+                }
             >
                 <Button
                     onClick={async (): Promise<void> => {
                         await view.componentDidMount();
                     }}
                 >
-                    <Locale stringKey={('REFRESH': LangKeyType)}/>
+                    <Locale stringKey={('REFRESH': LangKeyType)} />
                 </Button>
             </ButtonListWrapper>
         );
@@ -170,10 +172,8 @@ class JoinRoom extends Component<PropsType, StateType> {
                     {JoinRoom.renderHeader()}
                     <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                         <Fieldset className={serviceStyle.ta_c}>
-                            <span className={serviceStyle.zero_opacity}>
-                                {'\u2026'}
-                            </span>
-                            <Locale stringKey={('LOADING': LangKeyType)}/>
+                            <span className={serviceStyle.zero_opacity}>{'\u2026'}</span>
+                            <Locale stringKey={('LOADING': LangKeyType)} />
                             {'\u2026'}
                         </Fieldset>
                     </ButtonListWrapper>
@@ -185,13 +185,13 @@ class JoinRoom extends Component<PropsType, StateType> {
             return (
                 <Page>
                     {JoinRoom.renderHeader()}
-                    <Spinner isOpen={isRoomsFetching}/>
+                    <Spinner isOpen={isRoomsFetching} />
                     <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                         <Fieldset className={serviceStyle.ta_c}>
-                            <Locale stringKey={('MESSAGE__NO_OPEN_GAME': LangKeyType)}/>
+                            <Locale stringKey={('MESSAGE__NO_OPEN_GAME': LangKeyType)} />
                         </Fieldset>
                         <ButtonLink to={routes.createRoomOnline}>
-                            <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
+                            <Locale stringKey={('CREATE_GAME': LangKeyType)} />
                         </ButtonLink>
                     </ButtonListWrapper>
                     {view.renderRefreshButton()}
@@ -202,10 +202,10 @@ class JoinRoom extends Component<PropsType, StateType> {
         return (
             <Page>
                 {JoinRoom.renderHeader()}
-                <Spinner isOpen={isRoomsFetching}/>
+                <Spinner isOpen={isRoomsFetching} />
                 <Scroll>
-                    {roomDataList
-                        .map((roomData: RoomDataType): Node => {
+                    {roomDataList.map(
+                        (roomData: RoomDataType): Node => {
                             return (
                                 <Button
                                     onClick={async (): Promise<void> => {
@@ -213,16 +213,12 @@ class JoinRoom extends Component<PropsType, StateType> {
                                         await view.joinRoom(roomData.roomId);
                                         await view.hideSpinner();
                                     }}
-                                    className={classnames(style.open_room_item,
-                                        {
-                                            [serviceStyle.disabled]: roomData.userList.length === roomData.maxUserSize
-                                        }
-                                    )}
+                                    className={classnames(style.open_room_item, {
+                                        [serviceStyle.disabled]: roomData.userList.length === roomData.maxUserSize
+                                    })}
                                     key={roomData.roomId}
                                 >
-                                    <div className={style.right_arrow}>
-                                        &gt;&gt;
-                                    </div>
+                                    <div className={style.right_arrow}>&gt;&gt;</div>
                                     <p className={classnames(serviceStyle.ellipsis, serviceStyle.ta_l)}>
                                         {'['}
                                         {roomData.userList.length}
@@ -233,7 +229,8 @@ class JoinRoom extends Component<PropsType, StateType> {
                                     </p>
                                 </Button>
                             );
-                        })}
+                        }
+                    )}
                 </Scroll>
                 {view.renderRefreshButton()}
             </Page>

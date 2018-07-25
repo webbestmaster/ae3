@@ -1,28 +1,20 @@
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global window, Backbone, $, templateMaster, setTimeout, APP, history */
 
-	"use strict";
-	/*global window, Backbone, $, templateMaster, setTimeout, APP, history */
+    win.APP = win.APP || {};
 
-	win.APP = win.APP || {};
+    win.APP.BB = win.APP.BB || {};
 
-	win.APP.BB = win.APP.BB || {};
+    APP.BB.AboutView = APP.BB.BaseView.extend({
+        events: {},
 
-	APP.BB.AboutView = APP.BB.BaseView.extend({
+        initialize: function() {
+            this.$el = $(this.tmpl.about());
 
-		events: {
+            this.proto.initialize.apply(this, arguments);
 
-		},
-
-		initialize: function () {
-
-			this.$el = $(this.tmpl.about());
-
-			this.proto.initialize.apply(this, arguments);
-
-			this.render();
-
-		}
-
-	});
-
-}(window));
+            this.render();
+        }
+    });
+})(window);

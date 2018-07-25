@@ -54,18 +54,7 @@ export const myFirstMap: MapType = {
             'road-0',
             'forest-0'
         ],
-        [
-            'forest-0',
-            'forest-0',
-            'road-0',
-            'road-0',
-            'road-0',
-            'hill-0',
-            'forest-0',
-            'forest-0',
-            'road-0',
-            'forest-0'
-        ],
+        ['forest-0', 'forest-0', 'road-0', 'road-0', 'road-0', 'hill-0', 'forest-0', 'forest-0', 'road-0', 'forest-0'],
         [
             'forest-0',
             'forest-0',
@@ -138,78 +127,12 @@ export const myFirstMap: MapType = {
             'road-0',
             'forest-0'
         ],
-        [
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-1',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0'
-        ],
-        [
-            'water-0',
-            'water-1',
-            'water-1',
-            'water-1',
-            'water-1',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0'
-        ],
-        [
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-2',
-            'water-1',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0'
-        ],
-        [
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-2',
-            'water-1',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0'
-        ],
-        [
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-2',
-            'water-1',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0'
-        ],
-        [
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-1',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0',
-            'water-0'
-        ]
+        ['water-0', 'water-0', 'water-0', 'water-0', 'water-1', 'water-0', 'water-0', 'water-0', 'water-0', 'water-0'],
+        ['water-0', 'water-1', 'water-1', 'water-1', 'water-1', 'water-0', 'water-0', 'water-0', 'water-0', 'water-0'],
+        ['water-0', 'water-0', 'water-0', 'water-2', 'water-1', 'water-0', 'water-0', 'water-0', 'water-0', 'water-0'],
+        ['water-0', 'water-0', 'water-0', 'water-2', 'water-1', 'water-0', 'water-0', 'water-0', 'water-0', 'water-0'],
+        ['water-0', 'water-0', 'water-0', 'water-2', 'water-1', 'water-0', 'water-0', 'water-0', 'water-0', 'water-0'],
+        ['water-0', 'water-0', 'water-0', 'water-0', 'water-1', 'water-0', 'water-0', 'water-0', 'water-0', 'water-0']
     ],
     buildings: [
         {
@@ -436,4 +359,3 @@ export const myFirstMap: MapType = {
         }
     ]
 };
-

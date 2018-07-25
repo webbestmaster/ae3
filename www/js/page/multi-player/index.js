@@ -19,11 +19,7 @@ class MultiPlayer extends Component<void, void> {
     static renderPartLogo(): Node {
         return (
             <div className={serviceStyle.two_blocks_container}>
-                <img
-                    src={logoSrc}
-                    className={homeStyle.logo}
-                    alt=""
-                />
+                <img src={logoSrc} className={homeStyle.logo} alt="" />
             </div>
         );
     }
@@ -33,11 +29,11 @@ class MultiPlayer extends Component<void, void> {
             <div className={serviceStyle.two_blocks_container}>
                 <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                     <ButtonLink to={routes.createRoomOnline}>
-                        <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
+                        <Locale stringKey={('CREATE_GAME': LangKeyType)} />
                     </ButtonLink>
 
                     <ButtonLink to={routes.joinRoom}>
-                        <Locale stringKey={('JOIN_GAME': LangKeyType)}/>
+                        <Locale stringKey={('JOIN_GAME': LangKeyType)} />
                     </ButtonLink>
                 </ButtonListWrapper>
             </div>
@@ -48,7 +44,7 @@ class MultiPlayer extends Component<void, void> {
         return (
             <Page>
                 <Header>
-                    <Locale stringKey={('ONLINE_GAME': LangKeyType)}/>
+                    <Locale stringKey={('ONLINE_GAME': LangKeyType)} />
                 </Header>
                 <div className={serviceStyle.two_blocks_wrapper}>
                     {MultiPlayer.renderPartLogo()}

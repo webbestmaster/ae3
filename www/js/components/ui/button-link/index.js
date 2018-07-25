@@ -43,11 +43,7 @@ export default class ButtonLink extends Component<PropsType, StateType> {
         const onClick = isFunction(props.onClick) ? props.onClick : noop;
 
         return (
-            <Link
-                to={props.to}
-                className={buttonStyle.button + additionClass}
-                onClick={onClick}
-            >
+            <Link to={props.to} className={buttonStyle.button + additionClass} onClick={onClick}>
                 {props.children}
             </Link>
         );

@@ -1,200 +1,189 @@
 /*jslint white: true, nomen: true */ // http://www.jslint.com/lint.html#options
-(function (win) {
+(function(win) {
+    'use strict';
+    /*global console, alert, window, document, setTimeout, clearTimeout */
+    /*global APP, $, Backbone*/
 
-	"use strict";
-	/*global console, alert, window, document, setTimeout, clearTimeout */
-	/*global APP, $, Backbone*/
+    win.APP = win.APP || {};
 
-	win.APP = win.APP || {};
+    win.APP.BB = win.APP.BB || {};
 
-	win.APP.BB = win.APP.BB || {};
+    APP.BB.SkirmishSetupMapView = APP.BB.BaseView.extend({
+        events: {
+            'click .js-go-to-battle': 'goToBattle'
+        },
 
-	APP.BB.SkirmishSetupMapView = APP.BB.BaseView.extend({
+        initialize: function(jsMapKey, data) {
+            if (win.APP.bb.router.isForce) {
+                return;
+            }
 
-		events: {
-			'click .js-go-to-battle': 'goToBattle'
-		},
+            data = data || {};
 
-		initialize: function (jsMapKey, data) {
+            var view = this,
+                mapType = data.type || 'skirmish';
 
-			if (win.APP.bb.router.isForce) {
-				return;
-			}
+            view.set('jsMapKey', jsMapKey);
+            view.set('mapType', mapType);
 
-			data = data || {};
+            if (mapType === 'mission') {
+                win.APP.map.db
+                    .getMapInfo({
+                        jsMapKey: jsMapKey,
+                        type: mapType
+                    })
+                    .then(function(mapInfo) {
+                        new win.APP.BB.BattleView({
+                            jsMapKey: jsMapKey,
+                            type: mapType,
+                            money: 500,
+                            unitLimit: mapInfo.unitLimit,
+                            players: [
+                                {
+                                    teamNumber: 1,
+                                    id: 0,
+                                    type: 'player',
+                                    color: 'blue'
+                                },
+                                {
+                                    teamNumber: 2,
+                                    id: 1,
+                                    type: 'cpu',
+                                    color: 'red'
+                                }
+                            ]
+                        });
 
-			var view = this,
-				mapType = data.type || 'skirmish';
+                        view.navigate('battle');
+                    });
 
-			view.set('jsMapKey', jsMapKey);
-			view.set('mapType', mapType);
+                return;
+            }
 
-			if ( mapType === 'mission' ) {
+            win.APP.map.db
+                .getMapInfo({
+                    jsMapKey: jsMapKey,
+                    type: view.get('mapType')
+                })
+                .then(function(mapInfo) {
+                    var viewData = view.createViewData(mapInfo);
+                    view.$el = $(view.tmpl.skirmishSetupMap(viewData));
+                    view.proto.initialize.apply(view, arguments);
+                    view.render();
+                });
+        },
 
-				win.APP.map.db.getMapInfo({
-					jsMapKey: jsMapKey,
-					type: mapType
-				}).then(function (mapInfo) {
+        createViewData: function(map) {
+            var viewData = {},
+                //util = win.APP.util,
+                staticMapInfo = this.util.copyJSON(APP.map),
+                i,
+                len,
+                playerData,
+                playersData = [],
+                colors = staticMapInfo.playerColors,
+                playerType = staticMapInfo.playerTypes[0],
+                list = {};
 
-					new win.APP.BB.BattleView({
-						jsMapKey: jsMapKey,
-						type: mapType,
-						money: 500,
-						unitLimit: mapInfo.unitLimit,
-						players: [
-							{
-								teamNumber: 1,
-								id: 0,
-								type: 'player',
-								color: 'blue'
+            function objToDataURL(obj) {
+                return encodeURI(JSON.stringify(obj).replace(/\s/g, ''));
+            }
 
-							},
-							{
-								teamNumber: 2,
-								id: 1,
-								type: 'cpu',
-								color: 'red'
-							}
-						]
-					});
+            // set team number, color and type = cpu || player
+            for (i = 1, len = map.maxPlayers; i <= len; i += 1) {
+                playerData = {};
+                playerData.teamNumber = i;
+                playerData.color = colors[i - 1];
+                playersData.push(playerData);
+                playerData.type = playerType;
+            }
+            viewData.playersData = playersData;
 
-					view.navigate('battle');
+            // set money
+            viewData.money = staticMapInfo.money[0];
 
-				});
+            // set unit limit
+            viewData.unitLimit = staticMapInfo.unitsLimits[0];
 
-				return;
-			}
+            // set lists
+            // player types
+            list.playerTypes = [];
+            _.each(staticMapInfo.playerTypes, function(type) {
+                list.playerTypes.push({
+                    key: type,
+                    value: win.APP.lang.get(type)
+                });
+            });
+            list.playerTypes = objToDataURL(list.playerTypes);
 
-			win.APP.map.db.getMapInfo({
-				jsMapKey: jsMapKey,
-				type: view.get('mapType')
-			}).then(function (mapInfo) {
-				var viewData = view.createViewData(mapInfo);
-				view.$el = $(view.tmpl.skirmishSetupMap(viewData));
-				view.proto.initialize.apply(view, arguments);
-				view.render();
-			});
+            // team numbers
+            list.teamNumber = [];
+            for (i = 1, len = map.maxPlayers; i <= len; i += 1) {
+                list.teamNumber.push({
+                    key: i,
+                    value: i
+                });
+            }
+            list.teamNumber = objToDataURL(list.teamNumber);
 
-		},
+            // money list
+            list.money = [];
+            _.each(staticMapInfo.money, function(value) {
+                list.money.push({
+                    key: value,
+                    value: value
+                });
+            });
+            list.money = objToDataURL(list.money);
 
-		createViewData: function (map) {
+            // money list
+            list.unitsLimits = [];
+            _.each(staticMapInfo.unitsLimits, function(value) {
+                list.unitsLimits.push({
+                    key: value,
+                    value: value
+                });
+            });
+            list.unitsLimits = objToDataURL(list.unitsLimits);
 
-			var viewData = {},
-				//util = win.APP.util,
-				staticMapInfo = this.util.copyJSON(APP.map),
-				i, len,
-				playerData,
-				playersData = [],
-				colors = staticMapInfo.playerColors,
-				playerType = staticMapInfo.playerTypes[0],
-				list = {};
+            viewData.list = list;
 
-			function objToDataURL(obj) {
-				return encodeURI(JSON.stringify(obj).replace(/\s/g, ''));
-			}
+            return viewData;
+        },
 
-			// set team number, color and type = cpu || player
-			for (i = 1, len = map.maxPlayers; i <= len; i += 1) {
-				playerData = {};
-				playerData.teamNumber = i;
-				playerData.color = colors[i-1];
-				playersData.push(playerData);
-				playerData.type = playerType;
-			}
-			viewData.playersData = playersData;
+        goToBattle: function() {
+            var data = {},
+                $players = this.$el.find('.js-player-info-wrapper'),
+                players = [],
+                $money = this.$el.find('.js-money'),
+                $unitLimit = this.$el.find('.js-unit-limit');
 
-			// set money
-			viewData.money = staticMapInfo.money[0];
+            data.jsMapKey = this.get('jsMapKey');
+            data.type = this.get('mapType');
 
-			// set unit limit
-			viewData.unitLimit = staticMapInfo.unitsLimits[0];
+            data.money = parseInt($money.attr('data-key'), 10);
 
-			// set lists
-			// player types
-			list.playerTypes = [];
-			_.each(staticMapInfo.playerTypes, function (type) {
-				list.playerTypes.push({
-					key: type,
-					value: win.APP.lang.get(type)
-				});
-			});
-			list.playerTypes = objToDataURL(list.playerTypes);
+            data.unitLimit = parseInt($unitLimit.attr('data-key'), 10);
 
-			// team numbers
-			list.teamNumber = [];
-			for (i = 1, len = map.maxPlayers; i <= len; i += 1) {
-				list.teamNumber.push({
-					key: i,
-					value: i
-				});
-			}
-			list.teamNumber = objToDataURL(list.teamNumber);
+            $players.each(function(index) {
+                var $this = $(this),
+                    teamNumber = parseInt($this.find('.js-player-team-number').attr('data-key'), 10),
+                    type = $this.find('.js-player-type').attr('data-key'),
+                    color = $this.find('.js-player-color').attr('data-player-color');
 
-			// money list
-			list.money = [];
-			_.each(staticMapInfo.money, function (value) {
-				list.money.push({
-					key: value,
-					value: value
-				});
-			});
-			list.money = objToDataURL(list.money);
+                players.push({
+                    teamNumber: teamNumber,
+                    id: index,
+                    type: type,
+                    color: color
+                });
+            });
 
-			// money list
-			list.unitsLimits = [];
-			_.each(staticMapInfo.unitsLimits, function (value) {
-				list.unitsLimits.push({
-					key: value,
-					value: value
-				});
-			});
-			list.unitsLimits = objToDataURL(list.unitsLimits);
+            data.players = players;
 
-			viewData.list = list;
+            new win.APP.BB.BattleView(data);
 
-			return viewData;
-
-		},
-
-		goToBattle: function () {
-
-			var data = {},
-				$players = this.$el.find('.js-player-info-wrapper'),
-				players = [],
-				$money = this.$el.find('.js-money'),
-				$unitLimit = this.$el.find('.js-unit-limit');
-
-			data.jsMapKey = this.get('jsMapKey');
-			data.type = this.get('mapType');
-
-			data.money = parseInt($money.attr('data-key'), 10);
-
-			data.unitLimit = parseInt($unitLimit.attr('data-key'), 10);
-
-			$players.each(function (index) {
-
-				var $this = $(this),
-					teamNumber = parseInt($this.find('.js-player-team-number').attr('data-key'), 10),
-					type = $this.find('.js-player-type').attr('data-key'),
-					color = $this.find('.js-player-color').attr('data-player-color');
-
-				players.push({
-					teamNumber: teamNumber,
-					id: index,
-					type: type,
-					color: color
-				});
-
-			});
-
-			data.players = players;
-
-			new win.APP.BB.BattleView(data);
-
-			this.navigate('battle');
-
-		}
-
-	});
-
-}(window));
+            this.navigate('battle');
+        }
+    });
+})(window);
