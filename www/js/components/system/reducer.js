@@ -5,6 +5,7 @@
 import {combineReducers} from 'redux';
 import type {OnResizeType} from './action';
 import {systemConst} from './const';
+import isEqual from 'lodash/isEqual';
 
 export type ScreenType = {|
     width: number,
@@ -25,6 +26,10 @@ export type SystemType = {|
 export default combineReducers({
     screen: (screenState: ScreenType = defaultScreenState, {type, payload}: OnResizeType): ScreenType => {
         if (type !== systemConst.action.type.resize) {
+            return screenState;
+        }
+
+        if (isEqual(screenState, payload)) {
             return screenState;
         }
 

@@ -295,13 +295,4 @@ class Store extends Component<PropsType, StateType> {
     }
 }
 
-export default withRouter(
-    connect(
-        (state: GlobalStateType): {} => ({
-            system: state.system
-        }),
-        {
-            // setUser
-        }
-    )(Store)
-);
+export default withRouter(Store);
