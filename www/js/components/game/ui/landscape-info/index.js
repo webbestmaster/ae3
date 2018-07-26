@@ -42,9 +42,8 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
         const {map, gameData, x, y} = props;
 
         return (
-            <div className={style.wrapper}>
+            <div className={style.wrapper} style={{backgroundImage: 'url(' + iconMap[map.landscape[y][x]] + ')'}}>
                 <p className={style.armor}>{gameData.armorMap.walk[y][x]}</p>
-                <img className={style.image} src={iconMap[map.landscape[y][x]]} alt="" />
             </div>
         );
     }
