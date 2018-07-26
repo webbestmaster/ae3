@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pixel": "0.0.4",
-    "pixel-to-svg": "0.0.0"
+    "pixel-art-2-svg": "^0.1.5"
   }
 }
