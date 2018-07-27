@@ -4,7 +4,6 @@ const pixelArtToSvg = require('pixel-art-2-svg');
 const pathToSrc = 'png';
 const pathToSvg = 'svg';
 
-/*
 async function convert(imageName) {
     return new Promise(async (resolve, reject) => {
         console.log('start:', imageName);
@@ -34,4 +33,3 @@ fs.readdir(pathToSrc, async (err, files) => {
         await convert(files.pop());
     }
 });
-*/

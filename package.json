@@ -15,7 +15,7 @@
     "stylelint": "stylelint ./**/*.scss",
     "stylelint:fix": "stylelint ./**/*.scss --fix",
     "flow": "flow",
-    "prettier": "prettier --write \"./**/*.js\"",
+    "prettier": "prettier --write \"./www/**/*.js\"",
     "weinre": "weinre --boundHost 172.21.1.215 --httpPort 8081",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

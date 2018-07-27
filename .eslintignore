@@ -14,6 +14,9 @@ flow-typed/npm
 # res
 /_res
 
+# tools
+/tools
+
 # reports
 /flow-coverage
 
