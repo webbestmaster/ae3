@@ -6,9 +6,7 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {user} from './../../module/user';
-import type {GlobalStateType} from './../../app-reducer';
 import * as serverApi from './../../module/server-api';
 import find from 'lodash/find';
 import padStart from 'lodash/padStart';
@@ -28,16 +26,7 @@ import BottomBar from './../../components/ui/bottom-bar';
 import {storeAction} from './provider';
 import Scroll from './../../components/ui/scroll';
 import style from './style.scss';
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../lib/is';
+import {isBoolean, isNumber} from './../../lib/is';
 
 const storeViewId = 'store';
 

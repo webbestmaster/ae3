@@ -4,16 +4,7 @@
 import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
 import * as serverApi from './../../module/server-api';
 import type {BuildingType, MapType, UnitType} from './../../maps/type';
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../lib/is';
+import {isString} from './../../lib/is';
 
 export type RoomDataType = {|
     roomId: string,

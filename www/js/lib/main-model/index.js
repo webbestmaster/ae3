@@ -6,16 +6,7 @@
 
 /* eslint consistent-this: ["error", "model"] */
 
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../lib/is';
+import {isNotFunction, isNotString, isNumber, isString} from './../../lib/is';
 
 /* eslint-disable flowtype/no-weak-types */
 // $FlowFixMe

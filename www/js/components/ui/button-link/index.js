@@ -6,19 +6,8 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import type {GlobalStateType} from './../../../app-reducer';
 import buttonStyle from './../button/style.scss';
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../../lib/is';
+import {isFunction, isString} from './../../../lib/is';
 import noop from 'lodash/noop';
 import Link from 'react-router-dom/Link';
 

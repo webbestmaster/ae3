@@ -2,16 +2,7 @@
 
 /* global setTimeout */
 
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../lib/is';
+import {isFunction, isString} from './../../lib/is';
 
 type MapType = Array<string>;
 

@@ -6,19 +6,8 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import type {GlobalStateType} from './../../../app-reducer';
 import style from './style.scss';
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../../lib/is';
+import {isString} from './../../../lib/is';
 
 type PropsType = {|
     children: Array<Node>,

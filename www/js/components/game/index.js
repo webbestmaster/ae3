@@ -33,23 +33,13 @@ import find from 'lodash/find';
 import {localSocketIoClient} from './../../module/socket-local';
 import type {UserColorType} from './../../maps/map-guide';
 import LandscapeInfo from './ui/landscape-info';
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../lib/is';
+import {isBoolean} from './../../lib/is';
 
 import iconMoney from './ui/icon/money.svg';
 import iconUnitRed from './ui/icon/unit-red.svg';
 import iconUnitBlue from './ui/icon/unit-blue.svg';
 import iconUnitGreen from './ui/icon/unit-green.svg';
 import iconUnitBlack from './ui/icon/unit-black.svg';
-import type {LandscapeType} from './../../maps/type';
 
 const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,

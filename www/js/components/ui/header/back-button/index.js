@@ -4,8 +4,6 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import type {GlobalStateType} from './../../../../app-reducer';
 import style from './style.scss';
 import withRouter from 'react-router-dom/withRouter';
 import type {ContextRouter} from 'react-router-dom';

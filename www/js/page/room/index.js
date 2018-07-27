@@ -47,16 +47,7 @@ import serviceStyle from './../../../css/service.scss';
 import createRoomStyle from './../create-room/style.scss';
 import type {LangKeyType} from './../../components/locale/translation/type';
 import ButtonListWrapper from './../../components/ui/button-list-wrapper';
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../lib/is';
+import {isNotString, isString} from './../../lib/is';
 
 type StateType = {|
     settings?: AllRoomSettingsType,

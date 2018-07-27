@@ -41,7 +41,6 @@ import {user} from './../../../module/user';
 import find from 'lodash/find';
 import findLast from 'lodash/findLast';
 import isEqual from 'lodash/isEqual';
-import remove from 'lodash/remove';
 import type {SocketMessagePushStateType, SocketMessageTakeTurnType, SocketMessageType} from './../../../module/socket';
 import {socket} from './../../../module/socket';
 import MainModel from './../../../lib/main-model';
@@ -52,16 +51,7 @@ import {storeViewId} from './../../store';
 import Queue from './../../../lib/queue';
 import {storeAction} from './../../store/provider';
 import {localSocketIoClient} from './../../../module/socket-local';
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../../lib/is';
+import {isNotFunction, isNotNumber, isNotString, isNumber, isString} from './../../../lib/is';
 
 type RenderSettingType = {|
     width: number,

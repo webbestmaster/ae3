@@ -2,7 +2,6 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import routes from './../../app/routes';
 import buttonListWrapperStyle from './../../components/ui/button-list-wrapper/style.scss';
 import Page from './../../components/ui/page';

@@ -4,16 +4,7 @@
 /* eslint consistent-this: ["error", "queue"] */
 
 type CallBackType = () => Promise<void> | void;
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../lib/is';
+import {isFunction} from './../../lib/is';
 
 function requestIdleCallbackPolyfill(callback: () => {}) {
     window.requestAnimationFrame(() => {

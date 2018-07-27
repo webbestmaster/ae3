@@ -14,16 +14,7 @@ import * as PIXI from 'pixi.js';
 import {storeViewId} from './../../store';
 import queryString from 'query-string';
 import type {RoomTypeType} from './../../../module/server-api';
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../../lib/is';
+import {isNotNumber, isString} from './../../../lib/is';
 
 type InteractionEventType = {|
     +data: {|

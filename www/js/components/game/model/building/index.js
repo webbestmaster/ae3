@@ -7,16 +7,7 @@ import type {BuildingAttrTypeType, BuildingType, MapUserType} from './../../../.
 import {getUserColor} from './../helper';
 import mapGuide from './../../../../maps/map-guide';
 import imageMap from './../../image/image-map';
-import {
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-} from './../../../../lib/is';
+import {isNotString, isString} from './../../../../lib/is';
 
 type BuildingAttrType = BuildingType;
 
