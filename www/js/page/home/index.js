@@ -16,7 +16,7 @@ import buttonListWrapperStyle from './../../components/ui/button-list-wrapper/st
 import style from './style.scss';
 import serviceStyle from './../../../css/service.scss';
 import Locale from './../../components/locale';
-import logoSrc from './i/logo.png';
+import logoSrc from './i/logo.svg';
 import type {LangKeyType} from './../../components/locale/translation/type';
 
 class Home extends Component<void, void> {
