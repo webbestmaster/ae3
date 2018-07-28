@@ -113,7 +113,7 @@ export default class Scroll extends Component<StateType, PropsType> {
                 <div className={classnames(swiperStyle['swiper-wrapper'], style.swiper_wrapper)}>
                     <div className={classnames(swiperStyle['swiper-slide'], style.swiper_slide)}>{props.children}</div>
                 </div>
-                <div className="swiper-scrollbar" />
+                <div className="swiper-scrollbar"/>
             </div>
         );
     }

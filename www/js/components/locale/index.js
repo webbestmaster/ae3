@@ -52,11 +52,7 @@ class Locale extends Component<PropsType, StateType> {
 }
 
 export default connect(
-    (
-        state: GlobalStateType
-    ): {|
-        +locale: LocaleType
-    |} => ({
+    (state: GlobalStateType): {|+locale: LocaleType|} => ({
         locale: state.locale
     }),
     {

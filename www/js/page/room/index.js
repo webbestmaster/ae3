@@ -446,7 +446,7 @@ class Room extends Component<PropsType, StateType> {
                                             stringKey={((userData.type === 'human' ? 'HUMAN' : 'BOT'): LangKeyType)}
                                         />
                                         {myPlayerIndex === userIndex ?
-                                            [' (', <Locale key="you" stringKey={('YOU': LangKeyType)} />, ')'] :
+                                            [' (', <Locale key="you" stringKey={('YOU': LangKeyType)}/>, ')'] :
                                             null}
                                     </p>
                                 </div>
@@ -474,13 +474,13 @@ class Room extends Component<PropsType, StateType> {
             <Form>
                 <Fieldset>
                     <FormHeader>
-                        <Locale stringKey={('PLAYERS': LangKeyType)} />
+                        <Locale stringKey={('PLAYERS': LangKeyType)}/>
                         {[' (', userList.length, '/', getMaxUserListSize(map), '):'].join('')}
                     </FormHeader>
                     {view.renderUserList()}
 
                     <FormHeader>
-                        <Locale stringKey={('MAP': LangKeyType)} />
+                        <Locale stringKey={('MAP': LangKeyType)}/>
                         :
                     </FormHeader>
                     <p className={createRoomStyle.map_size}>
@@ -518,7 +518,7 @@ class Room extends Component<PropsType, StateType> {
                     await view.hideSpinner();
                 }}
             >
-                <Locale stringKey={('START': LangKeyType)} />
+                <Locale stringKey={('START': LangKeyType)}/>
             </Button>
         ];
 
@@ -535,7 +535,7 @@ class Room extends Component<PropsType, StateType> {
                     await view.hideSpinner();
                 }}
             >
-                <Locale stringKey={('ADD_BOT': LangKeyType)} />
+                <Locale stringKey={('ADD_BOT': LangKeyType)}/>
             </Button>
         );
 
@@ -549,7 +549,7 @@ class Room extends Component<PropsType, StateType> {
                         await view.hideSpinner();
                     }}
                 >
-                    <Locale stringKey={('ADD_HUMAN': LangKeyType)} />
+                    <Locale stringKey={('ADD_HUMAN': LangKeyType)}/>
                 </Button>
             );
         }
@@ -566,12 +566,12 @@ class Room extends Component<PropsType, StateType> {
         const myPlayerIndex = view.getMyPlayerIndex();
 
         if (isGameStart === true) {
-            return <Game roomId={roomId} />;
+            return <Game roomId={roomId}/>;
         }
 
         return (
             <Page>
-                <Spinner isOpen={isRoomDataFetching} />
+                <Spinner isOpen={isRoomDataFetching}/>
                 <Header>{settings ? settings.map.meta[props.locale.name].name : '\u00A0'}</Header>
                 <Scroll>{view.renderForm()}</Scroll>
 
@@ -580,7 +580,7 @@ class Room extends Component<PropsType, StateType> {
                         {view.renderMasterButtonList()}
                     </ButtonListWrapper> :
                     <BottomBar>
-                        <Locale stringKey={('WAIT_FOR_START': LangKeyType)} />
+                        <Locale stringKey={('WAIT_FOR_START': LangKeyType)}/>
                     </BottomBar>
                 }
             </Page>

@@ -29,7 +29,7 @@ export default class Header extends Component<PropsType, StateType> {
 
         return (
             <div className={style.header + additionClass}>
-                <BackButton />
+                <BackButton/>
                 <div className={style.header_text}>
                     <h3 className={servicesStyle.ellipsis}>{props.children}</h3>
                 </div>

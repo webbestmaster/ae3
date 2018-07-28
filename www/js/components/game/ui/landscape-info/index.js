@@ -81,7 +81,7 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
                         );
                     }
                 )}
-                <img className={style.armor_symbol} src={armorImage} />
+                <img className={style.armor_symbol} src={armorImage}/>
             </div>
         );
     }

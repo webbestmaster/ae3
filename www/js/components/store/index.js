@@ -27,6 +27,10 @@ import {storeAction} from './provider';
 import Scroll from './../../components/ui/scroll';
 import style from './style.scss';
 import {isBoolean, isNumber} from './../../lib/is';
+import Spinner from '../ui/spinner';
+import Locale from '../locale';
+import type {LangKeyType} from '../locale/translation/type';
+import type {TeamIdType} from '../../maps/map-guide';
 
 const storeViewId = 'store';
 
@@ -46,7 +50,7 @@ type PropsType = {|
 |};
 
 type StateType = {|
-    mapUserData: MapUserType | null,
+    mapUserData: MapUserType,
     isInProgress: boolean
 |};
 
@@ -63,7 +67,11 @@ class Store extends Component<PropsType, StateType> {
         const view = this;
 
         view.state = {
-            mapUserData: find(props.map.userList, {userId: user.getId()}) || null,
+            mapUserData: find(props.map.userList, {userId: user.getId()}) || {
+                userId: 'no-user-id-in-store',
+                money: 0,
+                teamId: 'team-0'
+            },
             isInProgress: false
         };
     }
@@ -155,11 +163,6 @@ class Store extends Component<PropsType, StateType> {
             return null;
         }
 
-        if (mapUserData === null) {
-            console.error('mapUserData is not define');
-            return null;
-        }
-
         const supplyState = getSupplyState(props.map, user.getId());
 
         return (
@@ -178,7 +181,7 @@ class Store extends Component<PropsType, StateType> {
                     {unitData.attack.min}
                     -
                     {unitData.attack.max}
-                    <br />
+                    <br/>
                     COST:
                     {padStart(String(unitCost), 4, ' ')}
                     &nbsp;|&nbsp; move:
@@ -212,11 +215,6 @@ class Store extends Component<PropsType, StateType> {
             return cost;
         }
 
-        if (mapUserData === null) {
-            console.error('mapUserData is not define');
-            return null;
-        }
-
         const userCommander = mapUserData.commander || null;
 
         if (userCommander === null) {
@@ -248,28 +246,13 @@ class Store extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
-        // const supplyState = getSupplyState(props.map, user.getId());
-
-        if (state.mapUserData === null) {
-            console.error('ERROR with state.mapUserData', state);
-            return (
-                <Page>
-                    <Header>ERROR with state.mapUserData</Header>
-                </Page>
-            );
-        }
-
-        if (state.isInProgress) {
-            return (
-                <Page>
-                    <Header>Waiting...</Header>
-                </Page>
-            );
-        }
-
         return (
             <Page>
-                <Header>Store</Header>
+                <Spinner isOpen={state.isInProgress}/>
+
+                <Header>
+                    <Locale stringKey={('CASTLE': LangKeyType)}/>
+                </Header>
 
                 <Scroll>{view.renderUnitList()}</Scroll>
 

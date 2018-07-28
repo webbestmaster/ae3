@@ -128,7 +128,7 @@ class JoinRoom extends Component<PropsType, StateType> {
     static renderHeader(): Node {
         return (
             <Header>
-                <Locale stringKey={('JOIN_GAME': LangKeyType)} />
+                <Locale stringKey={('JOIN_GAME': LangKeyType)}/>
             </Header>
         );
     }
@@ -155,7 +155,7 @@ class JoinRoom extends Component<PropsType, StateType> {
                         await view.componentDidMount();
                     }}
                 >
-                    <Locale stringKey={('REFRESH': LangKeyType)} />
+                    <Locale stringKey={('REFRESH': LangKeyType)}/>
                 </Button>
             </ButtonListWrapper>
         );
@@ -173,7 +173,7 @@ class JoinRoom extends Component<PropsType, StateType> {
                     <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                         <Fieldset className={serviceStyle.ta_c}>
                             <span className={serviceStyle.zero_opacity}>{'\u2026'}</span>
-                            <Locale stringKey={('LOADING': LangKeyType)} />
+                            <Locale stringKey={('LOADING': LangKeyType)}/>
                             {'\u2026'}
                         </Fieldset>
                     </ButtonListWrapper>
@@ -185,13 +185,13 @@ class JoinRoom extends Component<PropsType, StateType> {
             return (
                 <Page>
                     {JoinRoom.renderHeader()}
-                    <Spinner isOpen={isRoomsFetching} />
+                    <Spinner isOpen={isRoomsFetching}/>
                     <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
                         <Fieldset className={serviceStyle.ta_c}>
-                            <Locale stringKey={('MESSAGE__NO_OPEN_GAME': LangKeyType)} />
+                            <Locale stringKey={('MESSAGE__NO_OPEN_GAME': LangKeyType)}/>
                         </Fieldset>
                         <ButtonLink to={routes.createRoomOnline}>
-                            <Locale stringKey={('CREATE_GAME': LangKeyType)} />
+                            <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
                         </ButtonLink>
                     </ButtonListWrapper>
                     {view.renderRefreshButton()}
@@ -202,7 +202,7 @@ class JoinRoom extends Component<PropsType, StateType> {
         return (
             <Page>
                 {JoinRoom.renderHeader()}
-                <Spinner isOpen={isRoomsFetching} />
+                <Spinner isOpen={isRoomsFetching}/>
                 <Scroll>
                     {roomDataList.map(
                         (roomData: RoomDataType): Node => {

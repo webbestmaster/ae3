@@ -44,7 +44,7 @@ export default class Spinner extends Component<PropsType, StateType> {
                     aria-labelledby="alert-dialog-slide-title"
                     aria-describedby="alert-dialog-slide-description"
                 >
-                    <div className={style.spinner} />
+                    <div className={style.spinner}/>
                 </Dialog>
             </MuiThemeProvider>
         );

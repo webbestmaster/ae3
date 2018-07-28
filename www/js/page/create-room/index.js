@@ -284,9 +284,9 @@ class CreateRoom extends Component<PropsType, StateType> {
 
         return (
             <Page>
-                <Spinner isOpen={state.isRoomCreating} />
+                <Spinner isOpen={state.isRoomCreating}/>
                 <Header>
-                    <Locale stringKey={('CREATE_GAME': LangKeyType)} />
+                    <Locale stringKey={('CREATE_GAME': LangKeyType)}/>
                 </Header>
 
                 <Form className={style.map_list__form}>
@@ -295,7 +295,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                         {view.senderUnitLimitSelect()}
                     </div>
                     <FormHeader>
-                        <Locale stringKey={('MAPS': LangKeyType)} />
+                        <Locale stringKey={('MAPS': LangKeyType)}/>
                         :
                     </FormHeader>
                 </Form>

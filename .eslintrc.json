@@ -142,7 +142,7 @@
             1,
             {
                 "closingSlash": "never",
-                "beforeSelfClosing": "always",
+                "beforeSelfClosing": "never",
                 "afterOpening": "never",
                 "beforeClosing": "never"
             }

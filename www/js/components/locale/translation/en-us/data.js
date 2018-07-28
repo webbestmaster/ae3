@@ -24,6 +24,7 @@ export const enUs: LangDataType = {
     ADD_BOT: 'Add Bot',
     START: 'Start',
     WAIT_FOR_START: 'Wait for Start',
+    CASTLE: 'Castle',
     SPACE: ' '
     /* eslint-enable id-match */
 };

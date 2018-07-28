@@ -141,15 +141,12 @@ export default class Game {
         game.render.drawLandscape(
             map,
             async (x: number, y: number): Promise<void> => {
+                game.gameView.setState({activeLandscapeTile: {x, y}});
+
                 if (!game.isMyTurn()) {
                     console.log('click on landscape: not your turn');
                     return;
                 }
-
-                console.log('landscape clicked in', x, y);
-                console.log('todo: show landscape date', x, y);
-
-                game.gameView.setState({activeLandscapeTile: {x, y}});
 
                 await game.render.cleanActionsList();
 

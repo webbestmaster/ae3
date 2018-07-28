@@ -625,11 +625,11 @@ export class GameView extends Component<PropsType, StateType> {
                     y={state.activeLandscapeTile.y}
                 />
                 <BottomBar className={classnames(style.bottom_bar, bottomBarColorMap[activeUserColor])}>
-                    <img className={style.bottom_bar__icon} src={unitIconMap[activeUserColor]} alt="" />
+                    <img className={style.bottom_bar__icon} src={unitIconMap[activeUserColor]} alt=""/>
                     <span className={style.bottom_bar__text}>
                         {supplyState.unitCount + '/' + supplyState.unitLimit}
                     </span>
-                    <img className={style.bottom_bar__icon} src={iconMoney} alt="" />
+                    <img className={style.bottom_bar__icon} src={iconMoney} alt=""/>
                     <span className={style.bottom_bar__text}>
                         {mapUserData.money}
                         &nbsp;

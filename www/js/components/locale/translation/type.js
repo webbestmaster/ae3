@@ -22,6 +22,7 @@ export type LangDataType = {|
     +ADD_BOT: string,
     +START: string,
     +WAIT_FOR_START: string,
+    +CASTLE: string,
     +SPACE: ' '
     /* eslint-enable id-match */
 |};

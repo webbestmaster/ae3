@@ -24,6 +24,7 @@ export const ruRu: LangDataType = {
     ADD_BOT: 'Добавить Бота',
     START: 'Старт',
     WAIT_FOR_START: 'Ожидание старта',
+    CASTLE: 'Замок',
     SPACE: ' '
     /* eslint-enable id-match */
 };

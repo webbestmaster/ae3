@@ -83,7 +83,7 @@ export default class Select extends Component<PropsType, StateType> {
             }
         }
 
-        return <img className={style.icon} src={icon[iconPath]} alt="" />;
+        return <img className={style.icon} src={icon[iconPath]} alt=""/>;
     }
 
     render(): Node {
