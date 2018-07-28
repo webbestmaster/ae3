@@ -365,7 +365,20 @@ export default class Render {
         container.position.set(defender.x * mapGuide.size.square, defender.y * mapGuide.size.square);
         container.buttonMode = true;
         container.interactive = true;
-        container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-attack-0']));
+
+        const attackIcon = new PIXI.extras.AnimatedSprite(
+            [0, 1, 2, 3].map(
+                (spriteNumber: number): PIXI.Texture => {
+                    return PIXI.Texture.fromImage(imageMap.other[`action-attack-${spriteNumber}`]);
+                }
+            )
+        );
+
+        attackIcon.animationSpeed = defaultUnitData.render.spriteAnimatedSpeed;
+
+        attackIcon.play();
+
+        container.addChild(attackIcon);
 
         render.layer.actions.addChild(unitAction.container);
     }
@@ -466,7 +479,7 @@ export default class Render {
         }
         */
 
-        const attackSprite = PIXI.Sprite.fromImage(imageMap.other['action-attack-0']);
+        const attackSprite = PIXI.Sprite.fromImage(imageMap.other['action-attack-1']);
 
         render.layer.actions.addChild(attackSprite);
 
