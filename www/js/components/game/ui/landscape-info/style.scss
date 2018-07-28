@@ -15,15 +15,17 @@
 }
 
 .armor {
-    background-image: url('./i/armor.svg');
-    background-position: 0 2px;
-    background-repeat: no-repeat;
-    background-size: 12px auto;
-    bottom: 0;
-    font-size: 14px;
-    padding: 1px 3px 1px 14px;
+    bottom: 4px;
     position: absolute;
-    right: 0;
-    text-shadow: 1px 1px 0 $main-text-shadow-color, -1px -1px 0 $main-text-shadow-color, 1px -1px 0 $main-text-shadow-color, -1px 1px 0 $main-text-shadow-color, 0 1px 0 $main-text-shadow-color, 1px 0 0 $main-text-shadow-color, 0 -1px 0 $main-text-shadow-color, -1px 0 0 $main-text-shadow-color;
-    z-index: 1;
+    right: 4px;
+}
+
+.armor_symbol {
+    float: right;
+    height: 14px;
+    width: 12px;
+
+    &:last-child {
+        margin-right: 1px;
+    }
 }

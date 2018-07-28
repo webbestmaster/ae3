@@ -52,29 +52,29 @@ type MapGuideType = {|
         |},
         +terra: {|
             +pathReduce: 1,
-            +armor: 1
+            +armor: 5
         |},
         +forest: {|
             +pathReduce: 2,
-            +armor: 2
+            +armor: 10
         |},
         +stone: {|
             +pathReduce: 3,
-            +armor: 3
+            +armor: 15
         |},
         +water: {|
             +pathReduce: 3,
             +armor: 0,
-            +flowArmor: 3
+            +flowArmor: 15
         |},
         +hill: {|
             +pathReduce: 2,
-            +armor: 2
+            +armor: 10
         |}
     |},
     +landscapeUnderBuilding: {|
         +pathReduce: 1,
-        +armor: 3
+        +armor: 15
     |}
 |};
 
@@ -134,29 +134,29 @@ const mapGuide: MapGuideType = {
         },
         terra: {
             pathReduce: 1,
-            armor: 1
+            armor: 5
         },
         forest: {
             pathReduce: 2,
-            armor: 2
+            armor: 10
         },
         stone: {
             pathReduce: 3,
-            armor: 3
+            armor: 15
         },
         water: {
             pathReduce: 3,
             armor: 0,
-            flowArmor: 3
+            flowArmor: 15
         },
         hill: {
             pathReduce: 2,
-            armor: 2
+            armor: 10
         }
     },
     landscapeUnderBuilding: {
         pathReduce: 1,
-        armor: 3
+        armor: 15
     }
 };
 
