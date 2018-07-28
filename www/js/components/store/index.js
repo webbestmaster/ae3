@@ -271,9 +271,7 @@ class Store extends Component<PropsType, StateType> {
             <Page>
                 <Header>Store</Header>
 
-                <div className={style.unit_list_wrapper}>
-                    <Scroll>{view.renderUnitList()}</Scroll>
-                </div>
+                <Scroll>{view.renderUnitList()}</Scroll>
 
                 {props.children}
             </Page>
