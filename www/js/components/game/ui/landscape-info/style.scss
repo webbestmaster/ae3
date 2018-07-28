@@ -10,6 +10,7 @@
     float: right;
     height: $bar-height;
     position: relative;
+    transition: background-image linear 0.3s;
     width: $bar-height;
 }
 
