@@ -426,7 +426,20 @@ export default class Render {
         container.position.set(grave.x * mapGuide.size.square, grave.y * mapGuide.size.square);
         container.buttonMode = true;
         container.interactive = true;
-        container.addChild(PIXI.Sprite.fromImage(imageMap.other.skull));
+
+        const raiseIcon = new PIXI.extras.AnimatedSprite(
+            [0, 1, 2, 3].map(
+                (spriteNumber: number): PIXI.Texture => {
+                    return PIXI.Texture.fromImage(imageMap.other[`action-raise-skeleton-${spriteNumber}`]);
+                }
+            )
+        );
+
+        raiseIcon.animationSpeed = defaultUnitData.render.spriteAnimatedSpeed;
+
+        raiseIcon.play();
+
+        container.addChild(raiseIcon);
 
         render.layer.actions.addChild(unitAction.container);
     }
@@ -438,7 +451,20 @@ export default class Render {
         container.position.set(building.x * mapGuide.size.square, building.y * mapGuide.size.square);
         container.buttonMode = true;
         container.interactive = true;
-        container.addChild(PIXI.Sprite.fromImage(imageMap.other['action-destroy-building-0']));
+
+        const attackIcon = new PIXI.extras.AnimatedSprite(
+            [0, 1, 2, 3].map(
+                (spriteNumber: number): PIXI.Texture => {
+                    return PIXI.Texture.fromImage(imageMap.other[`action-destroy-building-${spriteNumber}`]);
+                }
+            )
+        );
+
+        attackIcon.animationSpeed = defaultUnitData.render.spriteAnimatedSpeed;
+
+        attackIcon.play();
+
+        container.addChild(attackIcon);
 
         render.layer.actions.addChild(unitAction.container);
     }
