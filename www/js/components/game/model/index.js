@@ -141,7 +141,7 @@ export default class Game {
         game.render.drawLandscape(
             map,
             async (x: number, y: number): Promise<void> => {
-                game.gameView.setState({activeLandscapeTile: {x, y}});
+                game.gameView.setActiveLandscape(x, y);
 
                 if (!game.isMyTurn()) {
                     console.log('click on landscape: not your turn');
@@ -1293,7 +1293,7 @@ export default class Game {
             building.gameAttr.container,
             // eslint-disable-next-line complexity, max-statements
             async (): Promise<void> => {
-                game.gameView.setState({activeLandscapeTile: {x: buildingData.x, y: buildingData.y}});
+                game.gameView.setActiveLandscape(buildingData.x, buildingData.y);
 
                 if (!game.isMyTurn()) {
                     console.log('click on building: not your turn');
@@ -1386,7 +1386,7 @@ export default class Game {
             userList: mapState === null ? [] : mapState.userList,
             event: {
                 click: async (clickedUnit: Unit): Promise<void> => {
-                    game.gameView.setState({activeLandscapeTile: {x: unitData.x, y: unitData.y}});
+                    game.gameView.setActiveLandscape(clickedUnit.attr.x, clickedUnit.attr.y);
 
                     if (!game.isMyTurn()) {
                         console.log('click on unit: not your turn');
@@ -1488,6 +1488,7 @@ export default class Game {
                                 case 'move':
                                     if (unitActionsList !== null) {
                                         await game.bindOnClickUnitActionMove(unitAction, unitActionsList);
+                                        game.gameView.setActiveLandscape(unitAction.to.x, unitAction.to.y);
                                     }
                                     break;
 

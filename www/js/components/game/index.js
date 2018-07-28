@@ -588,6 +588,12 @@ export class GameView extends Component<PropsType, StateType> {
         );
     }
 
+    setActiveLandscape(x: number, y: number) {
+        const view = this;
+
+        view.setState({activeLandscapeTile: {x, y}});
+    }
+
     // eslint-disable-next-line complexity
     renderBottomBar(): Node {
         const view = this;
