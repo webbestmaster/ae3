@@ -7,8 +7,11 @@ import React, {Component} from 'react';
 import style from './style.scss';
 import type {GameDataType} from './../../model/unit';
 import type {MapType} from './../../../../maps/type';
+import find from 'lodash/find';
 
 import armorImage from './i/armor.svg';
+import {isNotString} from './../../../../lib/is';
+import {getUserColor} from './../../model/helper';
 
 const fontReqContext = require.context('./i/font', true, /\.svg$/);
 
@@ -27,12 +30,20 @@ type PropsType = {|
     map: MapType
 |};
 
-const iconsReqContext = require.context('./i/landscape', true, /\.svg$/);
+const landscapeIconsReqContext = require.context('./i/landscape', true, /\.svg$/);
 
-const iconMap = {};
+const landscapeIconMap = {};
 
-iconsReqContext.keys().forEach((fileName: string) => {
-    Object.assign(iconMap, {[fileName.replace('./', '').replace('.svg', '')]: iconsReqContext(fileName)});
+landscapeIconsReqContext.keys().forEach((fileName: string) => {
+    landscapeIconMap[fileName.replace('./', '').replace('.svg', '')] = landscapeIconsReqContext(fileName);
+});
+
+const buildingIconsReqContext = require.context('./i/building', true, /\.svg$/);
+
+const buildingIconMap = {};
+
+buildingIconsReqContext.keys().forEach((fileName: string) => {
+    buildingIconMap[fileName.replace('./', '').replace('.svg', '')] = buildingIconsReqContext(fileName);
 });
 
 export default class LandscapeInfo extends Component<PropsType, StateType> {
@@ -75,13 +86,46 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
         );
     }
 
-    render(): Node {
+    // eslint-disable-next-line complexity
+    getImageSrc(): string {
         const view = this;
         const {props} = view;
         const {map, x, y} = props;
 
+        const buildingOnPlace = find(props.gameData.buildingList, {attr: {x, y}}) || null;
+
+        if (buildingOnPlace === null) {
+            return landscapeIconMap[map.landscape[y][x]];
+        }
+
+        const buildingAttr = buildingOnPlace.attr;
+        const buildingType = buildingAttr.type;
+
+        if (['farm-destroyed', 'well', 'temple'].includes(buildingType)) {
+            return buildingIconMap[buildingType];
+        }
+
+        const buildingUserId = buildingAttr.userId;
+
+        if (isNotString(buildingUserId)) {
+            return buildingIconMap[buildingType + '-gray'];
+        }
+
+        const userColor = getUserColor(buildingUserId, props.gameData.userList);
+
+        if (userColor === null) {
+            console.error('User color is not defined');
+            return buildingIconMap[buildingType + '-gray'];
+        }
+
+        return buildingIconMap[buildingType + '-' + userColor];
+    }
+
+    render(): Node {
+        const view = this;
+
         return (
-            <div className={style.wrapper} style={{backgroundImage: 'url(' + iconMap[map.landscape[y][x]] + ')'}}>
+            <div className={style.wrapper} style={{backgroundImage: 'url(' + view.getImageSrc() + ')'}}>
                 {view.renderArmorData()}
             </div>
         );

@@ -1296,12 +1296,12 @@ export default class Game {
             building.gameAttr.container,
             // eslint-disable-next-line complexity, max-statements
             async (): Promise<void> => {
+                game.gameView.setState({activeLandscapeTile: {x: buildingData.x, y: buildingData.y}});
+
                 if (!game.isMyTurn()) {
                     console.log('click on building: not your turn');
                     return;
                 }
-
-                console.log('TODO: show data bout building', building.attr);
 
                 const wrongStateList = getWrongStateList(game.getGameData());
 
@@ -1389,6 +1389,8 @@ export default class Game {
             userList: mapState === null ? [] : mapState.userList,
             event: {
                 click: async (clickedUnit: Unit): Promise<void> => {
+                    game.gameView.setState({activeLandscapeTile: {x: unitData.x, y: unitData.y}});
+
                     if (!game.isMyTurn()) {
                         console.log('click on unit: not your turn');
                         return;
