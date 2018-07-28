@@ -41,7 +41,8 @@ type PropsType = {|
         +params: {|
             +roomId: string
         |}
-    |}
+    |},
+    +children: Array<Node>
 |};
 
 type StateType = {|
@@ -247,7 +248,7 @@ class Store extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
 
-        const supplyState = getSupplyState(props.map, user.getId());
+        // const supplyState = getSupplyState(props.map, user.getId());
 
         if (state.mapUserData === null) {
             console.error('ERROR with state.mapUserData', state);
@@ -268,17 +269,13 @@ class Store extends Component<PropsType, StateType> {
 
         return (
             <Page>
-                <Header className={serviceStyle.ta_r}>Store</Header>
+                <Header>Store</Header>
 
                 <div className={style.unit_list_wrapper}>
                     <Scroll>{view.renderUnitList()}</Scroll>
                 </div>
 
-                <BottomBar className={serviceStyle.ta_l}>
-                    Money: {state.mapUserData && state.mapUserData.money ? state.mapUserData.money : 0} $ &nbsp;|&nbsp;
-                    {supplyState.unitCount} /
-                    {supplyState.unitLimit} 웃
-                </BottomBar>
+                {props.children}
             </Page>
         );
     }

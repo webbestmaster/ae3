@@ -581,7 +581,11 @@ export class GameView extends Component<PropsType, StateType> {
             return null;
         }
 
-        return <Store key="store" x={parseInt(queryData.x, 10)} y={parseInt(queryData.y, 10)} map={mapState} />;
+        return (
+            <Store key="store" x={parseInt(queryData.x, 10)} y={parseInt(queryData.y, 10)} map={mapState}>
+                {view.renderBottomBar()}
+            </Store>
+        );
     }
 
     // eslint-disable-next-line complexity
