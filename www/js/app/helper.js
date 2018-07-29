@@ -5,8 +5,8 @@
 import FastClick from 'fastclick';
 import TWEEN from '@tweenjs/tween.js';
 
-import {run as runLocalServer} from './../module/server-local-api';
-import {run as runLocalSocket} from './../module/socket-local';
+import {run as runLocalServer} from '../module/server-local-api';
+import {run as runLocalSocket} from '../module/socket-local';
 
 export async function initializeEnvironment(): Promise<void> {
     const {document} = window;

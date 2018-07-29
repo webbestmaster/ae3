@@ -7,9 +7,9 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import type {GlobalStateType} from './../../../app-reducer';
+import type {GlobalStateType} from '../../../app-reducer';
 import style from './style.scss';
-import {isString} from './../../../lib/is';
+import {isString} from '../../../lib/is';
 
 type PropsType = {|
     children: Node,

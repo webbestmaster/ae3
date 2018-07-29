@@ -1,6 +1,6 @@
 // @flow
 
-import {LocalSocketIoClient} from './../lib/local-server/local-socket-io-client';
+import {LocalSocketIoClient} from '../lib/local-server/local-socket-io-client';
 import {localServerOptions} from './server-local-api';
 
 const localSocketIoClient = new LocalSocketIoClient();

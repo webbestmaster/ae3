@@ -7,7 +7,7 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import type {GlobalStateType} from './../../app-reducer';
+import type {GlobalStateType} from '../../app-reducer';
 import type {LocaleType} from './reducer';
 import {allLocales} from './const';
 import type {LangKeyType} from './translation/type';
@@ -25,8 +25,7 @@ type PassedPropsType = {|
 |};
 
 class Locale extends Component<ReduxPropsType, PassedPropsType, StateType> {
-    // eslint-disable-next-line id-match
-    props: $Exact<{...ReduxPropsType, ...PassedPropsType}>;
+    props: ReduxPropsType & PassedPropsType;
     state: StateType;
 
     getLocalizedString(): string {

@@ -2,11 +2,11 @@
 
 /* eslint consistent-this: ["error", "unit", "aggressor"] */
 
-import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './..';
-import Unit from './..';
-import {getMoviePath} from './../../helper';
-import type {PathType} from './../../../../../lib/a-star-finder';
-import type {AvailablePathMapType} from './../path-master';
+import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from '..';
+import Unit from '..';
+import {getMoviePath} from '../../helper';
+import type {PathType} from '../../../../../lib/a-star-finder';
+import type {AvailablePathMapType} from '../path-master';
 
 function getCell(x: number, y: number, map: UnitActionsMapType): Array<UnitActionType> | null {
     const line = getLine(y, map);

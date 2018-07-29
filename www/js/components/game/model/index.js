@@ -4,11 +4,11 @@
 
 /* eslint consistent-this: ["error", "game"] */
 
-import type {BuildingType, GraveType, LandscapeType, MapType, MapUserType, UnitType} from './../../../maps/type';
-import {unitActionStateDefaultValue} from './../../../maps/type';
-import type {AllRoomSettingsType, ServerUserType} from './../../../module/server-api';
-import * as serverApi from './../../../module/server-api';
-import mapGuide from './../../../maps/map-guide';
+import type {BuildingType, GraveType, LandscapeType, MapType, MapUserType, UnitType} from '../../../maps/type';
+import {unitActionStateDefaultValue} from '../../../maps/type';
+import type {AllRoomSettingsType, ServerUserType} from '../../../module/server-api';
+import * as serverApi from '../../../module/server-api';
+import mapGuide from '../../../maps/map-guide';
 import type {WrongStateType, WrongStateTypeUnitOnUnitType} from './helper';
 import {
     bindClick,
@@ -37,21 +37,21 @@ import type {
     UnitActionType
 } from './unit';
 import Unit from './unit';
-import {user} from './../../../module/user';
+import {user} from '../../../module/user';
 import find from 'lodash/find';
 import findLast from 'lodash/findLast';
 import isEqual from 'lodash/isEqual';
-import type {SocketMessagePushStateType, SocketMessageTakeTurnType, SocketMessageType} from './../../../module/socket';
-import {socket} from './../../../module/socket';
-import MainModel from './../../../lib/main-model';
+import type {SocketMessagePushStateType, SocketMessageTakeTurnType, SocketMessageType} from '../../../module/socket';
+import {socket} from '../../../module/socket';
+import MainModel from '../../../lib/main-model';
 import * as unitMaster from './unit/master';
 import {defaultUnitData} from './unit/unit-guide';
-import {bottomBarData, GameView} from './../../game';
-import {storeViewId} from './../../store';
-import Queue from './../../../lib/queue';
-import {storeAction} from './../../store/provider';
-import {localSocketIoClient} from './../../../module/socket-local';
-import {isNotFunction, isNotNumber, isNotString, isNumber, isString} from './../../../lib/is';
+import {bottomBarData, GameView} from '..';
+import {storeViewId} from '../../store';
+import Queue from '../../../lib/queue';
+import {storeAction} from '../../store/provider';
+import {localSocketIoClient} from '../../../module/socket-local';
+import {isNotFunction, isNotNumber, isNotString, isNumber, isString} from '../../../lib/is';
 
 type RenderSettingType = {|
     width: number,

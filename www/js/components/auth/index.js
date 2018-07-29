@@ -10,9 +10,9 @@ import {connect} from 'react-redux';
 import type {SetSocketType, SetUserType} from './action';
 import {setSocket, setUser} from './action';
 import type {AuthType, SocketType, UserType} from './reducer';
-import {user} from './../../module/user';
-import {socket} from './../../module/socket';
-import type {GlobalStateType} from './../../app-reducer';
+import {user} from '../../module/user';
+import {socket} from '../../module/socket';
+import type {GlobalStateType} from '../../app-reducer';
 
 type PropsType = {|
     setUser: (userState: UserType) => SetUserType,

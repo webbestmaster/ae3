@@ -1,11 +1,13 @@
 // @flow
 
-import type {ScreenType} from './reducer';
 import {systemConst} from './const';
 
 export type OnResizeType = {|
     type: 'system__resize',
-    payload: ScreenType
+    payload: {
+        width: number,
+        height: number
+    }
 |};
 
 export function onResize(width: number, height: number): OnResizeType {

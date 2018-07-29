@@ -6,7 +6,7 @@
 
 /* eslint consistent-this: ["error", "model"] */
 
-import {isNotFunction, isNotString, isNumber, isString} from './../../lib/is';
+import {isNotFunction, isNotString, isNumber, isString} from '../is';
 
 /* eslint-disable flowtype/no-weak-types */
 // $FlowFixMe

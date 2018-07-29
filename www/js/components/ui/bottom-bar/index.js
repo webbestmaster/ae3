@@ -7,10 +7,10 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import type {GlobalStateType} from './../../../app-reducer';
-import servicesStyle from './../../../../css/service.scss';
+import type {GlobalStateType} from '../../../app-reducer';
+import servicesStyle from '../../../../css/service.scss';
 import style from './style.scss';
-import {isFunction, isString} from './../../../lib/is';
+import {isFunction, isString} from '../../../lib/is';
 
 type PropsType = {|
     children: Node,

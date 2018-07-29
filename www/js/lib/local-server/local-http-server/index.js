@@ -3,8 +3,8 @@
 /* global setTimeout */
 
 /* eslint consistent-this: ["error", "httpServer"] */
-import type {RequestCallBackType} from './../local-request';
-import type {PushedStateType} from './../room';
+import type {RequestCallBackType} from '../local-request';
+import type {PushedStateType} from '../room';
 
 const {isFunction} = require('./../helper');
 

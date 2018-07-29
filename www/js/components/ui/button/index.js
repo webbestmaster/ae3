@@ -5,7 +5,7 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import style from './style.scss';
-import {isFunction, isString} from './../../../lib/is';
+import {isFunction, isString} from '../../../lib/is';
 
 type PropsType = {|
     children: Node,

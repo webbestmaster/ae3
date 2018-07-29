@@ -1,10 +1,10 @@
 // @flow
 
 // helpers
-import type {AllRoomSettingsType, ServerUserType} from './../../module/server-api';
-import * as serverApi from './../../module/server-api';
-import type {BuildingType, MapType, UnitType} from './../../maps/type';
-import {isString} from './../../lib/is';
+import type {AllRoomSettingsType, ServerUserType} from '../../module/server-api';
+import * as serverApi from '../../module/server-api';
+import type {BuildingType, MapType, UnitType} from '../../maps/type';
+import {isString} from '../../lib/is';
 
 export type RoomDataType = {|
     roomId: string,

@@ -2,7 +2,7 @@
 
 /* eslint id-length: [ "error", { "min": 3, "max": 34, "exceptions": ["x", "y", "en", "ru"] } ] */
 
-import type {MapType} from './../../type';
+import type {MapType} from '../../type';
 
 export const testMap1: MapType = {
     meta: {

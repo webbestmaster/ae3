@@ -1,15 +1,15 @@
 // @flow
 /* global fetch */
 
-import appConst from './../app-const';
-import type {BuildingAttrTypeType, BuildingType, MapType, UnitType} from './../maps/type';
-import mapGuide from './../maps/map-guide';
-import type {PathType} from './../components/game/model/unit/path-master';
-import type {AttackResultUnitType} from './../components/game/model/helper';
-import {isOnLineRoomType} from './../components/game/model/helper';
+import appConst from '../app-const';
+import type {BuildingAttrTypeType, BuildingType, MapType, UnitType} from '../maps/type';
+import mapGuide from '../maps/map-guide';
+import type {PathType} from '../components/game/model/unit/path-master';
+import type {AttackResultUnitType} from '../components/game/model/helper';
+import {isOnLineRoomType} from '../components/game/model/helper';
 import {localGet, localPost, localServerUrl} from './server-local-api';
 import {localSocketIoClient} from './socket-local';
-import {isString} from './../lib/is';
+import {isString} from '../lib/is';
 
 const {api} = appConst;
 const {url} = api;

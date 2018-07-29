@@ -9,7 +9,7 @@ import React, {Component} from 'react';
 import style from './style.scss';
 import type {SelectIconNameType} from './icon';
 import {icon} from './icon';
-import {isString} from './../../../lib/is';
+import {isString} from '../../../lib/is';
 
 type PropsType = {|
     +children: Node,

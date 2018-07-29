@@ -2,7 +2,7 @@
 
 /* global setTimeout */
 
-import {isFunction, isString} from './../../lib/is';
+import {isFunction, isString} from '../is';
 
 type MapType = Array<string>;
 

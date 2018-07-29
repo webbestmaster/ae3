@@ -1,7 +1,7 @@
 // @flow
-import {Server as LocalServer} from './../lib/local-server/server';
+import {Server as LocalServer} from '../lib/local-server/server';
 
-import type {PushedStateType} from './../lib/local-server/room';
+import type {PushedStateType} from '../lib/local-server/room';
 
 const {get, post} = require('./../lib/local-server/local-request');
 

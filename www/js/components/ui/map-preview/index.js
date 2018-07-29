@@ -6,14 +6,14 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import type {BuildingType, LandscapeType, MapType, UnitType} from './../../../maps/type';
+import type {BuildingType, LandscapeType, MapType, UnitType} from '../../../maps/type';
 import style from './style.scss';
 import * as PIXI from 'pixi.js';
-import imageMap from './../../game/image/image-map';
-import mapGuide from './../../../maps/map-guide';
-import {getMapSize, getUserColor} from './../../game/model/helper';
+import imageMap from '../../game/image/image-map';
+import mapGuide from '../../../maps/map-guide';
+import {getMapSize, getUserColor} from '../../game/model/helper';
 import {getDefaultUserList} from './helper';
-import {isString} from './../../../lib/is';
+import {isString} from '../../../lib/is';
 
 type StateType = void;
 type PropsType = {|

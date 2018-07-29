@@ -2,17 +2,17 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import routes from './../../app/routes';
-import buttonListWrapperStyle from './../../components/ui/button-list-wrapper/style.scss';
-import Page from './../../components/ui/page';
-import ButtonLink from './../../components/ui/button-link';
-import ButtonListWrapper from './../../components/ui/button-list-wrapper';
-import Header from './../../components/ui/header';
-import serviceStyle from './../../../css/service.scss';
-import logoSrc from './../home/i/logo.svg';
-import homeStyle from './../home/style.scss';
-import type {LangKeyType} from './../../components/locale/translation/type';
-import Locale from './../../components/locale';
+import routes from '../../app/routes';
+import buttonListWrapperStyle from '../../components/ui/button-list-wrapper/style.scss';
+import Page from '../../components/ui/page';
+import ButtonLink from '../../components/ui/button-link';
+import ButtonListWrapper from '../../components/ui/button-list-wrapper';
+import Header from '../../components/ui/header';
+import serviceStyle from '../../../css/service.scss';
+import logoSrc from '../home/i/logo.svg';
+import homeStyle from '../home/style.scss';
+import type {LangKeyType} from '../../components/locale/translation/type';
+import Locale from '../../components/locale';
 
 export default class MultiPlayer extends Component<void, void> {
     static renderPartLogo(): Node {

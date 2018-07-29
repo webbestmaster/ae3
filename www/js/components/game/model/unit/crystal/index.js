@@ -1,4 +1,4 @@
 // @flow
-import Unit from './..';
+import Unit from '..';
 
 export default class Crystal extends Unit {}

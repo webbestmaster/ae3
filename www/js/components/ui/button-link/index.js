@@ -6,8 +6,8 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import buttonStyle from './../button/style.scss';
-import {isFunction, isString} from './../../../lib/is';
+import buttonStyle from '../button/style.scss';
+import {isFunction, isString} from '../../../lib/is';
 import noop from 'lodash/noop';
 import Link from 'react-router-dom/Link';
 

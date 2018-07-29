@@ -7,19 +7,19 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Page from './../../components/ui/page';
-import Header from './../../components/ui/header';
-import Button from './../../components/ui/button';
-import Locale from './../../components/locale';
-import type {LangKeyType} from './../../components/locale/translation/type';
-import {allLocales, localeConst} from './../../components/locale/const';
-import type {LocaleNameType} from './../../components/locale/action';
-import * as localeAction from './../../components/locale/action';
-import Form from './../../components/ui/form';
-import Fieldset from './../../components/ui/fieldset';
-import FormHeader from './../../components/ui/form-header';
-import ButtonListWrapper from './../../components/ui/button-list-wrapper';
-import serviceStyle from './../../../css/service.scss';
+import Page from '../../components/ui/page';
+import Header from '../../components/ui/header';
+import Button from '../../components/ui/button';
+import Locale from '../../components/locale';
+import type {LangKeyType} from '../../components/locale/translation/type';
+import {allLocales, localeConst} from '../../components/locale/const';
+import type {LocaleNameType} from '../../components/locale/action';
+import * as localeAction from '../../components/locale/action';
+import Form from '../../components/ui/form';
+import Fieldset from '../../components/ui/fieldset';
+import FormHeader from '../../components/ui/form-header';
+import ButtonListWrapper from '../../components/ui/button-list-wrapper';
+import serviceStyle from '../../../css/service.scss';
 
 class Settings extends Component<void, void> {
     renderLanguageList(): Node {

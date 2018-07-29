@@ -42,6 +42,7 @@
         }
     },
     "rules": {
+        "import/no-useless-path-segments": 2,
         "no-loops/no-loops": 2,
         "optimize-regex/optimize-regex": 1,
         "lodash/prefer-lodash-method": 0,

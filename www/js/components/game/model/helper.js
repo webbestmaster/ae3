@@ -1,20 +1,20 @@
 // @flow
 /* global document, window */
 
-import mapGuide, {type TeamIdType, type UserColorType} from './../../../maps/map-guide';
+import mapGuide, {type TeamIdType, type UserColorType} from '../../../maps/map-guide';
 import type {UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
 import unitGuideData, {additionalUnitData, defaultUnitData} from './unit/unit-guide';
 import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './unit';
 import Unit from './unit';
-import type {PathType} from './../../../lib/a-star-finder';
-import {defaultOptions, getPath} from './../../../lib/a-star-finder';
-import type {BuildingType, MapType, MapUserType, UnitType} from './../../../maps/type';
+import type {PathType} from '../../../lib/a-star-finder';
+import {defaultOptions, getPath} from '../../../lib/a-star-finder';
+import type {BuildingType, MapType, MapUserType, UnitType} from '../../../maps/type';
 import find from 'lodash/find';
 import * as PIXI from 'pixi.js';
-import {storeViewId} from './../../store';
+import {storeViewId} from '../../store';
 import queryString from 'query-string';
-import type {RoomTypeType} from './../../../module/server-api';
-import {isNotNumber, isString} from './../../../lib/is';
+import type {RoomTypeType} from '../../../module/server-api';
+import {isNotNumber, isString} from '../../../lib/is';
 
 type InteractionEventType = {|
     +data: {|

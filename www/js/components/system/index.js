@@ -8,7 +8,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {onResize} from './action';
-import type {GlobalStateType} from './../../app-reducer';
+import type {GlobalStateType} from '../../app-reducer';
 
 type PropsType = {|
     onResize: (width: number, height: number) => void

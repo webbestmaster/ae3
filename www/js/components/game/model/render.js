@@ -5,9 +5,9 @@
 /* eslint consistent-this: ["error", "render"] */
 
 import * as PIXI from 'pixi.js';
-import type {LandscapeType, MapType} from './../../../maps/type';
-import mapGuide from './../../../maps/map-guide';
-import imageMap from './../image/image-map';
+import type {LandscapeType, MapType} from '../../../maps/type';
+import mapGuide from '../../../maps/map-guide';
+import imageMap from '../image/image-map';
 import Unit, {
     type UnitActionAttackType,
     type UnitActionDestroyBuildingType,
@@ -21,18 +21,18 @@ import Unit, {
 } from './unit';
 import {defaultUnitData} from './unit/unit-guide';
 import Building from './building';
-import {tween} from './../../../lib/tween';
+import {tween} from '../../../lib/tween';
 import Viewport from 'pixi-viewport';
 import {bindClick} from './helper';
 
-import borderImage1 from './../i/border/1.png';
-import borderImage2 from './../i/border/2.png';
-import borderImage3 from './../i/border/3.png';
-import borderImage4 from './../i/border/4.png';
-import borderImage6 from './../i/border/6.png';
-import borderImage7 from './../i/border/7.png';
-import borderImage8 from './../i/border/8.png';
-import borderImage9 from './../i/border/9.png';
+import borderImage1 from '../i/border/1.png';
+import borderImage2 from '../i/border/2.png';
+import borderImage3 from '../i/border/3.png';
+import borderImage4 from '../i/border/4.png';
+import borderImage6 from '../i/border/6.png';
+import borderImage7 from '../i/border/7.png';
+import borderImage8 from '../i/border/8.png';
+import borderImage9 from '../i/border/9.png';
 
 type InitializeConfigType = {|
     width: number,

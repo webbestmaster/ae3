@@ -3,22 +3,22 @@
 /* eslint consistent-this: ["error", "unit", "aggressor"] */
 
 import * as PIXI from 'pixi.js';
-import type {MapType, MapUserType, UnitActionStateType, UnitType} from './../../../../maps/type';
-import type {AttackResultUnitType} from './../helper';
-import {bindClick, canOpenStore, getAttackResult, getLevel, getMoviePath, getUserColor} from './../helper';
-import mapGuide from './../../../../maps/map-guide';
+import type {MapType, MapUserType, UnitActionStateType, UnitType} from '../../../../maps/type';
+import type {AttackResultUnitType} from '../helper';
+import {bindClick, canOpenStore, getAttackResult, getLevel, getMoviePath, getUserColor} from '../helper';
+import mapGuide from '../../../../maps/map-guide';
 import type {UnitGuideDataType} from './unit-guide';
 import unitGuide, {defaultUnitData} from './unit-guide';
-import imageMap from './../../image/image-map';
-import Building from './../building';
+import imageMap from '../../image/image-map';
+import Building from '../building';
 import type {AvailablePathMapType} from './path-master';
 import {getPath} from './path-master';
-import type {PathType, PointType} from './../../../../lib/a-star-finder';
-import {tweenList} from './../../../../lib/tween';
+import type {PathType, PointType} from '../../../../lib/a-star-finder';
+import {tweenList} from '../../../../lib/tween';
 import find from 'lodash/find';
-import Grave from './../grave';
+import Grave from '../grave';
 import {fillActionMap} from './helper';
-import {isNotNumber, isNotString, isNumber, isString} from './../../../../lib/is';
+import {isNotNumber, isNotString, isNumber, isString} from '../../../../lib/is';
 
 type LevelUpAnimationDataType = {|
     x: number,

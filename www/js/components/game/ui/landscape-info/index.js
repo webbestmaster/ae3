@@ -5,13 +5,13 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import style from './style.scss';
-import type {GameDataType} from './../../model/unit';
-import type {MapType} from './../../../../maps/type';
+import type {GameDataType} from '../../model/unit';
+import type {MapType} from '../../../../maps/type';
 import find from 'lodash/find';
 
 import armorImage from './i/armor.svg';
-import {isNotString} from './../../../../lib/is';
-import {getUserColor} from './../../model/helper';
+import {isNotString} from '../../../../lib/is';
+import {getUserColor} from '../../model/helper';
 
 const fontReqContext = require.context('./i/font', true, /\.svg$/);
 
