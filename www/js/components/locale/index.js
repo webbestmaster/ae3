@@ -12,15 +12,22 @@ import type {LocaleType} from './reducer';
 import {allLocales} from './const';
 import type {LangKeyType} from './translation/type';
 
-type StateType = {};
-type PropsType = {|
-    +locale: LocaleType,
+type StateType = {|
+    stateData: string
+|};
+
+type ReduxPropsType = {|
+    +locale: LocaleType
+|};
+
+type PassedPropsType = {|
     +stringKey: LangKeyType
 |};
 
-class Locale extends Component<PropsType, StateType> {
+class Locale extends Component<ReduxPropsType, PassedPropsType, StateType> {
+    // eslint-disable-next-line id-match
+    props: $Exact<{...ReduxPropsType, ...PassedPropsType}>;
     state: StateType;
-    props: PropsType;
 
     getLocalizedString(): string {
         const view = this;
@@ -52,7 +59,7 @@ class Locale extends Component<PropsType, StateType> {
 }
 
 export default connect(
-    (state: GlobalStateType): {|+locale: LocaleType|} => ({
+    (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
         locale: state.locale
     }),
     {
