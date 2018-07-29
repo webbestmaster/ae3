@@ -480,8 +480,7 @@ class Room extends Component<PropsType, StateType> {
                     {view.renderUserList()}
 
                     <FormHeader>
-                        <Locale stringKey={('MAP': LangKeyType)}/>
-                        :
+                        <Locale stringKey={('MAP': LangKeyType)}/>:
                     </FormHeader>
                     <p className={createRoomStyle.map_size}>
                         {['(', getMaxUserListSize(map), ') [', mapSize.width, ' x ', mapSize.height, '] '].join('')}

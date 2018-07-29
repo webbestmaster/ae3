@@ -178,9 +178,7 @@ class Store extends Component<PropsType, StateType> {
                 <span>
                     {padEnd(unitType, 10, ' ')}
                     &nbsp;|&nbsp; attack:
-                    {unitData.attack.min}
-                    -
-                    {unitData.attack.max}
+                    {unitData.attack.min}-{unitData.attack.max}
                     <br/>
                     COST:
                     {padStart(String(unitCost), 4, ' ')}

@@ -295,8 +295,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                         {view.senderUnitLimitSelect()}
                     </div>
                     <FormHeader>
-                        <Locale stringKey={('MAPS': LangKeyType)}/>
-                        :
+                        <Locale stringKey={('MAPS': LangKeyType)}/>:
                     </FormHeader>
                 </Form>
                 {view.renderSelectMap()}
