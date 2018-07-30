@@ -148,7 +148,12 @@
                 "beforeClosing": "never"
             }
         ],
-        "react/jsx-max-props-per-line": [1, { "maximum": 4 }],
+        "react/jsx-max-props-per-line": [
+            1,
+            {
+                "maximum": 4
+            }
+        ],
         "react/jsx-one-expression-per-line": 0,
         //        "react/destructuring-assignment": [1, "never"],
         "no-console": 0,
@@ -473,6 +478,13 @@
         "linebreak-style": [
             1,
             "unix"
+        ],
+        "lines-between-class-members": [
+            1,
+            "always",
+            {
+                "exceptAfterSingleLine": true
+            }
         ],
         "max-nested-callbacks": [
             1,

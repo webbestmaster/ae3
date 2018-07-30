@@ -60,6 +60,7 @@ export default class Render {
         units: PIXI.Container,
         actions: PIXI.Container
     |};
+
     map: MapType;
     viewport: Viewport | null;
     mainContainer: PIXI.Container;
