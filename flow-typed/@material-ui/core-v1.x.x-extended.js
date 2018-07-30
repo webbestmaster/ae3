@@ -36,6 +36,10 @@ declare module '@material-ui/core/styles/MuiThemeProvider' {
     declare module.exports: $Exports<'material-ui/styles/MuiThemeProvider'>;
 }
 
+declare module '@material-ui/core/TextField' {
+    declare module.exports: $Exports<'material-ui/TextField/TextField'>;
+}
+
 // Filename aliases (copy from original file)
 
 /*
