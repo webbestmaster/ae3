@@ -2,13 +2,12 @@
 
 /* global window */
 
-import {combineReducers} from 'redux';
-import type {OnResizeType} from './action';
-import {systemConst} from './const';
+import type {OnResizeType} from '../action';
+import {systemConst} from '../const';
 
 type ScreenWidthNameType = 'desktop' | 'tablet' | 'mobile';
 
-const screenMinWidth = {
+const screenMinWidth: {[key: ScreenWidthNameType]: number} = {
     desktop: 1280,
     tablet: 768,
     mobile: 320
@@ -50,36 +49,29 @@ function getLtThen(screenWidth: number): Array<ScreenWidthNameType> {
     return ltThenList;
 }
 
+function getScreenState(width: number, height: number): ScreenType {
+    return {
+        width,
+        height,
+        name: getScreenName(width),
+        ltThen: getLtThen(width)
+    };
+}
+
 const {clientWidth, clientHeight} = window.document.documentElement;
-const defaultScreenState: ScreenType = {
-    width: clientWidth,
-    height: clientHeight,
-    name: getScreenName(clientWidth),
-    ltThen: getLtThen(clientWidth)
-};
 
-// module
-export type SystemType = {|
-    +screen: ScreenType
-|};
+const defaultScreenState = getScreenState(clientWidth, clientHeight);
 
-export default combineReducers({
-    screen: (screenState: ScreenType = defaultScreenState, {type, payload}: OnResizeType): ScreenType => {
-        if (type !== systemConst.action.type.resize) {
-            return screenState;
-        }
-
-        const {width, height} = payload;
-
-        if (screenState.width === width && screenState.height === height) {
-            return screenState;
-        }
-
-        return {
-            width,
-            height,
-            name: getScreenName(width),
-            ltThen: getLtThen(width)
-        };
+export default (screenState: ScreenType = defaultScreenState, {type, payload}: OnResizeType): ScreenType => {
+    if (type !== systemConst.action.type.resize) {
+        return screenState;
     }
-});
+
+    const {width, height} = payload;
+
+    if (screenState.width === width && screenState.height === height) {
+        return screenState;
+    }
+
+    return getScreenState(width, height);
+};
