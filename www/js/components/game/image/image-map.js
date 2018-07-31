@@ -47,7 +47,7 @@ buildingReqContext.keys().forEach((fileName: string) => {
     Object.assign(imageMap.building, {[fileName.replace('./', '').replace('.png', '')]: base64Data});
 
     // init sprite
-    PIXI.Sprite.fromImage(base64Data);
+    // PIXI.Sprite.fromImage(base64Data);
 });
 
 const landscapeReqContext = require.context('./landscape/', true, /\.png$/);
@@ -58,7 +58,7 @@ landscapeReqContext.keys().forEach((fileName: string) => {
     Object.assign(imageMap.landscape, {[fileName.replace('./', '').replace('.png', '')]: base64Data});
 
     // init sprite
-    PIXI.Sprite.fromImage(base64Data);
+    // PIXI.Sprite.fromImage(base64Data);
 });
 
 const otherReqContext = require.context('./other/', true, /\.png$/);
@@ -69,7 +69,7 @@ otherReqContext.keys().forEach((fileName: string) => {
     Object.assign(imageMap.other, {[fileName.replace('./', '').replace('.png', '')]: base64Data});
 
     // init sprite
-    PIXI.Sprite.fromImage(base64Data);
+    // PIXI.Sprite.fromImage(base64Data);
 });
 
 const unitReqContext = require.context('./unit/', true, /\.png$/);
@@ -80,7 +80,7 @@ unitReqContext.keys().forEach((fileName: string) => {
     Object.assign(imageMap.unit, {[fileName.replace('./', '').replace('.png', '')]: base64Data});
 
     // init sprite
-    PIXI.Sprite.fromImage(base64Data);
+    // PIXI.Sprite.fromImage(base64Data);
 });
 
 const fontUnitReqContext = require.context('./../i/font/unit/', true, /\.png$/);
@@ -91,7 +91,7 @@ fontUnitReqContext.keys().forEach((fileName: string) => {
     Object.assign(imageMap.font.unit, {[fileName.replace('./', '').replace('.png', '')]: base64Data});
 
     // init sprite
-    PIXI.Sprite.fromImage(base64Data);
+    // PIXI.Sprite.fromImage(base64Data);
 });
 
 const fontPopupReqContext = require.context('./../i/font/popup/', true, /\.png$/);
@@ -102,7 +102,7 @@ fontPopupReqContext.keys().forEach((fileName: string) => {
     Object.assign(imageMap.font.popup, {[fileName.replace('./', '').replace('.png', '')]: base64Data});
 
     // init sprite
-    PIXI.Sprite.fromImage(base64Data);
+    // PIXI.Sprite.fromImage(base64Data);
 });
 
 /*

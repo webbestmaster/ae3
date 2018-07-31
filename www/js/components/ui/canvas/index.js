@@ -8,8 +8,8 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import style from './style.scss';
 import {isString} from '../../../lib/is';
-import * as PIXI from 'pixi.js';
-import {imageCache} from './../../../../js/app/helper';
+import {imageCache} from '../../../app/helper-image';
+import type {ScaledImageDataType} from '../../../app/helper-image';
 
 type PassedPropsType = {|
     +className?: string,
@@ -18,111 +18,42 @@ type PassedPropsType = {|
     +src: string
 |};
 
-type StateType = {|
-    +state: number
-|};
-
-type AttrType = {|
-    +canvas: HTMLElement | null
-|};
-
-const canvasCache: { [key: string]: string } = {};
+type StateType = {};
 
 export default class Canvas extends Component<PassedPropsType, StateType> {
     props: PassedPropsType;
     state: StateType;
-    attr: AttrType;
-    app: PIXI.Application | null;
 
     constructor() {
         super();
 
         const view = this;
 
-        view.state = {
-            state: 0
-        };
-
-        view.app = null;
-
-        view.attr = {
-            canvas: null
-        };
+        view.state = {};
     }
 
-    initApp() {
+    getSrc(): string {
         const view = this;
-        const {props, attr} = view;
-        const {canvas} = attr;
-        const {width, height, src} = props;
+        const {props, state} = view;
 
-        if (canvas === null) {
-            console.error('canvas is not define');
-            return;
-        }
-
-        view.app = new PIXI.Application(width, height, {
-            view: canvas,
-            autoStart: false,
-            clearBeforeRender: false,
-            sharedTicker: false,
-            sharedLoader: true,
-            transparent: true,
-            preserveDrawingBuffer: true,
-            resolution: window.devicePixelRatio || 1
-        });
-    }
-
-    componentDidMount() {
-        /*
-                const view = this;
-                const {props, attr, app} = view;
-                const {canvas} = attr;
-                const {width, height, src} = props;
-
-                if (canvasCache[src]) {
-                    console.log('from cache');
-                    return;
+        const cachedImageData =
+            imageCache.find(
+                (cachedImageDataInList: ScaledImageDataType): boolean => {
+                    return (
+                        // eslint-disable-next-line lodash/prefer-matches
+                        cachedImageDataInList.src === props.src &&
+                        cachedImageDataInList.width === props.width &&
+                        cachedImageDataInList.height === props.height
+                    );
                 }
+            ) || null;
 
-                view.initApp();
-                view.drawSprite();
-        */
-    }
-
-    drawSprite() {
-        const view = this;
-        const {props, attr, app} = view;
-        const {canvas} = attr;
-        const {width, height, src} = props;
-
-        if (canvas === null || app === null) {
-            console.error('canvas is not define or app');
-            return;
+        if (cachedImageData === null) {
+            console.error('can not find cached image for', props.src);
+            return props.src;
         }
 
-        app.stage.removeChildren(0, 1);
-
-        const sprite = PIXI.Sprite.fromImage(src);
-
-        sprite.width = width;
-        sprite.height = height;
-
-        app.stage.addChild(sprite);
-        app.render();
-
-        canvasCache[src] = app.renderer.view.toDataURL();
-    }
-
-    componentDidUpdate(prevProps: PassedPropsType) {
-        const view = this;
-        const {props} = view;
-
-        if (props.src === prevProps.src) {
-            return;
-        }
-
-        // view.componentDidMount();
+        return cachedImageData.base64Image;
     }
 
     render(): Node {
@@ -131,30 +62,12 @@ export default class Canvas extends Component<PassedPropsType, StateType> {
 
         const additionClass = isString(props.className) ? ' ' + props.className : '';
 
-        const imgSrc = imageCache.find((data) => {
-            return data.src === props.src && data.width === props.width && data.height === props.height;
-        });
-
         return (
             <img
                 style={{width: props.width, height: props.height}}
-                src={imgSrc.base64Image}
+                src={view.getSrc()}
                 className={style.canvas + additionClass}
             />
         );
-
-        // return null;
-
-        /*
-                return (
-                    <canvas
-                        style={{width: props.width, height: props.height}}
-                        ref={(node: HTMLElement | null) => {
-                            view.attr = {canvas: node};
-                        }}
-                        className={style.canvas + additionClass}
-                    />
-                );
-        */
     }
 }

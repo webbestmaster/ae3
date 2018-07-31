@@ -61,6 +61,14 @@ declare module 'pixi.js' {
         SCALE_MODE: 0 | 1
     |};
 
+    declare export var loader: {|
+        add(imageName: string, imagePath?: string): void,
+        load(callback: () => void): void,
+        onProgress: {
+            add(callback: () => void): void
+        }
+    |};
+
     declare class PixiObject {
         on(eventName: MouseEventNameType | TouchEventNameType, callback: (evt: InteractionEventType) => void): void,
         width: number,
@@ -113,6 +121,7 @@ declare module 'pixi.js' {
         removeChild(pixiObject: PixiObject | Container): void,
         removeChildren(startIndex?: number, endIndex?: number): void,
         getChildAt(index: number): Sprite | void,
+        children: Array<PixiObject>,
         interactive: boolean,
         buttonMode: boolean,
         hitArea: Rectangle,
