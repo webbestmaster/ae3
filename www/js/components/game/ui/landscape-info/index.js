@@ -8,6 +8,8 @@ import style from './style.scss';
 import type {GameDataType} from '../../model/unit';
 import type {MapType} from '../../../../maps/type';
 import find from 'lodash/find';
+import Canvas from '../../../ui/canvas';
+import imageMap from '../../image/image-map';
 
 import armorImage from './i/armor.svg';
 import {isNotString} from '../../../../lib/is';
@@ -29,22 +31,6 @@ type PropsType = {|
     gameData: GameDataType,
     map: MapType
 |};
-
-const landscapeIconsReqContext = require.context('./i/landscape', true, /\.svg$/);
-
-const landscapeIconMap = {};
-
-landscapeIconsReqContext.keys().forEach((fileName: string) => {
-    landscapeIconMap[fileName.replace('./', '').replace('.svg', '')] = landscapeIconsReqContext(fileName);
-});
-
-const buildingIconsReqContext = require.context('./i/building', true, /\.svg$/);
-
-const buildingIconMap = {};
-
-buildingIconsReqContext.keys().forEach((fileName: string) => {
-    buildingIconMap[fileName.replace('./', '').replace('.svg', '')] = buildingIconsReqContext(fileName);
-});
 
 export default class LandscapeInfo extends Component<PropsType, StateType> {
     props: PropsType;
@@ -95,38 +81,42 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
         const buildingOnPlace = find(props.gameData.buildingList, {attr: {x, y}}) || null;
 
         if (buildingOnPlace === null) {
-            return landscapeIconMap[map.landscape[y][x]];
+            return imageMap.landscape[map.landscape[y][x]];
         }
 
         const buildingAttr = buildingOnPlace.attr;
         const buildingType = buildingAttr.type;
 
         if (['farm-destroyed', 'well', 'temple'].includes(buildingType)) {
-            return buildingIconMap[buildingType];
+            return imageMap.building[buildingType];
         }
 
         const buildingUserId = buildingAttr.userId;
 
+        const castlePostfix = buildingType === 'castle' ? '-square' : '';
+
         if (isNotString(buildingUserId)) {
-            return buildingIconMap[buildingType + '-gray'];
+            return imageMap.building[buildingType + '-gray' + castlePostfix];
         }
 
         const userColor = getUserColor(buildingUserId, props.gameData.userList);
 
         if (userColor === null) {
             console.error('User color is not defined');
-            return buildingIconMap[buildingType + '-gray'];
+            return imageMap.building[buildingType + '-gray' + castlePostfix];
         }
 
-        return buildingIconMap[buildingType + '-' + userColor];
+        return imageMap.building[buildingType + '-' + userColor + castlePostfix];
     }
 
     render(): Node {
         const view = this;
 
         return (
-            <div className={style.wrapper} style={{backgroundImage: 'url(' + view.getImageSrc() + ')'}}>
+            <div className={style.wrapper}>
+                <Canvas className={style.image} width={48} height={48} src={view.getImageSrc()}/>
                 {view.renderArmorData()}
+                <div className={style.frame}/>
             </div>
         );
     }
