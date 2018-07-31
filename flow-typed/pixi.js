@@ -8,6 +8,7 @@ type ApplicationOptionsType = {|
     backgroundColor?: number,
     view?: HTMLElement,
     resolution?: number,
+    preserveDrawingBuffer?: boolean,
     clearBeforeRender?: boolean,
     roundPixels?: boolean,
     sharedTicker?: boolean,
@@ -126,7 +127,10 @@ declare module 'pixi.js' {
         view: HTMLElement,
         stage: Container,
         renderer: {
-            resize(width: number, height: number): void
+            resize(width: number, height: number): void,
+            view: {
+                toDataURL(): string
+            }
         },
         stop: () => void,
         start: () => void,

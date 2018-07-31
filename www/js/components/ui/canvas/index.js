@@ -9,7 +9,6 @@ import React, {Component} from 'react';
 import style from './style.scss';
 import {isString} from '../../../lib/is';
 import * as PIXI from 'pixi.js';
-import isEqual from 'lodash/isEqual';
 
 type PassedPropsType = {|
     +className?: string,
@@ -25,6 +24,8 @@ type StateType = {|
 type AttrType = {|
     +canvas: HTMLElement | null
 |};
+
+const canvasCache: {[key: string]: string} = {};
 
 export default class Canvas extends Component<PassedPropsType, StateType> {
     props: PassedPropsType;
@@ -66,12 +67,21 @@ export default class Canvas extends Component<PassedPropsType, StateType> {
             sharedTicker: false,
             sharedLoader: true,
             transparent: true,
+            preserveDrawingBuffer: true,
             resolution: window.devicePixelRatio || 1
         });
     }
 
     componentDidMount() {
         const view = this;
+        const {props, attr, app} = view;
+        const {canvas} = attr;
+        const {width, height, src} = props;
+
+        if (canvasCache[src]) {
+            console.log('from cache');
+            return;
+        }
 
         view.initApp();
         view.drawSprite();
@@ -97,6 +107,8 @@ export default class Canvas extends Component<PassedPropsType, StateType> {
 
         app.stage.addChild(sprite);
         app.render();
+
+        canvasCache[src] = app.renderer.view.toDataURL();
     }
 
     componentDidUpdate(prevProps: PassedPropsType) {
@@ -107,7 +119,7 @@ export default class Canvas extends Component<PassedPropsType, StateType> {
             return;
         }
 
-        view.drawSprite();
+        view.componentDidMount();
     }
 
     render(): Node {
@@ -115,6 +127,18 @@ export default class Canvas extends Component<PassedPropsType, StateType> {
         const {props, state} = view;
 
         const additionClass = isString(props.className) ? ' ' + props.className : '';
+
+        const savedDataUrl = canvasCache[props.src];
+
+        if (savedDataUrl) {
+            return (
+                <img
+                    style={{width: props.width, height: props.height}}
+                    src={savedDataUrl}
+                    className={style.canvas + additionClass}
+                />
+            );
+        }
 
         return (
             <canvas

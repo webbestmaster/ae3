@@ -105,15 +105,6 @@ fontPopupReqContext.keys().forEach((fileName: string) => {
     PIXI.Sprite.fromImage(base64Data);
 });
 
-const allImageReqContext = require.context('./../../../../', true, /\.png$/);
-
-allImageReqContext.keys().forEach((fileName: string) => {
-    const base64Data = allImageReqContext(fileName);
-
-    // init sprite
-    PIXI.Sprite.fromImage(base64Data);
-});
-
 /*
 const ____ReqContext = require.context('./landscape/', true, /\.png$/);
 

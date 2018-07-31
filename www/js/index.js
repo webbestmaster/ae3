@@ -18,33 +18,39 @@ import App from './app';
 import * as reducers from './app-reducer';
 
 initializeEnvironment()
-    .then((): void => console.log('Environment is initialized!'))
+    .then(
+        (): void => {
+            console.log('Environment is initialized!');
+
+            const reducer = combineReducers({
+                ...reducers
+            });
+
+            const composeEnhancers = composeWithDevTools({
+                // options like actionSanitizer, stateSanitizer
+            });
+
+            const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
+
+            /* eslint-disable react/jsx-max-depth */
+            render(
+                <Provider store={store}>
+                    <BrowserRouter>
+                        <StoreProvider>
+                            <MuiThemeProvider theme={muiTheme}>
+                                <App/>
+                            </MuiThemeProvider>
+                        </StoreProvider>
+                    </BrowserRouter>
+                </Provider>,
+                window.document.querySelector('.js-app-wrapper')
+            );
+            /* eslint-enable react/jsx-max-depth */
+
+            return console.log('App started!');
+        }
+    )
     .catch((error: Error) => {
-        console.error('error with initialize environment');
+        console.error('error with initialize environment or app start');
         console.error(error);
     });
-
-const reducer = combineReducers({
-    ...reducers
-});
-
-const composeEnhancers = composeWithDevTools({
-    // options like actionSanitizer, stateSanitizer
-});
-
-const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
-
-/* eslint-disable react/jsx-max-depth */
-render(
-    <Provider store={store}>
-        <BrowserRouter>
-            <StoreProvider>
-                <MuiThemeProvider theme={muiTheme}>
-                    <App/>
-                </MuiThemeProvider>
-            </StoreProvider>
-        </BrowserRouter>
-    </Provider>,
-    window.document.querySelector('.js-app-wrapper')
-);
-/* eslint-enable react/jsx-max-depth */
