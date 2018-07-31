@@ -11,18 +11,9 @@ import find from 'lodash/find';
 import Canvas from '../../../ui/canvas';
 import imageMap from '../../image/image-map';
 
-import armorImage from './i/armor.svg';
+import armorImage from './i/armor.png';
 import {isNotString} from '../../../../lib/is';
 import {getUserColor} from '../../model/helper';
-
-type FontImageMapType = {[key: string]: string};
-const fontImageMap: FontImageMapType = {};
-
-const fontReqContext = require.context('./i/font', true, /\.svg$/);
-
-fontReqContext.keys().forEach((fileName: string) => {
-    fontImageMap[fileName.replace('./', '').replace('.svg', '')] = fontReqContext(fileName);
-});
 
 type StateType = {};
 type PropsType = {|
@@ -58,16 +49,17 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
                 {armorValue.map(
                     (char: string, index: number): Node => {
                         return (
-                            <img
-                                className={style.armor_symbol}
+                            <Canvas
                                 key={char + '/' + String(index)}
-                                src={fontImageMap[char]}
-                                alt=""
+                                width={12}
+                                height={14}
+                                className={style.armor_symbol}
+                                src={imageMap.font.unit[char]}
                             />
                         );
                     }
                 )}
-                <img className={style.armor_symbol} src={armorImage}/>
+                <Canvas width={12} height={14} className={style.armor_symbol} src={armorImage}/>
             </div>
         );
     }
