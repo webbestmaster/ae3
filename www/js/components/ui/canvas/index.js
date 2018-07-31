@@ -9,6 +9,7 @@ import React, {Component} from 'react';
 import style from './style.scss';
 import {isString} from '../../../lib/is';
 import * as PIXI from 'pixi.js';
+import {imageCache} from './../../../../js/app/helper';
 
 type PassedPropsType = {|
     +className?: string,
@@ -25,7 +26,7 @@ type AttrType = {|
     +canvas: HTMLElement | null
 |};
 
-const canvasCache: {[key: string]: string} = {};
+const canvasCache: { [key: string]: string } = {};
 
 export default class Canvas extends Component<PassedPropsType, StateType> {
     props: PassedPropsType;
@@ -73,18 +74,20 @@ export default class Canvas extends Component<PassedPropsType, StateType> {
     }
 
     componentDidMount() {
-        const view = this;
-        const {props, attr, app} = view;
-        const {canvas} = attr;
-        const {width, height, src} = props;
+        /*
+                const view = this;
+                const {props, attr, app} = view;
+                const {canvas} = attr;
+                const {width, height, src} = props;
 
-        if (canvasCache[src]) {
-            console.log('from cache');
-            return;
-        }
+                if (canvasCache[src]) {
+                    console.log('from cache');
+                    return;
+                }
 
-        view.initApp();
-        view.drawSprite();
+                view.initApp();
+                view.drawSprite();
+        */
     }
 
     drawSprite() {
@@ -119,7 +122,7 @@ export default class Canvas extends Component<PassedPropsType, StateType> {
             return;
         }
 
-        view.componentDidMount();
+        // view.componentDidMount();
     }
 
     render(): Node {
@@ -128,26 +131,30 @@ export default class Canvas extends Component<PassedPropsType, StateType> {
 
         const additionClass = isString(props.className) ? ' ' + props.className : '';
 
-        const savedDataUrl = canvasCache[props.src];
-
-        if (savedDataUrl) {
-            return (
-                <img
-                    style={{width: props.width, height: props.height}}
-                    src={savedDataUrl}
-                    className={style.canvas + additionClass}
-                />
-            );
-        }
+        const imgSrc = imageCache.find((data) => {
+            return data.src === props.src && data.width === props.width && data.height === props.height;
+        });
 
         return (
-            <canvas
+            <img
                 style={{width: props.width, height: props.height}}
-                ref={(node: HTMLElement | null) => {
-                    view.attr = {canvas: node};
-                }}
+                src={imgSrc.base64Image}
                 className={style.canvas + additionClass}
             />
         );
+
+        // return null;
+
+        /*
+                return (
+                    <canvas
+                        style={{width: props.width, height: props.height}}
+                        ref={(node: HTMLElement | null) => {
+                            view.attr = {canvas: node};
+                        }}
+                        className={style.canvas + additionClass}
+                    />
+                );
+        */
     }
 }
