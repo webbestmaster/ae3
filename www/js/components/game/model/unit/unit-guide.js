@@ -1,4 +1,7 @@
 // @flow
+
+import type {LangKeyType} from '../../../locale/translation/type';
+
 export type UnitTypeCommonType =
     | 'soldier'
     | 'archer'
@@ -25,7 +28,10 @@ export type UnitGuideDataType = {|
     |},
     +armor: number,
     +move: number,
-    +langKey: string,
+    +langKey: {|
+        +name: LangKeyType,
+        +description: LangKeyType
+    |},
     +cost: number,
 
     +auraRange?: number,
@@ -63,7 +69,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 5,
         move: 4,
-        langKey: 'soldier',
+        langKey: {
+            name: 'UNIT__SOLDIER__NAME',
+            description: 'UNIT__SOLDIER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 150,
 
@@ -78,7 +87,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 5,
         move: 4,
-        langKey: 'archer',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 250,
 
@@ -92,7 +104,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 10,
         move: 4,
-        langKey: 'elemental',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 300,
 
@@ -106,7 +121,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 5,
         move: 4,
-        langKey: 'sorceress',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 400,
 
@@ -120,7 +138,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 10,
         move: 4,
-        langKey: 'wisp',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 500,
 
@@ -135,7 +156,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 15,
         move: 5,
-        langKey: 'dire-wolf',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 600,
 
@@ -149,7 +173,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 30,
         move: 4,
-        langKey: 'golem',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 600
     },
@@ -161,7 +188,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 10,
         move: 3,
-        langKey: 'catapult',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 700,
 
@@ -175,7 +205,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 25,
         move: 6,
-        langKey: 'dragon',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 1000,
 
@@ -189,7 +222,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 2,
         move: 4,
-        langKey: 'skeleton',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         cost: 0,
 
         withoutGrave: true
@@ -202,7 +238,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 15,
         move: 3,
-        langKey: 'crystal',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         cost: 0
     },
     galamar: {
@@ -213,7 +252,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 20,
         move: 4,
-        langKey: 'galamar',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 200,
 
@@ -230,7 +272,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 20,
         move: 4,
-        langKey: 'valadorn',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 200,
 
@@ -247,7 +292,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 20,
         move: 4,
-        langKey: 'demon-lord',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 200,
 
@@ -264,7 +312,10 @@ const unitData: GuideUnitDataType = {
         },
         armor: 20,
         move: 4,
-        langKey: 'saeth',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
         canBeBuy: true,
         cost: 200,
 
@@ -282,7 +333,10 @@ const unitData: GuideUnitDataType = {
         cost: 0,
         armor: 45,
         move: 0,
-        langKey: 'saeth',
+        langKey: {
+            name: 'UNIT__ARCHER__NAME',
+            description: 'UNIT__ARCHER__DESCRIPTION'
+        },
 
         withoutGrave: true
     }
