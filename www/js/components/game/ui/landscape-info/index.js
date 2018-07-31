@@ -15,10 +15,10 @@ import armorImage from './i/armor.svg';
 import {isNotString} from '../../../../lib/is';
 import {getUserColor} from '../../model/helper';
 
-const fontReqContext = require.context('./i/font', true, /\.svg$/);
-
 type FontImageMapType = {[key: string]: string};
 const fontImageMap: FontImageMapType = {};
+
+const fontReqContext = require.context('./i/font', true, /\.svg$/);
 
 fontReqContext.keys().forEach((fileName: string) => {
     fontImageMap[fileName.replace('./', '').replace('.svg', '')] = fontReqContext(fileName);

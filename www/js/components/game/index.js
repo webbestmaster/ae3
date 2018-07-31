@@ -35,11 +35,12 @@ import type {UserColorType} from '../../maps/map-guide';
 import LandscapeInfo from './ui/landscape-info';
 import {isBoolean} from '../../lib/is';
 
-import iconMoney from './ui/icon/money.svg';
-import iconUnitRed from './ui/icon/unit-red.svg';
-import iconUnitBlue from './ui/icon/unit-blue.svg';
-import iconUnitGreen from './ui/icon/unit-green.svg';
-import iconUnitBlack from './ui/icon/unit-black.svg';
+import iconMoney from './ui/icon/money.png';
+import iconUnitRed from './image/unit/soldier-red-1.png';
+import iconUnitBlue from './image/unit/soldier-blue-1.png';
+import iconUnitGreen from './image/unit/soldier-green-1.png';
+import iconUnitBlack from './image/unit/soldier-black-1.png';
+import Canvas from '../ui/canvas';
 
 const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,
@@ -631,11 +632,16 @@ export class GameView extends Component<PropsType, StateType> {
                     y={state.activeLandscapeTile.y}
                 />
                 <BottomBar className={classnames(style.bottom_bar, bottomBarColorMap[activeUserColor])}>
-                    <img className={style.bottom_bar__icon} src={unitIconMap[activeUserColor]} alt=""/>
+                    <Canvas
+                        className={style.bottom_bar__icon}
+                        width={24}
+                        height={24}
+                        src={unitIconMap[activeUserColor]}
+                    />
                     <span className={style.bottom_bar__text}>
                         {supplyState.unitCount + '/' + supplyState.unitLimit}
                     </span>
-                    <img className={style.bottom_bar__icon} src={iconMoney} alt=""/>
+                    <Canvas className={style.bottom_bar__icon} width={16} height={24} src={iconMoney}/>
                     <span className={style.bottom_bar__text}>
                         {mapUserData.money}
                         &nbsp;

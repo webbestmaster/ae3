@@ -2,8 +2,8 @@
 
 export type SelectIconNameType = 'UNIT' | 'MONEY';
 
-import unit from './image/unit.svg';
-import money from './image/money.svg';
+import unit from '../../../game/image/unit/soldier-blue-1.png';
+import money from '../../../game/image/other/open-store.png';
 
 export const icon = {
     UNIT: unit,

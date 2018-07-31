@@ -10,6 +10,7 @@ import style from './style.scss';
 import type {SelectIconNameType} from './icon';
 import {icon} from './icon';
 import {isString} from '../../../lib/is';
+import Canvas from '../canvas';
 
 type PropsType = {|
     +children: Node,
@@ -83,7 +84,7 @@ export default class Select extends Component<PropsType, StateType> {
             }
         }
 
-        return <img className={style.icon} src={icon[iconPath]} alt=""/>;
+        return <Canvas width={24} height={24} className={style.icon} src={icon[iconPath]}/>;
     }
 
     render(): Node {
