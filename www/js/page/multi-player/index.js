@@ -9,7 +9,7 @@ import ButtonLink from '../../components/ui/button-link';
 import ButtonListWrapper from '../../components/ui/button-list-wrapper';
 import Header from '../../components/ui/header';
 import serviceStyle from '../../../css/service.scss';
-import logoSrc from '../home/i/logo.svg';
+import logoSrc from '../home/i/logo.png';
 import homeStyle from '../home/style.scss';
 import type {LangKeyType} from '../../components/locale/translation/type';
 import Locale from '../../components/locale';
