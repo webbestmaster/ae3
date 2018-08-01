@@ -11,9 +11,13 @@ import {initImages} from './helper-image';
 import {socket} from '../module/socket';
 
 export async function initializeEnvironment(): Promise<void> {
-    // reduce 300ms delay
-    if (document.body !== null) {
-        FastClick.attach(document.body);
+    const {body} = document;
+
+    if (body !== null) {
+        // reduce 300ms delay
+        FastClick.attach(body);
+    } else {
+        console.error('document.body is not define');
     }
 
     // run Tween.js updater
