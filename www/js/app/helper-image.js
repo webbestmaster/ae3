@@ -1,6 +1,6 @@
 // @flow
 
-/* global window, document */
+/* global window, document, IS_PRODUCTION */
 
 import * as PIXI from 'pixi.js';
 import Queue from '../lib/queue';
@@ -104,6 +104,16 @@ async function scaleImage(src: string, multiple: number): Promise<ScaledImageDat
     if (naturalWidth > maxImageSideSize || naturalHeight > maxImageSideSize) {
         console.log('too big for cache', src);
         return null;
+    }
+
+    // eslint-disable-next-line id-match
+    if (!IS_PRODUCTION) {
+        return {
+            src,
+            width: endWidth,
+            height: endHeight,
+            base64Image: src
+        };
     }
 
     const {stage, renderer} = pixiApplication;
