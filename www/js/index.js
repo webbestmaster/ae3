@@ -14,6 +14,7 @@ import muiTheme from './components/ui/mui-theme';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 import App from './app';
+import AppLoader from './components/app-loader';
 
 import * as reducers from './app-reducer';
 
@@ -54,3 +55,12 @@ initializeEnvironment()
         console.error('error with initialize environment or app start');
         console.error(error);
     });
+
+render(
+    <AppLoader
+        load={() => {
+            console.log('load');
+        }}
+    />,
+    window.document.querySelector('.js-app-wrapper')
+);
