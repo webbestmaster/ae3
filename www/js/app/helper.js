@@ -8,6 +8,7 @@ import TWEEN from '@tweenjs/tween.js';
 import {run as runLocalServer} from '../module/server-local-api';
 import {run as runLocalSocket} from '../module/socket-local';
 import {initImages} from './helper-image';
+import {socket} from './../module/socket';
 
 export async function initializeEnvironment(): Promise<void> {
     // reduce 300ms delay
@@ -35,6 +36,13 @@ export async function initializeEnvironment(): Promise<void> {
         false
     );
 
+    await socket.initSocket()
+        .then((): void => console.log('Socket has been connect.'))
+        .catch((error: Error) => {
+            console.log('Socket has NOT been connect.');
+            console.error(error);
+        });
+
     await runLocalServer()
         .then((): void => console.log('Local Server has been run.'))
         .catch((error: Error) => {
@@ -43,9 +51,9 @@ export async function initializeEnvironment(): Promise<void> {
         });
 
     await runLocalSocket()
-        .then((): void => console.log('Local Socket has been run.'))
+        .then((): void => console.log('Local Socket has been connect.'))
         .catch((error: Error) => {
-            console.log('Local Socket has NOT been run.');
+            console.log('Local Socket has NOT been connect.');
             console.error(error);
         });
 
