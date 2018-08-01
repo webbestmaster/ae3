@@ -14,53 +14,48 @@ import muiTheme from './components/ui/mui-theme';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 import App from './app';
-import AppLoader from './components/app-loader';
+import AppLoader, {type LoadAppPassedMethodMapType} from './components/app-loader';
 
 import * as reducers from './app-reducer';
 
-initializeEnvironment()
-    .then(
-        (): void => {
-            console.log('Environment is initialized!');
+function loadApp(methodMap: LoadAppPassedMethodMapType) {
+    initializeEnvironment(methodMap)
+        .then(
+            (): void => {
+                console.log('Environment is initialized!');
 
-            const reducer = combineReducers({
-                ...reducers
-            });
+                const reducer = combineReducers({
+                    ...reducers
+                });
 
-            const composeEnhancers = composeWithDevTools({
-                // options like actionSanitizer, stateSanitizer
-            });
+                const composeEnhancers = composeWithDevTools({
+                    // options like actionSanitizer, stateSanitizer
+                });
 
-            const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
+                const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
 
-            /* eslint-disable react/jsx-max-depth */
-            render(
-                <Provider store={store}>
-                    <BrowserRouter>
-                        <StoreProvider>
-                            <MuiThemeProvider theme={muiTheme}>
-                                <App/>
-                            </MuiThemeProvider>
-                        </StoreProvider>
-                    </BrowserRouter>
-                </Provider>,
-                window.document.querySelector('.js-app-wrapper')
-            );
-            /* eslint-enable react/jsx-max-depth */
+                /* eslint-disable react/jsx-max-depth */
+                render(
+                    <Provider store={store}>
+                        <BrowserRouter>
+                            <StoreProvider>
+                                <MuiThemeProvider theme={muiTheme}>
+                                    <App/>
+                                </MuiThemeProvider>
+                            </StoreProvider>
+                        </BrowserRouter>
+                    </Provider>,
+                    window.document.querySelector('.js-app-wrapper')
+                );
+                /* eslint-enable react/jsx-max-depth */
 
-            return console.log('App started!');
-        }
-    )
-    .catch((error: Error) => {
-        console.error('error with initialize environment or app start');
-        console.error(error);
-    });
+                return console.log('App started!');
+            }
+        )
+        .catch((error: Error) => {
+            console.error('error with initialize environment or app start');
+            console.error(error);
+        });
+}
 
-render(
-    <AppLoader
-        load={() => {
-            console.log('load');
-        }}
-    />,
-    window.document.querySelector('.js-app-wrapper')
-);
+render(<AppLoader load={loadApp}/>, window.document.querySelector('.js-app-wrapper'));
