@@ -1,16 +1,17 @@
 // @flow
 
-/* global window, document, IS_PRODUCTION */
+/* global window, document, fetch, URL, IS_PRODUCTION */
 
 import * as PIXI from 'pixi.js';
 import Queue from '../lib/queue';
 import type {LoadAppPassedMethodMapType} from '../components/app-loader';
 
 export type ScaledImageDataType = {|
+    src: string,
     width: number,
     height: number,
-    base64Image: string,
-    src: string
+    // base64Image: string,
+    blobUrl: string
 |};
 
 export const imageCache: Array<ScaledImageDataType> = [];
@@ -124,7 +125,7 @@ async function scaleImage(src: string, multiple: number): Promise<ScaledImageDat
             src,
             width: endWidth,
             height: endHeight,
-            base64Image: src
+            blobUrl: src
         };
     }
 
@@ -143,11 +144,17 @@ async function scaleImage(src: string, multiple: number): Promise<ScaledImageDat
 
     pixiApplication.render();
 
+    const base64Image = renderer.view.toDataURL();
+
+    const imageBlob = await fetch(base64Image).then((res: Response): Promise<Blob> => res.blob());
+
+    const blobUrl = URL.createObjectURL(imageBlob);
+
     return {
         src,
         width: endWidth,
         height: endHeight,
-        base64Image: renderer.view.toDataURL()
+        blobUrl
     };
 }
 

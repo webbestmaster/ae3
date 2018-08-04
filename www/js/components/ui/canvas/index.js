@@ -53,7 +53,7 @@ export default class Canvas extends Component<PassedPropsType, StateType> {
             return props.src;
         }
 
-        return cachedImageData.base64Image;
+        return cachedImageData.blobUrl;
     }
 
     render(): Node {
