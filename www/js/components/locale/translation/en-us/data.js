@@ -63,6 +63,12 @@ export const enUs: LangDataType = {
     // eslint-disable-next-line id-length
     UNIT__SAETH_HEAVENS_FURY__DESCRIPTION: 'UNIT__SAETH_HEAVENS_FURY__DESCRIPTION',
 
+    // init app
+    ENVIRONMENT_SETTING: 'Environment setting',
+    SETTING_UP_CONNECTIONS: 'Setting up connections',
+    LOADING_TEXTURES: 'Loading textures',
+    PREPARATION_OF_IMAGES: 'Preparation of images',
+
     // spec symbols
     SPACE: ' '
     /* eslint-enable id-match */

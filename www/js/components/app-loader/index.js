@@ -1,19 +1,32 @@
 // @flow
 
+/* global BUILD_DATE */
+
 /* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import style from './style.scss';
 import type {LangKeyType} from '../locale/translation/type';
+import Page from '../ui/page';
+import serviceStyle from '../../../css/service.scss';
+// import {Home} from '../../page/home';
+import ButtonListWrapper from '../ui/button-list-wrapper';
+import buttonListWrapperStyle from '../ui/button-list-wrapper/style.scss';
+import ButtonLink from '../ui/button-link';
+import routes from '../../app/routes';
+import Locale from '../locale';
+import Button from '../ui/button';
+import logoSrc from '../../page/home/i/logo.png';
+import homeStyle from '../../page/home/style.scss';
 
 export type LoadAppPassedMethodMapType = {|
     addItem(itemId: string, langKeyName: LangKeyType): void,
     setItemProgress(itemId: string, current: number, full: number): void,
     increaseItem(itemId: string): void,
     onLoadItem(itemId: string): void,
-    onErrorItem(itemId: string): void,
-    onWarningItem(itemId: string): void
+    onErrorItem(itemId: string, errorMessage: string): void,
+    onWarningItem(itemId: string, warningMessage: string): void
 |};
 
 type PassedPropsType = {|
@@ -26,8 +39,8 @@ type LoadItemType = {|
     current: number,
     full: number,
     isLoad: boolean,
-    hasError: boolean,
-    hasWarning: boolean
+    warningList: Array<string>,
+    errorList: Array<string>
 |};
 
 type StateType = {|
@@ -71,11 +84,11 @@ export default class AppLoader extends Component<PassedPropsType, StateType> {
             onLoadItem: (itemId: string) => {
                 view.onLoadItem(itemId);
             },
-            onErrorItem: (itemId: string) => {
-                view.onErrorItem(itemId);
+            onErrorItem: (itemId: string, errorMessage: string) => {
+                view.onErrorItem(itemId, errorMessage);
             },
-            onWarningItem: (itemId: string) => {
-                view.onWarningItem(itemId);
+            onWarningItem: (itemId: string, warningMessage: string) => {
+                view.onWarningItem(itemId, warningMessage);
             }
         };
     }
@@ -106,8 +119,8 @@ export default class AppLoader extends Component<PassedPropsType, StateType> {
             current: 0,
             full: 0,
             isLoad: false,
-            hasError: false,
-            hasWarning: false
+            warningList: [],
+            errorList: []
         });
 
         view.setState({items: [...items]});
@@ -159,7 +172,7 @@ export default class AppLoader extends Component<PassedPropsType, StateType> {
         view.setState({...state});
     }
 
-    onErrorItem(itemId: string) {
+    onErrorItem(itemId: string, errorMessage: string) {
         const view = this;
         const {state} = view;
 
@@ -170,12 +183,12 @@ export default class AppLoader extends Component<PassedPropsType, StateType> {
             return;
         }
 
-        item.hasError = true;
+        item.errorList.push(errorMessage);
 
         view.setState({...state});
     }
 
-    onWarningItem(itemId: string) {
+    onWarningItem(itemId: string, warningMessage: string) {
         const view = this;
         const {state} = view;
 
@@ -186,7 +199,7 @@ export default class AppLoader extends Component<PassedPropsType, StateType> {
             return;
         }
 
-        item.hasWarning = true;
+        item.warningList.push(warningMessage);
 
         view.setState({...state});
     }
@@ -194,17 +207,42 @@ export default class AppLoader extends Component<PassedPropsType, StateType> {
     renderItem(loadItem: LoadItemType): Node {
         return (
             <div key={loadItem.id}>
+                <Locale stringKey={loadItem.langKeyName}/>:<br/>
                 {loadItem.id} {loadItem.current}
                 {'/'}
                 {loadItem.full}
                 <br/>
                 {'isLoad ' + loadItem.isLoad.toString()}
                 <br/>
-                {'hasWarning ' + loadItem.hasWarning.toString()}
+                {'warningList size' + loadItem.warningList.length}
                 <br/>
-                {'hasError ' + loadItem.hasError.toString()}
+                {'errorList size' + loadItem.errorList.length}
                 <br/>
                 <br/>
+            </div>
+        );
+    }
+
+    static renderPartLogo(): Node {
+        return (
+            <div className={serviceStyle.two_blocks_container}>
+                &nbsp;&nbsp;Build of&nbsp;
+                {new Date(BUILD_DATE).toLocaleString()}
+                <img src={logoSrc} className={homeStyle.logo} alt=""/>
+            </div>
+        );
+    }
+
+    renderPartLoadersList(): Node {
+        const view = this;
+        const {state} = view;
+        const {items} = state;
+
+        return (
+            <div className={serviceStyle.two_blocks_container}>
+                <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
+                    <div>{items.map((loadItem: LoadItemType): Node => view.renderItem(loadItem))}</div>
+                </ButtonListWrapper>
             </div>
         );
     }
@@ -214,6 +252,13 @@ export default class AppLoader extends Component<PassedPropsType, StateType> {
         const {state} = view;
         const {items} = state;
 
-        return <div>{items.map((loadItem: LoadItemType): Node => view.renderItem(loadItem))}</div>;
+        return (
+            <Page>
+                <div className={serviceStyle.two_blocks_wrapper}>
+                    {AppLoader.renderPartLogo()}
+                    {view.renderPartLoadersList()}
+                </div>
+            </Page>
+        );
     }
 }

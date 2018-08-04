@@ -18,21 +18,25 @@ import AppLoader, {type LoadAppPassedMethodMapType} from './components/app-loade
 
 import * as reducers from './app-reducer';
 
+console.log('Environment is initialized!');
+
+const reducer = combineReducers({
+    ...reducers
+});
+
+const composeEnhancers = composeWithDevTools({
+    // options like actionSanitizer, stateSanitizer
+});
+
+const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
+
+const wrapperNode = window.document.querySelector('.js-app-wrapper');
+
 function loadApp(methodMap: LoadAppPassedMethodMapType) {
     initializeEnvironment(methodMap)
         .then(
             (): void => {
                 console.log('Environment is initialized!');
-
-                const reducer = combineReducers({
-                    ...reducers
-                });
-
-                const composeEnhancers = composeWithDevTools({
-                    // options like actionSanitizer, stateSanitizer
-                });
-
-                const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
 
                 /* eslint-disable react/jsx-max-depth */
                 render(
@@ -45,7 +49,7 @@ function loadApp(methodMap: LoadAppPassedMethodMapType) {
                             </StoreProvider>
                         </BrowserRouter>
                     </Provider>,
-                    window.document.querySelector('.js-app-wrapper')
+                    wrapperNode
                 );
                 /* eslint-enable react/jsx-max-depth */
 
@@ -58,4 +62,11 @@ function loadApp(methodMap: LoadAppPassedMethodMapType) {
         });
 }
 
-render(<AppLoader load={loadApp}/>, window.document.querySelector('.js-app-wrapper'));
+render(
+    <Provider store={store}>
+        <BrowserRouter>
+            <AppLoader load={loadApp}/>
+        </BrowserRouter>
+    </Provider>,
+    wrapperNode
+);

@@ -63,6 +63,12 @@ export const ruRu: LangDataType = {
     // eslint-disable-next-line id-length
     UNIT__SAETH_HEAVENS_FURY__DESCRIPTION: 'UNIT__SAETH_HEAVENS_FURY__DESCRIPTION',
 
+    // init app
+    ENVIRONMENT_SETTING: 'Настройка окружения',
+    SETTING_UP_CONNECTIONS: 'Настройка соединений',
+    LOADING_TEXTURES: 'Загрузка текстур',
+    PREPARATION_OF_IMAGES: 'Подготовка изображений',
+
     // spec symbols
     SPACE: ' '
     /* eslint-enable id-match */

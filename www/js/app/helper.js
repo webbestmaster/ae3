@@ -10,23 +10,57 @@ import {run as runLocalSocket} from '../module/socket-local';
 import {initImages} from './helper-image';
 import {socket} from '../module/socket';
 import type {LoadAppPassedMethodMapType} from '../components/app-loader';
+import type {LangKeyType} from '../components/locale/translation/type';
+
+type LoadStepsType = {
+    +[key: string]: {|
+        +id: string,
+        +langKey: LangKeyType
+    |}
+};
+
+export const loadSteps: LoadStepsType = {
+    environmentSetting: {
+        id: 'environment setting',
+        langKey: 'ENVIRONMENT_SETTING'
+    },
+    settingUpConnections: {
+        id: 'setting up connections',
+        langKey: 'SETTING_UP_CONNECTIONS'
+    },
+    loadingTextures: {
+        id: 'loading textures',
+        langKey: 'LOADING_TEXTURES'
+    },
+    preparationOfImages: {
+        id: 'preparation of images',
+        langKey: 'PREPARATION_OF_IMAGES'
+    }
+};
 
 // eslint-disable-next-line max-statements
 export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapType): Promise<void> {
     const {body} = document;
 
-    methodMap.addItem('setMobileEnv', 'SPACE');
-    methodMap.setItemProgress('setMobileEnv', 0, 4);
+    // add all loaders
+    methodMap.addItem(loadSteps.environmentSetting.id, loadSteps.environmentSetting.langKey);
+    methodMap.setItemProgress(loadSteps.environmentSetting.id, 0, 4);
+
+    methodMap.addItem(loadSteps.settingUpConnections.id, loadSteps.settingUpConnections.langKey);
+    methodMap.setItemProgress(loadSteps.settingUpConnections.id, 0, 3);
+
+    methodMap.addItem(loadSteps.loadingTextures.id, loadSteps.loadingTextures.langKey);
+    methodMap.addItem(loadSteps.preparationOfImages.id, loadSteps.preparationOfImages.langKey);
 
     if (body !== null) {
         // reduce 300ms delay
         FastClick.attach(body);
     } else {
-        methodMap.onErrorItem('setMobileEnv');
+        methodMap.onErrorItem(loadSteps.environmentSetting.id, 'document.body is not define');
         console.error('document.body is not define');
     }
 
-    methodMap.setItemProgress('setMobileEnv', 1, 4);
+    methodMap.increaseItem(loadSteps.environmentSetting.id);
 
     // run Tween.js updater
     (function animate() {
@@ -34,14 +68,14 @@ export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapTyp
         TWEEN.update();
     })();
 
-    methodMap.setItemProgress('setMobileEnv', 2, 4);
+    methodMap.increaseItem(loadSteps.environmentSetting.id);
 
     // disable gesture zoom on iOS
     document.addEventListener('gesturestart', (evt: Event) => {
         evt.preventDefault();
     });
 
-    methodMap.setItemProgress('setMobileEnv', 3, 4);
+    methodMap.increaseItem(loadSteps.environmentSetting.id);
 
     // disable extra scroll on iOS, use Scroll component
     document.addEventListener(
@@ -52,51 +86,40 @@ export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapTyp
         false
     );
 
-    methodMap.setItemProgress('setMobileEnv', 4, 4);
-    methodMap.onLoadItem('setMobileEnv');
-
-    methodMap.addItem('initServerSocket', 'SPACE');
-    methodMap.setItemProgress('initServerSocket', 0, 1);
+    methodMap.increaseItem(loadSteps.environmentSetting.id);
+    methodMap.onLoadItem(loadSteps.environmentSetting.id);
 
     await socket
         .initSocket()
         .then((): void => console.log('Socket has been connect.'))
         .catch((error: Error) => {
-            methodMap.onErrorItem('initServerSocket');
+            methodMap.onErrorItem(loadSteps.settingUpConnections.id, 'Socket has NOT been connect.');
             console.log('Socket has NOT been connect.');
             console.error(error);
         });
 
-    methodMap.setItemProgress('initServerSocket', 1, 1);
-    methodMap.onLoadItem('initServerSocket');
-
-    methodMap.addItem('runLocalServer', 'SPACE');
-    methodMap.setItemProgress('runLocalServer', 0, 1);
+    methodMap.increaseItem(loadSteps.settingUpConnections.id);
 
     await runLocalServer()
         .then((): void => console.log('Local Server has been run.'))
         .catch((error: Error) => {
-            methodMap.onErrorItem('runLocalServer');
+            methodMap.onErrorItem(loadSteps.settingUpConnections.id, 'Local Server has NOT been run.');
             console.log('Local Server has NOT been run.');
             console.error(error);
         });
 
-    methodMap.setItemProgress('runLocalServer', 1, 1);
-    methodMap.onLoadItem('runLocalServer');
-
-    methodMap.addItem('runLocalSocket', 'SPACE');
-    methodMap.setItemProgress('runLocalSocket', 0, 1);
+    methodMap.increaseItem(loadSteps.settingUpConnections.id);
 
     await runLocalSocket()
         .then((): void => console.log('Local Socket has been connect.'))
         .catch((error: Error) => {
-            methodMap.onErrorItem('runLocalSocket');
+            methodMap.onErrorItem(loadSteps.settingUpConnections.id, 'Local Socket has NOT been connect.');
             console.log('Local Socket has NOT been connect.');
             console.error(error);
         });
 
-    methodMap.setItemProgress('runLocalSocket', 1, 1);
-    methodMap.onLoadItem('runLocalSocket');
+    methodMap.increaseItem(loadSteps.settingUpConnections.id);
+    methodMap.onLoadItem(loadSteps.settingUpConnections.id);
 
     await initImages(methodMap);
 }

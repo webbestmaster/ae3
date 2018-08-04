@@ -5,6 +5,7 @@
 import * as PIXI from 'pixi.js';
 import Queue from '../lib/queue';
 import type {LoadAppPassedMethodMapType} from '../components/app-loader';
+import {loadSteps} from './helper';
 
 export type ScaledImageDataType = {|
     src: string,
@@ -36,8 +37,7 @@ async function loadImagesToTextures(
     imageListToLoad: Array<string>,
     methodMap: LoadAppPassedMethodMapType
 ): Promise<void> {
-    methodMap.addItem('loadImagesToTextures', 'SPACE');
-    methodMap.setItemProgress('loadImagesToTextures', 0, imageListToLoad.length);
+    methodMap.setItemProgress(loadSteps.loadingTextures.id, 0, imageListToLoad.length);
 
     return new Promise((resolve: () => void) => {
         imageListToLoad.forEach((imageToLoad: string) => {
@@ -45,12 +45,12 @@ async function loadImagesToTextures(
         });
 
         loader.onProgress.add(() => {
-            methodMap.increaseItem('loadImagesToTextures');
+            methodMap.increaseItem(loadSteps.loadingTextures.id);
             console.log('load one image');
         });
 
         loader.load(() => {
-            methodMap.onLoadItem('loadImagesToTextures');
+            methodMap.onLoadItem(loadSteps.loadingTextures.id);
 
             resolve();
         });
@@ -164,18 +164,17 @@ export async function initImages(methodMap: LoadAppPassedMethodMapType): Promise
     const queue = new Queue();
 
     await new Promise((resolve: () => void) => {
-        methodMap.addItem('scaleImage', 'SPACE');
-        methodMap.setItemProgress('scaleImage', 0, imageList.length * 2);
+        methodMap.setItemProgress(loadSteps.preparationOfImages.id, 0, imageList.length * 2);
 
         imageList.forEach((imageSrc: string) => {
             queue.push(
                 async (): Promise<void> => {
                     const imageScale1 = await scaleImage(imageSrc, 1);
 
-                    methodMap.increaseItem('scaleImage');
+                    methodMap.increaseItem(loadSteps.preparationOfImages.id);
                     const imageScale2 = await scaleImage(imageSrc, 2);
 
-                    methodMap.increaseItem('scaleImage');
+                    methodMap.increaseItem(loadSteps.preparationOfImages.id);
 
                     if (imageScale1 === null || imageScale2 === null) {
                         console.log('error with image scaling', imageSrc);
@@ -189,7 +188,7 @@ export async function initImages(methodMap: LoadAppPassedMethodMapType): Promise
             );
         });
         queue.push(() => {
-            methodMap.onLoadItem('scaleImage');
+            methodMap.onLoadItem(loadSteps.preparationOfImages.id);
             resolve();
         });
     });

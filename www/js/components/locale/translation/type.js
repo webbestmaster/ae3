@@ -61,6 +61,12 @@ export type LangDataType = {|
     // eslint-disable-next-line id-length
     +UNIT__SAETH_HEAVENS_FURY__DESCRIPTION: string,
 
+    // init app
+    +ENVIRONMENT_SETTING: string,
+    +SETTING_UP_CONNECTIONS: string,
+    +LOADING_TEXTURES: string,
+    +PREPARATION_OF_IMAGES: string,
+
     // spec symbols
     +SPACE: ' '
     /* eslint-enable id-match */
