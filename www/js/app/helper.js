@@ -89,17 +89,6 @@ export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapTyp
     methodMap.increaseItem(loadSteps.environmentSetting.id);
     methodMap.onLoadItem(loadSteps.environmentSetting.id);
 
-    await socket
-        .initSocket()
-        .then((): void => console.log('Socket has been connect.'))
-        .catch((error: Error) => {
-            methodMap.onErrorItem(loadSteps.settingUpConnections.id, 'Socket has NOT been connect.');
-            console.log('Socket has NOT been connect.');
-            console.error(error);
-        });
-
-    methodMap.increaseItem(loadSteps.settingUpConnections.id);
-
     await runLocalServer()
         .then((): void => console.log('Local Server has been run.'))
         .catch((error: Error) => {
@@ -107,7 +96,6 @@ export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapTyp
             console.log('Local Server has NOT been run.');
             console.error(error);
         });
-
     methodMap.increaseItem(loadSteps.settingUpConnections.id);
 
     await runLocalSocket()
@@ -117,8 +105,18 @@ export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapTyp
             console.log('Local Socket has NOT been connect.');
             console.error(error);
         });
-
     methodMap.increaseItem(loadSteps.settingUpConnections.id);
+
+    await socket
+        .initSocket()
+        .then((): void => console.log('Socket has been connect.'))
+        .catch((error: Error) => {
+            methodMap.onErrorItem(loadSteps.settingUpConnections.id, 'Socket has NOT been connect.');
+            console.log('Socket has NOT been connect.');
+            console.error(error);
+        });
+    methodMap.increaseItem(loadSteps.settingUpConnections.id);
+
     methodMap.onLoadItem(loadSteps.settingUpConnections.id);
 
     await initImages(methodMap);
