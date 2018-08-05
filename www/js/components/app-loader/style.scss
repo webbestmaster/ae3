@@ -1,1 +1,42 @@
 // the css
+
+@import './../../../css/var';
+
+.load_item {
+    display: block;
+    padding: 0 0 13px;
+
+    &:last-child {
+        padding-bottom: 0;
+    }
+}
+
+.load_item__header {
+    display: block;
+    padding-bottom: 6px;
+}
+
+.progress_bar__wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.progress_bar__container {
+    border: 2px solid $main-text-color;
+    //display: block;
+    flex-grow: 1;
+    height: 12px;
+    position: relative;
+}
+
+.progress_bar__line {
+    background-color: $main-text-color;
+    display: block;
+    height: 100%;
+    opacity: 0.75;
+}
+
+.progress_bar__percent_value {
+    display: block;
+    padding-left: 6px;
+}

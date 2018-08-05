@@ -205,9 +205,33 @@ export default class AppLoader extends Component<PassedPropsType, StateType> {
     }
 
     renderItem(loadItem: LoadItemType): Node {
+        const progressString = (loadItem.full === 0 ? '?/?' : loadItem.current + '/' + loadItem.full).padEnd(
+            7,
+            '\u00A0'
+        );
+
+        const progressValue = loadItem.full === 0 ? 0 : loadItem.current / loadItem.full * 100;
+
         return (
-            <div key={loadItem.id}>
-                <Locale stringKey={loadItem.langKeyName}/>:<br/>
+            <div className={style.load_item} key={loadItem.id}>
+                <p className={style.load_item__header}>
+                    <Locale stringKey={loadItem.langKeyName} isOneLine/>
+                    {':\u00A0'}
+                    {progressString}
+                </p>
+                <div className={style.progress_bar__wrapper}>
+                    <div className={style.progress_bar__container}>
+                        <div className={style.progress_bar__line} style={{width: progressValue + '%'}}/>
+                    </div>
+                    <p className={style.progress_bar__percent_value}>
+                        {Math.floor(progressValue)
+                            .toString(10)
+                            .padStart(3, '\u00A0')}
+                        %
+                    </p>
+                </div>
+
+                {/*
                 {loadItem.id} {loadItem.current}
                 {'/'}
                 {loadItem.full}
@@ -219,6 +243,7 @@ export default class AppLoader extends Component<PassedPropsType, StateType> {
                 {'errorList size' + loadItem.errorList.length}
                 <br/>
                 <br/>
+*/}
             </div>
         );
     }

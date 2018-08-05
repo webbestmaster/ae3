@@ -11,6 +11,7 @@ import type {GlobalStateType} from '../../app-reducer';
 import type {LocaleType} from './reducer';
 import {allLocales} from './const';
 import type {LangKeyType} from './translation/type';
+import {isBoolean} from '../../lib/is';
 
 type StateType = {|
     stateData: string
@@ -21,7 +22,8 @@ type ReduxPropsType = {|
 |};
 
 type PassedPropsType = {|
-    +stringKey: LangKeyType
+    +stringKey: LangKeyType,
+    +isOneLine?: boolean
 |};
 
 class Locale extends Component<ReduxPropsType, PassedPropsType, StateType> {
@@ -54,7 +56,13 @@ class Locale extends Component<ReduxPropsType, PassedPropsType, StateType> {
         const view = this;
         const {props} = view;
 
-        return view.getLocalizedString();
+        const localizedString = view.getLocalizedString();
+
+        if (props.isOneLine === true) {
+            return localizedString.replace(/\s/g, '\u00A0');
+        }
+
+        return localizedString;
     }
 }
 
