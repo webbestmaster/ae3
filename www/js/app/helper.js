@@ -50,7 +50,7 @@ export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapTyp
     methodMap.setItemProgress(loadSteps.settingUpConnections.id, 0, 3);
 
     methodMap.addItem(loadSteps.loadingTextures.id, loadSteps.loadingTextures.langKey);
-    methodMap.addItem(loadSteps.preparationOfImages.id, loadSteps.preparationOfImages.langKey);
+    // methodMap.addItem(loadSteps.preparationOfImages.id, loadSteps.preparationOfImages.langKey);
 
     if (body !== null) {
         // reduce 300ms delay

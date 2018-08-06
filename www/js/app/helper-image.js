@@ -163,33 +163,21 @@ export async function initImages(methodMap: LoadAppPassedMethodMapType): Promise
 
     const queue = new Queue();
 
-    await new Promise((resolve: () => void) => {
-        methodMap.setItemProgress(loadSteps.preparationOfImages.id, 0, imageList.length * 2);
+    imageList.forEach((imageSrc: string) => {
+        queue.push(
+            async (): Promise<void> => {
+                const imageScale1 = await scaleImage(imageSrc, 1);
+                const imageScale2 = await scaleImage(imageSrc, 2);
 
-        imageList.forEach((imageSrc: string) => {
-            queue.push(
-                async (): Promise<void> => {
-                    const imageScale1 = await scaleImage(imageSrc, 1);
-
-                    methodMap.increaseItem(loadSteps.preparationOfImages.id);
-                    const imageScale2 = await scaleImage(imageSrc, 2);
-
-                    methodMap.increaseItem(loadSteps.preparationOfImages.id);
-
-                    if (imageScale1 === null || imageScale2 === null) {
-                        console.log('error with image scaling', imageSrc);
-                        return;
-                    }
-
-                    console.log('image scaled');
-
-                    imageCache.push(imageScale1, imageScale2);
+                if (imageScale1 === null || imageScale2 === null) {
+                    console.log('error with image scaling', imageSrc);
+                    return;
                 }
-            );
-        });
-        queue.push(() => {
-            methodMap.onLoadItem(loadSteps.preparationOfImages.id);
-            resolve();
-        });
+
+                console.log('image scaled');
+
+                imageCache.push(imageScale1, imageScale2);
+            }
+        );
     });
 }
