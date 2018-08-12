@@ -34,7 +34,10 @@ const definePluginParams = {
 const imageRETest = /\.(png|jpg|jpeg|gif|svg)(\?[\d&.=a-z]+)?$/;
 
 const webpackConfig = {
-    entry: ['./www/css/root.scss', 'babel-polyfill', 'whatwg-fetch', './www/js/index.js'],
+    entry: [
+        './www/css/root.scss',
+        './www/js/index.js'
+    ],
     output: {
         path: path.join(CWD, '/dist'),
         publicPath: '/',
