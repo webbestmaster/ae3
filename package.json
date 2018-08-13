@@ -42,7 +42,7 @@
     "timer-stopwatch": "^0.2.0"
   },
   "devDependencies": {
-    "autoprefixer": "^9.0.2",
+    "autoprefixer": "^9.1.1",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
     "babel-loader": "^7.1.5",
@@ -87,7 +87,7 @@
     "stylelint": "^9.3.0",
     "stylelint-config-sass-guidelines": "^5.0.0",
     "stylelint-config-standard": "^18.2.0",
-    "stylelint-scss": "^3.2.0",
+    "stylelint-scss": "^3.3.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "webpack": "^4.16.5",
     "webpack-bundle-analyzer": "^2.13.0",
