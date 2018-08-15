@@ -6,49 +6,41 @@
 
 /* eslint consistent-this: ["error", "model"] */
 
-import {isNotFunction, isNotString, isNumber, isString} from '../is';
+import {isNotFunction, isNotString, isNotUndefined, isNumber, isString} from '../is';
 
-/* eslint-disable flowtype/no-weak-types */
-// $FlowFixMe
-type AttrValueType = any;
-/* eslint-enable flowtype/no-weak-types */
+type ActionType<ValueType> = (newValue: ValueType | void, oldValue: ValueType | void) => mixed;
 
-type ActionType = (newValue: AttrValueType, oldValue: AttrValueType) => AttrValueType;
+type ListenersItemType<ValueType> = [ActionType<ValueType>, {}];
 
-type AttrType = {
-    [key: string]: AttrValueType
+type ListenersType<KeyNameType, ValueType> = {
+    [key: KeyNameType]: Array<ListenersItemType<ValueType>>
 };
 
-type ListenersItemType = [ActionType, {}];
+type ListeningItemType<LIModel, LIKeyName, LIAction, LIContext> = [LIModel, LIKeyName, LIAction, LIContext];
 
-type ListenersType = {
-    [key: string]: Array<ListenersItemType>
-};
+type ListeningType<LModel, LKeyName, LAction, LContext> = Array<ListeningItemType<LModel, LKeyName, LAction, LContext>>;
 
-// eslint-disable-next-line no-use-before-define
-type ListeningItemType = [MainModel, string, ActionType, {}];
-
-type ListeningType = Array<ListeningItemType>;
+type AttrType<KeyNameType, ValueType> = {[key: KeyNameType]: ValueType};
 
 /**
  *
  * @param {object} attributes of new MainModel instance
  * @return {MainModel} instance
  */
-export default class MainModel {
-    attr: AttrType;
-    listeners: ListenersType;
-    listening: ListeningType;
+export default class MainModel<KeyNameType: string, ValueType> {
+    attr: AttrType<KeyNameType, ValueType>;
+    listeners: ListenersType<KeyNameType, ValueType>;
+    listening: ListeningType<MainModel<KeyNameType, ValueType>, KeyNameType, ActionType<ValueType>, {}>;
 
-    constructor(attributes?: Attr) {
+    constructor(key?: KeyNameType, value?: ValueType) {
         const model = this;
 
         model.attr = {};
         model.listeners = {};
         model.listening = [];
 
-        if (attributes) {
-            model.setObject(attributes);
+        if (isNotUndefined(key) && isNotUndefined(value)) {
+            model.attr[key] = value;
         }
     }
 
@@ -65,12 +57,13 @@ export default class MainModel {
 
     /**
      *
-     * @param {string|object} key of value
+     * @param {string} key of value
      * @param {*} [value] saved value
      * @return {MainModel} instance
      */
-    set(key: string | {}, value?: AttrValueType): MainModel {
-        return isString(key) ? this.setKeyValue(key, value) : this.setObject(key);
+    set(key: KeyNameType, value: ValueType): this {
+        return this.setKeyValue(key, value);
+        // return isString(key) ? this.setKeyValue(key, value) : this.setObject(key);
     }
 
     /**
@@ -78,21 +71,10 @@ export default class MainModel {
      * @param {string} key of value
      * @return {*} saved value
      */
-    get(key: string): AttrValueType {
-        return this.attr[key];
-    }
+    get(key: KeyNameType): ValueType | void {
+        const {attr} = this;
 
-    /**
-     *
-     * @param {string} key of value
-     * @return {MainModel} instance
-     */
-    unset(key: string): MainModel {
-        const model = this;
-
-        Reflect.deleteProperty(model.attr, key);
-        // delete model.attr[key];
-        return model;
+        return attr[key];
     }
 
     /**
@@ -101,14 +83,29 @@ export default class MainModel {
      * @param {number} deltaValue to change current value
      * @return {MainModel} instance
      */
-    changeBy(key: string, deltaValue: number): MainModel {
+    changeBy(key: KeyNameType, deltaValue: ValueType): this {
         const model = this;
-        const oldValue = model.get(key);
 
-        if (isNumber(deltaValue) && isNumber(oldValue)) {
-            model.setKeyValue(key, oldValue + deltaValue);
+        const currentValue = model.get(key);
+
+        if (isNumber(currentValue) && isNumber(deltaValue)) {
+            return model.setKeyValue(key, currentValue + deltaValue);
         }
 
+        console.error('delta and value should be number');
+
+        return model;
+    }
+
+    /**
+     *
+     * @param {string} key of value
+     * @return {MainModel} instance
+     */
+    unset(key: KeyNameType): this {
+        const model = this;
+
+        Reflect.deleteProperty(model.attr, key);
         return model;
     }
 
@@ -119,7 +116,7 @@ export default class MainModel {
      * @param {*} [context] of action
      * @return {MainModel} instance
      */
-    onChange(key: string, action: ActionType, context?: {} = this): MainModel {
+    onChange(key: KeyNameType, action: ActionType<ValueType>, context?: {} = this): this {
         const model = this;
         const listeners = model.getListenersByKey(key);
 
@@ -135,9 +132,9 @@ export default class MainModel {
      * @param {*} [context] of action
      * @return {MainModel} instance
      */
-    offChange(key?: string, action?: ActionType, context?: {}): MainModel {
+    // eslint-disable-next-line sonarjs/cognitive-complexity, max-statements
+    offChange(key?: KeyNameType, action?: ActionType<ValueType>, context?: {} = this): this {
         const model = this;
-
         const argsLength = arguments.length;
 
         // key did not passed
@@ -159,57 +156,39 @@ export default class MainModel {
         }
 
         const listenersByKey = model.getListenersByKey(key);
-        // context did not passed
+
+        const filtered: Array<ListenersItemType<ValueType>> = [];
+
+        const listenerDataLength = listenersByKey.length;
+        let listenerDataIndex = 0;
 
         if (argsLength === 2) {
-            allListeners[key] = listenersByKey.filter((listener: ListenersItemType): boolean => listener[0] !== action);
+            // eslint-disable-next-line no-loops/no-loops
+            for (; listenerDataIndex < listenerDataLength; listenerDataIndex += 1) {
+                const listenerData: ListenersItemType<ValueType> = listenersByKey[listenerDataIndex];
+
+                if (listenerData[0] !== action) {
+                    filtered.push(listenerData);
+                }
+            }
+
+            allListeners[key] = filtered;
             return model;
         }
 
         if (argsLength === 3) {
-            allListeners[key] = listenersByKey.filter(
-                (listener: ListenersItemType): boolean => listener[0] !== action || listener[1] !== context
-            );
+            // eslint-disable-next-line no-loops/no-loops
+            for (; listenerDataIndex < listenerDataLength; listenerDataIndex += 1) {
+                const listenerData: ListenersItemType<ValueType> = listenersByKey[listenerDataIndex];
+
+                if (listenerData[0] !== action || listenerData[1] !== context) {
+                    filtered.push(listenerData);
+                }
+            }
+
+            allListeners[key] = filtered;
+            return model;
         }
-
-        return model;
-    }
-
-    /**
-     *
-     * @param {string} key - of value
-     * @param {function} test - for new value of key
-     * @param {function} onValid - run if key right
-     * @param {function} onInvalid - run if key wrong
-     * @param {*} [context] of actions
-     * @returns {MainModel} instance
-     */
-    setValidation(
-        key: string,
-        test: (...args: [AttrValueType, AttrValueType]) => boolean,
-        onValid: (...args: [AttrValueType, AttrValueType]) => void,
-        onInvalid: (...args: [AttrValueType, AttrValueType]) => void,
-        context?: {} = this
-    ): MainModel {
-        const model = this;
-
-        model.onChange(
-            key,
-            (newValue: AttrValueType, oldValue: AttrValueType): void => {
-                const args = [newValue, oldValue];
-
-                return Reflect.apply(test, context, args) ?
-                    Reflect.apply(onValid, context, args) :
-                    Reflect.apply(onInvalid, context, args);
-
-                /*
-                        return test.apply(context, args) ?
-                            onValid.apply(context, args) :
-                            onInvalid.apply(context, args);
-            */
-            },
-            context
-        );
 
         return model;
     }
@@ -222,7 +201,12 @@ export default class MainModel {
      * @param {*} [context] of action
      * @returns {MainModel} instance
      */
-    listenTo(mainModel: MainModel, key: string, action: ActionType, context?: {} = this): MainModel {
+    listenTo(
+        mainModel: MainModel<KeyNameType, ValueType>,
+        key: KeyNameType,
+        action: ActionType<ValueType>,
+        context?: {} = this
+    ): this {
         const model = this;
         const listening = model.getListening();
 
@@ -239,50 +223,76 @@ export default class MainModel {
      * @param {*} [context] of action
      * @return {MainModel} instance
      */
-    stopListening(mainModel?: MainModel, key?: string, action?: ActionType, context?: {}): MainModel {
+    // eslint-disable-next-line sonarjs/cognitive-complexity
+    stopListening(
+        mainModel?: MainModel<KeyNameType, ValueType>,
+        key?: KeyNameType,
+        action?: ActionType<ValueType>,
+        context?: {} = this
+    ): this {
         const model = this;
         const argsLength = arguments.length;
         const listening = model.getListening();
 
         if (argsLength === 0) {
             listening.forEach(
-                ([listMainModel, listKey, listAction, listContext]: ListeningItemType): MainModel =>
-                    model.stopListening(listMainModel, listKey, listAction, listContext)
+                ([listMainModel, listKey, listAction, listContext]: ListeningItemType<MainModel<KeyNameType, ValueType>,
+                    KeyNameType,
+                    ActionType<ValueType>,
+                    {}>) => {
+                    model.stopListening(listMainModel, listKey, listAction, listContext);
+                }
             );
             return model;
         }
 
         if (argsLength === 1) {
             listening.forEach(
-                ([listMainModel, listKey, listAction, listContext]: ListeningItemType): MainModel | boolean =>
-                    listMainModel === mainModel && model.stopListening(listMainModel, listKey, listAction, listContext)
+                ([listMainModel, listKey, listAction, listContext]: ListeningItemType<MainModel<KeyNameType, ValueType>,
+                    KeyNameType,
+                    ActionType<ValueType>,
+                    {}>) => {
+                    if (listMainModel === mainModel) {
+                        model.stopListening(listMainModel, listKey, listAction, listContext);
+                    }
+                }
             );
             return model;
         }
 
         if (argsLength === 2) {
             listening.forEach(
-                ([listMainModel, listKey, listAction, listContext]: ListeningItemType): MainModel | boolean =>
-                    listMainModel === mainModel &&
-                    listKey === key &&
-                    model.stopListening(listMainModel, listKey, listAction, listContext)
+                ([listMainModel, listKey, listAction, listContext]: ListeningItemType<MainModel<KeyNameType, ValueType>,
+                    KeyNameType,
+                    ActionType<ValueType>,
+                    {}>) => {
+                    if (listMainModel === mainModel && listKey === key) {
+                        model.stopListening(listMainModel, listKey, listAction, listContext);
+                    }
+                }
             );
             return model;
         }
 
         if (argsLength === 3) {
             listening.forEach(
-                ([listMainModel, listKey, listAction, listContext]: ListeningItemType): MainModel | boolean =>
-                    listMainModel === mainModel &&
-                    listKey === key &&
-                    listAction === action &&
-                    model.stopListening(listMainModel, listKey, listAction, listContext)
+                ([listMainModel, listKey, listAction, listContext]: ListeningItemType<MainModel<KeyNameType, ValueType>,
+                    KeyNameType,
+                    ActionType<ValueType>,
+                    {}>) => {
+                    if (listMainModel === mainModel && listKey === key && listAction === action) {
+                        model.stopListening(listMainModel, listKey, listAction, listContext);
+                    }
+                }
             );
             return model;
         }
 
         model.listening = listening.filter(
-            ([listMainModel, listKey, listAction, listContext]: ListeningItemType): boolean => {
+            ([listMainModel, listKey, listAction, listContext]: ListeningItemType<MainModel<KeyNameType, ValueType>,
+                KeyNameType,
+                ActionType<ValueType>,
+                {}>): boolean => {
                 if (
                     mainModel &&
                     listMainModel === mainModel &&
@@ -307,7 +317,7 @@ export default class MainModel {
      * @param {*} [oldValue] of instance
      * @return {MainModel} instance
      */
-    trigger(key: string, newValue: AttrValueType, oldValue: AttrValueType): MainModel {
+    trigger(key: KeyNameType, newValue: ValueType | void, oldValue: ValueType | void): this {
         const model = this;
         const listeners = model.getListenersByKey(key);
         const argsLength = arguments.length;
@@ -330,10 +340,48 @@ export default class MainModel {
             newValueArg = newValue;
         }
 
-        listeners.forEach((listenerData: ListenersItemType) => {
+        const listenerDataLength = listeners.length;
+        let listenerDataIndex = 0;
+
+        // eslint-disable-next-line no-loops/no-loops
+        for (; listenerDataIndex < listenerDataLength; listenerDataIndex += 1) {
+            const listenerData: ListenersItemType<ValueType> = listeners[listenerDataIndex];
+
             Reflect.apply(listenerData[0], listenerData[1], [newValueArg, oldValueArg]);
-        });
-        // listeners.forEach(listenerData => listenerData[0].call(listenerData[1], newValueArg, oldValueArg));
+        }
+
+        return model;
+    }
+
+    /**
+     *
+     * @param {string} key - of value
+     * @param {function} test - for new value of key
+     * @param {function} onValid - run if key right
+     * @param {function} onInvalid - run if key wrong
+     * @param {*} [context] of actions
+     * @returns {MainModel} instance
+     */
+    setValidation(
+        key: KeyNameType,
+        test: (...args: [ValueType, ValueType]) => boolean,
+        onValid: (...args: [ValueType, ValueType]) => void,
+        onInvalid: (...args: [ValueType, ValueType]) => void,
+        context?: {} = this
+    ): this {
+        const model = this;
+
+        model.onChange(
+            key,
+            (newValue: ValueType | void, oldValue: ValueType | void): void => {
+                const args = [newValue, oldValue];
+
+                return Reflect.apply(test, context, args) ?
+                    Reflect.apply(onValid, context, args) :
+                    Reflect.apply(onInvalid, context, args);
+            },
+            context
+        );
 
         return model;
     }
@@ -342,7 +390,8 @@ export default class MainModel {
      *
      * @return {object} all attributes
      */
-    getAllAttributes(): AttrType {
+
+    getAllAttributes(): AttrType<KeyNameType, ValueType> {
         return this.attr;
     }
 
@@ -350,7 +399,7 @@ export default class MainModel {
      *
      * @return {object} all listeners
      */
-    getAllListeners(): ListenersType {
+    getAllListeners(): ListenersType<KeyNameType, ValueType> {
         return this.listeners;
     }
 
@@ -358,7 +407,7 @@ export default class MainModel {
      *
      * @return {*[]} all listening
      */
-    getListening(): ListeningType {
+    getListening(): ListeningType<MainModel<KeyNameType, ValueType>, KeyNameType, ActionType<ValueType>, {}> {
         return this.listening;
     }
 
@@ -367,7 +416,7 @@ export default class MainModel {
      * @param {string} key of value
      * @return {*[]} of listeners filtered by key
      */
-    getListenersByKey(key: string): Array<[ActionType, {}]> {
+    getListenersByKey(key: KeyNameType): Array<ListenersItemType<ValueType>> {
         const model = this;
         const listeners = model.listeners;
 
@@ -381,25 +430,28 @@ export default class MainModel {
     }
 
     // helpers
-
-    setObject(obj: {}): MainModel {
-        const model = this;
-
-        Object.keys(obj).forEach((key: string): MainModel => model.setKeyValue(key, obj[key]));
-
-        return model;
-    }
-
-    setKeyValue(key: string, newValue: AttrValueType): MainModel {
+    setKeyValue(key: KeyNameType, newValue: ValueType): this {
         const model = this;
         const attr = model.attr;
-        const oldValue = attr[key];
+        const oldValue = model.get(key);
+
+        attr[key] = newValue;
 
         if (oldValue !== newValue) {
-            attr[key] = newValue;
             model.trigger(key, newValue, oldValue);
         }
+        return model;
+    }
+
+    /*
+    setObject(obj: {|+[key: KeyNameType]: ValueType|}): this {
+        const model = this;
+
+        Object.keys(obj).forEach((key: KeyNameType) => {
+            model.setKeyValue(key, obj[key]);
+        });
 
         return model;
     }
+    */
 }

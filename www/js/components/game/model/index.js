@@ -80,7 +80,7 @@ export default class Game {
     mapState: MapType;
     emptyActionMap: Array<Array<[]>>;
     roomId: string;
-    model: MainModel;
+    model: MainModel<'message', SocketMessageType>;
     pathMap: {|
         walk: Array<Array<number>>,
         flow: Array<Array<number>>,
@@ -202,7 +202,11 @@ export default class Game {
             model.listenTo(
                 socket.attr.model,
                 'message',
-                async (message: SocketMessageType): Promise<void> => {
+                async (message: SocketMessageType | void): Promise<void> => {
+                    if (!message) {
+                        console.error('SocketMessage is not define');
+                        return;
+                    }
                     await game.onMessageWrapper(message);
                 }
             );

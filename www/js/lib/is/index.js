@@ -1,5 +1,21 @@
 // @flow
 
+export function isNull(value: mixed): boolean %checks {
+    return value === null;
+}
+
+export function isNotNull(value: mixed): boolean %checks {
+    return value !== null;
+}
+
+export function isUndefined(value: mixed): boolean %checks {
+    return typeof value === 'undefined';
+}
+
+export function isNotUndefined(value: mixed): boolean %checks {
+    return typeof value !== 'undefined';
+}
+
 export function isBoolean(value: mixed): boolean %checks {
     return typeof value === 'boolean';
 }

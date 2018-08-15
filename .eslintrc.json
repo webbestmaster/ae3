@@ -37,6 +37,10 @@
         "node": false
     },
     "settings": {
+        "react": {
+            "version": "16.4",
+            "flowVersion": "0.78"
+        },
         "flowtype": {
             "onlyFilesWithFlowAnnotation": true
         }

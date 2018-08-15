@@ -12,7 +12,7 @@ type AttrType = {|
     // eslint-disable-next-line no-use-before-define
     initialPromise: Promise<Socket>,
     socket: {id: string} | null,
-    model: MainModel
+    model: MainModel<'message' | 'connect', string>
 |};
 
 export default class Socket {

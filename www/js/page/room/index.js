@@ -52,7 +52,7 @@ import {isNotString, isString} from '../../lib/is';
 type StateType = {|
     settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
-    model: MainModel,
+    model: MainModel<'message', SocketMessageType>,
     isGameStart: boolean,
     isRoomDataFetching: boolean
 |};
@@ -150,7 +150,11 @@ class Room extends Component<PropsType, StateType> {
             model.listenTo(
                 socket.attr.model,
                 'message',
-                async (message: SocketMessageType): Promise<void> => {
+                async (message: SocketMessageType | void): Promise<void> => {
+                    if (!message) {
+                        console.error('SocketMessage is not define');
+                        return;
+                    }
                     await view.onMessage(message);
                 }
             );
