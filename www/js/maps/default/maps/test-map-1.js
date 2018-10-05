@@ -5,6 +5,7 @@
 import type {MapType} from '../../type';
 
 export const testMap1: MapType = {
+    /* eslint-disable sonarjs/no-duplicate-string */
     meta: {
         'en-US': {
             name: 'my test map 1 (Cycle)'
@@ -248,4 +249,5 @@ export const testMap1: MapType = {
         {x: 10, y: 11, type: 'saeth', userId: '3'}
     ],
     graves: []
+    /* eslint-enable sonarjs/no-duplicate-string */
 };

@@ -1,5 +1,5 @@
 /* global process, __dirname */
-/* eslint no-process-env: 0, id-match: 0 */
+/* eslint no-process-env: 0, id-match: 0, optimize-regex/optimize-regex: 0 */
 const path = require('path');
 
 const webpack = require('webpack');
@@ -11,7 +11,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 
 const DEVELOPMENT = 'development';
 const PRODUCTION = 'production';
@@ -31,15 +32,16 @@ const definePluginParams = {
     // IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
 };
 
-const imageRETest = /\.(png|jpg|jpeg|gif|svg)(\?[\d&.=a-z]+)?$/;
+const fileRegExp = /\.(png|jpg|jpeg|gif|svg|woff2?)$/;
+const pathToDist = '/dist';
 
 const webpackConfig = {
     entry: [
         './www/css/root.scss',
-        './www/js/index.js'
+        './www/js/root.js'
     ],
     output: {
-        path: path.join(CWD, '/dist'),
+        path: path.join(CWD, pathToDist),
         publicPath: '/',
         filename: '[name].js',
         chunkFilename: '[name].async-import.js'
@@ -64,13 +66,13 @@ const webpackConfig = {
                             name: 'style',
                             priority: -20,
                             reuseExistingChunk: true,
-                            test: /\.scs{2}|\.cs{2}$/
+                            test: /\.s?css$/
                         },
                         image: {
                             chunks: 'initial',
                             name: 'image',
                             priority: -15,
-                            test: imageRETest
+                            test: fileRegExp
                         },
                         vendor: {
                             chunks: 'initial',
@@ -83,8 +85,8 @@ const webpackConfig = {
             } :
             {
                 minimizer: [
-                    new UglifyJsPlugin({
-                        uglifyOptions: {
+                    new TerserPlugin({
+                        terserOptions: {
                             output: {
                                 comments: false,
                                 beautify: false
@@ -106,11 +108,11 @@ const webpackConfig = {
                 // exclude: /node_modules/,
                 // query-string: query-string|strict-uri-encode
                 // pixi-viewport: pixi-viewport|yy-[\w]+
-                exclude: /node_modules(?!([/\\])(query-string|strict-uri-encode|pixi-viewport|y{2}-\w+))/,
+                exclude: /node_modules(?!([/\\])(query-string|strict-uri-encode|pixi-viewport|yy-\w+))/,
                 loader: 'babel-loader'
             },
             {
-                test: imageRETest,
+                test: fileRegExp,
                 use: [
                     {
                         loader: 'base64-inline-loader',
@@ -151,7 +153,7 @@ const webpackConfig = {
                 ]
             },
             {
-                test: /\.scs{2}$/,
+                test: /\.scss$/,
                 use: [
                     IS_PRODUCTION ?
                         MiniCssExtractPlugin.loader :
@@ -165,7 +167,7 @@ const webpackConfig = {
                                 }
                             }
                         },
-
+                    'css-modules-flow-types-loader',
                     {
                         loader: 'css-loader',
                         options: {
@@ -188,7 +190,7 @@ const webpackConfig = {
                 ]
             },
             {
-                test: /\.cs{2}$/,
+                test: /\.css$/,
                 use: [
                     IS_PRODUCTION ?
                         MiniCssExtractPlugin.loader :
@@ -202,7 +204,7 @@ const webpackConfig = {
                                 }
                             }
                         },
-
+                    'css-modules-flow-types-loader',
                     {
                         loader: 'css-loader',
                         options: {
@@ -225,8 +227,18 @@ const webpackConfig = {
             }
         ]
     },
+    // resolve module warning, see DuplicatePackageCheckerPlugin
+    resolve: {
+        alias: {
+            warning: path.resolve(CWD, 'node_modules/warning'),
+            lodash: path.resolve(CWD, 'node_modules/lodash'),
+            isarray: path.resolve(CWD, 'node_modules/isarray'),
+            '@babel/runtime': path.resolve(CWD, 'node_modules/@babel/runtime')
+        }
+    },
     plugins: [
-        new CleanWebpackPlugin(['./dist']),
+        new DuplicatePackageCheckerPlugin(),
+        new CleanWebpackPlugin(['.' + pathToDist]),
         new webpack.DefinePlugin(definePluginParams),
         new HtmlWebpackPlugin({
             template: './www/index.html',

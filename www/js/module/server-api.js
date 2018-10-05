@@ -9,7 +9,7 @@ import type {AttackResultUnitType} from '../components/game/model/helper';
 import {isOnLineRoomType} from '../components/game/model/helper';
 import {localGet, localPost, localServerUrl} from './server-local-api';
 import {localSocketIoClient} from './socket-local';
-import {isString} from '../lib/is';
+import {isString} from '../lib/is/is';
 
 const {api} = appConst;
 const {url} = api;
@@ -26,6 +26,8 @@ export type RoomTypeType = 'on-line' | 'off-line';
 export type CreateRoomType = {|
     roomId: string
 |};
+
+const headers = {Accept: 'application/json', 'Content-Type': 'application/json'};
 
 export function createRoom(): Promise<CreateRoomType> {
     if (isOnLineRoomType()) {
@@ -139,7 +141,7 @@ export function setAllRoomSettings(
         return fetch(url + '/api/room/set-all-settings/' + roomId, {
             method: 'POST',
             body: JSON.stringify(allRoomSettings),
-            headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
+            headers
         })
             .then((blob: Response): Promise<SetAllRoomSettingsType> => blob.json())
             .then(
@@ -181,7 +183,7 @@ export function setRoomSetting(
         return fetch(url + '/api/room/set-setting/' + roomId, {
             method: 'POST',
             body: JSON.stringify(roomSetting),
-            headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
+            headers
         })
             .then((blob: Response): Promise<SetRoomSettingType> => blob.json())
             .then(
@@ -440,7 +442,7 @@ export function pushState(roomId: string, userId: string, pushedState: PushedSta
         return fetch(url + '/api/room/push-state/' + [roomId, userId].join('/'), {
             method: 'POST',
             body: JSON.stringify(pushedState),
-            headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
+            headers
         }).then((blob: Response): Promise<PushStateType> => blob.json());
     }
 

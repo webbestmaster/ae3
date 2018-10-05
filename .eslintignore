@@ -1,24 +1,14 @@
-# IDE
-/.idea/
+# dist
+/dist
+
+# res
+_res
 
 # npm
 node_modules
 
 # flow
 flow-typed/npm
-
-# dist
-/dist/
-/prod/
-
-# res
-/_res
-
-# tools
-/tools
-
-# reports
-/flow-coverage
 
 # example
 

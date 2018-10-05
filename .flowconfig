@@ -1,6 +1,6 @@
 [ignore]
-./_res
-<PROJECT_ROOT>/node_modules/config-chain/test/broken.json
+./dist
+<PROJECT_ROOT>/node_modules
 
 [include]
 #./flow-typed/**/
@@ -12,8 +12,10 @@ all=warn
 
 [options]
 #all=true
-module.name_mapper='^.*\.s?css$' -> 'css-module-flow'
 include_warnings=true
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
 module.use_strict=true
 munge_underscores=true
+module.file_ext=.js
+module.file_ext=.css
+module.file_ext=.scss

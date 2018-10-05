@@ -1,9 +1,8 @@
 # dist
-/dist/
-/prod/
+/dist
 
 # res
-/_res
+_res
 
 # example
 # /* eslint-disable no-unused-vars */

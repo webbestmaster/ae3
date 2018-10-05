@@ -3,8 +3,8 @@
 /* global window, document, fetch, URL, IS_PRODUCTION */
 
 import * as PIXI from 'pixi.js';
-import Queue from '../lib/queue';
-import type {LoadAppPassedMethodMapType} from '../components/app-loader';
+import Queue from '../lib/queue/queue';
+import type {LoadAppPassedMethodMapType} from '../components/app-loader/c-app-loader';
 import {loadSteps} from './helper';
 
 export type ScaledImageDataType = {|

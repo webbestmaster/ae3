@@ -4,6 +4,7 @@
 {
     "parser": "babel-eslint",
     "extends": [
+        "plugin:jsx-a11y/recommended",
         "eslint:recommended",
         "plugin:flowtype/recommended",
         "plugin:react/all",
@@ -20,6 +21,7 @@
         "console": true
     },
     "plugins": [
+        "jsx-a11y",
         "no-use-extend-native",
         "import",
         "flowtype",
@@ -29,7 +31,9 @@
         "lodash",
         "optimize-regex",
         "unicorn",
-        "no-loops"
+        "no-loops",
+        "filenames",
+        "markdown"
     ],
     "env": {
         "es6": true,
@@ -37,15 +41,13 @@
         "node": false
     },
     "settings": {
-        "react": {
-            "version": "16.4",
-            "flowVersion": "0.78"
-        },
         "flowtype": {
             "onlyFilesWithFlowAnnotation": true
         }
     },
     "rules": {
+        "jsx-a11y/label-has-for": 0, // deprecated, https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/label-has-for.md
+        "filenames/no-index": 2,
         "import/no-useless-path-segments": 2,
         "no-loops/no-loops": 2,
         "optimize-regex/optimize-regex": 1,
@@ -557,7 +559,7 @@
         ],
         "id-match": [
             1,
-            "^[a-zA-Z0-9]+$",
+            "^\\$?[a-zA-Z0-9]+$",
             {
                 "onlyDeclarations": false,
                 "properties": true

@@ -9,7 +9,7 @@ import {run as runLocalServer} from '../module/server-local-api';
 import {run as runLocalSocket} from '../module/socket-local';
 import {initImages} from './helper-image';
 import {socket} from '../module/socket';
-import type {LoadAppPassedMethodMapType} from '../components/app-loader';
+import type {LoadAppPassedMethodMapType} from '../components/app-loader/c-app-loader';
 import type {LangKeyType} from '../components/locale/translation/type';
 
 type LoadStepsType = {

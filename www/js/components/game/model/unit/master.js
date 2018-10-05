@@ -1,23 +1,23 @@
 // @flow
 
-import type {UnitConstructorType} from '.';
-import Unit from '.';
-import UnitArcher from './archer';
-import UnitCatapult from './catapult';
-import UnitCrystal from './crystal';
-import UnitDemonLord from './demon-lord';
-import UnitDireWolf from './dire-wolf';
-import UnitDragon from './dragon';
-import UnitElemental from './elemental';
-import UnitGalamar from './galamar';
-import UnitGolem from './golem';
-import UnitSaeth from './saeth';
-import UnitSaethHeavenFury from './saeth-heavens-fury';
-import UnitSkeleton from './skeleton';
-import UnitSoldier from './soldier';
-import UnitSorceress from './sorceress';
-import UnitValadorn from './valadorn';
-import UnitWisp from './wisp';
+import type {UnitConstructorType} from './unit';
+import Unit from './unit';
+import UnitArcher from './archer/archer';
+import UnitCatapult from './catapult/catapult';
+import UnitCrystal from './crystal/crystal';
+import UnitDemonLord from './demon-lord/demon-lord';
+import UnitDireWolf from './dire-wolf/dire-wolf';
+import UnitDragon from './dragon/dragon';
+import UnitElemental from './elemental/elemental';
+import UnitGalamar from './galamar/galamar';
+import UnitGolem from './golem/golem';
+import UnitSaeth from './saeth/saeth';
+import UnitSaethHeavenFury from './saeth-heavens-fury/saeth-heavens-fury';
+import UnitSkeleton from './skeleton/skeleton';
+import UnitSoldier from './soldier/soldier';
+import UnitSorceress from './sorceress/sorceress';
+import UnitValadorn from './valadorn/valadorn';
+import UnitWisp from './wisp/wisp';
 
 // eslint-disable-next-line complexity
 export function createUnit(unitConstructor: UnitConstructorType): Unit {

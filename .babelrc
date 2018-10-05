@@ -1,19 +1,32 @@
 {
     "presets": [
-        "env",
-        "stage-2",
-        "react",
-        "flow"
+        "@babel/preset-env",
+        "@babel/preset-react",
+        "@babel/preset-flow"
     ],
     "plugins": [
-        "transform-runtime"
+        "@babel/plugin-transform-runtime",
+        "babel-plugin-transform-class-properties",
+        "@babel/plugin-proposal-export-namespace-from",
+        "@babel/plugin-proposal-throw-expressions",
+        "@babel/plugin-syntax-dynamic-import"
     ],
     "env": {
         "development": {
             "plugins": [
-                "transform-runtime",
-                "flow-runtime",
-                "transform-decorators-legacy"
+                [
+                    "@babel/plugin-proposal-decorators",
+                    {
+                        "legacy": true
+                    }
+                ],
+                [
+                    "babel-plugin-flow-runtime",
+                    {
+                        "assert": true,
+                        "annotate": true
+                    }
+                ]
             ]
         }
     }

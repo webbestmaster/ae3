@@ -4,17 +4,17 @@
 import mapGuide, {type TeamIdType, type UserColorType} from '../../../maps/map-guide';
 import type {UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
 import unitGuideData, {additionalUnitData, defaultUnitData} from './unit/unit-guide';
-import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './unit';
-import Unit from './unit';
-import type {PathType} from '../../../lib/a-star-finder';
-import {defaultOptions, getPath} from '../../../lib/a-star-finder';
+import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './unit/unit';
+import Unit from './unit/unit';
+import type {PathType} from '../../../lib/a-star-finder/a-star-finder';
+import {defaultOptions, getPath} from '../../../lib/a-star-finder/a-star-finder';
 import type {BuildingType, MapType, MapUserType, UnitType} from '../../../maps/type';
 import find from 'lodash/find';
 import * as PIXI from 'pixi.js';
-import {storeViewId} from '../../store';
+import {storeViewId} from '../../store/c-store';
 import queryString from 'query-string';
 import type {RoomTypeType} from '../../../module/server-api';
-import {isNotNumber, isString} from '../../../lib/is';
+import {isNotNumber, isString} from '../../../lib/is/is';
 
 type InteractionEventType = {|
     +data: {|
@@ -357,7 +357,7 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
             return;
         }
 
-        if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) > 100) {
+        if (deltaX ** 2 + deltaY ** 2 > 100) {
             // move delta > 10px - no click
             return;
         }
@@ -531,7 +531,7 @@ export function getLevel(damageGiven: number): number {
             return level;
         }
 
-        levelSize += base * Math.pow(levelScale, level);
+        levelSize += base * levelScale ** level;
     }
 
     return level;

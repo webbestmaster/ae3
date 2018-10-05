@@ -7,6 +7,7 @@ $bottom-bar--border-color: #404757;
 .end_turn {
     background-color: rgba(0, 0, 0, 0.75);
     color: $main-text-color;
+    display: block;
     font-family: $main-font-family;
     font-size: 40px;
     font-weight: bold;

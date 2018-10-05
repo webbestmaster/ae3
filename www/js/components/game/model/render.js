@@ -18,10 +18,10 @@ import Unit, {
     type UnitActionRaiseSkeletonType,
     type UnitActionsMapType,
     type UnitActionType
-} from './unit';
+} from './unit/unit';
 import {defaultUnitData} from './unit/unit-guide';
-import Building from './building';
-import {tween} from '../../../lib/tween';
+import Building from './building/building';
+import {tween} from '../../../lib/tween/tween';
 import Viewport from 'pixi-viewport';
 import {bindClick} from './helper';
 

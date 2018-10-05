@@ -5,7 +5,7 @@
 const socketIoClient = require('socket.io-client');
 
 import appConst from '../app-const';
-import MainModel from '../lib/main-model';
+import MainModel from '../lib/main-model/main-model';
 import type {PushedStatePayloadType} from './server-api';
 
 type AttrType = {|
