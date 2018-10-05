@@ -7,9 +7,9 @@
 import type {RequestCallBackType} from '../local-request/local-request';
 import type {PushedStateType} from '../room/room';
 
-const {LocalExpressRequest} = require('./request');
-const {LocalExpressResponse} = require('./response');
-const {UrlMask} = require('./url-mask');
+import {LocalExpressRequest} from './request';
+import {LocalExpressResponse} from './response';
+import {UrlMask} from './url-mask';
 
 type ExpressCallBackType = (req: LocalExpressRequest, res: LocalExpressResponse) => void;
 
@@ -23,7 +23,7 @@ type AttrType = {|
     +listenerList: Array<LocalExpressListenerType>
 |};
 
-class LocalExpress {
+export class LocalExpress {
     attr: AttrType;
 
     constructor() {
@@ -80,5 +80,3 @@ class LocalExpress {
         localExpress.addListener('post', url, callBack);
     }
 }
-
-module.exports.LocalExpress = LocalExpress;

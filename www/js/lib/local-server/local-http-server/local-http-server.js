@@ -6,19 +6,16 @@
 import type {RequestCallBackType} from '../local-request/local-request';
 import type {PushedStateType} from '../room/room';
 
-const {isFunction} = require('./../helper');
-
-const {localMaster} = require('../local-master/local-master');
-const {LocalExpress} = require('../local-express/local-express');
-// const {LocalExpressRequest} = require('./request');
-// const {LocalExpressResponse} = require('./response');
+import {isFunction} from '../helper';
+import {localMaster} from '../local-master/local-master';
+import {LocalExpress} from '../local-express/local-express';
 
 type AttrType = {|
     port: number,
     +expressApp: LocalExpress
 |};
 
-class LocalHttpServer {
+export class LocalHttpServer {
     attr: AttrType;
 
     constructor(expressApp: LocalExpress) {
@@ -71,5 +68,3 @@ class LocalHttpServer {
         }
     }
 }
-
-module.exports.LocalHttpServer = LocalHttpServer;

@@ -13,7 +13,7 @@ type AttrType = {|
     +mask: Array<string>
 |};
 
-class UrlMask {
+export class UrlMask {
     attr: AttrType;
 
     constructor(constructorOptions: ConstructorOptionsType) {
@@ -98,5 +98,3 @@ class UrlMask {
         return params;
     }
 }
-
-module.exports.UrlMask = UrlMask;

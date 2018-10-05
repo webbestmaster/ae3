@@ -37,7 +37,7 @@ import Spinner from '../../components/ui/spinner/c-spinner';
 import MapPreview from '../../components/ui/map-preview/c-map-preview';
 import Locale from '../../components/locale/c-locale';
 import {getMaxUserListSize, getRoomState} from '../join-room/helper';
-import type {ContextRouter} from 'react-router-dom';
+import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import {localSocketIoClient} from '../../module/socket-local';
 import type {GlobalStateType} from '../../app-reducer';
 import type {LocaleType} from '../../components/locale/reducer';
@@ -60,7 +60,7 @@ type StateType = {|
 |};
 
 type PropsType = {|
-    ...ContextRouter,
+    ...ContextRouterType,
     locale: LocaleType
 |};
 
@@ -347,7 +347,7 @@ class Room extends Component<PropsType, StateType> {
         const {match} = props;
         const roomId = match.params.roomId || '';
 
-        const userList: Array<ServerUserType> = state.userList.map(
+        const userList = state.userList.map(
             (userItem: ServerUserType, userIndex: number): ServerUserType => ({
                 socketId: userItem.socketId,
                 userId: userItem.userId,
@@ -356,7 +356,7 @@ class Room extends Component<PropsType, StateType> {
             })
         );
 
-        const map: MapType | void = state.settings && state.settings.map;
+        const map = state.settings && state.settings.map;
 
         if (!map) {
             console.error('---> map is not exists!!!!');
@@ -378,7 +378,7 @@ class Room extends Component<PropsType, StateType> {
 
             const userIndex = parseInt(userItemUserId.replace(/\D/g, ''), 10) || 0;
 
-            const userData: ServerUserType | void = userList[userIndex];
+            const userData = userList[userIndex];
 
             if (!userData) {
                 Reflect.deleteProperty(userItem, 'userId');
@@ -399,7 +399,7 @@ class Room extends Component<PropsType, StateType> {
             map
         });
 
-        const newState: PushedStatePayloadType = {
+        const newState = {
             isGameStart: true,
             activeUserId: user.getId(),
             map

@@ -2,12 +2,12 @@
 
 /* eslint consistent-this: ["error", "roomConnection"] */
 
-const messageConst = require('./../message-data.js');
-const roomConfig = require('./../config-data.js');
-const Stopwatch = require('timer-stopwatch');
-const {Server} = require('../../server/server');
-const {Room} = require('./..');
-const {LocalSocketIoClient} = require('../../local-socket-io-client/local-socket-io-client');
+import messageConst from '../message-data';
+import roomConfig from '../config-data';
+import Stopwatch from 'timer-stopwatch';
+import {Server} from '../../server/server';
+import {Room} from '../room';
+import {LocalSocketIoClient} from '../../local-socket-io-client/local-socket-io-client';
 
 type RoomConnectionConstructorOptionType = {|
     +userId: string,
@@ -35,7 +35,7 @@ type AttrType = {|
  *      @param {String} options.userId - user's id
  *      @param {Object} options.room - parent room
  */
-class RoomConnection {
+export class RoomConnection {
     // eslint-disable-next-line no-underscore-dangle, id-match
     _attr: AttrType;
 
@@ -168,5 +168,3 @@ class RoomConnection {
         return this.getAttr().type;
     }
 }
-
-module.exports.RoomConnection = RoomConnection;

@@ -1,10 +1,11 @@
 // @flow
 
-const roomMaster = require('./../../../room/master').roomMaster;
-const {LocalExpressRequest} = require('./../../../local-express/request');
-const {LocalExpressResponse} = require('./../../../local-express/response');
-const {RoomConnection} = require('../../../room/room-connection/room-connection');
-const error = require('./../error-data.js');
+import {roomMaster} from '../../../room/master';
+import {LocalExpressRequest} from '../../../local-express/request';
+import {LocalExpressResponse} from '../../../local-express/response';
+import error from '../error-data';
+import {RoomConnection} from '../../../room/room-connection/room-connection';
+import messageConst from '../../../room/message-data';
 
 type ServerUserType = {|
     userId: string,
@@ -12,7 +13,7 @@ type ServerUserType = {|
     type: 'human' | 'bot'
 |};
 
-module.exports = (req: LocalExpressRequest, res: LocalExpressResponse) => {
+export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
     const {params} = req;
     const {roomId} = params;
 

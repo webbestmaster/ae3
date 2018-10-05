@@ -1,10 +1,10 @@
 // @flow
 
-/* eslint consistent-this: ["error", "localMaster"] */
+/* eslint consistent-this: ["error", "localMasterModel"] */
 
-const {LocalHttpServer} = require('../local-http-server/local-http-server');
-const {LocalSocketIoServer} = require('../local-socket-io-server/local-socket-io-server');
-const {getPort} = require('./../helper');
+import {LocalHttpServer} from '../local-http-server/local-http-server';
+import {LocalSocketIoServer} from '../local-socket-io-server/local-socket-io-server';
+import {getPort} from '../helper';
 
 import type {PushedStateType} from '../room/room';
 
@@ -15,25 +15,25 @@ type AttrType = {|
     +socketIoServerList: Array<LocalSocketIoServer>
 |};
 
-class LocalMaster {
+export class LocalMaster {
     attr: AttrType;
 
     constructor() {
-        const localMaster = this;
+        const localMasterModel = this;
 
-        localMaster.attr = {
+        localMasterModel.attr = {
             httpServerList: [],
             socketIoServerList: []
         };
     }
 
     addHttpServer(localHttpServer: LocalHttpServer) {
-        const localMaster = this;
-        const {httpServerList} = localMaster.attr;
+        const localMasterModel = this;
+        const {httpServerList} = localMasterModel.attr;
         const indexOfLocalHttpServer = httpServerList.indexOf(localHttpServer);
 
         if (indexOfLocalHttpServer !== -1) {
-            console.log('httpServerList already has localHttpServer', localMaster, localHttpServer);
+            console.log('httpServerList already has localHttpServer', localMasterModel, localHttpServer);
             return;
         }
 
@@ -41,12 +41,12 @@ class LocalMaster {
     }
 
     removeHttpServer(localHttpServer: LocalHttpServer) {
-        const localMaster = this;
-        const {httpServerList} = localMaster.attr;
+        const localMasterModel = this;
+        const {httpServerList} = localMasterModel.attr;
         const indexOfLocalHttpServer = httpServerList.indexOf(localHttpServer);
 
         if (indexOfLocalHttpServer === -1) {
-            console.log('httpServerList has NO localHttpServer', localMaster, localHttpServer);
+            console.log('httpServerList has NO localHttpServer', localMasterModel, localHttpServer);
             return;
         }
 
@@ -54,12 +54,12 @@ class LocalMaster {
     }
 
     addSocketIoServer(localSocketIoServer: LocalSocketIoServer) {
-        const localMaster = this;
-        const {socketIoServerList} = localMaster.attr;
+        const localMasterModel = this;
+        const {socketIoServerList} = localMasterModel.attr;
         const indexOfLocalSocketIoServer = socketIoServerList.indexOf(localSocketIoServer);
 
         if (indexOfLocalSocketIoServer !== -1) {
-            console.log('socketIoServerList already has localSocketIoServer', localMaster, localSocketIoServer);
+            console.log('socketIoServerList already has localSocketIoServer', localMasterModel, localSocketIoServer);
             return;
         }
 
@@ -67,12 +67,12 @@ class LocalMaster {
     }
 
     removeSocketIoServer(localSocketIoServer: LocalSocketIoServer) {
-        const localMaster = this;
-        const {socketIoServerList} = localMaster.attr;
+        const localMasterModel = this;
+        const {socketIoServerList} = localMasterModel.attr;
         const indexOfLocalSocketIoServer = socketIoServerList.indexOf(localSocketIoServer);
 
         if (indexOfLocalSocketIoServer === -1) {
-            console.log('socketIoServerList has NO localSocketIoServer', localMaster, localSocketIoServer);
+            console.log('socketIoServerList has NO localSocketIoServer', localMasterModel, localSocketIoServer);
             return;
         }
 
@@ -80,8 +80,8 @@ class LocalMaster {
     }
 
     triggerHttp(requestType: 'get' | 'post', url: string, form: PushedStateType, requestCallBack: RequestCallBackType) {
-        const localMaster = this;
-        const {httpServerList} = localMaster.attr;
+        const localMasterModel = this;
+        const {httpServerList} = localMasterModel.attr;
 
         httpServerList.forEach((localHttpServer: LocalHttpServer) => {
             if (localHttpServer.attr.port !== getPort(url)) {
@@ -93,5 +93,4 @@ class LocalMaster {
     }
 }
 
-module.exports.localMaster = new LocalMaster();
-module.exports.LocalMaster = LocalMaster;
+export const localMaster = new LocalMaster();

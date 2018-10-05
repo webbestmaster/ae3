@@ -1,31 +1,31 @@
 // @flow
-const {Server} = require('.');
-const {LocalExpressRequest} = require('./../local-express/request');
-const {LocalExpressResponse} = require('./../local-express/response');
+import {Server} from './server';
+import {LocalExpressRequest} from '../local-express/request';
+import {LocalExpressResponse} from '../local-express/response';
 
-const apiRoomCreate = require('./api/room/create');
-const apiRoomGetIds = require('./api/room/get-ids');
+import apiRoomCreate from './api/room/create';
+import apiRoomGetIds from './api/room/get-ids';
 
-const apiRoomJoin = require('./api/room/join');
-const apiRoomMakeUser = require('./api/room/make-user');
-const apiRoomLeave = require('./api/room/leave');
+import apiRoomJoin from './api/room/join';
+import apiRoomMakeUser from './api/room/make-user';
+import apiRoomLeave from './api/room/leave';
 
-const apiRoomDropTurn = require('./api/room/drop-turn');
-const apiRoomTakeTurn = require('./api/room/take-turn');
+import apiRoomDropTurn from './api/room/drop-turn';
+import apiRoomTakeTurn from './api/room/take-turn';
 
-const apiRoomGetUsers = require('./api/room/get-users');
-const apiRoomPushState = require('./api/room/push-state');
-const apiGetLastStates = require('./api/room/get-last-states');
+import apiRoomGetUsers from './api/room/get-users';
+import apiRoomPushState from './api/room/push-state';
+import apiGetLastStates from './api/room/get-last-states';
 
-const apiGetAllSettings = require('./api/room/get-all-settings');
-const apiGetSetting = require('./api/room/get-setting');
-const apiSetAllSettings = require('./api/room/set-all-settings');
-const apiSetSetting = require('./api/room/set-setting');
+import apiGetAllSettings from './api/room/get-all-settings';
+import apiGetSetting from './api/room/get-setting';
+import apiSetAllSettings from './api/room/set-all-settings';
+import apiSetSetting from './api/room/set-setting';
 
-const apiGetAllStates = require('./api/room/get-all-states');
-const apiGetStatesFromHash = require('./api/room/get-states-from-hash');
+import apiGetAllStates from './api/room/get-all-states';
+import apiGetStatesFromHash from './api/room/get-states-from-hash';
 
-module.exports.apiRouter = {
+export const apiRouter = {
     bindRoutes: (server: Server) => {
         // eslint-disable-next-line max-statements
         const expressApp = server.getExpressApp();

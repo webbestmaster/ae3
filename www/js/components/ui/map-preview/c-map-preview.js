@@ -119,7 +119,7 @@ export default class MapPreview extends Component<PropsType, StateType> {
         map.buildings.forEach((building: BuildingType) => {
             const {type} = building;
 
-            let sprite: PIXI.Sprite | null = null;
+            let sprite = null;
 
             if (['castle', 'farm'].includes(type)) {
                 let color = 'gray';

@@ -16,7 +16,7 @@ import Game from './model/model-game';
 import type {ServerUserType} from '../../module/server-api';
 import * as serverApi from '../../module/server-api';
 import MainModel from '../../lib/main-model/main-model';
-import type {ContextRouter} from 'react-router-dom';
+import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import withRouter from 'react-router-dom/withRouter';
 import Store from '../store/c-store';
 import queryString from 'query-string';
@@ -67,7 +67,7 @@ export const bottomBarData = {
 type PropsType = {|
     system: SystemType,
     roomId: string,
-    ...ContextRouter
+    ...ContextRouterType
 |};
 
 export type PopupParameterType = {|

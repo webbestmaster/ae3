@@ -1,37 +1,37 @@
 // @flow
 
-/* eslint consistent-this: ["error", "roomMaster"] */
+/* eslint consistent-this: ["error", "roomMasterModel"] */
 
-const find = require('lodash/find');
+import find from 'lodash/find';
 
-const {Room} = require('.');
+import {Room} from './room';
 
 type AttrType = {|
     +rooms: Array<Room>
 |};
 
-class RoomMaster {
+export class RoomMaster {
     // eslint-disable-next-line no-underscore-dangle, id-match
     _attr: AttrType;
     constructor() {
-        const roomMaster = this;
+        const roomMasterModel = this;
 
         // eslint-disable-next-line no-underscore-dangle, id-match
-        roomMaster._attr = {
+        roomMasterModel._attr = {
             rooms: []
         };
     }
 
     push(room: Room) {
-        const roomMaster = this;
-        const rooms = roomMaster.getRooms();
+        const roomMasterModel = this;
+        const rooms = roomMasterModel.getRooms();
 
         rooms.push(room);
     }
 
     removeRoomById(roomId: string) {
-        const roomMaster = this;
-        const rooms = roomMaster.getRooms();
+        const roomMasterModel = this;
+        const rooms = roomMasterModel.getRooms();
 
         const roomToRemove = find(rooms, (room: Room): boolean => room.getId() === roomId);
 
@@ -46,15 +46,15 @@ class RoomMaster {
     }
 
     getRoomById(roomId: string): Room | null {
-        const roomMaster = this;
-        const rooms = roomMaster.getRooms();
+        const roomMasterModel = this;
+        const rooms = roomMasterModel.getRooms();
 
         return find(rooms, (room: Room): boolean => room.getId() === roomId) || null;
     }
 
     getRoomIds(): Array<string> {
-        const roomMaster = this;
-        const rooms = roomMaster.getRooms();
+        const roomMasterModel = this;
+        const rooms = roomMasterModel.getRooms();
 
         return rooms.map((room: Room): string => room.getId());
     }
@@ -69,8 +69,8 @@ class RoomMaster {
     }
 
     destroy() {
-        const roomMaster = this;
-        const attr = roomMaster.getAttr();
+        const roomMasterModel = this;
+        const attr = roomMasterModel.getAttr();
         const {rooms} = attr;
 
         // eslint-disable-next-line no-loops/no-loops
@@ -78,11 +78,10 @@ class RoomMaster {
             rooms[rooms.length - 1].destroy();
         }
 
-        if (roomMaster.getAttr().rooms.length !== 0) {
-            console.error('--- ERROR ---> roomMaster.getAttr().rooms.length !== 0');
+        if (roomMasterModel.getAttr().rooms.length !== 0) {
+            console.error('--- ERROR ---> roomMasterModel.getAttr().rooms.length !== 0');
         }
     }
 }
 
-module.exports.RoomMaster = RoomMaster;
-module.exports.roomMaster = new RoomMaster();
+export const roomMaster = new RoomMaster();

@@ -1260,7 +1260,7 @@ export default class Game {
         //     return;
         // }
 
-        const graveListToRemove: Array<Grave> = [];
+        const graveListToRemove = [];
 
         // eslint-disable-next-line complexity
         graveList.forEach((grave: Grave) => {

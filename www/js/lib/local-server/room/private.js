@@ -1,11 +1,12 @@
 // @flow
 
-const Stopwatch = require('timer-stopwatch');
-const roomConfig = require('./config-data.js');
-const {Room} = require('.');
+import Stopwatch from 'timer-stopwatch';
+import roomConfig from './config-data.js';
+import {Room} from './room';
+
 const timersConfig = roomConfig.timers;
 
-function bindTimers(room: Room) {
+export function bindTimers(room: Room) {
     const attr = room.getAttr();
     const {timers} = attr;
 
@@ -24,5 +25,3 @@ function bindTimers(room: Room) {
         onCreateRoomTimer.stop();
     });
 }
-
-module.exports.bindTimers = bindTimers;

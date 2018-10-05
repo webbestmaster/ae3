@@ -365,7 +365,7 @@ export default class Unit {
             return null;
         }
 
-        const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const actionMap = JSON.parse(JSON.stringify(gameData.emptyActionMap));
 
         const isDidMoved = unit.getDidMove();
 
@@ -459,7 +459,7 @@ export default class Unit {
     // eslint-disable-next-line complexity, max-statements
     getOpenStoreActions(gameData: GameDataType): UnitActionsMapType | null {
         const unit = this;
-        const actionMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const actionMap = JSON.parse(JSON.stringify(gameData.emptyActionMap));
 
         const actionMapOpenStore = unit.getOpenStoreMapActions(gameData);
 
@@ -475,7 +475,7 @@ export default class Unit {
     getMoveActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this;
         const {attr} = unit;
-        const moveMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const moveMap = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = isString(attr.id) ? attr.id : null;
 
         if (unitId === null) {
@@ -506,7 +506,7 @@ export default class Unit {
     getAttackActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this;
         const {attr} = unit;
-        const attackMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const attackMap = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = isString(attr.id) ? attr.id : null;
 
         if (unitId === null) {
@@ -542,7 +542,7 @@ export default class Unit {
     getFixBuildingActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this;
         const {attr} = unit;
-        const fixBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const fixBuildingMap = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = isString(attr.id) ? attr.id : null;
         const userId = isString(attr.userId) ? attr.userId : null;
 
@@ -590,7 +590,7 @@ export default class Unit {
     getOccupyBuildingActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this;
         const {attr} = unit;
-        const occupyBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const occupyBuildingMap = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = isString(attr.id) ? attr.id : null;
         const userId = isString(attr.userId) ? attr.userId : null;
 
@@ -649,7 +649,7 @@ export default class Unit {
     getOpenStoreMapActions(gameData: GameDataType): UnitActionsMapType | null {
         const unit = this;
         const {attr} = unit;
-        const openStoreMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const openStoreMap = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = isString(attr.id) ? attr.id : null;
         const userId = isString(attr.userId) ? attr.userId : null;
 
@@ -693,7 +693,7 @@ export default class Unit {
     getDestroyBuildingActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this;
         const {attr} = unit;
-        const destroyBuildingMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const destroyBuildingMap = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = isString(attr.id) ? attr.id : null;
         const userId = isString(attr.userId) ? attr.userId : null;
 
@@ -764,7 +764,7 @@ export default class Unit {
     getRaiseSkeletonActions(gameData: GameDataType): UnitActionsMapType {
         const unit = this;
         const {attr} = unit;
-        const raiseSkeletonMap: UnitActionsMapType = JSON.parse(JSON.stringify(gameData.emptyActionMap));
+        const raiseSkeletonMap = JSON.parse(JSON.stringify(gameData.emptyActionMap));
         const unitId = isString(attr.id) ? attr.id : null;
         const userId = isString(attr.userId) ? attr.userId : null;
 
@@ -1309,19 +1309,19 @@ export default class Unit {
         levelUpSprite.position.set(square / 2, square);
         levelUpSprite.alpha = 0;
 
-        const animationFrom: LevelUpAnimationDataType = {
+        const animationFrom = {
             x: square / 2,
             y: square,
             alpha: 0
         };
 
-        const animationShow: LevelUpAnimationDataType = {
+        const animationShow = {
             x: square / 2,
             y: 0,
             alpha: 1
         };
 
-        const animationTo: LevelUpAnimationDataType = {
+        const animationTo = {
             x: square / 2,
             y: square / 2,
             alpha: 0
@@ -1486,19 +1486,19 @@ export default class Unit {
 
         hitPointsContainer.alpha = 0;
 
-        const animationFrom: LevelUpAnimationDataType = {
+        const animationFrom = {
             x: 0,
             y: square,
             alpha: 0
         };
 
-        const animationShow: LevelUpAnimationDataType = {
+        const animationShow = {
             x: 0,
             y: -square / 12,
             alpha: 1
         };
 
-        const animationTo: LevelUpAnimationDataType = {
+        const animationTo = {
             x: 0,
             y: -square / 12,
             alpha: 0
@@ -1589,7 +1589,7 @@ export default class Unit {
             }
         );
 
-        const wispAuraMap: Array<[number, number]> = [];
+        const wispAuraMap = [];
 
         friendWispList.forEach((unitWisp: Unit) => {
             const wispAuraCoordinates = getPath(

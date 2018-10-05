@@ -137,10 +137,12 @@ declare module 'material-ui/ButtonBase/ButtonBase' {
     }>;
 }
 
+/*
 declare module 'material-ui/ButtonBase/createRippleHandler' {
     declare function handleEvent(event: SyntheticUIEvent<>): void;
     declare module.exports: (instance: Object, eventName: string, action: string, cb: ?Function) => handleEvent;
 }
+*/
 
 declare module 'material-ui/ButtonBase' {
     declare module.exports: $Exports<'material-ui/ButtonBase/ButtonBase'>;
@@ -2234,9 +2236,11 @@ declare module 'material-ui/Button/index.js' {
 declare module 'material-ui/ButtonBase/ButtonBase.js' {
     declare module.exports: $Exports<'material-ui/ButtonBase/ButtonBase'>;
 }
+/*
 declare module 'material-ui/ButtonBase/createRippleHandler.js' {
     declare module.exports: $Exports<'material-ui/ButtonBase/createRippleHandler'>;
 }
+*/
 declare module 'material-ui/ButtonBase/index.js' {
     declare module.exports: $Exports<'material-ui/ButtonBase'>;
 }

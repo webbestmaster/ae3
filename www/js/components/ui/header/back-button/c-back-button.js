@@ -6,10 +6,10 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import style from './style.scss';
 import withRouter from 'react-router-dom/withRouter';
-import type {ContextRouter} from 'react-router-dom';
+import type {ContextRouterType} from '../../../../type/react-router-dom-v4';
 
 type PropsType = {|
-    ...ContextRouter
+    ...ContextRouterType
 |};
 
 type StateType = void;

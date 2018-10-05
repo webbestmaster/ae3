@@ -16,7 +16,7 @@ import Header from '../../components/ui/header/c-header';
 import Fieldset from '../../components/ui/fieldset/c-fieldset';
 import type {RoomDataType} from './helper';
 import {getRoomState} from './helper';
-import type {ContextRouter} from 'react-router-dom';
+import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import {isOnLineRoomType} from '../../components/game/model/helper';
 import serviceStyle from '../../../css/service.scss';
 import type {LangKeyType} from '../../components/locale/translation/type';
@@ -40,7 +40,7 @@ type StateType = {|
 |};
 
 type PropsType = {|
-    ...ContextRouter,
+    ...ContextRouterType,
     auth: AuthType,
     locale: LocaleType
 |};

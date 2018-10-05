@@ -12,7 +12,7 @@ type ConstructorOptionsType = {|
     +callBack: RequestCallBackType
 |};
 
-class LocalExpressResponse {
+export class LocalExpressResponse {
     attr: AttrType;
 
     constructor(constructorOptions: ConstructorOptionsType) {
@@ -30,5 +30,3 @@ class LocalExpressResponse {
         callBack(null, null, JSON.stringify(data));
     }
 }
-
-module.exports.LocalExpressResponse = LocalExpressResponse;

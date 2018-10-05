@@ -9,7 +9,7 @@ type ConstructorOptionsType = {|
     +body: PushedStateType
 |};
 
-class LocalExpressRequest {
+export class LocalExpressRequest {
     params: ParamsType;
     body: PushedStateType; // | SettingsType;
 
@@ -20,5 +20,3 @@ class LocalExpressRequest {
         localExpressRequest.body = constructorOptions.body;
     }
 }
-
-module.exports.LocalExpressRequest = LocalExpressRequest;

@@ -8,7 +8,6 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import Swiper from 'swiper';
 import classnames from 'classnames';
-import swiperStyle from 'swiper/dist/css/swiper.min.css';
 import style from './style.scss';
 
 type StateType = void;
@@ -105,13 +104,13 @@ export default class Scroll extends Component<StateType, PropsType> {
 
         return (
             <div
-                className={classnames(swiperStyle['swiper-container'], style.swiper_container)}
+                className={classnames('swiper-container', style.swiper_container)}
                 ref={(wrapper: HTMLElement | null) => {
                     view.node.wrapper = wrapper;
                 }}
             >
-                <div className={classnames(swiperStyle['swiper-wrapper'], style.swiper_wrapper)}>
-                    <div className={classnames(swiperStyle['swiper-slide'], style.swiper_slide)}>{props.children}</div>
+                <div className={classnames('swiper-wrapper', style.swiper_wrapper)}>
+                    <div className={classnames('swiper-slide', style.swiper_slide)}>{props.children}</div>
                 </div>
                 <div className="swiper-scrollbar"/>
             </div>

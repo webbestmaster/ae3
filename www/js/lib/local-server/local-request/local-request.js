@@ -3,7 +3,7 @@
 /* global setTimeout */
 
 /* eslint consistent-this: ["error", "localRequest"] */
-const {localMaster} = require('../local-master/local-master');
+import {localMaster} from '../local-master/local-master';
 
 import type {PushedStateType} from '../room/room';
 
@@ -18,14 +18,10 @@ function request(
     setTimeout((): void => localMaster.triggerHttp(requestType, url, form, requestCallBack), 0);
 }
 
-function get(url: string, form: PushedStateType, requestCallBack: RequestCallBackType) {
+export function get(url: string, form: PushedStateType, requestCallBack: RequestCallBackType) {
     request('get', url, form, requestCallBack);
 }
 
-module.exports.get = get;
-
-function post(url: string, form: PushedStateType, requestCallBack: RequestCallBackType) {
+export function post(url: string, form: PushedStateType, requestCallBack: RequestCallBackType) {
     request('post', url, form, requestCallBack);
 }
-
-module.exports.post = post;

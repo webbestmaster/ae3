@@ -1,9 +1,9 @@
 // @flow
 
-const roomMaster = require('./../../../room/master').roomMaster;
-const {LocalExpressRequest} = require('./../../../local-express/request');
-const {LocalExpressResponse} = require('./../../../local-express/response');
+import {roomMaster} from '../../../room/master';
+import {LocalExpressRequest} from '../../../local-express/request';
+import {LocalExpressResponse} from '../../../local-express/response';
 
-module.exports = (req: LocalExpressRequest, res: LocalExpressResponse) => {
+export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
     res.json({roomIds: roomMaster.getRoomIds()});
 };

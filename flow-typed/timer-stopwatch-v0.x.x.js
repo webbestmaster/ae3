@@ -16,14 +16,12 @@
  */
 
 declare module 'timer-stopwatch' {
-    declare class Stopwatch {
+    declare export default class Stopwatch {
         constructor(time: number): Stopwatch,
         start(): void,
         stop(): void,
         onDone(callBack: () => void): void
     }
-
-    declare module.exports: (time: number) => Stopwatch;
 }
 
 /*

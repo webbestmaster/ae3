@@ -24,7 +24,7 @@ export default class User {
             id: ''
         };
 
-        const userId: string = User.getData().id || 'user-id-' + String(Math.random()).substr(2);
+        const userId = User.getData().id || 'user-id-' + String(Math.random()).substr(2);
 
         user.setId(userId);
     }

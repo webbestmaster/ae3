@@ -1,7 +1,7 @@
 // @flow
 
 /* eslint consistent-this: ["error", "room"] */
-const {isString, isFunction} = require('./../helper');
+import {isString, isFunction} from '../helper';
 
 type PushedStatePayloadIsGameStartedType = {|
     +isGameStart: boolean,
@@ -137,14 +137,14 @@ export type PushedStateType =
       |}
     | null;
 
-const {roomMaster} = require('./master');
-const {RoomConnection} = require('./room-connection/room-connection');
-const {Server} = require('../server/server');
-const find = require('lodash/find');
-const sha1 = require('sha1');
-const messageConst = require('./message-data.js');
-const roomPrivate = require('./private');
-const Stopwatch = require('timer-stopwatch');
+import {roomMaster} from './master';
+import {RoomConnection} from './room-connection/room-connection';
+import {Server} from '../server/server';
+import find from 'lodash/find';
+import sha1 from 'sha1';
+import messageConst from './message-data.js';
+import {bindTimers} from './private';
+import Stopwatch from 'timer-stopwatch';
 
 let roomId = 0;
 
@@ -169,7 +169,7 @@ type AttrType = {|
     server: Server
 |};
 
-class Room {
+export class Room {
     // eslint-disable-next-line no-underscore-dangle, id-match
     _attr: AttrType;
 
@@ -194,7 +194,7 @@ class Room {
             server: options.server
         };
 
-        roomPrivate.bindTimers(room);
+        bindTimers(room);
 
         roomMaster.push(room);
     }
@@ -574,5 +574,3 @@ class Room {
         });
     }
 }
-
-module.exports.Room = Room;

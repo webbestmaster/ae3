@@ -1,12 +1,13 @@
 // @flow
 
-const roomMaster = require('./../../../room/master').roomMaster;
-const {LocalExpressRequest} = require('./../../../local-express/request');
-const {LocalExpressResponse} = require('./../../../local-express/response');
-const error = require('./../error-data.js');
-const messageConst = require('./../../../room/message-data.js');
+import {roomMaster} from '../../../room/master';
+import {LocalExpressRequest} from '../../../local-express/request';
+import {LocalExpressResponse} from '../../../local-express/response';
+import error from '../error-data';
+import {RoomConnection} from '../../../room/room-connection/room-connection';
+import messageConst from '../../../room/message-data';
 
-module.exports = (req: LocalExpressRequest, res: LocalExpressResponse) => {
+export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
     const {params} = req;
     const {roomId, userId, socketId} = params;
 

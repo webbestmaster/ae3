@@ -4,12 +4,10 @@
 
 /* eslint consistent-this: ["error", "localSocketIoServer"] */
 
-const {LocalHttpServer} = require('../local-http-server/local-http-server');
-const {LocalSocketIoClient} = require('../local-socket-io-client/local-socket-io-client');
-
-const {localMaster} = require('../local-master/local-master');
-
-const {isFunction} = require('./../helper');
+import {LocalHttpServer} from '../local-http-server/local-http-server';
+import {LocalSocketIoClient} from '../local-socket-io-client/local-socket-io-client';
+import {localMaster} from '../local-master/local-master';
+import {isFunction} from '../helper';
 
 /*
 return socketIoServer.sockets.connected[socketId] || null;
@@ -31,7 +29,7 @@ type SocketsType = {|
     +connected: {[key: string]: LocalSocketIoClient}
 |};
 
-class LocalSocketIoServer {
+export class LocalSocketIoServer {
     attr: AttrType;
     sockets: SocketsType;
 
@@ -100,5 +98,3 @@ class LocalSocketIoServer {
         }
     }
 }
-
-module.exports.LocalSocketIoServer = LocalSocketIoServer;

@@ -1,6 +1,6 @@
 // @flow
 
-module.exports = {
+export default {
     timers: {
         onCreateRoom: {
             time: 5e3

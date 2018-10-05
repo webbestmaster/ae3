@@ -14,7 +14,7 @@ import padEnd from 'lodash/padEnd';
 import type {MapType, MapUserType, UnitType} from '../../maps/type';
 import type {UnitTypeAllType} from '../game/model/unit/unit-guide';
 import guideUnitData, {additionalUnitData} from '../game/model/unit/unit-guide';
-import type {ContextRouter} from 'react-router-dom';
+import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import withRouter from 'react-router-dom/withRouter';
 import classnames from 'classnames';
 import {getSupplyState, isCommanderLive} from '../game/model/helper';
@@ -37,7 +37,7 @@ const storeViewId = 'store';
 export {storeViewId};
 
 type PropsType = {|
-    ...ContextRouter,
+    ...ContextRouterType,
     +x: number,
     +y: number,
     +map: MapType,
@@ -93,7 +93,7 @@ class Store extends Component<PropsType, StateType> {
     buyUnit(unitType: UnitTypeAllType): Promise<void> {
         const view = this;
         const {props, state} = view;
-        const newMap: MapType = JSON.parse(JSON.stringify(props.map));
+        const newMap = JSON.parse(JSON.stringify(props.map));
         const newMapUserData = find(newMap.userList, {userId: user.getId()}) || null;
         // const newUnitData = guideUnitData[unitType];
 
@@ -118,7 +118,7 @@ class Store extends Component<PropsType, StateType> {
 
         newMapUserData.commander.buyCount += 1;
 
-        const newMapUnitData: UnitType = {
+        const newMapUnitData = {
             type: unitType,
             x: props.x,
             y: props.y,

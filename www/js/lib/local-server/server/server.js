@@ -4,12 +4,12 @@
 
 /* global __dirname */
 
-const {LocalExpress} = require('../local-express/local-express');
-const {LocalSocketIoServer} = require('../local-socket-io-server/local-socket-io-server');
-const {LocalHttpServer} = require('../local-http-server/local-http-server');
-const apiRouter = require('./api-router').apiRouter;
-const roomMaster = require('./../room/master').roomMaster;
-const {isNumber} = require('./../helper');
+import {LocalExpress} from '../local-express/local-express';
+import {LocalSocketIoServer} from '../local-socket-io-server/local-socket-io-server';
+import {LocalHttpServer} from '../local-http-server/local-http-server';
+import {apiRouter} from './api-router';
+import {roomMaster} from '../room/master';
+import {isNumber} from '../helper';
 
 type ServerConstructorOptionsType = {|
     port: number
@@ -31,7 +31,7 @@ type AttrType = {|
  * @param {Object} options - options for new TBW
  *      @param {number} options.port - port to lister
  */
-class Server {
+export class Server {
     // eslint-disable-next-line no-underscore-dangle, id-match
     _attr: AttrType;
     constructor(options: ServerConstructorOptionsType) {
@@ -122,5 +122,3 @@ class Server {
         return this.getAttr().options;
     }
 }
-
-module.exports.Server = Server;

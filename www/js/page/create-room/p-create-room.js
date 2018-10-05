@@ -21,7 +21,7 @@ import Select from '../../components/ui/select/c-select';
 import MapPreview from '../../components/ui/map-preview/c-map-preview';
 import type {SelectIconNameType} from '../../components/ui/select/icon/c-icon';
 import mapHash from '../../maps/default/map-list';
-import type {ContextRouter} from 'react-router-dom';
+import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import {getMapSize, getRoomType, isOnLineRoomType} from '../../components/game/model/helper';
 import serviceStyle from '../../../css/service.scss';
 import style from './style.scss';
@@ -44,7 +44,7 @@ type StateType = {|
 |};
 
 type PropsType = {|
-    ...ContextRouter,
+    ...ContextRouterType,
     auth: AuthType,
     locale: LocaleType
 |};
@@ -115,7 +115,7 @@ class CreateRoom extends Component<PropsType, StateType> {
         }
 
         const {mapIndex, defaultMoney, unitLimit} = state;
-        const map: MapType = JSON.parse(JSON.stringify(mapList[mapIndex]));
+        const map = JSON.parse(JSON.stringify(mapList[mapIndex]));
         const socketId = auth.socket.id;
         const userId = auth.user.id;
 

@@ -1,7 +1,7 @@
 // @flow
 
 // eslint-disable-next-line complexity
-function getPort(originalUrl: string): number {
+export function getPort(originalUrl: string): number {
     const matches = originalUrl.match(/^(([a-z]+:)?(\/{2})?[^/]+).*$/);
     const url = matches ? matches[1] : originalUrl;
     const parts = url.split(':');
@@ -22,46 +22,34 @@ function getPort(originalUrl: string): number {
     return port;
 }
 
-function isBoolean(value: mixed): boolean %checks {
+export function isBoolean(value: mixed): boolean %checks {
     return value === true || value === false;
 }
 
-function isNotBoolean(value: mixed): boolean %checks {
+export function isNotBoolean(value: mixed): boolean %checks {
     return value !== true && value !== false;
 }
 
-function isNumber(value: mixed): boolean %checks {
+export function isNumber(value: mixed): boolean %checks {
     return typeof value === 'number';
 }
 
-function isNotNumber(value: mixed): boolean %checks {
+export function isNotNumber(value: mixed): boolean %checks {
     return typeof value !== 'number';
 }
 
-function isString(value: mixed): boolean %checks {
+export function isString(value: mixed): boolean %checks {
     return typeof value === 'string';
 }
 
-function isNotString(value: mixed): boolean %checks {
+export function isNotString(value: mixed): boolean %checks {
     return typeof value !== 'string';
 }
 
-function isFunction(value: mixed): boolean %checks {
+export function isFunction(value: mixed): boolean %checks {
     return typeof value === 'function';
 }
 
-function isNotFunction(value: mixed): boolean %checks {
+export function isNotFunction(value: mixed): boolean %checks {
     return typeof value !== 'function';
 }
-
-module.exports = {
-    getPort,
-    isBoolean,
-    isNumber,
-    isString,
-    isFunction,
-    isNotBoolean,
-    isNotNumber,
-    isNotString,
-    isNotFunction
-};
