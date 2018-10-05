@@ -1,12 +1,12 @@
 // @flow
 /* global fetch */
 
-import appConst from '../app-const';
+import appConst from '../redux-store-provider/app-const';
 import type {BuildingAttrTypeType, BuildingType, MapType, UnitType} from '../maps/type';
 import mapGuide from '../maps/map-guide';
-import type {PathType} from '../components/game/model/unit/path-master';
-import type {AttackResultUnitType} from '../components/game/model/helper';
-import {isOnLineRoomType} from '../components/game/model/helper';
+import type {PathType} from '../component/game/model/unit/path-master';
+import type {AttackResultUnitType} from '../component/game/model/helper';
+import {isOnLineRoomType} from '../component/game/model/helper';
 import {localGet, localPost, localServerUrl} from './server-local-api';
 import {localSocketIoClient} from './socket-local';
 import {isString} from '../lib/is/is';

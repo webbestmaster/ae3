@@ -7,29 +7,29 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import routes from '../../app/routes';
+import routes from '../../component/app/routes';
 import * as serverApi from '../../module/server-api';
-import type {GlobalStateType} from '../../app-reducer';
-import type {AuthType} from '../../components/auth/reducer';
-import Page from '../../components/ui/page/c-page';
-import Header from '../../components/ui/header/c-header';
-import Fieldset from '../../components/ui/fieldset/c-fieldset';
+import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
+import type {AuthType} from '../../component/auth/reducer';
+import Page from '../../component/ui/page/c-page';
+import Header from '../../component/ui/header/c-header';
+import Fieldset from '../../component/ui/fieldset/c-fieldset';
 import type {RoomDataType} from './helper';
 import {getRoomState} from './helper';
 import type {ContextRouterType} from '../../type/react-router-dom-v4';
-import {isOnLineRoomType} from '../../components/game/model/helper';
+import {isOnLineRoomType} from '../../component/game/model/helper';
 import serviceStyle from '../../../css/service.scss';
-import type {LangKeyType} from '../../components/locale/translation/type';
-import Locale from '../../components/locale/c-locale';
-import ButtonListWrapper from '../../components/ui/button-list-wrapper/c-button-list-wrapper';
-import buttonListWrapperStyle from '../../components/ui/button-list-wrapper/style.scss';
-import ButtonLink from '../../components/ui/button-link/c-button-link';
-import Button from '../../components/ui/button/c-button';
-import type {LocaleType} from '../../components/locale/reducer';
+import type {LangKeyType} from '../../component/locale/translation/type';
+import Locale from '../../component/locale/c-locale';
+import ButtonListWrapper from '../../component/ui/button-list-wrapper/c-button-list-wrapper';
+import buttonListWrapperStyle from '../../component/ui/button-list-wrapper/style.scss';
+import ButtonLink from '../../component/ui/button-link/c-button-link';
+import Button from '../../component/ui/button/c-button';
+import type {LocaleType} from '../../component/locale/reducer';
 import style from './style.scss';
-import Scroll from '../../components/ui/scroll/c-scroll';
+import Scroll from '../../component/ui/scroll/c-scroll';
 import classnames from 'classnames';
-import Spinner from '../../components/ui/spinner/c-spinner';
+import Spinner from '../../component/ui/spinner/c-spinner';
 
 type StateType = {|
     // roomIds: Array<string>,

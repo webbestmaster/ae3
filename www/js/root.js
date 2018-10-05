@@ -1,7 +1,7 @@
 // @flow
 /* global window */
 
-import {initializeEnvironment} from './app/helper.js';
+import {initializeEnvironment} from './component/app/helper.js';
 import React from 'react';
 import {render} from 'react-dom';
 import BrowserRouter from 'react-router-dom/BrowserRouter';
@@ -9,14 +9,14 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
-import {StoreProvider} from './components/store/provider';
-import muiTheme from './components/ui/mui-theme/mui-theme';
+import {StoreProvider} from './component/store/provider';
+import muiTheme from './component/ui/mui-theme/mui-theme';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
-import App from './app/c-app';
-import AppLoader, {type LoadAppPassedMethodMapType} from './components/app-loader/c-app-loader';
+import App from './component/app/c-app';
+import AppLoader, {type LoadAppPassedMethodMapType} from './component/app-loader/c-app-loader';
 
-import * as reducers from './app-reducer';
+import * as reducers from './redux-store-provider/app-reducer';
 
 console.log('Environment is initialized!');
 

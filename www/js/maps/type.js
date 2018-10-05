@@ -1,6 +1,6 @@
 // @flow
 import type {TeamIdType} from './map-guide';
-import type {UnitTypeAllType, UnitTypeCommanderType} from '../components/game/model/unit/unit-guide';
+import type {UnitTypeAllType, UnitTypeCommanderType} from '../component/game/model/unit/unit-guide';
 
 export type UserIdType = string;
 

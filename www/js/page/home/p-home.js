@@ -7,17 +7,17 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import routes from '../../app/routes';
-import Page from '../../components/ui/page/c-page';
-import Button from '../../components/ui/button/c-button';
-import ButtonLink from '../../components/ui/button-link/c-button-link';
-import ButtonListWrapper from '../../components/ui/button-list-wrapper/c-button-list-wrapper';
-import buttonListWrapperStyle from '../../components/ui/button-list-wrapper/style.scss';
+import routes from '../../component/app/routes';
+import Page from '../../component/ui/page/c-page';
+import Button from '../../component/ui/button/c-button';
+import ButtonLink from '../../component/ui/button-link/c-button-link';
+import ButtonListWrapper from '../../component/ui/button-list-wrapper/c-button-list-wrapper';
+import buttonListWrapperStyle from '../../component/ui/button-list-wrapper/style.scss';
 import style from './style.scss';
 import serviceStyle from '../../../css/service.scss';
-import Locale from '../../components/locale/c-locale';
+import Locale from '../../component/locale/c-locale';
 import logoSrc from './i/logo.png';
-import type {LangKeyType} from '../../components/locale/translation/type';
+import type {LangKeyType} from '../../component/locale/translation/type';
 
 class Home extends Component<void, void> {
     static renderPartLogo(): Node {

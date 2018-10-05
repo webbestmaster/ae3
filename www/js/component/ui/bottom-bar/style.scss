@@ -1,0 +1,28 @@
+@import '../../ui/ui-var';
+@import './../../../../css/var';
+
+.bottom_bar {
+    background-color: $main-background-color;
+    border-image-repeat: repeat repeat;
+    border-image-slice: 25%;
+    border-image-source: url('./i/header-border.svg');
+    border-style: solid;
+    border-width: 13px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    color: #fff;
+    display: block;
+    height: $bar-height;
+    position: relative;
+    width: 100%;
+    z-index: 1;
+}
+
+.bottom_bar__text {
+    font-size: 19px;
+    line-height: 29px;
+    margin-left: 7px;
+    margin-right: 7px;
+    text-align: center;
+    text-shadow: 3px 3px 0 $main-text-shadow-color;
+}
