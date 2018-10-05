@@ -37,7 +37,7 @@ const storeViewId = 'store';
 export {storeViewId};
 
 type PropsType = {|
-    ...ContextRouterType,
+    ...$Exact<ContextRouterType>,
     +x: number,
     +y: number,
     +map: MapType,

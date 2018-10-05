@@ -8,9 +8,9 @@ import style from './style.scss';
 import withRouter from 'react-router-dom/withRouter';
 import type {ContextRouterType} from '../../../../type/react-router-dom-v4';
 
-type PropsType = {|
-    ...ContextRouterType
-|};
+type PropsType = $Exact<{
+    ...$Exact<ContextRouterType>
+}>;
 
 type StateType = void;
 

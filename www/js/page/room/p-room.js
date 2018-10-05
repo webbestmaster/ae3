@@ -60,7 +60,7 @@ type StateType = {|
 |};
 
 type PropsType = {|
-    ...ContextRouterType,
+    ...$Exact<ContextRouterType>,
     locale: LocaleType
 |};
 

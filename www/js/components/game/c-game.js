@@ -67,7 +67,7 @@ export const bottomBarData = {
 type PropsType = {|
     system: SystemType,
     roomId: string,
-    ...ContextRouterType
+    ...$Exact<ContextRouterType>
 |};
 
 export type PopupParameterType = {|
