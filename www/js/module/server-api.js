@@ -17,15 +17,15 @@ const {url} = api;
 export type ServerUserType = {|
     socketId: string,
     userId: string,
-    teamId: string,
+    teamId?: string,
     type: 'human' | 'bot'
 |};
 
 export type RoomTypeType = 'on-line' | 'off-line';
 
-export type CreateRoomType = {|
+export type CreateRoomType = {
     roomId: string
-|};
+};
 
 const headers = {Accept: 'application/json', 'Content-Type': 'application/json'};
 
@@ -49,9 +49,9 @@ export function createRoom(): Promise<CreateRoomType> {
     return localGet(localServerUrl + '/api/room/create').then((result: string): CreateRoomType => JSON.parse(result));
 }
 
-export type JoinRoomType = {|
+export type JoinRoomType = {
     roomId: string
-|};
+};
 
 export function joinRoom(roomId: string, userId: string, socketId: string): Promise<JoinRoomType> {
     if (isOnLineRoomType()) {
@@ -91,9 +91,9 @@ export function makeUser(type: 'human' | 'bot', roomId: string): Promise<JoinRoo
     );
 }
 
-export type LeaveRoomType = {|
+export type LeaveRoomType = {
     roomId: string
-|};
+};
 
 export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType> {
     if (isOnLineRoomType()) {
@@ -128,9 +128,9 @@ export type AllRoomSettingsType = {|
     // userList: Array<ServerUserType>
 |};
 
-export type SetAllRoomSettingsType = {|
+export type SetAllRoomSettingsType = {
     roomId: string
-|};
+};
 
 export function setAllRoomSettings(
     roomId: string,
@@ -170,9 +170,9 @@ export type RoomSettingMapType = {|
     map: MapType
 |};
 
-export type SetRoomSettingType = {|
+export type SetRoomSettingType = {
     roomId: string
-|};
+};
 
 export function setRoomSetting(
     roomId: string,
@@ -198,10 +198,10 @@ export function setRoomSetting(
     );
 }
 
-export type GetAllRoomSettingsType = {|
+export type GetAllRoomSettingsType = {
     roomId: string,
     settings: AllRoomSettingsType
-|};
+};
 
 export function getAllRoomSettings(roomId: string): Promise<GetAllRoomSettingsType> {
     if (isOnLineRoomType()) {
@@ -215,11 +215,12 @@ export function getAllRoomSettings(roomId: string): Promise<GetAllRoomSettingsTy
     );
 }
 
-export type GetAllRoomUsersType = {|
+export type GetAllRoomUsersType = {
     roomId: string,
     users: Array<ServerUserType>
-|};
+};
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
     if (isOnLineRoomType()) {
         return fetch(url + '/api/room/get-users/' + roomId)
@@ -233,11 +234,15 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
                     }
 
                     const users = serverUserList.map(
+                        // eslint-disable-next-line sonarjs/cognitive-complexity
                         (user: ServerUserType, userIndex: number): ServerUserType => {
                             return {
                                 socketId: user.socketId,
                                 userId: user.userId,
-                                teamId: user.teamId || mapGuide.teamIdList[userIndex],
+                                teamId:
+                                    typeof user.teamId === 'string' && user.teamId !== '' ?
+                                        user.teamId :
+                                        mapGuide.teamIdList[userIndex],
                                 type: user.type
                             };
                         }
@@ -262,11 +267,15 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
                 }
 
                 const users = serverUserList.map(
+                    // eslint-disable-next-line sonarjs/cognitive-complexity
                     (user: ServerUserType, userIndex: number): ServerUserType => {
                         return {
                             socketId: localSocketIoClient.id,
                             userId: user.userId,
-                            teamId: user.teamId || mapGuide.teamIdList[userIndex],
+                            teamId:
+                                typeof user.teamId === 'string' && user.teamId !== '' ?
+                                    user.teamId :
+                                    mapGuide.teamIdList[userIndex],
                             type: user.type
                         };
                     }
@@ -280,9 +289,9 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
         );
 }
 
-export type GetAllRoomIdsType = {|
+export type GetAllRoomIdsType = {
     +roomIds: Array<string>
-|};
+};
 
 export function getAllRoomIds(): Promise<GetAllRoomIdsType> {
     if (isOnLineRoomType()) {
@@ -413,7 +422,7 @@ export type PushedStatePayloadType =
     | PushedStatePayloadSyncMapWithServerUserListType
     | PushedStateRemoveUserType;
 
-export type PushStateType = {|
+export type PushStateType = {
     roomId: string,
     type: 'room__push-state',
     states: {
@@ -423,7 +432,7 @@ export type PushStateType = {|
         },
         length: number
     }
-|};
+};
 
 export type PushedStateType = {|
     type: 'room__push-state',
@@ -452,9 +461,9 @@ export function pushState(roomId: string, userId: string, pushedState: PushedSta
     ).then((result: string): PushStateType => JSON.parse(result));
 }
 
-export type TakeTurnType = {|
+export type TakeTurnType = {
     roomId: string
-|};
+};
 
 export function takeTurn(roomId: string, userId: string): Promise<TakeTurnType> {
     if (isOnLineRoomType()) {
@@ -468,9 +477,9 @@ export function takeTurn(roomId: string, userId: string): Promise<TakeTurnType> 
     );
 }
 
-export type DropTurnType = {|
+export type DropTurnType = {
     roomId: string
-|};
+};
 
 export function dropTurn(roomId: string, userId: string): Promise<DropTurnType> {
     if (isOnLineRoomType()) {

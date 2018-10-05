@@ -121,21 +121,15 @@ export type PushedStatePayloadType =
     | PushedStatePayloadBuyUnitType
     | PushedStatePayloadSyncMapWithServerUserListType;
 
-export type PushedStateType =
-    | {|
-          type: string,
-          +state: PushedStatePayloadType,
-          meta?: MetaType
-      |}
-    | {|
-          type: string,
-          +roomId: string,
-          activeUserId?: string,
-          userId?: string,
-          +socketId?: string,
-          meta?: MetaType
-      |}
-    | null;
+export type PushedStateType = {
+    type?: string,
+    +state?: PushedStatePayloadType,
+    meta?: MetaType,
+    +roomId?: string,
+    +activeUserId?: string,
+    +userId?: string,
+    +socketId?: string
+} | null;
 
 import {roomMaster} from './master';
 import {RoomConnection} from './room-connection/room-connection';
@@ -373,7 +367,7 @@ export class Room {
         const timestamp = Date.now();
 
         Object.assign(state, {
-            type: state.type || messageConst.type.pushState,
+            type: isString(state.type) && state.type !== '' ? state.type : messageConst.type.pushState,
             meta: {
                 order,
                 timestamp,

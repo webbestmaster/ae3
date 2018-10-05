@@ -10,7 +10,7 @@ type EventNameType = 'message' | 'connect' | 'disconnect';
 
 type ListenerType = {|
     +eventName: EventNameType,
-    +callBack: (data: mixed) => void
+    +callBack: (data: mixed) => void | Promise<void>
 |};
 
 type AttrType = {|
@@ -67,7 +67,7 @@ export class LocalSocketIoClient {
     }
 
     // eslint-disable-next-line id-length
-    on(eventName: EventNameType, callBack: (message?: mixed) => void) {
+    on(eventName: EventNameType, callBack: (message?: mixed) => void | Promise<void>) {
         const localSocketIoClient = this;
         const {listenerList} = localSocketIoClient.attr;
 

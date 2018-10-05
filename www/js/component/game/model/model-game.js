@@ -411,7 +411,7 @@ export default class Game {
     async onMessage(message: SocketMessageType): Promise<void> {
         const game = this;
 
-        if (message.states.last.state && message.states.last.state.map) {
+        if (message.type === 'room__push-state' && message.states.last.state) {
             game.setMapState(message.states.last.state.map);
         }
 
@@ -461,7 +461,9 @@ export default class Game {
         const game = this;
         const lastSavedSocketMessage = game.getLastSocketMessage();
         const messageMap =
-            message.states.last.state && message.states.last.state.map ? message.states.last.state.map : null;
+            message.type === 'room__push-state' && message.states.last.state && message.states.last.state.map ?
+                message.states.last.state.map :
+                null;
 
         // check for messed message
         if (lastSavedSocketMessage !== null && message.states.length - 1 !== lastSavedSocketMessage.states.length) {

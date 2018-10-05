@@ -81,83 +81,83 @@ const socketModel = new Socket();
 export {socketModel as socket};
 
 // socket message
-type SocketMessageJoinIntoRoomType = {|
+type SocketMessageJoinIntoRoomType = {
     +roomId: string,
     +type: 'room__join-into-room',
-    +states: {|
-        +last: {|
+    +states: {
+        +last: {
             +roomId: string,
             +socketId: string,
             +type: 'room__join-into-room',
             +userId: string
-        |},
+        },
         length: number
-    |}
-|};
+    }
+};
 
-type SocketMessageLeaveFromRoomType = {|
+type SocketMessageLeaveFromRoomType = {
     +roomId: string,
     +type: 'room__leave-from-room',
-    +states: {|
-        +last: {|
+    +states: {
+        +last: {
             +roomId: string,
             +type: 'room__leave-from-room',
             +userId: string
-        |},
+        },
         length: number
-    |}
-|};
+    }
+};
 
-type SocketMessageUserDisconnectedFromRoomType = {|
+type SocketMessageUserDisconnectedFromRoomType = {
     +roomId: string,
     +type: 'room__user-disconnected',
-    +states: {|
-        +last: {|
+    +states: {
+        +last: {
             +roomId: string,
             +type: 'room__user-disconnected',
             +userId: string
-        |},
+        },
         length: number
-    |}
-|};
+    }
+};
 
-export type SocketMessageTakeTurnType = {|
+export type SocketMessageTakeTurnType = {
     +roomId: string,
     +type: 'room__take-turn',
-    +states: {|
-        +last: {|
+    +states: {
+        +last: {
             +roomId: string,
             +type: 'room__take-turn',
             +activeUserId: string // !!! instead of userId, new active user
-        |},
+        },
         length: number
-    |}
-|};
+    }
+};
 
-type SocketMessageDropTurnType = {|
+type SocketMessageDropTurnType = {
     +roomId: string,
     +type: 'room__drop-turn',
-    +states: {|
-        +last: {|
+    +states: {
+        +last: {
             +roomId: string,
             +type: 'room__drop-turn',
             +activeUserId: string // !!! instead of userId, user who drop turn
-        |},
+        },
         length: number
-    |}
-|};
+    }
+};
 
-export type SocketMessagePushStateType = {|
+export type SocketMessagePushStateType = {
     +roomId: string,
     +type: 'room__push-state',
-    +states: {|
-        +last: {|
+    +states: {
+        +last: {
             +type: 'room__push-state',
             +state: PushedStatePayloadType
-        |},
+        },
         length: number
-    |}
-|};
+    }
+};
 
 export type SocketMessageType =
     | SocketMessageJoinIntoRoomType

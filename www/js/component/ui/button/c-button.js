@@ -9,7 +9,7 @@ import {isFunction, isString} from '../../../lib/is/is';
 
 type PropsType = {|
     children: Node,
-    onClick?: () => void,
+    onClick?: () => void | Promise<void>,
     className?: string
 |};
 
