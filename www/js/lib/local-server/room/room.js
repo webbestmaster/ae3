@@ -103,6 +103,12 @@ export type PushedStatePayloadSyncMapWithServerUserListType = {|
     +activeUserId: string
 |};
 
+export type PushedStatePayloadRemoveUserType = {|
+    +type: 'remove-user',
+    +map: mixed, // MapType,
+    +userId: string
+|};
+
 export type MetaType = {|
     order: number,
     timestamp: number,
@@ -111,6 +117,7 @@ export type MetaType = {|
 
 export type PushedStatePayloadType =
     | PushedStatePayloadIsGameStartedType
+    | PushedStatePayloadRemoveUserType
     | PushedStatePayloadUnitMoveType
     | PushedStatePayloadUnitAttackType
     | PushedStatePayloadRefreshUnitListType

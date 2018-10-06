@@ -6,12 +6,18 @@
 
 /* eslint consistent-this: ["error", "model"] */
 
+type KeyNameType = string;
+type ValueType = mixed;
+
 import {isNotFunction, isNotString, isNotUndefined, isNumber, isString} from '../is/is';
 
+// eslint-disable-next-line no-shadow
 type ActionType<ValueType> = (newValue: ValueType | void, oldValue: ValueType | void) => mixed;
 
+// eslint-disable-next-line no-shadow
 type ListenersItemType<ValueType> = [ActionType<ValueType>, {}];
 
+// eslint-disable-next-line no-shadow
 type ListenersType<KeyNameType, ValueType> = {
     [key: KeyNameType]: Array<ListenersItemType<ValueType>>
 };
@@ -20,6 +26,7 @@ type ListeningItemType<LIModel, LIKeyName, LIAction, LIContext> = [LIModel, LIKe
 
 type ListeningType<LModel, LKeyName, LAction, LContext> = Array<ListeningItemType<LModel, LKeyName, LAction, LContext>>;
 
+// eslint-disable-next-line no-shadow
 type AttrType<KeyNameType, ValueType> = {[key: KeyNameType]: ValueType};
 
 /**
@@ -27,6 +34,7 @@ type AttrType<KeyNameType, ValueType> = {[key: KeyNameType]: ValueType};
  * @param {object} attributes of new MainModel instance
  * @return {MainModel} instance
  */
+// eslint-disable-next-line no-shadow
 export default class MainModel<KeyNameType: string, ValueType> {
     attr: AttrType<KeyNameType, ValueType>;
     listeners: ListenersType<KeyNameType, ValueType>;
@@ -157,36 +165,22 @@ export default class MainModel<KeyNameType: string, ValueType> {
 
         const listenersByKey = model.getListenersByKey(key);
 
-        const filtered = [];
-
-        const listenerDataLength = listenersByKey.length;
-        let listenerDataIndex = 0;
-
         if (argsLength === 2) {
-            // eslint-disable-next-line no-loops/no-loops
-            for (; listenerDataIndex < listenerDataLength; listenerDataIndex += 1) {
-                const listenerData = listenersByKey[listenerDataIndex];
-
-                if (listenerData[0] !== action) {
-                    filtered.push(listenerData);
+            allListeners[key] = listenersByKey.filter(
+                <ActionValueType: ValueType>(listenerData: ListenersItemType<ActionValueType>): boolean => {
+                    return listenerData[0] !== action;
                 }
-            }
-
-            allListeners[key] = filtered;
+            );
             return model;
         }
 
         if (argsLength === 3) {
-            // eslint-disable-next-line no-loops/no-loops
-            for (; listenerDataIndex < listenerDataLength; listenerDataIndex += 1) {
-                const listenerData = listenersByKey[listenerDataIndex];
-
-                if (listenerData[0] !== action || listenerData[1] !== context) {
-                    filtered.push(listenerData);
+            allListeners[key] = listenersByKey.filter(
+                <ActionValueType: ValueType>(listenerData: ListenersItemType<ActionValueType>): boolean => {
+                    return listenerData[0] !== action || listenerData[1] !== context;
                 }
-            }
+            );
 
-            allListeners[key] = filtered;
             return model;
         }
 
@@ -360,15 +354,9 @@ export default class MainModel<KeyNameType: string, ValueType> {
             newValueArg = newValue;
         }
 
-        const listenerDataLength = listeners.length;
-        let listenerDataIndex = 0;
-
-        // eslint-disable-next-line no-loops/no-loops
-        for (; listenerDataIndex < listenerDataLength; listenerDataIndex += 1) {
-            const listenerData = listeners[listenerDataIndex];
-
+        listeners.forEach(<ActionValueType: ValueType>(listenerData: ListenersItemType<ActionValueType>) => {
             Reflect.apply(listenerData[0], listenerData[1], [newValueArg, oldValueArg]);
-        }
+        });
 
         return model;
     }

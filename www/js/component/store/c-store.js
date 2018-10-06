@@ -41,11 +41,11 @@ type PropsType = {|
     +x: number,
     +y: number,
     +map: MapType,
-    +match: {|
-        +params: {|
+    +match: {
+        +params: {
             +roomId: string
-        |}
-    |},
+        }
+    },
     +children: Node | Array<Node>
 |};
 

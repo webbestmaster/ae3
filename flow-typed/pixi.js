@@ -32,20 +32,20 @@ type TextStyleConstructorType = {
     wordWrapWidth?: number
 };
 
-type InteractionEventType = {|
-    +data: {|
-        +global: {|
+type InteractionEventType = {
+    +data: {
+        +global: {
             +x: number,
             +y: number
-        |},
-        +originalEvent: {|
-            touches?: Array<{|
+        },
+        +originalEvent: {
+            touches?: Array<{
                 +x: number,
                 +y: number
-            |}>
-        |}
-    |}
-|};
+            }>
+        }
+    }
+};
 
 type MouseEventNameType = 'click' | 'mousedown' | 'mouseup';
 type TouchEventNameType = 'tap' | 'touchstart' | 'touchend';

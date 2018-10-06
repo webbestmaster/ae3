@@ -16,20 +16,20 @@ import queryString from 'query-string';
 import type {RoomTypeType} from '../../../module/server-api';
 import {isNotNumber, isString} from '../../../lib/is/is';
 
-type InteractionEventType = {|
-    +data: {|
-        +global: {|
+type InteractionEventType = {
+    +data: {
+        +global: {
             +x: number,
             +y: number
-        |},
-        +originalEvent: {|
-            touches?: Array<{|
+        },
+        +originalEvent: {
+            touches?: Array<{
                 +x: number,
                 +y: number
-            |}>
-        |}
-    |}
-|};
+            }>
+        }
+    }
+};
 
 export function getUserIndex(userId: string, userList: Array<MapUserType>): number | null {
     let userIndex = 0;
