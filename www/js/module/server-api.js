@@ -239,10 +239,7 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
                             return {
                                 socketId: user.socketId,
                                 userId: user.userId,
-                                teamId:
-                                    typeof user.teamId === 'string' && user.teamId !== '' ?
-                                        user.teamId :
-                                        mapGuide.teamIdList[userIndex],
+                                teamId: typeof user.teamId === 'string' ? user.teamId : mapGuide.teamIdList[userIndex],
                                 type: user.type
                             };
                         }
@@ -272,10 +269,7 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
                         return {
                             socketId: localSocketIoClient.id,
                             userId: user.userId,
-                            teamId:
-                                typeof user.teamId === 'string' && user.teamId !== '' ?
-                                    user.teamId :
-                                    mapGuide.teamIdList[userIndex],
+                            teamId: typeof user.teamId === 'string' ? user.teamId : mapGuide.teamIdList[userIndex],
                             type: user.type
                         };
                     }

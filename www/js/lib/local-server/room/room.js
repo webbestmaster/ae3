@@ -374,7 +374,7 @@ export class Room {
         const timestamp = Date.now();
 
         Object.assign(state, {
-            type: isString(state.type) && state.type !== '' ? state.type : messageConst.type.pushState,
+            type: isString(state.type) ? state.type : messageConst.type.pushState,
             meta: {
                 order,
                 timestamp,

@@ -26,7 +26,7 @@ output, progress, section, summary, time, video,
 select {
     background-color: transparent;
     border: 0;
-    font-family: 'Lucida Console', Monaco, monospace;
+    //font-family: 'Lucida Console', Monaco, monospace;
     font-size: 14px;
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: antialiased;
@@ -36,13 +36,13 @@ select {
     font-weight: normal;
     line-height: 1.15;
     margin: 0;
-    outline: 0;
+    //outline: 0;
     padding: 0;
-    -webkit-tap-highlight-color: transparent;
-    -moz-tap-highlight-color: transparent;
-    -ms-tap-highlight-color: transparent;
-    -o-tap-highlight-color: transparent;
-    tap-highlight-color: transparent;
+    //-webkit-tap-highlight-color: transparent;
+    //-moz-tap-highlight-color: transparent;
+    //-ms-tap-highlight-color: transparent;
+    //-o-tap-highlight-color: transparent;
+    //tap-highlight-color: transparent;
     text-decoration: none;
     user-select: none;
     vertical-align: baseline;
@@ -120,6 +120,21 @@ input[type='submit'], input[type='button'], button {
     padding: 0 !important;
 }
 */
+
+a,
+select,
+button,
+input {
+    cursor: pointer;
+}
+
+input {
+    user-select: auto;
+}
+
+input[type='text'] {
+    cursor: auto;
+}
 
 input, select, a img {
     vertical-align: middle;

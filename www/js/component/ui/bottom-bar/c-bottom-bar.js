@@ -14,7 +14,6 @@ import {isFunction, isString} from '../../../lib/is/is';
 
 type PropsType = {|
     children: Node,
-    onClick?: () => void,
     className?: string
 |};
 
@@ -30,16 +29,11 @@ class BottomBar extends Component<PropsType, StateType> {
         const additionClass = isString(props.className) ? ' ' + props.className : '';
 
         return (
-            <button
-                type="button"
-                className={style.bottom_bar + additionClass}
-                onClick={isFunction(props.onClick) ? props.onClick : null}
-                onKeyPress={isFunction(props.onClick) ? props.onClick : null}
-            >
+            <div className={style.bottom_bar + additionClass}>
                 <div className={style.bottom_bar__text}>
                     <p className={servicesStyle.ellipsis}>{props.children}</p>
                 </div>
-            </button>
+            </div>
         );
     }
 }
