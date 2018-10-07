@@ -157,8 +157,8 @@ const unitData: GuideUnitDataType = {
         armor: 15,
         move: 5,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__DIRE_WOLF__NAME',
+            description: 'UNIT__DIRE_WOLF__DESCRIPTION'
         },
         canBeBuy: true,
         cost: 600,
@@ -174,8 +174,8 @@ const unitData: GuideUnitDataType = {
         armor: 30,
         move: 4,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__GOLEM__NAME',
+            description: 'UNIT__GOLEM__DESCRIPTION'
         },
         canBeBuy: true,
         cost: 600
@@ -189,8 +189,8 @@ const unitData: GuideUnitDataType = {
         armor: 10,
         move: 3,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__CATAPULT__NAME',
+            description: 'UNIT__CATAPULT__DESCRIPTION'
         },
         canBeBuy: true,
         cost: 700,
@@ -206,8 +206,8 @@ const unitData: GuideUnitDataType = {
         armor: 25,
         move: 6,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__DRAGON__NAME',
+            description: 'UNIT__DRAGON__DESCRIPTION'
         },
         canBeBuy: true,
         cost: 1000,
@@ -223,8 +223,8 @@ const unitData: GuideUnitDataType = {
         armor: 2,
         move: 4,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__SKELETON__NAME',
+            description: 'UNIT__SKELETON__DESCRIPTION'
         },
         cost: 0,
 
@@ -239,8 +239,8 @@ const unitData: GuideUnitDataType = {
         armor: 15,
         move: 3,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__CRYSTAL__NAME',
+            description: 'UNIT__CRYSTAL__DESCRIPTION'
         },
         cost: 0
     },
@@ -253,8 +253,8 @@ const unitData: GuideUnitDataType = {
         armor: 20,
         move: 4,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__GALAMAR__NAME',
+            description: 'UNIT__GALAMAR__DESCRIPTION'
         },
         canBeBuy: true,
         cost: 200,
@@ -273,8 +273,8 @@ const unitData: GuideUnitDataType = {
         armor: 20,
         move: 4,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__VALADORN__NAME',
+            description: 'UNIT__VALADORN__DESCRIPTION'
         },
         canBeBuy: true,
         cost: 200,
@@ -293,8 +293,8 @@ const unitData: GuideUnitDataType = {
         armor: 20,
         move: 4,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__DEMON_LORD__NAME',
+            description: 'UNIT__DEMON_LORD__DESCRIPTION'
         },
         canBeBuy: true,
         cost: 200,
@@ -313,8 +313,8 @@ const unitData: GuideUnitDataType = {
         armor: 20,
         move: 4,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__SAETH__NAME',
+            description: 'UNIT__SAETH__DESCRIPTION'
         },
         canBeBuy: true,
         cost: 200,
@@ -334,8 +334,8 @@ const unitData: GuideUnitDataType = {
         armor: 45,
         move: 0,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__SAETH_HEAVENS_FURY__NAME',
+            description: 'UNIT__SAETH_HEAVENS_FURY__DESCRIPTION'
         },
 
         withoutGrave: true
