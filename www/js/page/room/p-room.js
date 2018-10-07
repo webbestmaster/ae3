@@ -75,7 +75,7 @@ class Room extends Component<PropsType, StateType> {
 
         view.state = {
             userList: [],
-            model: new MainModel(),
+            model: new MainModel<'message', SocketMessageType>(),
             isGameStart: false,
             isRoomDataFetching: true
         };
@@ -152,7 +152,7 @@ class Room extends Component<PropsType, StateType> {
             model.listenTo(
                 socket.attr.model,
                 'message',
-                async (message: SocketMessageType | void): Promise<void> => {
+                async (message?: SocketMessageType): Promise<void> => {
                     if (!message) {
                         console.error('SocketMessage is not define');
                         return;

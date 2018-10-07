@@ -5,7 +5,8 @@ type SocketIoOptionsType = {|
     'force new connection': true
 |};
 
-type SocketCallbackFunctionType = (message?: string) => void;
+// eslint-disable-next-line flowtype/no-weak-types
+type SocketCallbackFunctionType = (message?: any) => void;
 
 type SocketType = {|
     id: string,
