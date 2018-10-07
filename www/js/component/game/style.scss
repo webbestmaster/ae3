@@ -4,18 +4,21 @@
 
 $bottom-bar--border-color: #404757;
 
-.end_turn {
+.end_turn__wrapper {
     background-color: rgba(0, 0, 0, 0.75);
+    box-sizing: border-box;
     color: $main-text-color;
     display: block;
     font-family: $main-font-family;
     font-size: 40px;
     font-weight: bold;
+    height: 52px;
     padding: 3px 5px 3px 14px;
     position: absolute;
     right: 10px;
     top: 10px;
     user-select: none;
+    width: 67px;
 
     &:before {
         border-color: $main-text-color;
@@ -25,6 +28,16 @@ $bottom-bar--border-color: #404757;
     &:after {
         border-width: 5px;
     }
+}
+
+.end_turn__button {
+    color: inherit;
+    font: inherit;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
 }
 
 .game_page {

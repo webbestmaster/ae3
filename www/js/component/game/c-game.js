@@ -688,18 +688,20 @@ export class GameView extends Component<PropsType, StateType> {
                 {mapState ? <ReactJson src={mapState.userList}/> : <h1>no map</h1>}
                 */}
 
-                <button
-                    type="button"
-                    className={classnames(style.end_turn, {[serviceStyle.disabled]: isCanvasDisabled})}
-                    onClick={async (): Promise<void> => {
-                        await view.endTurn();
-                    }}
-                    onKeyPress={async (): Promise<void> => {
-                        await view.endTurn();
-                    }}
-                >
-                    {'>|'}
-                </button>
+                <div className={classnames(style.end_turn__wrapper, {[serviceStyle.disabled]: isCanvasDisabled})}>
+                    <button
+                        type="button"
+                        className={style.end_turn__button}
+                        onClick={async (): Promise<void> => {
+                            await view.endTurn();
+                        }}
+                        onKeyPress={async (): Promise<void> => {
+                            await view.endTurn();
+                        }}
+                    >
+                        {'>|'}
+                    </button>
+                </div>
 
                 {/* <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>*/}
 

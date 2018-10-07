@@ -23,10 +23,7 @@ type InteractionEventType = {
             +y: number
         },
         +originalEvent: {
-            touches?: Array<{
-                +x: number,
-                +y: number
-            }>
+            touches?: TouchList
         }
     }
 };
@@ -330,7 +327,7 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
         const {originalEvent} = interactionEvent.data;
 
         // this is not fix problem, but make problem more hard reproducible
-        if (Array.isArray(originalEvent.touches) && originalEvent.touches.length > 1) {
+        if (originalEvent.touches && originalEvent.touches.length > 1) {
             containerEvent.startTouch.x = NaN;
             containerEvent.startTouch.y = NaN;
             smthWrongCallbackFunction();
@@ -351,7 +348,7 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
         if (
             Number.isNaN(deltaX) ||
             Number.isNaN(deltaY) ||
-            Array.isArray(originalEvent.touches) && originalEvent.touches.length !== 0
+            originalEvent.touches && originalEvent.touches.length !== 0
         ) {
             smthWrongCallbackFunction();
             return;

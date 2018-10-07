@@ -39,10 +39,7 @@ type InteractionEventType = {
             +y: number
         },
         +originalEvent: {
-            touches?: Array<{
-                +x: number,
-                +y: number
-            }>
+            touches?: TouchList
         }
     }
 };

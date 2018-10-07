@@ -1,7 +1,7 @@
 @import './../ui-var';
 @import './../../../../css/var';
 
-.button {
+.button_wrapper {
     background-color: $main-background-color;
     border-radius: 5px;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
@@ -15,6 +15,7 @@
     min-height: 41px;
     min-width: 195px;
     padding: 9px 15px 5px;
+    position: relative;
     text-align: center;
     text-decoration: none;
     text-shadow: 3px 3px 0 $main-text-shadow-color;
@@ -31,4 +32,14 @@
     &:active {
         background-color: #39384e;
     }
+}
+
+.button {
+    color: inherit;
+    font: inherit;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
 }
