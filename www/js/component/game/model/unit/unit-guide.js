@@ -105,8 +105,8 @@ const unitData: GuideUnitDataType = {
         armor: 10,
         move: 4,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__ELEMENTAL__NAME',
+            description: 'UNIT__ELEMENTAL__DESCRIPTION'
         },
         canBeBuy: true,
         cost: 300,
@@ -122,8 +122,8 @@ const unitData: GuideUnitDataType = {
         armor: 5,
         move: 4,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__SORCERESS__NAME',
+            description: 'UNIT__SORCERESS__DESCRIPTION'
         },
         canBeBuy: true,
         cost: 400,
@@ -139,8 +139,8 @@ const unitData: GuideUnitDataType = {
         armor: 10,
         move: 4,
         langKey: {
-            name: 'UNIT__ARCHER__NAME',
-            description: 'UNIT__ARCHER__DESCRIPTION'
+            name: 'UNIT__WISP__NAME',
+            description: 'UNIT__WISP__DESCRIPTION'
         },
         canBeBuy: true,
         cost: 500,
