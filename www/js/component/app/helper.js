@@ -107,7 +107,7 @@ export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapTyp
         });
     methodMap.increaseItem(loadSteps.settingUpConnections.id);
 
-    await socket
+    socket
         .initSocket()
         .then((): void => console.log('Socket has been connect.'))
         .catch((error: Error) => {
@@ -115,6 +115,7 @@ export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapTyp
             console.log('Socket has NOT been connect.');
             console.error(error);
         });
+
     methodMap.increaseItem(loadSteps.settingUpConnections.id);
 
     methodMap.onLoadItem(loadSteps.settingUpConnections.id);
