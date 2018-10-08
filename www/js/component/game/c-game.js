@@ -15,7 +15,7 @@ import type {SystemType} from '../system/reducer/reducer';
 import Game from './model/model-game';
 import type {ServerUserType} from '../../module/server-api';
 import * as serverApi from '../../module/server-api';
-import MainModel from '../../lib/main-model/main-model';
+import MainModel from 'main-model';
 import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import withRouter from 'react-router-dom/withRouter';
 import Store from '../store/c-store';
@@ -86,7 +86,7 @@ export type DisabledByItemType =
 type StateType = {|
     // settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
-    model: MainModel<'message', SocketMessageType>,
+    model: MainModel,
     game: Game,
     activeUserId: string,
     socketMessageList: Array<SocketMessageType>,

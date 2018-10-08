@@ -15,7 +15,7 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import MainModel from '../../lib/main-model/main-model';
+import MainModel from 'main-model';
 import classnames from 'classnames';
 import {user} from '../../module/user';
 import {socket, type SocketMessageType} from '../../module/socket';
@@ -54,7 +54,7 @@ const roomPushState = 'room__push-state';
 type StateType = {|
     settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
-    model: MainModel<'message', SocketMessageType>,
+    model: MainModel,
     isGameStart: boolean,
     isRoomDataFetching: boolean
 |};
@@ -75,7 +75,7 @@ class Room extends Component<PropsType, StateType> {
 
         view.state = {
             userList: [],
-            model: new MainModel<'message', SocketMessageType>(),
+            model: new MainModel(),
             isGameStart: false,
             isRoomDataFetching: true
         };

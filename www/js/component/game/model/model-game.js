@@ -43,7 +43,7 @@ import findLast from 'lodash/findLast';
 import isEqual from 'lodash/isEqual';
 import type {SocketMessagePushStateType, SocketMessageTakeTurnType, SocketMessageType} from '../../../module/socket';
 import {socket} from '../../../module/socket';
-import MainModel from '../../../lib/main-model/main-model';
+import MainModel from 'main-model';
 import * as unitMaster from './unit/master';
 import {defaultUnitData} from './unit/unit-guide';
 import {bottomBarData, GameView} from '../c-game';
@@ -80,7 +80,7 @@ export default class Game {
     mapState: MapType;
     emptyActionMap: Array<Array<[]>>;
     roomId: string;
-    model: MainModel<'message', SocketMessageType>;
+    model: MainModel;
     pathMap: {|
         walk: Array<Array<number>>,
         flow: Array<Array<number>>,

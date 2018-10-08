@@ -5,7 +5,7 @@
 const socketIoClient = require('socket.io-client');
 
 import appConst from '../redux-store-provider/app-const';
-import MainModel from '../lib/main-model/main-model';
+import MainModel from 'main-model';
 import type {PushedStatePayloadType} from './server-api';
 
 // socket message
@@ -99,7 +99,7 @@ type AttrType = {|
     // eslint-disable-next-line no-use-before-define
     initialPromise: Promise<Socket>,
     socket: {id: string} | null,
-    model: MainModel<'message' | 'connect', SocketMessageType | void>
+    model: MainModel
 |};
 
 export default class Socket {
@@ -113,7 +113,7 @@ export default class Socket {
         socket.attr = {
             initialPromise,
             socket: null,
-            model: new MainModel<'message' | 'connect', SocketMessageType | void>()
+            model: new MainModel()
         };
     }
 
