@@ -46,7 +46,7 @@
         }
     },
     "rules": {
-        "jsx-a11y/label-has-for": 0, // deprecated, https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/label-has-for.md
+        "jsx-a11y/label-has-for": 0, // deprecated
         "filenames/no-index": 2,
         "import/no-useless-path-segments": 2,
         "no-loops/no-loops": 2,
@@ -122,6 +122,7 @@
         "react/no-unused-prop-types": 0,
         "react/sort-comp": 0,
         "react/jsx-sort-props": 0,
+        // leave react/jsx-no-bind, I need more prectice to work properly with react/jsx-no-bind
         "react/jsx-no-bind": [
             1,
             {
@@ -277,7 +278,7 @@
             }
         ],
         "no-implied-eval": 1,
-        "no-invalid-this": 1,
+        "no-invalid-this": 0,
         "no-iterator": 1,
         "no-labels": 1,
         "no-lone-blocks": 1,
