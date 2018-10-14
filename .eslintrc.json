@@ -46,7 +46,8 @@
         }
     },
     "rules": {
-        "jsx-a11y/label-has-for": 0, // deprecated
+        // deprecated
+        "jsx-a11y/label-has-for": 0,
         "filenames/no-index": 2,
         "import/no-useless-path-segments": 2,
         "no-loops/no-loops": 2,
@@ -70,7 +71,12 @@
         ],
         "flowtype/no-primitive-constructor-types": 2,
         "flowtype/no-types-missing-file-annotation": 2,
-        "flowtype/no-weak-types": 2,
+        "flowtype/no-weak-types": [
+            2,
+            {
+                "mixed": false
+            }
+        ],
         "flowtype/object-type-delimiter": [
             2,
             "comma"
