@@ -31,6 +31,7 @@ import Spinner from '../ui/spinner/c-spinner';
 import Locale from '../locale/c-locale';
 import type {LangKeyType} from '../locale/translation/type';
 import type {TeamIdType} from '../../maps/map-guide';
+import UnitData from './unit-data/c-unit-data';
 
 const storeViewId = 'store';
 
