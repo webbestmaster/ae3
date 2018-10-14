@@ -83,4 +83,4 @@ class StoreProvider extends Component {
     }
 }
 
-export {StoreProvider, Consumer as StoreConsumer, storeAction};
+export {storeAction};

@@ -23,7 +23,7 @@ import Page from '../ui/page/c-page';
 import Button from '../ui/button/c-button';
 import Header from '../ui/header/c-header';
 import BottomBar from '../ui/bottom-bar/c-bottom-bar';
-import {storeAction} from './provider';
+// import {storeAction} from './provider';
 import Scroll from '../ui/scroll/c-scroll';
 import style from './style.scss';
 import {isBoolean, isNumber} from '../../lib/is/is';

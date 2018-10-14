@@ -49,7 +49,7 @@ import {defaultUnitData} from './unit/unit-guide';
 import {bottomBarData, GameView} from '../c-game';
 import {storeViewId} from '../../store/c-store';
 import Queue from '../../../lib/queue/queue';
-import {storeAction} from '../../store/provider';
+// import {storeAction} from '../../store/provider';
 import {localSocketIoClient} from '../../../module/socket-local';
 import {isNotFunction, isNotNumber, isNotString, isNumber, isString} from '../../../lib/is/is';
 
