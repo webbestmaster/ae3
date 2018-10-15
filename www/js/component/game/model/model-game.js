@@ -2485,6 +2485,8 @@ export default class Game {
         console.warn('TODO: set setOpenFromGame !!!');
         // storeAction.setOpenFromGame(true);
 
+        game.gameView.props.setOpenFromGame(true);
+
         game.gameView.props.history.push('?viewId=' + storeViewId + '&x=' + x + '&y=' + y);
 
         await game.render.cleanActionsList();

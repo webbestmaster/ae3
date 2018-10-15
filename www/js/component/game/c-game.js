@@ -41,6 +41,10 @@ import iconUnitBlue from './image/unit/soldier-blue-1.png';
 import iconUnitGreen from './image/unit/soldier-green-1.png';
 import iconUnitBlack from './image/unit/soldier-black-1.png';
 import Canvas from '../ui/canvas/c-canvas';
+import type {SetOpenFromGameType} from '../store/action';
+import {setOpenFromGame} from '../store/action';
+import type {MapType} from '../../maps/type';
+import type {StoreType} from '../store/reducer';
 
 const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,
@@ -64,11 +68,29 @@ export const bottomBarData = {
     height: 53 // $bar-height: 52px; + 1 top border
 };
 
-type PropsType = {|
-    system: SystemType,
-    roomId: string,
-    ...$Exact<ContextRouterType>
+type PassedPropsType = {|
+    +roomId: string
 |};
+
+type ReduxPropsType = {
+    system: SystemType
+};
+
+type ReduxActionType = {|
+    setOpenFromGame: (isOpenFromGame: boolean) => SetOpenFromGameType
+|};
+
+const reduxAction: ReduxActionType = {
+    setOpenFromGame
+    // setSmth // imported from actions
+};
+
+type PropsType = $ReadOnly<$Exact<{|
+        ...$Exact<PassedPropsType>,
+        ...$Exact<ReduxPropsType>,
+        ...$Exact<ReduxActionType>,
+        ...$Exact<ContextRouterType>
+    |}>>;
 
 export type PopupParameterType = {|
     isOpen: boolean,
@@ -111,7 +133,7 @@ type RefsType = {|
     canvas: HTMLElement | null
 |};
 
-export class GameView extends Component<PropsType, StateType> {
+export class GameView extends Component<ReduxPropsType, PassedPropsType, StateType> {
     props: PropsType;
     state: StateType;
     node: RefsType;
@@ -735,8 +757,6 @@ export default withRouter(
         (state: GlobalStateType): {} => ({
             system: state.system
         }),
-        {
-            // setUser
-        }
+        reduxAction
     )(GameView)
 );

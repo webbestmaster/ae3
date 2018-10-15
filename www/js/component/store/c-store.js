@@ -24,7 +24,6 @@ import Page from '../ui/page/c-page';
 import Button from '../ui/button/c-button';
 import Header from '../ui/header/c-header';
 import BottomBar from '../ui/bottom-bar/c-bottom-bar';
-// import {storeAction} from './provider';
 import Scroll from '../ui/scroll/c-scroll';
 import style from './style.scss';
 import {isBoolean, isNumber} from '../../lib/is/is';
@@ -34,6 +33,9 @@ import type {LangKeyType} from '../locale/translation/type';
 import type {TeamIdType} from '../../maps/map-guide';
 import UnitData from './unit-data/c-unit-data';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
+import {setOpenFromGame} from './action';
+import type {SetOpenFromGameType} from './action';
+import type {StoreType} from './reducer';
 
 const storeViewId = 'store';
 
@@ -47,14 +49,15 @@ type PassedPropsType = {|
 |};
 
 type ReduxPropsType = {
-    // +reduxProp: boolean
+    +store: StoreType
 };
 
-type ReduxActionType = {
-    // +setSmth: (smth: string) => string
-};
+type ReduxActionType = {|
+    setOpenFromGame: (isOpenFromGame: boolean) => SetOpenFromGameType
+|};
 
 const reduxAction: ReduxActionType = {
+    setOpenFromGame
     // setSmth // imported from actions
 };
 
@@ -100,16 +103,15 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
     componentDidMount() {
         const view = this;
         const {props} = view;
-        const {history} = props;
+        const {history, store} = props;
 
-        // TODO: add check store.isOpenFromGame here
-        console.warn('TODO: add check store.isOpenFromGame here');
-        // if (storeAction.getState().openFromGame === true) {
-        //     storeAction.setOpenFromGame(false);
-        //     return;
-        // }
+        if (store.isOpenFromGame === true) {
+            props.setOpenFromGame(false);
+            return;
+        }
 
-        // history.goBack();
+        console.log('store did NOT open from game, probaby from url, go back');
+        history.goBack();
     }
 
     // eslint-disable-next-line max-statements
