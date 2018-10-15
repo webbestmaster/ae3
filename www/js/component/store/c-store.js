@@ -5,6 +5,7 @@
 /* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
+import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import {user} from '../../module/user';
 import * as serverApi from '../../module/server-api';
@@ -32,32 +33,51 @@ import Locale from '../locale/c-locale';
 import type {LangKeyType} from '../locale/translation/type';
 import type {TeamIdType} from '../../maps/map-guide';
 import UnitData from './unit-data/c-unit-data';
+import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 
 const storeViewId = 'store';
 
 export {storeViewId};
 
-type PropsType = {|
-    ...$Exact<ContextRouterType>,
+type PassedPropsType = {|
     +x: number,
     +y: number,
     +map: MapType,
-    +match: {
-        +params: {
-            +roomId: string
-        }
-    },
     +children: Node | Array<Node>
 |};
 
+type ReduxPropsType = {
+    // +reduxProp: boolean
+};
+
+type ReduxActionType = {
+    // +setSmth: (smth: string) => string
+};
+
+const reduxAction: ReduxActionType = {
+    // setSmth // imported from actions
+};
+
+type PropsType = $ReadOnly<$Exact<{
+        ...$Exact<PassedPropsType>,
+        ...$Exact<ReduxPropsType>,
+        ...$Exact<ReduxActionType>,
+        ...$Exact<ContextRouterType>,
+        +match: {
+            +params: {
+                +roomId: string
+            }
+        }
+    }>>;
+
 type StateType = {|
-    mapUserData: MapUserType,
-    isInProgress: boolean
+    +mapUserData: MapUserType,
+    +isInProgress: boolean
 |};
 
 type RefsType = {||};
 
-class Store extends Component<PropsType, StateType> {
+class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
     props: PropsType;
     state: StateType;
     refs: RefsType;
@@ -82,12 +102,14 @@ class Store extends Component<PropsType, StateType> {
         const {props} = view;
         const {history} = props;
 
-        if (storeAction.getState().openFromGame === true) {
-            storeAction.setOpenFromGame(false);
-            return;
-        }
+        // TODO: add check store.isOpenFromGame here
+        console.warn('TODO: add check store.isOpenFromGame here');
+        // if (storeAction.getState().openFromGame === true) {
+        //     storeAction.setOpenFromGame(false);
+        //     return;
+        // }
 
-        history.goBack();
+        // history.goBack();
     }
 
     // eslint-disable-next-line max-statements
@@ -261,4 +283,9 @@ class Store extends Component<PropsType, StateType> {
     }
 }
 
-export default withRouter(Store);
+export default connect(
+    (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
+        store: state.store
+    }),
+    reduxAction
+)(withRouter(Store));

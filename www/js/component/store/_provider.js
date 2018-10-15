@@ -51,8 +51,8 @@ class StoreProvider extends Component {
             openFromGame: false
         };
 
-        storeAction.setOpenFromGame = (openFromGame: boolean): void => view.setOpenFromGame(openFromGame);
-        storeAction.getState = (): StoreValueStateType => view.state;
+        // storeAction.setOpenFromGame = (openFromGame: boolean): void => view.setOpenFromGame(openFromGame);
+        // storeAction.getState = (): StoreValueStateType => view.state;
     }
 
     getValue(): StoreValueType {

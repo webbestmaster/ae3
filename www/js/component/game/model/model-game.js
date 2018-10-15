@@ -2481,7 +2481,9 @@ export default class Game {
             return;
         }
 
-        storeAction.setOpenFromGame(true);
+        // TODO: set setOpenFromGame !!!
+        console.warn('TODO: set setOpenFromGame !!!');
+        // storeAction.setOpenFromGame(true);
 
         game.gameView.props.history.push('?viewId=' + storeViewId + '&x=' + x + '&y=' + y);
 

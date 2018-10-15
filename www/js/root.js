@@ -42,11 +42,11 @@ function loadApp(methodMap: LoadAppPassedMethodMapType) {
                 render(
                     <Provider store={store}>
                         <BrowserRouter>
-                            {/*<StoreProvider>*/}
-                                <MuiThemeProvider theme={muiTheme}>
-                                    <App/>
-                                </MuiThemeProvider>
-                            {/*</StoreProvider>*/}
+                            {/* <StoreProvider>*/}
+                            <MuiThemeProvider theme={muiTheme}>
+                                <App/>
+                            </MuiThemeProvider>
+                            {/* </StoreProvider>*/}
                         </BrowserRouter>
                     </Provider>,
                     wrapperNode
