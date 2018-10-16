@@ -164,7 +164,7 @@
         "react/jsx-max-props-per-line": [
             1,
             {
-                "maximum": 4
+                "maximum": 5
             }
         ],
         "react/jsx-one-expression-per-line": 0,

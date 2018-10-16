@@ -31,7 +31,7 @@ import Spinner from '../ui/spinner/c-spinner';
 import Locale from '../locale/c-locale';
 import type {LangKeyType} from '../locale/translation/type';
 import type {TeamIdType} from '../../maps/map-guide';
-import UnitData from './unit-data/c-unit-data';
+import UnitSellPosition from './unit-sell-position/c-unit-sell-position';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 import {setOpenFromGame} from './action';
 import type {SetOpenFromGameType} from './action';
@@ -73,10 +73,10 @@ type PropsType = $ReadOnly<$Exact<{
         }
     }>>;
 
-type StateType = {|
-    +mapUserData: MapUserType,
-    +isInProgress: boolean
-|};
+type StateType = {
+    // +mapUserData: MapUserType,
+    // +isInProgress: boolean
+};
 
 type RefsType = {||};
 
@@ -91,12 +91,15 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
         const view = this;
 
         view.state = {
+
+            /*
             mapUserData: find(props.map.userList, {userId: user.getId()}) || {
                 userId: 'no-user-id-in-store',
                 money: 0,
                 teamId: 'team-0'
             },
             isInProgress: false
+*/
         };
     }
 
@@ -114,80 +117,22 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
         history.goBack();
     }
 
-    // eslint-disable-next-line max-statements
-    buyUnit(unitType: UnitTypeAllType): Promise<void> {
+    renderUnitData(unitType: UnitTypeAllType): Node {
         const view = this;
         const {props, state} = view;
-        const newMap = JSON.parse(JSON.stringify(props.map));
-        const newMapUserData = find(newMap.userList, {userId: user.getId()}) || null;
-        // const newUnitData = guideUnitData[unitType];
+        // const {mapUserData} = state;
+        // const unitData = guideUnitData[unitType];
+        // const unitCost = view.getUnitCost(unitType);
 
-        if (newMapUserData === null) {
-            console.error('can not find map user with id', user.getId(), newMap);
-            return Promise.resolve();
-        }
+        return <UnitSellPosition unitType={unitType} x={props.x} y={props.y} map={props.map} key={unitType}/>;
 
-        const unitCost = view.getUnitCost(unitType);
-
-        if (unitCost === null) {
-            console.error('Can not get unit cost');
-            return Promise.resolve();
-        }
-
-        newMapUserData.money -= unitCost;
-
-        if (!newMapUserData.commander) {
-            console.error('User has no Commander');
-            return Promise.resolve();
-        }
-
-        newMapUserData.commander.buyCount += 1;
-
-        const newMapUnitData = {
-            type: unitType,
-            x: props.x,
-            y: props.y,
-            userId: user.getId(),
-            id: [props.x, props.y, Math.random()].join('-')
-        };
-
-        newMap.units.push(newMapUnitData);
-
-        view.setState({isInProgress: true});
-
-        return serverApi
-            .pushState(props.match.params.roomId, user.getId(), {
-                type: 'room__push-state',
-                state: {
-                    type: 'buy-unit',
-                    newMapUnit: newMapUnitData,
-                    map: newMap,
-                    activeUserId: user.getId()
-                }
-            })
-            .then((response: mixed): void => console.log('---> user action buy unit', response))
-            .catch((error: Error) => {
-                console.error('store-push-state error');
-                console.log(error);
-            })
-            .then((): void => props.history.goBack())
-            .catch((error: Error) => {
-                console.error('error with props.history.goBack()');
-                console.error(error);
-            });
-    }
-
-    renderUnitData(unitType: UnitTypeAllType): Node | null {
-        const view = this;
-        const {props, state} = view;
-        const {mapUserData} = state;
-        const unitData = guideUnitData[unitType];
-        const unitCost = view.getUnitCost(unitType);
-
+        /*
         if (unitCost === null) {
             return null;
         }
+*/
 
+        /*
         const supplyState = getSupplyState(props.map, user.getId());
 
         return (
@@ -212,49 +157,7 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
                 </span>
             </Button>
         );
-    }
-
-    // eslint-disable-next-line complexity, max-statements
-    getUnitCost(unitType: UnitTypeAllType): number | null {
-        const view = this;
-        const {props, state} = view;
-        const {mapUserData} = state;
-        const unitData = guideUnitData[unitType];
-
-        if (unitData.canBeBuy !== true) {
-            return null;
-        }
-
-        const cost = isNumber(unitData.cost) ? unitData.cost : null;
-
-        if (cost === null) {
-            console.error('unit canBeBuy but without cost');
-            return null;
-        }
-
-        const isCommander = isBoolean(unitData.isCommander) && unitData.isCommander;
-
-        if (!isCommander) {
-            return cost;
-        }
-
-        const userCommander = mapUserData.commander || null;
-
-        if (userCommander === null) {
-            console.error('userCommander is not define');
-            return null;
-        }
-
-        if (userCommander.type !== unitType) {
-            return null;
-        }
-
-        // detect user's commander on map
-        if (isCommanderLive(user.getId(), props.map)) {
-            return null;
-        }
-
-        return cost + userCommander.buyCount * additionalUnitData.additionalCommanderCost;
+*/
     }
 
     renderUnitList(): Array<Node | null> {
@@ -271,8 +174,6 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
 
         return (
             <Page>
-                <Spinner isOpen={state.isInProgress}/>
-
                 <Header>
                     <Locale stringKey={('CASTLE': LangKeyType)}/>
                 </Header>
