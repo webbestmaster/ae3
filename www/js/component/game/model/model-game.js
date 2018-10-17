@@ -520,7 +520,7 @@ export default class Game {
         const isMyTurn = activeUserId === userId;
 
         if (isMyTurn) {
-            console.log("---> take turn, and it's ME!!!");
+            console.log('---> take turn, and it\'s ME!!!');
             // TODO: check here map users and server users, only if your turn
             console.warn('check here map users and server users, only if your turn');
             await game.refreshUnitActionState(userId);

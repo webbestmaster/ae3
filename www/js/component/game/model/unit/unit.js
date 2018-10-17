@@ -972,7 +972,7 @@ export default class Unit {
         if (actionState === null && currentActionState !== null) {
             console.error(
                 'old action state !==  null, but new action state === null!!!, ' +
-                    "the game has not method to remove unit's action"
+                    'the game has not method to remove unit\'s action'
             );
             return Promise.resolve();
         }

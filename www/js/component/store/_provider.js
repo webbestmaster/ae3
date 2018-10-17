@@ -25,7 +25,7 @@ const defaultState: StoreValueStateType = {
 
 const defaultAction: StoreValueActionType = {
     setOpenFromGame: (openFromGame: boolean) => {
-        console.error("method not 'override' yet");
+        console.error('method not \'override\' yet');
     },
     getState: (): StoreValueStateType => defaultState
 };
