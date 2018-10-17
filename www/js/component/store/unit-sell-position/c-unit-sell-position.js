@@ -1,6 +1,6 @@
 // @flow
 
-/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
+/* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
@@ -125,7 +125,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
     }
 
     // eslint-disable-next-line max-statements
-    buyUnit(unitType: UnitTypeAllType): Promise<void> {
+    handleOnClickBuyUnit = (): Promise<void> => {
         const view = this;
         const {props, state} = view;
         const newMap = JSON.parse(JSON.stringify(props.map));
@@ -137,7 +137,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
             return Promise.resolve();
         }
 
-        const unitCost = view.getUnitCost(unitType);
+        const unitCost = view.getUnitCost(props.unitType);
 
         if (unitCost === null) {
             console.error('Can not get unit cost');
@@ -154,7 +154,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         newMapUserData.commander.buyCount += 1;
 
         const newMapUnitData = {
-            type: unitType,
+            type: props.unitType,
             x: props.x,
             y: props.y,
             userId: user.getId(),
@@ -185,7 +185,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
                 console.error('error with props.history.goBack()');
                 console.error(error);
             });
-    }
+    };
 
     render(): Node {
         const view = this;
@@ -208,9 +208,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
                 className={classnames(serviceStyle.w75_c, serviceStyle.ta_l, {
                     [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
                 })}
-                onClick={() => {
-                    view.buyUnit(unitType);
-                }}
+                onClick={view.handleOnClickBuyUnit}
                 key={unitType}
             >
                 <Spinner isOpen={state.isInProgress}/>
