@@ -2,7 +2,7 @@
 
 /* global window, requestAnimationFrame, Event */
 
-/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
+/* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
@@ -98,17 +98,19 @@ export default class Scroll extends Component<StateType, PropsType> {
         });
     }
 
+    defineRefWrapper = (wrapper: HTMLElement | null) => {
+        const view = this;
+        const {node} = view;
+
+        node.wrapper = wrapper;
+    };
+
     renderSwiper(): Node {
         const view = this;
         const {props} = view;
 
         return (
-            <div
-                className={classnames('swiper-container', style.swiper_container)}
-                ref={(wrapper: HTMLElement | null) => {
-                    view.node.wrapper = wrapper;
-                }}
-            >
+            <div className={classnames('swiper-container', style.swiper_container)} ref={view.defineRefWrapper}>
                 <div className={classnames('swiper-wrapper', style.swiper_wrapper)}>
                     <div className={classnames('swiper-slide', style.swiper_slide)}>{props.children}</div>
                 </div>
