@@ -2,7 +2,7 @@
 
 /* global window */
 
-/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
+/* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
@@ -96,6 +96,20 @@ class JoinRoom extends Component<PropsType, StateType> {
         await view.hideSpinner();
     }
 
+    handleOnClickRefresh = () => {
+        const view = this;
+
+        view.componentDidMount()
+            .then((): void => console.log('page refreshed'))
+            .catch(
+                (error: Error): Error => {
+                    console.error('can not refresh page');
+                    console.error(error);
+                    return error;
+                }
+            );
+    };
+
     async joinRoom(roomId: string): Promise<void> {
         const view = this;
         const {props, state} = view;
@@ -150,11 +164,7 @@ class JoinRoom extends Component<PropsType, StateType> {
                         style.bottom_button_list_wrapper
                 }
             >
-                <Button
-                    onClick={async (): Promise<void> => {
-                        await view.componentDidMount();
-                    }}
-                >
+                <Button onClick={view.handleOnClickRefresh}>
                     <Locale stringKey={('REFRESH': LangKeyType)}/>
                 </Button>
             </ButtonListWrapper>
