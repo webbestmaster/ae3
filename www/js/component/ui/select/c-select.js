@@ -2,7 +2,7 @@
 
 /* global window, IS_PRODUCTION */
 
-/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
+/* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
@@ -49,22 +49,7 @@ export default class Select extends Component<PropsType, StateType> {
     componentDidMount() {
         const view = this;
 
-        view.onSelectChange();
-    }
-
-    onSelectChange() {
-        const view = this;
-        const {props} = view;
-
-        const selectNode = view.node.select;
-
-        if (selectNode === null) {
-            console.error('select node is not defined');
-            return;
-        }
-
-        view.setState({visibleString: selectNode.value});
-        props.onChange(selectNode.value);
+        view.handleOnChangeSelect();
     }
 
     renderIcon(): Node | null {
@@ -87,6 +72,28 @@ export default class Select extends Component<PropsType, StateType> {
         return <Canvas width={24} height={24} className={style.icon} src={icon[iconPath]}/>;
     }
 
+    handleOnChangeSelect = () => {
+        const view = this;
+        const {props} = view;
+
+        const selectNode = view.node.select;
+
+        if (selectNode === null) {
+            console.error('select node is not defined');
+            return;
+        }
+
+        view.setState({visibleString: selectNode.value});
+        props.onChange(selectNode.value);
+    };
+
+    defineRefSelect = (select: HTMLSelectElement | null) => {
+        const view = this;
+        const {node} = view;
+
+        node.select = select;
+    };
+
     render(): Node {
         const view = this;
         const {props, state} = view;
@@ -99,15 +106,9 @@ export default class Select extends Component<PropsType, StateType> {
                     <p className={style.current_selected}>&nbsp;</p>
                 }
                 <select
-                    ref={(select: HTMLSelectElement | null) => {
-                        view.node.select = select;
-                    }}
-                    onChange={() => {
-                        view.onSelectChange();
-                    }}
-                    onBlur={() => {
-                        view.onSelectChange();
-                    }}
+                    ref={view.defineRefSelect}
+                    onChange={view.handleOnChangeSelect}
+                    onBlur={view.handleOnChangeSelect}
                     className={style.select}
                 >
                     {props.children}
