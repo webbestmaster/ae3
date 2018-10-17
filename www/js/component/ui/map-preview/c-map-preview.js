@@ -2,7 +2,7 @@
 
 /* global window */
 
-/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
+/* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
@@ -200,6 +200,13 @@ export default class MapPreview extends Component<PropsType, StateType> {
         view.app.render();
     }
 
+    defineRefCanvas = (canvas: HTMLElement | null) => {
+        const view = this;
+        const {props, node} = view;
+
+        node.canvas = canvas;
+    };
+
     render(): Node {
         const view = this;
         const {props, node} = view;
@@ -215,9 +222,7 @@ export default class MapPreview extends Component<PropsType, StateType> {
                         height: mapSize.height * mapGuide.size.square
                     }}
                     className={style.canvas + additionCanvasClassName}
-                    ref={(canvas: HTMLElement | null) => {
-                        node.canvas = canvas;
-                    }}
+                    ref={view.defineRefCanvas}
                 />
             </div>
         );
