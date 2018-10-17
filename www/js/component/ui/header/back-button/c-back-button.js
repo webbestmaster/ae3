@@ -1,6 +1,6 @@
 // @flow
 
-/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
+/* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
@@ -18,19 +18,21 @@ class BackButton extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 
+    handleOnClickGoBack = () => {
+        const view = this;
+        const {props} = view;
+
+        props.history.goBack();
+    };
+
     render(): Node {
         const view = this;
-        const {props, state} = view;
 
         return (
             <button
                 type="button"
-                onClick={() => {
-                    props.history.goBack();
-                }}
-                onKeyPress={() => {
-                    props.history.goBack();
-                }}
+                onClick={view.handleOnClickGoBack}
+                onKeyPress={view.handleOnClickGoBack}
                 className={style.wrapper}
             >
                 &lt;&lt;
