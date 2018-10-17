@@ -2,7 +2,7 @@
 
 /* global window, requestAnimationFrame, Event */
 
-/* eslint consistent-this: ["error", "view"] */
+/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';

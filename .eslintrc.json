@@ -136,16 +136,6 @@
         "react/no-unused-prop-types": 0,
         "react/sort-comp": 0,
         "react/jsx-sort-props": 0,
-        // leave react/jsx-no-bind, I need more prectice to work properly with react/jsx-no-bind
-        "react/jsx-no-bind": [
-            1,
-            {
-                "ignoreRefs": true,
-                "allowArrowFunctions": true,
-                "allowFunctions": false,
-                "allowBind": false
-            }
-        ],
         "react/jsx-closing-bracket-location": [
             1,
             "line-aligned"

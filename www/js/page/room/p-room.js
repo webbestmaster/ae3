@@ -2,7 +2,7 @@
 
 /* global window */
 
-/* eslint consistent-this: ["error", "view"] */
+/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
 
 // wait other players and prepare map\settings for Game view
 
