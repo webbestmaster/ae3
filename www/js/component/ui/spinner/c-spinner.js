@@ -10,6 +10,9 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import style from './style.scss';
 
 const theme = createMuiTheme({
+    typography: {
+        useNextVariants: true
+    },
     overrides: {
         MuiPaper: {
             // Name of the component ⚛️ / style sheet
