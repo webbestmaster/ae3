@@ -1,6 +1,6 @@
 // @flow
 
-/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
+/* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
@@ -82,7 +82,7 @@ class CreateRoom extends Component<PropsType, StateType> {
         view.setState({openShowInfoMapList: currentRoomList});
     }
 
-    removeFromShowInfoMapList(mapName: string) {
+    removeFromInfoMapList(mapName: string) {
         const view = this;
         const {state} = view;
         const currentRoomList = JSON.parse(JSON.stringify(state.openShowInfoMapList));
@@ -154,17 +154,18 @@ class CreateRoom extends Component<PropsType, StateType> {
         return joinRoomResult.roomId;
     }
 
+    handleOnChangeMoneySelect = (defaultMoney: string) => {
+        const view = this;
+
+        view.setState({defaultMoney: parseInt(defaultMoney, 10)});
+    };
+
     senderMoneySelect(): Node {
         const view = this;
 
         return (
             <Fieldset className={serviceStyle.line_item}>
-                <Select
-                    icon={('MONEY': SelectIconNameType)}
-                    onChange={(defaultMoney: string) => {
-                        view.setState({defaultMoney: parseInt(defaultMoney, 10)});
-                    }}
-                >
+                <Select icon={('MONEY': SelectIconNameType)} onChange={view.handleOnChangeMoneySelect}>
                     {mapGuide.defaultMoneyList.map(
                         (defaultMoney: number): Node => {
                             return (
@@ -179,17 +180,18 @@ class CreateRoom extends Component<PropsType, StateType> {
         );
     }
 
+    handleOnChangeUnitLimitSelect = (unitLimit: string) => {
+        const view = this;
+
+        view.setState({unitLimit: parseInt(unitLimit, 10)});
+    };
+
     senderUnitLimitSelect(): Node {
         const view = this;
 
         return (
             <Fieldset className={serviceStyle.line_item}>
-                <Select
-                    icon={('UNIT': SelectIconNameType)}
-                    onChange={(unitLimit: string) => {
-                        view.setState({unitLimit: parseInt(unitLimit, 10)});
-                    }}
-                >
+                <Select icon={('UNIT': SelectIconNameType)} onChange={view.handleOnChangeUnitLimitSelect}>
                     {mapGuide.defaultUnitLimitList.map(
                         (unitLimit: number): Node => {
                             return (
@@ -202,6 +204,24 @@ class CreateRoom extends Component<PropsType, StateType> {
                 </Select>
             </Fieldset>
         );
+    }
+
+    makeHandlerRemoveFromInfoMapList(mapId: string): () => void {
+        const view = this;
+
+        return (): void => view.removeFromInfoMapList(mapId);
+    }
+
+    makeHandlerAddToInfoMapList(mapId: string): () => void {
+        const view = this;
+
+        return (): void => view.addToShowInfoMapList(mapId);
+    }
+
+    makeHandlerCreateRoom(mapIndex: number): () => void {
+        const view = this;
+
+        return (): void => view.setState({mapIndex}, (): Promise<string | null> => view.createRoom());
     }
 
     renderSelectMap(): Node {
@@ -221,13 +241,13 @@ class CreateRoom extends Component<PropsType, StateType> {
                             <div key={mapId} className={classnames(style.map_item, serviceStyle.clear_self)}>
                                 {isAdditionalInfoOpen ?
                                     <Button
-                                        onClick={(): void => view.removeFromShowInfoMapList(mapId)}
+                                        onClick={view.makeHandlerRemoveFromInfoMapList(mapId)}
                                         className={style.button__show_info}
                                     >
                                         [-]
                                     </Button> :
                                     <Button
-                                        onClick={(): void => view.addToShowInfoMapList(mapId)}
+                                        onClick={view.makeHandlerAddToInfoMapList(mapId)}
                                         className={style.button__show_info}
                                     >
                                         [+]
@@ -235,14 +255,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                                 }
 
                                 <Button
-                                    onClick={() => {
-                                        view.setState(
-                                            {mapIndex},
-                                            async (): Promise<void> => {
-                                                const result = await view.createRoom();
-                                            }
-                                        );
-                                    }}
+                                    onClick={view.makeHandlerCreateRoom(mapIndex)}
                                     className={style.button__create_room}
                                 >
                                     &gt;&gt;
