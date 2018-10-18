@@ -2,7 +2,7 @@
 
 /* global window */
 
-/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
+/* eslint consistent-this: ["error", "view"] */
 
 // wait other players and prepare map\settings for Game view
 
@@ -411,6 +411,16 @@ class Room extends Component<PropsType, StateType> {
         });
     }
 
+    makeHandlerRemoveUser(userId: string): () => Promise<void> {
+        const view = this;
+
+        return async (): Promise<void> => {
+            await view.showSpinner();
+            await view.removeUser(userId);
+            await view.hideSpinner();
+        };
+    }
+
     renderUserList(): Node | null {
         const view = this;
         const {props, state} = view;
@@ -435,11 +445,7 @@ class Room extends Component<PropsType, StateType> {
                                 {myPlayerIndex === 0 && myPlayerIndex !== userIndex ?
                                     <Button
                                         className={style.user_list__remove_user_button}
-                                        onClick={async (): Promise<void> => {
-                                            await view.showSpinner();
-                                            await view.removeUser(userData.userId);
-                                            await view.hideSpinner();
-                                        }}
+                                        onClick={view.makeHandlerRemoveUser(userData.userId)}
                                     >
                                         X
                                     </Button> :
@@ -503,6 +509,26 @@ class Room extends Component<PropsType, StateType> {
         );
     }
 
+    handleOnClickStartGame = () => {
+        const view = this;
+
+        (async (): Promise<void> => {
+            await view.showSpinner();
+            await view.startGame();
+            await view.hideSpinner();
+        })();
+    };
+
+    makeHandlerCreateUser(type: 'human' | 'bot', roomId: string): () => Promise<void> {
+        const view = this;
+
+        return async (): Promise<void> => {
+            await view.showSpinner();
+            await serverApi.makeUser(type, roomId);
+            await view.hideSpinner();
+        };
+    }
+
     renderMasterButtonList(): Array<Node> {
         const view = this;
         const {props, state} = view;
@@ -517,11 +543,7 @@ class Room extends Component<PropsType, StateType> {
                 className={classnames({
                     [serviceStyle.disabled]: userList.length === 1
                 })}
-                onClick={async (): Promise<void> => {
-                    await view.showSpinner();
-                    await view.startGame();
-                    await view.hideSpinner();
-                }}
+                onClick={view.handleOnClickStartGame}
             >
                 <Locale stringKey={('START': LangKeyType)}/>
             </Button>
@@ -532,28 +554,14 @@ class Room extends Component<PropsType, StateType> {
         }
 
         buttonList.unshift(
-            <Button
-                key="add-bot-button"
-                onClick={async (): Promise<void> => {
-                    await view.showSpinner();
-                    await serverApi.makeUser('bot', roomId);
-                    await view.hideSpinner();
-                }}
-            >
+            <Button key="add-bot-button" onClick={view.makeHandlerCreateUser('bot', roomId)}>
                 <Locale stringKey={('ADD_BOT': LangKeyType)}/>
             </Button>
         );
 
         if (!isOnLineRoomType()) {
             buttonList.unshift(
-                <Button
-                    key="add-human-button"
-                    onClick={async (): Promise<void> => {
-                        await view.showSpinner();
-                        await serverApi.makeUser('human', roomId);
-                        await view.hideSpinner();
-                    }}
-                >
+                <Button key="add-human-button" onClick={view.makeHandlerCreateUser('human', roomId)}>
                     <Locale stringKey={('ADD_HUMAN': LangKeyType)}/>
                 </Button>
             );
