@@ -171,6 +171,16 @@ class JoinRoom extends Component<PropsType, StateType> {
         );
     }
 
+    makeJoinFunction(roomId: string): () => Promise<void> {
+        const view = this;
+
+        return async (): Promise<void> => {
+            await view.showSpinner();
+            await view.joinRoom(roomId);
+            await view.hideSpinner();
+        };
+    }
+
     render(): Node {
         const view = this;
         const {props, state} = view;
@@ -218,11 +228,7 @@ class JoinRoom extends Component<PropsType, StateType> {
                         (roomData: RoomDataType): Node => {
                             return (
                                 <Button
-                                    onClick={async (): Promise<void> => {
-                                        await view.showSpinner();
-                                        await view.joinRoom(roomData.roomId);
-                                        await view.hideSpinner();
-                                    }}
+                                    onClick={view.makeJoinFunction(roomData.roomId)}
                                     className={classnames(style.open_room_item, {
                                         [serviceStyle.disabled]: roomData.userList.length === roomData.maxUserSize
                                     })}
