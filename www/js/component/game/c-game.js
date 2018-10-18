@@ -2,7 +2,7 @@
 
 /* global window */
 
-/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
+/* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
@@ -355,6 +355,20 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             });
     }
 
+    handleOnClickEndTurn = () => {
+        const view = this;
+
+        view.endTurn()
+            .then((): void => console.log('end turn - success'))
+            .catch(
+                (error: Error): Error => {
+                    console.error('end turn - failed');
+                    console.error(error);
+                    return error;
+                }
+            );
+    };
+
     addDisableReason(reason: DisabledByItemType) {
         const view = this;
         const {props, state} = view;
@@ -458,12 +472,8 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                 open={popup.endGame.isOpen}
                 // transition={Transition}
                 keepMounted
-                onClose={() => {
-                    view.leaveGame();
-                }}
-                onClick={() => {
-                    view.leaveGame();
-                }}
+                onClose={view.handleLeaveGame}
+                onClick={view.handleLeaveGame}
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
@@ -483,12 +493,12 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
     }
 
     // to leave game by user, user should close store or other views which use router
-    leaveGame() {
+    handleLeaveGame = () => {
         const view = this;
         const {props, state} = view;
 
         props.history.goBack();
-    }
+    };
 
     popupChangeActiveUser(state: PopupParameterType) {
         const view = this;
@@ -509,6 +519,19 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             }
         );
     }
+
+    handleOnClickChangeActiveUserPopup = () => {
+        const view = this;
+        const {state} = view;
+        const {popup} = state;
+
+        if (popup.changeActiveUser.isOpen === false) {
+            console.warn('popup.changeActiveUser.isOpen is already CLOSED, you click on popup too fast :)');
+            return;
+        }
+
+        view.popupChangeActiveUser({isOpen: false});
+    };
 
     // eslint-disable-next-line complexity, max-statements
     renderPopupChangeActiveUserDialog(): Node | null {
@@ -566,15 +589,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                 // onClose={() => {
                 //     view.popupChangeActiveUser({isOpen: false});
                 // }}
-                onClick={() => {
-                    if (popup.changeActiveUser.isOpen === false) {
-                        console.warn('popup.changeActiveUser.isOpen is already CLOSED, you click on popup too fast :)');
-                        return;
-                    }
-                    view.popupChangeActiveUser({
-                        isOpen: false
-                    });
-                }}
+                onClick={view.handleOnClickChangeActiveUserPopup}
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
@@ -677,8 +692,13 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         );
     }
 
+    defineNodeCanvas = (canvas: HTMLElement | null) => {
+        const view = this;
+
+        view.node.canvas = canvas;
+    };
+
     render(): Node {
-        // eslint-disable-next-line complexity
         const view = this;
         const {props, state} = view;
         const mapState = state.game.getMapState();
@@ -714,12 +734,8 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                     <button
                         type="button"
                         className={style.end_turn__button}
-                        onClick={async (): Promise<void> => {
-                            await view.endTurn();
-                        }}
-                        onKeyPress={async (): Promise<void> => {
-                            await view.endTurn();
-                        }}
+                        onClick={view.handleOnClickEndTurn}
+                        onKeyPress={view.handleOnClickEndTurn}
                     >
                         {'>|'}
                     </button>
@@ -736,9 +752,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
                 <canvas
                     key="canvas"
-                    ref={(canvas: HTMLElement | null) => {
-                        view.node.canvas = canvas;
-                    }}
+                    ref={view.defineNodeCanvas}
                     style={{
                         // TODO: uncomment this for production
                         // pointerEvents: isCanvasDisabled ? 'none' : 'auto',
