@@ -2,7 +2,7 @@
 
 /* global BUILD_DATE */
 
-/* eslint consistent-this: ["error", "view"], react/jsx-no-bind: 0 */
+/* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
@@ -22,9 +22,17 @@ import ButtonListWrapper from '../../component/ui/button-list-wrapper/c-button-l
 import serviceStyle from '../../../css/service.scss';
 
 class Settings extends Component<void, void> {
-    renderLanguageList(): Node {
+    makeHandlerSetLocale(localeName: LocaleNameType): () => void {
         const view = this;
         const {props} = view;
+
+        return () => {
+            props.setLocale(localeName);
+        };
+    }
+
+    renderLanguageList(): Node {
+        const view = this;
 
         const headerString = localeConst.localeNameList
             .map((localeName: LocaleNameType): string => allLocales[localeName].LANGUAGE)
@@ -41,12 +49,7 @@ class Settings extends Component<void, void> {
                     {localeConst.localeNameList.map(
                         (localeName: LocaleNameType): Node => {
                             return (
-                                <Button
-                                    key={localeName}
-                                    onClick={() => {
-                                        props.setLocale(localeName);
-                                    }}
-                                >
+                                <Button onClick={view.makeHandlerSetLocale(localeName)} key={localeName}>
                                     {localeConst.langName[localeName]}
                                 </Button>
                             );
