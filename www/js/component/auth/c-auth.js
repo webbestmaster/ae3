@@ -13,6 +13,7 @@ import type {AuthType, SocketType, UserType} from './reducer';
 import {user} from '../../module/user';
 import {socket} from '../../module/socket';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
+import type {ActionDataType} from '../../redux-store-provider/type';
 
 type PropsType = {|
     setUser: (userState: UserType) => SetUserType,
@@ -32,10 +33,13 @@ class Auth extends Component<PropsType, StateType> {
 
         props.setUser({id: user.getId()});
 
-        socket.attr.initialPromise.then((): mixed => props.setSocket({id: socket.getId()})).catch((error: Error) => {
-            console.error('set socket error!');
-            console.error(error);
-        });
+        socket.attr.initialPromise.then((): ActionDataType => props.setSocket({id: socket.getId()})).catch(
+            (error: Error): Error => {
+                console.error('set socket error!');
+                console.error(error);
+                return error;
+            }
+        );
     }
 
     render(): Node {
