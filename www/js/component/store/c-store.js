@@ -17,7 +17,7 @@ import type {UnitTypeAllType} from '../game/model/unit/unit-guide';
 import guideUnitData, {additionalUnitData} from '../game/model/unit/unit-guide';
 import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import withRouter from 'react-router-dom/withRouter';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import {getSupplyState, isCommanderLive} from '../game/model/helper';
 import serviceStyle from '../../../css/service.scss';
 import Page from '../ui/page/c-page';

@@ -30,7 +30,7 @@ import Locale from '../../component/locale/c-locale';
 import type {LocaleType} from '../../component/locale/reducer';
 import Scroll from '../../component/ui/scroll/c-scroll';
 import {getMaxUserListSize} from '../join-room/helper';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import Spinner from '../../component/ui/spinner/c-spinner';
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
@@ -238,7 +238,7 @@ class CreateRoom extends Component<PropsType, StateType> {
                         const mapSize = getMapSize(map);
 
                         return (
-                            <div key={mapId} className={classnames(style.map_item, serviceStyle.clear_self)}>
+                            <div key={mapId} className={classNames(style.map_item, serviceStyle.clear_self)}>
                                 {isAdditionalInfoOpen ?
                                     <Button
                                         onClick={view.makeHandlerRemoveFromInfoMapList(mapId)}

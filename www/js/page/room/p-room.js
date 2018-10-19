@@ -16,7 +16,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import MainModel from 'main-model';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import {user} from '../../module/user';
 import {socket, type SocketMessageType} from '../../module/socket';
 import Game from '../../component/game/c-game';
@@ -540,7 +540,7 @@ class Room extends Component<PropsType, StateType> {
         const buttonList = [
             <Button
                 key="start-button"
-                className={classnames({
+                className={classNames({
                     [serviceStyle.disabled]: userList.length === 1
                 })}
                 onClick={view.handleOnClickStartGame}

@@ -28,7 +28,7 @@ import Button from '../../component/ui/button/c-button';
 import type {LocaleType} from '../../component/locale/reducer';
 import style from './style.scss';
 import Scroll from '../../component/ui/scroll/c-scroll';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import Spinner from '../../component/ui/spinner/c-spinner';
 
 type StateType = {|
@@ -229,7 +229,7 @@ class JoinRoom extends Component<PropsType, StateType> {
                             return (
                                 <Button
                                     onClick={view.makeJoinFunction(roomData.roomId)}
-                                    className={classnames(style.open_room_item, {
+                                    className={classNames(style.open_room_item, {
                                         [serviceStyle.disabled]: roomData.userList.length === roomData.maxUserSize
                                     })}
                                     key={roomData.roomId}

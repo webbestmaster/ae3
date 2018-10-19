@@ -19,7 +19,7 @@ import type {MapType, MapUserType} from '../../../maps/type';
 import Spinner from '../../ui/spinner/c-spinner';
 import Page from '../../ui/page/c-page';
 import serviceStyle from '../../../../css/service.scss';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import Button from '../../ui/button/c-button';
 import padStart from 'lodash/padStart';
 import padEnd from 'lodash/padEnd';
@@ -205,7 +205,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
 
         return (
             <Button
-                className={classnames(serviceStyle.w75_c, serviceStyle.ta_l, {
+                className={classNames(serviceStyle.w75_c, serviceStyle.ta_l, {
                     [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
                 })}
                 onClick={view.handleOnClickBuyUnit}

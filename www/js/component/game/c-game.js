@@ -22,7 +22,7 @@ import Store from '../store/c-store';
 import queryString from 'query-string';
 import {getMatchResult, getSupplyState, getUserColor, getWrongStateList, isOnLineRoomType} from './model/helper';
 import style from './style.scss';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import serviceStyle from '../../../css/service.scss';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -672,7 +672,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                     x={state.activeLandscapeTile.x}
                     y={state.activeLandscapeTile.y}
                 />
-                <BottomBar className={classnames(style.bottom_bar, bottomBarColorMap[activeUserColor])}>
+                <BottomBar className={classNames(style.bottom_bar, bottomBarColorMap[activeUserColor])}>
                     <Canvas
                         className={style.bottom_bar__icon}
                         width={24}
@@ -713,7 +713,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
         return [
             view.renderStore(),
-            <Page className={classnames(style.game_page, {[serviceStyle.hidden]: storeState.isOpen})} key="game-page">
+            <Page className={classNames(style.game_page, {[serviceStyle.hidden]: storeState.isOpen})} key="game-page">
                 {view.renderEndGameDialog()}
                 {view.renderPopupChangeActiveUserDialog()}
 
@@ -730,7 +730,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                 {mapState ? <ReactJson src={mapState.userList}/> : <h1>no map</h1>}
                 */}
 
-                <div className={classnames(style.end_turn__wrapper, {[serviceStyle.disabled]: isCanvasDisabled})}>
+                <div className={classNames(style.end_turn__wrapper, {[serviceStyle.disabled]: isCanvasDisabled})}>
                     <button
                         type="button"
                         className={style.end_turn__button}
