@@ -43,8 +43,6 @@ import iconUnitBlack from './image/unit/soldier-black-1.png';
 import Canvas from '../ui/canvas/c-canvas';
 import type {SetOpenFromGameType} from '../store/action';
 import {setOpenFromGame} from '../store/action';
-import type {MapType} from '../../maps/type';
-import type {StoreType} from '../store/reducer';
 
 const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,

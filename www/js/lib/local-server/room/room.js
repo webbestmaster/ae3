@@ -1,7 +1,15 @@
 // @flow
 
 /* eslint consistent-this: ["error", "room"] */
-import {isString, isFunction} from '../helper';
+import {isFunction, isString} from '../helper';
+import {roomMaster} from './master';
+import {RoomConnection} from './room-connection/room-connection';
+import {Server} from '../server/server';
+import find from 'lodash/find';
+import sha1 from 'sha1';
+import messageConst from './message-data.js';
+import {bindTimers} from './private';
+import Stopwatch from 'timer-stopwatch';
 
 type PushedStatePayloadIsGameStartedType = {|
     +isGameStart: boolean,
@@ -137,15 +145,6 @@ export type PushedStateType = {
     +userId?: string,
     +socketId?: string
 } | null;
-
-import {roomMaster} from './master';
-import {RoomConnection} from './room-connection/room-connection';
-import {Server} from '../server/server';
-import find from 'lodash/find';
-import sha1 from 'sha1';
-import messageConst from './message-data.js';
-import {bindTimers} from './private';
-import Stopwatch from 'timer-stopwatch';
 
 let roomId = 0;
 

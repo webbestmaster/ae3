@@ -5,7 +5,6 @@
 import {combineReducers} from 'redux';
 // user
 // socket
-import type {SetSocketType, SetUserType} from './action';
 import {authConst} from './const';
 import type {ActionDataType} from '../../redux-store-provider/type';
 

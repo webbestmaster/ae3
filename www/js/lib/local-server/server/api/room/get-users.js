@@ -5,7 +5,6 @@ import {LocalExpressRequest} from '../../../local-express/request';
 import {LocalExpressResponse} from '../../../local-express/response';
 import error from '../error-data';
 import {RoomConnection} from '../../../room/room-connection/room-connection';
-import messageConst from '../../../room/message-data';
 
 type ServerUserType = {|
     userId: string,

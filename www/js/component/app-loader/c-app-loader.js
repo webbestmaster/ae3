@@ -13,10 +13,7 @@ import serviceStyle from '../../../css/service.scss';
 // import {Home} from '../../page/home';
 import ButtonListWrapper from '../ui/button-list-wrapper/c-button-list-wrapper';
 import buttonListWrapperStyle from '../ui/button-list-wrapper/style.scss';
-import ButtonLink from '../ui/button-link/c-button-link';
-import routes from '../app/routes';
 import Locale from '../locale/c-locale';
-import Button from '../ui/button/c-button';
 import logoSrc from '../../page/home/i/logo.png';
 import homeStyle from '../../page/home/style.scss';
 

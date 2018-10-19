@@ -4,7 +4,6 @@ import {roomMaster} from '../../../room/master';
 import {LocalExpressRequest} from '../../../local-express/request';
 import {LocalExpressResponse} from '../../../local-express/response';
 import error from '../error-data';
-import messageConst from '../../../room/message-data';
 
 export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
     const {params} = req;

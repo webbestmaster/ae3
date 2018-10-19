@@ -2,7 +2,6 @@
 
 /* global window */
 
-import type {OnResizeType} from '../action';
 import {systemConst} from '../const';
 import type {ActionDataType} from '../../../redux-store-provider/type';
 

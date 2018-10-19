@@ -4,7 +4,7 @@
 
 import {combineReducers} from 'redux';
 import {localeConst} from './const';
-import type {LocaleNameType, SetLocaleType} from './action';
+import type {LocaleNameType} from './action';
 import type {ActionDataType} from '../../redux-store-provider/type';
 
 function getLocaleName(): LocaleNameType {

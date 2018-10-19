@@ -5,36 +5,22 @@
 /* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
-import {connect} from 'react-redux';
 import React, {Component} from 'react';
-import {user} from '../../module/user';
-import * as serverApi from '../../module/server-api';
-import find from 'lodash/find';
-import padStart from 'lodash/padStart';
-import padEnd from 'lodash/padEnd';
-import type {MapType, MapUserType, UnitType} from '../../maps/type';
+import {connect} from 'react-redux';
+import type {MapType} from '../../maps/type';
 import type {UnitTypeAllType} from '../game/model/unit/unit-guide';
-import guideUnitData, {additionalUnitData} from '../game/model/unit/unit-guide';
+import guideUnitData from '../game/model/unit/unit-guide';
 import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import withRouter from 'react-router-dom/withRouter';
-import classNames from 'classnames';
-import {getSupplyState, isCommanderLive} from '../game/model/helper';
-import serviceStyle from '../../../css/service.scss';
 import Page from '../ui/page/c-page';
-import Button from '../ui/button/c-button';
 import Header from '../ui/header/c-header';
-import BottomBar from '../ui/bottom-bar/c-bottom-bar';
 import Scroll from '../ui/scroll/c-scroll';
-import style from './style.scss';
-import {isBoolean, isNumber} from '../../lib/is/is';
-import Spinner from '../ui/spinner/c-spinner';
 import Locale from '../locale/c-locale';
 import type {LangKeyType} from '../locale/translation/type';
-import type {TeamIdType} from '../../maps/map-guide';
 import UnitSellPosition from './unit-sell-position/c-unit-sell-position';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
-import {setOpenFromGame} from './action';
 import type {SetOpenFromGameType} from './action';
+import {setOpenFromGame} from './action';
 import type {StoreType} from './reducer';
 
 const storeViewId = 'store';

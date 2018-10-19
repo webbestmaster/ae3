@@ -11,7 +11,6 @@ import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 import type {LocaleType} from './reducer';
 import {allLocales} from './const';
 import type {LangKeyType} from './translation/type';
-import {isBoolean} from '../../lib/is/is';
 
 type StateType = {|
     stateData: string

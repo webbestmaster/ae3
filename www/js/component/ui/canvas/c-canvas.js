@@ -8,8 +8,8 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import style from './style.scss';
 import {isString} from '../../../lib/is/is';
-import {imageCache} from '../../app/helper-image';
 import type {ScaledImageDataType} from '../../app/helper-image';
+import {imageCache} from '../../app/helper-image';
 
 type PassedPropsType = {|
     +className?: string,
