@@ -23,15 +23,11 @@ export default class Button extends Component<PropsType, StateType> {
         const view = this;
         const {props, state} = view;
         const additionClass = isString(props.className) ? ' ' + props.className : '';
+        const handleOnClick = isFunction(props.onClick) ? props.onClick : null;
 
         return (
             <div className={style.button_wrapper + additionClass}>
-                <button
-                    type="button"
-                    className={style.button}
-                    onClick={isFunction(props.onClick) ? props.onClick : null}
-                    onKeyPress={isFunction(props.onClick) ? props.onClick : null}
-                >
+                <button type="button" className={style.button} onClick={handleOnClick} onKeyPress={handleOnClick}>
                     {props.children}
                 </button>
             </div>

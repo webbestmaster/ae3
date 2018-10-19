@@ -1,3 +1,5 @@
+@import './../../../css/service';
+
 .open_room_item {
     display: block;
     margin: 10px;
@@ -8,6 +10,7 @@
     float: right;
     font-size: 20px;
     line-height: 23px;
+    padding: 1px 13px;
 }
 
 .bottom_button_list_wrapper {
@@ -20,4 +23,11 @@
     left: 0;
     position: absolute;
     width: 100%;
+}
+
+.map_name {
+    @extend %ellipsis;
+
+    padding-left: 12px;
+    text-align: left;
 }

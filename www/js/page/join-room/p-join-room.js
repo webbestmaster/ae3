@@ -235,7 +235,7 @@ class JoinRoom extends Component<PropsType, StateType> {
                                     key={roomData.roomId}
                                 >
                                     <div className={style.right_arrow}>&gt;&gt;</div>
-                                    <p className={classnames(serviceStyle.ellipsis, serviceStyle.ta_l)}>
+                                    <p className={style.map_name}>
                                         {'['}
                                         {roomData.userList.length}
                                         {'/'}
