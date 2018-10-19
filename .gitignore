@@ -21,3 +21,6 @@ flow-coverage
 # flow css
 *.css.flow
 *.scss.flow
+
+# report
+/flow-coverage

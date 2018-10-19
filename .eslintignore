@@ -1,6 +1,9 @@
 # dist
 /dist
 
+# report
+/flow-coverage
+
 # res
 _res
 
