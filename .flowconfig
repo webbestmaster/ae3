@@ -1,6 +1,7 @@
 [ignore]
 ./dist
 <PROJECT_ROOT>/node_modules
+<PROJECT_ROOT>/_res
 
 [include]
 #./flow-typed/**/

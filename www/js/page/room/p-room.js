@@ -554,7 +554,11 @@ class Room extends Component<PropsType, StateType> {
         }
 
         buttonList.unshift(
-            <Button key="add-bot-button" onClick={view.makeHandlerCreateUser('bot', roomId)}>
+            <Button
+                className={serviceStyle.disabled}
+                key="add-bot-button"
+                onClick={view.makeHandlerCreateUser('bot', roomId)}
+            >
                 <Locale stringKey={('ADD_BOT': LangKeyType)}/>
             </Button>
         );

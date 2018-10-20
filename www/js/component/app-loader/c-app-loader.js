@@ -214,7 +214,7 @@ export default class AppLoader extends Component<PassedPropsType, StateType> {
         return (
             <div className={style.load_item} key={loadItem.id}>
                 <p className={style.load_item__header}>
-                    <Locale stringKey={loadItem.langKeyName} isOneLine/>
+                    <Locale stringKey={loadItem.langKeyName}/>
                     {':\u00A0'}
                     {progressString}
                 </p>

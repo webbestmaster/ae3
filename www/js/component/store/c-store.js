@@ -110,7 +110,7 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
         // const unitData = guideUnitData[unitType];
         // const unitCost = view.getUnitCost(unitType);
 
-        return <UnitSellPosition unitType={unitType} x={props.x} y={props.y} map={props.map} key={unitType}/>;
+        return <UnitSellPosition unitType={unitType} x={props.x} y={props.y} mapState={props.map} key={unitType}/>;
 
         /*
         if (unitCost === null) {

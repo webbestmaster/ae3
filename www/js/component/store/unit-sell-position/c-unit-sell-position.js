@@ -10,7 +10,7 @@ import type {ContextRouterType} from '../../../type/react-router-dom-v4';
 import type {UnitTypeAllType} from '../../game/model/unit/unit-guide';
 import guideUnitData, {additionalUnitData} from '../../game/model/unit/unit-guide';
 import {isBoolean, isNumber} from '../../../lib/is/is';
-import {getSupplyState, isCommanderLive} from '../../game/model/helper';
+import {getSupplyState, getUserColor, isCommanderLive} from '../../game/model/helper';
 import {user} from '../../../module/user';
 import find from 'lodash/find';
 import * as serverApi from '../../../module/server-api';
@@ -22,9 +22,17 @@ import Button from '../../ui/button/c-button';
 import padStart from 'lodash/padStart';
 import padEnd from 'lodash/padEnd';
 import withRouter from 'react-router-dom/withRouter';
+import style from './style.scss';
+import type {LocaleType} from '../../locale/reducer';
+import Locale, {getLocalizedString} from '../../locale/c-locale';
+import type {UserColorType} from '../../../maps/map-guide';
+import {imageCache} from '../../app/helper-image';
+import Canvas from '../../ui/canvas/c-canvas';
+import imageMap from '../../game/image/image-map';
+import {icon} from '../../ui/select/icon/c-icon';
 
 type ReduxPropsType = {|
-    +reduxProp: boolean
+    +locale: LocaleType
 |};
 
 type ReduxActionType = {
@@ -39,7 +47,7 @@ type PassedPropsType = {|
     +unitType: UnitTypeAllType,
     +x: number,
     +y: number,
-    +map: MapType
+    +mapState: MapType
 |};
 
 type PropsType = $ReadOnly<$Exact<{
@@ -57,7 +65,8 @@ type PropsType = $ReadOnly<$Exact<{
 
 type StateType = {|
     +mapUserData: MapUserType,
-    +isInProgress: boolean
+    +isInProgress: boolean,
+    +isFullInfoShow: boolean
 |};
 
 class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateType> {
@@ -70,20 +79,22 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         const view = this;
 
         view.state = {
-            mapUserData: find(props.map.userList, {userId: user.getId()}) || {
+            mapUserData: find(props.mapState.userList, {userId: user.getId()}) || {
                 userId: 'no-user-id-in-store',
                 money: 0,
                 teamId: 'team-0'
             },
-            isInProgress: false
+            isInProgress: false,
+            isFullInfoShow: false
         };
     }
 
     // eslint-disable-next-line complexity, max-statements
-    getUnitCost(unitType: UnitTypeAllType): number | null {
+    getUnitCost(): number | null {
         const view = this;
         const {props, state} = view;
         const {mapUserData} = state;
+        const {unitType, mapState} = props;
         const unitData = guideUnitData[unitType];
 
         if (unitData.canBeBuy !== true) {
@@ -115,18 +126,26 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         }
 
         // detect user's commander on map
-        if (isCommanderLive(user.getId(), props.map)) {
+        if (isCommanderLive(user.getId(), mapState)) {
             return null;
         }
 
         return cost + userCommander.buyCount * additionalUnitData.additionalCommanderCost;
     }
 
+    getUnitColor(): UserColorType | null {
+        const view = this;
+        const {props} = view;
+        const {mapState} = props;
+
+        return getUserColor(user.getId(), mapState.userList);
+    }
+
     // eslint-disable-next-line max-statements
     handleOnClickBuyUnit = (): Promise<void> => {
         const view = this;
         const {props, state} = view;
-        const newMap = JSON.parse(JSON.stringify(props.map));
+        const newMap = JSON.parse(JSON.stringify(props.mapState));
         const newMapUserData = find(newMap.userList, {userId: user.getId()}) || null;
         // const newUnitData = guideUnitData[unitType];
 
@@ -135,7 +154,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
             return Promise.resolve();
         }
 
-        const unitCost = view.getUnitCost(props.unitType);
+        const unitCost = view.getUnitCost();
 
         if (unitCost === null) {
             console.error('Can not get unit cost');
@@ -185,58 +204,84 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
             });
     };
 
+    handleToggleFullInfo = () => {
+        const view = this;
+        const {props, state} = view;
+        const {isFullInfoShow} = state;
+
+        view.setState({isFullInfoShow: !isFullInfoShow});
+    };
+
+    // eslint-disable-next-line complexity
     render(): Node {
         const view = this;
         const {props, state} = view;
-        const {unitType} = props;
-        const {mapUserData} = state;
+        const {unitType, locale} = props;
+        const {mapUserData, isFullInfoShow, isInProgress} = state;
 
-        const unitCost = view.getUnitCost(unitType);
+        console.log(imageCache);
 
-        if (unitCost === null) {
+        const unitCost = view.getUnitCost();
+        const unitColor = view.getUnitColor();
+
+        if (unitCost === null || unitColor === null) {
+            console.error('can not get unit color or cost', unitCost, unitColor);
             return null;
         }
 
         const unitData = guideUnitData[unitType];
 
-        const supplyState = getSupplyState(props.map, user.getId());
+        const supplyState = getSupplyState(props.mapState, user.getId());
+
+        const unitImageScr = imageMap.unit[unitType + '-' + unitColor + '-1'];
 
         return (
-            <Button
-                className={classNames(serviceStyle.w75_c, serviceStyle.ta_l, {
-                    [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
-                })}
-                onClick={view.handleOnClickBuyUnit}
-                key={unitType}
-            >
-                <Spinner isOpen={state.isInProgress}/>
-                <span>
-                    {padEnd(unitType, 10, ' ')}
+            <div key={unitType} className={style.unit_sell_position}>
+                <Button
+                    className={classNames(serviceStyle.ta_l, {
+                        [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
+                    })}
+                    onClick={view.handleOnClickBuyUnit}
+                >
+                    {padStart(String(unitCost), 4, ' ')}
+                </Button>
+
+                <Button
+                    className={classNames(serviceStyle.ta_l, {
+                        [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
+                    })}
+                    onClick={view.handleToggleFullInfo}
+                >
+                    %show full info%
+                </Button>
+
+                <Canvas width={48} height={48} className={style.unit_preview} src={unitImageScr}/>
+
+                <div>
+                    {view.getUnitColor()}
+                    <br/>
+                    <Locale stringKey={unitData.langKey.name}/>
+                    <br/>
                     &nbsp;|&nbsp; attack:
                     {unitData.attack.min}-{unitData.attack.max}
-                    <br/>
-                    COST:
-                    {padStart(String(unitCost), 4, ' ')}
                     &nbsp;|&nbsp; move:
                     {unitData.move}
-                </span>
-            </Button>
-        );
+                </div>
 
-        /*
-        return (
-            <div>
-
-                {props.unitType}
+                {isFullInfoShow ?
+                    <div className={style.full_info__wrapper}>
+                        {getLocalizedString(unitData.langKey.description, locale.name)}
+                    </div> :
+                    null}
+                <Spinner isOpen={isInProgress}/>
             </div>
         );
-*/
     }
 }
 
 export default connect(
     (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
-        reduxProp: true
+        locale: state.locale
     }),
     reduxAction
 )(withRouter(UnitSellPosition));
