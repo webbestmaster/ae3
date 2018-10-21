@@ -64,29 +64,16 @@ type StateType = {
     // +isInProgress: boolean
 };
 
-type RefsType = {||};
-
 class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
     props: PropsType;
     state: StateType;
-    refs: RefsType;
 
     constructor(props: PropsType) {
         super(props);
 
         const view = this;
 
-        view.state = {
-
-            /*
-            mapUserData: find(props.map.userList, {userId: user.getId()}) || {
-                userId: 'no-user-id-in-store',
-                money: 0,
-                teamId: 'team-0'
-            },
-            isInProgress: false
-*/
-        };
+        view.state = {};
     }
 
     componentDidMount() {
@@ -99,51 +86,15 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
             return;
         }
 
-        console.log('store did NOT open from game, probaby from url, go back');
+        console.log('store did NOT open from game, probably from url, go back');
         history.goBack();
     }
 
     renderUnitData(unitType: UnitTypeAllType): Node {
         const view = this;
-        const {props, state} = view;
-        // const {mapUserData} = state;
-        // const unitData = guideUnitData[unitType];
-        // const unitCost = view.getUnitCost(unitType);
+        const {props} = view;
 
         return <UnitSellPosition unitType={unitType} x={props.x} y={props.y} mapState={props.map} key={unitType}/>;
-
-        /*
-        if (unitCost === null) {
-            return null;
-        }
-*/
-
-        /*
-        const supplyState = getSupplyState(props.map, user.getId());
-
-        return (
-            <Button
-                className={classnames(serviceStyle.w75_c, serviceStyle.ta_l, {
-                    [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
-                })}
-                onClick={() => {
-                    view.buyUnit(unitType);
-                }}
-                key={unitType}
-            >
-                <span>
-                    {padEnd(unitType, 10, ' ')}
-                    &nbsp;|&nbsp; attack:
-                    {unitData.attack.min}-{unitData.attack.max}
-                    <br/>
-                    COST:
-                    {padStart(String(unitCost), 4, ' ')}
-                    &nbsp;|&nbsp; move:
-                    {unitData.move}
-                </span>
-            </Button>
-        );
-*/
     }
 
     renderUnitList(): Array<Node | null> {
@@ -156,7 +107,7 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
 
     render(): Node {
         const view = this;
-        const {props, state} = view;
+        const {props} = view;
 
         return (
             <Page>

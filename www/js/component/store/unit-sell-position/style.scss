@@ -4,12 +4,40 @@
     position: relative;
 }
 
+.unit_preview {
+    display: block;
+    float: left;
+}
+
+.unit_name {
+    display: block;
+}
+
+.unit_data {
+    display: block;
+}
+
 .full_info__wrapper {
     display: block;
     padding: 20px;
 }
 
-.unit_preview {
+.unit_sell_position__short_info {
     display: block;
-    float: left;
+}
+
+.unit_sell_position__short_info__line {
+    display: block;
+}
+
+.buy_button {
+    display: block;
+}
+
+.show_info_button {
+    display: block;
+
+    &.show_info_button__open {
+        opacity: 0.5;
+    }
 }

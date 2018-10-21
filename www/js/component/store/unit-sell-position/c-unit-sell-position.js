@@ -237,42 +237,44 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
 
         return (
             <div key={unitType} className={style.unit_sell_position}>
-                <Button
-                    className={classNames(serviceStyle.ta_l, {
-                        [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
-                    })}
-                    onClick={view.handleOnClickBuyUnit}
-                >
-                    {padStart(String(unitCost), 4, ' ')}
-                </Button>
-
-                <Button
-                    className={classNames(serviceStyle.ta_l, {
-                        [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
-                    })}
-                    onClick={view.handleToggleFullInfo}
-                >
-                    %show full info%
-                </Button>
-
-                <Canvas width={48} height={48} className={style.unit_preview} src={unitImageScr}/>
-
-                <div>
-                    {view.getUnitColor()}
-                    <br/>
+                <h3 className={style.unit_name}>
                     <Locale stringKey={unitData.langKey.name}/>
-                    <br/>
-                    &nbsp;|&nbsp; attack:
-                    {unitData.attack.min}-{unitData.attack.max}
-                    &nbsp;|&nbsp; move:
-                    {unitData.move}
-                </div>
+                </h3>
 
-                {isFullInfoShow ?
-                    <div className={style.full_info__wrapper}>
-                        {getLocalizedString(unitData.langKey.description, locale.name)}
-                    </div> :
-                    null}
+                <div className={style.unit_data}>
+                    <Canvas width={48} height={48} className={style.unit_preview} src={unitImageScr}/>
+
+                    <div className={style.unit_sell_position__short_info}>
+                        <div className={style.unit_sell_position__short_info__line}>
+                            {unitData.attack.min}-{unitData.attack.max}
+                        </div>
+                        <div className={style.unit_sell_position__short_info__line}>
+                            {unitData.move} | {unitData.armor}
+                        </div>
+                    </div>
+
+                    <Button
+                        className={classNames(style.buy_button, {
+                            [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
+                        })}
+                        onClick={view.handleOnClickBuyUnit}
+                    >
+                        {unitCost}
+                    </Button>
+
+                    <Button
+                        className={classNames(style.show_info_button, {[style.show_info_button__open]: isFullInfoShow})}
+                        onClick={view.handleToggleFullInfo}
+                    >
+                        %show full info%
+                    </Button>
+
+                    {isFullInfoShow ?
+                        <div className={style.full_info__wrapper}>
+                            {getLocalizedString(unitData.langKey.description, locale.name)}
+                        </div> :
+                        null}
+                </div>
                 <Spinner isOpen={isInProgress}/>
             </div>
         );
