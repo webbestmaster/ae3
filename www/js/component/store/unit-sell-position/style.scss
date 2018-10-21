@@ -1,6 +1,11 @@
+@import './../../../../css/service';
+
 .unit_sell_position {
+    @extend %clear-full;
+
     display: block;
     max-width: 750px;
+    padding: 14px 15px 20px;
     position: relative;
 }
 
@@ -11,6 +16,9 @@
 
 .unit_name {
     display: block;
+    font-size: 14px;
+    line-height: 1.15;
+    padding-bottom: 10px;
 }
 
 .unit_data {
@@ -19,25 +27,53 @@
 
 .full_info__wrapper {
     display: block;
-    padding: 20px;
+    padding-top: 18px;
 }
 
 .unit_sell_position__short_info {
     display: block;
+    margin: 0 87px 0 58px;
+    overflow: hidden;
 }
 
 .unit_sell_position__short_info__line {
+    clear: left;
     display: block;
 }
 
-.buy_button {
+.unit_sell_position__short_info__line_icon {
     display: block;
+    float: left;
+}
+
+.unit_sell_position__short_info__line_text {
+    display: block;
+    float: left;
+    font-size: 14px;
+    line-height: 1.15;
+    padding: 3px 11px 6px 5px;
+
+    &:first-child {
+        padding-left: 10px;
+    }
+}
+
+.buy_button {
+    float: right;
+    min-width: auto;
+    width: 75px;
 }
 
 .show_info_button {
     display: block;
+    float: right;
+    min-width: auto;
+    padding-left: 0;
+    padding-right: 0;
+    width: 43px;
+}
 
-    &.show_info_button__open {
-        opacity: 0.5;
-    }
+.show_info_description_icon {
+    display: block;
+    margin: 0 auto;
 }

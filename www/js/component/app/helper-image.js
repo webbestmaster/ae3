@@ -120,6 +120,7 @@ async function scaleImage(src: string, multiple: number): Promise<ScaledImageDat
     }
 
     // eslint-disable-next-line id-match
+    /*
     if (!IS_PRODUCTION) {
         return {
             src,
@@ -128,6 +129,7 @@ async function scaleImage(src: string, multiple: number): Promise<ScaledImageDat
             blobUrl: src
         };
     }
+*/
 
     const {stage, renderer} = pixiApplication;
 

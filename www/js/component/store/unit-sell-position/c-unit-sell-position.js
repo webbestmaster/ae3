@@ -29,7 +29,11 @@ import type {UserColorType} from '../../../maps/map-guide';
 import {imageCache} from '../../app/helper-image';
 import Canvas from '../../ui/canvas/c-canvas';
 import imageMap from '../../game/image/image-map';
-import {icon} from '../../ui/select/icon/c-icon';
+import iconUnitInfoAttack from './i/icon-unit-info-attack.png';
+import iconUnitInfoMove from './i/icon-unit-info-move.png';
+import iconUnitInfoDefence from './i/icon-unit-info-defence.png';
+import iconUnitInfoDescription from './i/icon-unit-info-description.png';
+import iconUnitInfoDescriptionOpen from './i/icon-unit-info-description-open.png';
 
 type ReduxPropsType = {|
     +locale: LocaleType
@@ -212,14 +216,61 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         view.setState({isFullInfoShow: !isFullInfoShow});
     };
 
+    renderShortInfo(): Node {
+        const view = this;
+        const {props, state} = view;
+        const {unitType} = props;
+        const {isFullInfoShow} = state;
+
+        const unitData = guideUnitData[unitType];
+
+        return (
+            <div className={style.unit_sell_position__short_info}>
+                <Button className={style.show_info_button} onClick={view.handleToggleFullInfo}>
+                    <Canvas
+                        className={style.show_info_description_icon}
+                        width={15}
+                        height={20}
+                        src={isFullInfoShow ? iconUnitInfoDescriptionOpen : iconUnitInfoDescription}
+                    />
+                </Button>
+                <div className={style.unit_sell_position__short_info__line}>
+                    <Canvas
+                        className={style.unit_sell_position__short_info__line_icon}
+                        width={20}
+                        height={21}
+                        src={iconUnitInfoAttack}
+                    />
+                    <p className={style.unit_sell_position__short_info__line_text}>
+                        {unitData.attack.min} - {unitData.attack.max}
+                    </p>
+                </div>
+                <div className={style.unit_sell_position__short_info__line}>
+                    <Canvas
+                        className={style.unit_sell_position__short_info__line_icon}
+                        width={20}
+                        height={21}
+                        src={iconUnitInfoMove}
+                    />
+                    <p className={style.unit_sell_position__short_info__line_text}>{unitData.move}</p>
+                    <Canvas
+                        className={style.unit_sell_position__short_info__line_icon}
+                        width={20}
+                        height={21}
+                        src={iconUnitInfoDefence}
+                    />
+                    <p className={style.unit_sell_position__short_info__line_text}>{unitData.armor}</p>
+                </div>
+            </div>
+        );
+    }
+
     // eslint-disable-next-line complexity
     render(): Node {
         const view = this;
         const {props, state} = view;
         const {unitType, locale} = props;
         const {mapUserData, isFullInfoShow, isInProgress} = state;
-
-        console.log(imageCache);
 
         const unitCost = view.getUnitCost();
         const unitColor = view.getUnitColor();
@@ -244,30 +295,16 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
                 <div className={style.unit_data}>
                     <Canvas width={48} height={48} className={style.unit_preview} src={unitImageScr}/>
 
-                    <div className={style.unit_sell_position__short_info}>
-                        <div className={style.unit_sell_position__short_info__line}>
-                            {unitData.attack.min}-{unitData.attack.max}
-                        </div>
-                        <div className={style.unit_sell_position__short_info__line}>
-                            {unitData.move} | {unitData.armor}
-                        </div>
-                    </div>
-
                     <Button
                         className={classNames(style.buy_button, {
                             [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
                         })}
                         onClick={view.handleOnClickBuyUnit}
                     >
-                        {unitCost}
+                        ${unitCost}
                     </Button>
 
-                    <Button
-                        className={classNames(style.show_info_button, {[style.show_info_button__open]: isFullInfoShow})}
-                        onClick={view.handleToggleFullInfo}
-                    >
-                        %show full info%
-                    </Button>
+                    {view.renderShortInfo()}
 
                     {isFullInfoShow ?
                         <div className={style.full_info__wrapper}>
