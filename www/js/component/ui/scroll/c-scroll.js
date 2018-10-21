@@ -11,12 +11,14 @@ import classNames from 'classnames';
 import style from './style.scss';
 
 type StateType = void;
+
 type PropsType = {|
-    className?: string,
-    children: Node | Array<Node>
+    +className?: string,
+    +children: Node | Array<Node>
 |};
+
 type NodeType = {|
-    wrapper: HTMLElement | null
+    +wrapper: {current: null | HTMLDivElement}
 |};
 
 type AttrType = {|
@@ -35,7 +37,7 @@ export default class Scroll extends Component<StateType, PropsType> {
         const view = this;
 
         view.node = {
-            wrapper: null
+            wrapper: React.createRef()
         };
 
         view.attr = {
@@ -48,11 +50,11 @@ export default class Scroll extends Component<StateType, PropsType> {
 
         const {wrapper} = view.node;
 
-        if (wrapper === null) {
+        if (wrapper.current === null) {
             return Promise.resolve();
         }
 
-        view.attr.swiper = new Swiper(wrapper, {
+        view.attr.swiper = new Swiper(wrapper.current, {
             direction: 'vertical',
             slidesPerView: 'auto',
             freeMode: true,
@@ -98,19 +100,12 @@ export default class Scroll extends Component<StateType, PropsType> {
         });
     }
 
-    defineRefWrapper = (wrapper: HTMLElement | null) => {
-        const view = this;
-        const {node} = view;
-
-        node.wrapper = wrapper;
-    };
-
     renderSwiper(): Node {
         const view = this;
         const {props} = view;
 
         return (
-            <div className={classNames('swiper-container', style.swiper_container)} ref={view.defineRefWrapper}>
+            <div className={classNames('swiper-container', style.swiper_container)} ref={view.node.wrapper}>
                 <div className={classNames('swiper-wrapper', style.swiper_wrapper)}>
                     <div className={classNames('swiper-slide', style.swiper_slide)}>{props.children}</div>
                 </div>
