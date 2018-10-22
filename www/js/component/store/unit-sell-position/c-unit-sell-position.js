@@ -242,7 +242,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
                         src={iconUnitInfoAttack}
                     />
                     <p className={style.unit_sell_position__short_info__line_text}>
-                        {unitData.attack.min} - {unitData.attack.max}
+                        {unitData.attack.min}-{unitData.attack.max}
                     </p>
                 </div>
                 <div className={style.unit_sell_position__short_info__line}>
