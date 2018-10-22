@@ -1,5 +1,7 @@
 // @flow
 
+/* global window, Event */
+
 /* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
@@ -210,10 +212,12 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
 
     handleToggleFullInfo = () => {
         const view = this;
-        const {props, state} = view;
+        const {state} = view;
         const {isFullInfoShow} = state;
 
-        view.setState({isFullInfoShow: !isFullInfoShow});
+        view.setState({isFullInfoShow: !isFullInfoShow}, () => {
+            window.dispatchEvent(new Event('resize'));
+        });
     };
 
     renderShortInfo(): Node {
@@ -307,7 +311,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
                     {view.renderShortInfo()}
 
                     {isFullInfoShow ?
-                        <div className={style.full_info__wrapper}>
+                        <div className={style.full_info}>
                             {getLocalizedString(unitData.langKey.description, locale.name)}
                         </div> :
                         null}

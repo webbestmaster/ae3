@@ -3,7 +3,7 @@
 import type {LangDataType} from '../type';
 
 export const ruRu: LangDataType = {
-    /* eslint-disable id-match */
+    /* eslint-disable id-match, max-len, id-length */
     ONLINE_GAME: 'Сетевая Игра',
     OFFLINE_GAME: 'Локальная Игра',
     SETTINGS: 'Настройки',
@@ -27,41 +27,56 @@ export const ruRu: LangDataType = {
     CASTLE: 'Замок',
 
     // units name
-    UNIT__SOLDIER__NAME: 'UNIT__SOLDIER__NAME',
-    UNIT__ARCHER__NAME: 'UNIT__ARCHER__NAME',
-    UNIT__ELEMENTAL__NAME: 'UNIT__ELEMENTAL__NAME',
-    UNIT__SORCERESS__NAME: 'UNIT__SORCERESS__NAME',
-    UNIT__WISP__NAME: 'UNIT__WISP__NAME',
-    UNIT__DIRE_WOLF__NAME: 'UNIT__DIRE_WOLF__NAME',
-    UNIT__GOLEM__NAME: 'UNIT__GOLEM__NAME',
-    UNIT__CATAPULT__NAME: 'UNIT__CATAPULT__NAME',
-    UNIT__DRAGON__NAME: 'UNIT__DRAGON__NAME',
-    UNIT__SKELETON__NAME: 'UNIT__SKELETON__NAME',
-    UNIT__GALAMAR__NAME: 'UNIT__GALAMAR__NAME',
-    UNIT__VALADORN__NAME: 'UNIT__VALADORN__NAME',
-    UNIT__DEMON_LORD__NAME: 'UNIT__DEMON_LORD__NAME',
-    UNIT__SAETH__NAME: 'UNIT__SAETH__NAME',
-    UNIT__CRYSTAL__NAME: 'UNIT__CRYSTAL__NAME',
-    UNIT__SAETH_HEAVENS_FURY__NAME: 'UNIT__SAETH_HEAVENS_FURY__NAME',
+    UNIT__SOLDIER__NAME: 'Солдат',
+    UNIT__ARCHER__NAME: 'Лучник',
+    UNIT__ELEMENTAL__NAME: 'Элементаль',
+    UNIT__SORCERESS__NAME: 'Ведьма',
+    UNIT__WISP__NAME: 'Висп',
+    UNIT__DIRE_WOLF__NAME: 'Жуткий Волк',
+    UNIT__GOLEM__NAME: 'Голем',
+    UNIT__CATAPULT__NAME: 'Катапульта',
+    UNIT__DRAGON__NAME: 'Дракон',
+    UNIT__SKELETON__NAME: 'Скелет',
+    UNIT__GALAMAR__NAME: 'Галамар',
+    UNIT__VALADORN__NAME: 'Валадорн',
+    UNIT__DEMON_LORD__NAME: 'Демон Лорд',
+    UNIT__SAETH__NAME: 'Саеф',
+    UNIT__CRYSTAL__NAME: 'Кристалл',
+    UNIT__SAETH_HEAVENS_FURY__NAME: 'Саеф',
 
     // units description
-    UNIT__SOLDIER__DESCRIPTION: 'UNIT__SOLDIER__DESCRIPTION',
-    UNIT__ARCHER__DESCRIPTION: 'UNIT__ARCHER__DESCRIPTION',
-    UNIT__ELEMENTAL__DESCRIPTION: 'UNIT__ELEMENTAL__DESCRIPTION',
-    UNIT__SORCERESS__DESCRIPTION: 'UNIT__SORCERESS__DESCRIPTION',
-    UNIT__WISP__DESCRIPTION: 'UNIT__WISP__DESCRIPTION',
-    UNIT__DIRE_WOLF__DESCRIPTION: 'UNIT__DIRE_WOLF__DESCRIPTION',
-    UNIT__GOLEM__DESCRIPTION: 'UNIT__GOLEM__DESCRIPTION',
-    UNIT__CATAPULT__DESCRIPTION: 'UNIT__CATAPULT__DESCRIPTION',
-    UNIT__DRAGON__DESCRIPTION: 'UNIT__DRAGON__DESCRIPTION',
-    UNIT__SKELETON__DESCRIPTION: 'UNIT__SKELETON__DESCRIPTION',
-    UNIT__GALAMAR__DESCRIPTION: 'UNIT__GALAMAR__DESCRIPTION',
-    UNIT__VALADORN__DESCRIPTION: 'UNIT__VALADORN__DESCRIPTION',
-    UNIT__DEMON_LORD__DESCRIPTION: 'UNIT__DEMON_LORD__DESCRIPTION',
-    UNIT__SAETH__DESCRIPTION: 'UNIT__SAETH__DESCRIPTION',
-    UNIT__CRYSTAL__DESCRIPTION: 'UNIT__CRYSTAL__DESCRIPTION',
-    // eslint-disable-next-line id-length
-    UNIT__SAETH_HEAVENS_FURY__DESCRIPTION: 'UNIT__SAETH_HEAVENS_FURY__DESCRIPTION',
+    UNIT__SOLDIER__DESCRIPTION:
+        'Солдаты это солидные всесторонние бойцы, которые сформируют костяк любой армии. Также солдаты - единственная единица, которая может захватывать города, приносящие золото.',
+    UNIT__ARCHER__DESCRIPTION:
+        'Со своими мощными луками стрелки могут атаковать на расстоянии и особенно эффективны против летающих врагов.',
+    UNIT__ELEMENTAL__DESCRIPTION:
+        'Элементалы это магические водяные духи. Будучи в воде, Элементалы быстрее передвигаются и лучше защищаются.',
+    UNIT__SORCERESS__DESCRIPTION:
+        'Натасканные в использовании магии, Ведьмы слабы в ближнем бою. Однако, их способность к вызову боевых скелетов из мертвых войск может стать решающей в битве.',
+    UNIT__WISP__DESCRIPTION:
+        'Эти мистические существа чистого света излучают ауру, которая усиливает способности к атаке у ближайших дружественных единиц. В ближнем бою они особенно смертельны против скелетов.',
+    UNIT__DIRE_WOLF__DESCRIPTION:
+        'Жуткие Волки - опасные охотники, которые передвигаются стаями. Будьте осторожны - их укусы ядовиты, что умельшает и атаку, и защиту на один ход.',
+    UNIT__GOLEM__DESCRIPTION:
+        'Големы - это древние существа - медленны, но необычайно сильны в защите. Голема, расположенного в здании или хорошо защищенной горе очень сложно победить.',
+    UNIT__CATAPULT__DESCRIPTION:
+        'Катапульты приносят опустошение везде, куда достанут со своей гигантской зоной атаки. Однако, они относительная неподвижность и неспособность атаковать вблизи делают их уязвимыми, так что защищайте их хорошо. Катапульты могут передвигаться и атаковать в течении хода, но только что-нибудь одно за ход.',
+    UNIT__DRAGON__DESCRIPTION:
+        'Эти грациозные летающие твари правят над горами с древнейших времен. Они чрезвычайно подвижны, а так же смертельно опасны в атаках на земле, воздухе и в море.',
+    UNIT__SKELETON__DESCRIPTION:
+        'Вызванные ведьмами, эти безжизненные воины сильны как солдаты и смертельные оппоненты на любом поле боя.',
+    UNIT__GALAMAR__DESCRIPTION:
+        'Галамар (командир) очень силен в атаке и защите. Командиры могут также занимать замки, чтобы производить войска, и их можно оживлять в замке, если они умрут в битве.',
+    UNIT__VALADORN__DESCRIPTION:
+        'Валадорн (командир) очень силен в атаке и защите. Командиры могут также занимать замки, чтобы производить войска, и их можно оживлять в замке, если они умрут в битве.',
+    UNIT__DEMON_LORD__DESCRIPTION:
+        'Демон лорд (командир) очень силен в атаке и защите. Командиры могут также занимать замки, чтобы производить войска, и их можно оживлять в замке, если они умрут в битве.',
+    UNIT__SAETH__DESCRIPTION:
+        'Саеф (командир) очень силен в атаке и защите. Командиры могут также занимать замки, чтобы производить войска, и их можно оживлять в замке, если они умрут в битве.',
+    UNIT__CRYSTAL__DESCRIPTION:
+        'Эти легендарные кристаллы были изначально выкопаны из руин Античной Цитадели. Мало что известно об их силе, за исключением того, что они, по слухам, могут защитить королевство, а также обладают силой, чтобы уничтожить его.',
+    UNIT__SAETH_HEAVENS_FURY__DESCRIPTION:
+        'Саеф (командир) очень силен в атаке и защите. Командиры могут также занимать замки, чтобы производить войска, и их можно оживлять в замке, если они умрут в битве.',
 
     // init app
     ENVIRONMENT_SETTING: 'Настройка окружения',
@@ -71,5 +86,4 @@ export const ruRu: LangDataType = {
 
     // spec symbols
     SPACE: ' '
-    /* eslint-enable id-match */
 };

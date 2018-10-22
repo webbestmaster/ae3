@@ -3,8 +3,10 @@
 .unit_sell_position {
     @extend %clear-full;
 
+    border-bottom: 1px solid #fff;
     display: block;
-    max-width: 750px;
+    margin: 0 auto;
+    max-width: 320px;
     padding: 14px 15px 20px;
     position: relative;
 }
@@ -19,21 +21,25 @@
     font-size: 14px;
     line-height: 1.15;
     padding-bottom: 10px;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .unit_data {
     display: block;
 }
 
-.full_info__wrapper {
+.full_info {
     display: block;
-    padding-top: 18px;
+    font-size: 14px;
+    line-height: 20px;
+    padding-top: 11px;
 }
 
 .unit_sell_position__short_info {
     display: block;
     margin: 0 87px 0 58px;
     overflow: hidden;
+    width: 147px;
 }
 
 .unit_sell_position__short_info__line {
@@ -60,6 +66,7 @@
 
 .buy_button {
     float: right;
+    margin-top: 3px;
     min-width: auto;
     width: 75px;
 }
@@ -67,6 +74,7 @@
 .show_info_button {
     display: block;
     float: right;
+    margin-top: 3px;
     min-width: auto;
     padding-left: 0;
     padding-right: 0;
