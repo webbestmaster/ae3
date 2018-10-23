@@ -23,7 +23,7 @@ type PropsType = {|
 |};
 
 type NodeType = {|
-    canvas: HTMLElement | null
+    canvas: {current: HTMLCanvasElement | null}
 |};
 
 type LayerListType = {|
@@ -45,7 +45,7 @@ export default class MapPreview extends Component<PropsType, StateType> {
         const view = this;
 
         view.node = {
-            canvas: null
+            canvas: React.createRef()
         };
 
         view.layer = {
@@ -58,7 +58,7 @@ export default class MapPreview extends Component<PropsType, StateType> {
     initApp() {
         const view = this;
         const {props, node, layer} = view;
-        const {canvas} = node;
+        const canvas = node.canvas.current;
         const {map} = props;
 
         if (canvas === null) {
@@ -200,13 +200,6 @@ export default class MapPreview extends Component<PropsType, StateType> {
         view.app.render();
     }
 
-    defineRefCanvas = (canvas: HTMLElement | null) => {
-        const view = this;
-        const {props, node} = view;
-
-        node.canvas = canvas;
-    };
-
     render(): Node {
         const view = this;
         const {props, node} = view;
@@ -222,7 +215,7 @@ export default class MapPreview extends Component<PropsType, StateType> {
                         height: mapSize.height * mapGuide.size.square
                     }}
                     className={style.canvas + additionCanvasClassName}
-                    ref={view.defineRefCanvas}
+                    ref={view.node.canvas}
                 />
             </div>
         );

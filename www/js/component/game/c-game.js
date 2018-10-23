@@ -128,7 +128,7 @@ type StateType = {|
 |};
 
 type RefsType = {|
-    canvas: HTMLElement | null
+    canvas: {current: HTMLCanvasElement | null}
 |};
 
 export class GameView extends Component<ReduxPropsType, PassedPropsType, StateType> {
@@ -142,7 +142,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         const view = this;
 
         view.node = {
-            canvas: null
+            canvas: React.createRef()
         };
 
         view.state = {
@@ -174,7 +174,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
         const {roomId, system} = props;
         const {game} = state;
-        const {canvas} = node;
+        const canvas = node.canvas.current;
 
         const {settings} = await serverApi.getAllRoomSettings(roomId);
         const {users} = await serverApi.getAllRoomUsers(roomId);
@@ -690,12 +690,6 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         );
     }
 
-    defineNodeCanvas = (canvas: HTMLElement | null) => {
-        const view = this;
-
-        view.node.canvas = canvas;
-    };
-
     render(): Node {
         const view = this;
         const {props, state} = view;
@@ -750,7 +744,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
                 <canvas
                     key="canvas"
-                    ref={view.defineNodeCanvas}
+                    ref={view.node.canvas}
                     style={{
                         // TODO: uncomment this for production
                         // pointerEvents: isCanvasDisabled ? 'none' : 'auto',

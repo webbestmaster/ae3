@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --content-base dist/ --host 0.0.0.0 --port 8181 --progress --no-inline --history-api-fallback",
-    "start-hot": "webpack-dev-server --mode development --inline --hot --content-base dist/ --host 0.0.0.0 --port 8181 --progress --history-api-fallback",
+    "start": "webpack-dev-server --mode development --content-base dist/ --host 0.0.0.0 --port 8383 --progress --no-inline --history-api-fallback",
+    "start-hot": "webpack-dev-server --mode development --inline --hot --content-base dist/ --host 0.0.0.0 --port 8383 --progress --history-api-fallback",
     "build": "cross-env NODE_ENV=production webpack --mode production --progress",
     "webpack": "webpack --mode development --progress",
     "check": "npm run eslint; npm run stylelint; npm run flow;",
@@ -108,6 +108,6 @@
     "webpack": "^4.22.0",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9"
+    "webpack-dev-server": "^3.1.10"
   }
 }

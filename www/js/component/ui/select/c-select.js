@@ -24,7 +24,7 @@ type StateType = {|
 |};
 
 type NodeType = {|
-    select: HTMLSelectElement | null
+    select: {current: HTMLSelectElement | null}
 |};
 
 export default class Select extends Component<PropsType, StateType> {
@@ -42,7 +42,7 @@ export default class Select extends Component<PropsType, StateType> {
         };
 
         view.node = {
-            select: null
+            select: React.createRef()
         };
     }
 
@@ -76,7 +76,7 @@ export default class Select extends Component<PropsType, StateType> {
         const view = this;
         const {props} = view;
 
-        const selectNode = view.node.select;
+        const selectNode = view.node.select.current;
 
         if (selectNode === null) {
             console.error('select node is not defined');
@@ -85,13 +85,6 @@ export default class Select extends Component<PropsType, StateType> {
 
         view.setState({visibleString: selectNode.value});
         props.onChange(selectNode.value);
-    };
-
-    defineRefSelect = (select: HTMLSelectElement | null) => {
-        const view = this;
-        const {node} = view;
-
-        node.select = select;
     };
 
     render(): Node {
@@ -106,7 +99,7 @@ export default class Select extends Component<PropsType, StateType> {
                     <p className={style.current_selected}>&nbsp;</p>
                 }
                 <select
-                    ref={view.defineRefSelect}
+                    ref={view.node.select}
                     onChange={view.handleOnChangeSelect}
                     onBlur={view.handleOnChangeSelect}
                     className={style.select}
