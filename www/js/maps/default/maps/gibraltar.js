@@ -1,11 +1,11 @@
 // @flow
 
+/* eslint-disable sonarjs/no-duplicate-string */
 /* eslint id-length: [ "error", { "min": 3, "max": 34, "exceptions": ["x", "y", "en", "ru"] } ] */
 
 import type {MapType} from '../../type';
 
 export const gibraltar: MapType = {
-    /* eslint-disable sonarjs/no-duplicate-string */
     meta: {
         'en-US': {
             name: 'Gibraltar'
@@ -61,5 +61,4 @@ export const gibraltar: MapType = {
         {x: 0, y: 2, type: 'saeth', userId: '3'}
     ],
     graves: []
-    /* eslint-enable sonarjs/no-duplicate-string */
 };
