@@ -115,43 +115,49 @@ export default class MapPreview extends Component<PropsType, StateType> {
 
         const userList = getDefaultUserList();
 
-        // eslint-disable-next-line complexity
-        map.buildings.forEach((building: BuildingType) => {
-            const {type} = building;
+        map.buildings
+            .sort((buildingA: BuildingType, buildingB: BuildingType): number => buildingA.type === 'castle' ? 1 : 0)
+            // eslint-disable-next-line complexity
+            .forEach((building: BuildingType) => {
+                const {type} = building;
 
-            let sprite = null;
+                let sprite = null;
 
-            if (['castle', 'farm'].includes(type)) {
-                let color = 'gray';
+                if (['castle', 'farm'].includes(type)) {
+                    let color = 'gray';
 
-                if (isString(building.userId)) {
-                    const userColor = getUserColor(building.userId, userList);
+                    if (isString(building.userId)) {
+                        const userColor = getUserColor(building.userId, userList);
 
-                    if (isString(userColor)) {
-                        color = userColor;
+                        if (isString(userColor)) {
+                            color = userColor;
+                        }
                     }
+
+                    sprite = PIXI.Sprite.fromImage(imageMap.building[type + '-' + color]);
                 }
 
-                sprite = PIXI.Sprite.fromImage(imageMap.building[type + '-' + color]);
-            }
+                if (['well', 'temple'].includes(type)) {
+                    sprite = PIXI.Sprite.fromImage(imageMap.building[type]);
+                }
 
-            if (['well', 'temple', 'farm-destroyed'].includes(type)) {
-                sprite = PIXI.Sprite.fromImage(imageMap.building[type]);
-            }
+                if (type === 'farmDestroyed') {
+                    sprite = PIXI.Sprite.fromImage(imageMap.building['farm-destroyed']);
+                }
 
-            if (sprite === null) {
-                console.error('can not detect sprite');
-                return;
-            }
+                if (sprite === null) {
+                    console.error('can not detect sprite');
+                    return;
+                }
 
-            if (type === 'castle') {
-                sprite.position.set(building.x * square, building.y * square - square);
-            } else {
-                sprite.position.set(building.x * square, building.y * square);
-            }
+                if (type === 'castle') {
+                    sprite.position.set(building.x * square, building.y * square - square);
+                } else {
+                    sprite.position.set(building.x * square, building.y * square);
+                }
 
-            buildingList.addChild(sprite);
-        });
+                buildingList.addChild(sprite);
+            });
     }
 
     drawUnitList() {

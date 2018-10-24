@@ -78,8 +78,14 @@ export default class Building {
             gameAttr.container.addChild(gameAttr.sprite.building);
         }
 
-        if (['well', 'temple', 'farm-destroyed'].includes(attr.type)) {
+        if (['well', 'temple'].includes(attr.type)) {
             gameAttr.sprite.building = PIXI.Sprite.fromImage(imageMap.building[attr.type]);
+
+            gameAttr.container.addChild(gameAttr.sprite.building);
+        }
+
+        if (attr.type === 'farmDestroyed') {
+            gameAttr.sprite.building = PIXI.Sprite.fromImage(imageMap.building['farm-destroyed']);
 
             gameAttr.container.addChild(gameAttr.sprite.building);
         }

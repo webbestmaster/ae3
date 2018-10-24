@@ -162,9 +162,11 @@ export default class Game {
         );
 
         // add buildings
-        map.buildings.forEach((buildingData: BuildingType) => {
-            game.createBuilding(buildingData);
-        });
+        map.buildings
+            .sort((buildingA: BuildingType, buildingB: BuildingType): number => buildingA.type === 'castle' ? 1 : 0)
+            .forEach((buildingData: BuildingType) => {
+                game.createBuilding(buildingData);
+            });
 
         // add units
         map.units.forEach((unitData: UnitType) => {

@@ -178,7 +178,7 @@ export const myFirstMap: MapType = {
         {
             x: 4,
             y: 3,
-            type: 'farm-destroyed'
+            type: 'farmDestroyed'
         },
         {
             x: 6,

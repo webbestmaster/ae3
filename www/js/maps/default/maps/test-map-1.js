@@ -237,10 +237,10 @@ export const testMap1: MapType = {
         {x: 10, y: 11, type: 'castle', userId: '3'},
         {x: 10, y: 9, type: 'farm', userId: '3'},
 
-        {x: 5, y: 5, type: 'farm-destroyed'},
-        {x: 6, y: 5, type: 'farm-destroyed'},
-        {x: 5, y: 7, type: 'farm-destroyed'},
-        {x: 6, y: 7, type: 'farm-destroyed'}
+        {x: 5, y: 5, type: 'farmDestroyed'},
+        {x: 6, y: 5, type: 'farmDestroyed'},
+        {x: 5, y: 7, type: 'farmDestroyed'},
+        {x: 6, y: 7, type: 'farmDestroyed'}
     ],
     units: [
         {x: 1, y: 1, type: 'galamar', userId: '0'},

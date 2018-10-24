@@ -18,25 +18,34 @@ type MapGuideType = {|
             +height: number
         |}
     |},
-
     +building: {|
         +farm: {|
+            +name: 'farm',
+            +spriteName: 'farm-gray',
             +moneyBonus: 20,
             +hitPointsBonus: 20
         |},
         +castle: {|
+            +name: 'castle',
+            +spriteName: 'castle-gray',
             +moneyBonus: 30,
             +hitPointsBonus: 30
         |},
-        +'farm-destroyed': {|
+        +farmDestroyed: {|
+            +name: 'farmDestroyed',
+            +spriteName: 'farm-destroyed',
             +moneyBonus: 0,
             +hitPointsBonus: 0
         |},
         +temple: {|
+            +name: 'temple',
+            +spriteName: 'temple',
             +moneyBonus: 0,
             +hitPointsBonus: 20
         |},
         +well: {|
+            +name: 'well',
+            +spriteName: 'well',
             +moneyBonus: 0,
             +hitPointsBonus: 20
         |}
@@ -82,14 +91,6 @@ const mapGuide: MapGuideType = {
     defaultMoneyList: [500, 1000, 2000, 5000],
     defaultUnitLimitList: [10, 15, 20, 25, 50, 99],
 
-    /*
-    userIdList: [
-        '0',
-        '1',
-        '2',
-        '3'
-    ],
-    */
     teamIdList: ['team-0', 'team-1', 'team-2', 'team-3'],
     colorList: ['red', 'blue', 'green', 'black'],
     size: {
@@ -103,22 +104,32 @@ const mapGuide: MapGuideType = {
     },
     building: {
         farm: {
+            name: 'farm',
+            spriteName: 'farm-gray',
             moneyBonus: 20,
             hitPointsBonus: 20
         },
         castle: {
+            name: 'castle',
+            spriteName: 'castle-gray',
             moneyBonus: 30,
             hitPointsBonus: 30
         },
-        'farm-destroyed': {
+        farmDestroyed: {
+            name: 'farmDestroyed',
+            spriteName: 'farm-destroyed',
             moneyBonus: 0,
             hitPointsBonus: 0
         },
         temple: {
+            name: 'temple',
+            spriteName: 'temple',
             moneyBonus: 0,
             hitPointsBonus: 20
         },
         well: {
+            name: 'well',
+            spriteName: 'well',
             moneyBonus: 0,
             hitPointsBonus: 20
         }

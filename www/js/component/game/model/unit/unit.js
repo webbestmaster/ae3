@@ -102,7 +102,7 @@ export type UnitActionDestroyBuildingType = {|
     building: {|
         x: number,
         y: number,
-        type: 'farm-destroyed',
+        type: 'farmDestroyed',
         id: string
     |},
     userId: string,
@@ -568,7 +568,7 @@ export default class Unit {
         const unitX = attr.x;
         const unitY = attr.y;
 
-        const building = find(gameData.buildingList, {attr: {type: 'farm-destroyed', x: unitX, y: unitY}}) || null;
+        const building = find(gameData.buildingList, {attr: {type: 'farmDestroyed', x: unitX, y: unitY}}) || null;
 
         if (building === null) {
             return [];
@@ -743,7 +743,7 @@ export default class Unit {
                 building: {
                     x: building.attr.x,
                     y: building.attr.y,
-                    type: 'farm-destroyed',
+                    type: 'farmDestroyed',
                     id: isString(building.attr.id) ? building.attr.id : 'no-building-id-' + Math.random()
                 },
                 destroyer: {

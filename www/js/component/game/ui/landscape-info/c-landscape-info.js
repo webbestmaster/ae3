@@ -64,7 +64,7 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
         );
     }
 
-    // eslint-disable-next-line complexity
+    // eslint-disable-next-line complexity, max-statements
     getImageSrc(): string {
         const view = this;
         const {props} = view;
@@ -79,8 +79,12 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
         const buildingAttr = buildingOnPlace.attr;
         const buildingType = buildingAttr.type;
 
-        if (['farm-destroyed', 'well', 'temple'].includes(buildingType)) {
+        if (['well', 'temple'].includes(buildingType)) {
             return imageMap.building[buildingType];
+        }
+
+        if (buildingType === 'farmDestroyed') {
+            return imageMap.building['farm-destroyed'];
         }
 
         const buildingUserId = buildingAttr.userId;

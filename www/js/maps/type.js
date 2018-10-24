@@ -22,7 +22,7 @@ export type LandscapeType =
     | 'water-1'
     | 'water-2';
 
-export type BuildingAttrTypeType = 'castle' | 'farm' | 'farm-destroyed' | 'well' | 'temple';
+export type BuildingAttrTypeType = 'castle' | 'farm' | 'farmDestroyed' | 'well' | 'temple';
 
 export type BuildingType = {|
     x: number,

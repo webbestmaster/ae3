@@ -36,6 +36,7 @@ import iconUnitInfoMove from './i/icon-unit-info-move.png';
 import iconUnitInfoDefence from './i/icon-unit-info-defence.png';
 import iconUnitInfoDescription from './i/icon-unit-info-description.png';
 import iconUnitInfoDescriptionOpen from './i/icon-unit-info-description-open.png';
+import mapGuide from '../../../maps/map-guide';
 
 type ReduxPropsType = {|
     +locale: LocaleType
@@ -88,7 +89,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
             mapUserData: find(props.mapState.userList, {userId: user.getId()}) || {
                 userId: 'no-user-id-in-store',
                 money: 0,
-                teamId: 'team-0'
+                teamId: mapGuide.teamIdList[0]
             },
             isInProgress: false,
             isFullInfoShow: false
