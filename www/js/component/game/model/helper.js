@@ -411,12 +411,12 @@ export function countHealHitPointOnBuilding(newMap: MapType, mapUnit: UnitType):
     const buildingType = building.type;
     let additionalHitPoints = 0;
 
-    if (['well', 'temple'].includes(buildingType)) {
+    if ([mapGuide.building.well.name, mapGuide.building.temple.name].includes(buildingType)) {
         additionalHitPoints = mapGuide.building[buildingType].hitPointsBonus;
     }
 
     if (
-        ['farm', 'castle'].includes(buildingType) &&
+        [mapGuide.building.farm.name, mapGuide.building.castle.name].includes(buildingType) &&
         isString(building.userId) &&
         isString(mapUnit.userId) &&
         building.userId === mapUnit.userId
@@ -469,7 +469,8 @@ export function isCommanderLive(userId: string, map: MapType): boolean {
 
 export function hasCastle(userId: string, map: MapType): boolean {
     return map.buildings.some(
-        (mapBuilding: BuildingType): boolean => mapBuilding.userId === userId && mapBuilding.type === 'castle'
+        (mapBuilding: BuildingType): boolean =>
+            mapBuilding.userId === userId && mapBuilding.type === mapGuide.building.castle.name
     );
 }
 

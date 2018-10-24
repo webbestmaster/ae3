@@ -1,6 +1,7 @@
 // @flow
 
 import type {LangKeyType} from '../../../locale/translation/type';
+import mapGuide from '../../../../maps/map-guide';
 
 export type UnitTypeCommonType =
     | 'soldier'
@@ -77,7 +78,7 @@ const unitData: GuideUnitDataType = {
         cost: 150,
 
         canFixBuilding: true,
-        occupyBuildingList: ['farm']
+        occupyBuildingList: [mapGuide.building.farm.name]
     },
     archer: {
         attack: {
@@ -195,7 +196,7 @@ const unitData: GuideUnitDataType = {
         canBeBuy: true,
         cost: 700,
 
-        destroyBuildingList: ['farm']
+        destroyBuildingList: [mapGuide.building.farm.name]
     },
     dragon: {
         attack: {
@@ -261,7 +262,7 @@ const unitData: GuideUnitDataType = {
 
         withoutGrave: true,
         canFixBuilding: true,
-        occupyBuildingList: ['farm', 'castle'],
+        occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true
     },
     valadorn: {
@@ -281,7 +282,7 @@ const unitData: GuideUnitDataType = {
 
         withoutGrave: true,
         canFixBuilding: true,
-        occupyBuildingList: ['farm', 'castle'],
+        occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true
     },
     'demon-lord': {
@@ -301,7 +302,7 @@ const unitData: GuideUnitDataType = {
 
         withoutGrave: true,
         canFixBuilding: true,
-        occupyBuildingList: ['farm', 'castle'],
+        occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true
     },
     saeth: {
@@ -321,7 +322,7 @@ const unitData: GuideUnitDataType = {
 
         withoutGrave: true,
         canFixBuilding: true,
-        occupyBuildingList: ['farm', 'castle'],
+        occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true
     },
     'saeth-heavens-fury': {

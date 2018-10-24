@@ -116,14 +116,17 @@ export default class MapPreview extends Component<PropsType, StateType> {
         const userList = getDefaultUserList();
 
         map.buildings
-            .sort((buildingA: BuildingType, buildingB: BuildingType): number => buildingA.type === 'castle' ? 1 : 0)
+            .sort(
+                (buildingA: BuildingType, buildingB: BuildingType): number =>
+                    buildingA.type === mapGuide.building.castle.name ? 1 : 0
+            )
             // eslint-disable-next-line complexity
             .forEach((building: BuildingType) => {
                 const {type} = building;
 
                 let sprite = null;
 
-                if (['castle', 'farm'].includes(type)) {
+                if ([mapGuide.building.castle.name, mapGuide.building.farm.name].includes(type)) {
                     let color = 'gray';
 
                     if (isString(building.userId)) {
@@ -137,12 +140,14 @@ export default class MapPreview extends Component<PropsType, StateType> {
                     sprite = PIXI.Sprite.fromImage(imageMap.building[type + '-' + color]);
                 }
 
-                if (['well', 'temple'].includes(type)) {
-                    sprite = PIXI.Sprite.fromImage(imageMap.building[type]);
-                }
-
-                if (type === 'farmDestroyed') {
-                    sprite = PIXI.Sprite.fromImage(imageMap.building['farm-destroyed']);
+                if (
+                    [
+                        mapGuide.building.well.name,
+                        mapGuide.building.temple.name,
+                        mapGuide.building.farmDestroyed.name
+                    ].includes(type)
+                ) {
+                    sprite = PIXI.Sprite.fromImage(imageMap.building[mapGuide.building[type].spriteName]);
                 }
 
                 if (sprite === null) {
@@ -150,7 +155,7 @@ export default class MapPreview extends Component<PropsType, StateType> {
                     return;
                 }
 
-                if (type === 'castle') {
+                if (type === mapGuide.building.castle.name) {
                     sprite.position.set(building.x * square, building.y * square - square);
                 } else {
                     sprite.position.set(building.x * square, building.y * square);

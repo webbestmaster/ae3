@@ -163,7 +163,10 @@ export default class Game {
 
         // add buildings
         map.buildings
-            .sort((buildingA: BuildingType, buildingB: BuildingType): number => buildingA.type === 'castle' ? 1 : 0)
+            .sort(
+                (buildingA: BuildingType, buildingB: BuildingType): number =>
+                    buildingA.type === mapGuide.building.castle.name ? 1 : 0
+            )
             .forEach((buildingData: BuildingType) => {
                 game.createBuilding(buildingData);
             });
@@ -1330,7 +1333,7 @@ export default class Game {
 
                 await game.render.cleanActionsList();
 
-                if (building.attr.type !== 'castle') {
+                if (building.attr.type !== mapGuide.building.castle.name) {
                     console.log('NOT a castle');
                     return;
                 }
@@ -1815,7 +1818,7 @@ export default class Game {
         fixerUnit.action = fixerUnit.action || {};
         fixerUnit.action.didFixBuilding = true;
 
-        building.type = 'farm';
+        building.type = mapGuide.building.farm.name;
 
         game.gameView.addDisableReason('client-push-state');
 

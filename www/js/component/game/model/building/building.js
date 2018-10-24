@@ -56,13 +56,13 @@ export default class Building {
         const {attr, gameAttr} = building;
         const {square} = mapGuide.size;
 
-        if (attr.type === 'castle') {
+        if (attr.type === mapGuide.building.castle.name) {
             gameAttr.container.position.set(attr.x * square, attr.y * square - square);
         } else {
             gameAttr.container.position.set(attr.x * square, attr.y * square);
         }
 
-        if (['castle', 'farm'].includes(attr.type)) {
+        if ([mapGuide.building.castle.name, mapGuide.building.farm.name].includes(attr.type)) {
             let color = 'gray';
 
             if (isString(attr.userId)) {
@@ -78,14 +78,14 @@ export default class Building {
             gameAttr.container.addChild(gameAttr.sprite.building);
         }
 
-        if (['well', 'temple'].includes(attr.type)) {
-            gameAttr.sprite.building = PIXI.Sprite.fromImage(imageMap.building[attr.type]);
-
-            gameAttr.container.addChild(gameAttr.sprite.building);
-        }
-
-        if (attr.type === 'farmDestroyed') {
-            gameAttr.sprite.building = PIXI.Sprite.fromImage(imageMap.building['farm-destroyed']);
+        if (
+            [mapGuide.building.well.name, mapGuide.building.temple.name, mapGuide.building.farmDestroyed.name].includes(
+                attr.type
+            )
+        ) {
+            gameAttr.sprite.building = PIXI.Sprite.fromImage(
+                imageMap.building[mapGuide.building[attr.type].spriteName]
+            );
 
             gameAttr.container.addChild(gameAttr.sprite.building);
         }
@@ -100,7 +100,7 @@ export default class Building {
         gameAttr.container.buttonMode = true;
 
         gameAttr.container.hitArea =
-            attr.type === 'castle' ?
+            attr.type === mapGuide.building.castle.name ?
                 new PIXI.Rectangle(0, square, square, square) :
                 new PIXI.Rectangle(0, 0, square, square);
     }

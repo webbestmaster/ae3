@@ -14,6 +14,7 @@ import imageMap from '../../image/image-map';
 import armorImage from './i/armor.png';
 import {isNotString} from '../../../../lib/is/is';
 import {getUserColor} from '../../model/helper';
+import mapGuide from '../../../../maps/map-guide';
 
 type StateType = {};
 type PropsType = {|
@@ -79,17 +80,17 @@ export default class LandscapeInfo extends Component<PropsType, StateType> {
         const buildingAttr = buildingOnPlace.attr;
         const buildingType = buildingAttr.type;
 
-        if (['well', 'temple'].includes(buildingType)) {
-            return imageMap.building[buildingType];
-        }
-
-        if (buildingType === 'farmDestroyed') {
-            return imageMap.building['farm-destroyed'];
+        if (
+            [mapGuide.building.well.name, mapGuide.building.temple.name, mapGuide.building.farmDestroyed.name].includes(
+                buildingType
+            )
+        ) {
+            return imageMap.building[mapGuide.building[buildingType].spriteName];
         }
 
         const buildingUserId = buildingAttr.userId;
 
-        const castlePostfix = buildingType === 'castle' ? '-square' : '';
+        const castlePostfix = buildingType === mapGuide.building.castle.name ? '-square' : '';
 
         if (isNotString(buildingUserId)) {
             return imageMap.building[buildingType + '-gray' + castlePostfix];

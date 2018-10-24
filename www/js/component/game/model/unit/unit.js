@@ -667,7 +667,9 @@ export default class Unit {
         const unitX = attr.x;
         const unitY = attr.y;
 
-        const building = find(gameData.buildingList, {attr: {x: unitX, y: unitY, type: 'castle', userId}}) || null;
+        const building =
+            find(gameData.buildingList, {attr: {x: unitX, y: unitY, type: mapGuide.building.castle.name, userId}}) ||
+            null;
 
         if (building === null) {
             return null;
