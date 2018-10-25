@@ -491,9 +491,9 @@ export default class Render {
         const render = this;
 
         const attackSprite = new PIXI.extras.AnimatedSprite(
-            [0, 1, 2, 3].map(
+            [0, 1, 2, 3, 4, 5].map(
                 (spriteNumber: number): PIXI.Texture => {
-                    return PIXI.Texture.fromImage(imageMap.other[`action-attack-${spriteNumber}`]);
+                    return PIXI.Texture.fromImage(imageMap.other[`animation-action-attack-${spriteNumber}`]);
                 }
             )
         );
@@ -520,9 +520,9 @@ export default class Render {
         const render = this;
 
         const attackSprite = new PIXI.extras.AnimatedSprite(
-            [0, 1, 2, 3].map(
+            [0, 1, 2, 3, 4, 5].map(
                 (spriteNumber: number): PIXI.Texture => {
-                    return PIXI.Texture.fromImage(imageMap.other[`action-attack-${spriteNumber}`]);
+                    return PIXI.Texture.fromImage(imageMap.other[`animation-action-attack-${spriteNumber}`]);
                 }
             )
         );
