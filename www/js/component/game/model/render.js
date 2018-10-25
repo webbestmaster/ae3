@@ -488,25 +488,19 @@ export default class Render {
     }
 
     async drawAttack(aggressorUnit: Unit, defenderUnit: Unit): Promise<void> {
-        // TODO: DO NOT set HP here - do it in handleServerPushStateAttack
         const render = this;
-        // const state = message.states.last.state;
 
-        /*
-        if (state.type !== 'attack') {
-            console.error('here is should be a ATTACK type');
-            return Promise.resolve();
-        }
-        */
+        const attackSprite = new PIXI.extras.AnimatedSprite(
+            [0, 1, 2, 3].map(
+                (spriteNumber: number): PIXI.Texture => {
+                    return PIXI.Texture.fromImage(imageMap.other[`action-attack-${spriteNumber}`]);
+                }
+            )
+        );
 
-        /*
-        if (!state.aggressor || !state.defender) {
-            console.error('no aggressor or defender', state);
-            return Promise.resolve();
-        }
-        */
+        attackSprite.animationSpeed = defaultUnitData.render.spriteAnimatedSpeed;
 
-        const attackSprite = PIXI.Sprite.fromImage(imageMap.other['action-attack-1']);
+        attackSprite.play();
 
         render.layer.actions.addChild(attackSprite);
 
@@ -520,14 +514,22 @@ export default class Render {
         );
 
         render.layer.actions.removeChild(attackSprite);
-
-        return Promise.resolve();
     }
 
     async drawBuildingAttack(destroyerUnit: Unit, building: Building): Promise<void> {
         const render = this;
 
-        const attackSprite = PIXI.Sprite.fromImage(imageMap.other['action-destroy-building-0']);
+        const attackSprite = new PIXI.extras.AnimatedSprite(
+            [0, 1, 2, 3].map(
+                (spriteNumber: number): PIXI.Texture => {
+                    return PIXI.Texture.fromImage(imageMap.other[`action-attack-${spriteNumber}`]);
+                }
+            )
+        );
+
+        attackSprite.animationSpeed = defaultUnitData.render.spriteAnimatedSpeed;
+
+        attackSprite.play();
 
         render.layer.actions.addChild(attackSprite);
 
@@ -541,8 +543,6 @@ export default class Render {
         );
 
         render.layer.actions.removeChild(attackSprite);
-
-        return Promise.resolve();
     }
 
     // eslint-disable-next-line max-statements
