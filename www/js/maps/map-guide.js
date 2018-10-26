@@ -10,7 +10,10 @@ type MapGuideType = {|
     +teamIdList: ['team-0', 'team-1', 'team-2', 'team-3'],
     +colorList: ['red', 'blue', 'green', 'black'],
     +size: {|
-        +square: number
+        +square: number,
+        +attackAnimation: {|
+            +square: number
+        |}
     |},
     +font: {|
         +unit: {|
@@ -94,7 +97,10 @@ const mapGuide: MapGuideType = {
     teamIdList: ['team-0', 'team-1', 'team-2', 'team-3'],
     colorList: ['red', 'blue', 'green', 'black'],
     size: {
-        square: 24
+        square: 24,
+        attackAnimation: {
+            square: 20
+        }
     },
     font: {
         unit: {

@@ -487,7 +487,8 @@ export default class Render {
         render.layer.actions.removeChildren();
     }
 
-    async drawAttack(aggressorUnit: Unit, defenderUnit: Unit): Promise<void> {
+    async drawAttack(aggressorUnit: Unit, defenderUnit: Unit | Building): Promise<void> {
+        const deltaPosition = (mapGuide.size.square - mapGuide.size.attackAnimation.square) / 2;
         const render = this;
 
         const attackSprite = new PIXI.extras.AnimatedSprite(
@@ -507,9 +508,12 @@ export default class Render {
         await tween(
             {x: aggressorUnit.attr.x, y: aggressorUnit.attr.y},
             {x: defenderUnit.attr.x, y: defenderUnit.attr.y},
-            defaultUnitData.animation.attack,
+            defaultUnitData.animation.attack * 10,
             (coordinates: {x: number, y: number}) => {
-                attackSprite.position.set(coordinates.x * mapGuide.size.square, coordinates.y * mapGuide.size.square);
+                attackSprite.position.set(
+                    coordinates.x * mapGuide.size.square + deltaPosition,
+                    coordinates.y * mapGuide.size.square + deltaPosition
+                );
             }
         );
 
@@ -519,30 +523,7 @@ export default class Render {
     async drawBuildingAttack(destroyerUnit: Unit, building: Building): Promise<void> {
         const render = this;
 
-        const attackSprite = new PIXI.extras.AnimatedSprite(
-            [0, 1, 2, 3, 4, 5].map(
-                (spriteNumber: number): PIXI.Texture => {
-                    return PIXI.Texture.fromImage(imageMap.other[`animation-action-attack-${spriteNumber}`]);
-                }
-            )
-        );
-
-        attackSprite.animationSpeed = defaultUnitData.render.spriteAnimatedSpeed;
-
-        attackSprite.play();
-
-        render.layer.actions.addChild(attackSprite);
-
-        await tween(
-            {x: destroyerUnit.attr.x, y: destroyerUnit.attr.y},
-            {x: building.attr.x, y: building.attr.y},
-            defaultUnitData.animation.attack,
-            (coordinates: {x: number, y: number}) => {
-                attackSprite.position.set(coordinates.x * mapGuide.size.square, coordinates.y * mapGuide.size.square);
-            }
-        );
-
-        render.layer.actions.removeChild(attackSprite);
+        await render.drawAttack(destroyerUnit, building);
     }
 
     // eslint-disable-next-line max-statements
