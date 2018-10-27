@@ -102,7 +102,7 @@ type AttrType = {|
     model: MainModel
 |};
 
-export default class Socket {
+export class Socket {
     attr: AttrType;
 
     constructor() {
