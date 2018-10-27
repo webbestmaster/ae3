@@ -9,7 +9,7 @@ export type AppConstType = {|
 
 const {hostname, origin} = window.location;
 
-const appConst: AppConstType = {
+export const appConst: AppConstType = {
     api: {
         // eslint-disable-next-line id-match
         // url: IS_PRODUCTION ? origin : 'http://' + hostname + ':3001'
@@ -17,5 +17,3 @@ const appConst: AppConstType = {
         url: IS_PRODUCTION ? origin : 'http://aefree.herokuapp.com'
     }
 };
-
-export default appConst;
