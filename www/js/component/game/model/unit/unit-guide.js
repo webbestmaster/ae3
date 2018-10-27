@@ -1,7 +1,7 @@
 // @flow
 
 import type {LangKeyType} from '../../../locale/translation/type';
-import mapGuide from '../../../../maps/map-guide';
+import {mapGuide} from '../../../../maps/map-guide';
 
 export type UnitTypeCommonType =
     | 'soldier'

@@ -233,6 +233,7 @@ const webpackConfig = {
             warning: path.resolve(CWD, 'node_modules/warning'),
             lodash: path.resolve(CWD, 'node_modules/lodash'),
             isarray: path.resolve(CWD, 'node_modules/isarray'),
+            'hoist-non-react-statics': path.resolve(CWD, 'node_modules//hoist-non-react-statics'),
             '@babel/runtime': path.resolve(CWD, 'node_modules/@babel/runtime')
         }
     },

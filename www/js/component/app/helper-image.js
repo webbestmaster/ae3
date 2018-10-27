@@ -3,7 +3,7 @@
 /* global window, document, fetch, URL, IS_PRODUCTION */
 
 import * as PIXI from 'pixi.js';
-import Queue from '../../lib/queue/queue';
+import {Queue} from '../../lib/queue/queue';
 import type {LoadAppPassedMethodMapType} from '../app-loader/c-app-loader';
 import {loadSteps} from './helper';
 

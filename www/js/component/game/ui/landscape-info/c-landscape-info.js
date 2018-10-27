@@ -14,7 +14,7 @@ import imageMap from '../../image/image-map';
 import armorImage from './i/armor.png';
 import {isNotString} from '../../../../lib/is/is';
 import {getUserColor} from '../../model/helper';
-import mapGuide from '../../../../maps/map-guide';
+import {mapGuide} from '../../../../maps/map-guide';
 
 type StateType = {};
 type PropsType = {|

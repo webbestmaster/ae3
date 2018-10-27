@@ -3,10 +3,10 @@
 import {roomMaster} from '../../../room/master';
 import {LocalExpressRequest} from '../../../local-express/request';
 import {LocalExpressResponse} from '../../../local-express/response';
-import error from '../error-data';
-import messageConst from '../../../room/message-data';
+import {error} from '../error';
+import {messageConst} from '../../../room/message-const';
 
-export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
+export function makeUser(req: LocalExpressRequest, res: LocalExpressResponse) {
     const {params} = req;
     const {type, roomId} = params;
 
@@ -41,4 +41,4 @@ export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
             message: error.WRONG_PARAMETERS.message.replace('{{params}}', JSON.stringify(params))
         }
     });
-};
+}

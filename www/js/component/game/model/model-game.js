@@ -8,7 +8,7 @@ import type {BuildingType, GraveType, LandscapeType, MapType, MapUserType, UnitT
 import {unitActionStateDefaultValue} from '../../../maps/type';
 import type {AllRoomSettingsType, ServerUserType} from '../../../module/server-api';
 import * as serverApi from '../../../module/server-api';
-import mapGuide from '../../../maps/map-guide';
+import {mapGuide} from '../../../maps/map-guide';
 import type {WrongStateType, WrongStateTypeUnitOnUnitType} from './helper';
 import {
     bindClick,
@@ -48,7 +48,7 @@ import * as unitMaster from './unit/master';
 import {defaultUnitData} from './unit/unit-guide';
 import {bottomBarData, GameView} from '../c-game';
 import {storeViewId} from '../../store/c-store';
-import Queue from '../../../lib/queue/queue';
+import {Queue} from '../../../lib/queue/queue';
 // import {storeAction} from '../../store/provider';
 import {localSocketIoClient} from '../../../module/socket-local';
 import {isNotFunction, isNotNumber, isNotString, isNumber, isString} from '../../../lib/is/is';

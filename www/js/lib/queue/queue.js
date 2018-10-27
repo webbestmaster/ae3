@@ -14,7 +14,7 @@ function requestIdleCallbackPolyfill(callback: () => {}) {
 
 window.requestIdleCallback = window.requestIdleCallback || requestIdleCallbackPolyfill;
 
-export default class Queue {
+export class Queue {
     list: Array<CallBackType>;
     isInProgress: boolean;
 

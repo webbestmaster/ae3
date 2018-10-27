@@ -1,7 +1,7 @@
 // @flow
 
 import Stopwatch from 'timer-stopwatch';
-import roomConfig from './config-data.js';
+import {roomConfig} from './room-config';
 import {Room} from './room';
 
 const timersConfig = roomConfig.timers;

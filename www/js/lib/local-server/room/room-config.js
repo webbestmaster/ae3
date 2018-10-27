@@ -1,6 +1,6 @@
 // @flow
 
-export default {
+export const roomConfig = {
     timers: {
         onCreateRoom: {
             time: 5e3

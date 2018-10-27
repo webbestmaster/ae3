@@ -22,7 +22,7 @@ import {socket, type SocketMessageType} from '../../module/socket';
 import Game from '../../component/game/c-game';
 import type {AllRoomSettingsType, ServerUserType} from '../../module/server-api';
 import * as serverApi from '../../module/server-api';
-import mapGuide from '../../maps/map-guide';
+import {mapGuide} from '../../maps/map-guide';
 import {getCommanderDataByUserIndex, getMapSize, isOnLineRoomType} from '../../component/game/model/helper';
 import type {BuildingType, MapUserType, UnitType} from '../../maps/type';
 

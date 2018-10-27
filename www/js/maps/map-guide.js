@@ -90,7 +90,7 @@ type MapGuideType = {|
     |}
 |};
 
-const mapGuide: MapGuideType = {
+export const mapGuide: MapGuideType = {
     defaultMoneyList: [500, 1000, 2000, 5000],
     defaultUnitLimitList: [10, 15, 20, 25, 50, 99],
 
@@ -176,5 +176,3 @@ const mapGuide: MapGuideType = {
         armor: 15
     }
 };
-
-export default mapGuide;

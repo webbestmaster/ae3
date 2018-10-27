@@ -1,6 +1,6 @@
 // @flow
 
-export default {
+export const error = {
     // eslint-disable-next-line id-match
     ROOM_NOT_FOUND: {
         id: '0001',

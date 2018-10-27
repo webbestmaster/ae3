@@ -5,7 +5,7 @@ import {myFirstMap} from './maps/my-first-map';
 import {gibraltar} from './maps/gibraltar';
 import {allBuildings} from './maps/all-buildings';
 
-export default {
+export const mapHash = {
     testMap1,
     myFirstMap,
     gibraltar,

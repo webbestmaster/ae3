@@ -3,9 +3,9 @@
 import {roomMaster} from '../../../room/master';
 import {LocalExpressRequest} from '../../../local-express/request';
 import {LocalExpressResponse} from '../../../local-express/response';
-import error from '../error-data';
+import {error} from '../error';
 
-export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
+export function getAllStates(req: LocalExpressRequest, res: LocalExpressResponse) {
     const {params} = req;
     const {roomId} = params;
 
@@ -27,4 +27,4 @@ export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
         roomId,
         states
     });
-};
+}

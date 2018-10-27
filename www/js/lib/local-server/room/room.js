@@ -7,7 +7,7 @@ import {RoomConnection} from './room-connection/room-connection';
 import {Server} from '../server/server';
 import find from 'lodash/find';
 import sha1 from 'sha1';
-import messageConst from './message-data.js';
+import {messageConst} from './message-const';
 import {bindTimers} from './private';
 import Stopwatch from 'timer-stopwatch';
 

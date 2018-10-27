@@ -2,8 +2,8 @@
 
 /* eslint consistent-this: ["error", "roomConnection"] */
 
-import messageConst from '../message-data';
-import roomConfig from '../config-data';
+import {messageConst} from '../message-const';
+import {roomConfig} from '../room-config';
 import Stopwatch from 'timer-stopwatch';
 import {Server} from '../../server/server';
 import {Room} from '../room';

@@ -1,6 +1,6 @@
 // @flow
 
-export default {
+export const messageConst = {
     type: {
         joinIntoRoom: 'room__join-into-room',
         leaveFromRoom: 'room__leave-from-room',

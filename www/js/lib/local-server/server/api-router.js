@@ -3,27 +3,27 @@ import {Server} from './server';
 import {LocalExpressRequest} from '../local-express/request';
 import {LocalExpressResponse} from '../local-express/response';
 
-import apiRoomCreate from './api/room/create';
-import apiRoomGetIds from './api/room/get-ids';
+import {create} from './api/room/create';
+import {getIds} from './api/room/get-ids';
 
-import apiRoomJoin from './api/room/join';
-import apiRoomMakeUser from './api/room/make-user';
-import apiRoomLeave from './api/room/leave';
+import {join} from './api/room/join';
+import {makeUser} from './api/room/make-user';
+import {leave} from './api/room/leave';
 
-import apiRoomDropTurn from './api/room/drop-turn';
-import apiRoomTakeTurn from './api/room/take-turn';
+import {dropTurn} from './api/room/drop-turn';
+import {takeTurn} from './api/room/take-turn';
 
-import apiRoomGetUsers from './api/room/get-users';
-import apiRoomPushState from './api/room/push-state';
-import apiGetLastStates from './api/room/get-last-states';
+import {getUsers} from './api/room/get-users';
+import {pushState} from './api/room/push-state';
+import {getLastStates} from './api/room/get-last-states';
 
-import apiGetAllSettings from './api/room/get-all-settings';
-import apiGetSetting from './api/room/get-setting';
-import apiSetAllSettings from './api/room/set-all-settings';
-import apiSetSetting from './api/room/set-setting';
+import {getAllSettings} from './api/room/get-all-settings';
+import {getSetting} from './api/room/get-setting';
+import {setAllSettings} from './api/room/set-all-settings';
+import {setSetting} from './api/room/set-setting';
 
-import apiGetAllStates from './api/room/get-all-states';
-import apiGetStatesFromHash from './api/room/get-states-from-hash';
+import {getAllStates} from './api/room/get-all-states';
+import {getStatesFromHash} from './api/room/get-states-from-hash';
 
 export const apiRouter = {
     bindRoutes: (server: Server) => {
@@ -44,82 +44,82 @@ export const apiRouter = {
          * create room
          */
         expressApp.get('/api/room/create', (req: LocalExpressRequest, res: LocalExpressResponse) => {
-            apiRoomCreate(req, res, server);
+            create(req, res, server);
         });
 
         /**
          * get room ids
          */
-        expressApp.get('/api/room/get-ids', apiRoomGetIds);
+        expressApp.get('/api/room/get-ids', getIds);
 
         /**
          * join to room
          */
-        expressApp.get('/api/room/join/:roomId/:userId/:socketId', apiRoomJoin);
+        expressApp.get('/api/room/join/:roomId/:userId/:socketId', join);
 
         /**
          * make human or bot
          */
-        expressApp.get('/api/room/make/:type/:roomId', apiRoomMakeUser);
+        expressApp.get('/api/room/make/:type/:roomId', makeUser);
 
         /**
          * leave to room
          */
-        expressApp.get('/api/room/leave/:roomId/:userId', apiRoomLeave);
+        expressApp.get('/api/room/leave/:roomId/:userId', leave);
 
         /**
          * take a turn
          */
-        expressApp.get('/api/room/take-turn/:roomId/:userId', apiRoomTakeTurn);
+        expressApp.get('/api/room/take-turn/:roomId/:userId', takeTurn);
 
         /**
          * drop a turn
          */
-        expressApp.get('/api/room/drop-turn/:roomId/:userId', apiRoomDropTurn);
+        expressApp.get('/api/room/drop-turn/:roomId/:userId', dropTurn);
 
         /**
          * get users
          */
-        expressApp.get('/api/room/get-users/:roomId', apiRoomGetUsers);
+        expressApp.get('/api/room/get-users/:roomId', getUsers);
 
         /**
          * push a state
          */
-        expressApp.post('/api/room/push-state/:roomId/:userId', apiRoomPushState);
+        expressApp.post('/api/room/push-state/:roomId/:userId', pushState);
 
         /**
          * get last states
          */
-        expressApp.get('/api/room/get-last-states/:roomId/:count', apiGetLastStates);
+        expressApp.get('/api/room/get-last-states/:roomId/:count', getLastStates);
 
         /**
          * get states from hash
          */
-        expressApp.get('/api/room/get-states-from-hash/:roomId/:hash', apiGetStatesFromHash);
+        expressApp.get('/api/room/get-states-from-hash/:roomId/:hash', getStatesFromHash);
 
         /**
          * get all states
          */
-        expressApp.get('/api/room/get-all-states/:roomId', apiGetAllStates);
+        expressApp.get('/api/room/get-all-states/:roomId', getAllStates);
 
         /**
          * get all settings
          */
-        expressApp.get('/api/room/get-all-settings/:roomId', apiGetAllSettings);
+        expressApp.get('/api/room/get-all-settings/:roomId', getAllSettings);
 
         /**
          * get setting by key
          */
-        expressApp.get('/api/room/get-setting/:roomId/:key', apiGetSetting);
+        expressApp.get('/api/room/get-setting/:roomId/:key', getSetting);
 
         /**
          * set all settings
          */
-        expressApp.post('/api/room/set-all-settings/:roomId', apiSetAllSettings);
+        expressApp.post('/api/room/set-all-settings/:roomId', setAllSettings);
 
         /**
          * set setting by {key: value}
          */
-        expressApp.post('/api/room/set-setting/:roomId', apiSetSetting);
+        expressApp.post('/api/room/set-setting/:roomId', setSetting);
     }
 };

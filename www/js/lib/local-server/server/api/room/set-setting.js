@@ -3,9 +3,9 @@
 import {roomMaster} from '../../../room/master';
 import {LocalExpressRequest} from '../../../local-express/request';
 import {LocalExpressResponse} from '../../../local-express/response';
-import error from '../error-data';
+import {error} from '../error';
 
-export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
+export function setSetting(req: LocalExpressRequest, res: LocalExpressResponse) {
     const {params, body} = req;
     const {roomId} = params;
 
@@ -26,4 +26,4 @@ export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
     res.json({
         roomId
     });
-};
+}

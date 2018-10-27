@@ -6,7 +6,7 @@
 
 import * as PIXI from 'pixi.js';
 import type {LandscapeType, MapType} from '../../../maps/type';
-import mapGuide from '../../../maps/map-guide';
+import {mapGuide} from '../../../maps/map-guide';
 import imageMap from '../image/image-map';
 import Unit, {
     type UnitActionAttackType,

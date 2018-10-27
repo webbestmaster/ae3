@@ -36,7 +36,7 @@ import iconUnitInfoMove from './i/icon-unit-info-move.png';
 import iconUnitInfoDefence from './i/icon-unit-info-defence.png';
 import iconUnitInfoDescription from './i/icon-unit-info-description.png';
 import iconUnitInfoDescriptionOpen from './i/icon-unit-info-description-open.png';
-import mapGuide from '../../../maps/map-guide';
+import {mapGuide} from '../../../maps/map-guide';
 
 type ReduxPropsType = {|
     +locale: LocaleType

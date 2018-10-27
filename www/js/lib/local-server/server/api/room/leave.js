@@ -3,10 +3,10 @@
 import {roomMaster} from '../../../room/master';
 import {LocalExpressRequest} from '../../../local-express/request';
 import {LocalExpressResponse} from '../../../local-express/response';
-import error from '../error-data';
-import messageConst from '../../../room/message-data';
+import {error} from '../error';
+import {messageConst} from '../../../room/message-const';
 
-export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
+export function leave(req: LocalExpressRequest, res: LocalExpressResponse) {
     const {params} = req;
     const {roomId, userId} = params;
 
@@ -29,4 +29,4 @@ export default (req: LocalExpressRequest, res: LocalExpressResponse) => {
         roomId,
         userId
     });
-};
+}
