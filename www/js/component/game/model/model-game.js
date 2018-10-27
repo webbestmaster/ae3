@@ -22,8 +22,8 @@ import {
     procedureMakeGraveForMapUnit
 } from './helper';
 import {Render} from './render';
-import Building from './building/building';
-import Grave from './grave/grave';
+import {Building} from './building/building';
+import {Grave} from './grave/grave';
 import type {
     GameDataType,
     UnitActionAttackType,

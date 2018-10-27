@@ -10,13 +10,13 @@ import {mapGuide} from '../../../../maps/map-guide';
 import type {UnitDataType} from './unit-guide';
 import {unitGuideData, defaultUnitData} from './unit-guide';
 import {imageMap} from '../../image/image-map';
-import Building from '../building/building';
+import {Building} from '../building/building';
 import type {AvailablePathMapType} from './path-master';
 import {getPath} from './path-master';
 import type {PathType, PointType} from '../../../../lib/a-star-finder/a-star-finder';
 import {tweenList} from '../../../../lib/tween/tween';
 import find from 'lodash/find';
-import Grave from '../grave/grave';
+import {Grave} from '../grave/grave';
 import {fillActionMap} from './helper';
 import {isNotNumber, isNotString, isNumber, isString} from '../../../../lib/is/is';
 

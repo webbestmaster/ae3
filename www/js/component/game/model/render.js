@@ -21,7 +21,7 @@ import {
     type UnitActionType
 } from './unit/unit';
 import {defaultUnitData} from './unit/unit-guide';
-import Building from './building/building';
+import {Building} from './building/building';
 import {tween} from '../../../lib/tween/tween';
 import Viewport from 'pixi-viewport';
 import {bindClick} from './helper';

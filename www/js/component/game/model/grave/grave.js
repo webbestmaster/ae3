@@ -20,7 +20,7 @@ type GraveConstructorType = {|
     graveData: GraveType
 |};
 
-export default class Grave {
+export class Grave {
     attr: GraveAttrType;
     gameAttr: GraveGameAttrType;
 

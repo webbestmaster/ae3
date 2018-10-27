@@ -24,7 +24,7 @@ type BuildingConstructorType = {|
     userList: Array<MapUserType>
 |};
 
-export default class Building {
+export class Building {
     attr: BuildingAttrType;
     gameAttr: BuildingGameAttrType;
 
