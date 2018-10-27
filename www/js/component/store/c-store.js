@@ -44,7 +44,6 @@ type ReduxActionType = {|
 
 const reduxAction: ReduxActionType = {
     setOpenFromGame
-    // setSmth // imported from actions
 };
 
 type PropsType = $ReadOnly<$Exact<{

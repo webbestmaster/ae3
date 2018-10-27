@@ -26,7 +26,6 @@ import classNames from 'classnames';
 import serviceStyle from '../../../css/service.scss';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
-// import Slide from 'material-ui/transitions/Slide';
 import {Page} from '../ui/page/c-page';
 import {BottomBar} from '../ui/bottom-bar/c-bottom-bar';
 import find from 'lodash/find';
@@ -34,7 +33,6 @@ import {localSocketIoClient} from '../../module/socket-local';
 import type {UserColorType} from '../../maps/map-guide';
 import {LandscapeInfo} from './ui/landscape-info/c-landscape-info';
 import {isBoolean} from '../../lib/is/is';
-
 import iconMoney from './ui/icon/money.png';
 import iconUnitRed from './image/unit/soldier-red-1.png';
 import iconUnitBlue from './image/unit/soldier-blue-1.png';
@@ -80,7 +78,6 @@ type ReduxActionType = {|
 
 const reduxAction: ReduxActionType = {
     setOpenFromGame
-    // setSmth // imported from actions
 };
 
 type PropsType = $ReadOnly<$Exact<{|
@@ -758,7 +755,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
     }
 }
 
-export default withRouter(
+const ConnectedComponent = withRouter(
     connect(
         (state: GlobalStateType): {} => ({
             system: state.system
@@ -766,3 +763,5 @@ export default withRouter(
         reduxAction
     )(GameView)
 );
+
+export {ConnectedComponent as Game};
