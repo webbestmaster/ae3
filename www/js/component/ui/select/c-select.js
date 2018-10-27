@@ -10,7 +10,7 @@ import style from './style.scss';
 import type {SelectIconNameType} from './icon/c-icon';
 import {icon} from './icon/c-icon';
 import {isString} from '../../../lib/is/is';
-import Canvas from '../canvas/c-canvas';
+import {Canvas} from '../canvas/c-canvas';
 
 type PropsType = {|
     +children: Node,
@@ -27,7 +27,7 @@ type NodeType = {|
     select: {current: HTMLSelectElement | null}
 |};
 
-export default class Select extends Component<PropsType, StateType> {
+export class Select extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
     node: NodeType;

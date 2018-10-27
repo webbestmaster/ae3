@@ -31,7 +31,7 @@ type PropsType = {|
     +isOpen: boolean
 |};
 
-export default class Spinner extends Component<PropsType, StateType> {
+export class Spinner extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 

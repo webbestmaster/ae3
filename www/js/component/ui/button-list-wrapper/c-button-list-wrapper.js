@@ -25,7 +25,7 @@ type StyleType = {|
 |} | null;
 */
 
-export default class ButtonListWrapper extends Component<PropsType, StateType> {
+export class ButtonListWrapper extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 

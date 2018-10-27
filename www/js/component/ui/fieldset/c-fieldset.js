@@ -16,7 +16,7 @@ type PropsType = {|
 
 type StateType = {||};
 
-export default class Fieldset extends Component<PropsType, StateType> {
+export class Fieldset extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 

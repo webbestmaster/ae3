@@ -15,7 +15,7 @@ type PropsType = {|
 
 type StateType = {||};
 
-export default class Button extends Component<PropsType, StateType> {
+export class Button extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 

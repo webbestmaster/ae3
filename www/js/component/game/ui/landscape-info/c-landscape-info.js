@@ -8,7 +8,7 @@ import style from './style.scss';
 import type {GameDataType} from '../../model/unit/unit';
 import type {MapType} from '../../../../maps/type';
 import find from 'lodash/find';
-import Canvas from '../../../ui/canvas/c-canvas';
+import {Canvas} from '../../../ui/canvas/c-canvas';
 import {imageMap} from '../../image/image-map';
 
 import armorImage from './i/armor.png';
@@ -24,7 +24,7 @@ type PropsType = {|
     map: MapType
 |};
 
-export default class LandscapeInfo extends Component<PropsType, StateType> {
+export class LandscapeInfo extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 

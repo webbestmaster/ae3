@@ -18,7 +18,7 @@ type PropsType = {|
 
 type StateType = {||};
 
-export default class Header extends Component<PropsType, StateType> {
+export class Header extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 

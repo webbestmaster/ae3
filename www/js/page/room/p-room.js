@@ -27,26 +27,26 @@ import {getCommanderDataByUserIndex, getMapSize, isOnLineRoomType} from '../../c
 import type {BuildingType, MapUserType, UnitType} from '../../maps/type';
 
 import {Page} from '../../component/ui/page/c-page';
-import Button from '../../component/ui/button/c-button';
-import Header from '../../component/ui/header/c-header';
-import Form from '../../component/ui/form/c-form';
-import FormHeader from '../../component/ui/form-header/c-form-header';
-import Fieldset from '../../component/ui/fieldset/c-fieldset';
+import {Button} from '../../component/ui/button/c-button';
+import {Header} from '../../component/ui/header/c-header';
+import {Form} from '../../component/ui/form/c-form';
+import {FormHeader} from '../../component/ui/form-header/c-form-header';
+import {Fieldset} from '../../component/ui/fieldset/c-fieldset';
 import {BottomBar} from '../../component/ui/bottom-bar/c-bottom-bar';
-import Spinner from '../../component/ui/spinner/c-spinner';
-import MapPreview from '../../component/ui/map-preview/c-map-preview';
+import {Spinner} from '../../component/ui/spinner/c-spinner';
+import {MapPreview} from '../../component/ui/map-preview/c-map-preview';
 import {Locale} from '../../component/locale/c-locale';
 import {getMaxUserListSize, getRoomState} from '../join-room/helper';
 import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import {localSocketIoClient} from '../../module/socket-local';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 import type {LocaleType} from '../../component/locale/reducer';
-import Scroll from '../../component/ui/scroll/c-scroll';
+import {Scroll} from '../../component/ui/scroll/c-scroll';
 import style from './style.scss';
 import serviceStyle from '../../../css/service.scss';
 import createRoomStyle from '../create-room/style.scss';
 import type {LangKeyType} from '../../component/locale/translation/type';
-import ButtonListWrapper from '../../component/ui/button-list-wrapper/c-button-list-wrapper';
+import {ButtonListWrapper} from '../../component/ui/button-list-wrapper/c-button-list-wrapper';
 import {isNotString, isString} from '../../lib/is/is';
 
 const roomPushState = 'room__push-state';

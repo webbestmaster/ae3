@@ -32,7 +32,7 @@ import {BottomBar} from '../ui/bottom-bar/c-bottom-bar';
 import find from 'lodash/find';
 import {localSocketIoClient} from '../../module/socket-local';
 import type {UserColorType} from '../../maps/map-guide';
-import LandscapeInfo from './ui/landscape-info/c-landscape-info';
+import {LandscapeInfo} from './ui/landscape-info/c-landscape-info';
 import {isBoolean} from '../../lib/is/is';
 
 import iconMoney from './ui/icon/money.png';
@@ -40,7 +40,7 @@ import iconUnitRed from './image/unit/soldier-red-1.png';
 import iconUnitBlue from './image/unit/soldier-blue-1.png';
 import iconUnitGreen from './image/unit/soldier-green-1.png';
 import iconUnitBlack from './image/unit/soldier-black-1.png';
-import Canvas from '../ui/canvas/c-canvas';
+import {Canvas} from '../ui/canvas/c-canvas';
 import type {SetOpenFromGameType} from '../store/action';
 import {setOpenFromGame} from '../store/action';
 

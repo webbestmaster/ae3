@@ -20,7 +20,7 @@ type PropsType = {|
 
 type StateType = {||};
 
-export default class ButtonLink extends Component<PropsType, StateType> {
+export class ButtonLink extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 

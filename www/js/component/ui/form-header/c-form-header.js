@@ -16,7 +16,7 @@ type PropsType = {|
 
 type StateType = {||};
 
-export default class FormHeader extends Component<PropsType, StateType> {
+export class FormHeader extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
 

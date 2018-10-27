@@ -20,7 +20,7 @@ type PassedPropsType = {|
 
 type StateType = void;
 
-export default class Canvas extends Component<PassedPropsType, StateType> {
+export class Canvas extends Component<PassedPropsType, StateType> {
     props: PassedPropsType;
     state: StateType;
 

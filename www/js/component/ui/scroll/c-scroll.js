@@ -25,7 +25,7 @@ type AttrType = {|
     swiper: Swiper | null
 |};
 
-export default class Scroll extends Component<StateType, PropsType> {
+export class Scroll extends Component<StateType, PropsType> {
     state: StateType;
     props: PropsType;
     node: NodeType;

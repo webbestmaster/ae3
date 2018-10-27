@@ -32,7 +32,7 @@ type LayerListType = {|
     +buildingList: PIXI.Container
 |};
 
-export default class MapPreview extends Component<PropsType, StateType> {
+export class MapPreview extends Component<PropsType, StateType> {
     props: PropsType;
     state: StateType;
     node: NodeType;
