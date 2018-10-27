@@ -14,7 +14,7 @@ type SavedDataType = {|
 // eslint-disable-next-line id-match
 const userLocalStorageField = PROJECT_ID + '-user-data-v.1.0';
 
-export default class User {
+export class User {
     attr: UserAttrType;
 
     constructor() {
