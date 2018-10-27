@@ -9,7 +9,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {MapType} from '../../maps/type';
 import type {UnitTypeAllType} from '../game/model/unit/unit-guide';
-import guideUnitData from '../game/model/unit/unit-guide';
+import {unitGuideData} from '../game/model/unit/unit-guide';
 import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import withRouter from 'react-router-dom/withRouter';
 import Page from '../ui/page/c-page';
@@ -100,7 +100,7 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
     renderUnitList(): Array<Node | null> {
         const view = this;
 
-        return Object.keys(guideUnitData).map(
+        return Object.keys(unitGuideData).map(
             (unitType: UnitTypeAllType): Node | null => view.renderUnitData(unitType)
         );
     }

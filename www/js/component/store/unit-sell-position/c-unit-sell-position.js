@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 import type {GlobalStateType} from '../../../redux-store-provider/app-reducer';
 import type {ContextRouterType} from '../../../type/react-router-dom-v4';
 import type {UnitTypeAllType} from '../../game/model/unit/unit-guide';
-import guideUnitData, {additionalUnitData} from '../../game/model/unit/unit-guide';
+import {unitGuideData, additionalUnitData} from '../../game/model/unit/unit-guide';
 import {isBoolean, isNumber} from '../../../lib/is/is';
 import {getSupplyState, getUserColor, isCommanderLive} from '../../game/model/helper';
 import {user} from '../../../module/user';
@@ -102,7 +102,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         const {props, state} = view;
         const {mapUserData} = state;
         const {unitType, mapState} = props;
-        const unitData = guideUnitData[unitType];
+        const unitData = unitGuideData[unitType];
 
         if (unitData.canBeBuy !== true) {
             return null;
@@ -154,7 +154,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         const {props, state} = view;
         const newMap = JSON.parse(JSON.stringify(props.mapState));
         const newMapUserData = find(newMap.userList, {userId: user.getId()}) || null;
-        // const newUnitData = guideUnitData[unitType];
+        // const newUnitData = unitGuideData[unitType];
 
         if (newMapUserData === null) {
             console.error('can not find map user with id', user.getId(), newMap);
@@ -227,7 +227,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         const {unitType} = props;
         const {isFullInfoShow} = state;
 
-        const unitData = guideUnitData[unitType];
+        const unitData = unitGuideData[unitType];
 
         return (
             <div className={style.unit_sell_position__short_info}>
@@ -285,7 +285,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
             return null;
         }
 
-        const unitData = guideUnitData[unitType];
+        const unitData = unitGuideData[unitType];
 
         const supplyState = getSupplyState(props.mapState, user.getId());
 

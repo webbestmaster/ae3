@@ -508,7 +508,7 @@ export default class Render {
         await tween(
             {x: aggressorUnit.attr.x, y: aggressorUnit.attr.y},
             {x: defenderUnit.attr.x, y: defenderUnit.attr.y},
-            defaultUnitData.animation.attack * 10,
+            defaultUnitData.animation.attack,
             (coordinates: {x: number, y: number}) => {
                 attackSprite.position.set(
                     coordinates.x * mapGuide.size.square + deltaPosition,

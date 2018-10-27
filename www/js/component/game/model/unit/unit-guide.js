@@ -21,7 +21,7 @@ export type UnitTypeExtraType = 'crystal' | 'saeth-heavens-fury';
 
 export type UnitTypeAllType = UnitTypeCommonType | UnitTypeCommanderType | UnitTypeExtraType;
 
-export type UnitGuideDataType = {|
+export type UnitDataType = {|
     +attack: {|
         +min: number,
         +max: number,
@@ -53,9 +53,9 @@ export type UnitGuideDataType = {|
     +isCommander?: boolean
 |};
 
-type GuideUnitDataType = {+[key: UnitTypeAllType]: UnitGuideDataType};
+type UnitGuideDataType = {+[key: UnitTypeAllType]: UnitDataType};
 
-const unitData: GuideUnitDataType = {
+export const unitGuideData: UnitGuideDataType = {
     soldier: {
         // attack: {
         //     min: 150,
@@ -365,9 +365,8 @@ const unitData: GuideUnitDataType = {
         }
     }
 */
-export default unitData;
 
-const defaultUnitData = {
+export const defaultUnitData = {
     hitPoints: 100,
     poisonCountdown: 0,
     graveRemoveCountdown: 3,
@@ -395,13 +394,9 @@ const defaultUnitData = {
     }
 };
 
-export {defaultUnitData};
-
-const additionalUnitData = {
+export const additionalUnitData = {
     wispAttackBonus: 15,
     poisonAttackReduce: 10,
     poisonArmorReduce: 10,
     additionalCommanderCost: 200
 };
-
-export {additionalUnitData};

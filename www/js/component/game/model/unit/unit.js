@@ -7,8 +7,8 @@ import type {MapType, MapUserType, UnitActionStateType, UnitType} from '../../..
 import type {AttackResultUnitType} from '../helper';
 import {bindClick, canOpenStore, getAttackResult, getLevel, getMoviePath, getUserColor} from '../helper';
 import {mapGuide} from '../../../../maps/map-guide';
-import type {UnitGuideDataType} from './unit-guide';
-import unitGuide, {defaultUnitData} from './unit-guide';
+import type {UnitDataType} from './unit-guide';
+import {unitGuideData, defaultUnitData} from './unit-guide';
 import imageMap from '../../image/image-map';
 import Building from '../building/building';
 import type {AvailablePathMapType} from './path-master';
@@ -557,9 +557,9 @@ export default class Unit {
             return fixBuildingMap;
         }
 
-        const unitGuideData = unit.getGuideData();
+        const currentUnitGuideData = unit.getGuideData();
 
-        if (unitGuideData.canFixBuilding !== true) {
+        if (currentUnitGuideData.canFixBuilding !== true) {
             console.log('unit can not fix building');
             return [];
         }
@@ -604,9 +604,9 @@ export default class Unit {
             return occupyBuildingMap;
         }
 
-        const unitGuideData = unit.getGuideData();
+        const currentUnitGuideData = unit.getGuideData();
 
-        if (!Array.isArray(unitGuideData.occupyBuildingList)) {
+        if (!Array.isArray(currentUnitGuideData.occupyBuildingList)) {
             console.log('unit can not occupy building');
             return [];
         }
@@ -623,8 +623,8 @@ export default class Unit {
                         buildingInList.attr.x === unitX &&
                         buildingInList.attr.y === unitY &&
                         buildingInList.attr.userId !== userId &&
-                        Array.isArray(unitGuideData.occupyBuildingList) &&
-                        unitGuideData.occupyBuildingList.includes(buildingInList.attr.type)
+                        Array.isArray(currentUnitGuideData.occupyBuildingList) &&
+                        currentUnitGuideData.occupyBuildingList.includes(buildingInList.attr.type)
                     );
                 }
             ) || null;
@@ -709,14 +709,14 @@ export default class Unit {
             return destroyBuildingMap;
         }
 
-        const unitGuideData = unit.getGuideData();
+        const currentUnitGuideData = unit.getGuideData();
 
-        if (!unitGuideData.destroyBuildingList || unitGuideData.destroyBuildingList.length === 0) {
+        if (!currentUnitGuideData.destroyBuildingList || currentUnitGuideData.destroyBuildingList.length === 0) {
             console.log('unit can not destroy building');
             return destroyBuildingMap;
         }
 
-        const destroyBuildingList = unitGuideData.destroyBuildingList;
+        const destroyBuildingList = currentUnitGuideData.destroyBuildingList;
 
         const attackBuildingMapPointList = unit.getAllAvailableAttack(gameData);
 
@@ -780,9 +780,9 @@ export default class Unit {
             return raiseSkeletonMap;
         }
 
-        const unitGuideData = unit.getGuideData();
+        const currentUnitGuideData = unit.getGuideData();
 
-        if (isNotNumber(unitGuideData.raiseSkeletonRange)) {
+        if (isNotNumber(currentUnitGuideData.raiseSkeletonRange)) {
             console.log('unit can not raise skeleton');
             return raiseSkeletonMap;
         }
@@ -790,7 +790,7 @@ export default class Unit {
         const raiseSkeletonMapPointList = getPath(
             unit.attr.x,
             unit.attr.y,
-            unitGuideData.raiseSkeletonRange,
+            currentUnitGuideData.raiseSkeletonRange,
             gameData.pathMap.fly,
             []
         );
@@ -864,27 +864,27 @@ export default class Unit {
         const unit = this;
         const {x, y, type} = unit.attr;
 
-        if (!unitGuide.hasOwnProperty(type)) {
+        if (!unitGuideData.hasOwnProperty(type)) {
             // eslint-disable-next-line sonarjs/no-duplicate-string
-            console.error('unitGuide has no property:', type, unit);
+            console.error('unitGuideData has no property:', type, unit);
             return [];
         }
 
-        const unitGuideData = unitGuide[type];
+        const currentUnitGuideData = unitGuideData[type];
 
-        const moveType = isString(unitGuideData.moveType) ? unitGuideData.moveType : null;
+        const moveType = isString(currentUnitGuideData.moveType) ? currentUnitGuideData.moveType : null;
 
         const pathMap = moveType === null ? gameData.pathMap.walk : gameData.pathMap[moveType];
 
-        return getPath(x, y, unitGuideData.move, pathMap, unit.getAllUnitsCoordinates(gameData));
+        return getPath(x, y, currentUnitGuideData.move, pathMap, unit.getAllUnitsCoordinates(gameData));
     }
 
     getAvailableAttack(gameData: GameDataType): AvailablePathMapType {
         const unit = this;
         const {x, y, type} = unit.attr;
 
-        if (!unitGuide.hasOwnProperty(type)) {
-            console.error('unitGuide has no property:', type, unit);
+        if (!unitGuideData.hasOwnProperty(type)) {
+            console.error('unitGuideData has no property:', type, unit);
             return [];
         }
 
@@ -905,14 +905,14 @@ export default class Unit {
         const unit = this;
         const {x, y, type} = unit.attr;
 
-        if (!unitGuide.hasOwnProperty(type)) {
-            console.error('unitGuide has no property:', type, unit);
+        if (!unitGuideData.hasOwnProperty(type)) {
+            console.error('unitGuideData has no property:', type, unit);
             return [];
         }
 
-        const unitGuideData = unitGuide[type];
+        const currentUnitGuideData = unitGuideData[type];
 
-        return getPath(x, y, unitGuideData.attack.range, gameData.pathMap.fly, []);
+        return getPath(x, y, currentUnitGuideData.attack.range, gameData.pathMap.fly, []);
     }
 
     // eslint-disable-next-line complexity
@@ -1557,12 +1557,12 @@ export default class Unit {
     }
     */
 
-    getGuideData(): UnitGuideDataType {
+    getGuideData(): UnitDataType {
         const unit = this;
         const {attr} = unit;
         const {type} = attr;
 
-        return unitGuide[type];
+        return unitGuideData[type];
     }
 
     hasWispAura(): boolean {

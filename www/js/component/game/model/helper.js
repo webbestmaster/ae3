@@ -3,7 +3,7 @@
 
 import {mapGuide, type TeamIdType, type UserColorType} from '../../../maps/map-guide';
 import type {UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
-import unitGuideData, {additionalUnitData, defaultUnitData} from './unit/unit-guide';
+import {unitGuideData, additionalUnitData, defaultUnitData} from './unit/unit-guide';
 import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './unit/unit';
 import Unit from './unit/unit';
 import type {PathType} from '../../../lib/a-star-finder/a-star-finder';
