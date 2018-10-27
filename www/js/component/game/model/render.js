@@ -52,7 +52,7 @@ const stagePadding = {
 };
 // const sprite = require('./image.png');
 
-export default class Render {
+export class Render {
     app: PIXI.Application;
     layer: {|
         landscape: PIXI.Container,

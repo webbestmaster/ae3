@@ -12,7 +12,7 @@ import type {SocketMessageType} from '../../module/socket';
 import {socket} from '../../module/socket';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 import type {SystemType} from '../system/reducer/reducer';
-import Game from './model/model-game';
+import {GameModel} from './model/model-game';
 import type {ServerUserType} from '../../module/server-api';
 import * as serverApi from '../../module/server-api';
 import MainModel from 'main-model';
@@ -107,7 +107,7 @@ type StateType = {|
     // settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
     model: MainModel,
-    game: Game,
+    game: GameModel,
     activeUserId: string,
     socketMessageList: Array<SocketMessageType>,
     disabledByList: Array<DisabledByItemType>,
@@ -148,7 +148,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         view.state = {
             userList: [],
             model: new MainModel(),
-            game: new Game(),
+            game: new GameModel(),
             activeUserId: '',
             socketMessageList: [],
             disabledByList: [],

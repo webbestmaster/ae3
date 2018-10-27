@@ -21,7 +21,7 @@ import {
     mergeActionList,
     procedureMakeGraveForMapUnit
 } from './helper';
-import Render from './render';
+import {Render} from './render';
 import Building from './building/building';
 import Grave from './grave/grave';
 import type {
@@ -62,7 +62,7 @@ type RenderSettingType = {|
 
 // const sprite = require('./image.png');
 
-export default class Game {
+export class GameModel {
     // app: PIXI.Application;
     // layer: {|
     //     landscape: PIXI.Container,
