@@ -41,4 +41,6 @@ class BackButton extends Component<PropsType, StateType> {
     }
 }
 
-export default withRouter(BackButton);
+const ConnectedComponent = withRouter(BackButton);
+
+export {ConnectedComponent as BackButton};

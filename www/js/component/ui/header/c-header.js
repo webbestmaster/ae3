@@ -8,7 +8,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import style from './style.scss';
 import servicesStyle from '../../../../css/service.scss';
-import BackButton from './back-button/c-back-button';
+import {BackButton} from './back-button/c-back-button';
 import {isString} from '../../../lib/is/is';
 
 type PropsType = {|
