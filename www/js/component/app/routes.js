@@ -15,7 +15,7 @@ type RoutesType = {|
     settings: string
 |};
 
-const routes: RoutesType = {
+export const routes: RoutesType = {
     index: '/',
     multiPlayer: onLinePrefix + '/multi-player',
     // singlePlayer: '/single-player',
@@ -26,5 +26,3 @@ const routes: RoutesType = {
     roomOffLine: offLinePrefix + '/room/:roomId',
     settings: '/settings'
 };
-
-export default routes;

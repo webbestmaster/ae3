@@ -9,7 +9,7 @@ import {bindClick, canOpenStore, getAttackResult, getLevel, getMoviePath, getUse
 import {mapGuide} from '../../../../maps/map-guide';
 import type {UnitDataType} from './unit-guide';
 import {unitGuideData, defaultUnitData} from './unit-guide';
-import imageMap from '../../image/image-map';
+import {imageMap} from '../../image/image-map';
 import Building from '../building/building';
 import type {AvailablePathMapType} from './path-master';
 import {getPath} from './path-master';

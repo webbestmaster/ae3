@@ -30,7 +30,7 @@ export type AuthType = {|
     +socket: SocketType
 |};
 
-export default combineReducers({
+export const auth = combineReducers({
     user: (userState: UserType = defaultUserState, actionData: ActionDataType): UserType => {
         if (actionData.type !== authConst.action.type.setUserState) {
             return userState;

@@ -8,7 +8,7 @@ export type StoreType = {|
     +isOpenFromGame: boolean
 |};
 
-export default combineReducers({
+export const store = combineReducers({
     isOpenFromGame: (isOpenFromGame: boolean = false, actionData: ActionDataType): boolean => {
         if (actionData.type !== storeConst.action.type.setOpenFromGame) {
             return isOpenFromGame;

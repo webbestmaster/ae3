@@ -28,7 +28,7 @@ type ImageMapType = {|
     }
 |};
 
-const imageMap: ImageMapType = {
+export const imageMap: ImageMapType = {
     building: {},
     landscape: {},
     other: {},
@@ -116,5 +116,3 @@ ____ReqContext.keys()
         )
     });
 */
-
-export default imageMap;

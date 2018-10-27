@@ -6,7 +6,7 @@ import * as PIXI from 'pixi.js';
 import type {BuildingAttrTypeType, BuildingType, MapUserType} from '../../../../maps/type';
 import {getUserColor} from '../helper';
 import {mapGuide} from '../../../../maps/map-guide';
-import imageMap from '../../image/image-map';
+import {imageMap} from '../../image/image-map';
 import {isNotString, isString} from '../../../../lib/is/is';
 
 type BuildingAttrType = BuildingType;

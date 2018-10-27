@@ -7,7 +7,7 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import routes from '../../component/app/routes';
+import {routes} from '../../component/app/routes';
 import * as serverApi from '../../module/server-api';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 import type {AuthType} from '../../component/auth/reducer';

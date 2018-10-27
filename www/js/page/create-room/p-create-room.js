@@ -10,7 +10,7 @@ import {mapGuide} from '../../maps/map-guide';
 import * as serverApi from '../../module/server-api';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 import type {AuthType} from '../../component/auth/reducer';
-import routes from '../../component/app/routes';
+import {routes} from '../../component/app/routes';
 import Page from '../../component/ui/page/c-page';
 import Button from '../../component/ui/button/c-button';
 import Header from '../../component/ui/header/c-header';

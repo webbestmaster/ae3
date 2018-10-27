@@ -10,7 +10,7 @@ import thunk from 'redux-thunk';
 import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
 // import {StoreProvider} from './component/store/provider';
-import muiTheme from './component/ui/mui-theme/mui-theme';
+import {muiTheme} from './component/ui/mui-theme/mui-theme';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 import App from './component/app/c-app';

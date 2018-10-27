@@ -2,7 +2,7 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import routes from '../../component/app/routes';
+import {routes} from '../../component/app/routes';
 import buttonListWrapperStyle from '../../component/ui/button-list-wrapper/style.scss';
 import Page from '../../component/ui/page/c-page';
 import ButtonLink from '../../component/ui/button-link/c-button-link';

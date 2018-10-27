@@ -7,7 +7,7 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import routes from '../../component/app/routes';
+import {routes} from '../../component/app/routes';
 import Page from '../../component/ui/page/c-page';
 import Button from '../../component/ui/button/c-button';
 import ButtonLink from '../../component/ui/button-link/c-button-link';

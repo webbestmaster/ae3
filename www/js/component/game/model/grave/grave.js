@@ -5,7 +5,7 @@
 import * as PIXI from 'pixi.js';
 import type {GraveType} from '../../../../maps/type';
 import {mapGuide} from '../../../../maps/map-guide';
-import imageMap from '../../image/image-map';
+import {imageMap} from '../../image/image-map';
 
 type GraveAttrType = GraveType;
 

@@ -14,7 +14,7 @@ import JoinRoom from '../../page/join-room/p-join-room';
 import Room from '../../page/room/p-room';
 import Settings from '../../page/settings/p-settings';
 
-import routes from './routes';
+import {routes} from './routes';
 
 export default (): Array<Node> => [
     <Auth key="auth"/>,

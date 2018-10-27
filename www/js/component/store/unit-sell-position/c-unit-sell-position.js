@@ -30,7 +30,7 @@ import Locale, {getLocalizedString} from '../../locale/c-locale';
 import type {UserColorType} from '../../../maps/map-guide';
 import {imageCache} from '../../app/helper-image';
 import Canvas from '../../ui/canvas/c-canvas';
-import imageMap from '../../game/image/image-map';
+import {imageMap} from '../../game/image/image-map';
 import iconUnitInfoAttack from './i/icon-unit-info-attack.png';
 import iconUnitInfoMove from './i/icon-unit-info-move.png';
 import iconUnitInfoDefence from './i/icon-unit-info-defence.png';
