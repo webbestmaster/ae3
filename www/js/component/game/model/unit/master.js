@@ -1,23 +1,23 @@
 // @flow
 
 import type {UnitConstructorType} from './unit';
-import Unit from './unit';
-import UnitArcher from './archer/archer';
-import UnitCatapult from './catapult/catapult';
-import UnitCrystal from './crystal/crystal';
-import UnitDemonLord from './demon-lord/demon-lord';
-import UnitDireWolf from './dire-wolf/dire-wolf';
-import UnitDragon from './dragon/dragon';
-import UnitElemental from './elemental/elemental';
-import UnitGalamar from './galamar/galamar';
-import UnitGolem from './golem/golem';
-import UnitSaeth from './saeth/saeth';
-import UnitSaethHeavenFury from './saeth-heavens-fury/saeth-heavens-fury';
-import UnitSkeleton from './skeleton/skeleton';
-import UnitSoldier from './soldier/soldier';
-import UnitSorceress from './sorceress/sorceress';
-import UnitValadorn from './valadorn/valadorn';
-import UnitWisp from './wisp/wisp';
+import {Unit} from './unit';
+import {Archer} from './archer/archer';
+import {Catapult} from './catapult/catapult';
+import {Crystal} from './crystal/crystal';
+import {DemonLord} from './demon-lord/demon-lord';
+import {DireWolf} from './dire-wolf/dire-wolf';
+import {Dragon} from './dragon/dragon';
+import {Elemental} from './elemental/elemental';
+import {Galamar} from './galamar/galamar';
+import {Golem} from './golem/golem';
+import {Saeth} from './saeth/saeth';
+import {SaethHeavensFury} from './saeth-heavens-fury/saeth-heavens-fury';
+import {Skeleton} from './skeleton/skeleton';
+import {Soldier} from './soldier/soldier';
+import {Sorceress} from './sorceress/sorceress';
+import {Valadorn} from './valadorn/valadorn';
+import {Wisp} from './wisp/wisp';
 
 // eslint-disable-next-line complexity
 export function createUnit(unitConstructor: UnitConstructorType): Unit {
@@ -25,56 +25,56 @@ export function createUnit(unitConstructor: UnitConstructorType): Unit {
 
     switch (type) {
         case 'archer':
-            return new UnitArcher(unitConstructor);
+            return new Archer(unitConstructor);
 
         case 'catapult':
-            return new UnitCatapult(unitConstructor);
+            return new Catapult(unitConstructor);
 
         case 'crystal':
-            return new UnitCrystal(unitConstructor);
+            return new Crystal(unitConstructor);
 
         case 'demon-lord':
-            return new UnitDemonLord(unitConstructor);
+            return new DemonLord(unitConstructor);
 
         case 'dire-wolf':
-            return new UnitDireWolf(unitConstructor);
+            return new DireWolf(unitConstructor);
 
         case 'dragon':
-            return new UnitDragon(unitConstructor);
+            return new Dragon(unitConstructor);
 
         case 'elemental':
-            return new UnitElemental(unitConstructor);
+            return new Elemental(unitConstructor);
 
         case 'galamar':
-            return new UnitGalamar(unitConstructor);
+            return new Galamar(unitConstructor);
 
         case 'golem':
-            return new UnitGolem(unitConstructor);
+            return new Golem(unitConstructor);
 
         case 'saeth':
-            return new UnitSaeth(unitConstructor);
+            return new Saeth(unitConstructor);
 
         case 'saeth-heavens-fury':
-            return new UnitSaethHeavenFury(unitConstructor);
+            return new SaethHeavensFury(unitConstructor);
 
         case 'skeleton':
-            return new UnitSkeleton(unitConstructor);
+            return new Skeleton(unitConstructor);
 
         case 'soldier':
-            return new UnitSoldier(unitConstructor);
+            return new Soldier(unitConstructor);
 
         case 'sorceress':
-            return new UnitSorceress(unitConstructor);
+            return new Sorceress(unitConstructor);
 
         case 'valadorn':
-            return new UnitValadorn(unitConstructor);
+            return new Valadorn(unitConstructor);
 
         case 'wisp':
-            return new UnitWisp(unitConstructor);
+            return new Wisp(unitConstructor);
 
         default:
             console.error('---> unsupported unit type:', type);
     }
 
-    return new UnitSoldier(unitConstructor);
+    return new Soldier(unitConstructor);
 }

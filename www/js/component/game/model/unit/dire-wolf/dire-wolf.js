@@ -1,4 +1,4 @@
 // @flow
-import Unit from '../unit';
+import {Unit} from '../unit';
 
-export default class DireWolf extends Unit {}
+export class DireWolf extends Unit {}

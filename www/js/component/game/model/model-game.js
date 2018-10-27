@@ -36,7 +36,7 @@ import type {
     UnitActionsMapType,
     UnitActionType
 } from './unit/unit';
-import Unit from './unit/unit';
+import {Unit} from './unit/unit';
 import {user} from '../../../module/user';
 import find from 'lodash/find';
 import findLast from 'lodash/findLast';

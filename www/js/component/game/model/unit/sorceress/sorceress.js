@@ -1,4 +1,4 @@
 // @flow
-import Unit from '../unit';
+import {Unit} from '../unit';
 
-export default class Sorceress extends Unit {}
+export class Sorceress extends Unit {}

@@ -194,7 +194,7 @@ const textStyleRed = new PIXI.TextStyle({
     strokeThickness: 4
 });
 
-export default class Unit {
+export class Unit {
     attr: UnitAttrType;
     gameAttr: UnitGameAttrType;
 

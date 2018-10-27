@@ -1,4 +1,4 @@
 // @flow
-import Unit from '../unit';
+import {Unit} from '../unit';
 
-export default class Saeth extends Unit {}
+export class Saeth extends Unit {}

@@ -1,4 +1,4 @@
 // @flow
-import Unit from '../unit';
+import {Unit} from '../unit';
 
-export default class Golem extends Unit {}
+export class Golem extends Unit {}

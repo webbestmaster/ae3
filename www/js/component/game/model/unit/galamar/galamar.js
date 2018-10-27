@@ -1,4 +1,4 @@
 // @flow
-import Unit from '../unit';
+import {Unit} from '../unit';
 
-export default class Galamar extends Unit {}
+export class Galamar extends Unit {}

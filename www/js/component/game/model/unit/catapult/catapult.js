@@ -3,7 +3,7 @@
 /* eslint consistent-this: ["error", "unit", "aggressor"] */
 
 import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from '../unit';
-import Unit from '../unit';
+import {Unit} from '../unit';
 import {getMoviePath} from '../../helper';
 import type {PathType} from '../../../../../lib/a-star-finder/a-star-finder';
 import type {AvailablePathMapType} from '../path-master';
@@ -34,7 +34,7 @@ function getItemOfLine(index: number, line: Array<Array<UnitActionType>>): Array
     return null;
 }
 
-export default class Catapult extends Unit {
+export class Catapult extends Unit {
     getActions(gameData: GameDataType): UnitActionsMapType | null {
         const unit = this;
 
