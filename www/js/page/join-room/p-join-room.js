@@ -11,7 +11,7 @@ import {routes} from '../../component/app/routes';
 import * as serverApi from '../../module/server-api';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 import type {AuthType} from '../../component/auth/reducer';
-import Page from '../../component/ui/page/c-page';
+import {Page} from '../../component/ui/page/c-page';
 import Header from '../../component/ui/header/c-header';
 import Fieldset from '../../component/ui/fieldset/c-fieldset';
 import type {RoomDataType} from './helper';
@@ -20,7 +20,7 @@ import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import {isOnLineRoomType} from '../../component/game/model/helper';
 import serviceStyle from '../../../css/service.scss';
 import type {LangKeyType} from '../../component/locale/translation/type';
-import Locale from '../../component/locale/c-locale';
+import {Locale} from '../../component/locale/c-locale';
 import ButtonListWrapper from '../../component/ui/button-list-wrapper/c-button-list-wrapper';
 import buttonListWrapperStyle from '../../component/ui/button-list-wrapper/style.scss';
 import ButtonLink from '../../component/ui/button-link/c-button-link';
@@ -254,10 +254,12 @@ class JoinRoom extends Component<PropsType, StateType> {
     }
 }
 
-export default connect(
+const ConnectedComponent = connect(
     (state: GlobalStateType): {} => ({
         auth: state.auth,
         locale: state.locale
     }),
     {}
 )(JoinRoom);
+
+export {ConnectedComponent as JoinRoom};

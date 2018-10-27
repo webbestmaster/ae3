@@ -4,7 +4,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {routes} from '../../component/app/routes';
 import buttonListWrapperStyle from '../../component/ui/button-list-wrapper/style.scss';
-import Page from '../../component/ui/page/c-page';
+import {Page} from '../../component/ui/page/c-page';
 import ButtonLink from '../../component/ui/button-link/c-button-link';
 import ButtonListWrapper from '../../component/ui/button-list-wrapper/c-button-list-wrapper';
 import Header from '../../component/ui/header/c-header';
@@ -12,7 +12,7 @@ import serviceStyle from '../../../css/service.scss';
 import logoSrc from '../home/i/logo.png';
 import homeStyle from '../home/style.scss';
 import type {LangKeyType} from '../../component/locale/translation/type';
-import Locale from '../../component/locale/c-locale';
+import {Locale} from '../../component/locale/c-locale';
 
 export default class MultiPlayer extends Component<void, void> {
     static renderPartLogo(): Node {

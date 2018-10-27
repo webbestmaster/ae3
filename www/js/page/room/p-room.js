@@ -26,16 +26,16 @@ import {mapGuide} from '../../maps/map-guide';
 import {getCommanderDataByUserIndex, getMapSize, isOnLineRoomType} from '../../component/game/model/helper';
 import type {BuildingType, MapUserType, UnitType} from '../../maps/type';
 
-import Page from '../../component/ui/page/c-page';
+import {Page} from '../../component/ui/page/c-page';
 import Button from '../../component/ui/button/c-button';
 import Header from '../../component/ui/header/c-header';
 import Form from '../../component/ui/form/c-form';
 import FormHeader from '../../component/ui/form-header/c-form-header';
 import Fieldset from '../../component/ui/fieldset/c-fieldset';
-import BottomBar from '../../component/ui/bottom-bar/c-bottom-bar';
+import {BottomBar} from '../../component/ui/bottom-bar/c-bottom-bar';
 import Spinner from '../../component/ui/spinner/c-spinner';
 import MapPreview from '../../component/ui/map-preview/c-map-preview';
-import Locale from '../../component/locale/c-locale';
+import {Locale} from '../../component/locale/c-locale';
 import {getMaxUserListSize, getRoomState} from '../join-room/helper';
 import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import {localSocketIoClient} from '../../module/socket-local';
@@ -605,9 +605,11 @@ class Room extends Component<PropsType, StateType> {
     }
 }
 
-export default connect(
+const ConnectedComponent = connect(
     (state: GlobalStateType): {} => ({
         locale: state.locale
     }),
     {}
 )(Room);
+
+export {ConnectedComponent as Room};

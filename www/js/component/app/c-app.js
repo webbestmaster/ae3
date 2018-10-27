@@ -4,15 +4,15 @@ import type {Node} from 'react';
 import React from 'react';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
-import System from '../system/c-system';
-import Auth from '../auth/c-auth';
+import {System} from '../system/c-system';
+import {Auth} from '../auth/c-auth';
 
-import Home from '../../page/home/p-home';
+import {Home} from '../../page/home/p-home';
 import MultiPlayer from '../../page/multi-player/p-multi-player';
-import CreateRoom from '../../page/create-room/p-create-room';
-import JoinRoom from '../../page/join-room/p-join-room';
-import Room from '../../page/room/p-room';
-import Settings from '../../page/settings/p-settings';
+import {CreateRoom} from '../../page/create-room/p-create-room';
+import {JoinRoom} from '../../page/join-room/p-join-room';
+import {Room} from '../../page/room/p-room';
+import {Settings} from '../../page/settings/p-settings';
 
 import {routes} from './routes';
 

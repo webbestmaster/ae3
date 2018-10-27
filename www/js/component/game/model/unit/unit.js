@@ -8,7 +8,7 @@ import type {AttackResultUnitType} from '../helper';
 import {bindClick, canOpenStore, getAttackResult, getLevel, getMoviePath, getUserColor} from '../helper';
 import {mapGuide} from '../../../../maps/map-guide';
 import type {UnitDataType} from './unit-guide';
-import {unitGuideData, defaultUnitData} from './unit-guide';
+import {defaultUnitData, unitGuideData} from './unit-guide';
 import {imageMap} from '../../image/image-map';
 import {Building} from '../building/building';
 import type {AvailablePathMapType} from './path-master';

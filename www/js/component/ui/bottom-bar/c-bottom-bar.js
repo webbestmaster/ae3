@@ -38,7 +38,7 @@ class BottomBar extends Component<PropsType, StateType> {
     }
 }
 
-export default connect(
+const ConnectedComponent = connect(
     (state: GlobalStateType): {} => ({
         // auth: state.auth
     }),
@@ -46,3 +46,5 @@ export default connect(
         // setUser
     }
 )(BottomBar);
+
+export {ConnectedComponent as BottomBar};

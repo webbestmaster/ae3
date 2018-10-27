@@ -12,12 +12,12 @@ import type {UnitTypeAllType} from '../game/model/unit/unit-guide';
 import {unitGuideData} from '../game/model/unit/unit-guide';
 import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import withRouter from 'react-router-dom/withRouter';
-import Page from '../ui/page/c-page';
+import {Page} from '../ui/page/c-page';
 import Header from '../ui/header/c-header';
 import Scroll from '../ui/scroll/c-scroll';
-import Locale from '../locale/c-locale';
+import {Locale} from '../locale/c-locale';
 import type {LangKeyType} from '../locale/translation/type';
-import UnitSellPosition from './unit-sell-position/c-unit-sell-position';
+import {UnitSellPosition} from './unit-sell-position/c-unit-sell-position';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 import type {SetOpenFromGameType} from './action';
 import {setOpenFromGame} from './action';
@@ -123,9 +123,11 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
     }
 }
 
-export default connect(
+const ConnectedComponent = connect(
     (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
         store: state.store
     }),
     reduxAction
 )(withRouter(Store));
+
+export {ConnectedComponent as Store};

@@ -8,12 +8,12 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import style from './style.scss';
 import type {LangKeyType} from '../locale/translation/type';
-import Page from '../ui/page/c-page';
+import {Page} from '../ui/page/c-page';
 import serviceStyle from '../../../css/service.scss';
 // import {Home} from '../../page/home';
 import ButtonListWrapper from '../ui/button-list-wrapper/c-button-list-wrapper';
 import buttonListWrapperStyle from '../ui/button-list-wrapper/style.scss';
-import Locale from '../locale/c-locale';
+import {Locale} from '../locale/c-locale';
 import logoSrc from '../../page/home/i/logo.png';
 import homeStyle from '../../page/home/style.scss';
 

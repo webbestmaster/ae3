@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 import type {GlobalStateType} from '../../../redux-store-provider/app-reducer';
 import type {ContextRouterType} from '../../../type/react-router-dom-v4';
 import type {UnitTypeAllType} from '../../game/model/unit/unit-guide';
-import {unitGuideData, additionalUnitData} from '../../game/model/unit/unit-guide';
+import {additionalUnitData, unitGuideData} from '../../game/model/unit/unit-guide';
 import {isBoolean, isNumber} from '../../../lib/is/is';
 import {getSupplyState, getUserColor, isCommanderLive} from '../../game/model/helper';
 import {user} from '../../../module/user';
@@ -21,14 +21,12 @@ import Spinner from '../../ui/spinner/c-spinner';
 import serviceStyle from '../../../../css/service.scss';
 import classNames from 'classnames';
 import Button from '../../ui/button/c-button';
-import padStart from 'lodash/padStart';
-import padEnd from 'lodash/padEnd';
 import withRouter from 'react-router-dom/withRouter';
 import style from './style.scss';
 import type {LocaleType} from '../../locale/reducer';
-import Locale, {getLocalizedString} from '../../locale/c-locale';
+import {getLocalizedString, Locale} from '../../locale/c-locale';
 import type {UserColorType} from '../../../maps/map-guide';
-import {imageCache} from '../../app/helper-image';
+import {mapGuide} from '../../../maps/map-guide';
 import Canvas from '../../ui/canvas/c-canvas';
 import {imageMap} from '../../game/image/image-map';
 import iconUnitInfoAttack from './i/icon-unit-info-attack.png';
@@ -36,7 +34,6 @@ import iconUnitInfoMove from './i/icon-unit-info-move.png';
 import iconUnitInfoDefence from './i/icon-unit-info-defence.png';
 import iconUnitInfoDescription from './i/icon-unit-info-description.png';
 import iconUnitInfoDescriptionOpen from './i/icon-unit-info-description-open.png';
-import {mapGuide} from '../../../maps/map-guide';
 
 type ReduxPropsType = {|
     +locale: LocaleType
@@ -323,9 +320,11 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
     }
 }
 
-export default connect(
+const ConnectedComponent = connect(
     (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
         locale: state.locale
     }),
     reduxAction
 )(withRouter(UnitSellPosition));
+
+export {ConnectedComponent as UnitSellPosition};

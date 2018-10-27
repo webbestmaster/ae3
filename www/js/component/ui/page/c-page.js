@@ -31,7 +31,7 @@ class Page extends Component<PropsType, StateType> {
     }
 }
 
-export default connect(
+const ConnectedComponent = connect(
     (state: GlobalStateType): {} => ({
         // auth: state.auth
     }),
@@ -39,3 +39,5 @@ export default connect(
         // setUser
     }
 )(Page);
+
+export {ConnectedComponent as Page};

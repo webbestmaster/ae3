@@ -7,10 +7,10 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Page from '../../component/ui/page/c-page';
+import {Page} from '../../component/ui/page/c-page';
 import Header from '../../component/ui/header/c-header';
 import Button from '../../component/ui/button/c-button';
-import Locale from '../../component/locale/c-locale';
+import {Locale} from '../../component/locale/c-locale';
 import type {LangKeyType} from '../../component/locale/translation/type';
 import {allLocales, localeConst} from '../../component/locale/const';
 import type {LocaleNameType} from '../../component/locale/action';
@@ -74,7 +74,7 @@ class Settings extends Component<void, void> {
     }
 }
 
-export default connect(
+const ConnectedComponent = connect(
     (state: {}): {} => ({
         // app: state.app
     }),
@@ -82,3 +82,5 @@ export default connect(
         setLocale: localeAction.setLocale
     }
 )(Settings);
+
+export {ConnectedComponent as Settings};

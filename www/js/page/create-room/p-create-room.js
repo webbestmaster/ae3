@@ -11,7 +11,7 @@ import * as serverApi from '../../module/server-api';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 import type {AuthType} from '../../component/auth/reducer';
 import {routes} from '../../component/app/routes';
-import Page from '../../component/ui/page/c-page';
+import {Page} from '../../component/ui/page/c-page';
 import Button from '../../component/ui/button/c-button';
 import Header from '../../component/ui/header/c-header';
 import Form from '../../component/ui/form/c-form';
@@ -26,7 +26,7 @@ import {getMapSize, getRoomType, isOnLineRoomType} from '../../component/game/mo
 import serviceStyle from '../../../css/service.scss';
 import style from './style.scss';
 import type {LangKeyType} from '../../component/locale/translation/type';
-import Locale from '../../component/locale/c-locale';
+import {Locale} from '../../component/locale/c-locale';
 import type {LocaleType} from '../../component/locale/reducer';
 import Scroll from '../../component/ui/scroll/c-scroll';
 import {getMaxUserListSize} from '../join-room/helper';
@@ -317,10 +317,12 @@ class CreateRoom extends Component<PropsType, StateType> {
     }
 }
 
-export default connect(
+const ConnectedComponent = connect(
     (state: GlobalStateType): {} => ({
         auth: state.auth,
         locale: state.locale
     }),
     {}
 )(CreateRoom);
+
+export {ConnectedComponent as CreateRoom};

@@ -47,7 +47,7 @@ class Auth extends Component<PropsType, StateType> {
     }
 }
 
-export default connect(
+const ConnectedComponent = connect(
     (state: GlobalStateType): {} => ({
         auth: state.auth
     }),
@@ -56,3 +56,5 @@ export default connect(
         setSocket
     }
 )(Auth);
+
+export {ConnectedComponent as Auth};

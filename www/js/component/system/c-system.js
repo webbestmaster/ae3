@@ -42,9 +42,11 @@ class System extends Component<PropsType, StateType> {
     }
 }
 
-export default connect(
+const ConnectedComponent = connect(
     (state: GlobalStateType): {} => ({}),
     {
         onResize
     }
 )(System);
+
+export {ConnectedComponent as System};
