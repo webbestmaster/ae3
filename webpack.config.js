@@ -37,6 +37,7 @@ const pathToDist = '/dist';
 
 const webpackConfig = {
     entry: [
+        'swiper/dist/css/swiper.css',
         './www/css/root.scss',
         './www/js/root.js'
     ],
