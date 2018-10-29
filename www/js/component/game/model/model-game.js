@@ -558,13 +558,14 @@ export class GameModel {
         }
 
         // you can add human only for offline game
+        // but you can play with human in online game
         if (activePlayerData.type === 'human' && !isOnLineRoomType()) {
             user.setId(activeUserId);
             await game.refreshUnitActionState(activeUserId);
             return;
         }
 
-        console.error('NO variant to pass here!');
+        console.log('---- wait for other player ----');
     }
 
     // eslint-disable-next-line complexity
