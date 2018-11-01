@@ -4,40 +4,50 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node} from 'react';
+import type {Node, ComponentType} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from '../../../redux-store-provider/app-reducer';
 import style from './style.scss';
 import {isString} from '../../../lib/is/is';
 
-type PropsType = {|
-    children: Node,
-    className?: string
+type ReduxPropsType = {};
+
+type ReduxActionType = {};
+
+const reduxAction: ReduxActionType = {};
+
+type PassedPropsType = {|
+    +children: Node,
+    +className?: string
 |};
 
-type StateType = {||};
+type PropsType = $ReadOnly<$Exact<{
+        ...$Exact<PassedPropsType>,
+        ...$Exact<ReduxPropsType>,
+        ...$Exact<ReduxActionType>
+    }>>;
 
-class Page extends Component<PropsType, StateType> {
+type StateType = null;
+
+class Page extends Component<ReduxPropsType, PassedPropsType, StateType> {
     props: PropsType;
     state: StateType;
 
     render(): Node {
         const view = this;
-        const {props, state} = view;
+        const {props} = view;
         const additionClass = isString(props.className) ? ' ' + props.className : '';
 
         return <div className={style.page + additionClass}>{props.children}</div>;
     }
 }
 
-const ConnectedComponent = connect(
-    (state: GlobalStateType): {} => ({
+const ConnectedComponent = connect<ComponentType<Page>, PassedPropsType, ReduxPropsType, ReduxActionType>(
+    (state: GlobalStateType): ReduxPropsType => ({
         // auth: state.auth
     }),
-    {
-        // setUser
-    }
+    reduxAction
 )(Page);
 
 export {ConnectedComponent as Page};

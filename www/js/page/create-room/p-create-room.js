@@ -2,7 +2,7 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node} from 'react';
+import type {Node, ComponentType} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {MapType} from '../../maps/type';
@@ -35,21 +35,33 @@ import {Spinner} from '../../component/ui/spinner/c-spinner';
 
 const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapType => mapHash[mapName]);
 
+type ReduxPropsType = {|
+    +auth: AuthType,
+    +locale: LocaleType
+|};
+
+type ReduxActionType = {};
+
+const reduxAction: ReduxActionType = {};
+
+type PassedPropsType = {};
+
+type PropsType = $ReadOnly<$Exact<{
+        ...$Exact<PassedPropsType>,
+        ...$Exact<ReduxPropsType>,
+        ...$Exact<ReduxActionType>,
+        ...$Exact<ContextRouterType>
+    }>>;
+
 type StateType = {|
-    mapIndex: number,
-    defaultMoney: number,
-    unitLimit: number,
-    openShowInfoMapList: Array<string>,
-    isRoomCreating: boolean
+    +mapIndex: number,
+    +defaultMoney: number,
+    +unitLimit: number,
+    +openShowInfoMapList: Array<string>,
+    +isRoomCreating: boolean
 |};
 
-type PropsType = {|
-    ...$Exact<ContextRouterType>,
-    auth: AuthType,
-    locale: LocaleType
-|};
-
-class CreateRoom extends Component<PropsType, StateType> {
+class CreateRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -317,12 +329,12 @@ class CreateRoom extends Component<PropsType, StateType> {
     }
 }
 
-const ConnectedComponent = connect(
-    (state: GlobalStateType): {} => ({
+const ConnectedComponent = connect<ComponentType<CreateRoom>, PassedPropsType, ReduxPropsType, ReduxActionType>(
+    (state: GlobalStateType): ReduxPropsType => ({
         auth: state.auth,
         locale: state.locale
     }),
-    {}
+    reduxAction
 )(CreateRoom);
 
 export {ConnectedComponent as CreateRoom};
