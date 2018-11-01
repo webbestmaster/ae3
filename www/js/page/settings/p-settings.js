@@ -4,7 +4,7 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node, ComponentType} from 'react';
+import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Page} from '../../component/ui/page/c-page';
@@ -14,12 +14,12 @@ import {Locale} from '../../component/locale/c-locale';
 import type {LangKeyType} from '../../component/locale/translation/type';
 import {allLocales, localeConst} from '../../component/locale/const';
 import type {LocaleNameType, SetLocaleType} from '../../component/locale/action';
+import {setLocale} from '../../component/locale/action';
 import {Form} from '../../component/ui/form/c-form';
 import {Fieldset} from '../../component/ui/fieldset/c-fieldset';
 import {FormHeader} from '../../component/ui/form-header/c-form-header';
 import {ButtonListWrapper} from '../../component/ui/button-list-wrapper/c-button-list-wrapper';
 import serviceStyle from '../../../css/service.scss';
-import {setLocale} from '../../component/locale/action';
 import type {ContextRouterType} from '../../type/react-router-dom-v4';
 
 type ReduxPropsType = {};

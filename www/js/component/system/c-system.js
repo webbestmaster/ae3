@@ -4,25 +4,40 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node} from 'react';
+import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import type {OnResizeType} from './action';
 import {onResize} from './action';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 
-type PropsType = {|
-    onResize: (width: number, height: number) => void
+type ReduxPropsType = {};
+
+type ReduxActionType = {|
+    +onResize: (width: number, height: number) => OnResizeType
 |};
 
-type StateType = {||};
+const reduxAction: ReduxActionType = {
+    onResize
+};
 
-class System extends Component<PropsType, StateType> {
+type PassedPropsType = {};
+
+type PropsType = $ReadOnly<$Exact<{
+        ...$Exact<PassedPropsType>,
+        ...$Exact<ReduxPropsType>,
+        ...$Exact<ReduxActionType>
+    }>>;
+
+type StateType = null;
+
+class System extends Component<ReduxPropsType, PassedPropsType, StateType> {
     props: PropsType;
     state: StateType;
 
     componentDidMount() {
         const view = this;
-        const {props, state} = view;
+        const {props} = view;
 
         window.addEventListener(
             'resize',
@@ -42,11 +57,9 @@ class System extends Component<PropsType, StateType> {
     }
 }
 
-const ConnectedComponent = connect(
-    (state: GlobalStateType): {} => ({}),
-    {
-        onResize
-    }
+const ConnectedComponent = connect<ComponentType<System>, PassedPropsType, ReduxPropsType, ReduxActionType>(
+    (state: GlobalStateType): ReduxPropsType => ({}),
+    reduxAction
 )(System);
 
 export {ConnectedComponent as System};

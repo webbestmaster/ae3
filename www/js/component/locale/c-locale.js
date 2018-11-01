@@ -4,7 +4,7 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node} from 'react';
+import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
@@ -13,15 +13,19 @@ import {allLocales, localeConst} from './const';
 import type {LangKeyType} from './translation/type';
 import type {LocaleNameType} from './action';
 
-type StateType = null;
-
 type ReduxPropsType = {|
     +locale: LocaleType
 |};
 
+type ReduxActionType = {};
+
+const reduxAction: ReduxActionType = {};
+
 type PassedPropsType = {|
     +stringKey: LangKeyType
 |};
+
+type StateType = null;
 
 export function getLocalizedString(stringKey: LangKeyType, localeName: LocaleNameType): string {
     // eslint-disable-next-line id-match
@@ -53,13 +57,11 @@ class Locale extends Component<ReduxPropsType, PassedPropsType, StateType> {
     }
 }
 
-const ConnectedComponent = connect(
+const ConnectedComponent = connect<ComponentType<Locale>, PassedPropsType, ReduxPropsType, ReduxActionType>(
     (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
         locale: state.locale
     }),
-    {
-        // setUser
-    }
+    reduxAction
 )(Locale);
 
 export {ConnectedComponent as Locale};

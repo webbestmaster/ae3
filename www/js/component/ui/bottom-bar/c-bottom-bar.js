@@ -4,7 +4,7 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node} from 'react';
+import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from '../../../redux-store-provider/app-reducer';
@@ -12,20 +12,32 @@ import servicesStyle from '../../../../css/service.scss';
 import style from './style.scss';
 import {isString} from '../../../lib/is/is';
 
-type PropsType = {|
+type ReduxPropsType = {};
+
+type ReduxActionType = {};
+
+const reduxAction: ReduxActionType = {};
+
+type PassedPropsType = {|
     children: Node,
     className?: string
 |};
 
-type StateType = {||};
+type PropsType = $ReadOnly<$Exact<{
+        ...$Exact<PassedPropsType>,
+        ...$Exact<ReduxPropsType>,
+        ...$Exact<ReduxActionType>
+    }>>;
 
-class BottomBar extends Component<PropsType, StateType> {
+type StateType = null;
+
+class BottomBar extends Component<ReduxPropsType, PassedPropsType, StateType> {
     props: PropsType;
     state: StateType;
 
     render(): Node {
         const view = this;
-        const {props, state} = view;
+        const {props} = view;
         const additionClass = isString(props.className) ? ' ' + props.className : '';
 
         return (
@@ -38,13 +50,11 @@ class BottomBar extends Component<PropsType, StateType> {
     }
 }
 
-const ConnectedComponent = connect(
-    (state: GlobalStateType): {} => ({
+const ConnectedComponent = connect<ComponentType<BottomBar>, PassedPropsType, ReduxPropsType, ReduxActionType>(
+    (state: GlobalStateType): ReduxPropsType => ({
         // auth: state.auth
     }),
-    {
-        // setUser
-    }
+    reduxAction
 )(BottomBar);
 
 export {ConnectedComponent as BottomBar};

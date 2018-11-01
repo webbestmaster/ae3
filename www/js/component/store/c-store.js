@@ -4,7 +4,7 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node} from 'react';
+import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {MapType} from '../../maps/type';
@@ -122,7 +122,7 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
     }
 }
 
-const ConnectedComponent = connect(
+const ConnectedComponent = connect<ComponentType<Store>, PassedPropsType, ReduxPropsType, ReduxActionType>(
     (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
         store: state.store
     }),

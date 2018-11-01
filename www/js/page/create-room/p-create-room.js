@@ -2,7 +2,7 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node, ComponentType} from 'react';
+import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {MapType} from '../../maps/type';
