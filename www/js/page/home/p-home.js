@@ -4,7 +4,7 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node} from 'react';
+import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {routes} from '../../component/app/routes';
@@ -18,8 +18,29 @@ import serviceStyle from '../../../css/service.scss';
 import {Locale} from '../../component/locale/c-locale';
 import logoSrc from './i/logo.png';
 import type {LangKeyType} from '../../component/locale/translation/type';
+import type {ContextRouterType} from '../../type/react-router-dom-v4';
 
-class Home extends Component<void, void> {
+type ReduxPropsType = {};
+
+type ReduxActionType = {};
+
+const reduxAction: ReduxActionType = {};
+
+type PassedPropsType = {};
+
+type PropsType = $ReadOnly<$Exact<{
+        ...$Exact<PassedPropsType>,
+        ...$Exact<ReduxPropsType>,
+        ...$Exact<ReduxActionType>,
+        ...$Exact<ContextRouterType>
+    }>>;
+
+type StateType = null;
+
+class Home extends Component<ReduxPropsType, PassedPropsType, StateType> {
+    props: PropsType;
+    state: StateType;
+
     static renderPartLogo(): Node {
         return (
             <div className={serviceStyle.two_blocks_container}>
@@ -64,11 +85,11 @@ class Home extends Component<void, void> {
     }
 }
 
-const ConnectedComponent = connect(
-    (state: {}): {} => ({
+const ConnectedComponent = connect<ComponentType<Home>, PassedPropsType, ReduxPropsType, ReduxActionType>(
+    (state: {}): ReduxPropsType => ({
         // app: state.app
     }),
-    {}
+    reduxAction
 )(Home);
 
 export {ConnectedComponent as Home};

@@ -4,7 +4,7 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node} from 'react';
+import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {routes} from '../../component/app/routes';
@@ -31,21 +31,30 @@ import {Scroll} from '../../component/ui/scroll/c-scroll';
 import classNames from 'classnames';
 import {Spinner} from '../../component/ui/spinner/c-spinner';
 
+type ReduxPropsType = {|
+    +auth: AuthType,
+    +locale: LocaleType
+|};
+
+type ReduxActionType = {};
+
+const reduxAction: ReduxActionType = {};
+
+type PassedPropsType = {};
+
+type PropsType = $ReadOnly<$Exact<{
+        ...$Exact<PassedPropsType>,
+        ...$Exact<ReduxPropsType>,
+        ...$Exact<ReduxActionType>,
+        ...$Exact<ContextRouterType>
+    }>>;
+
 type StateType = {|
-    // roomIds: Array<string>,
-    roomDataList: Array<RoomDataType> | null,
-    isRoomsFetching: boolean
-    // settings: AllRoomSettingsType,
-    // userList: Array<ServerUserType>
+    +roomDataList: Array<RoomDataType> | null,
+    +isRoomsFetching: boolean
 |};
 
-type PropsType = {|
-    ...$Exact<ContextRouterType>,
-    auth: AuthType,
-    locale: LocaleType
-|};
-
-class JoinRoom extends Component<PropsType, StateType> {
+class JoinRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -254,12 +263,12 @@ class JoinRoom extends Component<PropsType, StateType> {
     }
 }
 
-const ConnectedComponent = connect(
-    (state: GlobalStateType): {} => ({
+const ConnectedComponent = connect<ComponentType<JoinRoom>, PassedPropsType, ReduxPropsType, ReduxActionType>(
+    (state: GlobalStateType): ReduxPropsType => ({
         auth: state.auth,
         locale: state.locale
     }),
-    {}
+    reduxAction
 )(JoinRoom);
 
 export {ConnectedComponent as JoinRoom};

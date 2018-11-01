@@ -12,7 +12,7 @@
 // - unitLimit
 // - userList
 
-import type {Node} from 'react';
+import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import MainModel from 'main-model';
@@ -50,6 +50,23 @@ import {isNotString, isString} from '../../lib/is/is';
 
 const roomPushState = 'room__push-state';
 
+type ReduxPropsType = {|
+    +locale: LocaleType
+|};
+
+type ReduxActionType = {};
+
+const reduxAction: ReduxActionType = {};
+
+type PassedPropsType = {};
+
+type PropsType = $ReadOnly<$Exact<{
+        ...$Exact<PassedPropsType>,
+        ...$Exact<ReduxPropsType>,
+        ...$Exact<ReduxActionType>,
+        ...$Exact<ContextRouterType>
+    }>>;
+
 type StateType = {|
     settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
@@ -58,12 +75,7 @@ type StateType = {|
     isRoomDataFetching: boolean
 |};
 
-type PropsType = {|
-    ...$Exact<ContextRouterType>,
-    locale: LocaleType
-|};
-
-class Room extends Component<PropsType, StateType> {
+class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -604,11 +616,11 @@ class Room extends Component<PropsType, StateType> {
     }
 }
 
-const ConnectedComponent = connect(
-    (state: GlobalStateType): {} => ({
+const ConnectedComponent = connect<ComponentType<Room>, PassedPropsType, ReduxPropsType, ReduxActionType>(
+    (state: GlobalStateType): ReduxPropsType => ({
         locale: state.locale
     }),
-    {}
+    reduxAction
 )(Room);
 
 export {ConnectedComponent as Room};
