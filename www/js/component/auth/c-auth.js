@@ -4,7 +4,7 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node} from 'react';
+import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {SetSocketType, SetUserType} from './action';
@@ -15,15 +15,31 @@ import {socket} from '../../module/socket';
 import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 import type {ActionDataType} from '../../redux-store-provider/type';
 
-type PropsType = {|
-    setUser: (userState: UserType) => SetUserType,
-    setSocket: (socketState: SocketType) => SetSocketType,
-    auth: AuthType
+type ReduxPropsType = {|
+    +auth: AuthType
 |};
 
-type StateType = {||};
+type ReduxActionType = {|
+    +setUser: (userState: UserType) => SetUserType,
+    +setSocket: (socketState: SocketType) => SetSocketType
+|};
 
-class Auth extends Component<PropsType, StateType> {
+const reduxAction: ReduxActionType = {
+    setUser,
+    setSocket
+};
+
+type PassedPropsType = {};
+
+type PropsType = $ReadOnly<$Exact<{
+        ...$Exact<PassedPropsType>,
+        ...$Exact<ReduxPropsType>,
+        ...$Exact<ReduxActionType>
+    }>>;
+
+type StateType = null;
+
+class Auth extends Component<ReduxPropsType, PassedPropsType, StateType> {
     props: PropsType;
     state: StateType;
 
@@ -47,14 +63,11 @@ class Auth extends Component<PropsType, StateType> {
     }
 }
 
-const ConnectedComponent = connect(
-    (state: GlobalStateType): {} => ({
+const ConnectedComponent = connect<ComponentType<Auth>, PassedPropsType, ReduxPropsType, ReduxActionType>(
+    (state: GlobalStateType): ReduxPropsType => ({
         auth: state.auth
     }),
-    {
-        setUser,
-        setSocket
-    }
+    reduxAction
 )(Auth);
 
 export {ConnectedComponent as Auth};

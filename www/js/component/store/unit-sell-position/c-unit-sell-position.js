@@ -4,7 +4,7 @@
 
 /* eslint consistent-this: ["error", "view"] */
 
-import type {Node} from 'react';
+import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {GlobalStateType} from '../../../redux-store-provider/app-reducer';
@@ -320,7 +320,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
     }
 }
 
-const ConnectedComponent = connect(
+const ConnectedComponent = connect<ComponentType<UnitSellPosition>, PassedPropsType, ReduxPropsType, ReduxActionType>(
     (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
         locale: state.locale
     }),
