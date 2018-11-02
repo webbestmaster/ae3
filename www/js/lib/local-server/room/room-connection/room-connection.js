@@ -13,7 +13,7 @@ type RoomConnectionConstructorOptionType = {|
     +userId: string,
     +socketId: string,
     +room: Room,
-    +type: 'human' | 'bot'
+    +type: 'human' | 'bot',
 |};
 
 type AttrType = {|
@@ -22,8 +22,8 @@ type AttrType = {|
     room: Room,
     type: 'human' | 'bot',
     timers: {|
-        onDisconnect: Stopwatch | null
-    |}
+        onDisconnect: Stopwatch | null,
+    |},
 |};
 
 /**

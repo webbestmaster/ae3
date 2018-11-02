@@ -21,7 +21,7 @@ type PropsType = {|
     x: number,
     y: number,
     gameData: GameDataType,
-    map: MapType
+    map: MapType,
 |};
 
 export class LandscapeInfo extends Component<PropsType, StateType> {

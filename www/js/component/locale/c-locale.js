@@ -14,7 +14,7 @@ import type {LangKeyType} from './translation/type';
 import type {LocaleNameType} from './action';
 
 type ReduxPropsType = {|
-    +locale: LocaleType
+    +locale: LocaleType,
 |};
 
 type ReduxActionType = {};
@@ -22,7 +22,7 @@ type ReduxActionType = {};
 const reduxAction: ReduxActionType = {};
 
 type PassedPropsType = {|
-    +stringKey: LangKeyType
+    +stringKey: LangKeyType,
 |};
 
 type StateType = null;

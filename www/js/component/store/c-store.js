@@ -31,15 +31,15 @@ type PassedPropsType = {|
     +x: number,
     +y: number,
     +map: MapType,
-    +children: Node | Array<Node>
+    +children: Node | Array<Node>,
 |};
 
 type ReduxPropsType = {
-    +store: StoreType
+    +store: StoreType,
 };
 
 type ReduxActionType = {|
-    setOpenFromGame: (isOpenFromGame: boolean) => SetOpenFromGameType
+    setOpenFromGame: (isOpenFromGame: boolean) => SetOpenFromGameType,
 |};
 
 const reduxAction: ReduxActionType = {
@@ -53,9 +53,9 @@ type PropsType = $ReadOnly<$Exact<{
         ...$Exact<ContextRouterType>,
         +match: {
             +params: {
-                +roomId: string
-            }
-        }
+                +roomId: string,
+            },
+        },
     }>>;
 
 type StateType = {

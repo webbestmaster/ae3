@@ -15,8 +15,8 @@ import type {LangKeyType} from '../locale/translation/type';
 type LoadStepsType = {
     +[key: string]: {|
         +id: string,
-        +langKey: LangKeyType
-    |}
+        +langKey: LangKeyType,
+    |},
 };
 
 export const loadSteps: LoadStepsType = {

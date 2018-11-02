@@ -23,28 +23,28 @@ import {isNotNumber, isNotString, isNumber, isString} from '../../../../lib/is/i
 type LevelUpAnimationDataType = {|
     x: number,
     y: number,
-    alpha: number
+    alpha: number,
 |};
 
 export type UnitActionMoveType = {|
     type: 'move',
     from: {
         x: number,
-        y: number
+        y: number,
     },
     to: {
         x: number,
-        y: number
+        y: number,
     },
     id: string,
-    container: PIXI.Container
+    container: PIXI.Container,
 |};
 
 export type UnitActionAttackType = {|
     type: 'attack',
     aggressor: AttackResultUnitType,
     defender: AttackResultUnitType,
-    container: PIXI.Container
+    container: PIXI.Container,
 |};
 
 export type UnitActionFixBuildingType = {|
@@ -53,7 +53,7 @@ export type UnitActionFixBuildingType = {|
     y: number,
     id: string,
     userId: string,
-    container: PIXI.Container
+    container: PIXI.Container,
 |};
 
 export type UnitActionOccupyBuildingType = {|
@@ -62,7 +62,7 @@ export type UnitActionOccupyBuildingType = {|
     y: number,
     id: string,
     userId: string,
-    container: PIXI.Container
+    container: PIXI.Container,
 |};
 
 export type UnitActionOpenStoreType = {|
@@ -71,7 +71,7 @@ export type UnitActionOpenStoreType = {|
     y: number,
     id: string,
     userId: string,
-    container: PIXI.Container
+    container: PIXI.Container,
 |};
 
 export type UnitActionRaiseSkeletonType = {|
@@ -81,14 +81,14 @@ export type UnitActionRaiseSkeletonType = {|
         y: number,
         id: string,
         userId: string,
-        newUnitId: string
+        newUnitId: string,
     |},
     grave: {|
         x: number,
-        y: number
+        y: number,
     |},
     userId: string,
-    container: PIXI.Container
+    container: PIXI.Container,
 |};
 
 export type UnitActionDestroyBuildingType = {|
@@ -97,22 +97,22 @@ export type UnitActionDestroyBuildingType = {|
         x: number,
         y: number,
         id: string,
-        userId: string
+        userId: string,
     |},
     building: {|
         x: number,
         y: number,
         type: 'farmDestroyed',
-        id: string
+        id: string,
     |},
     userId: string,
-    container: PIXI.Container
+    container: PIXI.Container,
 |};
 
 export type RefreshUnitListType = {|
     type: 'refresh-unit-list',
     map: MapType,
-    activeUserId: string
+    activeUserId: string,
 |};
 
 export type UnitActionType =
@@ -136,15 +136,15 @@ type UnitGameAttrType = {|
         hitPoints: PIXI.Container,
         level: PIXI.Container,
         poisonCountdown: PIXI.Sprite,
-        wispAura: PIXI.Sprite
+        wispAura: PIXI.Sprite,
     |},
     userList: Array<MapUserType>,
     event: {|
         // eslint-disable-next-line no-use-before-define
-        click: (unit: Unit) => Promise<void>
+        click: (unit: Unit) => Promise<void>,
     |},
     hasWispAura: boolean,
-    isActionAvailable: boolean
+    isActionAvailable: boolean,
 |};
 
 export type UnitConstructorType = {|
@@ -152,8 +152,8 @@ export type UnitConstructorType = {|
     userList: Array<MapUserType>,
     event: {|
         // eslint-disable-next-line no-use-before-define
-        click: (unit: Unit) => Promise<void>
-    |}
+        click: (unit: Unit) => Promise<void>,
+    |},
 |};
 
 export type GameDataType = {|
@@ -166,14 +166,14 @@ export type GameDataType = {|
     +pathMap: {
         +walk: Array<Array<number>>,
         +flow: Array<Array<number>>,
-        +fly: Array<Array<number>>
+        +fly: Array<Array<number>>,
     },
     +armorMap: {
         +walk: Array<Array<number>>,
         +flow: Array<Array<number>>,
-        +fly: Array<Array<number>>
+        +fly: Array<Array<number>>,
     },
-    +emptyActionMap: Array<Array<[]>>
+    +emptyActionMap: Array<Array<[]>>,
 |};
 
 /*

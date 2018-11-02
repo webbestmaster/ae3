@@ -4,11 +4,11 @@
 /* eslint consistent-this: ["error", "user"] */
 
 type UserAttrType = {|
-    id: string
+    id: string,
 |};
 
 type SavedDataType = {|
-    id?: string
+    id?: string,
 |};
 
 // eslint-disable-next-line id-match

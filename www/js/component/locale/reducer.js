@@ -21,10 +21,14 @@ function getLocaleName(): LocaleNameType {
 const initialLocaleName = getLocaleName();
 
 export type LocaleType = {|
-    +name: LocaleNameType
+    +name: LocaleNameType,
 |};
 
-export const locale = combineReducers({
+type ReduceMapType = {|
+    +name: (localeName: LocaleNameType, actionData: ActionDataType) => LocaleNameType,
+|};
+
+export const locale = combineReducers<ReduceMapType, LocaleType>({
     name: (localeName: LocaleNameType = initialLocaleName, actionData: ActionDataType): LocaleNameType => {
         if (actionData.type !== localeConst.action.type.setLocale) {
             return localeName;

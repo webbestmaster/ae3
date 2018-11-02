@@ -29,7 +29,7 @@ export type BuildingType = {|
     y: number,
     type: BuildingAttrTypeType,
     userId?: UserIdType,
-    id?: string
+    id?: string,
 |};
 
 export type UnitActionStateType = {|
@@ -40,7 +40,7 @@ export type UnitActionStateType = {|
     didOccupyBuilding?: boolean,
     didDestroyBuilding?: boolean,
 
-    didRaiseSkeleton?: boolean
+    didRaiseSkeleton?: boolean,
 |};
 
 const unitActionStateDefaultValue: UnitActionStateType = {
@@ -66,17 +66,17 @@ export type UnitType = {|
     hasWispAura?: boolean,
     damage?: {|
         given?: number,
-        received?: number
+        received?: number,
     |},
     userId?: UserIdType,
-    id?: string
+    id?: string,
     // level?: number
 |};
 
 export type GraveType = {|
     x: number,
     y: number,
-    removeCountdown: number
+    removeCountdown: number,
 |};
 
 export type MapUserType = {|
@@ -85,19 +85,19 @@ export type MapUserType = {|
     teamId: TeamIdType,
     commander?: {|
         type: UnitTypeCommanderType,
-        buyCount: number
+        buyCount: number,
     |},
-    isLeaved?: boolean
+    isLeaved?: boolean,
 |};
 
 export type MapType = {|
     meta: {
         'en-US': {
-            name: string
+            name: string,
         },
         'ru-RU': {
-            name: string
-        }
+            name: string,
+        },
     },
     type: 'skirmish',
     userList: Array<MapUserType>,
@@ -107,5 +107,5 @@ export type MapType = {|
     landscape: Array<Array<LandscapeType>>,
     buildings: Array<BuildingType>,
     units: Array<UnitType>,
-    graves: Array<GraveType>
+    graves: Array<GraveType>,
 |};

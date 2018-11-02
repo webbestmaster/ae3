@@ -16,12 +16,12 @@ import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 import type {ActionDataType} from '../../redux-store-provider/type';
 
 type ReduxPropsType = {|
-    +auth: AuthType
+    +auth: AuthType,
 |};
 
 type ReduxActionType = {|
     +setUser: (userState: UserType) => SetUserType,
-    +setSocket: (socketState: SocketType) => SetSocketType
+    +setSocket: (socketState: SocketType) => SetSocketType,
 |};
 
 const reduxAction: ReduxActionType = {
@@ -34,7 +34,7 @@ type PassedPropsType = {};
 type PropsType = $ReadOnly<$Exact<{
         ...$Exact<PassedPropsType>,
         ...$Exact<ReduxPropsType>,
-        ...$Exact<ReduxActionType>
+        ...$Exact<ReduxActionType>,
     }>>;
 
 type StateType = null;

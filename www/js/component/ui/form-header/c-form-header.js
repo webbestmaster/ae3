@@ -11,7 +11,7 @@ import {isString} from '../../../lib/is/is';
 
 type PropsType = {|
     children: Node,
-    className?: string
+    className?: string,
 |};
 
 type StateType = {||};

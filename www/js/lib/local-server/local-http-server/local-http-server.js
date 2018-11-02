@@ -12,7 +12,7 @@ import {LocalExpress} from '../local-express/local-express';
 
 type AttrType = {|
     port: number,
-    +expressApp: LocalExpress
+    +expressApp: LocalExpress,
 |};
 
 export class LocalHttpServer {

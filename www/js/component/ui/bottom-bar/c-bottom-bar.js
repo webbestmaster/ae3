@@ -20,13 +20,13 @@ const reduxAction: ReduxActionType = {};
 
 type PassedPropsType = {|
     children: Node,
-    className?: string
+    className?: string,
 |};
 
 type PropsType = $ReadOnly<$Exact<{
         ...$Exact<PassedPropsType>,
         ...$Exact<ReduxPropsType>,
-        ...$Exact<ReduxActionType>
+        ...$Exact<ReduxActionType>,
     }>>;
 
 type StateType = null;

@@ -28,7 +28,7 @@ const theme = createMuiTheme({
 
 type StateType = void;
 type PropsType = {|
-    +isOpen: boolean
+    +isOpen: boolean,
 |};
 
 export class Spinner extends Component<PropsType, StateType> {

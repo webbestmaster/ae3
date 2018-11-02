@@ -19,17 +19,17 @@ type StateType = void;
 type PropsType = {|
     map: MapType,
     className?: string,
-    canvasClassName?: string
+    canvasClassName?: string,
 |};
 
 type NodeType = {|
-    canvas: {current: HTMLCanvasElement | null}
+    canvas: {current: HTMLCanvasElement | null},
 |};
 
 type LayerListType = {|
     +landscape: PIXI.Container,
     +unitList: PIXI.Container,
-    +buildingList: PIXI.Container
+    +buildingList: PIXI.Container,
 |};
 
 export class MapPreview extends Component<PropsType, StateType> {

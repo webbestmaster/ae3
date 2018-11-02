@@ -20,12 +20,12 @@ type InteractionEventType = {
     +data: {
         +global: {
             +x: number,
-            +y: number
+            +y: number,
         },
         +originalEvent: {
-            touches?: TouchList
-        }
-    }
+            touches?: TouchList,
+        },
+    },
 };
 
 export function getUserIndex(userId: string, userList: Array<MapUserType>): number | null {
@@ -91,7 +91,7 @@ export type UnitDataForAttackType = {|
     +attack: {|
         +min: number,
         +max: number,
-        +range: number
+        +range: number,
     |},
     +poisonAttack: number,
     +type: UnitTypeAllType,
@@ -107,17 +107,17 @@ export type UnitDataForAttackType = {|
     +damage: {|
         // need to count level
         given: number, // will rewrite in getAttackDamage
-        received: number // will rewrite in getAttackDamage
+        received: number, // will rewrite in getAttackDamage
     |},
     +level: number,
-    +placeArmor: number
+    +placeArmor: number,
 |};
 
 export type AttackResultUnitType = UnitDataForAttackType;
 
 export type AttackResultType = {|
     aggressor: AttackResultUnitType,
-    defender: AttackResultUnitType
+    defender: AttackResultUnitType,
 |};
 
 // eslint-disable-next-line max-statements, complexity
@@ -186,7 +186,7 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
 
 type UnitsDataForAttackType = {|
     +aggressor: UnitDataForAttackType,
-    +defender: UnitDataForAttackType
+    +defender: UnitDataForAttackType,
 |};
 
 function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataForAttackType): number {
@@ -437,7 +437,7 @@ type UnitSupplyStateType = {|
     +unitCount: number,
     +unitLimit: number,
     +isFull: boolean,
-    +isOverFull: boolean
+    +isOverFull: boolean,
 |};
 
 export function getSupplyState(map: MapType, userId: string): UnitSupplyStateType {
@@ -455,8 +455,8 @@ export function getSupplyState(map: MapType, userId: string): UnitSupplyStateTyp
 
 type SkirmishMathResultType = {|
     winner: {|
-        teamId: TeamIdType | null
-    |}
+        teamId: TeamIdType | null,
+    |},
 |};
 
 type MathResultType = SkirmishMathResultType;
@@ -602,7 +602,7 @@ export function isStoreOpen(): boolean {
 
 type PlaceForNewUnitType = {|
     +x: number,
-    +y: number
+    +y: number,
 |};
 
 function hasPlaceForNewUnit(x: number, y: number, gameData: GameDataType): boolean {
@@ -656,7 +656,7 @@ export function canOpenStore(x: number, y: number, gameData: GameDataType): bool
 export type WrongStateTypeUnitOnUnitType = {|
     type: 'unit-on-unit',
     x: number,
-    y: number
+    y: number,
 |};
 
 export type WrongStateType = WrongStateTypeUnitOnUnitType;
@@ -714,7 +714,7 @@ export function getRoomType(): RoomTypeType {
 type MapSizeDataType = {|
     +width: number,
     +height: number,
-    +aspectRatio: number
+    +aspectRatio: number,
 |};
 
 export function getMapSize(map: MapType): MapSizeDataType {

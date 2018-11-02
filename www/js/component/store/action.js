@@ -5,8 +5,8 @@ import {storeConst} from './const';
 export type SetOpenFromGameType = {|
     +type: 'store__open-from-game',
     +payload: {|
-        +isOpenFromGame: boolean
-    |}
+        +isOpenFromGame: boolean,
+    |},
 |};
 
 export function setOpenFromGame(isOpenFromGame: boolean): SetOpenFromGameType {

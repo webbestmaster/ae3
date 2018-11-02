@@ -37,7 +37,7 @@ const mapList: Array<MapType> = Object.keys(mapHash).map((mapName: string): MapT
 
 type ReduxPropsType = {|
     +auth: AuthType,
-    +locale: LocaleType
+    +locale: LocaleType,
 |};
 
 type ReduxActionType = {};
@@ -50,7 +50,7 @@ type PropsType = $ReadOnly<$Exact<{
         ...$Exact<PassedPropsType>,
         ...$Exact<ReduxPropsType>,
         ...$Exact<ReduxActionType>,
-        ...$Exact<ContextRouterType>
+        ...$Exact<ContextRouterType>,
     }>>;
 
 type StateType = {|
@@ -58,7 +58,7 @@ type StateType = {|
     +defaultMoney: number,
     +unitLimit: number,
     +openShowInfoMapList: Array<string>,
-    +isRoomCreating: boolean
+    +isRoomCreating: boolean,
 |};
 
 class CreateRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {

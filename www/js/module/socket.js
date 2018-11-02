@@ -17,10 +17,10 @@ type SocketMessageJoinIntoRoomType = {
             +roomId: string,
             +socketId: string,
             +type: 'room__join-into-room',
-            +userId: string
+            +userId: string,
         },
-        length: number
-    }
+        length: number,
+    },
 };
 
 type SocketMessageLeaveFromRoomType = {
@@ -30,10 +30,10 @@ type SocketMessageLeaveFromRoomType = {
         +last: {
             +roomId: string,
             +type: 'room__leave-from-room',
-            +userId: string
+            +userId: string,
         },
-        length: number
-    }
+        length: number,
+    },
 };
 
 type SocketMessageUserDisconnectedFromRoomType = {
@@ -43,10 +43,10 @@ type SocketMessageUserDisconnectedFromRoomType = {
         +last: {
             +roomId: string,
             +type: 'room__user-disconnected',
-            +userId: string
+            +userId: string,
         },
-        length: number
-    }
+        length: number,
+    },
 };
 
 export type SocketMessageTakeTurnType = {
@@ -56,10 +56,10 @@ export type SocketMessageTakeTurnType = {
         +last: {
             +roomId: string,
             +type: 'room__take-turn',
-            +activeUserId: string // !!! instead of userId, new active user
+            +activeUserId: string, // !!! instead of userId, new active user
         },
-        length: number
-    }
+        length: number,
+    },
 };
 
 type SocketMessageDropTurnType = {
@@ -69,10 +69,10 @@ type SocketMessageDropTurnType = {
         +last: {
             +roomId: string,
             +type: 'room__drop-turn',
-            +activeUserId: string // !!! instead of userId, user who drop turn
+            +activeUserId: string, // !!! instead of userId, user who drop turn
         },
-        length: number
-    }
+        length: number,
+    },
 };
 
 export type SocketMessagePushStateType = {
@@ -81,10 +81,10 @@ export type SocketMessagePushStateType = {
     +states: {
         +last: {
             +type: 'room__push-state',
-            +state: PushedStatePayloadType
+            +state: PushedStatePayloadType,
         },
-        length: number
-    }
+        length: number,
+    },
 };
 
 export type SocketMessageType =
@@ -99,7 +99,7 @@ type AttrType = {|
     // eslint-disable-next-line no-use-before-define
     initialPromise: Promise<Socket>,
     socket: {id: string} | null,
-    model: MainModel
+    model: MainModel,
 |};
 
 export class Socket {

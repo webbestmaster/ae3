@@ -36,7 +36,7 @@ import iconUnitInfoDescription from './i/icon-unit-info-description.png';
 import iconUnitInfoDescriptionOpen from './i/icon-unit-info-description-open.png';
 
 type ReduxPropsType = {|
-    +locale: LocaleType
+    +locale: LocaleType,
 |};
 
 type ReduxActionType = {
@@ -51,7 +51,7 @@ type PassedPropsType = {|
     +unitType: UnitTypeAllType,
     +x: number,
     +y: number,
-    +mapState: MapType
+    +mapState: MapType,
 |};
 
 type PropsType = $ReadOnly<$Exact<{
@@ -61,16 +61,16 @@ type PropsType = $ReadOnly<$Exact<{
         ...$Exact<ContextRouterType>,
         +match: {
             +params: {
-                +roomId: string
-            }
-        }
+                +roomId: string,
+            },
+        },
         // +children: Node
     }>>;
 
 type StateType = {|
     +mapUserData: MapUserType,
     +isInProgress: boolean,
-    +isFullInfoShow: boolean
+    +isFullInfoShow: boolean,
 |};
 
 class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateType> {

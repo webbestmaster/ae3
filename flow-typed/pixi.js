@@ -12,7 +12,7 @@ type ApplicationOptionsType = {|
     clearBeforeRender?: boolean,
     roundPixels?: boolean,
     sharedTicker?: boolean,
-    sharedLoader?: boolean
+    sharedLoader?: boolean,
 |};
 
 type TextStyleConstructorType = {
@@ -29,19 +29,19 @@ type TextStyleConstructorType = {
     dropShadowAngle?: number,
     dropShadowDistance?: number,
     wordWrap?: boolean,
-    wordWrapWidth?: number
+    wordWrapWidth?: number,
 };
 
 type InteractionEventType = {
     +data: {
         +global: {
             +x: number,
-            +y: number
+            +y: number,
         },
         +originalEvent: {
-            touches?: TouchList
-        }
-    }
+            touches?: TouchList,
+        },
+    },
 };
 
 type MouseEventNameType = 'click' | 'mousedown' | 'mouseup';
@@ -51,19 +51,19 @@ declare module 'pixi.js' {
     // eslint-disable-next-line id-match
     declare export var SCALE_MODES: {|
         +LINEAR: 0,
-        +NEAREST: 1
+        +NEAREST: 1,
     |};
 
     declare export var settings: {|
-        SCALE_MODE: 0 | 1
+        SCALE_MODE: 0 | 1,
     |};
 
     declare export var loader: {|
         add(imageName: string, imagePath?: string): void,
         load(callback: () => void): void,
         onProgress: {
-            add(callback: () => void): void
-        }
+            add(callback: () => void): void,
+        },
     |};
 
     declare class PixiObject {
@@ -74,41 +74,41 @@ declare module 'pixi.js' {
         buttonMode: boolean,
         hitArea: Rectangle,
         position: {
-            set(x: number, y: number): void
+            set(x: number, y: number): void,
         },
         anchor: {
-            set(x: number, y: number): void
+            set(x: number, y: number): void,
         },
         scale: {
-            set(x: number, y: number): void
+            set(x: number, y: number): void,
         },
         alpha: number,
-        removeChildren(startIndex?: number, endIndex?: number): void
+        removeChildren(startIndex?: number, endIndex?: number): void,
     }
 
     declare export class Texture {
         constructor(): Texture,
-        static fromImage(spriteName: string): Texture
+        static fromImage(spriteName: string): Texture,
     }
 
     declare export class Sprite extends PixiObject {
         constructor(): Sprite,
         texture: Texture,
         tint: number,
-        static fromImage(spriteName: string): Sprite
+        static fromImage(spriteName: string): Sprite,
     }
 
     declare export class Rectangle extends PixiObject {
-        constructor(number, number, number, number): Rectangle
+        constructor(number, number, number, number): Rectangle,
     }
 
     declare export class TextStyle {
-        constructor(initialData?: TextStyleConstructorType): TextStyle
+        constructor(initialData?: TextStyleConstructorType): TextStyle,
     }
 
     declare export class Text extends PixiObject {
         constructor(text: string | number, style?: TextStyle): Text,
-        text: string | number
+        text: string | number,
     }
 
     declare export class Container {
@@ -124,8 +124,8 @@ declare module 'pixi.js' {
         hitArea: Rectangle,
         alpha: number,
         position: {
-            set(x: number, y: number): void
-        }
+            set(x: number, y: number): void,
+        },
     }
 
     declare export class Application {
@@ -135,23 +135,23 @@ declare module 'pixi.js' {
         renderer: {
             resize(width: number, height: number): void,
             view: {
-                toDataURL(): string
-            }
+                toDataURL(): string,
+            },
         },
         stop: () => void,
         start: () => void,
         destroy: () => void,
-        render: () => void
+        render: () => void,
     }
 
     declare class AnimatedSprite extends PixiObject {
         constructor(textureList: Array<Texture>): AnimatedSprite,
         animationSpeed: number,
         textures: Array<Texture>,
-        play(): void
+        play(): void,
     }
 
     declare export var extras: {
-        AnimatedSprite: typeof AnimatedSprite
+        AnimatedSprite: typeof AnimatedSprite,
     };
 }

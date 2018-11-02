@@ -9,8 +9,8 @@ export type LocaleNameType = 'en-US' | 'ru-RU';
 export type SetLocaleType = {|
     +type: 'locale__set-locale',
     +payload: {|
-        +localeName: LocaleNameType
-    |}
+        +localeName: LocaleNameType,
+    |},
 |};
 
 export function setLocale(localeName: LocaleNameType): SetLocaleType {

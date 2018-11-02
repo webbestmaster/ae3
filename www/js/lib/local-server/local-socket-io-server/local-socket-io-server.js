@@ -22,11 +22,11 @@ connections.forEach(connection => {
 */
 
 type AttrType = {|
-    +localHttpServer: LocalHttpServer
+    +localHttpServer: LocalHttpServer,
 |};
 
 type SocketsType = {|
-    +connected: {[key: string]: LocalSocketIoClient}
+    +connected: {[key: string]: LocalSocketIoClient},
 |};
 
 export class LocalSocketIoServer {

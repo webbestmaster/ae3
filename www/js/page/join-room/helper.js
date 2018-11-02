@@ -10,7 +10,7 @@ export type RoomDataType = {|
     roomId: string,
     settings: AllRoomSettingsType,
     userList: Array<ServerUserType>,
-    maxUserSize: number
+    maxUserSize: number,
 |};
 
 // eslint-disable-next-line complexity

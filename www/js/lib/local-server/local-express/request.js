@@ -6,7 +6,7 @@ import type {PushedStateType} from '../room/room';
 type ParamsType = {+[key: string]: string};
 type ConstructorOptionsType = {|
     +params: ParamsType,
-    +body: PushedStateType
+    +body: PushedStateType,
 |};
 
 export class LocalExpressRequest {

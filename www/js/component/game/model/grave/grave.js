@@ -12,12 +12,12 @@ type GraveAttrType = GraveType;
 type GraveGameAttrType = {|
     container: PIXI.Container,
     sprite: {|
-        grave: PIXI.Sprite
-    |}
+        grave: PIXI.Sprite,
+    |},
 |};
 
 type GraveConstructorType = {|
-    graveData: GraveType
+    graveData: GraveType,
 |};
 
 export class Grave {

@@ -11,6 +11,6 @@ declare module '@tweenjs/tween.js' {
         delay(delay: number): Tween,
         to<T>(tweenObject: T, time: number): Tween,
         onUpdate<T>(callback: (tweenObject: T) => void): Tween,
-        onComplete<T>(callback: (tweenObject: T) => void): Tween
+        onComplete<T>(callback: (tweenObject: T) => void): Tween,
     }
 }

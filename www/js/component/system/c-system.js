@@ -14,7 +14,7 @@ import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
 type ReduxPropsType = {};
 
 type ReduxActionType = {|
-    +onResize: (width: number, height: number) => OnResizeType
+    +onResize: (width: number, height: number) => OnResizeType,
 |};
 
 const reduxAction: ReduxActionType = {
@@ -26,7 +26,7 @@ type PassedPropsType = {};
 type PropsType = $ReadOnly<$Exact<{
         ...$Exact<PassedPropsType>,
         ...$Exact<ReduxPropsType>,
-        ...$Exact<ReduxActionType>
+        ...$Exact<ReduxActionType>,
     }>>;
 
 type StateType = null;

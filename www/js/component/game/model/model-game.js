@@ -56,7 +56,7 @@ type RenderSettingType = {|
     width: number,
     height: number,
     view: HTMLElement,
-    map: MapType
+    map: MapType,
 |};
 
 // const sprite = require('./image.png');
@@ -83,17 +83,17 @@ export class GameModel {
     pathMap: {|
         walk: Array<Array<number>>,
         flow: Array<Array<number>>,
-        fly: Array<Array<number>>
+        fly: Array<Array<number>>,
     |};
 
     armorMap: {|
         walk: Array<Array<number>>,
         flow: Array<Array<number>>,
-        fly: Array<Array<number>>
+        fly: Array<Array<number>>,
     |};
 
     message: {|
-        list: Array<SocketMessageType>
+        list: Array<SocketMessageType>,
     |};
 
     constructor() {

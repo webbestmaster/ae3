@@ -25,7 +25,7 @@ import type {ContextRouterType} from '../../type/react-router-dom-v4';
 type ReduxPropsType = {};
 
 type ReduxActionType = {|
-    +setLocale: (localeName: LocaleNameType) => SetLocaleType
+    +setLocale: (localeName: LocaleNameType) => SetLocaleType,
 |};
 
 const reduxAction: ReduxActionType = {
@@ -38,7 +38,7 @@ type PropsType = $ReadOnly<$Exact<{
         ...$Exact<PassedPropsType>,
         ...$Exact<ReduxPropsType>,
         ...$Exact<ReduxActionType>,
-        ...$Exact<ContextRouterType>
+        ...$Exact<ContextRouterType>,
     }>>;
 
 type StateType = null;

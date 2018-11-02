@@ -7,25 +7,25 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 type ImageMapType = {|
     building: {
-        [key: string]: string
+        [key: string]: string,
     },
     landscape: {
-        [key: string]: string
+        [key: string]: string,
     },
     other: {
-        [key: string]: string
+        [key: string]: string,
     },
     unit: {
-        [key: string]: string
+        [key: string]: string,
     },
     font: {
         unit: {
-            [key: string]: string
+            [key: string]: string,
         },
         popup: {
-            [key: string]: string
-        }
-    }
+            [key: string]: string,
+        },
+    },
 |};
 
 export const imageMap: ImageMapType = {

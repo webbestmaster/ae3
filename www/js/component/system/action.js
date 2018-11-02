@@ -6,8 +6,8 @@ export type OnResizeType = {|
     type: 'system__resize',
     payload: {
         width: number,
-        height: number
-    }
+        height: number,
+    },
 |};
 
 export function onResize(width: number, height: number): OnResizeType {

@@ -5,12 +5,12 @@
 /* global URL */
 
 type ConstructorOptionsType = {|
-    +initialUrl: string
+    +initialUrl: string,
 |};
 
 type AttrType = {|
     ...ConstructorOptionsType,
-    +mask: Array<string>
+    +mask: Array<string>,
 |};
 
 export class UrlMask {

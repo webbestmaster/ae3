@@ -33,7 +33,7 @@ import {Spinner} from '../../component/ui/spinner/c-spinner';
 
 type ReduxPropsType = {|
     +auth: AuthType,
-    +locale: LocaleType
+    +locale: LocaleType,
 |};
 
 type ReduxActionType = {};
@@ -46,12 +46,12 @@ type PropsType = $ReadOnly<$Exact<{
         ...$Exact<PassedPropsType>,
         ...$Exact<ReduxPropsType>,
         ...$Exact<ReduxActionType>,
-        ...$Exact<ContextRouterType>
+        ...$Exact<ContextRouterType>,
     }>>;
 
 type StateType = {|
     +roomDataList: Array<RoomDataType> | null,
-    +isRoomsFetching: boolean
+    +isRoomsFetching: boolean,
 |};
 
 class JoinRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {

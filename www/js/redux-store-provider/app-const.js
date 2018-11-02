@@ -3,8 +3,8 @@
 
 export type AppConstType = {|
     +api: {|
-        +url: string
-    |}
+        +url: string,
+    |},
 |};
 
 const {hostname, origin} = window.location;

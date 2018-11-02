@@ -65,15 +65,15 @@ export const bottomBarData = {
 };
 
 type PassedPropsType = {|
-    +roomId: string
+    +roomId: string,
 |};
 
 type ReduxPropsType = {
-    system: SystemType
+    system: SystemType,
 };
 
 type ReduxActionType = {|
-    setOpenFromGame: (isOpenFromGame: boolean) => SetOpenFromGameType
+    setOpenFromGame: (isOpenFromGame: boolean) => SetOpenFromGameType,
 |};
 
 const reduxAction: ReduxActionType = {
@@ -84,12 +84,12 @@ type PropsType = $ReadOnly<$Exact<{|
         ...$Exact<PassedPropsType>,
         ...$Exact<ReduxPropsType>,
         ...$Exact<ReduxActionType>,
-        ...$Exact<ContextRouterType>
+        ...$Exact<ContextRouterType>,
     |}>>;
 
 export type PopupParameterType = {|
     isOpen: boolean,
-    showMoney?: boolean
+    showMoney?: boolean,
 |};
 
 export type DisabledByItemType =
@@ -110,22 +110,22 @@ type StateType = {|
     disabledByList: Array<DisabledByItemType>,
     popup: {|
         endGame: {|
-            isOpen: boolean
+            isOpen: boolean,
         |},
         changeActiveUser: {|
             isOpen: boolean,
-            showMoney: boolean
-        |}
+            showMoney: boolean,
+        |},
     |},
     activeLandscapeTile: {|
         x: number,
-        y: number
-    |}
+        y: number,
+    |},
     // map: MapType | null
 |};
 
 type RefsType = {|
-    canvas: {current: HTMLCanvasElement | null}
+    canvas: {current: HTMLCanvasElement | null},
 |};
 
 export class GameView extends Component<ReduxPropsType, PassedPropsType, StateType> {

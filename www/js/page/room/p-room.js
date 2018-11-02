@@ -51,7 +51,7 @@ import {isNotString, isString} from '../../lib/is/is';
 const roomPushState = 'room__push-state';
 
 type ReduxPropsType = {|
-    +locale: LocaleType
+    +locale: LocaleType,
 |};
 
 type ReduxActionType = {};
@@ -64,7 +64,7 @@ type PropsType = $ReadOnly<$Exact<{
         ...$Exact<PassedPropsType>,
         ...$Exact<ReduxPropsType>,
         ...$Exact<ReduxActionType>,
-        ...$Exact<ContextRouterType>
+        ...$Exact<ContextRouterType>,
     }>>;
 
 type StateType = {|
@@ -72,7 +72,7 @@ type StateType = {|
     userList: Array<ServerUserType>,
     model: MainModel,
     isGameStart: boolean,
-    isRoomDataFetching: boolean
+    isRoomDataFetching: boolean,
 |};
 
 class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {

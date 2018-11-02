@@ -12,7 +12,7 @@ import type {RequestCallBackType} from '../local-request/local-request';
 
 type AttrType = {|
     +httpServerList: Array<LocalHttpServer>,
-    +socketIoServerList: Array<LocalSocketIoServer>
+    +socketIoServerList: Array<LocalSocketIoServer>,
 |};
 
 export class LocalMaster {

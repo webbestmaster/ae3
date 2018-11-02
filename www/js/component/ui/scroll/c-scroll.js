@@ -14,15 +14,15 @@ type StateType = void;
 
 type PropsType = {|
     +className?: string,
-    +children: Node | Array<Node>
+    +children: Node | Array<Node>,
 |};
 
 type NodeType = {|
-    +wrapper: {current: null | HTMLDivElement}
+    +wrapper: {current: null | HTMLDivElement},
 |};
 
 type AttrType = {|
-    swiper: Swiper | null
+    swiper: Swiper | null,
 |};
 
 export class Scroll extends Component<StateType, PropsType> {

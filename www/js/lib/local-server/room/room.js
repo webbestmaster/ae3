@@ -14,7 +14,7 @@ import Stopwatch from 'timer-stopwatch';
 type PushedStatePayloadIsGameStartedType = {|
     +isGameStart: boolean,
     +activeUserId: string,
-    +map: mixed // MapType
+    +map: mixed, // MapType
 |};
 
 export type PushedStatePayloadUnitMoveType = {|
@@ -22,17 +22,17 @@ export type PushedStatePayloadUnitMoveType = {|
     +path: mixed, // PathType,
     +from: {|
         +x: number,
-        +y: number
+        +y: number,
     |},
     +to: {|
         +x: number,
-        +y: number
+        +y: number,
     |},
     +unit: {|
-        +id: string
+        +id: string,
     |},
     +map: mixed, // MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadUnitAttackType = {|
@@ -40,21 +40,21 @@ export type PushedStatePayloadUnitAttackType = {|
     +aggressor: mixed, // AttackResultUnitType,
     +defender: mixed, // AttackResultUnitType,
     +map: mixed, // MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadFixBuildingType = {|
     +type: 'fix-building',
     +building: mixed, // BuildingType,
     +map: mixed, // MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadOccupyBuildingType = {|
     +type: 'occupy-building',
     +building: mixed, // BuildingType,
     +map: mixed, // MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadRaiseSkeletonType = {|
@@ -64,14 +64,14 @@ export type PushedStatePayloadRaiseSkeletonType = {|
         +y: number,
         +id: string,
         +userId: string,
-        +newUnitId: string
+        +newUnitId: string,
     |},
     +grave: {|
         +x: number,
-        +y: number
+        +y: number,
     |},
     +map: mixed, // MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadDestroyBuildingType = {|
@@ -80,47 +80,47 @@ export type PushedStatePayloadDestroyBuildingType = {|
         +x: number,
         +y: number,
         +id: string,
-        +userId: string
+        +userId: string,
     |},
     +building: {|
         +x: number,
         +y: number,
         +type: mixed, // BuildingAttrTypeType,
-        +id: string
+        +id: string,
     |},
     +map: mixed, // MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadRefreshUnitListType = {|
     +type: 'refresh-unit-list',
     +map: mixed, // MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadBuyUnitType = {|
     +type: 'buy-unit',
     +newMapUnit: mixed, // UnitType,
     +map: mixed, // MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadSyncMapWithServerUserListType = {|
     +type: 'sync-map-with-server-user-list',
     +map: mixed, // MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadRemoveUserType = {|
     +type: 'remove-user',
     +map: mixed, // MapType,
-    +userId: string
+    +userId: string,
 |};
 
 export type MetaType = {|
     order: number,
     timestamp: number,
-    hash: string
+    hash: string,
 |};
 
 export type PushedStatePayloadType =
@@ -143,13 +143,13 @@ export type PushedStateType = {
     +roomId?: string,
     +activeUserId?: string,
     +userId?: string,
-    +socketId?: string
+    +socketId?: string,
 } | null;
 
 let roomId = 0;
 
 type RoomConstructorOptionsType = {|
-    +server: Server
+    +server: Server,
 |};
 
 // export type SettingsType = { [key: string]: mixed };
@@ -164,9 +164,9 @@ type AttrType = {|
     settings: SettingsType,
     timers: {|
         // will destroy room, if room has no connections
-        onCreateRoom: Stopwatch | null
+        onCreateRoom: Stopwatch | null,
     |}, // will extend by private.bindTimers
-    server: Server
+    server: Server,
 |};
 
 export class Room {

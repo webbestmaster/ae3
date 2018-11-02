@@ -9,7 +9,7 @@ import {RoomConnection} from '../../../room/room-connection/room-connection';
 type ServerUserType = {|
     userId: string,
     socketId: string,
-    type: 'human' | 'bot'
+    type: 'human' | 'bot',
 |};
 
 export function getUsers(req: LocalExpressRequest, res: LocalExpressResponse) {

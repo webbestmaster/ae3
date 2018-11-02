@@ -7,7 +7,7 @@ import find from 'lodash/find';
 import {Room} from './room';
 
 type AttrType = {|
-    +rooms: Array<Room>
+    +rooms: Array<Room>,
 |};
 
 export class RoomMaster {

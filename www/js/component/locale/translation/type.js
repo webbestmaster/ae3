@@ -68,7 +68,7 @@ export type LangDataType = {|
     +PREPARATION_OF_IMAGES: string,
 
     // spec symbols
-    +SPACE: ' '
+    +SPACE: ' ',
     /* eslint-enable id-match */
 |};
 

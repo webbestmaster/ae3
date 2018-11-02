@@ -6,17 +6,17 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 
 type StoreValueStateType = {|
-    +openFromGame: boolean
+    +openFromGame: boolean,
 |};
 
 type StoreValueActionType = {|
     setOpenFromGame: (openFromGame: boolean) => void,
-    getState: () => StoreValueStateType
+    getState: () => StoreValueStateType,
 |};
 
 export type StoreValueType = {|
     +state: StoreValueStateType,
-    +action: StoreValueActionType
+    +action: StoreValueActionType,
 |};
 
 const defaultState: StoreValueStateType = {

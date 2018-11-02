@@ -12,82 +12,82 @@ type MapGuideType = {|
     +size: {|
         +square: number,
         +attackAnimation: {|
-            +square: number
-        |}
+            +square: number,
+        |},
     |},
     +font: {|
         +unit: {|
             +width: number,
-            +height: number
-        |}
+            +height: number,
+        |},
     |},
     +building: {|
         +farm: {|
             +name: 'farm',
             +spriteName: 'farm-gray',
             +moneyBonus: 20,
-            +hitPointsBonus: 20
+            +hitPointsBonus: 20,
         |},
         +castle: {|
             +name: 'castle',
             +spriteName: 'castle-gray',
             +moneyBonus: 30,
-            +hitPointsBonus: 30
+            +hitPointsBonus: 30,
         |},
         +farmDestroyed: {|
             +name: 'farmDestroyed',
             +spriteName: 'farm-destroyed',
             +moneyBonus: 0,
-            +hitPointsBonus: 0
+            +hitPointsBonus: 0,
         |},
         +temple: {|
             +name: 'temple',
             +spriteName: 'temple',
             +moneyBonus: 0,
-            +hitPointsBonus: 20
+            +hitPointsBonus: 20,
         |},
         +well: {|
             +name: 'well',
             +spriteName: 'well',
             +moneyBonus: 0,
-            +hitPointsBonus: 20
-        |}
+            +hitPointsBonus: 20,
+        |},
     |},
     +landscape: {|
         +road: {|
             +pathReduce: 1,
-            +armor: 0
+            +armor: 0,
         |},
         +bridge: {|
             +pathReduce: 1,
-            +armor: 0
+            +armor: 0,
         |},
         +terra: {|
             +pathReduce: 1,
-            +armor: 5
+            +armor: 5,
         |},
         +forest: {|
             +pathReduce: 2,
-            +armor: 10
+            +armor: 10,
         |},
         +stone: {|
             +pathReduce: 3,
-            +armor: 15
+            +armor: 15,
         |},
         +water: {|
             +pathReduce: 3,
             +armor: 0,
-            +flowArmor: 15
+            +flowArmor: 15,
         |},
         +hill: {|
             +pathReduce: 2,
-            +armor: 10
-        |}
+            +armor: 10,
+        |},
     |},
     +landscapeUnderBuilding: {|
         +pathReduce: 1,
-        +armor: 15
-    |}
+        +armor: 15,
+    |},
 |};
 
 export const mapGuide: MapGuideType = {

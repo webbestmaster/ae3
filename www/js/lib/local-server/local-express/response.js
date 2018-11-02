@@ -5,11 +5,11 @@
 import type {RequestCallBackType} from '../local-request/local-request';
 
 type AttrType = {|
-    +callBack: RequestCallBackType
+    +callBack: RequestCallBackType,
 |};
 
 type ConstructorOptionsType = {|
-    +callBack: RequestCallBackType
+    +callBack: RequestCallBackType,
 |};
 
 export class LocalExpressResponse {

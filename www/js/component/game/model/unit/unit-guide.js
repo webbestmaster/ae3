@@ -25,13 +25,13 @@ export type UnitDataType = {|
     +attack: {|
         +min: number,
         +max: number,
-        +range: number
+        +range: number,
     |},
     +armor: number,
     +move: number,
     +langKey: {|
         +name: LangKeyType,
-        +description: LangKeyType
+        +description: LangKeyType,
     |},
     +cost: number,
 
@@ -50,7 +50,7 @@ export type UnitDataType = {|
     +raiseSkeletonRange?: number,
     +canBeBuy?: boolean,
     +withoutGrave?: boolean,
-    +isCommander?: boolean
+    +isCommander?: boolean,
 |};
 
 type UnitGuideDataType = {+[key: UnitTypeAllType]: UnitDataType};

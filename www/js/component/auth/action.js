@@ -5,7 +5,7 @@ import {authConst} from './const';
 
 export type SetUserType = {|
     +type: 'auth__set-user-state',
-    +payload: UserType
+    +payload: UserType,
 |};
 
 export function setUser(userState: UserType): SetUserType {
@@ -17,7 +17,7 @@ export function setUser(userState: UserType): SetUserType {
 
 export type SetSocketType = {|
     +type: 'auth__set-socket-state',
-    +payload: SocketType
+    +payload: SocketType,
 |};
 
 export function setSocket(socketState: SocketType): SetSocketType {

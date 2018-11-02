@@ -3,13 +3,11 @@
 /* global window */
 
 import {combineReducers} from 'redux';
-// user
-// socket
 import {authConst} from './const';
 import type {ActionDataType} from '../../redux-store-provider/type';
 
 export type UserType = {|
-    +id: string
+    +id: string,
 |};
 
 const defaultUserState: UserType = {
@@ -17,7 +15,7 @@ const defaultUserState: UserType = {
 };
 
 export type SocketType = {|
-    +id: string
+    +id: string,
 |};
 
 const defaultSocketState: SocketType = {
@@ -27,10 +25,15 @@ const defaultSocketState: SocketType = {
 // module
 export type AuthType = {|
     +user: UserType,
-    +socket: SocketType
+    +socket: SocketType,
 |};
 
-export const auth = combineReducers({
+type ReduceMapType = {|
+    +user: (userState: UserType, actionData: ActionDataType) => UserType,
+    +socket: (socketState: SocketType, actionData: ActionDataType) => SocketType,
+|};
+
+export const auth = combineReducers<ReduceMapType, AuthType>({
     user: (userState: UserType = defaultUserState, actionData: ActionDataType): UserType => {
         if (actionData.type !== authConst.action.type.setUserState) {
             return userState;

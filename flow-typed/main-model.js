@@ -8,6 +8,6 @@ declare module 'main-model' {
     stopListening(): MainModel,
     destroy(): MainModel,
         // eslint-disable-next-line flowtype/no-weak-types
-    trigger(key: string, value?: any): MainModel
+    trigger(key: string, value?: any): MainModel,
     }
 }

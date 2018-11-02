@@ -12,7 +12,7 @@ type RoutesType = {|
     joinRoom: string,
     roomOnLine: string,
     roomOffLine: string,
-    settings: string
+    settings: string,
 |};
 
 export const routes: RoutesType = {

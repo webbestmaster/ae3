@@ -15,16 +15,16 @@ import {Canvas} from '../canvas/c-canvas';
 type PropsType = {|
     +children: Node,
     +onChange: (value: string) => void,
-    +icon?: SelectIconNameType
+    +icon?: SelectIconNameType,
     // className?: string
 |};
 
 type StateType = {|
-    visibleString: string
+    visibleString: string,
 |};
 
 type NodeType = {|
-    select: {current: HTMLSelectElement | null}
+    select: {current: HTMLSelectElement | null},
 |};
 
 export class Select extends Component<PropsType, StateType> {

@@ -14,14 +14,14 @@ type BuildingAttrType = BuildingType;
 type BuildingGameAttrType = {|
     container: PIXI.Container,
     sprite: {|
-        building: PIXI.Sprite
+        building: PIXI.Sprite,
     |},
-    userList: Array<MapUserType>
+    userList: Array<MapUserType>,
 |};
 
 type BuildingConstructorType = {|
     buildingData: BuildingType,
-    userList: Array<MapUserType>
+    userList: Array<MapUserType>,
 |};
 
 export class Building {

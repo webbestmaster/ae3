@@ -10,13 +10,13 @@ type EventNameType = 'message' | 'connect' | 'disconnect';
 
 type ListenerType = {|
     +eventName: EventNameType,
-    +callBack: (data: mixed) => void | Promise<void>
+    +callBack: (data: mixed) => void | Promise<void>,
 |};
 
 type AttrType = {|
     +listenerList: Array<ListenerType>,
     url: string,
-    options: mixed
+    options: mixed,
 |};
 
 export class LocalSocketIoClient {

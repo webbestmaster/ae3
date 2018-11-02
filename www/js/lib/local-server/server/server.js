@@ -12,7 +12,7 @@ import {roomMaster} from '../room/master';
 import {isNumber} from '../helper';
 
 type ServerConstructorOptionsType = {|
-    port: number
+    port: number,
 |};
 
 const serverDefaultOptions: ServerConstructorOptionsType = {
@@ -23,7 +23,7 @@ type AttrType = {|
     +options: ServerConstructorOptionsType,
     +expressApp: LocalExpress,
     +httpServer: LocalHttpServer,
-    +socketIoServer: LocalSocketIoServer
+    +socketIoServer: LocalSocketIoServer,
 |};
 
 /**

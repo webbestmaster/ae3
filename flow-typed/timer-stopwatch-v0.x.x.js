@@ -20,7 +20,7 @@ declare module 'timer-stopwatch' {
         constructor(time: number): Stopwatch,
         start(): void,
         stop(): void,
-        onDone(callBack: () => void): void
+        onDone(callBack: () => void): void,
     }
 }
 

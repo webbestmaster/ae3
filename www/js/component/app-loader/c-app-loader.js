@@ -22,11 +22,11 @@ export type LoadAppPassedMethodMapType = {|
     increaseItem(itemId: string): void,
     onLoadItem(itemId: string): void,
     onErrorItem(itemId: string, errorMessage: string): void,
-    onWarningItem(itemId: string, warningMessage: string): void
+    onWarningItem(itemId: string, warningMessage: string): void,
 |};
 
 type PassedPropsType = {|
-    +load: (methodMap: LoadAppPassedMethodMapType) => void
+    +load: (methodMap: LoadAppPassedMethodMapType) => void,
 |};
 
 type LoadItemType = {|
@@ -36,11 +36,11 @@ type LoadItemType = {|
     full: number,
     isLoad: boolean,
     warningList: Array<string>,
-    errorList: Array<string>
+    errorList: Array<string>,
 |};
 
 type StateType = {|
-    +items: Array<LoadItemType>
+    +items: Array<LoadItemType>,
 |};
 
 const itemWithid = 'Item with id';

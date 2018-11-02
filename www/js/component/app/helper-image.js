@@ -12,7 +12,7 @@ export type ScaledImageDataType = {|
     width: number,
     height: number,
     // base64Image: string,
-    blobUrl: string
+    blobUrl: string,
 |};
 
 export const imageCache: Array<ScaledImageDataType> = [];

@@ -6,13 +6,13 @@ type SwiperOptionsType = {|
     +freeMode?: boolean,
     +watchOverflow?: boolean,
     +scrollbar?: {|
-        +el: string // eslint-disable-line id-length
+        +el: string, // eslint-disable-line id-length
     |},
-    +mousewheel?: boolean
+    +mousewheel?: boolean,
 |};
 
 declare module 'swiper' {
     declare export default class Swiper {
-        constructor(node: HTMLElement, options: SwiperOptionsType): Swiper
+        constructor(node: HTMLElement, options: SwiperOptionsType): Swiper,
     }
 }

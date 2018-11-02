@@ -39,7 +39,7 @@ type InitializeConfigType = {|
     width: number,
     height: number,
     view: HTMLElement,
-    map: MapType
+    map: MapType,
 |};
 
 const squareSize = mapGuide.size.square;
@@ -59,7 +59,7 @@ export class Render {
         buildings: PIXI.Container,
         graves: PIXI.Container,
         units: PIXI.Container,
-        actions: PIXI.Container
+        actions: PIXI.Container,
     |};
 
     map: MapType;

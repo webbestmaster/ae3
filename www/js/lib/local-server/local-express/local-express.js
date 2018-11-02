@@ -16,11 +16,11 @@ type ExpressCallBackType = (req: LocalExpressRequest, res: LocalExpressResponse)
 type LocalExpressListenerType = {|
     +type: 'get' | 'post',
     +url: string,
-    +callback: ExpressCallBackType
+    +callback: ExpressCallBackType,
 |};
 
 type AttrType = {|
-    +listenerList: Array<LocalExpressListenerType>
+    +listenerList: Array<LocalExpressListenerType>,
 |};
 
 export class LocalExpress {

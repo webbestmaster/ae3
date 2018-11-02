@@ -15,7 +15,7 @@ type PassedPropsType = {|
     +className?: string,
     +width: number,
     +height: number,
-    +src: string
+    +src: string,
 |};
 
 type StateType = void;

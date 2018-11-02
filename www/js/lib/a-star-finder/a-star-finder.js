@@ -11,14 +11,14 @@ export type PointType = [number, number];
 export type PathType = Array<PointType>;
 
 type SelfDataType = {|
-    collectedCells: Array<string>
+    collectedCells: Array<string>,
 |};
 
 type AsyncCallbackType = (path: PathType | null) => void;
 
 type OptionsType = {|
     noPath?: string,
-    callBack?: AsyncCallbackType
+    callBack?: AsyncCallbackType,
 |};
 
 export const defaultOptions: OptionsType = {

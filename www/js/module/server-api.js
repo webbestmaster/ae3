@@ -18,13 +18,13 @@ export type ServerUserType = {|
     socketId: string,
     userId: string,
     teamId?: string,
-    type: 'human' | 'bot'
+    type: 'human' | 'bot',
 |};
 
 export type RoomTypeType = 'on-line' | 'off-line';
 
 export type CreateRoomType = {
-    roomId: string
+    roomId: string,
 };
 
 const headers = {Accept: 'application/json', 'Content-Type': 'application/json'};
@@ -50,7 +50,7 @@ export function createRoom(): Promise<CreateRoomType> {
 }
 
 export type JoinRoomType = {
-    roomId: string
+    roomId: string,
 };
 
 export function joinRoom(roomId: string, userId: string, socketId: string): Promise<JoinRoomType> {
@@ -92,7 +92,7 @@ export function makeUser(type: 'human' | 'bot', roomId: string): Promise<JoinRoo
 }
 
 export type LeaveRoomType = {
-    roomId: string
+    roomId: string,
 };
 
 export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType> {
@@ -122,14 +122,14 @@ export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType
 
 export type AllRoomSettingsType = {|
     map: MapType,
-    type: RoomTypeType
+    type: RoomTypeType,
     // defaultMoney: number,
     // unitLimit: number,
     // userList: Array<ServerUserType>
 |};
 
 export type SetAllRoomSettingsType = {
-    roomId: string
+    roomId: string,
 };
 
 export function setAllRoomSettings(
@@ -163,15 +163,15 @@ export function setAllRoomSettings(
 }
 
 export type RoomSettingUserListType = {|
-    userList: Array<ServerUserType>
+    userList: Array<ServerUserType>,
 |};
 
 export type RoomSettingMapType = {|
-    map: MapType
+    map: MapType,
 |};
 
 export type SetRoomSettingType = {
-    roomId: string
+    roomId: string,
 };
 
 export function setRoomSetting(
@@ -200,7 +200,7 @@ export function setRoomSetting(
 
 export type GetAllRoomSettingsType = {
     roomId: string,
-    settings: AllRoomSettingsType
+    settings: AllRoomSettingsType,
 };
 
 export function getAllRoomSettings(roomId: string): Promise<GetAllRoomSettingsType> {
@@ -217,7 +217,7 @@ export function getAllRoomSettings(roomId: string): Promise<GetAllRoomSettingsTy
 
 export type GetAllRoomUsersType = {
     roomId: string,
-    users: Array<ServerUserType>
+    users: Array<ServerUserType>,
 };
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -284,7 +284,7 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
 }
 
 export type GetAllRoomIdsType = {
-    +roomIds: Array<string>
+    +roomIds: Array<string>,
 };
 
 export function getAllRoomIds(): Promise<GetAllRoomIdsType> {
@@ -300,7 +300,7 @@ export function getAllRoomIds(): Promise<GetAllRoomIdsType> {
 type PushedStatePayloadIsGameStartedType = {|
     +isGameStart: boolean,
     +activeUserId: string,
-    +map: MapType
+    +map: MapType,
 |};
 
 export type PushedStatePayloadUnitMoveType = {|
@@ -308,17 +308,17 @@ export type PushedStatePayloadUnitMoveType = {|
     +path: PathType,
     +from: {|
         +x: number,
-        +y: number
+        +y: number,
     |},
     +to: {|
         +x: number,
-        +y: number
+        +y: number,
     |},
     +unit: {|
-        +id: string
+        +id: string,
     |},
     +map: MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadUnitAttackType = {|
@@ -326,21 +326,21 @@ export type PushedStatePayloadUnitAttackType = {|
     +aggressor: AttackResultUnitType,
     +defender: AttackResultUnitType,
     +map: MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadFixBuildingType = {|
     +type: 'fix-building',
     +building: BuildingType,
     +map: MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadOccupyBuildingType = {|
     +type: 'occupy-building',
     +building: BuildingType,
     +map: MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadRaiseSkeletonType = {|
@@ -350,14 +350,14 @@ export type PushedStatePayloadRaiseSkeletonType = {|
         +y: number,
         +id: string,
         +userId: string,
-        +newUnitId: string
+        +newUnitId: string,
     |},
     +grave: {|
         +x: number,
-        +y: number
+        +y: number,
     |},
     +map: MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadDestroyBuildingType = {|
@@ -366,41 +366,41 @@ export type PushedStatePayloadDestroyBuildingType = {|
         +x: number,
         +y: number,
         +id: string,
-        +userId: string
+        +userId: string,
     |},
     +building: {|
         +x: number,
         +y: number,
         +type: BuildingAttrTypeType,
-        +id: string
+        +id: string,
     |},
     +map: MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadRefreshUnitListType = {|
     +type: 'refresh-unit-list',
     +map: MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadBuyUnitType = {|
     +type: 'buy-unit',
     +newMapUnit: UnitType,
     +map: MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStatePayloadSyncMapWithServerUserListType = {|
     +type: 'sync-map-with-server-user-list',
     +map: MapType,
-    +activeUserId: string
+    +activeUserId: string,
 |};
 
 export type PushedStateRemoveUserType = {|
     +type: 'remove-user',
     +map: MapType,
-    +userId: string
+    +userId: string,
 |};
 
 export type PushedStatePayloadType =
@@ -422,15 +422,15 @@ export type PushStateType = {
     states: {
         last: {
             state: PushedStatePayloadType,
-            type: 'room__push-state'
+            type: 'room__push-state',
         },
-        length: number
-    }
+        length: number,
+    },
 };
 
 export type PushedStateType = {|
     type: 'room__push-state',
-    state: PushedStatePayloadType
+    state: PushedStatePayloadType,
 |};
 
 // const lastPushedState = {};
@@ -456,7 +456,7 @@ export function pushState(roomId: string, userId: string, pushedState: PushedSta
 }
 
 export type TakeTurnType = {
-    roomId: string
+    roomId: string,
 };
 
 export function takeTurn(roomId: string, userId: string): Promise<TakeTurnType> {
@@ -472,7 +472,7 @@ export function takeTurn(roomId: string, userId: string): Promise<TakeTurnType> 
 }
 
 export type DropTurnType = {
-    roomId: string
+    roomId: string,
 };
 
 export function dropTurn(roomId: string, userId: string): Promise<DropTurnType> {

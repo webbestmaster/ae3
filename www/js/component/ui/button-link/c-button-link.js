@@ -15,7 +15,7 @@ type PropsType = {|
     children: Node,
     to: string,
     className?: string,
-    onClick?: () => void
+    onClick?: () => void,
 |};
 
 type StateType = {||};

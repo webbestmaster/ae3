@@ -2,7 +2,7 @@
 
 type SocketIoOptionsType = {|
     transports: ['websocket'],
-    'force new connection': true
+    'force new connection': true,
 |};
 
 // eslint-disable-next-line flowtype/no-weak-types
@@ -10,7 +10,7 @@ type SocketCallbackFunctionType = (message?: any) => void;
 
 type SocketType = {|
     id: string,
-    on(event: string, callbackFunction: SocketCallbackFunctionType): void
+    on(event: string, callbackFunction: SocketCallbackFunctionType): void,
 |};
 
 declare module 'socket.io-client' {
