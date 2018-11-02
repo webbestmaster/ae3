@@ -191,7 +191,7 @@ const textStyleRed = new PIXI.TextStyle({
     fill: '#cc0000',
     fontSize: 8,
     stroke: '#000000',
-    strokeThickness: 4
+    strokeThickness: 4,
 });
 
 export class Unit {
@@ -221,19 +221,19 @@ export class Unit {
             sprite: {
                 unit: new PIXI.extras.AnimatedSprite([
                     PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-0']),
-                    PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1'])
+                    PIXI.Texture.fromImage(imageMap.unit[unit.attr.type + '-gray-1']),
                 ]),
                 hitPoints: new PIXI.Container(),
                 level: new PIXI.Container(),
                 poisonCountdown: PIXI.Sprite.fromImage(imageMap.other['under-poison']),
-                wispAura: PIXI.Sprite.fromImage(imageMap.other['under-wisp-aura'])
+                wispAura: PIXI.Sprite.fromImage(imageMap.other['under-wisp-aura']),
             },
             userList: JSON.parse(JSON.stringify(unitConstructor.userList)),
             event: {
-                click: unitConstructor.event.click
+                click: unitConstructor.event.click,
             },
             hasWispAura: false,
-            isActionAvailable: false
+            isActionAvailable: false,
         };
 
         unit.initializeUnitSprite();
@@ -263,7 +263,7 @@ export class Unit {
 
         gameAttr.sprite.unit = new PIXI.extras.AnimatedSprite([
             PIXI.Texture.fromImage(imageMap.unit[attr.type + '-' + color + '-0']),
-            PIXI.Texture.fromImage(imageMap.unit[attr.type + '-' + color + '-1'])
+            PIXI.Texture.fromImage(imageMap.unit[attr.type + '-' + color + '-1']),
         ]);
 
         gameAttr.sprite.unit.animationSpeed = defaultUnitData.render.spriteAnimatedSpeed;
@@ -490,13 +490,13 @@ export class Unit {
                 type: 'move',
                 from: {
                     x: attr.x,
-                    y: attr.y
+                    y: attr.y,
                 },
                 to: {
                     x: cell[0],
-                    y: cell[1]
+                    y: cell[1],
                 },
-                container: new PIXI.Container()
+                container: new PIXI.Container(),
             });
         });
 
@@ -531,7 +531,7 @@ export class Unit {
                 type: 'attack',
                 aggressor: attackResult.aggressor,
                 defender: attackResult.defender,
-                container: new PIXI.Container()
+                container: new PIXI.Container(),
             });
         });
 
@@ -580,7 +580,7 @@ export class Unit {
             userId,
             x: unitX,
             y: unitY,
-            container: new PIXI.Container()
+            container: new PIXI.Container(),
         });
 
         return fixBuildingMap;
@@ -639,7 +639,7 @@ export class Unit {
             userId,
             x: unitX,
             y: unitY,
-            container: new PIXI.Container()
+            container: new PIXI.Container(),
         });
 
         return occupyBuildingMap;
@@ -685,7 +685,7 @@ export class Unit {
             userId,
             x: unitX,
             y: unitY,
-            container: new PIXI.Container()
+            container: new PIXI.Container(),
         });
 
         return openStoreMap;
@@ -746,16 +746,16 @@ export class Unit {
                     x: building.attr.x,
                     y: building.attr.y,
                     type: 'farmDestroyed',
-                    id: isString(building.attr.id) ? building.attr.id : 'no-building-id-' + Math.random()
+                    id: isString(building.attr.id) ? building.attr.id : 'no-building-id-' + Math.random(),
                 },
                 destroyer: {
                     x: unit.attr.x,
                     y: unit.attr.y,
                     id: unitId,
-                    userId
+                    userId,
                 },
                 userId,
-                container: new PIXI.Container()
+                container: new PIXI.Container(),
             });
         });
 
@@ -819,14 +819,14 @@ export class Unit {
                     y: unit.attr.y,
                     id: unitId,
                     userId,
-                    newUnitId: [grave.attr.x, grave.attr.y, Math.random()].join('_')
+                    newUnitId: [grave.attr.x, grave.attr.y, Math.random()].join('_'),
                 },
                 grave: {
                     x: grave.attr.x,
-                    y: grave.attr.y
+                    y: grave.attr.y,
                 },
                 userId,
-                container: new PIXI.Container()
+                container: new PIXI.Container(),
             });
         });
 
@@ -1314,19 +1314,19 @@ export class Unit {
         const animationFrom = {
             x: square / 2,
             y: square,
-            alpha: 0
+            alpha: 0,
         };
 
         const animationShow = {
             x: square / 2,
             y: 0,
-            alpha: 1
+            alpha: 1,
         };
 
         const animationTo = {
             x: square / 2,
             y: square / 2,
-            alpha: 0
+            alpha: 0,
         };
 
         await tweenList(
@@ -1491,19 +1491,19 @@ export class Unit {
         const animationFrom = {
             x: 0,
             y: square,
-            alpha: 0
+            alpha: 0,
         };
 
         const animationShow = {
             x: 0,
             y: -square / 12,
-            alpha: 1
+            alpha: 1,
         };
 
         const animationTo = {
             x: 0,
             y: -square / 12,
-            alpha: 0
+            alpha: 0,
         };
 
         await tweenList(

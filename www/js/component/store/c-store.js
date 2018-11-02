@@ -43,7 +43,7 @@ type ReduxActionType = {|
 |};
 
 const reduxAction: ReduxActionType = {
-    setOpenFromGame
+    setOpenFromGame,
 };
 
 type PropsType = $ReadOnly<$Exact<{
@@ -124,7 +124,7 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
 
 const ConnectedComponent = connect<ComponentType<Store>, PassedPropsType, ReduxPropsType, ReduxActionType>(
     (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
-        store: state.store
+        store: state.store,
     }),
     reduxAction
 )(withRouter(Store));

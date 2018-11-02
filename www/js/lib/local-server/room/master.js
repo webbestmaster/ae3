@@ -18,7 +18,7 @@ export class RoomMaster {
 
         // eslint-disable-next-line no-underscore-dangle, id-match
         roomMasterModel._attr = {
-            rooms: []
+            rooms: [],
         };
     }
 

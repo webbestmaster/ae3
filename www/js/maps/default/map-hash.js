@@ -9,5 +9,5 @@ export const mapHash = {
     testMap1,
     myFirstMap,
     gibraltar,
-    allBuildings
+    allBuildings,
 };

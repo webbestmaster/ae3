@@ -85,5 +85,5 @@ export const enUs: LangDataType = {
     PREPARATION_OF_IMAGES: 'Preparation of images',
 
     // spec symbols
-    SPACE: ' '
+    SPACE: ' ',
 };

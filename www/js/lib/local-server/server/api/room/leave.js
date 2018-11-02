@@ -16,8 +16,8 @@ export function leave(req: LocalExpressRequest, res: LocalExpressResponse) {
         res.json({
             error: {
                 id: error.ROOM_NOT_FOUND.id,
-                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId)
-            }
+                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId),
+            },
         });
         return;
     }
@@ -27,6 +27,6 @@ export function leave(req: LocalExpressRequest, res: LocalExpressResponse) {
     res.json({
         type: messageConst.type.leaveFromRoom,
         roomId,
-        userId
+        userId,
     });
 }

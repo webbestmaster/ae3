@@ -11,7 +11,7 @@ import style from './style.scss';
 
 const theme = createMuiTheme({
     typography: {
-        useNextVariants: true
+        useNextVariants: true,
     },
     overrides: {
         MuiPaper: {
@@ -20,10 +20,10 @@ const theme = createMuiTheme({
                 // Name of the rule
                 // Some CSS
                 boxShadow: 'none !important',
-                backgroundColor: 'transparent !important'
-            }
-        }
-    }
+                backgroundColor: 'transparent !important',
+            },
+        },
+    },
 });
 
 type StateType = void;

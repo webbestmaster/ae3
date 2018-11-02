@@ -30,7 +30,7 @@ export class LocalExpress {
         const localExpress = this;
 
         localExpress.attr = {
-            listenerList: []
+            listenerList: [],
         };
     }
 
@@ -64,7 +64,7 @@ export class LocalExpress {
         listenerList.push({
             type,
             url,
-            callback
+            callback,
         });
     }
 

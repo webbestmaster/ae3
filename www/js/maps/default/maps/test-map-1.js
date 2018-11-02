@@ -8,34 +8,34 @@ import type {MapType} from '../../type';
 export const testMap1: MapType = {
     meta: {
         'en-US': {
-            name: 'my test map 1 (Cycle)'
+            name: 'my test map 1 (Cycle)',
         },
         'ru-RU': {
-            name: 'моя тестовая карта 1 (Цикл)'
-        }
+            name: 'моя тестовая карта 1 (Цикл)',
+        },
     },
     type: 'skirmish',
     userList: [
         {
             userId: '0',
             money: 0,
-            teamId: 'team-0'
+            teamId: 'team-0',
         },
         {
             userId: '1',
             money: 0,
-            teamId: 'team-1'
+            teamId: 'team-1',
         },
         {
             userId: '2',
             money: 0,
-            teamId: 'team-2'
+            teamId: 'team-2',
         },
         {
             userId: '3',
             money: 0,
-            teamId: 'team-3'
-        }
+            teamId: 'team-3',
+        },
     ],
     activeUserId: '0',
     unitLimit: 0,
@@ -53,7 +53,7 @@ export const testMap1: MapType = {
             'road-0',
             'road-0',
             'road-0',
-            'road-0'
+            'road-0',
         ],
         [
             'road-0',
@@ -67,7 +67,7 @@ export const testMap1: MapType = {
             'terra-0',
             'forest-0',
             'terra-0',
-            'road-0'
+            'road-0',
         ],
         [
             'road-0',
@@ -81,7 +81,7 @@ export const testMap1: MapType = {
             'forest-0',
             'terra-0',
             'hill-0',
-            'road-0'
+            'road-0',
         ],
         [
             'road-0',
@@ -95,7 +95,7 @@ export const testMap1: MapType = {
             'terra-0',
             'forest-0',
             'terra-0',
-            'road-0'
+            'road-0',
         ],
         [
             'road-0',
@@ -109,7 +109,7 @@ export const testMap1: MapType = {
             'road-0',
             'road-0',
             'road-0',
-            'road-0'
+            'road-0',
         ],
         [
             'stone-0',
@@ -123,7 +123,7 @@ export const testMap1: MapType = {
             'stone-0',
             'road-0',
             'forest-0',
-            'stone-0'
+            'stone-0',
         ],
         [
             'terra-0',
@@ -137,7 +137,7 @@ export const testMap1: MapType = {
             'road-0',
             'road-0',
             'stone-0',
-            'terra-0'
+            'terra-0',
         ],
         [
             'stone-0',
@@ -151,7 +151,7 @@ export const testMap1: MapType = {
             'terra-0',
             'road-0',
             'hill-0',
-            'stone-0'
+            'stone-0',
         ],
         [
             'road-0',
@@ -165,7 +165,7 @@ export const testMap1: MapType = {
             'road-0',
             'road-0',
             'road-0',
-            'road-0'
+            'road-0',
         ],
         [
             'road-0',
@@ -179,7 +179,7 @@ export const testMap1: MapType = {
             'stone-0',
             'hill-0',
             'terra-0',
-            'road-0'
+            'road-0',
         ],
         [
             'road-0',
@@ -193,7 +193,7 @@ export const testMap1: MapType = {
             'forest-0',
             'forest-0',
             'terra-0',
-            'road-0'
+            'road-0',
         ],
         [
             'road-0',
@@ -207,7 +207,7 @@ export const testMap1: MapType = {
             'forest-0',
             'terra-0',
             'terra-0',
-            'road-0'
+            'road-0',
         ],
         [
             'road-0',
@@ -221,8 +221,8 @@ export const testMap1: MapType = {
             'road-0',
             'road-0',
             'road-0',
-            'road-0'
-        ]
+            'road-0',
+        ],
     ],
     buildings: [
         {x: 1, y: 1, type: 'castle', userId: '0'},
@@ -240,13 +240,13 @@ export const testMap1: MapType = {
         {x: 5, y: 5, type: 'farmDestroyed'},
         {x: 6, y: 5, type: 'farmDestroyed'},
         {x: 5, y: 7, type: 'farmDestroyed'},
-        {x: 6, y: 7, type: 'farmDestroyed'}
+        {x: 6, y: 7, type: 'farmDestroyed'},
     ],
     units: [
         {x: 1, y: 1, type: 'galamar', userId: '0'},
         {x: 9, y: 2, type: 'valadorn', userId: '1'},
         {x: 2, y: 10, type: 'demon-lord', userId: '2'},
-        {x: 10, y: 11, type: 'saeth', userId: '3'}
+        {x: 10, y: 11, type: 'saeth', userId: '3'},
     ],
-    graves: []
+    graves: [],
 };

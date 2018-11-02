@@ -31,7 +31,7 @@ export class LocalSocketIoClient {
         localSocketIoClient.attr = {
             listenerList: [],
             url: '',
-            options: null
+            options: null,
         };
     }
 

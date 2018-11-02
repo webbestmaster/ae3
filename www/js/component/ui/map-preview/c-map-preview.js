@@ -45,13 +45,13 @@ export class MapPreview extends Component<PropsType, StateType> {
         const view = this;
 
         view.node = {
-            canvas: React.createRef()
+            canvas: React.createRef(),
         };
 
         view.layer = {
             landscape: new PIXI.Container(),
             unitList: new PIXI.Container(),
-            buildingList: new PIXI.Container()
+            buildingList: new PIXI.Container(),
         };
     }
 
@@ -76,7 +76,7 @@ export class MapPreview extends Component<PropsType, StateType> {
             sharedLoader: true,
             transparent: true,
             backgroundColor: 0x1099BB,
-            resolution: window.devicePixelRatio || 1
+            resolution: window.devicePixelRatio || 1,
         });
 
         app.stage.addChild(layer.landscape);
@@ -144,7 +144,7 @@ export class MapPreview extends Component<PropsType, StateType> {
                     [
                         mapGuide.building.well.name,
                         mapGuide.building.temple.name,
-                        mapGuide.building.farmDestroyed.name
+                        mapGuide.building.farmDestroyed.name,
                     ].includes(type)
                 ) {
                     sprite = PIXI.Sprite.fromImage(imageMap.building[mapGuide.building[type].spriteName]);
@@ -223,7 +223,7 @@ export class MapPreview extends Component<PropsType, StateType> {
                 <canvas
                     style={{
                         width: mapSize.width * mapGuide.size.square,
-                        height: mapSize.height * mapGuide.size.square
+                        height: mapSize.height * mapGuide.size.square,
                     }}
                     className={style.canvas + additionCanvasClassName}
                     ref={view.node.canvas}

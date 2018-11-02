@@ -19,5 +19,5 @@ export const store = combineReducers({
         }
 
         return actionData.payload.isOpenFromGame;
-    }
+    },
 });

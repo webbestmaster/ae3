@@ -8,7 +8,7 @@ module.exports = ({file, options, env}) => ({
         // 'postcss-cssnext': options.cssnext ? options.cssnext : false,
         autoprefixer: {
             add: true,
-            browsers: ['Chrome 20', 'Safari 5', 'Edge 12', 'Explorer 8', 'Firefox 15']
-        }
-    }
+            browsers: ['Chrome 20', 'Safari 5', 'Edge 12', 'Explorer 8', 'Firefox 15'],
+        },
+    },
 });

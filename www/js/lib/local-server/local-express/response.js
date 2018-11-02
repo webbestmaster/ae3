@@ -19,7 +19,7 @@ export class LocalExpressResponse {
         const localExpressResponse = this;
 
         localExpressResponse.attr = {
-            callBack: constructorOptions.callBack
+            callBack: constructorOptions.callBack,
         };
     }
 

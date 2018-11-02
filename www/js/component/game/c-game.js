@@ -46,14 +46,14 @@ const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,
     blue: iconUnitBlue,
     green: iconUnitGreen,
-    black: iconUnitBlack
+    black: iconUnitBlack,
 };
 
 const bottomBarColorMap: {[key: UserColorType]: string} = {
     red: style.bottom_bar__color_red,
     blue: style.bottom_bar__color_blue,
     green: style.bottom_bar__color_green,
-    black: style.bottom_bar__color_black
+    black: style.bottom_bar__color_black,
 };
 
 // function Transition(props: mixed): Node {
@@ -61,7 +61,7 @@ const bottomBarColorMap: {[key: UserColorType]: string} = {
 // }
 
 export const bottomBarData = {
-    height: 53 // $bar-height: 52px; + 1 top border
+    height: 53, // $bar-height: 52px; + 1 top border
 };
 
 type PassedPropsType = {|
@@ -77,7 +77,7 @@ type ReduxActionType = {|
 |};
 
 const reduxAction: ReduxActionType = {
-    setOpenFromGame
+    setOpenFromGame,
 };
 
 type PropsType = $ReadOnly<$Exact<{|
@@ -139,7 +139,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         const view = this;
 
         view.node = {
-            canvas: React.createRef()
+            canvas: React.createRef(),
         };
 
         view.state = {
@@ -151,17 +151,17 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             disabledByList: [],
             popup: {
                 endGame: {
-                    isOpen: false
+                    isOpen: false,
                 },
                 changeActiveUser: {
                     isOpen: false,
-                    showMoney: true
-                }
+                    showMoney: true,
+                },
             },
             activeLandscapeTile: {
                 x: 0,
-                y: 0
-            }
+                y: 0,
+            },
         };
     }
 
@@ -182,7 +182,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
         view.setState({
             userList: users,
-            activeUserId: settings.map.activeUserId
+            activeUserId: settings.map.activeUserId,
         });
 
         // initialize game's data
@@ -196,12 +196,12 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             view: canvas,
             width: system.screen.width,
             height: system.screen.height,
-            map: settings.map
+            map: settings.map,
         });
 
         view.popupChangeActiveUser({
             isOpen: true,
-            showMoney: false
+            showMoney: false,
         });
 
         /*
@@ -281,7 +281,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             case 'room__user-disconnected':
                 allUserResponse = await serverApi.getAllRoomUsers(roomId);
                 view.setState({
-                    userList: allUserResponse.users
+                    userList: allUserResponse.users,
                 });
 
                 break;
@@ -483,7 +483,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         const queryData = queryString.parse(props.location.search);
 
         return {
-            isOpen: queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y)
+            isOpen: queryData.viewId === 'store' && /^\d+$/.test(queryData.x) && /^\d+$/.test(queryData.y),
         };
     }
 
@@ -746,11 +746,11 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                         // TODO: uncomment this for production
                         // pointerEvents: isCanvasDisabled ? 'none' : 'auto',
                         width: props.system.screen.width,
-                        height: props.system.screen.height - bottomBarData.height
+                        height: props.system.screen.height - bottomBarData.height,
                     }}
                 />
                 {view.renderBottomBar()}
-            </Page>
+            </Page>,
         ];
     }
 }
@@ -758,7 +758,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 const ConnectedComponent = withRouter(
     connect(
         (state: GlobalStateType): {} => ({
-            system: state.system
+            system: state.system,
         }),
         reduxAction
     )(GameView)

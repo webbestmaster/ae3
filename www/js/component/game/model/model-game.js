@@ -19,7 +19,7 @@ import {
     isOnLineRoomType,
     isStoreOpen,
     mergeActionList,
-    procedureMakeGraveForMapUnit
+    procedureMakeGraveForMapUnit,
 } from './helper';
 import {Render} from './render';
 import {Building} from './building/building';
@@ -34,7 +34,7 @@ import type {
     UnitActionOpenStoreType,
     UnitActionRaiseSkeletonType,
     UnitActionsMapType,
-    UnitActionType
+    UnitActionType,
 } from './unit/unit';
 import {Unit} from './unit/unit';
 import {user} from '../../../module/user';
@@ -115,16 +115,16 @@ export class GameModel {
         game.pathMap = {
             walk: [],
             flow: [],
-            fly: []
+            fly: [],
         };
         game.armorMap = {
             walk: [],
             flow: [],
-            fly: []
+            fly: [],
         };
         game.model = new MainModel();
         game.message = {
-            list: []
+            list: [],
         };
     }
 
@@ -395,8 +395,8 @@ export class GameModel {
                 state: {
                     type: 'refresh-unit-list',
                     map: newMap,
-                    activeUserId: userId
-                }
+                    activeUserId: userId,
+                },
             })
             .then((response: mixed): void => console.log('---> refresh unit list pushed', response))
             .catch((error: Error) => {
@@ -623,7 +623,7 @@ export class GameModel {
                             type: mapBuilding.type,
                             x: mapBuilding.x,
                             y: mapBuilding.y,
-                            id: mapBuilding.id
+                            id: mapBuilding.id,
                         };
                     }
 
@@ -645,8 +645,8 @@ export class GameModel {
                 state: {
                     type: 'sync-map-with-server-user-list',
                     map: newMap,
-                    activeUserId: user.getId()
-                }
+                    activeUserId: user.getId(),
+                },
             })
             .then((response: mixed): void => console.log('---> user action sync-map-with-server-user-list', response))
             .catch((error: Error) => {
@@ -811,14 +811,14 @@ export class GameModel {
             if (defenderUnitGuideData.withoutGrave !== true) {
                 const currentDefenderGrave =
                     find(game.graveList, {
-                        attr: {x: defenderUnit.attr.x, y: defenderUnit.attr.y}
+                        attr: {x: defenderUnit.attr.x, y: defenderUnit.attr.y},
                     }) || null;
 
                 if (currentDefenderGrave === null) {
                     game.createGrave({
                         x: defenderUnit.attr.x,
                         y: defenderUnit.attr.y,
-                        removeCountdown: defaultUnitData.graveRemoveCountdown
+                        removeCountdown: defaultUnitData.graveRemoveCountdown,
                     });
                 } else {
                     currentDefenderGrave.setRemoveCountdown(defaultUnitData.graveRemoveCountdown);
@@ -860,14 +860,14 @@ export class GameModel {
             if (aggressorUnitGuideData.withoutGrave !== true) {
                 const currentAggressorGrave =
                     find(game.graveList, {
-                        attr: {x: aggressorUnit.attr.x, y: aggressorUnit.attr.y}
+                        attr: {x: aggressorUnit.attr.x, y: aggressorUnit.attr.y},
                     }) || null;
 
                 if (currentAggressorGrave === null) {
                     game.createGrave({
                         x: aggressorUnit.attr.x,
                         y: aggressorUnit.attr.y,
-                        removeCountdown: defaultUnitData.graveRemoveCountdown
+                        removeCountdown: defaultUnitData.graveRemoveCountdown,
                     });
                 } else {
                     currentAggressorGrave.setRemoveCountdown(defaultUnitData.graveRemoveCountdown);
@@ -1030,8 +1030,8 @@ export class GameModel {
             id: mapRaiser.newUnitId,
             action: {
                 didAttack: true,
-                didMove: true
-            }
+                didMove: true,
+            },
         });
 
         await game.onUnitClick(gameRaiser);
@@ -1110,7 +1110,7 @@ export class GameModel {
             type: mapBuilding.type,
             x: mapBuilding.x,
             y: mapBuilding.y,
-            id: mapBuilding.id
+            id: mapBuilding.id,
         });
 
         await game.onUnitClick(gameDestroyer);
@@ -1418,8 +1418,8 @@ export class GameModel {
                     }
 
                     await game.onUnitClick(clickedUnit);
-                }
-            }
+                },
+            },
         });
 
         game.unitList.push(unit);
@@ -1656,18 +1656,18 @@ export class GameModel {
                     path: moviePath,
                     from: {
                         x: unitAction.from.x,
-                        y: unitAction.from.y
+                        y: unitAction.from.y,
                     },
                     to: {
                         x: unitAction.to.x,
-                        y: unitAction.to.y
+                        y: unitAction.to.y,
                     },
                     unit: {
-                        id: unitAction.id
+                        id: unitAction.id,
                     },
                     map: newMap,
-                    activeUserId: user.getId()
-                }
+                    activeUserId: user.getId(),
+                },
             })
             .then((response: mixed): void => console.log('---> unit action move pushed', response))
             .catch((error: Error) => {
@@ -1772,8 +1772,8 @@ export class GameModel {
                     aggressor: unitAction.aggressor,
                     defender: unitAction.defender,
                     map: newMap,
-                    activeUserId: user.getId()
-                }
+                    activeUserId: user.getId(),
+                },
             })
             .then((response: mixed): void => console.log('---> unit action attack pushed', response))
             .catch((error: Error) => {
@@ -1829,8 +1829,8 @@ export class GameModel {
                     type: 'fix-building',
                     building,
                     map: newMap,
-                    activeUserId: user.getId()
-                }
+                    activeUserId: user.getId(),
+                },
             })
             .then((response: mixed): void => console.log('---> unit action fix building pushed', response))
             .catch((error: Error) => {
@@ -1894,8 +1894,8 @@ export class GameModel {
                     type: 'occupy-building',
                     building,
                     map: newMap,
-                    activeUserId: user.getId()
-                }
+                    activeUserId: user.getId(),
+                },
             })
             .then((response: mixed): void => console.log('---> unit action occupy building pushed', response))
             .catch((error: Error) => {
@@ -1954,8 +1954,8 @@ export class GameModel {
             id: actionRaiser.newUnitId,
             action: {
                 didAttack: true,
-                didMove: true
-            }
+                didMove: true,
+            },
         });
 
         game.gameView.addDisableReason('client-push-state');
@@ -1968,8 +1968,8 @@ export class GameModel {
                     raiser: actionRaiser,
                     grave: actionGrave,
                     map: newMap,
-                    activeUserId: user.getId()
-                }
+                    activeUserId: user.getId(),
+                },
             })
             .then((response: mixed): void => console.log('---> unit action raise skeleton pushed', response))
             .catch((error: Error) => {
@@ -1999,7 +1999,7 @@ export class GameModel {
         const mapBuilding =
             find(newMap.buildings, {
                 x: unitAction.building.x,
-                y: unitAction.building.y
+                y: unitAction.building.y,
             }) || null;
 
         if (mapBuilding === null) {
@@ -2018,14 +2018,14 @@ export class GameModel {
             x: unitAction.building.x,
             y: unitAction.building.y,
             type: unitAction.building.type,
-            id: unitAction.building.id
+            id: unitAction.building.id,
         };
 
         const mapUnit =
             find(newMap.units, {
                 x: unitAction.destroyer.x,
                 y: unitAction.destroyer.y,
-                id: unitAction.destroyer.id
+                id: unitAction.destroyer.id,
             }) || null;
 
         if (mapUnit === null) {
@@ -2050,8 +2050,8 @@ export class GameModel {
                     destroyer: unitAction.destroyer,
                     building: unitAction.building,
                     map: newMap,
-                    activeUserId: user.getId()
-                }
+                    activeUserId: user.getId(),
+                },
             })
             .then((response: mixed): void => console.log('---> unit action destroy building pushed', response))
             .catch((error: Error) => {
@@ -2438,7 +2438,7 @@ export class GameModel {
             graveList: game.graveList,
             pathMap: game.pathMap,
             armorMap: game.armorMap,
-            emptyActionMap: game.emptyActionMap
+            emptyActionMap: game.emptyActionMap,
         };
     }
 

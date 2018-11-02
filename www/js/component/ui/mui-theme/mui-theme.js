@@ -4,15 +4,15 @@ import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 
 export const muiTheme = createMuiTheme({
     typography: {
-        useNextVariants: true
+        useNextVariants: true,
     },
     overrides: {
         MuiPaper: {
             // Name of the component ⚛️ / style sheet
             root: {
                 // Name of the rule
-                backgroundColor: '#c00' // Some CSS
-            }
-        }
-    }
+                backgroundColor: '#c00', // Some CSS
+            },
+        },
+    },
 });

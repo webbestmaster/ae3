@@ -38,11 +38,11 @@ export class Select extends Component<PropsType, StateType> {
         const view = this;
 
         view.state = {
-            visibleString: ''
+            visibleString: '',
         };
 
         view.node = {
-            select: React.createRef()
+            select: React.createRef(),
         };
     }
 

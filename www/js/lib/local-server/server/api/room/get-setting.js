@@ -15,14 +15,14 @@ export function getSetting(req: LocalExpressRequest, res: LocalExpressResponse) 
         res.json({
             error: {
                 id: error.ROOM_NOT_FOUND.id,
-                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId)
-            }
+                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId),
+            },
         });
         return;
     }
 
     res.json({
         roomId,
-        value: room.getSetting(key)
+        value: room.getSetting(key),
     });
 }

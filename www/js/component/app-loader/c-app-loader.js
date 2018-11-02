@@ -55,7 +55,7 @@ export class AppLoader extends Component<PassedPropsType, StateType> {
         const view = this;
 
         view.state = {
-            items: []
+            items: [],
         };
     }
 
@@ -87,7 +87,7 @@ export class AppLoader extends Component<PassedPropsType, StateType> {
             },
             onWarningItem: (itemId: string, warningMessage: string) => {
                 view.onWarningItem(itemId, warningMessage);
-            }
+            },
         };
     }
 
@@ -118,7 +118,7 @@ export class AppLoader extends Component<PassedPropsType, StateType> {
             full: 0,
             isLoad: false,
             warningList: [],
-            errorList: []
+            errorList: [],
         });
 
         view.setState({items: [...items]});

@@ -51,7 +51,7 @@ const unitActionStateDefaultValue: UnitActionStateType = {
     didOccupyBuilding: false,
     didDestroyBuilding: false,
 
-    didRaiseSkeleton: false
+    didRaiseSkeleton: false,
 };
 
 export {unitActionStateDefaultValue};

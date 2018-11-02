@@ -22,8 +22,8 @@ export function getUsers(req: LocalExpressRequest, res: LocalExpressResponse) {
         res.json({
             error: {
                 id: error.ROOM_NOT_FOUND.id,
-                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId)
-            }
+                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId),
+            },
         });
         return;
     }
@@ -34,8 +34,8 @@ export function getUsers(req: LocalExpressRequest, res: LocalExpressResponse) {
             (connection: RoomConnection): ServerUserType => ({
                 userId: connection.getUserId(),
                 socketId: connection.getSocketId(),
-                type: connection.getType()
+                type: connection.getType(),
             })
-        )
+        ),
     });
 }

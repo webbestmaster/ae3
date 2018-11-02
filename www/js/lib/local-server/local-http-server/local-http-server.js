@@ -23,7 +23,7 @@ export class LocalHttpServer {
 
         httpServer.attr = {
             port: -1,
-            expressApp
+            expressApp,
         };
     }
 

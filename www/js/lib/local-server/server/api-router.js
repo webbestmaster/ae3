@@ -121,5 +121,5 @@ export const apiRouter = {
          * set setting by {key: value}
          */
         expressApp.post('/api/room/set-setting/:roomId', setSetting);
-    }
+    },
 };

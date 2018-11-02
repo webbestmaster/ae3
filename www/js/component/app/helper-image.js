@@ -96,7 +96,7 @@ const pixiApplication = new PIXI.Application(1, 1, {
     sharedLoader: true,
     transparent: true,
     preserveDrawingBuffer: true,
-    resolution: window.devicePixelRatio || 1
+    resolution: window.devicePixelRatio || 1,
 });
 
 // eslint-disable-next-line complexity, max-statements
@@ -156,7 +156,7 @@ async function scaleImage(src: string, multiple: number): Promise<ScaledImageDat
         src,
         width: endWidth,
         height: endHeight,
-        blobUrl
+        blobUrl,
     };
 }
 

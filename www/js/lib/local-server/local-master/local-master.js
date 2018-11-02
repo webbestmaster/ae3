@@ -23,7 +23,7 @@ export class LocalMaster {
 
         localMasterModel.attr = {
             httpServerList: [],
-            socketIoServerList: []
+            socketIoServerList: [],
         };
     }
 

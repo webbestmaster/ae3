@@ -20,19 +20,19 @@ export type StoreValueType = {|
 |};
 
 const defaultState: StoreValueStateType = {
-    openFromGame: false
+    openFromGame: false,
 };
 
 const defaultAction: StoreValueActionType = {
     setOpenFromGame: (openFromGame: boolean) => {
         console.error('method not \'override\' yet');
     },
-    getState: (): StoreValueStateType => defaultState
+    getState: (): StoreValueStateType => defaultState,
 };
 
 const defaultContextData: StoreValueType = {
     state: defaultState,
-    action: defaultAction
+    action: defaultAction,
 };
 
 const {Provider, Consumer} = React.createContext(defaultContextData);
@@ -48,7 +48,7 @@ class StoreProvider extends Component {
         const view = this;
 
         view.state = {
-            openFromGame: false
+            openFromGame: false,
         };
 
         // storeAction.setOpenFromGame = (openFromGame: boolean): void => view.setOpenFromGame(openFromGame);
@@ -63,8 +63,8 @@ class StoreProvider extends Component {
             state,
             action: {
                 setOpenFromGame: (openFromGame: boolean): void => view.setOpenFromGame(openFromGame),
-                getState: (): StoreValueStateType => this.state
-            }
+                getState: (): StoreValueStateType => this.state,
+            },
         };
     }
 

@@ -21,7 +21,7 @@ export class User {
         const user = this;
 
         user.attr = {
-            id: ''
+            id: '',
         };
 
         const userId = User.getData().id || 'user-id-' + String(Math.random()).substr(2);
@@ -60,12 +60,12 @@ export class User {
             const parsedData = JSON.parse(savedData);
 
             return {
-                id: parsedData.id || ''
+                id: parsedData.id || '',
             };
         }
 
         return {
-            id: ''
+            id: '',
         };
     }
 }

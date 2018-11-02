@@ -7,5 +7,5 @@ import money from '../../../game/image/other/open-store.png';
 
 export const icon = {
     UNIT: unit,
-    MONEY: money
+    MONEY: money,
 };

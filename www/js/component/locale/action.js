@@ -20,7 +20,7 @@ export function setLocale(localeName: LocaleNameType): SetLocaleType {
     return {
         type: localeConst.action.type.setLocale,
         payload: {
-            localeName
-        }
+            localeName,
+        },
     };
 }

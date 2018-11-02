@@ -49,8 +49,8 @@ export class RoomConnection {
             room: options.room,
             type: options.type, // 'bot' | 'human'
             timers: {
-                onDisconnect: null
-            }
+                onDisconnect: null,
+            },
         };
     }
 
@@ -103,7 +103,7 @@ export class RoomConnection {
         room.pushStateForce({
             type: messageConst.type.userDisconnected,
             roomId: room.getId(),
-            userId: roomConnection.getUserId()
+            userId: roomConnection.getUserId(),
         });
 
         const timer = new Stopwatch(roomConfig.timers.onUserDisconnect.time);

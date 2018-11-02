@@ -22,11 +22,11 @@ type OptionsType = {|
 |};
 
 export const defaultOptions: OptionsType = {
-    noPath: '#'
+    noPath: '#',
 };
 
 const defaultSelfData: SelfDataType = {
-    collectedCells: []
+    collectedCells: [],
 };
 
 // eslint-disable-next-line max-params
@@ -165,7 +165,7 @@ function getNearCells(map: MapType, start: PointType, options: OptionsType): Arr
         0,
         1, // down
         -1,
-        0 // left
+        0, // left
     ];
     const disArrayLength = disArray.length;
     const result = [];
@@ -225,7 +225,7 @@ export function getPath(map: MapType, start: PointType, end: PointType, options?
         end,
         [[start]],
         {
-            noPath: options && isString(options.noPath) ? options.noPath : defaultOptions.noPath
+            noPath: options && isString(options.noPath) ? options.noPath : defaultOptions.noPath,
         },
         clone(defaultSelfData)
     );
@@ -245,7 +245,7 @@ export function getPathAsync(
         [[start]],
         {
             noPath: options && isString(options.noPath) ? options.noPath : defaultOptions.noPath,
-            callBack
+            callBack,
         },
         // Object.assign({}, defaultOptions, options || {}, {callBack}),
         clone(defaultSelfData)

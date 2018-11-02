@@ -88,7 +88,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
             userList: [],
             model: new MainModel(),
             isGameStart: false,
-            isRoomDataFetching: true
+            isRoomDataFetching: true,
         };
     }
 
@@ -230,8 +230,8 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
             state: {
                 type: 'remove-user',
                 map: settings.map,
-                userId
-            }
+                userId,
+            },
         });
 
         // needed to kick bot and force to kick user
@@ -256,7 +256,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         const roomDataUsers = await serverApi.getAllRoomUsers(roomId);
 
         view.setState({
-            userList: roomDataUsers.users
+            userList: roomDataUsers.users,
         });
 
         roomDataSettings.settings.map.userList = roomDataUsers.users.map(
@@ -267,8 +267,8 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
                     teamId: mapGuide.teamIdList[userIndex],
                     commander: {
                         type: getCommanderDataByUserIndex(userIndex),
-                        buyCount: 0
-                    }
+                        buyCount: 0,
+                    },
                 };
             }
         );
@@ -278,7 +278,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         await serverApi.setRoomSetting(roomId, {map: roomDataSettings.settings.map});
 
         view.setState({
-            settings: roomDataSettings.settings
+            settings: roomDataSettings.settings,
         });
 
         await view.hideSpinner();
@@ -337,7 +337,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
                     view.setState({
                         isGameStart: true,
                         settings: null, // wipe extra data
-                        userList: [] // wipe extra data
+                        userList: [], // wipe extra data
                     });
 
                     return Promise.resolve();
@@ -363,7 +363,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
                 socketId: userItem.socketId,
                 userId: userItem.userId,
                 teamId: mapGuide.teamIdList[userIndex],
-                type: userItem.type
+                type: userItem.type,
             })
         );
 
@@ -407,18 +407,18 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         */
 
         const setSettingResult = await serverApi.setRoomSetting(roomId, {
-            map
+            map,
         });
 
         const newState = {
             isGameStart: true,
             activeUserId: user.getId(),
-            map
+            map,
         };
 
         const pushStateResult = await serverApi.pushState(roomId, user.getId(), {
             type: roomPushState,
-            state: newState
+            state: newState,
         });
     }
 
@@ -552,12 +552,12 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
             <Button
                 key="start-button"
                 className={classNames({
-                    [serviceStyle.disabled]: userList.length === 1
+                    [serviceStyle.disabled]: userList.length === 1,
                 })}
                 onClick={view.handleOnClickStartGame}
             >
                 <Locale stringKey={('START': LangKeyType)}/>
-            </Button>
+            </Button>,
         ];
 
         if (isMapPlayerSizeExceed) {
@@ -618,7 +618,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
 
 const ConnectedComponent = connect<ComponentType<Room>, PassedPropsType, ReduxPropsType, ReduxActionType>(
     (state: GlobalStateType): ReduxPropsType => ({
-        locale: state.locale
+        locale: state.locale,
     }),
     reduxAction
 )(Room);

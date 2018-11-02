@@ -189,9 +189,9 @@ export class Room {
             settings: {},
             timers: {
                 // will destroy room, if room has no connections
-                onCreateRoom: null
+                onCreateRoom: null,
             }, // will extend by private.bindTimers
-            server: options.server
+            server: options.server,
         };
 
         bindTimers(room);
@@ -214,7 +214,7 @@ export class Room {
             room.pushStateForce({
                 type: messageConst.type.takeTurn,
                 roomId: room.getId(),
-                activeUserId: userId
+                activeUserId: userId,
             });
             room.getAttr().activeUserId = userId;
             return userId;
@@ -234,7 +234,7 @@ export class Room {
         room.pushStateForce({
             type: messageConst.type.dropTurn,
             roomId: room.getId(),
-            activeUserId: userId
+            activeUserId: userId,
         });
 
         const nextRoomConnection = room.getNextRoomConnectionByUserId(userId);
@@ -248,7 +248,7 @@ export class Room {
         room.pushStateForce({
             type: messageConst.type.takeTurn,
             roomId: room.getId(),
-            activeUserId: nextActiveUserId
+            activeUserId: nextActiveUserId,
         });
 
         room.getAttr().activeUserId = nextActiveUserId;
@@ -277,7 +277,7 @@ export class Room {
             type: 'human',
             userId: roomConnectionOptions.userId,
             socketId: roomConnectionOptions.socketId,
-            room
+            room,
         });
 
         newRoomConnection.bindEventListeners();
@@ -288,7 +288,7 @@ export class Room {
             type: messageConst.type.joinIntoRoom,
             roomId: room.getId(),
             userId: roomConnectionOptions.userId,
-            socketId: roomConnectionOptions.socketId
+            socketId: roomConnectionOptions.socketId,
         });
     }
 
@@ -308,7 +308,7 @@ export class Room {
             type: messageConst.type.joinIntoRoom,
             roomId: room.getId(),
             userId,
-            socketId
+            socketId,
         });
 
         return {userId, socketId};
@@ -335,7 +335,7 @@ export class Room {
         room.pushStateForce({
             type: messageConst.type.leaveFromRoom,
             roomId: room.getId(),
-            userId
+            userId,
         });
 
         existRoomConnection.destroy();
@@ -377,8 +377,8 @@ export class Room {
             meta: {
                 order,
                 timestamp,
-                hash: sha1(order + '/' + timestamp)
-            }
+                hash: sha1(order + '/' + timestamp),
+            },
         });
 
         states.push(state);
@@ -388,8 +388,8 @@ export class Room {
             roomId: room.getId(),
             states: {
                 last: state,
-                length: room.getStates().length
-            }
+                length: room.getStates().length,
+            },
         });
 
         return state;

@@ -29,7 +29,7 @@ type ReduxActionType = {|
 |};
 
 const reduxAction: ReduxActionType = {
-    setLocale
+    setLocale,
 };
 
 type PassedPropsType = {};

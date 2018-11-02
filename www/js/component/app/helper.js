@@ -22,20 +22,20 @@ type LoadStepsType = {
 export const loadSteps: LoadStepsType = {
     environmentSetting: {
         id: 'environment setting',
-        langKey: 'ENVIRONMENT_SETTING'
+        langKey: 'ENVIRONMENT_SETTING',
     },
     settingUpConnections: {
         id: 'setting up connections',
-        langKey: 'SETTING_UP_CONNECTIONS'
+        langKey: 'SETTING_UP_CONNECTIONS',
     },
     loadingTextures: {
         id: 'loading textures',
-        langKey: 'LOADING_TEXTURES'
+        langKey: 'LOADING_TEXTURES',
     },
     preparationOfImages: {
         id: 'preparation of images',
-        langKey: 'PREPARATION_OF_IMAGES'
-    }
+        langKey: 'PREPARATION_OF_IMAGES',
+    },
 };
 
 // eslint-disable-next-line max-statements

@@ -85,5 +85,5 @@ export const ruRu: LangDataType = {
     PREPARATION_OF_IMAGES: 'Подготовка изображений',
 
     // spec symbols
-    SPACE: ' '
+    SPACE: ' ',
 };

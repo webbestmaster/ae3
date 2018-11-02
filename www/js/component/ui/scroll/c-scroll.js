@@ -37,11 +37,11 @@ export class Scroll extends Component<StateType, PropsType> {
         const view = this;
 
         view.node = {
-            wrapper: React.createRef()
+            wrapper: React.createRef(),
         };
 
         view.attr = {
-            swiper: null
+            swiper: null,
         };
     }
 
@@ -61,9 +61,9 @@ export class Scroll extends Component<StateType, PropsType> {
             watchOverflow: true, // disable this cause swiper has scroll bar and bug after resize
             scrollbar: {
                 // eslint-disable-next-line id-length
-                el: '.swiper-scrollbar'
+                el: '.swiper-scrollbar',
             },
-            mousewheel: true
+            mousewheel: true,
         });
 
         return view.recount();

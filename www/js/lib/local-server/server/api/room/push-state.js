@@ -16,8 +16,8 @@ export function pushState(req: LocalExpressRequest, res: LocalExpressResponse) {
         res.json({
             error: {
                 id: error.ROOM_NOT_FOUND.id,
-                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId)
-            }
+                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId),
+            },
         });
         return;
     }
@@ -28,7 +28,7 @@ export function pushState(req: LocalExpressRequest, res: LocalExpressResponse) {
         res.json({
             type: messageConst.type.pushState,
             roomId,
-            states: null
+            states: null,
         });
         return;
     }
@@ -38,7 +38,7 @@ export function pushState(req: LocalExpressRequest, res: LocalExpressResponse) {
         roomId,
         states: {
             last: lastState,
-            length: room.getStates().length
-        }
+            length: room.getStates().length,
+        },
     });
 }

@@ -35,7 +35,7 @@ export function createRoom(): Promise<CreateRoomType> {
             .then((blob: Response): Promise<CreateRoomType> => blob.json())
             .then(
                 (result: CreateRoomType): CreateRoomType => ({
-                    roomId: isString(result.roomId) ? result.roomId : ''
+                    roomId: isString(result.roomId) ? result.roomId : '',
                 })
             )
             .catch(
@@ -59,7 +59,7 @@ export function joinRoom(roomId: string, userId: string, socketId: string): Prom
             .then((blob: Response): Promise<JoinRoomType> => blob.json())
             .then(
                 (result: JoinRoomType): JoinRoomType => ({
-                    roomId: isString(result.roomId) ? result.roomId : ''
+                    roomId: isString(result.roomId) ? result.roomId : '',
                 })
             )
             .catch(
@@ -81,7 +81,7 @@ export function makeUser(type: 'human' | 'bot', roomId: string): Promise<JoinRoo
             .then((blob: Response): Promise<JoinRoomType> => blob.json())
             .then(
                 (result: JoinRoomType): JoinRoomType => ({
-                    roomId: isString(result.roomId) ? result.roomId : ''
+                    roomId: isString(result.roomId) ? result.roomId : '',
                 })
             );
     }
@@ -101,7 +101,7 @@ export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType
             .then((blob: Response): Promise<LeaveRoomType> => blob.json())
             .then(
                 (result: LeaveRoomType): LeaveRoomType => ({
-                    roomId: isString(result.roomId) ? result.roomId : ''
+                    roomId: isString(result.roomId) ? result.roomId : '',
                 })
             )
             .catch(
@@ -109,7 +109,7 @@ export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType
                     console.error(error);
 
                     return {
-                        roomId: ''
+                        roomId: '',
                     };
                 }
             );
@@ -141,12 +141,12 @@ export function setAllRoomSettings(
         return fetch(url + '/api/room/set-all-settings/' + roomId, {
             method: 'POST',
             body: JSON.stringify(allRoomSettings),
-            headers
+            headers,
         })
             .then((blob: Response): Promise<SetAllRoomSettingsType> => blob.json())
             .then(
                 (result: SetAllRoomSettingsType): SetAllRoomSettingsType => ({
-                    roomId: isString(result.roomId) ? result.roomId : ''
+                    roomId: isString(result.roomId) ? result.roomId : '',
                 })
             )
             .catch(
@@ -183,12 +183,12 @@ export function setRoomSetting(
         return fetch(url + '/api/room/set-setting/' + roomId, {
             method: 'POST',
             body: JSON.stringify(roomSetting),
-            headers
+            headers,
         })
             .then((blob: Response): Promise<SetRoomSettingType> => blob.json())
             .then(
                 (result: SetRoomSettingType): SetRoomSettingType => ({
-                    roomId: isString(result.roomId) ? result.roomId : ''
+                    roomId: isString(result.roomId) ? result.roomId : '',
                 })
             );
     }
@@ -240,14 +240,14 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
                                 socketId: user.socketId,
                                 userId: user.userId,
                                 teamId: typeof user.teamId === 'string' ? user.teamId : mapGuide.teamIdList[userIndex],
-                                type: user.type
+                                type: user.type,
                             };
                         }
                     );
 
                     return {
                         roomId: result.roomId,
-                        users
+                        users,
                     };
                 }
             );
@@ -270,14 +270,14 @@ export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
                             socketId: localSocketIoClient.id,
                             userId: user.userId,
                             teamId: typeof user.teamId === 'string' ? user.teamId : mapGuide.teamIdList[userIndex],
-                            type: user.type
+                            type: user.type,
                         };
                     }
                 );
 
                 return {
                     roomId: result.roomId,
-                    users
+                    users,
                 };
             }
         );
@@ -445,7 +445,7 @@ export function pushState(roomId: string, userId: string, pushedState: PushedSta
         return fetch(url + '/api/room/push-state/' + [roomId, userId].join('/'), {
             method: 'POST',
             body: JSON.stringify(pushedState),
-            headers
+            headers,
         }).then((blob: Response): Promise<PushStateType> => blob.json());
     }
 

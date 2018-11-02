@@ -75,7 +75,7 @@ class CreateRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
             defaultMoney: mapGuide.defaultMoneyList[0],
             unitLimit: mapGuide.defaultUnitLimitList[0],
             openShowInfoMapList: [],
-            isRoomCreating: false
+            isRoomCreating: false,
         };
     }
 
@@ -141,7 +141,7 @@ class CreateRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
 
         const setAllRoomSettingsResult = await serverApi.setAllRoomSettings(createRoomResult.roomId, {
             map,
-            type: getRoomType()
+            type: getRoomType(),
             // userList: [{
             //     userId,
             //     socketId,
@@ -332,7 +332,7 @@ class CreateRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
 const ConnectedComponent = connect<ComponentType<CreateRoom>, PassedPropsType, ReduxPropsType, ReduxActionType>(
     (state: GlobalStateType): ReduxPropsType => ({
         auth: state.auth,
-        locale: state.locale
+        locale: state.locale,
     }),
     reduxAction
 )(CreateRoom);

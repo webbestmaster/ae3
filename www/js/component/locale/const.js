@@ -11,26 +11,26 @@ const localeNameList: Array<LocaleNameType> = ['en-US', 'ru-RU'];
 export const localeConst = {
     action: {
         type: {
-            setLocale: 'locale__set-locale'
-        }
+            setLocale: 'locale__set-locale',
+        },
     },
     defaults: {
-        localeName: 'en-US'
+        localeName: 'en-US',
     },
     key: {
         localStorage: {
             // eslint-disable-next-line id-match
-            localeName: PROJECT_ID + '-locale-name-v.1.0'
-        }
+            localeName: PROJECT_ID + '-locale-name-v.1.0',
+        },
     },
     localeNameList,
     langName: {
         'ru-RU': 'Русский',
-        'en-US': 'English'
-    }
+        'en-US': 'English',
+    },
 };
 
 export const allLocales = {
     'en-US': enUs,
-    'ru-RU': ruRu
+    'ru-RU': ruRu,
 };

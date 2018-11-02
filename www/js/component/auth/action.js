@@ -11,7 +11,7 @@ export type SetUserType = {|
 export function setUser(userState: UserType): SetUserType {
     return {
         type: authConst.action.type.setUserState,
-        payload: userState
+        payload: userState,
     };
 }
 
@@ -23,6 +23,6 @@ export type SetSocketType = {|
 export function setSocket(socketState: SocketType): SetSocketType {
     return {
         type: authConst.action.type.setSocketState,
-        payload: socketState
+        payload: socketState,
     };
 }

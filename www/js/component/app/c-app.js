@@ -29,6 +29,6 @@ export function App(): Array<Node> {
             <Route component={Room} path={routes.roomOnLine} exact/>
             <Route component={Room} path={routes.roomOffLine} exact/>
             <Route component={Settings} path={routes.settings} exact/>
-        </Switch>
+        </Switch>,
     ];
 }

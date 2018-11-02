@@ -35,5 +35,5 @@ export const locale = combineReducers({
         }
 
         return actionData.payload.localeName;
-    }
+    },
 });

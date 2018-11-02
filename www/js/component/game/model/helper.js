@@ -130,7 +130,7 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
         console.error('aggressor can not attack defender', aggressorData, defenderData);
         return {
             aggressor: aggressorData,
-            defender: defenderData
+            defender: defenderData,
         };
     }
 
@@ -143,7 +143,7 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
         defenderData.hitPoints = 0;
         return {
             aggressor: aggressorData,
-            defender: defenderData
+            defender: defenderData,
         };
     }
 
@@ -156,7 +156,7 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
         console.log('defender can NOT strike back');
         return {
             aggressor: aggressorData,
-            defender: defenderData
+            defender: defenderData,
         };
     }
 
@@ -169,7 +169,7 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
         aggressorData.hitPoints = 0;
         return {
             aggressor: aggressorData,
-            defender: defenderData
+            defender: defenderData,
         };
     }
 
@@ -180,7 +180,7 @@ export function getAttackResult(gameData: GameDataType, aggressor: Unit, defende
 
     return {
         aggressor: aggressorData,
-        defender: defenderData
+        defender: defenderData,
     };
 }
 
@@ -229,7 +229,7 @@ function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender
         attack: {
             min: aggressorGuideData.attack.min,
             max: aggressorGuideData.attack.max,
-            range: aggressorGuideData.attack.range
+            range: aggressorGuideData.attack.range,
         },
         poisonAttack: aggressor.getPoisonAttack(),
         type: aggressor.attr.type,
@@ -244,12 +244,12 @@ function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender
         hasWispAura: aggressor.hasWispAura(),
         damage: {
             given: aggressor.getDamageGiven(),
-            received: aggressor.getDamageReceived()
+            received: aggressor.getDamageReceived(),
         },
         level: aggressor.getLevel(),
         placeArmor: isString(aggressorGuideData.moveType) ?
             gameData.armorMap[aggressorGuideData.moveType][aggressor.attr.y][aggressor.attr.x] :
-            gameData.armorMap.walk[aggressor.attr.y][aggressor.attr.x]
+            gameData.armorMap.walk[aggressor.attr.y][aggressor.attr.x],
     };
 
     const defenderGuideData = defender.getGuideData();
@@ -258,7 +258,7 @@ function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender
         attack: {
             min: defenderGuideData.attack.min,
             max: defenderGuideData.attack.max,
-            range: defenderGuideData.attack.range
+            range: defenderGuideData.attack.range,
         },
         poisonAttack: defender.getPoisonAttack(),
         type: defender.attr.type,
@@ -273,17 +273,17 @@ function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender
         hasWispAura: defender.hasWispAura(),
         damage: {
             given: defender.getDamageGiven(),
-            received: defender.getDamageReceived()
+            received: defender.getDamageReceived(),
         },
         level: defender.getLevel(),
         placeArmor: isString(defenderGuideData.moveType) ?
             gameData.armorMap[defenderGuideData.moveType][defender.attr.y][defender.attr.x] :
-            gameData.armorMap.walk[defender.attr.y][defender.attr.x]
+            gameData.armorMap.walk[defender.attr.y][defender.attr.x],
     };
 
     return {
         aggressor: aggressorData,
-        defender: defenderData
+        defender: defenderData,
     };
 }
 
@@ -295,7 +295,7 @@ export function getEventName(MouseEventName: MouseEventNameType): MouseEventName
     const eventNameMap: EventNameMapType = {
         click: 'tap',
         mousedown: 'touchstart',
-        mouseup: 'touchend'
+        mouseup: 'touchend',
     };
 
     const hasInMap = isString(eventNameMap[MouseEventName]);
@@ -314,8 +314,8 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
     const containerEvent = {
         startTouch: {
             x: NaN,
-            y: NaN
-        }
+            y: NaN,
+        },
     };
 
     const smthWrongCallbackFunction = smthWrongCallback || noop;
@@ -377,7 +377,7 @@ export function procedureMakeGraveForMapUnit(newMap: MapType, mapUnit: AttackRes
         newMap.graves.push({
             x: mapUnit.x,
             y: mapUnit.y,
-            removeCountdown: defaultUnitData.graveRemoveCountdown
+            removeCountdown: defaultUnitData.graveRemoveCountdown,
         });
         return;
     }
@@ -449,7 +449,7 @@ export function getSupplyState(map: MapType, userId: string): UnitSupplyStateTyp
         unitCount,
         unitLimit,
         isFull: unitCount >= unitLimit,
-        isOverFull: unitCount > unitLimit
+        isOverFull: unitCount > unitLimit,
     };
 }
 
@@ -487,8 +487,8 @@ function isTeamSkirmishLoose(teamId: TeamIdType, map: MapType): boolean {
 function getSkirmishMatchResult(map: MapType): SkirmishMathResultType {
     const skirmishMatchResult: SkirmishMathResultType = {
         winner: {
-            teamId: null
-        }
+            teamId: null,
+        },
     };
 
     const fullTeamList: Array<TeamIdType> = JSON.parse(JSON.stringify(mapGuide.teamIdList));
@@ -612,7 +612,7 @@ function hasPlaceForNewUnit(x: number, y: number, gameData: GameDataType): boole
         {x, y: y - 1},
         {x: x + 1, y},
         {x, y: y + 1},
-        {x, y}
+        {x, y},
     ];
 
     return neededCoordinates.some(
@@ -680,7 +680,7 @@ export function getUnitOverUnit(gameData: GameDataType): Array<WrongStateTypeUni
         const newWrongState = {
             type: 'unit-on-unit',
             x: unitInListX,
-            y: unitInListY
+            y: unitInListY,
         };
 
         if (find(wrongStateList, newWrongState)) {
@@ -721,7 +721,7 @@ export function getMapSize(map: MapType): MapSizeDataType {
     const defaultData = {
         width: 0,
         height: 0,
-        aspectRatio: 0
+        aspectRatio: 0,
     };
 
     const height = map.landscape.length;
@@ -739,6 +739,6 @@ export function getMapSize(map: MapType): MapSizeDataType {
     return {
         width,
         height,
-        aspectRatio: height / width
+        aspectRatio: height / width,
     };
 }

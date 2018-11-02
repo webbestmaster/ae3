@@ -16,8 +16,8 @@ export function makeUser(req: LocalExpressRequest, res: LocalExpressResponse) {
         res.json({
             error: {
                 id: error.ROOM_NOT_FOUND.id,
-                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId)
-            }
+                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId),
+            },
         });
         return;
     }
@@ -29,7 +29,7 @@ export function makeUser(req: LocalExpressRequest, res: LocalExpressResponse) {
             type: messageConst.type.joinIntoRoom,
             roomId,
             userId: user.userId,
-            socketId: user.socketId
+            socketId: user.socketId,
         });
 
         return;
@@ -38,7 +38,7 @@ export function makeUser(req: LocalExpressRequest, res: LocalExpressResponse) {
     res.json({
         error: {
             id: error.WRONG_PARAMETERS.id,
-            message: error.WRONG_PARAMETERS.message.replace('{{params}}', JSON.stringify(params))
-        }
+            message: error.WRONG_PARAMETERS.message.replace('{{params}}', JSON.stringify(params)),
+        },
     });
 }

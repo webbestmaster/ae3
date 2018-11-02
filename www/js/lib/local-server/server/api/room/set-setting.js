@@ -15,8 +15,8 @@ export function setSetting(req: LocalExpressRequest, res: LocalExpressResponse) 
         res.json({
             error: {
                 id: error.ROOM_NOT_FOUND.id,
-                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId)
-            }
+                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId),
+            },
         });
         return;
     }
@@ -24,6 +24,6 @@ export function setSetting(req: LocalExpressRequest, res: LocalExpressResponse) 
     room.setSetting(body);
 
     res.json({
-        roomId
+        roomId,
     });
 }

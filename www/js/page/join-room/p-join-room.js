@@ -65,7 +65,7 @@ class JoinRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
 
         view.state = {
             roomDataList: null,
-            isRoomsFetching: false
+            isRoomsFetching: false,
         };
     }
 
@@ -239,7 +239,7 @@ class JoinRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
                                 <Button
                                     onClick={view.makeJoinFunction(roomData.roomId)}
                                     className={classNames(style.open_room_item, {
-                                        [serviceStyle.disabled]: roomData.userList.length === roomData.maxUserSize
+                                        [serviceStyle.disabled]: roomData.userList.length === roomData.maxUserSize,
                                     })}
                                     key={roomData.roomId}
                                 >
@@ -266,7 +266,7 @@ class JoinRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
 const ConnectedComponent = connect<ComponentType<JoinRoom>, PassedPropsType, ReduxPropsType, ReduxActionType>(
     (state: GlobalStateType): ReduxPropsType => ({
         auth: state.auth,
-        locale: state.locale
+        locale: state.locale,
     }),
     reduxAction
 )(JoinRoom);

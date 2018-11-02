@@ -28,7 +28,7 @@ const definePluginParams = {
     BUILD_DATE: Date.now(),
     // NODE_ENV: JSON.stringify(NODE_ENV),
     IS_PRODUCTION: JSON.stringify(IS_PRODUCTION),
-    PROJECT_ID: JSON.stringify('my-best-project')
+    PROJECT_ID: JSON.stringify('my-best-project'),
     // IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
 };
 
@@ -39,13 +39,13 @@ const webpackConfig = {
     entry: [
         'swiper/dist/css/swiper.css',
         './www/css/root.scss',
-        './www/js/root.js'
+        './www/js/root.js',
     ],
     output: {
         path: path.join(CWD, pathToDist),
         publicPath: '/',
         filename: IS_DEVELOPMENT ? '[name].js' : '[name].[hash:6].js',
-        chunkFilename: IS_DEVELOPMENT ? '[name].async-import.js' : '[name].[hash:6].async-import.js'
+        chunkFilename: IS_DEVELOPMENT ? '[name].async-import.js' : '[name].[hash:6].async-import.js',
     },
 
     devtool: IS_PRODUCTION ? false : 'source-map',
@@ -60,29 +60,29 @@ const webpackConfig = {
                             chunks: 'initial',
                             name: 'main',
                             priority: -25,
-                            reuseExistingChunk: true
+                            reuseExistingChunk: true,
                         },
                         style: {
                             chunks: 'initial',
                             name: 'style',
                             priority: -20,
                             reuseExistingChunk: true,
-                            test: /\.s?css$/
+                            test: /\.s?css$/,
                         },
                         image: {
                             chunks: 'initial',
                             name: 'image',
                             priority: -15,
-                            test: fileRegExp
+                            test: fileRegExp,
                         },
                         vendor: {
                             chunks: 'initial',
                             name: 'vendor',
                             priority: -10,
-                            test: /node_modules/
-                        }
-                    }
-                }
+                            test: /node_modules/,
+                        },
+                    },
+                },
             } :
             {
                 minimizer: [
@@ -90,16 +90,16 @@ const webpackConfig = {
                         terserOptions: {
                             output: {
                                 comments: false,
-                                beautify: false
+                                beautify: false,
                             },
                             compress: {
                                 drop_console: true, // eslint-disable-line camelcase
-                                passes: 3
-                            }
-                        }
+                                passes: 3,
+                            },
+                        },
                     }),
-                    new OptimizeCSSAssetsPlugin({})
-                ]
+                    new OptimizeCSSAssetsPlugin({}),
+                ],
             }
     ),
     module: {
@@ -110,7 +110,7 @@ const webpackConfig = {
                 // query-string: query-string|strict-uri-encode
                 // pixi-viewport: pixi-viewport|yy-[\w]+
                 exclude: /node_modules(?!([/\\])(query-string|strict-uri-encode|pixi-viewport|yy-\w+))/,
-                loader: 'babel-loader'
+                loader: 'babel-loader',
             },
             {
                 test: fileRegExp,
@@ -123,15 +123,15 @@ const webpackConfig = {
                         // - name - The name is a standard option.
                         query: {
                             limit: 10e3, // 10k bytes
-                            name: 'img/img-[name]-[hash:6].[ext]'
-                        }
+                            name: 'img/img-[name]-[hash:6].[ext]',
+                        },
                     },
                     {
                         loader: 'image-webpack-loader',
                         options: {
                             mozjpeg: {
                                 quality: 80, // 0..100
-                                progressive: true
+                                progressive: true,
                             },
                             // optipng: {
                             //     optimizationLevel: 7 // 0..7
@@ -142,16 +142,16 @@ const webpackConfig = {
                             // },
                             svgo: {}, // no set up needed
                             gifsicle: {
-                                optimizationLevel: 3 // 1..3
-                            }
+                                optimizationLevel: 3, // 1..3
+                            },
                             // webp brake MS Edge
                             // webp: {
                             //     quality: 75,
                             //     method: 6
                             // }
-                        }
-                    }
-                ]
+                        },
+                    },
+                ],
             },
             {
                 test: /\.scss$/,
@@ -164,9 +164,9 @@ const webpackConfig = {
                                 sourceMap: IS_DEVELOPMENT,
                                 singleton: true,
                                 attrs: {
-                                    'class': 'my-scss-module'
-                                }
-                            }
+                                    'class': 'my-scss-module',
+                                },
+                            },
                         },
                     'css-modules-flow-types-loader',
                     {
@@ -175,20 +175,20 @@ const webpackConfig = {
                             sourceMap: IS_DEVELOPMENT,
                             modules: true,
                             localIdentName: IS_DEVELOPMENT ? '[local]----[hash:6]' : '[hash:6]', // '[local]----[path]--[name]--[hash:6]'
-                            minimize: IS_PRODUCTION
-                        }
+                            minimize: IS_PRODUCTION,
+                        },
                     },
                     {
                         loader: 'postcss-loader',
                         options: {
                             sourceMap: true,
                             config: {
-                                path: './postcss.config.js'
-                            }
-                        }
+                                path: './postcss.config.js',
+                            },
+                        },
                     },
-                    {loader: 'sass-loader', options: {sourceMap: IS_DEVELOPMENT}}
-                ]
+                    {loader: 'sass-loader', options: {sourceMap: IS_DEVELOPMENT}},
+                ],
             },
             {
                 test: /\.css$/,
@@ -201,9 +201,9 @@ const webpackConfig = {
                                 sourceMap: IS_DEVELOPMENT,
                                 singleton: true,
                                 attrs: {
-                                    'class': 'my-css-module'
-                                }
-                            }
+                                    'class': 'my-css-module',
+                                },
+                            },
                         },
                     'css-modules-flow-types-loader',
                     {
@@ -212,21 +212,21 @@ const webpackConfig = {
                             sourceMap: IS_DEVELOPMENT,
                             modules: true,
                             localIdentName: '[local]',
-                            minimize: IS_PRODUCTION
-                        }
+                            minimize: IS_PRODUCTION,
+                        },
                     },
                     {
                         loader: 'postcss-loader',
                         options: {
                             sourceMap: true,
                             config: {
-                                path: './postcss.config.js'
-                            }
-                        }
-                    }
-                ]
-            }
-        ]
+                                path: './postcss.config.js',
+                            },
+                        },
+                    },
+                ],
+            },
+        ],
     },
     // resolve module warning, see DuplicatePackageCheckerPlugin
     resolve: {
@@ -235,8 +235,8 @@ const webpackConfig = {
             lodash: path.resolve(CWD, 'node_modules/lodash'),
             isarray: path.resolve(CWD, 'node_modules/isarray'),
             'hoist-non-react-statics': path.resolve(CWD, 'node_modules//hoist-non-react-statics'),
-            '@babel/runtime': path.resolve(CWD, 'node_modules/@babel/runtime')
-        }
+            '@babel/runtime': path.resolve(CWD, 'node_modules/@babel/runtime'),
+        },
     },
     plugins: [
         new DuplicatePackageCheckerPlugin(),
@@ -248,21 +248,21 @@ const webpackConfig = {
                 collapseWhitespace: IS_PRODUCTION,
                 removeComments: IS_PRODUCTION,
                 minifyCSS: IS_PRODUCTION,
-                minifyJS: IS_PRODUCTION
+                minifyJS: IS_PRODUCTION,
             },
             hash: true,
-            filename: './index.html'
+            filename: './index.html',
         }),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
             filename: IS_DEVELOPMENT ? '[name].css' : '[name].[hash:6].css',
-            chunkFilename: IS_DEVELOPMENT ? '[id].css' : '[id].[hash:6].css'
+            chunkFilename: IS_DEVELOPMENT ? '[id].css' : '[id].[hash:6].css',
         }),
         new ScriptExtHtmlWebpackPlugin({defaultAttribute: 'defer'}),
         new CopyWebpackPlugin([{from: './www/favicon.ico', to: './favicon.ico'}], {debug: false}),
-        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
-    ]
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
+    ],
 
     /*
         devServer: {

@@ -15,8 +15,8 @@ export function getStatesFromHash(req: LocalExpressRequest, res: LocalExpressRes
         res.json({
             error: {
                 id: error.ROOM_NOT_FOUND.id,
-                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId)
-            }
+                message: error.ROOM_NOT_FOUND.message.replace('{{roomId}}', roomId),
+            },
         });
         return;
     }
@@ -25,6 +25,6 @@ export function getStatesFromHash(req: LocalExpressRequest, res: LocalExpressRes
 
     res.json({
         roomId,
-        states
+        states,
     });
 }

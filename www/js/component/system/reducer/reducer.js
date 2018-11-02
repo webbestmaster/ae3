@@ -6,7 +6,7 @@ import {combineReducers} from 'redux';
 import {screen, type ScreenType} from './screen';
 
 export const system = combineReducers({
-    screen
+    screen,
 });
 
 export type SystemType = {|

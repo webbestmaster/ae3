@@ -6,7 +6,7 @@ import type {PushedStateType} from '../lib/local-server/room/room';
 const {get, post} = require('../lib/local-server/local-request/local-request');
 
 export const localServerOptions = {
-    port: 8080
+    port: 8080,
 };
 
 const url = 'http://www.localhost:' + localServerOptions.port + '/';

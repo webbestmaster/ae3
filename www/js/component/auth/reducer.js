@@ -13,7 +13,7 @@ export type UserType = {|
 |};
 
 const defaultUserState: UserType = {
-    id: ''
+    id: '',
 };
 
 export type SocketType = {|
@@ -21,7 +21,7 @@ export type SocketType = {|
 |};
 
 const defaultSocketState: SocketType = {
-    id: ''
+    id: '',
 };
 
 // module
@@ -52,5 +52,5 @@ export const auth = combineReducers({
         }
 
         return actionData.payload;
-    }
+    },
 });

@@ -21,7 +21,7 @@ export class UrlMask {
 
         urlMask.attr = {
             initialUrl: constructorOptions.initialUrl,
-            mask: []
+            mask: [],
         };
 
         urlMask.makeMask();

@@ -14,6 +14,6 @@ export const appConst: AppConstType = {
         // eslint-disable-next-line id-match
         // url: IS_PRODUCTION ? origin : 'http://' + hostname + ':3001'
         // eslint-disable-next-line id-match
-        url: IS_PRODUCTION ? origin : 'http://aefree.herokuapp.com'
-    }
+        url: IS_PRODUCTION ? origin : 'http://aefree.herokuapp.com',
+    },
 };

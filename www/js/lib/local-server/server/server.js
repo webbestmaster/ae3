@@ -16,7 +16,7 @@ type ServerConstructorOptionsType = {|
 |};
 
 const serverDefaultOptions: ServerConstructorOptionsType = {
-    port: 3000
+    port: 3000,
 };
 
 type AttrType = {|
@@ -44,11 +44,11 @@ export class Server {
         // eslint-disable-next-line no-underscore-dangle, id-match
         server._attr = {
             options: {
-                port: isNumber(options.port) ? options.port : serverDefaultOptions.port
+                port: isNumber(options.port) ? options.port : serverDefaultOptions.port,
             },
             expressApp,
             httpServer,
-            socketIoServer
+            socketIoServer,
         };
     }
 
@@ -92,7 +92,7 @@ export class Server {
 
         return Promise.all([
             new Promise((resolve: () => void, reject: () => void): void => socketIoServer.close(resolve)),
-            new Promise((resolve: () => void, reject: () => void): void => httpServer.close(resolve))
+            new Promise((resolve: () => void, reject: () => void): void => httpServer.close(resolve)),
         ])
             .then((): void => console.log('TBW stop listen on local:', options.port))
             .catch((error: Error) => {

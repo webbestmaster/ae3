@@ -38,7 +38,7 @@ export async function getRoomState(roomId: string): Promise<RoomDataType | null>
         roomId,
         settings: getAllRoomSettingsResult.settings,
         userList,
-        maxUserSize: getMaxUserListSize(map)
+        maxUserSize: getMaxUserListSize(map),
     };
 }
 

@@ -7,6 +7,6 @@ export const messageConst = {
         userDisconnected: 'room__user-disconnected',
         takeTurn: 'room__take-turn',
         dropTurn: 'room__drop-turn',
-        pushState: 'room__push-state'
-    }
+        pushState: 'room__push-state',
+    },
 };

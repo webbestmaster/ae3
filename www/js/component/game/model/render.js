@@ -18,7 +18,7 @@ import {
     type UnitActionOpenStoreType,
     type UnitActionRaiseSkeletonType,
     type UnitActionsMapType,
-    type UnitActionType
+    type UnitActionType,
 } from './unit/unit';
 import {defaultUnitData} from './unit/unit-guide';
 import {Building} from './building/building';
@@ -48,7 +48,7 @@ const stagePadding = {
     top: squareSize,
     right: squareSize,
     left: squareSize,
-    bottom: squareSize
+    bottom: squareSize,
 };
 // const sprite = require('./image.png');
 
@@ -74,7 +74,7 @@ export class Render {
             buildings: new PIXI.Container(),
             graves: new PIXI.Container(),
             units: new PIXI.Container(),
-            actions: new PIXI.Container()
+            actions: new PIXI.Container(),
         };
     }
 
@@ -94,7 +94,7 @@ export class Render {
             transparent: true,
             roundPixels: true,
             // backgroundColor: 0x1099bb,
-            resolution: window.devicePixelRatio || 1
+            resolution: window.devicePixelRatio || 1,
         });
 
         render.app = app;
@@ -103,7 +103,7 @@ export class Render {
             screenWidth: setting.width,
             screenHeight: setting.height,
             worldWidth: worldSize.width,
-            worldHeight: worldSize.height
+            worldHeight: worldSize.height,
         });
 
         render.viewport = viewport;
@@ -216,13 +216,13 @@ export class Render {
         if (!map || !map.landscape || !map.landscape[0]) {
             return {
                 width: 0,
-                height: 0
+                height: 0,
             };
         }
 
         return {
             width: map.landscape[0].length * mapGuide.size.square + stagePadding.top + stagePadding.bottom,
-            height: map.landscape.length * mapGuide.size.square + stagePadding.left + stagePadding.right
+            height: map.landscape.length * mapGuide.size.square + stagePadding.left + stagePadding.right,
         };
     }
 
@@ -248,7 +248,7 @@ export class Render {
             minWidth: worldSize.width / worldSizeMaxScaleQ * (width / worldSizeQ),
             minHeight: worldSize.height / worldSizeMaxScaleQ * (height / worldSizeQ),
             maxWidth: worldSize.width * (width / worldSizeQ),
-            maxHeight: worldSize.height * (height / worldSizeQ)
+            maxHeight: worldSize.height * (height / worldSizeQ),
         });
     }
 

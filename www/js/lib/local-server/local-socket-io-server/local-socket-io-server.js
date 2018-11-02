@@ -37,11 +37,11 @@ export class LocalSocketIoServer {
         const localSocketIoServer = this;
 
         localSocketIoServer.attr = {
-            localHttpServer
+            localHttpServer,
         };
 
         localSocketIoServer.sockets = {
-            connected: {}
+            connected: {},
         };
     }
 

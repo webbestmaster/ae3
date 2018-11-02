@@ -35,8 +35,8 @@ export const imageMap: ImageMapType = {
     unit: {},
     font: {
         unit: {},
-        popup: {}
-    }
+        popup: {},
+    },
 };
 
 const buildingReqContext = require.context('./building/', true, /\.png$/);

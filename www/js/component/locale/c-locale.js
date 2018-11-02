@@ -59,7 +59,7 @@ class Locale extends Component<ReduxPropsType, PassedPropsType, StateType> {
 
 const ConnectedComponent = connect<ComponentType<Locale>, PassedPropsType, ReduxPropsType, ReduxActionType>(
     (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
-        locale: state.locale
+        locale: state.locale,
     }),
     reduxAction
 )(Locale);

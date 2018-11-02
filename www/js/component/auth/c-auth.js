@@ -26,7 +26,7 @@ type ReduxActionType = {|
 
 const reduxAction: ReduxActionType = {
     setUser,
-    setSocket
+    setSocket,
 };
 
 type PassedPropsType = {};
@@ -65,7 +65,7 @@ class Auth extends Component<ReduxPropsType, PassedPropsType, StateType> {
 
 const ConnectedComponent = connect<ComponentType<Auth>, PassedPropsType, ReduxPropsType, ReduxActionType>(
     (state: GlobalStateType): ReduxPropsType => ({
-        auth: state.auth
+        auth: state.auth,
     }),
     reduxAction
 )(Auth);

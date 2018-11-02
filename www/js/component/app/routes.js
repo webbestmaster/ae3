@@ -24,5 +24,5 @@ export const routes: RoutesType = {
     joinRoom: onLinePrefix + '/join-room',
     roomOnLine: onLinePrefix + '/room/:roomId',
     roomOffLine: offLinePrefix + '/room/:roomId',
-    settings: '/settings'
+    settings: '/settings',
 };

@@ -41,9 +41,9 @@ export class Building {
         building.gameAttr = {
             container: new PIXI.Container(),
             sprite: {
-                building: new PIXI.Sprite()
+                building: new PIXI.Sprite(),
             },
-            userList: JSON.parse(JSON.stringify(buildingConstructor.userList))
+            userList: JSON.parse(JSON.stringify(buildingConstructor.userList)),
         };
 
         building.initializeBuildingSprite();
@@ -153,7 +153,7 @@ export class Building {
             type: building.attr.type,
             x: building.attr.x,
             y: building.attr.y,
-            id: building.attr.id
+            id: building.attr.id,
         };
 
         gameAttr.container.removeChild(gameAttr.sprite.building);

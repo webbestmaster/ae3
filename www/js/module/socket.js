@@ -113,7 +113,7 @@ export class Socket {
         socket.attr = {
             initialPromise,
             socket: null,
-            model: new MainModel()
+            model: new MainModel(),
         };
     }
 
@@ -127,7 +127,7 @@ export class Socket {
         return new Promise((resolve: (socket: Socket) => void) => {
             const options = {
                 transports: ['websocket'],
-                'force new connection': true
+                'force new connection': true,
             };
 
             const socketIo = socketIoClient.connect(

@@ -18,7 +18,7 @@ type ReduxActionType = {|
 |};
 
 const reduxAction: ReduxActionType = {
-    onResize
+    onResize,
 };
 
 type PassedPropsType = {};

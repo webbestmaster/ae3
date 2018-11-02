@@ -86,10 +86,10 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
             mapUserData: find(props.mapState.userList, {userId: user.getId()}) || {
                 userId: 'no-user-id-in-store',
                 money: 0,
-                teamId: mapGuide.teamIdList[0]
+                teamId: mapGuide.teamIdList[0],
             },
             isInProgress: false,
-            isFullInfoShow: false
+            isFullInfoShow: false,
         };
     }
 
@@ -179,7 +179,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
             x: props.x,
             y: props.y,
             userId: user.getId(),
-            id: [props.x, props.y, Math.random()].join('-')
+            id: [props.x, props.y, Math.random()].join('-'),
         };
 
         newMap.units.push(newMapUnitData);
@@ -193,8 +193,8 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
                     type: 'buy-unit',
                     newMapUnit: newMapUnitData,
                     map: newMap,
-                    activeUserId: user.getId()
-                }
+                    activeUserId: user.getId(),
+                },
             })
             .then((response: mixed): void => console.log('---> user action buy unit', response))
             .catch((error: Error) => {
@@ -299,7 +299,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
 
                     <Button
                         className={classNames(style.buy_button, {
-                            [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull
+                            [serviceStyle.disabled]: mapUserData.money < unitCost || supplyState.isFull,
                         })}
                         onClick={view.handleOnClickBuyUnit}
                     >
@@ -322,7 +322,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
 
 const ConnectedComponent = connect<ComponentType<UnitSellPosition>, PassedPropsType, ReduxPropsType, ReduxActionType>(
     (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
-        locale: state.locale
+        locale: state.locale,
     }),
     reduxAction
 )(withRouter(UnitSellPosition));

@@ -18,7 +18,7 @@ import * as reducers from './redux-store-provider/app-reducer';
 console.log('Environment is initialized!');
 
 const reducer = combineReducers({
-    ...reducers
+    ...reducers,
 });
 
 const composeEnhancers = composeWithDevTools({

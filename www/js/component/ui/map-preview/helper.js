@@ -8,7 +8,7 @@ export function getDefaultUserList(): Array<MapUserType> {
         (index: number): MapUserType => ({
             userId: String(index),
             money: 0,
-            teamId: mapGuide.teamIdList[index]
+            teamId: mapGuide.teamIdList[index],
         })
     );
 }

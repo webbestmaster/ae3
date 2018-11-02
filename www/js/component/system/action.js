@@ -15,7 +15,7 @@ export function onResize(width: number, height: number): OnResizeType {
         type: systemConst.action.type.resize,
         payload: {
             width,
-            height
-        }
+            height,
+        },
     };
 }

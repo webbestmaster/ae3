@@ -33,8 +33,8 @@ export class Grave {
         grave.gameAttr = {
             container: new PIXI.Container(),
             sprite: {
-                grave: new PIXI.Sprite()
-            }
+                grave: new PIXI.Sprite(),
+            },
         };
 
         grave.initializeGraveSprite();
