@@ -47,8 +47,7 @@ import createRoomStyle from '../create-room/style.scss';
 import type {LangKeyType} from '../../component/locale/translation/type';
 import {ButtonListWrapper} from '../../component/ui/button-list-wrapper/c-button-list-wrapper';
 import {isNotString, isString} from '../../lib/is/is';
-
-const roomPushState = 'room__push-state';
+import {messageConst} from '../../lib/local-server/room/message-const';
 
 type ReduxPropsType = {|
     +locale: LocaleType,
@@ -226,7 +225,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         }
 
         await serverApi.pushState(roomId, user.getId(), {
-            type: roomPushState,
+            type: messageConst.type.pushState,
             state: {
                 type: 'remove-user',
                 map: settings.map,
@@ -305,22 +304,22 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
             return Promise.resolve();
         }
 
-        const lastState = message.type === roomPushState ? message.states.last.state : null;
+        const lastState = message.type === messageConst.type.pushState ? message.states.last.state : null;
 
         switch (message.type) {
-            case 'room__take-turn':
+            case messageConst.type.takeTurn:
                 break;
 
-            case 'room__drop-turn':
+            case messageConst.type.dropTurn:
                 break;
 
-            case 'room__join-into-room':
-            case 'room__leave-from-room':
-            case 'room__user-disconnected':
+            case messageConst.type.joinIntoRoom:
+            case messageConst.type.leaveFromRoom:
+            case messageConst.type.userDisconnected:
                 await view.onServerUserListChange();
                 break;
 
-            case roomPushState:
+            case messageConst.type.pushState:
                 // kicked from room
                 if (lastState !== null && lastState.type === 'remove-user' && lastState.userId === user.getId()) {
                     view.unbindEventListeners();
@@ -417,7 +416,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         };
 
         const pushStateResult = await serverApi.pushState(roomId, user.getId(), {
-            type: roomPushState,
+            type: messageConst.type.pushState,
             state: newState,
         });
     }

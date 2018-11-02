@@ -41,6 +41,7 @@ import iconUnitBlack from './image/unit/soldier-black-1.png';
 import {Canvas} from '../ui/canvas/c-canvas';
 import type {SetOpenFromGameType} from '../store/action';
 import {setOpenFromGame} from '../store/action';
+import {messageConst} from '../../lib/local-server/room/message-const';
 
 const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,
@@ -271,14 +272,14 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         );
 
         switch (message.type) {
-            case 'room__take-turn':
+            case messageConst.type.takeTurn:
                 view.setState({activeUserId: message.states.last.activeUserId});
 
                 break;
 
-            case 'room__join-into-room':
-            case 'room__leave-from-room':
-            case 'room__user-disconnected':
+            case messageConst.type.joinIntoRoom:
+            case messageConst.type.leaveFromRoom:
+            case messageConst.type.userDisconnected:
                 allUserResponse = await serverApi.getAllRoomUsers(roomId);
                 view.setState({
                     userList: allUserResponse.users,
@@ -286,7 +287,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
                 break;
 
-            case 'room__push-state':
+            case messageConst.type.pushState:
                 // view.forceUpdate();
                 // view.setState({activeUserId: message.states.last.state.activeUserId});
                 // if (message.states.last.state.map) {
@@ -297,7 +298,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
                 break;
 
-            case 'room__drop-turn':
+            case messageConst.type.dropTurn:
                 break;
 
             default:

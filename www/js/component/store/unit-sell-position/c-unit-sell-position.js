@@ -34,6 +34,7 @@ import iconUnitInfoMove from './i/icon-unit-info-move.png';
 import iconUnitInfoDefence from './i/icon-unit-info-defence.png';
 import iconUnitInfoDescription from './i/icon-unit-info-description.png';
 import iconUnitInfoDescriptionOpen from './i/icon-unit-info-description-open.png';
+import {messageConst} from '../../../lib/local-server/room/message-const';
 
 type ReduxPropsType = {|
     +locale: LocaleType,
@@ -188,7 +189,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
 
         return serverApi
             .pushState(props.match.params.roomId, user.getId(), {
-                type: 'room__push-state',
+                type: messageConst.type.pushState,
                 state: {
                     type: 'buy-unit',
                     newMapUnit: newMapUnitData,

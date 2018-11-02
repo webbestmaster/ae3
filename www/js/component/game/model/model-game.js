@@ -51,6 +51,7 @@ import {storeViewId} from '../../store/c-store';
 import {Queue} from '../../../lib/queue/queue';
 import {localSocketIoClient} from '../../../module/socket-local';
 import {isNotFunction, isNotNumber, isNotString, isNumber, isString} from '../../../lib/is/is';
+import {messageConst} from '../../../lib/local-server/room/message-const';
 
 type RenderSettingType = {|
     width: number,
@@ -391,7 +392,7 @@ export class GameModel {
         await serverApi
             .pushState(game.roomId, userId, {
                 // eslint-disable-next-line sonarjs/no-duplicate-string
-                type: 'room__push-state',
+                type: messageConst.type.pushState,
                 state: {
                     type: 'refresh-unit-list',
                     map: newMap,
@@ -415,25 +416,25 @@ export class GameModel {
     async onMessage(message: SocketMessageType): Promise<void> {
         const game = this;
 
-        if (message.type === 'room__push-state' && message.states.last.state) {
+        if (message.type === messageConst.type.pushState && message.states.last.state) {
             game.setMapState(message.states.last.state.map);
         }
 
         switch (message.type) {
-            case 'room__take-turn':
+            case messageConst.type.takeTurn:
                 await game.handleServerTakeTurn(message);
                 game.gameView.popupChangeActiveUser({isOpen: true});
 
                 break;
 
-            case 'room__drop-turn':
+            case messageConst.type.dropTurn:
                 await game.render.cleanActionsList();
                 break;
 
-            case 'room__join-into-room':
+            case messageConst.type.joinIntoRoom:
                 break;
 
-            case 'room__leave-from-room':
+            case messageConst.type.leaveFromRoom:
                 // work only if your turn
                 await game.syncMapWithServerUserList(message);
 
@@ -441,10 +442,10 @@ export class GameModel {
                 console.warn('check here map users and server users, only if your turn');
                 break;
 
-            case 'room__user-disconnected':
+            case messageConst.type.userDisconnected:
                 break;
 
-            case 'room__push-state':
+            case messageConst.type.pushState:
                 await game.handleServerPushState(message);
                 game.checkMapState(message.states.last.state.map);
                 // game.setMapState(message.states.last.state.map);
@@ -465,7 +466,7 @@ export class GameModel {
         const game = this;
         const lastSavedSocketMessage = game.getLastSocketMessage();
         const messageMap =
-            message.type === 'room__push-state' && message.states.last.state && message.states.last.state.map ?
+            message.type === messageConst.type.pushState && message.states.last.state && message.states.last.state.map ?
                 message.states.last.state.map :
                 null;
 
@@ -641,7 +642,7 @@ export class GameModel {
 
         serverApi
             .pushState(game.roomId, user.getId(), {
-                type: 'room__push-state',
+                type: messageConst.type.pushState,
                 state: {
                     type: 'sync-map-with-server-user-list',
                     map: newMap,
@@ -1650,7 +1651,7 @@ export class GameModel {
 
         await serverApi
             .pushState(game.roomId, user.getId(), {
-                type: 'room__push-state',
+                type: messageConst.type.pushState,
                 state: {
                     type: 'move',
                     path: moviePath,
@@ -1766,7 +1767,7 @@ export class GameModel {
 
         serverApi
             .pushState(game.roomId, user.getId(), {
-                type: 'room__push-state',
+                type: messageConst.type.pushState,
                 state: {
                     type: 'attack',
                     aggressor: unitAction.aggressor,
@@ -1824,7 +1825,7 @@ export class GameModel {
 
         await serverApi
             .pushState(game.roomId, user.getId(), {
-                type: 'room__push-state',
+                type: messageConst.type.pushState,
                 state: {
                     type: 'fix-building',
                     building,
@@ -1889,7 +1890,7 @@ export class GameModel {
 
         await serverApi
             .pushState(game.roomId, user.getId(), {
-                type: 'room__push-state',
+                type: messageConst.type.pushState,
                 state: {
                     type: 'occupy-building',
                     building,
@@ -1962,7 +1963,7 @@ export class GameModel {
 
         await serverApi
             .pushState(game.roomId, user.getId(), {
-                type: 'room__push-state',
+                type: messageConst.type.pushState,
                 state: {
                     type: 'raise-skeleton',
                     raiser: actionRaiser,
@@ -2044,7 +2045,7 @@ export class GameModel {
 
         await serverApi
             .pushState(game.roomId, user.getId(), {
-                type: 'room__push-state',
+                type: messageConst.type.pushState,
                 state: {
                     type: 'destroy-building',
                     destroyer: unitAction.destroyer,
