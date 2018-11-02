@@ -18,7 +18,7 @@ import {Scroll} from '../ui/scroll/c-scroll';
 import {Locale} from '../locale/c-locale';
 import type {LangKeyType} from '../locale/translation/type';
 import {UnitSellPosition} from './unit-sell-position/c-unit-sell-position';
-import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
+import type {GlobalStateType} from '../../redux-store-provider/reducer';
 import type {SetOpenFromGameType} from './action';
 import {setOpenFromGame} from './action';
 import type {StoreType} from './reducer';

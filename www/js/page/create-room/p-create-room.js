@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import type {MapType} from '../../maps/type';
 import {mapGuide} from '../../maps/map-guide';
 import * as serverApi from '../../module/server-api';
-import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
+import type {GlobalStateType} from '../../redux-store-provider/reducer';
 import type {AuthType} from '../../component/auth/reducer';
 import {routes} from '../../component/app/routes';
 import {Page} from '../../component/ui/page/c-page';

@@ -3,8 +3,8 @@
 /* global window */
 
 import {combineReducers} from 'redux';
+import type {LocaleNameType} from './const';
 import {localeConst} from './const';
-import type {LocaleNameType} from './action';
 import type {ActionDataType} from '../../redux-store-provider/type';
 
 function getLocaleName(): LocaleNameType {
@@ -15,10 +15,31 @@ function getLocaleName(): LocaleNameType {
         return savedLocaleName;
     }
 
-    return localeConst.defaults.localeName;
+    const navigatorLanguages = window.navigator.languages;
+
+    if (!Array.isArray(navigatorLanguages)) {
+        return localeConst.defaults.localeName;
+    }
+
+    let localeName = localeConst.defaults.localeName;
+
+    navigatorLanguages.every(
+        (deviceLocaleName: string): boolean => {
+            if (localeNameList.includes(deviceLocaleName)) {
+                localeName = deviceLocaleName;
+                return false;
+            }
+
+            return true;
+        }
+    );
+
+    return localeName;
 }
 
 const initialLocaleName = getLocaleName();
+
+window.localStorage.setItem(localeConst.key.localStorage.localeName, initialLocaleName);
 
 export type LocaleType = {|
     +name: LocaleNameType,
@@ -28,7 +49,7 @@ type ReduceMapType = {|
     +name: (localeName: LocaleNameType, actionData: ActionDataType) => LocaleNameType,
 |};
 
-export const locale = combineReducers<ReduceMapType, LocaleType>({
+const locale = combineReducers<ReduceMapType, LocaleType>({
     name: (localeName: LocaleNameType = initialLocaleName, actionData: ActionDataType): LocaleNameType => {
         if (actionData.type !== localeConst.action.type.setLocale) {
             return localeName;
@@ -41,3 +62,5 @@ export const locale = combineReducers<ReduceMapType, LocaleType>({
         return actionData.payload.localeName;
     },
 });
+
+export {locale};

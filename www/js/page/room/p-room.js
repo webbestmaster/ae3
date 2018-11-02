@@ -38,7 +38,7 @@ import {Locale} from '../../component/locale/c-locale';
 import {getMaxUserListSize, getRoomState} from '../join-room/helper';
 import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import {localSocketIoClient} from '../../module/socket-local';
-import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
+import type {GlobalStateType} from '../../redux-store-provider/reducer';
 import type {LocaleType} from '../../component/locale/reducer';
 import {Scroll} from '../../component/ui/scroll/c-scroll';
 import style from './style.scss';

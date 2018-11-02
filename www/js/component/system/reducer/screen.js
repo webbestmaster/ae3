@@ -13,13 +13,22 @@ const screenMinWidth: {[key: ScreenWidthNameType]: number} = {
     mobile: 320,
 };
 
+export const screenNameReference: {[key: ScreenWidthNameType]: ScreenWidthNameType} = {
+    desktop: 'desktop',
+    tablet: 'tablet',
+    mobile: 'mobile',
+};
+
 export type ScreenType = {|
-    width: number,
-    height: number,
-    name: ScreenWidthNameType,
-    ltThen: Array<ScreenWidthNameType>,
-    isLandscape: boolean,
-    isPortrait: boolean,
+    +width: number,
+    +height: number,
+    +name: ScreenWidthNameType,
+    +isDesktop: boolean,
+    +isTablet: boolean,
+    +isMobile: boolean,
+    +littleThen: Array<ScreenWidthNameType>,
+    +isLandscape: boolean,
+    +isPortrait: boolean,
 |};
 
 function getScreenName(screenWidth: number): ScreenWidthNameType {
@@ -39,26 +48,30 @@ function getScreenName(screenWidth: number): ScreenWidthNameType {
     return screenName;
 }
 
-function getLtThen(screenWidth: number): Array<ScreenWidthNameType> {
-    const ltThenList = [];
+function getLittleThen(screenWidth: number): Array<ScreenWidthNameType> {
+    const littleThenList = [];
 
     Object.keys(screenMinWidth).forEach((screenName: ScreenWidthNameType) => {
         if (screenWidth < screenMinWidth[screenName]) {
-            ltThenList.push(screenName);
+            littleThenList.push(screenName);
         }
     });
 
-    return ltThenList;
+    return littleThenList;
 }
 
 function getScreenState(width: number, height: number): ScreenType {
     const isLandscape = width > height; // use >, do not use >=, if width === height it is portrait
+    const screenName = getScreenName(width);
 
     return {
         width,
         height,
-        name: getScreenName(width),
-        ltThen: getLtThen(width),
+        name: screenName,
+        littleThen: getLittleThen(width),
+        isDesktop: screenName === screenNameReference.desktop,
+        isTablet: screenName === screenNameReference.tablet,
+        isMobile: screenName === screenNameReference.mobile,
         isLandscape,
         isPortrait: !isLandscape,
     };

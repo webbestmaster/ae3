@@ -7,27 +7,42 @@
 import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
+import type {GlobalStateType} from '../../redux-store-provider/reducer';
 import type {LocaleType} from './reducer';
+import type {LocaleNameType} from './const';
 import {allLocales, localeConst} from './const';
 import type {LangKeyType} from './translation/type';
-import type {LocaleNameType} from './action';
+
+type StateType = null;
+
+type ValueMapType = {
+    [key: string]: string | number,
+};
 
 type ReduxPropsType = {|
     +locale: LocaleType,
 |};
 
-type ReduxActionType = {};
-
-const reduxAction: ReduxActionType = {};
-
 type PassedPropsType = {|
     +stringKey: LangKeyType,
+    +valueMap?: ValueMapType,
 |};
 
-type StateType = null;
+function replacePlaceholderMap(rawString: string, valueMap: ValueMapType): string {
+    let resultString = rawString;
 
-export function getLocalizedString(stringKey: LangKeyType, localeName: LocaleNameType): string {
+    Object.keys(valueMap).forEach((valueKey: string) => {
+        resultString = resultString.replace(`{${valueKey}}`, String(valueMap[valueKey]));
+    });
+
+    return resultString;
+}
+
+export function getLocalizedString(
+    stringKey: LangKeyType,
+    localeName: LocaleNameType,
+    valueMap?: ValueMapType
+): string {
     // eslint-disable-next-line id-match
     if (!IS_PRODUCTION) {
         if (!stringKey) {
@@ -41,7 +56,9 @@ export function getLocalizedString(stringKey: LangKeyType, localeName: LocaleNam
         }
     }
 
-    return allLocales[localeName][stringKey];
+    const resultString = allLocales[localeName][stringKey];
+
+    return valueMap ? replacePlaceholderMap(resultString, valueMap) : resultString;
 }
 
 class Locale extends Component<ReduxPropsType, PassedPropsType, StateType> {
@@ -52,16 +69,19 @@ class Locale extends Component<ReduxPropsType, PassedPropsType, StateType> {
     render(): string {
         const view = this;
         const {props} = view;
+        const {stringKey, locale, valueMap} = props;
 
-        return getLocalizedString(props.stringKey, props.locale.name);
+        return getLocalizedString(stringKey, locale.name, valueMap);
     }
 }
 
-const ConnectedComponent = connect<ComponentType<Locale>, PassedPropsType, ReduxPropsType, ReduxActionType>(
-    (state: GlobalStateType, props: PassedPropsType): ReduxPropsType => ({
+const ConnectedComponent = connect<ComponentType<Locale>, PassedPropsType, ReduxPropsType, {}>(
+    (state: GlobalStateType): ReduxPropsType => ({
         locale: state.locale,
     }),
-    reduxAction
+    {
+        // setUser
+    }
 )(Locale);
 
 export {ConnectedComponent as Locale};

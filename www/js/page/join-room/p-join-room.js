@@ -9,7 +9,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {routes} from '../../component/app/routes';
 import * as serverApi from '../../module/server-api';
-import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
+import type {GlobalStateType} from '../../redux-store-provider/reducer';
 import type {AuthType} from '../../component/auth/reducer';
 import {Page} from '../../component/ui/page/c-page';
 import {Header} from '../../component/ui/header/c-header';

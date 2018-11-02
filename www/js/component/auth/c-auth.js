@@ -12,7 +12,7 @@ import {setSocket, setUser} from './action';
 import type {AuthType, SocketType, UserType} from './reducer';
 import {user} from '../../module/user';
 import {socket} from '../../module/socket';
-import type {GlobalStateType} from '../../redux-store-provider/app-reducer';
+import type {GlobalStateType} from '../../redux-store-provider/reducer';
 import type {ActionDataType} from '../../redux-store-provider/type';
 
 type ReduxPropsType = {|

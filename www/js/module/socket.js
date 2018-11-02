@@ -4,7 +4,7 @@
 
 const socketIoClient = require('socket.io-client');
 
-import {appConst} from '../redux-store-provider/app-const';
+import {appConst} from '../const';
 import MainModel from 'main-model';
 import type {PushedStatePayloadType} from './server-api';
 

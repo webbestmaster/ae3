@@ -8,8 +8,8 @@ import trainingsCatalog from './components/trainings-catalog/reducer';
 import auth from './components/auth/reducer';
 */
 
-import type {SystemType} from '../component/system/reducer/reducer';
-import {system} from '../component/system/reducer/reducer';
+import type {SystemType} from '../component/system/reducer/root';
+import {system} from '../component/system/reducer/root';
 
 import type {AuthType} from '../component/auth/reducer';
 import {auth} from '../component/auth/reducer';

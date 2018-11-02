@@ -1,7 +1,7 @@
 // @flow
 /* global fetch */
 
-import {appConst} from '../redux-store-provider/app-const';
+import {appConst} from '../const';
 import type {BuildingAttrTypeType, BuildingType, MapType, UnitType} from '../maps/type';
 import {mapGuide} from '../maps/map-guide';
 import type {PathType} from '../component/game/model/unit/path-master';

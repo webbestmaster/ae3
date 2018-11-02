@@ -1,7 +1,7 @@
 // @flow
 
 import type {SetLocaleType} from '../component/locale/action';
-import type {OnResizeType} from '../component/system/action';
+import type {OnResizeType, OnSetIsScrollEnableType} from '../component/system/action';
 import type {SetSocketType, SetUserType} from '../component/auth/action';
 import type {SetOpenFromGameType} from '../component/store/action';
 
@@ -13,4 +13,5 @@ export type ActionDataType =
     | OnResizeType
     | SetUserType
     | SetSocketType
-    | SetOpenFromGameType;
+    | SetOpenFromGameType
+    | OnSetIsScrollEnableType;

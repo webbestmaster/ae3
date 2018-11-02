@@ -4,28 +4,9 @@
 import {initializeEnvironment} from './component/app/helper.js';
 import React from 'react';
 import {render} from 'react-dom';
-import BrowserRouter from 'react-router-dom/BrowserRouter';
-import {Provider} from 'react-redux';
-import thunk from 'redux-thunk';
-import {applyMiddleware, combineReducers, createStore} from 'redux';
-import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
-import {muiTheme} from './component/ui/mui-theme/mui-theme';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import {App} from './component/app/c-app';
 import {AppLoader, type LoadAppPassedMethodMapType} from './component/app-loader/c-app-loader';
-import * as reducers from './redux-store-provider/app-reducer';
-
-console.log('Environment is initialized!');
-
-const reducer = combineReducers({
-    ...reducers,
-});
-
-const composeEnhancers = composeWithDevTools({
-    // options like actionSanitizer, stateSanitizer
-});
-
-const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
+import {ReduxStoreProvider} from './redux-store-provider/provider';
 
 const wrapperNode = window.document.querySelector('.js-app-wrapper');
 
@@ -35,20 +16,7 @@ function loadApp(methodMap: LoadAppPassedMethodMapType) {
             (): void => {
                 console.log('Environment is initialized!');
 
-                /* eslint-disable react/jsx-max-depth */
-                render(
-                    <Provider store={store}>
-                        <BrowserRouter>
-                            {/* <StoreProvider>*/}
-                            <MuiThemeProvider theme={muiTheme}>
-                                <App/>
-                            </MuiThemeProvider>
-                            {/* </StoreProvider>*/}
-                        </BrowserRouter>
-                    </Provider>,
-                    wrapperNode
-                );
-                /* eslint-enable react/jsx-max-depth */
+                render(<App/>, wrapperNode);
 
                 return console.log('App started!');
             }
@@ -60,10 +28,8 @@ function loadApp(methodMap: LoadAppPassedMethodMapType) {
 }
 
 render(
-    <Provider store={store}>
-        <BrowserRouter>
-            <AppLoader load={loadApp}/>
-        </BrowserRouter>
-    </Provider>,
+    <ReduxStoreProvider>
+        <AppLoader load={loadApp}/>
+    </ReduxStoreProvider>,
     wrapperNode
 );

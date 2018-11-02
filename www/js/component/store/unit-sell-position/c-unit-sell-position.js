@@ -7,7 +7,7 @@
 import type {ComponentType, Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import type {GlobalStateType} from '../../../redux-store-provider/app-reducer';
+import type {GlobalStateType} from '../../../redux-store-provider/reducer';
 import type {ContextRouterType} from '../../../type/react-router-dom-v4';
 import type {UnitTypeAllType} from '../../game/model/unit/unit-guide';
 import {additionalUnitData, unitGuideData} from '../../game/model/unit/unit-guide';

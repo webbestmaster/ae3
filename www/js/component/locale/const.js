@@ -2,11 +2,24 @@
 
 /* global window, PROJECT_ID */
 
-import type {LocaleNameType} from './action';
-import {ruRu} from './translation/ru-ru/data';
-import {enUs} from './translation/en-us/data';
+export type LocaleNameType = 'en-US' | 'ru-RU';
 
-const localeNameList: Array<LocaleNameType> = ['en-US', 'ru-RU'];
+import {enUs} from './translation/en-us/data';
+import {ruRu} from './translation/ru-ru/data';
+
+export const localeNameReference: {[key: string]: LocaleNameType} = {
+    enUs: 'en-US',
+    ruRu: 'ru-RU',
+};
+
+export const allLocales = {
+    'en-US': enUs,
+    'ru-RU': ruRu,
+};
+
+const localeNameList: Array<LocaleNameType> = Object.keys(localeNameReference).map(
+    (localeKey: string): LocaleNameType => localeNameReference[localeKey]
+);
 
 export const localeConst = {
     action: {
@@ -15,7 +28,7 @@ export const localeConst = {
         },
     },
     defaults: {
-        localeName: 'en-US',
+        localeName: localeNameReference.enUs,
     },
     key: {
         localStorage: {
@@ -28,9 +41,4 @@ export const localeConst = {
         'ru-RU': 'Русский',
         'en-US': 'English',
     },
-};
-
-export const allLocales = {
-    'en-US': enUs,
-    'ru-RU': ruRu,
 };
