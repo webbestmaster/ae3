@@ -9,6 +9,7 @@ import {RoomConnection} from '../../../room/room-connection/room-connection';
 type ServerUserType = {|
     userId: string,
     socketId: string,
+    teamId?: string,
     type: 'human' | 'bot',
 |};
 

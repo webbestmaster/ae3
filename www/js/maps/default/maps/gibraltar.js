@@ -55,6 +55,8 @@ export const gibraltar: MapType = {
         {x: 0, y: 1, type: 'farm', userId: '3'},
     ],
     units: [
+        // {x: 0, y: 0, type: 'archer', userId: '0'},
+        // {x: 1, y: 0, type: 'galamar', userId: '0'},
         {x: 0, y: 0, type: 'galamar', userId: '0'},
         {x: 2, y: 0, type: 'valadorn', userId: '1'},
         {x: 2, y: 2, type: 'demon-lord', userId: '2'},

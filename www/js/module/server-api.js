@@ -14,6 +14,13 @@ import {isString} from '../lib/is/is';
 const {api} = appConst;
 const {url} = api;
 
+type ServerApiErrorType = {
+    +error: {
+        +id: string | number,
+        +message: string,
+    },
+};
+
 export type ServerUserType = {|
     socketId: string,
     userId: string,
@@ -98,11 +105,19 @@ export type LeaveRoomType = {
 export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType> {
     if (isOnLineRoomType()) {
         return fetch(url + '/api/room/leave/' + [roomId, userId].join('/'))
-            .then((blob: Response): Promise<LeaveRoomType> => blob.json())
+            .then((blob: Response): Promise<LeaveRoomType | ServerApiErrorType> => blob.json())
             .then(
-                (result: LeaveRoomType): LeaveRoomType => ({
-                    roomId: isString(result.roomId) ? result.roomId : '',
-                })
+                (result: LeaveRoomType | ServerApiErrorType): LeaveRoomType => {
+                    if (typeof result.roomId === 'string') {
+                        return {
+                            roomId: result.roomId,
+                        };
+                    }
+
+                    return {
+                        roomId: '',
+                    };
+                }
             )
             .catch(
                 (error: Error): LeaveRoomType => {
@@ -223,34 +238,38 @@ export type GetAllRoomUsersType = {
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export function getAllRoomUsers(roomId: string): Promise<GetAllRoomUsersType> {
     if (isOnLineRoomType()) {
-        return fetch(url + '/api/room/get-users/' + roomId)
-            .then((blob: Response): Promise<GetAllRoomUsersType> => blob.json())
-            .then(
-                (result: GetAllRoomUsersType): GetAllRoomUsersType => {
-                    const serverUserList = Array.isArray(result.users) ? result.users : [];
+        return (
+            fetch(url + '/api/room/get-users/' + roomId)
+                .then((blob: Response): Promise<{roomId?: string, users?: Array<ServerUserType>}> => blob.json())
+                // ServerApiErrorType can be fetched if game is over
+                .then(
+                    (result: {roomId?: string, users?: Array<ServerUserType>}): GetAllRoomUsersType => {
+                        const serverUserList = Array.isArray(result.users) ? result.users : [];
 
-                    if (Array.isArray(result.users) === false) {
-                        console.log('getAllRoomUsers get no array', result);
-                    }
-
-                    const users = serverUserList.map(
-                        // eslint-disable-next-line sonarjs/cognitive-complexity
-                        (user: ServerUserType, userIndex: number): ServerUserType => {
-                            return {
-                                socketId: user.socketId,
-                                userId: user.userId,
-                                teamId: typeof user.teamId === 'string' ? user.teamId : mapGuide.teamIdList[userIndex],
-                                type: user.type,
-                            };
+                        if (Array.isArray(result.users) === false) {
+                            console.log('getAllRoomUsers get no array', result);
                         }
-                    );
 
-                    return {
-                        roomId: result.roomId,
-                        users,
-                    };
-                }
-            );
+                        const users = serverUserList.map(
+                            // eslint-disable-next-line sonarjs/cognitive-complexity
+                            (user: ServerUserType, userIndex: number): ServerUserType => {
+                                return {
+                                    socketId: user.socketId,
+                                    userId: user.userId,
+                                    teamId:
+                                        typeof user.teamId === 'string' ? user.teamId : mapGuide.teamIdList[userIndex],
+                                    type: user.type,
+                                };
+                            }
+                        );
+
+                        return {
+                            roomId: typeof result.roomId === 'string' ? result.roomId : '',
+                            users,
+                        };
+                    }
+                )
+        );
     }
 
     return localGet(localServerUrl + '/api/room/get-users/' + roomId)
