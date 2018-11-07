@@ -2501,10 +2501,6 @@ export class GameModel {
             return;
         }
 
-        // TODO: set setOpenFromGame !!!
-        console.warn('TODO: set setOpenFromGame !!!');
-        // storeAction.setOpenFromGame(true);
-
         game.gameView.props.setOpenFromGame(true);
 
         game.gameView.props.history.push('?viewId=' + storeViewId + '&x=' + x + '&y=' + y);
