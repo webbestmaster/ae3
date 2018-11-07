@@ -49,13 +49,15 @@ class Auth extends Component<ReduxPropsType, PassedPropsType, StateType> {
 
         props.setUser({id: user.getId()});
 
-        socket.attr.initialPromise.then((): ActionDataType => props.setSocket({id: socket.getId()})).catch(
-            (error: Error): Error => {
-                console.error('set socket error!');
-                console.error(error);
-                return error;
-            }
-        );
+        socket.attr.initialPromise
+            .then((): ActionDataType => props.setSocket({id: socket.getId()}))
+            .catch(
+                (error: Error): Error => {
+                    console.error('set socket error!');
+                    console.error(error);
+                    return error;
+                }
+            );
     }
 
     render(): Node {

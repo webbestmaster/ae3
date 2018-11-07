@@ -50,10 +50,12 @@ export class Queue {
         const result = first();
 
         if (result && isFunction(result.then)) {
-            result.then((): void => queue.runCallBack()).catch(() => {
-                console.error('error with run callback');
-                queue.runCallBack();
-            });
+            result
+                .then((): void => queue.runCallBack())
+                .catch(() => {
+                    console.error('error with run callback');
+                    queue.runCallBack();
+                });
             return;
         }
 
