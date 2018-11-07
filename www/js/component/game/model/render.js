@@ -50,6 +50,7 @@ const stagePadding = {
     left: squareSize,
     bottom: squareSize,
 };
+
 // const sprite = require('./image.png');
 
 export class Render {
@@ -278,9 +279,14 @@ export class Render {
                     }
                 );
 
-                // TODO: draw here corner and other landscape parts
+                render.addAngles(container, map, tileX, tileY);
             });
         });
+    }
+
+    addAngles(container: PIXI.Container, map: MapType, x: number, y: number) {
+        // TODO: draw here corner and other landscape parts
+        console.error('add road and water angles here');
     }
 
     addBuilding(container: PIXI.Container) {

@@ -64,7 +64,7 @@ export class RoomConnection {
         }
 
         if (socket === null) {
-            console.error('--- ERROR ---> bindEventListeners: Can not find socket with id:', socketId);
+            console.warn('WARN: bindEventListeners: Can not find socket with id:', socketId);
             return;
         }
 
