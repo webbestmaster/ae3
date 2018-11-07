@@ -20,7 +20,14 @@ import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import withRouter from 'react-router-dom/withRouter';
 import {Store} from '../store/c-store';
 import queryString from 'query-string';
-import {getMatchResult, getSupplyState, getUserColor, getWrongStateList, isOnLineRoomType} from './model/helper';
+import {
+    getMatchResult,
+    getSupplyState,
+    getUserColor,
+    getWrongStateList,
+    isOnLineRoomType,
+    isUserDefeat,
+} from './model/helper';
 import style from './style.scss';
 import classNames from 'classnames';
 import serviceStyle from '../../../css/service.scss';
@@ -431,9 +438,10 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
     // eslint-disable-next-line complexity, max-statements
     renderEndGameDialog(): Node | null {
         const view = this;
-        const {props, state} = view;
+        const {state} = view;
         const {popup} = state;
         const {game} = state;
+        const userId = user.getId();
         const storeState = view.getStoreState();
 
         if (popup.endGame.isOpen === false || storeState.isOpen) {
@@ -447,6 +455,14 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             return null;
         }
 
+        const isCurrentUserDefeat = isUserDefeat(userId, mapState);
+
+        if (isCurrentUserDefeat) {
+            return view.renderEndGameDialogWrapper(
+                <DialogTitle id="alert-dialog-slide-title">You loose :(</DialogTitle>
+            );
+        }
+
         const matchResult = getMatchResult(mapState);
 
         if (matchResult === null) {
@@ -454,14 +470,22 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             return null;
         }
 
-        const mapUser = find(mapState.userList, {userId: user.getId()}) || null;
+        const mapUser = find(mapState.userList, {userId}) || null;
 
         if (mapUser === null) {
-            console.error('can not find mapUser with userId', user.getId(), mapState);
+            console.error('can not find mapUser with userId', userId, mapState);
             return null;
         }
 
-        const isWinner = matchResult.winner.teamId === mapUser.teamId;
+        return matchResult.winner.teamId === mapUser.teamId ?
+            view.renderEndGameDialogWrapper(<DialogTitle id="alert-dialog-slide-title">You win!</DialogTitle>) :
+            view.renderEndGameDialogWrapper(<DialogTitle id="alert-dialog-slide-title">You loose :(</DialogTitle>);
+    }
+
+    renderEndGameDialogWrapper(endGameDialogContent: Node | Array<Node>): Node {
+        const view = this;
+        const {state} = view;
+        const {popup} = state;
 
         return (
             <Dialog
@@ -473,7 +497,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle id="alert-dialog-slide-title">{isWinner ? 'You win!' : 'You loose :('}</DialogTitle>
+                {endGameDialogContent}
             </Dialog>
         );
     }

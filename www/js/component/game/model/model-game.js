@@ -18,6 +18,7 @@ import {
     getWrongStateList,
     isOnLineRoomType,
     isStoreOpen,
+    isUserDefeat,
     mergeActionList,
     procedureMakeGraveForMapUnit,
 } from './helper';
@@ -2443,12 +2444,20 @@ export class GameModel {
         };
     }
 
+    // eslint-disable-next-line complexity, max-statements
     async detectAndHandleEndGame(): Promise<void> {
         const game = this;
         const mapState = game.getMapState();
+        const userId = user.getId();
 
         if (mapState === null) {
             console.error('no mapState for detectAndHandleEndGame');
+            return;
+        }
+
+        // check me is defeat
+        if (isUserDefeat(userId, mapState)) {
+            await game.makeEndGame();
             return;
         }
 
@@ -2465,7 +2474,12 @@ export class GameModel {
             return;
         }
 
-        const roomId = game.roomId;
+        await game.makeEndGame();
+    }
+
+    async makeEndGame(): Promise<void> {
+        const game = this;
+        const {roomId} = game;
         const userId = user.getId();
 
         game.destroy();

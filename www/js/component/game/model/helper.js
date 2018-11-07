@@ -474,14 +474,14 @@ export function hasCastle(userId: string, map: MapType): boolean {
     );
 }
 
-function isUserSkirmishLoose(userId: string, map: MapType): boolean {
+function getSkirmishIsUserDefeat(userId: string, map: MapType): boolean {
     return !isCommanderLive(userId, map) && !hasCastle(userId, map);
 }
 
-function isTeamSkirmishLoose(teamId: TeamIdType, map: MapType): boolean {
+function isTeamSkirmishDefeat(teamId: TeamIdType, map: MapType): boolean {
     return map.userList
         .filter((mapUser: MapUserType): boolean => mapUser.teamId === teamId)
-        .every((mapUser: MapUserType): boolean => isUserSkirmishLoose(mapUser.userId, map));
+        .every((mapUser: MapUserType): boolean => getSkirmishIsUserDefeat(mapUser.userId, map));
 }
 
 function getSkirmishMatchResult(map: MapType): SkirmishMathResultType {
@@ -495,12 +495,10 @@ function getSkirmishMatchResult(map: MapType): SkirmishMathResultType {
     // .filter((teamId: TeamIdType): boolean => Boolean(find(map.userList, {teamId})));
 
     const winnerTeamList: Array<TeamIdType> = fullTeamList.filter(
-        (teamId: TeamIdType): boolean => !isTeamSkirmishLoose(teamId, map)
+        (teamId: TeamIdType): boolean => !isTeamSkirmishDefeat(teamId, map)
     );
 
-    const winnerTeamId = winnerTeamList.length === 1 ? winnerTeamList[0] : null;
-
-    skirmishMatchResult.winner.teamId = winnerTeamId;
+    skirmishMatchResult.winner.teamId = winnerTeamList.length === 1 ? winnerTeamList[0] : null;
 
     return skirmishMatchResult;
 }
@@ -513,6 +511,16 @@ export function getMatchResult(map: MapType): MathResultType | null {
     console.error('unsupported map.type', map);
 
     return null;
+}
+
+export function isUserDefeat(userId: string, map: MapType): boolean {
+    if (map.type === 'skirmish') {
+        return getSkirmishIsUserDefeat(userId, map);
+    }
+
+    console.error('unsupported map.type', map);
+
+    return false;
 }
 
 export function getLevel(damageGiven: number): number {
