@@ -24,7 +24,13 @@ import {defaultUnitData} from './unit/unit-guide';
 import {Building} from './building/building';
 import {tween} from '../../../lib/tween/tween';
 import Viewport from 'pixi-viewport';
-import {bindClick, getReducedLandscapeType, getSquareReducedLandscapeType} from './helper';
+import {
+    bindClick,
+    getReducedLandscapeType,
+    getSquareReducedLandscapeType,
+    isNeedDrawAngleLine,
+    isNeedDrawSmallAngle,
+} from './helper';
 
 import borderImage1 from '../i/border/1.png';
 import borderImage2 from '../i/border/2.png';
@@ -284,11 +290,84 @@ export class Render {
         });
     }
 
+    // eslint-disable-next-line complexity, max-statements
     addAngles(container: PIXI.Container, map: MapType, tileX: number, tileY: number) {
+        const tileType = getReducedLandscapeType(map, tileX, tileY);
+
+        if (tileType !== 'water' && tileType !== 'road') {
+            console.log('draw angles for water and road only');
+            return;
+        }
+
         const squareTypeList = getSquareReducedLandscapeType(map, tileX, tileY);
 
+        // draw | and --
+        // --> draw | and -- for up
+        if (isNeedDrawAngleLine(tileType, squareTypeList[1])) {
+            const upAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-2`]);
+
+            upAngleSprite.position.set(0, 0);
+            container.addChild(upAngleSprite);
+        }
+        // --> draw | and -- for bottom
+        if (isNeedDrawAngleLine(tileType, squareTypeList[7])) {
+            const bottomAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-8`]);
+
+            bottomAngleSprite.position.set(0, mapGuide.size.square / 2);
+            container.addChild(bottomAngleSprite);
+        }
+
+        // --> draw | and -- for left
+        if (isNeedDrawAngleLine(tileType, squareTypeList[3])) {
+            const leftAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-4`]);
+
+            leftAngleSprite.position.set(0, 0);
+            container.addChild(leftAngleSprite);
+        }
+
+        // --> draw | and -- for right
+        if (isNeedDrawAngleLine(tileType, squareTypeList[5])) {
+            const rightAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-6`]);
+
+            rightAngleSprite.position.set(mapGuide.size.square / 2, 0);
+            container.addChild(rightAngleSprite);
+        }
+
+        // draw \ and / --
+        // --> draw \ and / - for left-top
+        if (isNeedDrawSmallAngle(tileType, squareTypeList[1], squareTypeList[3], squareTypeList[0])) {
+            const leftTopAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-1-s`]);
+
+            leftTopAngleSprite.position.set(0, 0);
+            container.addChild(leftTopAngleSprite);
+        }
+
+        // --> draw \ and / - for right-top
+        if (isNeedDrawSmallAngle(tileType, squareTypeList[1], squareTypeList[5], squareTypeList[2])) {
+            const leftTopAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-3-s`]);
+
+            leftTopAngleSprite.position.set(mapGuide.size.square / 2, 0);
+            container.addChild(leftTopAngleSprite);
+        }
+
+        // --> draw \ and / - for left-bottom
+        if (isNeedDrawSmallAngle(tileType, squareTypeList[3], squareTypeList[7], squareTypeList[6])) {
+            const leftTopAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-7-s`]);
+
+            leftTopAngleSprite.position.set(0, mapGuide.size.square / 2);
+            container.addChild(leftTopAngleSprite);
+        }
+
+        // --> draw \ and / - for right-bottom
+        if (isNeedDrawSmallAngle(tileType, squareTypeList[5], squareTypeList[7], squareTypeList[8])) {
+            const leftTopAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-9-s`]);
+
+            leftTopAngleSprite.position.set(mapGuide.size.square / 2, mapGuide.size.square / 2);
+            container.addChild(leftTopAngleSprite);
+        }
+
         // TODO: draw here corner and other landscape parts
-        console.error('add road and water angles here');
+        // console.error('add road and water angles here');
     }
 
     addBuilding(container: PIXI.Container) {

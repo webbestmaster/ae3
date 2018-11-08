@@ -824,3 +824,29 @@ export function getSquareReducedLandscapeType(map: MapType, tileX: number, tileY
         rightBottomTile,
     ];
 }
+
+function isBridge(baseTile: ReducedLandscapeType): boolean {
+    return baseTile === 'bridge';
+}
+
+function isNotBridge(baseTile: ReducedLandscapeType): boolean {
+    return !isBridge(baseTile);
+}
+
+export function isNeedDrawAngleLine(baseTile: ReducedLandscapeType, testTile: ReducedLandscapeType): boolean {
+    return baseTile !== testTile && isNotBridge(testTile);
+}
+
+// eslint-disable-next-line complexity
+export function isNeedDrawSmallAngle(
+    baseTile: ReducedLandscapeType,
+    baseTileA: ReducedLandscapeType,
+    baseTileB: ReducedLandscapeType,
+    testTitle: ReducedLandscapeType
+): boolean {
+    return (
+        (baseTile === baseTileA || isBridge(baseTileA)) &&
+        (baseTile === baseTileB || isBridge(baseTileB)) &&
+        (baseTile !== testTitle && isNotBridge(testTitle))
+    );
+}
