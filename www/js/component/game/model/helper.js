@@ -8,7 +8,15 @@ import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionTyp
 import {Unit} from './unit/unit';
 import type {PathType} from '../../../lib/a-star-finder/a-star-finder';
 import {defaultOptions, getPath} from '../../../lib/a-star-finder/a-star-finder';
-import type {BuildingType, MapType, MapUserType, ReducedLandscapeType, UnitType} from '../../../maps/type';
+import type {
+    BuildingAttrTypeType,
+    BuildingType,
+    LandscapeType,
+    MapType,
+    MapUserType,
+    ReducedLandscapeType,
+    UnitType,
+} from '../../../maps/type';
 import find from 'lodash/find';
 import * as PIXI from 'pixi.js';
 import {storeViewId} from '../../store/c-store';
@@ -753,7 +761,7 @@ export function getMapSize(map: MapType): MapSizeDataType {
 
 // eslint-disable-next-line complexity
 export function getReducedLandscapeType(map: MapType, tileX: number, tileY: number): ReducedLandscapeType {
-    const landscapeImageType = map.landscape[tileY][tileX];
+    const landscapeImageType = getRenderLandscapeType(map, tileX, tileY);
     const landscapeType = landscapeImageType.replace(/-\d$/, '');
 
     if (
@@ -849,4 +857,42 @@ export function isNeedDrawSmallAngle(
         (baseTile === baseTileB || isBridge(baseTileB)) &&
         (baseTile !== testTitle && isNotBridge(testTitle))
     );
+}
+
+// eslint-disable-next-line complexity
+export function isNeedDrawBigAngle(
+    baseTile: ReducedLandscapeType,
+    baseTileA: ReducedLandscapeType,
+    baseTileB: ReducedLandscapeType
+): boolean {
+    return (
+        baseTile !== baseTileA && isNotBridge(baseTileA) && (baseTile !== baseTileB && isNotBridge(baseTileB))
+        // (baseTile !== testTitle && isNotBridge(testTitle))
+    );
+}
+
+export function getBuildingType(map: MapType, x: number, y: number): BuildingAttrTypeType | null {
+    const building =
+        map.buildings.find((buildingOnMap: BuildingType): boolean => buildingOnMap.x === x && buildingOnMap.y === y) ||
+        null;
+
+    if (building === null) {
+        return null;
+    }
+
+    return building.type;
+}
+
+export function getRenderLandscapeType(map: MapType, x: number, y: number): LandscapeType {
+    const buildingType = getBuildingType(map, x, y);
+
+    if (buildingType === null) {
+        return map.landscape[y][x];
+    }
+
+    if (['castle', 'well', 'temple'].includes(buildingType)) {
+        return 'road-0';
+    }
+
+    return 'terra-0';
 }

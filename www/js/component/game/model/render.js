@@ -27,8 +27,10 @@ import Viewport from 'pixi-viewport';
 import {
     bindClick,
     getReducedLandscapeType,
+    getRenderLandscapeType,
     getSquareReducedLandscapeType,
     isNeedDrawAngleLine,
+    isNeedDrawBigAngle,
     isNeedDrawSmallAngle,
 } from './helper';
 
@@ -267,7 +269,7 @@ export class Render {
         map.landscape.forEach((list: Array<LandscapeType>, tileY: number) => {
             list.forEach((landscapeItem: LandscapeType, tileX: number) => {
                 const container = new PIXI.Container();
-                const sprite = PIXI.Sprite.fromImage(imageMap.landscape[landscapeItem]);
+                const sprite = PIXI.Sprite.fromImage(imageMap.landscape[getRenderLandscapeType(map, tileX, tileY)]);
 
                 container.addChild(sprite);
 
@@ -333,8 +335,8 @@ export class Render {
             container.addChild(rightAngleSprite);
         }
 
-        // draw \ and / --
-        // --> draw \ and / - for left-top
+        // draw small \ and / --
+        // --> draw small \ and / - for left-top
         if (isNeedDrawSmallAngle(tileType, squareTypeList[1], squareTypeList[3], squareTypeList[0])) {
             const leftTopAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-1-s`]);
 
@@ -342,32 +344,62 @@ export class Render {
             container.addChild(leftTopAngleSprite);
         }
 
-        // --> draw \ and / - for right-top
+        // --> draw small \ and / - for right-top
         if (isNeedDrawSmallAngle(tileType, squareTypeList[1], squareTypeList[5], squareTypeList[2])) {
-            const leftTopAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-3-s`]);
+            const rightTopAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-3-s`]);
 
-            leftTopAngleSprite.position.set(mapGuide.size.square / 2, 0);
-            container.addChild(leftTopAngleSprite);
+            rightTopAngleSprite.position.set(mapGuide.size.square / 2, 0);
+            container.addChild(rightTopAngleSprite);
         }
 
-        // --> draw \ and / - for left-bottom
+        // --> draw small \ and / - for left-bottom
         if (isNeedDrawSmallAngle(tileType, squareTypeList[3], squareTypeList[7], squareTypeList[6])) {
-            const leftTopAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-7-s`]);
+            const leftBottompAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-7-s`]);
 
-            leftTopAngleSprite.position.set(0, mapGuide.size.square / 2);
-            container.addChild(leftTopAngleSprite);
+            leftBottompAngleSprite.position.set(0, mapGuide.size.square / 2);
+            container.addChild(leftBottompAngleSprite);
         }
 
-        // --> draw \ and / - for right-bottom
+        // --> draw small \ and / - for right-bottom
         if (isNeedDrawSmallAngle(tileType, squareTypeList[5], squareTypeList[7], squareTypeList[8])) {
-            const leftTopAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-9-s`]);
+            const leftBottomAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-9-s`]);
 
-            leftTopAngleSprite.position.set(mapGuide.size.square / 2, mapGuide.size.square / 2);
+            leftBottomAngleSprite.position.set(mapGuide.size.square / 2, mapGuide.size.square / 2);
+            container.addChild(leftBottomAngleSprite);
+        }
+
+        // draw big \ and / --
+        // --> draw big \ and / - for left-top
+        if (isNeedDrawBigAngle(tileType, squareTypeList[1], squareTypeList[3])) {
+            const leftTopAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-1`]);
+
+            leftTopAngleSprite.position.set(0, 0);
             container.addChild(leftTopAngleSprite);
         }
 
-        // TODO: draw here corner and other landscape parts
-        // console.error('add road and water angles here');
+        // --> draw big \ and / - for right-top
+        if (isNeedDrawBigAngle(tileType, squareTypeList[1], squareTypeList[5])) {
+            const rightTopAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-3`]);
+
+            rightTopAngleSprite.position.set(mapGuide.size.square / 2, 0);
+            container.addChild(rightTopAngleSprite);
+        }
+
+        // --> draw big \ and / - for left-bottom
+        if (isNeedDrawBigAngle(tileType, squareTypeList[3], squareTypeList[7])) {
+            const leftBottomAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-7`]);
+
+            leftBottomAngleSprite.position.set(0, mapGuide.size.square / 2);
+            container.addChild(leftBottomAngleSprite);
+        }
+
+        // --> draw big \ and / - for right-bottom
+        if (isNeedDrawBigAngle(tileType, squareTypeList[5], squareTypeList[7])) {
+            const rightBottomAngleSprite = PIXI.Sprite.fromImage(imageMap.landscape[`angle-${tileType}-9`]);
+
+            rightBottomAngleSprite.position.set(mapGuide.size.square / 2, mapGuide.size.square / 2);
+            container.addChild(rightBottomAngleSprite);
+        }
     }
 
     addBuilding(container: PIXI.Container) {
