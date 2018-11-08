@@ -8,7 +8,7 @@ import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionTyp
 import {Unit} from './unit/unit';
 import type {PathType} from '../../../lib/a-star-finder/a-star-finder';
 import {defaultOptions, getPath} from '../../../lib/a-star-finder/a-star-finder';
-import type {BuildingType, MapType, MapUserType, ReducedLandscapeType, UnitType,} from '../../../maps/type';
+import type {BuildingType, MapType, MapUserType, ReducedLandscapeType, UnitType} from '../../../maps/type';
 import find from 'lodash/find';
 import * as PIXI from 'pixi.js';
 import {storeViewId} from '../../store/c-store';
@@ -771,4 +771,56 @@ export function getReducedLandscapeType(map: MapType, tileX: number, tileY: numb
     console.error('can not detect reduced landscape type, return road');
 
     return 'road';
+}
+
+// eslint-disable-next-line  sonarjs/cognitive-complexity, complexity
+export function getSquareReducedLandscapeType(map: MapType, tileX: number, tileY: number): Array<ReducedLandscapeType> {
+    const centerTile = getReducedLandscapeType(map, tileX, tileY);
+
+    const leftUpTile =
+        map.landscape[tileY - 1] && map.landscape[tileY - 1][tileX - 1] ?
+            getReducedLandscapeType(map, tileX - 1, tileY - 1) :
+            centerTile;
+    const upTile =
+        map.landscape[tileY - 1] && map.landscape[tileY - 1][tileX] ?
+            getReducedLandscapeType(map, tileX, tileY - 1) :
+            centerTile;
+    const rightUpTile =
+        map.landscape[tileY - 1] && map.landscape[tileY - 1][tileX + 1] ?
+            getReducedLandscapeType(map, tileX + 1, tileY - 1) :
+            centerTile;
+
+    const leftTile =
+        map.landscape[tileY] && map.landscape[tileY][tileX - 1] ?
+            getReducedLandscapeType(map, tileX - 1, tileY) :
+            centerTile;
+    const rightTile =
+        map.landscape[tileY] && map.landscape[tileY][tileX + 1] ?
+            getReducedLandscapeType(map, tileX + 1, tileY) :
+            centerTile;
+
+    const leftBottomTile =
+        map.landscape[tileY + 1] && map.landscape[tileY + 1][tileX - 1] ?
+            getReducedLandscapeType(map, tileX - 1, tileY + 1) :
+            centerTile;
+    const bottomTile =
+        map.landscape[tileY + 1] && map.landscape[tileY + 1][tileX] ?
+            getReducedLandscapeType(map, tileX, tileY + 1) :
+            centerTile;
+    const rightBottomTile =
+        map.landscape[tileY + 1] && map.landscape[tileY + 1][tileX + 1] ?
+            getReducedLandscapeType(map, tileX + 1, tileY + 1) :
+            centerTile;
+
+    return [
+        leftUpTile,
+        upTile,
+        rightUpTile,
+        leftTile,
+        centerTile,
+        rightTile,
+        leftBottomTile,
+        bottomTile,
+        rightBottomTile,
+    ];
 }

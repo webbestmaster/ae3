@@ -24,7 +24,7 @@ import {defaultUnitData} from './unit/unit-guide';
 import {Building} from './building/building';
 import {tween} from '../../../lib/tween/tween';
 import Viewport from 'pixi-viewport';
-import {bindClick, getReducedLandscapeType} from './helper';
+import {bindClick, getReducedLandscapeType, getSquareReducedLandscapeType} from './helper';
 
 import borderImage1 from '../i/border/1.png';
 import borderImage2 from '../i/border/2.png';
@@ -285,7 +285,7 @@ export class Render {
     }
 
     addAngles(container: PIXI.Container, map: MapType, tileX: number, tileY: number) {
-        const landscapeType = getReducedLandscapeType(map, tileX, tileY);
+        const squareTypeList = getSquareReducedLandscapeType(map, tileX, tileY);
 
         // TODO: draw here corner and other landscape parts
         console.error('add road and water angles here');
