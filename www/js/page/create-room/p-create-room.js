@@ -243,62 +243,64 @@ class CreateRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
 
         return (
             <Scroll>
-                {mapList.map(
-                    (map: MapType, mapIndex: number): Node => {
-                        const mapId = map.meta['en-US'].name;
-                        const isAdditionalInfoOpen = openShowInfoMapList.includes(mapId);
-                        const mapSize = getMapSize(map);
+                <div className={style.map_list}>
+                    {mapList.map(
+                        (map: MapType, mapIndex: number): Node => {
+                            const mapId = map.meta['en-US'].name;
+                            const isAdditionalInfoOpen = openShowInfoMapList.includes(mapId);
+                            const mapSize = getMapSize(map);
 
-                        return (
-                            <div key={mapId} className={classNames(style.map_item, serviceStyle.clear_self)}>
-                                {isAdditionalInfoOpen ?
+                            return (
+                                <div key={mapId} className={classNames(style.map_item, serviceStyle.clear_self)}>
+                                    {isAdditionalInfoOpen ?
+                                        <Button
+                                            onClick={view.makeHandlerRemoveFromInfoMapList(mapId)}
+                                            className={style.button__show_info}
+                                        >
+                                            [-]
+                                        </Button> :
+                                        <Button
+                                            onClick={view.makeHandlerAddToInfoMapList(mapId)}
+                                            className={style.button__show_info}
+                                        >
+                                            [+]
+                                        </Button>
+                                    }
+
                                     <Button
-                                        onClick={view.makeHandlerRemoveFromInfoMapList(mapId)}
-                                        className={style.button__show_info}
+                                        onClick={view.makeHandlerCreateRoom(mapIndex)}
+                                        className={style.button__create_room}
                                     >
-                                        [-]
-                                    </Button> :
-                                    <Button
-                                        onClick={view.makeHandlerAddToInfoMapList(mapId)}
-                                        className={style.button__show_info}
-                                    >
-                                        [+]
+                                        &gt;&gt;
                                     </Button>
-                                }
 
-                                <Button
-                                    onClick={view.makeHandlerCreateRoom(mapIndex)}
-                                    className={style.button__create_room}
-                                >
-                                    &gt;&gt;
-                                </Button>
+                                    <div className={style.map_item__map_name}>
+                                        <p className={serviceStyle.ellipsis}>
+                                            {'(' + getMaxUserListSize(map) + ') '}
+                                            {map.meta[props.locale.name].name}
+                                        </p>
+                                        <p className={style.map_size}>
+                                            {'['}
+                                            {mapSize.width}
+                                            {' x '}
+                                            {mapSize.height}
+                                            {']'}
+                                        </p>
+                                    </div>
 
-                                <div className={style.map_item__map_name}>
-                                    <p className={serviceStyle.ellipsis}>
-                                        {'(' + getMaxUserListSize(map) + ') '}
-                                        {map.meta[props.locale.name].name}
-                                    </p>
-                                    <p className={style.map_size}>
-                                        {'['}
-                                        {mapSize.width}
-                                        {' x '}
-                                        {mapSize.height}
-                                        {']'}
-                                    </p>
+                                    {isAdditionalInfoOpen ?
+                                        <MapPreview
+                                            className={style.map_preview}
+                                            canvasClassName={style.map_preview_canvas}
+                                            key="map-preview"
+                                            map={map}
+                                        /> :
+                                        null}
                                 </div>
-
-                                {isAdditionalInfoOpen ?
-                                    <MapPreview
-                                        className={style.map_preview}
-                                        canvasClassName={style.map_preview_canvas}
-                                        key="map-preview"
-                                        map={map}
-                                    /> :
-                                    null}
-                            </div>
-                        );
-                    }
-                )}
+                            );
+                        }
+                    )}
+                </div>
             </Scroll>
         );
     }
