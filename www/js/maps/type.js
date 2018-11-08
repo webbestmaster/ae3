@@ -22,6 +22,8 @@ export type LandscapeType =
     | 'water-1'
     | 'water-2';
 
+export type ReducedLandscapeType = 'bridge' | 'forest' | 'hill' | 'road' | 'stone' | 'terra' | 'water';
+
 export type BuildingAttrTypeType = 'castle' | 'farm' | 'farmDestroyed' | 'well' | 'temple';
 
 export type BuildingType = {|

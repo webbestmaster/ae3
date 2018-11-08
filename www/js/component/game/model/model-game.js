@@ -15,6 +15,7 @@ import {
     canOpenStore,
     countHealHitPointOnBuilding,
     getMatchResult,
+    getReducedLandscapeType,
     getWrongStateList,
     isOnLineRoomType,
     isStoreOpen,
@@ -2137,8 +2138,7 @@ export class GameModel {
                 const building = find(map.buildings, {x: tileX, y: tileY}) || null;
 
                 if (building === null) {
-                    const landscapeImageType = map.landscape[tileY][tileX];
-                    const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                    const landscapeType = getReducedLandscapeType(map, tileX, tileY);
                     const pathReduce = mapGuide.landscape[landscapeType].pathReduce;
 
                     pathMap[tileY].push(pathReduce);
@@ -2162,8 +2162,7 @@ export class GameModel {
                 const building = find(map.buildings, {x: tileX, y: tileY}) || null;
 
                 if (building === null) {
-                    const landscapeImageType = map.landscape[tileY][tileX];
-                    const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                    const landscapeType = getReducedLandscapeType(map, tileX, tileY);
                     const pathReduce = landscapeType === 'water' ? 1 : mapGuide.landscape[landscapeType].pathReduce;
 
                     pathMap[tileY].push(pathReduce);
@@ -2203,8 +2202,7 @@ export class GameModel {
                 const building = find(map.buildings, {x: tileX, y: tileY}) || null;
 
                 if (building === null) {
-                    const landscapeImageType = map.landscape[tileY][tileX];
-                    const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                    const landscapeType = getReducedLandscapeType(map, tileX, tileY);
                     const placeArmor = mapGuide.landscape[landscapeType].armor;
 
                     armorMap[tileY].push(placeArmor);
@@ -2230,8 +2228,7 @@ export class GameModel {
                 const building = find(map.buildings, {x: tileX, y: tileY}) || null;
 
                 if (building === null) {
-                    const landscapeImageType = map.landscape[tileY][tileX];
-                    const landscapeType = landscapeImageType.replace(/-\d$/, '');
+                    const landscapeType = getReducedLandscapeType(map, tileX, tileY);
                     const placeArmor =
                         landscapeType === 'water' ?
                             mapGuide.landscape[landscapeType].flowArmor :

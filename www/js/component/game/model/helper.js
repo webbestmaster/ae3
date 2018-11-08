@@ -8,7 +8,7 @@ import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionTyp
 import {Unit} from './unit/unit';
 import type {PathType} from '../../../lib/a-star-finder/a-star-finder';
 import {defaultOptions, getPath} from '../../../lib/a-star-finder/a-star-finder';
-import type {BuildingType, MapType, MapUserType, UnitType} from '../../../maps/type';
+import type {BuildingType, MapType, MapUserType, ReducedLandscapeType, UnitType,} from '../../../maps/type';
 import find from 'lodash/find';
 import * as PIXI from 'pixi.js';
 import {storeViewId} from '../../store/c-store';
@@ -749,4 +749,26 @@ export function getMapSize(map: MapType): MapSizeDataType {
         height,
         aspectRatio: height / width,
     };
+}
+
+// eslint-disable-next-line complexity
+export function getReducedLandscapeType(map: MapType, tileX: number, tileY: number): ReducedLandscapeType {
+    const landscapeImageType = map.landscape[tileY][tileX];
+    const landscapeType = landscapeImageType.replace(/-\d$/, '');
+
+    if (
+        landscapeType === 'bridge' ||
+        landscapeType === 'forest' ||
+        landscapeType === 'hill' ||
+        landscapeType === 'road' ||
+        landscapeType === 'stone' ||
+        landscapeType === 'terra' ||
+        landscapeType === 'water'
+    ) {
+        return landscapeType;
+    }
+
+    console.error('can not detect reduced landscape type, return road');
+
+    return 'road';
 }
