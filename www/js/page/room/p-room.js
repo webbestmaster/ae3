@@ -519,14 +519,12 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         );
     }
 
-    handleOnClickStartGame = () => {
+    handleStartGame = async (): Promise<void> => {
         const view = this;
 
-        (async (): Promise<void> => {
-            await view.showSpinner();
-            await view.startGame();
-            await view.hideSpinner();
-        })();
+        await view.showSpinner();
+        await view.startGame();
+        await view.hideSpinner();
     };
 
     makeHandlerCreateUser(type: 'human' | 'bot', roomId: string): () => Promise<void> {
@@ -553,7 +551,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
                 className={classNames({
                     [serviceStyle.disabled]: userList.length === 1,
                 })}
-                onClick={view.handleOnClickStartGame}
+                onClick={view.handleStartGame}
             >
                 <Locale stringKey={('START': LangKeyType)}/>
             </Button>,
