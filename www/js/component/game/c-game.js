@@ -751,7 +751,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                         onClick={view.handleOnClickEndTurn}
                         onKeyPress={view.handleOnClickEndTurn}
                     >
-                        {'>|'}
+                        &rarr;
                     </button>
                 </div>
 

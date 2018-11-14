@@ -5,14 +5,17 @@
 $bottom-bar--border-color: #404757;
 
 .end_turn__wrapper {
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    box-shadow: -4px 4px 2px rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     color: $main-text-color;
     display: block;
     font-family: $main-font-family;
     font-size: 40px;
     font-weight: bold;
-    height: 52px;
+    height: 48px;
+    overflow: hidden;
     padding: 3px 5px 3px 14px;
     position: absolute;
     right: 10px;
@@ -20,21 +23,23 @@ $bottom-bar--border-color: #404757;
     user-select: none;
     width: 67px;
 
-    &:before {
-        border-color: $main-text-color;
-        border-width: 5px;
+    &:hover {
+        box-shadow: none;
     }
 
-    &:after {
-        border-width: 5px;
+    &:active {
+        box-shadow: none;
+        opacity: 0.5;
     }
 }
 
 .end_turn__button {
-    color: inherit;
+    color: #333;
     font: inherit;
-    height: 100%;
+    font-size: 46px;
     left: 0;
+    line-height: 38px;
+    outline: none;
     position: absolute;
     top: 0;
     width: 100%;

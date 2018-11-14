@@ -46,7 +46,7 @@ async function loadImagesToTextures(
 
         loader.onProgress.add(() => {
             methodMap.increaseItem(loadSteps.loadingTextures.id);
-            console.log('load one image');
+            // console.log('load one image');
         });
 
         loader.load(() => {
@@ -176,7 +176,7 @@ export async function initImages(methodMap: LoadAppPassedMethodMapType): Promise
                     return;
                 }
 
-                console.log('image scaled');
+                // console.log('image scaled');
 
                 imageCache.push(imageScale1, imageScale2);
             }
