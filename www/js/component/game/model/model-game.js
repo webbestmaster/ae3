@@ -54,6 +54,8 @@ import {Queue} from '../../../lib/queue/queue';
 import {localSocketIoClient} from '../../../module/socket-local';
 import {isNotFunction, isNotNumber, isNotString, isNumber, isString} from '../../../lib/is/is';
 import {messageConst} from '../../../lib/local-server/room/message-const';
+import {getBotTurnData} from './bot';
+import {waitFor} from '../../../lib/wait-for';
 
 type RenderSettingType = {|
     width: number,
@@ -509,7 +511,7 @@ export class GameModel {
         );
     }
 
-    // eslint-disable-next-line complexity, max-statements
+    // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
     async handleServerTakeTurn(message: SocketMessageTakeTurnType): Promise<void> {
         const game = this;
 
@@ -555,7 +557,39 @@ export class GameModel {
         if (activePlayerData.type === 'bot') {
             if (firstHuman.userId === userId) {
                 await game.refreshUnitActionState(activeUserId);
-                console.log('---> update game instead of bot here');
+
+                // TODO: remove this
+                console.warn(' ---> this is workaround to make sure game has actual map state');
+                // await new Promise((resolve: () => void): mixed => setTimeout(resolve, 10e3));
+
+                waitFor(
+                    (): boolean => {
+                        const mapStateWaiting = game.getMapState();
+
+                        if (mapStateWaiting === null) {
+                            return false;
+                        }
+
+                        return mapStateWaiting.activeUserId === activeUserId;
+                    }
+                )
+                    .then(
+                        (): mixed => {
+                            const mapState = game.getMapState();
+
+                            if (mapState === null) {
+                                return false;
+                            }
+
+                            getBotTurnData(mapState);
+                            return true;
+                        }
+                    )
+                    .catch(() => {
+                        // TODO: add here drop turn
+                        console.error('can not wait for activeUserId');
+                        console.error('add here drop turn');
+                    });
             }
             return;
         }
@@ -1261,14 +1295,6 @@ export class GameModel {
         });
 
         const {graveList} = game;
-
-        // // check unit length
-        // const isGraveListLengthEqual = socketMapState.graves.length === graveList.length;
-        //
-        // if (isGraveListLengthEqual === false) {
-        //     console.error('Grave List Length is not equal', socketMapState, graveList);
-        //     return;
-        // }
 
         const graveListToRemove = [];
 
