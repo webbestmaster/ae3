@@ -208,24 +208,17 @@ export class GameModel {
         const {model} = game;
 
         if (isOnLineRoomType()) {
-            model.listenTo(
-                socket.attr.model,
-                'message',
-                async (message: SocketMessageType | void): Promise<void> => {
-                    if (!message) {
-                        console.error('SocketMessage is not define');
-                        return;
-                    }
-                    await game.onMessageWrapper(message);
+            model.listenTo(socket.attr.model, 'message', (message: SocketMessageType | void) => {
+                if (!message) {
+                    console.error('SocketMessage is not define');
+                    return;
                 }
-            );
+                game.onMessageWrapper(message);
+            });
         } else {
-            localSocketIoClient.on(
-                'message',
-                async (message: SocketMessageType): Promise<void> => {
-                    await game.onMessageWrapper(message);
-                }
-            );
+            localSocketIoClient.on('message', (message: SocketMessageType) => {
+                game.onMessageWrapper(message);
+            });
         }
     }
 
@@ -466,7 +459,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity
-    async onMessageWrapper(message: SocketMessageType): Promise<void> {
+    onMessageWrapper(message: SocketMessageType) {
         const game = this;
         const lastSavedSocketMessage = game.getLastSocketMessage();
         const messageMap =
