@@ -24,8 +24,14 @@ const IS_PRODUCTION = NODE_ENV === PRODUCTION;
 
 const CWD = __dirname;
 
+console.log(`> branch: ${process.env.BRANCH_NAME}`);
+
+const date = new Date();
+
 const definePluginParams = {
-    BUILD_DATE: Date.now(),
+    BUILD_DATE: JSON.stringify(date.getTime()),
+    BUILD_DATE_H: JSON.stringify(date.toString()),
+    BRANCH_NAME: JSON.stringify(process.env.BRANCH_NAME),
     // NODE_ENV: JSON.stringify(NODE_ENV),
     IS_PRODUCTION: JSON.stringify(IS_PRODUCTION),
     PROJECT_ID: JSON.stringify('my-best-project'),

@@ -1,7 +1,5 @@
 // @flow
 
-/* global BUILD_DATE */
-
 /* eslint consistent-this: ["error", "view"] */
 
 import type {ComponentType, Node} from 'react';

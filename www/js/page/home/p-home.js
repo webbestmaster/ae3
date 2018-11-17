@@ -1,6 +1,6 @@
 // @flow
 
-/* global BUILD_DATE */
+/* global BUILD_DATE_H, BRANCH_NAME */
 
 /* eslint consistent-this: ["error", "view"] */
 
@@ -45,7 +45,10 @@ class Home extends Component<ReduxPropsType, PassedPropsType, StateType> {
         return (
             <div className={serviceStyle.two_blocks_container}>
                 &nbsp;&nbsp;Build of&nbsp;
-                {new Date(BUILD_DATE).toLocaleString()}
+                {String(BUILD_DATE_H)}
+                <br/>
+                &nbsp;&nbsp;Branch:&nbsp;
+                {String(BRANCH_NAME)}
                 <img src={logoSrc} className={style.logo} alt=""/>
             </div>
         );

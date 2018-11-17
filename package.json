@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --content-base dist/ --host 0.0.0.0 --port 8383 --progress --no-inline --history-api-fallback",
-    "start-hot": "webpack-dev-server --mode development --inline --hot --content-base dist/ --host 0.0.0.0 --port 8383 --progress --history-api-fallback",
-    "build": "cross-env NODE_ENV=production webpack --mode production --progress",
+    "start": "cross-env BRANCH_NAME=`git symbolic-ref --short HEAD` webpack-dev-server --mode development --content-base dist/ --host 0.0.0.0 --port 8383 --progress --history-api-fallback --no-inline",
+    "start-hot": "cross-env BRANCH_NAME=`git symbolic-ref --short HEAD` webpack-dev-server --mode development --content-base dist/ --host 0.0.0.0 --port 8383 --progress --history-api-fallback --inline --hot",
+    "build": "cross-env BRANCH_NAME=`git symbolic-ref --short HEAD` NODE_ENV=production webpack --mode production --progress",
     "webpack": "webpack --mode development --progress",
     "check": "npm run eslint; npm run stylelint; npm run flow;",
     "check:fix": "npm run prettier; npm run eslint:fix; npm run stylelint:fix; npm run flow;",
