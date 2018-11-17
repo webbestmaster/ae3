@@ -551,7 +551,7 @@ export class GameModel {
             if (firstHuman.userId === userId) {
                 await game.refreshUnitActionState(activeUserId);
 
-                // TODO: remove this
+                // TODO: remove this, I do not know how to remove this :(
                 console.warn(' ---> this is workaround to make sure game has actual map state');
                 // await new Promise((resolve: () => void): mixed => setTimeout(resolve, 10e3));
 
@@ -560,24 +560,14 @@ export class GameModel {
                         const mapStateWaiting = game.getMapState();
 
                         if (mapStateWaiting === null) {
+                            console.error('mapStateWaiting for bot is undefined');
                             return false;
                         }
 
                         return mapStateWaiting.activeUserId === activeUserId;
                     }
                 )
-                    .then(
-                        (): mixed => {
-                            const mapState = game.getMapState();
-
-                            if (mapState === null) {
-                                return false;
-                            }
-
-                            getBotTurnData(mapState);
-                            return true;
-                        }
-                    )
+                    .then((): Promise<mixed> => game.makeBotTurn())
                     .catch(() => {
                         // TODO: add here drop turn
                         console.error('can not wait for activeUserId');
@@ -2522,6 +2512,28 @@ export class GameModel {
         game.gameView.props.history.push('?viewId=' + storeViewId + '&x=' + x + '&y=' + y);
 
         await game.render.cleanActionsList();
+    }
+
+    async makeBotTurn(): Promise<void> {
+        const game = this;
+        const mapState = game.getMapState();
+
+        if (mapState === null) {
+            console.error('map state for bot is undefined');
+            return;
+        }
+
+        const botTurnData = getBotTurnData(mapState);
+
+        if (botTurnData === null) {
+            console.warn('---> NO bot\'s turn data, you need to drop bot\'s turn');
+            await serverApi.dropTurn(game.roomId, mapState.activeUserId);
+            return;
+        }
+
+        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!');
+        console.log('BOT HAS TURN DATA!!!!!!!!');
+        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!');
     }
 
     destroy() {
