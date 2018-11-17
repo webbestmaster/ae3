@@ -74,6 +74,26 @@ export class LocalSocketIoClient {
         listenerList.push({eventName, callBack});
     }
 
+    // eslint-disable-next-line id-length
+    off(eventName: EventNameType, callBack: (message?: mixed) => void | Promise<void>) {
+        const localSocketIoClient = this;
+        const {listenerList} = localSocketIoClient.attr;
+
+        const listener =
+            listenerList.find(
+                (listenerInList: ListenerType): boolean => {
+                    return listenerInList.eventName === eventName && listenerInList.callBack === callBack;
+                }
+            ) || null;
+
+        if (listener === null) {
+            console.error('can not find listener with', eventName, callBack);
+            return;
+        }
+
+        listenerList.splice(listenerList.indexOf(listener), 1);
+    }
+
     trigger(eventName: EventNameType, data: mixed) {
         const localSocketIoClient = this;
         const {listenerList} = localSocketIoClient.attr;

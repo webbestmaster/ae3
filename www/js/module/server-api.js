@@ -1,5 +1,5 @@
 // @flow
-/* global fetch */
+/* global window, fetch */
 
 import {appConst} from '../const';
 import type {BuildingAttrTypeType, BuildingType, MapType, UnitType} from '../maps/type';
@@ -10,6 +10,9 @@ import {isOnLineRoomType} from '../component/game/model/helper';
 import {localGet, localPost, localServerUrl} from './server-local-api';
 import {localSocketIoClient} from './socket-local';
 import {isString} from '../lib/is/is';
+import {socket} from './socket';
+import type {SocketMessageType} from './socket';
+import isEqual from 'lodash/isEqual';
 
 const {api} = appConst;
 const {url} = api;
@@ -452,26 +455,70 @@ export type PushedStateType = {|
     state: PushedStatePayloadType,
 |};
 
-// const lastPushedState = {};
-/*
-    const stateToPush = Object.assign({}, lastPushedState, pushedState);
+function waitForSocketMessage(pushedState: PushedStateType): Promise<void> {
+    return new Promise((resolve: () => void) => {
+        function checkMessageCallBack(message: SocketMessageType | void) {
+            if (!message) {
+                console.error('SocketMessage is not define');
+                return;
+            }
 
-    // update last pushed state
-    Object.assign(lastPushedState, pushedState);
-*/
+            if (typeof message.states.last.state === 'undefined') {
+                console.warn('message has no last.state');
+                return;
+            }
+
+            if (!isEqual(message.states.last.state, pushedState.state)) {
+                console.warn('need wait for needed message');
+                return;
+            }
+
+            if (isOnLineRoomType()) {
+                console.log('waitForSocketMessage before off', socket.attr.model.listeners.message.length);
+                socket.attr.model.offChange('message', checkMessageCallBack);
+                console.log('waitForSocketMessage after off', socket.attr.model.listeners.message.length);
+            } else {
+                console.log('waitForSocketMessage before off', localSocketIoClient.attr.listenerList.length);
+                localSocketIoClient.off('message', checkMessageCallBack);
+                console.log('waitForSocketMessage after off', localSocketIoClient.attr.listenerList.length);
+            }
+
+            resolve();
+        }
+
+        if (isOnLineRoomType()) {
+            console.log('waitForSocketMessage before on', socket.attr.model.listeners.message.length);
+            socket.attr.model.onChange('message', checkMessageCallBack);
+            console.log('waitForSocketMessage after on', socket.attr.model.listeners.message.length);
+        } else {
+            console.log('waitForSocketMessage before on', localSocketIoClient.attr.listenerList.length);
+            localSocketIoClient.on('message', checkMessageCallBack);
+            console.log('waitForSocketMessage after on', localSocketIoClient.attr.listenerList.length);
+        }
+    });
+}
+
 export function pushState(roomId: string, userId: string, pushedState: PushedStateType): Promise<PushStateType> {
-    if (isOnLineRoomType()) {
-        return fetch(url + '/api/room/push-state/' + [roomId, userId].join('/'), {
-            method: 'POST',
-            body: JSON.stringify(pushedState),
-            headers,
-        }).then((blob: Response): Promise<PushStateType> => blob.json());
+    function messagePushState(): Promise<PushStateType> {
+        if (isOnLineRoomType()) {
+            return window
+                .fetch(url + '/api/room/push-state/' + [roomId, userId].join('/'), {
+                    method: 'POST',
+                    body: JSON.stringify(pushedState),
+                    headers,
+                })
+                .then((blob: Response): Promise<PushStateType> => blob.json());
+        }
+        return localPost(
+            localServerUrl + '/api/room/push-state/' + [roomId, userId].join('/'),
+            JSON.stringify(pushedState)
+        ).then((result: string): PushStateType => JSON.parse(result));
     }
 
-    return localPost(
-        localServerUrl + '/api/room/push-state/' + [roomId, userId].join('/'),
-        JSON.stringify(pushedState)
-    ).then((result: string): PushStateType => JSON.parse(result));
+    const waitSocketMessagePromise = waitForSocketMessage(pushedState);
+    const messagePushStateResult = messagePushState();
+
+    return waitSocketMessagePromise.then((): Promise<PushStateType> => messagePushStateResult);
 }
 
 export type TakeTurnType = {
