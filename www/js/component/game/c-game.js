@@ -49,6 +49,7 @@ import {Canvas} from '../ui/canvas/c-canvas';
 import type {SetOpenFromGameType} from '../store/action';
 import {setOpenFromGame} from '../store/action';
 import {messageConst} from '../../lib/local-server/room/message-const';
+import {Queue} from '../../lib/queue/queue';
 
 const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,
@@ -113,6 +114,7 @@ type StateType = {|
     userList: Array<ServerUserType>,
     model: MainModel,
     game: GameModel,
+    socketMessageQueue: Queue,
     activeUserId: string,
     socketMessageList: Array<SocketMessageType>,
     disabledByList: Array<DisabledByItemType>,
@@ -154,6 +156,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             userList: [],
             model: new MainModel(),
             game: new GameModel(),
+            socketMessageQueue: new Queue(),
             activeUserId: '',
             socketMessageList: [],
             disabledByList: [],
@@ -235,30 +238,31 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         }
     }
 
+    createMessageCallBack(message: SocketMessageType | void): () => Promise<void> {
+        const view = this;
+
+        return async (): Promise<void> => {
+            if (!message) {
+                console.error('SocketMessage is not define');
+                return;
+            }
+            await view.onMessage(message);
+        };
+    }
+
     bindEventListeners() {
         const view = this;
         const {props, state} = view;
-        const {model} = state;
+        const {model, socketMessageQueue} = state;
 
         if (isOnLineRoomType()) {
-            model.listenTo(
-                socket.attr.model,
-                'message',
-                async (message: SocketMessageType | void): Promise<void> => {
-                    if (!message) {
-                        console.error('SocketMessage is not define');
-                        return;
-                    }
-                    await view.onMessage(message);
-                }
-            );
+            model.listenTo(socket.attr.model, 'message', (message: SocketMessageType | void) => {
+                socketMessageQueue.push(view.createMessageCallBack(message));
+            });
         } else {
-            localSocketIoClient.on(
-                'message',
-                async (message: SocketMessageType): Promise<void> => {
-                    await view.onMessage(message);
-                }
-            );
+            localSocketIoClient.on('message', (message: SocketMessageType) => {
+                socketMessageQueue.push(view.createMessageCallBack(message));
+            });
         }
     }
 
@@ -316,12 +320,14 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
     async componentWillUnmount(): Promise<void> {
         const view = this;
         const {props, state} = view;
-        const {model, game} = state;
+        const {model, game, socketMessageQueue} = state;
         const {roomId} = props;
 
         game.destroy();
 
         model.destroy();
+
+        socketMessageQueue.destroy();
 
         localSocketIoClient.removeAllListeners();
 

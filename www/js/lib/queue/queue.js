@@ -72,4 +72,10 @@ export class Queue {
             });
         });
     }
+
+    destroy() {
+        const queue = this;
+
+        queue.constructor();
+    }
 }
