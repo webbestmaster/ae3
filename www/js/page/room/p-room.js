@@ -48,6 +48,7 @@ import type {LangKeyType} from '../../component/locale/translation/type';
 import {ButtonListWrapper} from '../../component/ui/button-list-wrapper/c-button-list-wrapper';
 import {isNotString, isString} from '../../lib/is/is';
 import {messageConst} from '../../lib/local-server/room/message-const';
+import {Queue} from '../../lib/queue/queue';
 
 type ReduxPropsType = {|
     +locale: LocaleType,
@@ -70,6 +71,7 @@ type StateType = {|
     settings?: AllRoomSettingsType,
     userList: Array<ServerUserType>,
     model: MainModel,
+    socketMessageQueue: Queue,
     isGameStart: boolean,
     isRoomDataFetching: boolean,
 |};
@@ -86,6 +88,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         view.state = {
             userList: [],
             model: new MainModel(),
+            socketMessageQueue: new Queue(),
             isGameStart: false,
             isRoomDataFetching: true,
         };
@@ -138,45 +141,49 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
     async componentWillUnmount(): Promise<void> {
         const view = this;
         const {props, state} = view;
-        const {model} = state;
+        const {model, socketMessageQueue} = state;
         const {match} = props;
         const roomId = match.params.roomId || '';
 
         view.unbindEventListeners();
 
         model.destroy();
+
+        socketMessageQueue.destroy();
+
         localSocketIoClient.removeAllListeners();
 
         // needed if game did not started
         const leaveRoomResult = await serverApi.leaveRoom(roomId, user.getId());
     }
 
+    createMessageCallBack(message: SocketMessageType | void): () => Promise<void> {
+        const view = this;
+
+        return async (): Promise<void> => {
+            if (!message) {
+                console.error('SocketMessage is not define');
+                return;
+            }
+            await view.onMessage(message);
+        };
+    }
+
     bindEventListeners() {
         const view = this;
         const {props, state, attr} = view;
-        const {model} = state;
+        const {model, socketMessageQueue} = state;
         const {match, history} = props;
         const roomId = match.params.roomId || '';
 
         if (isOnLineRoomType()) {
-            model.listenTo(
-                socket.attr.model,
-                'message',
-                async (message?: SocketMessageType): Promise<void> => {
-                    if (!message) {
-                        console.error('SocketMessage is not define');
-                        return;
-                    }
-                    await view.onMessage(message);
-                }
-            );
+            model.listenTo(socket.attr.model, 'message', (message: SocketMessageType | void) => {
+                socketMessageQueue.push(view.createMessageCallBack(message));
+            });
         } else {
-            localSocketIoClient.on(
-                'message',
-                async (message: SocketMessageType): Promise<void> => {
-                    await view.onMessage(message);
-                }
-            );
+            localSocketIoClient.on('message', (message: SocketMessageType) => {
+                socketMessageQueue.push(view.createMessageCallBack(message));
+            });
         }
     }
 
