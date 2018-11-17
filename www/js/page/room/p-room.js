@@ -190,9 +190,12 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
     unbindEventListeners() {
         const view = this;
         const {props, state} = view;
-        const {model} = state;
+        const {model, socketMessageQueue} = state;
 
         model.stopListening();
+
+        socketMessageQueue.destroy();
+
         localSocketIoClient.removeAllListeners();
     }
 
