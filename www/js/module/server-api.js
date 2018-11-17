@@ -459,41 +459,53 @@ function waitForSocketMessage(pushedState: PushedStateType): Promise<void> {
     return new Promise((resolve: () => void) => {
         function checkMessageCallBack(message: SocketMessageType | void) {
             if (!message) {
-                console.error('SocketMessage is not define');
+                console.error('waitForSocketMessage - checkMessageCallBack - SocketMessage is not define');
                 return;
             }
 
             if (typeof message.states.last.state === 'undefined') {
-                console.warn('message has no last.state');
+                console.warn('waitForSocketMessage - checkMessageCallBack - message has no last.state');
                 return;
             }
 
             if (!isEqual(message.states.last.state, pushedState.state)) {
-                console.warn('need wait for needed message');
+                console.warn('waitForSocketMessage - checkMessageCallBack - need wait for needed message');
                 return;
             }
 
             if (isOnLineRoomType()) {
-                console.log('waitForSocketMessage before off', socket.attr.model.listeners.message.length);
+                console.log(
+                    'waitForSocketMessage - checkMessageCallBack - before off',
+                    socket.attr.model.listeners.message.length
+                );
                 socket.attr.model.offChange('message', checkMessageCallBack);
-                console.log('waitForSocketMessage after off', socket.attr.model.listeners.message.length);
+                console.log(
+                    'waitForSocketMessage - checkMessageCallBack - after off',
+                    socket.attr.model.listeners.message.length
+                );
             } else {
-                console.log('waitForSocketMessage before off', localSocketIoClient.attr.listenerList.length);
+                console.log(
+                    'waitForSocketMessage - checkMessageCallBack - before off',
+                    localSocketIoClient.attr.listenerList.length
+                );
                 localSocketIoClient.off('message', checkMessageCallBack);
-                console.log('waitForSocketMessage after off', localSocketIoClient.attr.listenerList.length);
+                console.log(
+                    'waitForSocketMessage - checkMessageCallBack - after off',
+                    localSocketIoClient.attr.listenerList.length
+                );
             }
 
             resolve();
         }
 
         if (isOnLineRoomType()) {
-            console.log('waitForSocketMessage before on', socket.attr.model.listeners.message.length);
+            console.log('waitForSocketMessage - before on', socket.attr.model.listeners.message.length);
             socket.attr.model.onChange('message', checkMessageCallBack);
-            console.log('waitForSocketMessage after on', socket.attr.model.listeners.message.length);
+            console.log('waitForSocketMessage - after on', socket.attr.model.listeners.message.length);
         } else {
-            console.log('waitForSocketMessage before on', localSocketIoClient.attr.listenerList.length);
+            console.log('waitForSocketMessage - before on', localSocketIoClient.attr.listenerList.length);
             localSocketIoClient.on('message', checkMessageCallBack);
-            console.log('waitForSocketMessage after on', localSocketIoClient.attr.listenerList.length);
+            console.log('waitForSocketMessage - after on', localSocketIoClient.attr.listenerList.length);
         }
     });
 }
@@ -525,30 +537,144 @@ export type TakeTurnType = {
     roomId: string,
 };
 
+function waitForSocketMessageTakeTurn(userId: string): Promise<void> {
+    return new Promise((resolve: () => void) => {
+        function checkMessageCallBack(message: SocketMessageType | void) {
+            if (!message) {
+                console.error('waitForSocketMessageTakeTurn - checkMessageCallBack - SocketMessage is not define');
+                return;
+            }
+
+            if (message.states.last.activeUserId !== userId) {
+                console.warn('waitForSocketMessageTakeTurn - checkMessageCallBack - activeUserId is wrong');
+                return;
+            }
+
+            if (isOnLineRoomType()) {
+                console.log(
+                    'waitForSocketMessageTakeTurn - checkMessageCallBack - before off',
+                    socket.attr.model.listeners.message.length
+                );
+                socket.attr.model.offChange('message', checkMessageCallBack);
+                console.log(
+                    'waitForSocketMessageTakeTurn - checkMessageCallBack - after off',
+                    socket.attr.model.listeners.message.length
+                );
+            } else {
+                console.log(
+                    'waitForSocketMessageTakeTurn - checkMessageCallBack - before off',
+                    localSocketIoClient.attr.listenerList.length
+                );
+                localSocketIoClient.off('message', checkMessageCallBack);
+                console.log(
+                    'waitForSocketMessageTakeTurn - checkMessageCallBack - after off',
+                    localSocketIoClient.attr.listenerList.length
+                );
+            }
+
+            resolve();
+        }
+
+        if (isOnLineRoomType()) {
+            console.log('waitForSocketMessageTakeTurn - before on', socket.attr.model.listeners.message.length);
+            socket.attr.model.onChange('message', checkMessageCallBack);
+            console.log('waitForSocketMessageTakeTurn - after on', socket.attr.model.listeners.message.length);
+        } else {
+            console.log('waitForSocketMessageTakeTurn - before on', localSocketIoClient.attr.listenerList.length);
+            localSocketIoClient.on('message', checkMessageCallBack);
+            console.log('waitForSocketMessageTakeTurn - after on', localSocketIoClient.attr.listenerList.length);
+        }
+    });
+}
+
 export function takeTurn(roomId: string, userId: string): Promise<TakeTurnType> {
-    if (isOnLineRoomType()) {
-        return fetch(url + '/api/room/take-turn/' + [roomId, userId].join('/')).then(
-            (blob: Response): Promise<TakeTurnType> => blob.json()
+    function messageTakeTurn(): Promise<TakeTurnType> {
+        if (isOnLineRoomType()) {
+            return fetch(url + '/api/room/take-turn/' + [roomId, userId].join('/')).then(
+                (blob: Response): Promise<TakeTurnType> => blob.json()
+            );
+        }
+
+        return localGet(localServerUrl + '/api/room/take-turn/' + [roomId, userId].join('/')).then(
+            (result: string): TakeTurnType => JSON.parse(result)
         );
     }
 
-    return localGet(localServerUrl + '/api/room/take-turn/' + [roomId, userId].join('/')).then(
-        (result: string): TakeTurnType => JSON.parse(result)
-    );
+    const waitSocketTakeTurnPromise = waitForSocketMessageTakeTurn(userId);
+    const messageTakeTurnResult = messageTakeTurn();
+
+    return waitSocketTakeTurnPromise.then((): Promise<TakeTurnType> => messageTakeTurnResult);
 }
 
 export type DropTurnType = {
     roomId: string,
 };
 
+function waitForSocketMessageDropTurn(userId: string): Promise<void> {
+    return new Promise((resolve: () => void) => {
+        function checkMessageCallBack(message: SocketMessageType | void) {
+            if (!message) {
+                console.error('waitForSocketMessageDropTurn - checkMessageCallBack - is not define');
+                return;
+            }
+
+            if (message.states.last.activeUserId === userId) {
+                console.warn('waitForSocketMessageDropTurn - checkMessageCallBack - activeUserId is wrong');
+                return;
+            }
+
+            if (isOnLineRoomType()) {
+                console.log(
+                    'waitForSocketMessageDropTurn - checkMessageCallBack - before off',
+                    socket.attr.model.listeners.message.length
+                );
+                socket.attr.model.offChange('message', checkMessageCallBack);
+                console.log(
+                    'waitForSocketMessageDropTurn - checkMessageCallBack - after off',
+                    socket.attr.model.listeners.message.length
+                );
+            } else {
+                console.log(
+                    'waitForSocketMessageDropTurn - checkMessageCallBack - before off',
+                    localSocketIoClient.attr.listenerList.length
+                );
+                localSocketIoClient.off('message', checkMessageCallBack);
+                console.log(
+                    'waitForSocketMessageDropTurn - checkMessageCallBack - after off',
+                    localSocketIoClient.attr.listenerList.length
+                );
+            }
+
+            resolve();
+        }
+
+        if (isOnLineRoomType()) {
+            console.log('waitForSocketMessageDropTurn - before on', socket.attr.model.listeners.message.length);
+            socket.attr.model.onChange('message', checkMessageCallBack);
+            console.log('waitForSocketMessageDropTurn - after on', socket.attr.model.listeners.message.length);
+        } else {
+            console.log('waitForSocketMessageDropTurn - before on', localSocketIoClient.attr.listenerList.length);
+            localSocketIoClient.on('message', checkMessageCallBack);
+            console.log('waitForSocketMessageDropTurn - after on', localSocketIoClient.attr.listenerList.length);
+        }
+    });
+}
+
 export function dropTurn(roomId: string, userId: string): Promise<DropTurnType> {
-    if (isOnLineRoomType()) {
-        return fetch(url + '/api/room/drop-turn/' + [roomId, userId].join('/')).then(
-            (blob: Response): Promise<DropTurnType> => blob.json()
+    function messageDropTurn(): Promise<DropTurnType> {
+        if (isOnLineRoomType()) {
+            return fetch(url + '/api/room/drop-turn/' + [roomId, userId].join('/')).then(
+                (blob: Response): Promise<DropTurnType> => blob.json()
+            );
+        }
+
+        return localGet(localServerUrl + '/api/room/drop-turn/' + [roomId, userId].join('/')).then(
+            (result: string): DropTurnType => JSON.parse(result)
         );
     }
 
-    return localGet(localServerUrl + '/api/room/drop-turn/' + [roomId, userId].join('/')).then(
-        (result: string): DropTurnType => JSON.parse(result)
-    );
+    const waitSocketDropTurnPromise = waitForSocketMessageDropTurn(userId);
+    const messageDropTurnResult = messageDropTurn();
+
+    return waitSocketDropTurnPromise.then((): Promise<DropTurnType> => messageDropTurnResult);
 }
