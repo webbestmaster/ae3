@@ -2533,7 +2533,7 @@ export class GameModel {
             return;
         }
 
-        const botTurnData = getBotTurnData(mapState);
+        const botTurnData = getBotTurnData(mapState, game.getGameData());
 
         if (botTurnData === null) {
             console.warn('---> NO bot\'s turn data, you need to drop bot\'s turn');
