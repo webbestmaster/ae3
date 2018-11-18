@@ -169,7 +169,7 @@ export class GameModel {
         map.buildings
             .sort(
                 (buildingA: BuildingType, buildingB: BuildingType): number =>
-                    buildingA.type === mapGuide.building.castle.name ? 1 : 0
+                    buildingA.type === mapGuide.building.castle.name ? Infinity : -Infinity
             )
             .forEach((buildingData: BuildingType) => {
                 game.createBuilding(buildingData);
@@ -567,6 +567,16 @@ export class GameModel {
                         return mapStateWaiting.activeUserId === activeUserId;
                     }
                 )
+                    .then(
+                        (): Promise<mixed> => {
+                            // TODO: remove this, I do not know how to remove this :(
+                            console.warn(' ---> this is workaround to make sure game has actual map state');
+                            return new Promise((resolve: () => void) => {
+                                // wait for all map state is update
+                                window.setTimeout(resolve, 2e3);
+                            });
+                        }
+                    )
                     .then((): Promise<mixed> => game.makeBotTurn())
                     .catch(() => {
                         // TODO: add here drop turn

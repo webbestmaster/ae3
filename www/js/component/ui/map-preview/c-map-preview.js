@@ -118,7 +118,7 @@ export class MapPreview extends Component<PropsType, StateType> {
         map.buildings
             .sort(
                 (buildingA: BuildingType, buildingB: BuildingType): number =>
-                    buildingA.type === mapGuide.building.castle.name ? 1 : -1
+                    buildingA.type === mapGuide.building.castle.name ? Infinity : -Infinity
             )
             // eslint-disable-next-line complexity
             .forEach((building: BuildingType) => {
