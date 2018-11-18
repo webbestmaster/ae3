@@ -8,7 +8,7 @@ function getUnitListByPlayerId(gameData: GameDataType, activeUserId: string): Ar
     return gameData.unitList.filter((unit: Unit): boolean => unit.getUserId() === activeUserId);
 }
 
-function getMoveActionList(unit: Unit, actionMap: UnitActionsMapType): Array<UnitActionMoveType> | null {
+function getMoveActionList(unit: Unit, actionMap: UnitActionsMapType): Array<UnitActionMoveType> {
     const moveActionList = [];
 
     actionMap.forEach((actionListList: Array<Array<UnitActionType>>) => {
@@ -26,7 +26,29 @@ function getMoveActionList(unit: Unit, actionMap: UnitActionsMapType): Array<Uni
     return moveActionList;
 }
 
-function getUnitActionList(unit: Unit, gameData: GameDataType): mixed {
+function getActionMapAfterMove(
+    unit: Unit,
+    actionMove: UnitActionMoveType,
+    gameData: GameDataType
+): UnitActionsMapType | null {
+    const unitAttr = unit.getAttr();
+
+    // eslint-disable-next-line no-param-reassign
+    unit.attr.x = actionMove.to.x;
+    // eslint-disable-next-line no-param-reassign
+    unit.attr.y = actionMove.to.y;
+
+    unit.setDidMove(true);
+
+    const actionMap = unit.getActions(gameData);
+
+    // eslint-disable-next-line no-param-reassign
+    unit.attr = unitAttr;
+
+    return actionMap;
+}
+
+function getUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitActionsMapType> | null {
     // 1 - get unit action list // +
     // 2 - filter MOVE action only // +
     // 3 - get action list for every move position
@@ -39,7 +61,19 @@ function getUnitActionList(unit: Unit, gameData: GameDataType): mixed {
         return null;
     }
 
-    return getMoveActionList(unit, actionMap);
+    const actionMapList = [actionMap];
+
+    getMoveActionList(unit, actionMap).forEach((actionMove: UnitActionMoveType) => {
+        const actionMapAfterMove = getActionMapAfterMove(unit, actionMove, gameData);
+
+        if (actionMapAfterMove === null) {
+            return;
+        }
+
+        actionMapList.push(actionMapAfterMove);
+    });
+
+    return actionMapList;
 }
 
 export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | null {
@@ -50,7 +84,7 @@ export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | nu
 
     unitList.forEach((unit: Unit) => {
         // get action uit list
-        const unitActionList = getUnitActionList(unit, gameData);
+        const unitActionList = getUnitActionMapList(unit, gameData);
 
         console.log(unitActionList);
     });

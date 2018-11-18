@@ -1548,15 +1548,6 @@ export class Unit {
         }
     }
 
-    /*
-    getIsActionAvailable(): boolean {
-        const unit = this;
-        const {gameAttr} = unit;
-
-        return gameAttr.isActionAvailable;
-    }
-    */
-
     getGuideData(): UnitDataType {
         const unit = this;
         const {attr} = unit;
@@ -1650,6 +1641,12 @@ export class Unit {
         const range = aggressor.getGuideData().attack.range;
 
         return Math.abs(defender.attr.x - aggressor.attr.x) + Math.abs(defender.attr.y - aggressor.attr.y) <= range;
+    }
+
+    getAttr(): UnitType {
+        const unit = this;
+
+        return JSON.parse(JSON.stringify(unit.attr));
     }
 
     destroy() {
