@@ -31,19 +31,18 @@ function getActionMapAfterMove(
     actionMove: UnitActionMoveType,
     gameData: GameDataType
 ): UnitActionsMapType | null {
-    const unitAttr = unit.getAttr();
+    const beforeUnitAttr = unit.getAttr();
+    const moveUnitAttr = unit.getAttr();
 
-    // eslint-disable-next-line no-param-reassign
-    unit.attr.x = actionMove.to.x;
-    // eslint-disable-next-line no-param-reassign
-    unit.attr.y = actionMove.to.y;
+    moveUnitAttr.x = actionMove.to.x;
+    moveUnitAttr.y = actionMove.to.y;
 
+    unit.setAttr(moveUnitAttr);
     unit.setDidMove(true);
 
     const actionMap = unit.getActions(gameData);
 
-    // eslint-disable-next-line no-param-reassign
-    unit.attr = unitAttr;
+    unit.setAttr(beforeUnitAttr);
 
     return actionMap;
 }

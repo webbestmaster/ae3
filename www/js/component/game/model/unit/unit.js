@@ -1643,6 +1643,12 @@ export class Unit {
         return Math.abs(defender.attr.x - aggressor.attr.x) + Math.abs(defender.attr.y - aggressor.attr.y) <= range;
     }
 
+    setAttr(attr: UnitType) {
+        const unit = this;
+
+        unit.attr = attr;
+    }
+
     getAttr(): UnitType {
         const unit = this;
 
