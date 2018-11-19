@@ -377,7 +377,7 @@ export const defaultUnitData = {
     level: {
         min: 0,
         max: 9,
-        base: 45,
+        base: 90,
         scale: 1.05,
     },
     experience: {
