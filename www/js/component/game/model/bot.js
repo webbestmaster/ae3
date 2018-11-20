@@ -1,11 +1,33 @@
 // @flow
 
-import type {MapType} from '../../../maps/type';
+import type {MapType, MapUserType} from '../../../maps/type';
 import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './unit/unit';
 import {Unit} from './unit/unit';
+import type {UserType} from '../../auth/reducer';
+import type {TeamIdType} from '../../../maps/map-guide';
 
 function getUnitListByPlayerId(gameData: GameDataType, activeUserId: string): Array<Unit> {
     return gameData.unitList.filter((unit: Unit): boolean => unit.getUserId() === activeUserId);
+}
+
+function getEnemyUnitListByPlayerId(gameData: GameDataType, activeUserId: string): Array<Unit> {
+    const playerData =
+        gameData.userList.find((userData: MapUserType): boolean => userData.userId === activeUserId) || null;
+
+    if (playerData === null) {
+        console.error('can not find user by id', activeUserId);
+        return [];
+    }
+
+    const {teamId} = playerData;
+
+    const enemyPlayerDataList = gameData.userList.filter(
+        (userData: MapUserType): boolean => userData.teamId !== teamId
+    );
+
+    const enemyPlayerIdList = enemyPlayerDataList.map((userData: MapUserType): string => userData.userId);
+
+    return gameData.unitList.filter((unit: Unit): boolean => enemyPlayerIdList.includes(unit.getUserId()));
 }
 
 function getMoveActionList(unit: Unit, actionMap: UnitActionsMapType): Array<UnitActionMoveType> {
@@ -81,14 +103,18 @@ export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | nu
     // get unit
     const unitList = getUnitListByPlayerId(gameData, map.activeUserId);
 
+    console.log('getBotTurnData unitList', unitList);
+
+    const enemyUnitList = getEnemyUnitListByPlayerId(gameData, map.activeUserId);
+
+    console.log('getBotTurnData enemyUnitList', enemyUnitList);
+
     unitList.forEach((unit: Unit) => {
         // get action uit list
         const unitActionList = getUnitActionMapList(unit, gameData);
 
-        console.log(unitActionList);
+        // console.log(unitActionList);
     });
-
-    console.log('getBotTurnData unitList', unitList);
 
     return null;
 }
