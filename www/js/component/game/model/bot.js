@@ -3,8 +3,6 @@
 import type {MapType, MapUserType} from '../../../maps/type';
 import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './unit/unit';
 import {Unit} from './unit/unit';
-import type {UserType} from '../../auth/reducer';
-import type {TeamIdType} from '../../../maps/map-guide';
 
 function getUnitListByPlayerId(gameData: GameDataType, activeUserId: string): Array<Unit> {
     return gameData.unitList.filter((unit: Unit): boolean => unit.getUserId() === activeUserId);
@@ -106,6 +104,8 @@ export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | nu
     console.log('getBotTurnData unitList', unitList);
 
     const enemyUnitList = getEnemyUnitListByPlayerId(gameData, map.activeUserId);
+    // TODO: get enemy unit available path (remove self unit from map for this)
+    // TODO: and make available path map and available attack map
 
     console.log('getBotTurnData enemyUnitList', enemyUnitList);
 
