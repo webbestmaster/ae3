@@ -68,12 +68,6 @@ function getActionMapAfterMove(
 }
 
 function getUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitActionsMapType> | null {
-    // 1 - get unit action list // +
-    // 2 - filter MOVE action only // +
-    // 3 - get action list for every move position
-    // 4 - get action list for current position, without move
-    // 5 - rate every unit action
-
     const actionMap = unit.getActions(gameData);
 
     if (actionMap === null) {
@@ -95,26 +89,65 @@ function getUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitAct
     return actionMapList;
 }
 
+function getEnemyUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitActionsMapType> | null {
+    const actionMap = unit.getActions(gameData);
+
+    if (actionMap === null) {
+        return null;
+    }
+
+    const actionMapList = [actionMap];
+
+    getMoveActionList(unit, actionMap).forEach((actionMove: UnitActionMoveType) => {
+        const emptyUnitListGameData = {...gameData, unitList: [unit]};
+
+        const actionMapAfterMove = getActionMapAfterMove(unit, actionMove, emptyUnitListGameData);
+
+        if (actionMapAfterMove === null) {
+            return;
+        }
+
+        actionMapList.push(actionMapAfterMove);
+    });
+
+    return actionMapList;
+}
+
+type UnitAllActionsMapType = {|
+    +unit: Unit,
+    +unitActionsMapList: Array<UnitActionsMapType> | null,
+|};
+
+// TODO: get enemy unit available path (remove self unit from map for this)
+// TODO: and make available path map and available attack map
 export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | null {
     console.log('getBotTurnData map', map);
 
-    // get unit
     const unitList = getUnitListByPlayerId(gameData, map.activeUserId);
 
     console.log('getBotTurnData unitList', unitList);
 
     const enemyUnitList = getEnemyUnitListByPlayerId(gameData, map.activeUserId);
-    // TODO: get enemy unit available path (remove self unit from map for this)
-    // TODO: and make available path map and available attack map
 
     console.log('getBotTurnData enemyUnitList', enemyUnitList);
 
-    unitList.forEach((unit: Unit) => {
-        // get action uit list
-        const unitActionList = getUnitActionMapList(unit, gameData);
+    const unitActionsMapListList = unitList.map(
+        (unit: Unit): UnitAllActionsMapType => {
+            return {
+                unit,
+                unitActionsMapList: getUnitActionMapList(unit, gameData),
+            };
+        }
+    );
 
-        // console.log(unitActionList);
-    });
+    const enemyUnitActionsMapListList = enemyUnitList.map(
+        (unit: Unit): UnitAllActionsMapType => {
+            return {
+                unit,
+                unitActionsMapList: getEnemyUnitActionMapList(unit, gameData),
+            };
+        }
+    );
 
     return null;
 }
