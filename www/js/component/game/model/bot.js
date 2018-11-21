@@ -67,14 +67,17 @@ function getActionMapAfterMove(
     return actionMap;
 }
 
-function getUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitActionsMapType> | null {
+function getUnitActionMapList(
+    unit: Unit,
+    gameData: GameDataType
+): Array<[UnitActionMoveType | null, UnitActionsMapType]> | null {
     const actionMap = unit.getActions(gameData);
 
     if (actionMap === null) {
         return null;
     }
 
-    const actionMapList = [actionMap];
+    const actionMapList = [[null, actionMap]];
 
     getMoveActionList(unit, actionMap).forEach((actionMove: UnitActionMoveType) => {
         const actionMapAfterMove = getActionMapAfterMove(unit, actionMove, gameData);
@@ -83,20 +86,23 @@ function getUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitAct
             return;
         }
 
-        actionMapList.push(actionMapAfterMove);
+        actionMapList.push([actionMove, actionMapAfterMove]);
     });
 
     return actionMapList;
 }
 
-function getEnemyUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitActionsMapType> | null {
+function getEnemyUnitActionMapList(
+    unit: Unit,
+    gameData: GameDataType
+): Array<[UnitActionMoveType | null, UnitActionsMapType]> | null {
     const actionMap = unit.getActions(gameData);
 
     if (actionMap === null) {
         return null;
     }
 
-    const actionMapList = [actionMap];
+    const actionMapList = [[null, actionMap]];
 
     getMoveActionList(unit, actionMap).forEach((actionMove: UnitActionMoveType) => {
         const emptyUnitListGameData = {...gameData, unitList: [unit]};
@@ -107,7 +113,7 @@ function getEnemyUnitActionMapList(unit: Unit, gameData: GameDataType): Array<Un
             return;
         }
 
-        actionMapList.push(actionMapAfterMove);
+        actionMapList.push([actionMove, actionMapAfterMove]);
     });
 
     return actionMapList;
@@ -115,7 +121,7 @@ function getEnemyUnitActionMapList(unit: Unit, gameData: GameDataType): Array<Un
 
 type UnitAllActionsMapType = {|
     +unit: Unit,
-    +unitActionsMapList: Array<UnitActionsMapType> | null,
+    +unitActionsMapList: Array<[UnitActionMoveType | null, UnitActionsMapType]> | null,
 |};
 
 // TODO: get enemy unit available path (remove self unit from map for this)
@@ -131,7 +137,7 @@ export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | nu
 
     console.log('getBotTurnData enemyUnitList', enemyUnitList);
 
-    const unitActionsMapListList = unitList.map(
+    const unitAllActionsMapList = unitList.map(
         (unit: Unit): UnitAllActionsMapType => {
             return {
                 unit,
@@ -140,7 +146,9 @@ export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | nu
         }
     );
 
-    const enemyUnitActionsMapListList = enemyUnitList.map(
+    console.log('getBotTurnData unitAllActionsMapList', unitAllActionsMapList);
+
+    const enemyUnitAllActionsMapList = enemyUnitList.map(
         (unit: Unit): UnitAllActionsMapType => {
             return {
                 unit,
@@ -148,6 +156,8 @@ export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | nu
             };
         }
     );
+
+    console.log('getBotTurnData enemyUnitAllActionsMapList', enemyUnitAllActionsMapList);
 
     return null;
 }
