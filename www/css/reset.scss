@@ -128,7 +128,8 @@ input {
     cursor: pointer;
 }
 
-input {
+input,
+textarea {
     user-select: auto;
 }
 
