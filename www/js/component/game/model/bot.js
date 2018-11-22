@@ -92,32 +92,32 @@ function getUnitActionMapList(
     return actionMapList;
 }
 
-function getEnemyUnitActionMapList(
-    unit: Unit,
-    gameData: GameDataType
-): Array<[UnitActionMoveType | null, UnitActionsMapType]> | null {
-    const actionMap = unit.getActions(gameData);
-
-    if (actionMap === null) {
-        return null;
-    }
-
-    const actionMapList = [[null, actionMap]];
-
-    getMoveActionList(unit, actionMap).forEach((actionMove: UnitActionMoveType) => {
-        const emptyUnitListGameData = {...gameData, unitList: [unit]};
-
-        const actionMapAfterMove = getActionMapAfterMove(unit, actionMove, emptyUnitListGameData);
-
-        if (actionMapAfterMove === null) {
-            return;
-        }
-
-        actionMapList.push([actionMove, actionMapAfterMove]);
-    });
-
-    return actionMapList;
-}
+// function getEnemyUnitActionMapList(
+//     unit: Unit,
+//     gameData: GameDataType
+// ): Array<[UnitActionMoveType | null, UnitActionsMapType]> | null {
+//     const actionMap = unit.getActions(gameData);
+//
+//     if (actionMap === null) {
+//         return null;
+//     }
+//
+//     const actionMapList = [[null, actionMap]];
+//
+//     getMoveActionList(unit, actionMap).forEach((actionMove: UnitActionMoveType) => {
+//         const emptyUnitListGameData = {...gameData, unitList: [unit]};
+//
+//         const actionMapAfterMove = getActionMapAfterMove(unit, actionMove, emptyUnitListGameData);
+//
+//         if (actionMapAfterMove === null) {
+//             return;
+//         }
+//
+//         actionMapList.push([actionMove, actionMapAfterMove]);
+//     });
+//
+//     return actionMapList;
+// }
 
 type UnitAllActionsMapType = {|
     +unit: Unit,
@@ -148,16 +148,16 @@ export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | nu
 
     console.log('getBotTurnData unitAllActionsMapList', unitAllActionsMapList);
 
-    const enemyUnitAllActionsMapList = enemyUnitList.map(
-        (unit: Unit): UnitAllActionsMapType => {
-            return {
-                unit,
-                unitActionsMapList: getEnemyUnitActionMapList(unit, gameData),
-            };
-        }
-    );
+    // const enemyUnitAllActionsMapList = enemyUnitList.map(
+    //     (unit: Unit): UnitAllActionsMapType => {
+    //         return {
+    //             unit,
+    //             unitActionsMapList: getEnemyUnitActionMapList(unit, gameData),
+    //         };
+    //     }
+    // );
 
-    console.log('getBotTurnData enemyUnitAllActionsMapList', enemyUnitAllActionsMapList);
+    // console.log('getBotTurnData enemyUnitAllActionsMapList', enemyUnitAllActionsMapList);
 
     return null;
 }
