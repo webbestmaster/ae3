@@ -28,23 +28,23 @@ function getEnemyUnitListByPlayerId(gameData: GameDataType, activeUserId: string
     return gameData.unitList.filter((unit: Unit): boolean => enemyPlayerIdList.includes(unit.getUserId()));
 }
 
-// function getActionByName(unit: Unit, actionMap: UnitActionsMapType, actionType: string | null): Array<UnitActionType> {
-//     const moveActionList = [];
-//
-//     actionMap.forEach((actionListList: Array<Array<UnitActionType>>) => {
-//         actionListList.forEach((actionList: Array<UnitActionType>) => {
-//             actionList.forEach((action: UnitActionType) => {
-//                 if (actionType === null || actionType === action.type) {
-//                     moveActionList.push(action);
-//                 }
-//             });
-//         });
-//     });
-//
-//     return moveActionList;
-// }
+function getActionByName(actionMap: UnitActionsMapType, actionType: string | null): Array<UnitActionType> {
+    const moveActionList = [];
 
-function getMoveActionList(unit: Unit, actionMap: UnitActionsMapType): Array<UnitActionMoveType> {
+    actionMap.forEach((actionListList: Array<Array<UnitActionType>>) => {
+        actionListList.forEach((actionList: Array<UnitActionType>) => {
+            actionList.forEach((action: UnitActionType) => {
+                if (actionType === null || actionType === action.type) {
+                    moveActionList.push(action);
+                }
+            });
+        });
+    });
+
+    return moveActionList;
+}
+
+function getMoveActionList(actionMap: UnitActionsMapType): Array<UnitActionMoveType> {
     const moveActionList = [];
 
     actionMap.forEach((actionListList: Array<Array<UnitActionType>>) => {
@@ -97,7 +97,7 @@ function getUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitAva
 
     const actionMapList = [{move: null, actionMap}];
 
-    getMoveActionList(unit, actionMap).forEach((actionMove: UnitActionMoveType) => {
+    getMoveActionList(actionMap).forEach((actionMove: UnitActionMoveType) => {
         const actionMapAfterMove = getActionMapAfterMove(unit, actionMove, gameData);
 
         if (actionMapAfterMove === null) {
@@ -141,14 +141,54 @@ function getUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitAva
 //     return actionMapList;
 // }
 
+type BotResultActionDataType = {|
+    +unit: Unit,
+    +unitActionsMap: UnitAvailableActionType,
+    +unitAction: UnitActionType,
+|};
+
 type UnitAllActionsMapType = {|
     +unit: Unit,
     +unitActionsMapList: Array<UnitAvailableActionType> | null,
 |};
 
+function rateBotResultActionData(botResultActionData: BotResultActionDataType): number {
+    return Math.random();
+}
+
+function getBotActionDataList(unitAllActionsMapList: Array<UnitAllActionsMapType>): Array<BotResultActionDataType> {
+    const botResultActionDataList = [];
+
+    unitAllActionsMapList.forEach((unitAllActionsMap: UnitAllActionsMapType) => {
+        const {unit, unitActionsMapList} = unitAllActionsMap;
+
+        if (unitActionsMapList === null) {
+            return;
+        }
+
+        unitActionsMapList.forEach((unitActionsMap: UnitAvailableActionType) => {
+            const {move, actionMap} = unitActionsMap;
+
+            getActionByName(actionMap, null).forEach((unitAction: UnitActionType) => {
+                if (unitAction.type === 'move') {
+                    // TODO: REMOVE move filter!!!!!
+                    console.warn('----> REMOVE move filter!!!!! <----');
+                    botResultActionDataList.push({unit, unitActionsMap, unitAction});
+                }
+            });
+        });
+    });
+
+    return botResultActionDataList.sort(
+        (botResultA: BotResultActionDataType, botResultB: BotResultActionDataType): number => {
+            return rateBotResultActionData(botResultA) - rateBotResultActionData(botResultB);
+        }
+    );
+}
+
 // TODO: get enemy unit available path (remove self unit from map for this)
 // TODO: and make available path map and available attack map
-export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | null {
+export function getBotTurnData(map: MapType, gameData: GameDataType): Array<BotResultActionDataType> | null {
     console.log('getBotTurnData map', map);
 
     const unitList = getUnitListByPlayerId(gameData, map.activeUserId);
@@ -159,11 +199,17 @@ export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | nu
 
     console.log('getBotTurnData enemyUnitList', enemyUnitList);
 
-    const unitAllActionsMapList = unitList
-        .map((unit: Unit): UnitAllActionsMapType => ({unit, unitActionsMapList: getUnitActionMapList(unit, gameData)}))
-        .filter((unitAllActionsMap: UnitAllActionsMapType): boolean => unitAllActionsMap.unitActionsMapList !== null);
+    const unitAllActionsMapList = unitList.map(
+        (unit: Unit): UnitAllActionsMapType => ({unit, unitActionsMapList: getUnitActionMapList(unit, gameData)})
+    );
 
     console.log('getBotTurnData unitAllActionsMapList', unitAllActionsMapList);
+
+    const bestBotActionDataList = getBotActionDataList(unitAllActionsMapList);
+
+    if (bestBotActionDataList.length > 0) {
+        return bestBotActionDataList;
+    }
 
     // const enemyUnitAllActionsMapList = enemyUnitList.map(
     //     (unit: Unit): UnitAllActionsMapType => {

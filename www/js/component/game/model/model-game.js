@@ -2524,6 +2524,7 @@ export class GameModel {
         await game.render.cleanActionsList();
     }
 
+    // eslint-disable-next-line complexity, max-statements
     async makeBotTurn(): Promise<void> {
         const game = this;
         const mapState = game.getMapState();
@@ -2539,6 +2540,47 @@ export class GameModel {
             console.warn('---> NO bot\'s turn data, you need to drop bot\'s turn');
             await serverApi.dropTurn(game.roomId, mapState.activeUserId);
             return;
+        }
+
+        const [firstBotResultActionData] = botTurnData;
+        const {unitAction, unitActionsMap} = firstBotResultActionData;
+
+        const {move, actionMap} = unitActionsMap;
+
+        switch (unitAction.type) {
+            case 'move':
+                if (actionMap !== null) {
+                    await game.bindOnClickUnitActionMove(unitAction, actionMap);
+                    game.gameView.setActiveLandscape(unitAction.to.x, unitAction.to.y);
+                }
+                break;
+
+            case 'attack':
+                await game.bindOnClickUnitActionAttack(unitAction);
+                break;
+
+            case 'fix-building':
+                await game.bindOnClickUnitActionFixBuilding(unitAction);
+                break;
+
+            case 'occupy-building':
+                await game.bindOnClickUnitActionOccupyBuilding(unitAction);
+                break;
+
+            case 'raise-skeleton':
+                await game.bindOnClickUnitActionRaiseSkeleton(unitAction);
+                break;
+
+            case 'destroy-building':
+                await game.bindOnClickUnitActionDestroyBuilding(unitAction);
+                break;
+
+            case 'open-store':
+                await game.bindOnClickUnitActionOpenStore(unitAction);
+                break;
+
+            default:
+                console.error('unknown action', unitAction);
         }
 
         console.log('!!!!!!!!!!!!!!!!!!!!!!!!!');
