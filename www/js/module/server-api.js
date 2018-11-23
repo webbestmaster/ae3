@@ -134,7 +134,19 @@ export function leaveRoom(roomId: string, userId: string): Promise<LeaveRoomType
     }
 
     return localGet(localServerUrl + '/api/room/leave/' + [roomId, userId].join('/')).then(
-        (result: string): LeaveRoomType => JSON.parse(result)
+        (result: string): LeaveRoomType => {
+            const parsedResult = JSON.parse(result);
+
+            if (typeof parsedResult.roomId === 'string') {
+                return {
+                    roomId: parsedResult.roomId,
+                };
+            }
+
+            return {
+                roomId: '',
+            };
+        }
     );
 }
 
