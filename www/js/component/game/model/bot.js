@@ -143,14 +143,9 @@ export function getBotTurnData(map: MapType, gameData: GameDataType): mixed | nu
 
     console.log('getBotTurnData enemyUnitList', enemyUnitList);
 
-    const unitAllActionsMapList = unitList.map(
-        (unit: Unit): UnitAllActionsMapType => {
-            return {
-                unit,
-                unitActionsMapList: getUnitActionMapList(unit, gameData),
-            };
-        }
-    );
+    const unitAllActionsMapList = unitList
+        .map((unit: Unit): UnitAllActionsMapType => ({unit, unitActionsMapList: getUnitActionMapList(unit, gameData)}))
+        .filter((unitAllActionsMap: UnitAllActionsMapType): boolean => unitAllActionsMap.unitActionsMapList !== null);
 
     console.log('getBotTurnData unitAllActionsMapList', unitAllActionsMapList);
 
