@@ -28,6 +28,22 @@ function getEnemyUnitListByPlayerId(gameData: GameDataType, activeUserId: string
     return gameData.unitList.filter((unit: Unit): boolean => enemyPlayerIdList.includes(unit.getUserId()));
 }
 
+// function getActionByName(unit: Unit, actionMap: UnitActionsMapType, actionType: string | null): Array<UnitActionType> {
+//     const moveActionList = [];
+//
+//     actionMap.forEach((actionListList: Array<Array<UnitActionType>>) => {
+//         actionListList.forEach((actionList: Array<UnitActionType>) => {
+//             actionList.forEach((action: UnitActionType) => {
+//                 if (actionType === null || actionType === action.type) {
+//                     moveActionList.push(action);
+//                 }
+//             });
+//         });
+//     });
+//
+//     return moveActionList;
+// }
+
 function getMoveActionList(unit: Unit, actionMap: UnitActionsMapType): Array<UnitActionMoveType> {
     const moveActionList = [];
 
