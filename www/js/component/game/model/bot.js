@@ -67,17 +67,19 @@ function getActionMapAfterMove(
     return actionMap;
 }
 
-function getUnitActionMapList(
-    unit: Unit,
-    gameData: GameDataType
-): Array<[UnitActionMoveType | null, UnitActionsMapType]> | null {
+type UnitAvailableActionType = {|
+    +move: UnitActionMoveType | null,
+    +actionMap: UnitActionsMapType,
+|};
+
+function getUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitAvailableActionType> | null {
     const actionMap = unit.getActions(gameData);
 
     if (actionMap === null) {
         return null;
     }
 
-    const actionMapList = [[null, actionMap]];
+    const actionMapList = [{move: null, actionMap}];
 
     getMoveActionList(unit, actionMap).forEach((actionMove: UnitActionMoveType) => {
         const actionMapAfterMove = getActionMapAfterMove(unit, actionMove, gameData);
@@ -86,7 +88,11 @@ function getUnitActionMapList(
             return;
         }
 
-        actionMapList.push([actionMove, actionMapAfterMove]);
+        // actionMapList.push([actionMove, actionMapAfterMove]);
+        actionMapList.push({
+            move: actionMove,
+            actionMap: actionMapAfterMove,
+        });
     });
 
     return actionMapList;
@@ -121,7 +127,7 @@ function getUnitActionMapList(
 
 type UnitAllActionsMapType = {|
     +unit: Unit,
-    +unitActionsMapList: Array<[UnitActionMoveType | null, UnitActionsMapType]> | null,
+    +unitActionsMapList: Array<UnitAvailableActionType> | null,
 |};
 
 // TODO: get enemy unit available path (remove self unit from map for this)
