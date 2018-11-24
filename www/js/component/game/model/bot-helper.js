@@ -14,7 +14,7 @@ export type RawRateType = {|
         +damageReceived: number,
     |},
 
-    +pathSizeToNearNoOccupiedBuilding: number, // castle or farm, less better, will stimulate unit to move ahead
+    +pathSizeToNearOccupyAbleBuilding: number, // castle or farm, less better, will stimulate unit to move ahead
     +canRaiseSkeleton: boolean,
 
     // farm
