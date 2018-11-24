@@ -778,15 +778,15 @@ export class GameModel {
             return Promise.resolve();
         }
 
-        const isMyUnit = unitModel.getUserId() === user.getId();
+        // const isMyUnit = unitModel.getUserId() === user.getId();
 
         // await game.render.moveWorldTo(state.to.x, state.to.y);
 
         await unitModel.move(state.to.x, state.to.y, state.path, (x: number, y: number) => {
-            if (isMyUnit) {
-                return;
-            }
-            // game.render.moveWorldToInstantly(x, y);
+            // if (isMyUnit) {
+            //     return;
+            // }
+            game.render.moveWorldTo(x, y);
         });
 
         await game.onUnitClick(unitModel);
