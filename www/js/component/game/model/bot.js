@@ -213,15 +213,6 @@ function getBotActionDataList(
                 }
 
                 botResultActionDataList.push({unit, moveAction, unitAction});
-
-                /*
-                if (unitAction.type === 'fix-building') {
-                    // TODO: REMOVE move filter!!!!!
-                    console.warn('----> REMOVE move filter!!!!! <----');
-                    botResultActionDataList.push({unit, moveAction, unitAction});
-                    return;
-                }
-                */
             });
         });
     });

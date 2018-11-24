@@ -14,6 +14,7 @@
     "env": {
         "development": {
 
+/*
             "plugins": [
                 [
                     "@babel/plugin-proposal-decorators",
@@ -29,6 +30,7 @@
                     }
                 ]
             ]
+*/
 
         }
     }

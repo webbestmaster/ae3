@@ -2564,7 +2564,9 @@ export class GameModel {
 
         await game.executeBotResultAction(firstBotResultActionData);
 
-        // await game.makeBotTurn();
+        await wait(2000);
+
+        await game.makeBotTurn();
     }
 
     // eslint-disable-next-line complexity
@@ -2614,8 +2616,17 @@ export class GameModel {
                 await serverApi.dropTurn(game.roomId, activeUserId);
                 return;
         }
+
+        // get unit's action
+        const unitActionsList = botResultAction.unit.getActions(game.getGameData());
+
+        if (unitActionsList === null) {
+            console.log('---> executeBotResultAction - unit already done - set unit GRAY state');
+            botResultAction.unit.setIsActionAvailable(false);
+        }
     }
 
+    // eslint-disable-next-line max-statements
     async executeBotResultActionMove(botResultAction: BotResultActionDataType): Promise<void> {
         const game = this;
         const mapState = game.getMapState();
@@ -2644,6 +2655,15 @@ export class GameModel {
         game.gameView.setActiveLandscape(action.from.x, action.from.y);
         await game.bindOnClickUnitActionMove(action, actionsMap, activeUserId);
         game.gameView.setActiveLandscape(action.to.x, action.to.y);
+
+        // get unit's action
+        const unitActionsList = botResultAction.unit.getActions(game.getGameData());
+
+        if (unitActionsList === null) {
+            console.log('---> executeBotResultActionMove - unit already done - set unit GRAY state');
+            botResultAction.unit.setIsActionAvailable(false);
+        }
+
         await wait(2000);
     }
 
