@@ -2541,6 +2541,7 @@ export class GameModel {
         await game.render.cleanActionsList();
     }
 
+    // eslint-disable-next-line complexity
     async makeBotTurn(): Promise<void> {
         const game = this;
         const mapState = game.getMapState();
@@ -2561,6 +2562,13 @@ export class GameModel {
         }
 
         const [firstBotResultActionData] = botTurnData;
+        const {unitAction, moveAction} = firstBotResultActionData;
+
+        if (unitAction === null && moveAction.action === null && moveAction.actionsMap === null) {
+            await serverApi.dropTurn(game.roomId, activeUserId);
+            console.log('---> no action data and move data ---- drop turn');
+            return;
+        }
 
         await game.executeBotResultAction(firstBotResultActionData);
 

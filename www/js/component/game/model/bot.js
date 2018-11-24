@@ -3,6 +3,7 @@
 import type {MapType, MapUserType} from '../../../maps/type';
 import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './unit/unit';
 import {Unit} from './unit/unit';
+import {rateBotResultActionData} from './bot-helper';
 
 function getUnitListByPlayerId(gameData: GameDataType, activeUserId: string): Array<Unit> {
     return gameData.unitList.filter((unit: Unit): boolean => unit.getUserId() === activeUserId);
@@ -176,10 +177,6 @@ type UnitAllAvailableActionsMapType = {|
     +availableActionsMapList: Array<UnitAvailableActionsMapType> | null,
 |};
 
-function rateBotResultActionData(botResultActionData: BotResultActionDataType): number {
-    return Math.random();
-}
-
 function getBotActionDataList(
     unitAllActionsMapList: Array<UnitAllAvailableActionsMapType>
 ): Array<BotResultActionDataType> {
@@ -219,7 +216,7 @@ function getBotActionDataList(
 
     return botResultActionDataList.sort(
         (botResultA: BotResultActionDataType, botResultB: BotResultActionDataType): number => {
-            return rateBotResultActionData(botResultA) - rateBotResultActionData(botResultB);
+            return rateBotResultActionData(botResultB) - rateBotResultActionData(botResultA);
         }
     );
 }
