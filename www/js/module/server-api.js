@@ -10,8 +10,8 @@ import {isOnLineRoomType} from '../component/game/model/helper';
 import {localGet, localPost, localServerUrl} from './server-local-api';
 import {localSocketIoClient} from './socket-local';
 import {isString} from '../lib/is/is';
-import {socket} from './socket';
 import type {SocketMessageType} from './socket';
+import {socket} from './socket';
 import isEqual from 'lodash/isEqual';
 
 const {api} = appConst;

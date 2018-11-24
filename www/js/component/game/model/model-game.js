@@ -54,8 +54,10 @@ import {Queue} from '../../../lib/queue/queue';
 import {localSocketIoClient} from '../../../module/socket-local';
 import {isNotFunction, isNotNumber, isNotString, isNumber, isString} from '../../../lib/is/is';
 import {messageConst} from '../../../lib/local-server/room/message-const';
-import {getBotTurnData} from './bot';
+import type {BotResultActionDataType} from './bot';
+import {getBotTurnDataList} from './bot';
 import {waitFor} from '../../../lib/wait-for';
+import {wait} from '../../../lib/sleep';
 
 type RenderSettingType = {|
     width: number,
@@ -1530,32 +1532,34 @@ export class GameModel {
                         unitAction.container,
                         // eslint-disable-next-line complexity
                         async (): Promise<void> => {
+                            const activeUserId = user.getId();
+
                             switch (unitAction.type) {
                                 case 'move':
                                     if (unitActionsList !== null) {
-                                        await game.bindOnClickUnitActionMove(unitAction, unitActionsList);
+                                        await game.bindOnClickUnitActionMove(unitAction, unitActionsList, activeUserId);
                                         game.gameView.setActiveLandscape(unitAction.to.x, unitAction.to.y);
                                     }
                                     break;
 
                                 case 'attack':
-                                    await game.bindOnClickUnitActionAttack(unitAction);
+                                    await game.bindOnClickUnitActionAttack(unitAction, activeUserId);
                                     break;
 
                                 case 'fix-building':
-                                    await game.bindOnClickUnitActionFixBuilding(unitAction);
+                                    await game.bindOnClickUnitActionFixBuilding(unitAction, activeUserId);
                                     break;
 
                                 case 'occupy-building':
-                                    await game.bindOnClickUnitActionOccupyBuilding(unitAction);
+                                    await game.bindOnClickUnitActionOccupyBuilding(unitAction, activeUserId);
                                     break;
 
                                 case 'raise-skeleton':
-                                    await game.bindOnClickUnitActionRaiseSkeleton(unitAction);
+                                    await game.bindOnClickUnitActionRaiseSkeleton(unitAction, activeUserId);
                                     break;
 
                                 case 'destroy-building':
-                                    await game.bindOnClickUnitActionDestroyBuilding(unitAction);
+                                    await game.bindOnClickUnitActionDestroyBuilding(unitAction, activeUserId);
                                     break;
 
                                 case 'open-store':
@@ -1619,7 +1623,7 @@ export class GameModel {
                             if (unitAction.type !== 'move') {
                                 return;
                             }
-                            await game.bindOnClickUnitActionMove(unitAction, moveActionList);
+                            await game.bindOnClickUnitActionMove(unitAction, moveActionList, user.getId());
                         }
                     );
                 });
@@ -1628,7 +1632,11 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity, max-statements
-    async bindOnClickUnitActionMove(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType): Promise<void> {
+    async bindOnClickUnitActionMove(
+        unitAction: UnitActionMoveType,
+        actionsList: UnitActionsMapType,
+        activeUserId: string
+    ): Promise<void> {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -1671,7 +1679,7 @@ export class GameModel {
         game.gameView.addDisableReason('client-push-state');
 
         await serverApi
-            .pushState(game.roomId, user.getId(), {
+            .pushState(game.roomId, activeUserId, {
                 type: messageConst.type.pushState,
                 state: {
                     type: 'move',
@@ -1688,7 +1696,7 @@ export class GameModel {
                         id: unitAction.id,
                     },
                     map: newMap,
-                    activeUserId: user.getId(),
+                    activeUserId,
                 },
             })
             .then((response: mixed): void => console.log('---> unit action move pushed', response))
@@ -1704,7 +1712,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
-    async bindOnClickUnitActionAttack(unitAction: UnitActionAttackType): Promise<void> {
+    async bindOnClickUnitActionAttack(unitAction: UnitActionAttackType, activeUserId: string): Promise<void> {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -1787,14 +1795,14 @@ export class GameModel {
         game.gameView.addDisableReason('client-push-state');
 
         serverApi
-            .pushState(game.roomId, user.getId(), {
+            .pushState(game.roomId, activeUserId, {
                 type: messageConst.type.pushState,
                 state: {
                     type: 'attack',
                     aggressor: unitAction.aggressor,
                     defender: unitAction.defender,
                     map: newMap,
-                    activeUserId: user.getId(),
+                    activeUserId,
                 },
             })
             .then((response: mixed): void => console.log('---> unit action attack pushed', response))
@@ -1810,7 +1818,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line max-statements, complexity
-    async bindOnClickUnitActionFixBuilding(unitAction: UnitActionFixBuildingType): Promise<void> {
+    async bindOnClickUnitActionFixBuilding(unitAction: UnitActionFixBuildingType, activeUserId: string): Promise<void> {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -1845,13 +1853,13 @@ export class GameModel {
         game.gameView.addDisableReason('client-push-state');
 
         await serverApi
-            .pushState(game.roomId, user.getId(), {
+            .pushState(game.roomId, activeUserId, {
                 type: messageConst.type.pushState,
                 state: {
                     type: 'fix-building',
                     building,
                     map: newMap,
-                    activeUserId: user.getId(),
+                    activeUserId,
                 },
             })
             .then((response: mixed): void => console.log('---> unit action fix building pushed', response))
@@ -1876,7 +1884,10 @@ export class GameModel {
     }
 
     // eslint-disable-next-line max-statements, complexity, id-length
-    async bindOnClickUnitActionOccupyBuilding(unitAction: UnitActionOccupyBuildingType): Promise<void> {
+    async bindOnClickUnitActionOccupyBuilding(
+        unitAction: UnitActionOccupyBuildingType,
+        activeUserId: string
+    ): Promise<void> {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -1910,13 +1921,13 @@ export class GameModel {
         game.gameView.addDisableReason('client-push-state');
 
         await serverApi
-            .pushState(game.roomId, user.getId(), {
+            .pushState(game.roomId, activeUserId, {
                 type: messageConst.type.pushState,
                 state: {
                     type: 'occupy-building',
                     building,
                     map: newMap,
-                    activeUserId: user.getId(),
+                    activeUserId,
                 },
             })
             .then((response: mixed): void => console.log('---> unit action occupy building pushed', response))
@@ -1932,7 +1943,10 @@ export class GameModel {
     }
 
     // eslint-disable-next-line max-statements, complexity, id-length
-    async bindOnClickUnitActionRaiseSkeleton(unitAction: UnitActionRaiseSkeletonType): Promise<void> {
+    async bindOnClickUnitActionRaiseSkeleton(
+        unitAction: UnitActionRaiseSkeletonType,
+        activeUserId: string
+    ): Promise<void> {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -1983,14 +1997,14 @@ export class GameModel {
         game.gameView.addDisableReason('client-push-state');
 
         await serverApi
-            .pushState(game.roomId, user.getId(), {
+            .pushState(game.roomId, activeUserId, {
                 type: messageConst.type.pushState,
                 state: {
                     type: 'raise-skeleton',
                     raiser: actionRaiser,
                     grave: actionGrave,
                     map: newMap,
-                    activeUserId: user.getId(),
+                    activeUserId,
                 },
             })
             .then((response: mixed): void => console.log('---> unit action raise skeleton pushed', response))
@@ -2006,7 +2020,10 @@ export class GameModel {
     }
 
     // eslint-disable-next-line max-statements, complexity, id-length
-    async bindOnClickUnitActionDestroyBuilding(unitAction: UnitActionDestroyBuildingType): Promise<void> {
+    async bindOnClickUnitActionDestroyBuilding(
+        unitAction: UnitActionDestroyBuildingType,
+        activeUserId: string
+    ): Promise<void> {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -2065,14 +2082,14 @@ export class GameModel {
         game.gameView.addDisableReason('client-push-state');
 
         await serverApi
-            .pushState(game.roomId, user.getId(), {
+            .pushState(game.roomId, activeUserId, {
                 type: messageConst.type.pushState,
                 state: {
                     type: 'destroy-building',
                     destroyer: unitAction.destroyer,
                     building: unitAction.building,
                     map: newMap,
-                    activeUserId: user.getId(),
+                    activeUserId,
                 },
             })
             .then((response: mixed): void => console.log('---> unit action destroy building pushed', response))
@@ -2524,68 +2541,110 @@ export class GameModel {
         await game.render.cleanActionsList();
     }
 
-    // eslint-disable-next-line complexity, max-statements
     async makeBotTurn(): Promise<void> {
         const game = this;
         const mapState = game.getMapState();
 
         if (mapState === null) {
-            console.error('map state for bot is undefined');
+            console.error('makeBotTurn - map state for bot is undefined');
             return;
         }
 
-        const botTurnData = getBotTurnData(mapState, game.getGameData());
+        const {activeUserId} = mapState;
+
+        const botTurnData = getBotTurnDataList(mapState, game.getGameData());
 
         if (botTurnData === null) {
             console.warn('---> NO bot\'s turn data, you need to drop bot\'s turn');
-            await serverApi.dropTurn(game.roomId, mapState.activeUserId);
+            await serverApi.dropTurn(game.roomId, activeUserId);
             return;
         }
 
         const [firstBotResultActionData] = botTurnData;
-        const {unitAction, unitActionsMap} = firstBotResultActionData;
 
-        const {move, actionMap} = unitActionsMap;
+        await game.executeBotResultAction(firstBotResultActionData);
+
+        // await game.makeBotTurn();
+    }
+
+    // eslint-disable-next-line complexity
+    async executeBotResultAction(botResultAction: BotResultActionDataType): Promise<void> {
+        const game = this;
+        const mapState = game.getMapState();
+
+        if (mapState === null) {
+            console.error('executeBotResultAction - map state for bot is undefined');
+            return;
+        }
+
+        const {activeUserId} = mapState;
+
+        const {unitAction} = botResultAction;
+
+        await game.executeBotResultActionMove(botResultAction);
+
+        if (unitAction === null) {
+            console.log('BotResultActionData has no unit action');
+            return;
+        }
 
         switch (unitAction.type) {
-            case 'move':
-                if (actionMap !== null) {
-                    await game.bindOnClickUnitActionMove(unitAction, actionMap);
-                    game.gameView.setActiveLandscape(unitAction.to.x, unitAction.to.y);
-                }
-                break;
-
             case 'attack':
-                await game.bindOnClickUnitActionAttack(unitAction);
+                await game.bindOnClickUnitActionAttack(unitAction, activeUserId);
                 break;
 
             case 'fix-building':
-                await game.bindOnClickUnitActionFixBuilding(unitAction);
+                await game.bindOnClickUnitActionFixBuilding(unitAction, activeUserId);
                 break;
 
             case 'occupy-building':
-                await game.bindOnClickUnitActionOccupyBuilding(unitAction);
+                await game.bindOnClickUnitActionOccupyBuilding(unitAction, activeUserId);
                 break;
 
             case 'raise-skeleton':
-                await game.bindOnClickUnitActionRaiseSkeleton(unitAction);
+                await game.bindOnClickUnitActionRaiseSkeleton(unitAction, activeUserId);
                 break;
 
             case 'destroy-building':
-                await game.bindOnClickUnitActionDestroyBuilding(unitAction);
-                break;
-
-            case 'open-store':
-                await game.bindOnClickUnitActionOpenStore(unitAction);
+                await game.bindOnClickUnitActionDestroyBuilding(unitAction, activeUserId);
                 break;
 
             default:
-                console.error('unknown action', unitAction);
+                console.error('---> NO bot\'s support action, drop turn', botResultAction);
+                await serverApi.dropTurn(game.roomId, activeUserId);
+                return;
+        }
+    }
+
+    async executeBotResultActionMove(botResultAction: BotResultActionDataType): Promise<void> {
+        const game = this;
+        const mapState = game.getMapState();
+
+        if (mapState === null) {
+            console.error('executeBotResultActionMove - map state for bot is undefined');
+            return;
         }
 
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!');
-        console.log('BOT HAS TURN DATA!!!!!!!!');
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!');
+        const {activeUserId} = mapState;
+
+        const {moveAction} = botResultAction;
+
+        const {action, actionsMap} = moveAction;
+
+        if (action === null) {
+            console.log('---> no move action before unitAction');
+            return;
+        }
+
+        if (actionsMap === null) {
+            console.log('---> no move actionsMap before unitAction');
+            return;
+        }
+
+        game.gameView.setActiveLandscape(action.from.x, action.from.y);
+        await game.bindOnClickUnitActionMove(action, actionsMap, activeUserId);
+        game.gameView.setActiveLandscape(action.to.x, action.to.y);
+        await wait(2000);
     }
 
     destroy() {

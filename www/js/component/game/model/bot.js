@@ -83,31 +83,52 @@ function getActionMapAfterMove(
     return actionMap;
 }
 
-type UnitAvailableActionType = {|
-    +move: UnitActionMoveType | null,
-    +actionMap: UnitActionsMapType,
+type UnitAvailableActionsMapType = {|
+    +moveAction: {|
+        +action: UnitActionMoveType | null,
+        +actionsMap: UnitActionsMapType | null,
+    |},
+    +actionsMap: UnitActionsMapType | null,
 |};
 
-function getUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitAvailableActionType> | null {
-    const actionMap = unit.getActions(gameData);
+function getUnitAvailableActionsMapList(unit: Unit, gameData: GameDataType): Array<UnitAvailableActionsMapType> | null {
+    const actionsMap = unit.getActions(gameData);
 
-    if (actionMap === null) {
+    if (actionsMap === null) {
         return null;
     }
 
-    const actionMapList = [{move: null, actionMap}];
+    const actionMapList = [
+        {
+            moveAction: {
+                action: null,
+                actionsMap: null,
+            },
+            actionsMap,
+        },
+    ];
 
-    getMoveActionList(actionMap).forEach((actionMove: UnitActionMoveType) => {
+    getMoveActionList(actionsMap).forEach((actionMove: UnitActionMoveType) => {
+        actionMapList.push({
+            moveAction: {
+                action: actionMove,
+                actionsMap,
+            },
+            actionsMap: null,
+        });
+
         const actionMapAfterMove = getActionMapAfterMove(unit, actionMove, gameData);
 
         if (actionMapAfterMove === null) {
             return;
         }
 
-        // actionMapList.push([actionMove, actionMapAfterMove]);
         actionMapList.push({
-            move: actionMove,
-            actionMap: actionMapAfterMove,
+            moveAction: {
+                action: actionMove,
+                actionsMap,
+            },
+            actionsMap: actionMapAfterMove,
         });
     });
 
@@ -141,40 +162,66 @@ function getUnitActionMapList(unit: Unit, gameData: GameDataType): Array<UnitAva
 //     return actionMapList;
 // }
 
-type BotResultActionDataType = {|
+export type BotResultActionDataType = {|
     +unit: Unit,
-    +unitActionsMap: UnitAvailableActionType,
-    +unitAction: UnitActionType,
+    +moveAction: {|
+        +action: UnitActionMoveType | null,
+        +actionsMap: UnitActionsMapType | null,
+    |},
+    +unitAction: UnitActionType | null,
 |};
 
-type UnitAllActionsMapType = {|
+type UnitAllAvailableActionsMapType = {|
     +unit: Unit,
-    +unitActionsMapList: Array<UnitAvailableActionType> | null,
+    +availableActionsMapList: Array<UnitAvailableActionsMapType> | null,
 |};
 
 function rateBotResultActionData(botResultActionData: BotResultActionDataType): number {
     return Math.random();
 }
 
-function getBotActionDataList(unitAllActionsMapList: Array<UnitAllActionsMapType>): Array<BotResultActionDataType> {
+function getBotActionDataList(
+    unitAllActionsMapList: Array<UnitAllAvailableActionsMapType>
+): Array<BotResultActionDataType> {
     const botResultActionDataList = [];
 
-    unitAllActionsMapList.forEach((unitAllActionsMap: UnitAllActionsMapType) => {
-        const {unit, unitActionsMapList} = unitAllActionsMap;
+    unitAllActionsMapList.forEach((unitAllActionsMap: UnitAllAvailableActionsMapType) => {
+        const {unit, availableActionsMapList} = unitAllActionsMap;
 
-        if (unitActionsMapList === null) {
+        if (availableActionsMapList === null) {
             return;
         }
 
-        unitActionsMapList.forEach((unitActionsMap: UnitAvailableActionType) => {
-            const {move, actionMap} = unitActionsMap;
+        availableActionsMapList.forEach((unitActionsMap: UnitAvailableActionsMapType) => {
+            const {actionsMap, moveAction} = unitActionsMap;
 
-            getActionByName(actionMap, null).forEach((unitAction: UnitActionType) => {
+            botResultActionDataList.push({unit, moveAction, unitAction: null});
+
+            if (actionsMap === null) {
+                return;
+            }
+
+            getActionByName(actionsMap, null).forEach((unitAction: UnitActionType) => {
+                // no need to open store
+                if (unitAction.type === 'open-store') {
+                    return;
+                }
+
+                // no need to move, moveAction exists in botActionData yet
                 if (unitAction.type === 'move') {
+                    return;
+                }
+
+                botResultActionDataList.push({unit, moveAction, unitAction});
+
+                /*
+                if (unitAction.type === 'fix-building') {
                     // TODO: REMOVE move filter!!!!!
                     console.warn('----> REMOVE move filter!!!!! <----');
-                    botResultActionDataList.push({unit, unitActionsMap, unitAction});
+                    botResultActionDataList.push({unit, moveAction, unitAction});
+                    return;
                 }
+                */
             });
         });
     });
@@ -188,7 +235,7 @@ function getBotActionDataList(unitAllActionsMapList: Array<UnitAllActionsMapType
 
 // TODO: get enemy unit available path (remove self unit from map for this)
 // TODO: and make available path map and available attack map
-export function getBotTurnData(map: MapType, gameData: GameDataType): Array<BotResultActionDataType> | null {
+export function getBotTurnDataList(map: MapType, gameData: GameDataType): Array<BotResultActionDataType> | null {
     console.log('getBotTurnData map', map);
 
     const unitList = getUnitListByPlayerId(gameData, map.activeUserId);
@@ -200,7 +247,10 @@ export function getBotTurnData(map: MapType, gameData: GameDataType): Array<BotR
     console.log('getBotTurnData enemyUnitList', enemyUnitList);
 
     const unitAllActionsMapList = unitList.map(
-        (unit: Unit): UnitAllActionsMapType => ({unit, unitActionsMapList: getUnitActionMapList(unit, gameData)})
+        (unit: Unit): UnitAllAvailableActionsMapType => ({
+            unit,
+            availableActionsMapList: getUnitAvailableActionsMapList(unit, gameData),
+        })
     );
 
     console.log('getBotTurnData unitAllActionsMapList', unitAllActionsMapList);
@@ -212,10 +262,10 @@ export function getBotTurnData(map: MapType, gameData: GameDataType): Array<BotR
     }
 
     // const enemyUnitAllActionsMapList = enemyUnitList.map(
-    //     (unit: Unit): UnitAllActionsMapType => {
+    //     (unit: Unit): UnitAllAvailableActionsMapType => {
     //         return {
     //             unit,
-    //             unitActionsMapList: getEnemyUnitActionMapList(unit, gameData),
+    //             availableActionsMapList: getEnemyUnitActionMapList(unit, gameData),
     //         };
     //     }
     // );
