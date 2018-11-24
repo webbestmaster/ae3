@@ -8,13 +8,15 @@ type PointType = {|
 |};
 
 export type RawRateType = {|
-    // +placeArmor: number, // too little for other aspects
     +attack: {|
         +damageGiven: number,
         +damageReceived: number,
     |},
 
+    // use together: placeArmor and availableDamageGiven
+    +placeArmor: number,
     +availableDamageGiven: number, // make enemy's damage map
+
     +currentHitPoints: number, // unit with bigger hp has priority, to attack and move on front
 
     /*
