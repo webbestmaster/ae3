@@ -2652,9 +2652,7 @@ export class GameModel {
             return;
         }
 
-        game.gameView.setActiveLandscape(action.from.x, action.from.y);
         await game.bindOnClickUnitActionMove(action, actionsMap, activeUserId);
-        game.gameView.setActiveLandscape(action.to.x, action.to.y);
 
         // get unit's action
         const unitActionsList = botResultAction.unit.getActions(game.getGameData());
