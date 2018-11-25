@@ -1,6 +1,7 @@
 // @flow
 
 import type {BotResultActionDataType} from './bot';
+import {defaultUnitData} from './unit/unit-guide';
 
 type PointType = {|
     +x: number,
@@ -9,15 +10,16 @@ type PointType = {|
 
 export type RawRateType = {|
     +attack: {|
-        +damageGiven: number,
-        +damageReceived: number,
+        +damageGiven: number, // done
+        +damageReceived: number, // done
+        +hitPoints: number, // done
     |},
 
     // use together: placeArmor and availableDamageGiven
-    +placeArmor: number,
-    +availableDamageGiven: number, // make enemy's damage map
+    +placeArmor: number, // in progress
+    +availableDamageGiven: number, // in progress // make enemy's damage map
 
-    +currentHitPoints: number, // unit with bigger hp has priority, to attack and move on front
+    +currentHitPoints: number, // in progress // unit with bigger hp has priority, to attack and move on front
 
     /*
      *
@@ -28,22 +30,42 @@ export type RawRateType = {|
      * nearest building has bigger diff
      *
      * */
-    +pathSizeToNearOccupyAbleBuilding: number,
-    +pathSizeToNearHealsBuilding: number, // use if unit has < 50hp
+    +pathSizeToNearOccupyAbleBuilding: number, // in progress
+    +pathSizeToNearHealsBuilding: number, // in progress // use if unit has < 50hp
 
-    +canRaiseSkeleton: boolean,
+    +canRaiseSkeleton: boolean, // in progress
 
     // farm
-    +canFixFarm: boolean,
-    +canOccupyEnemyFarm: boolean,
-    +canOccupyNoManFarm: boolean,
-    +canDestroyEnemyFarm: boolean,
-    // +canDestroyNoManFarm: boolean, // catapult can not destroy no man's farm
+    +canFixFarm: boolean, // in progress
+    +canOccupyEnemyFarm: boolean, // in progress
+    +canOccupyNoManFarm: boolean, // in progress
+    +canDestroyEnemyFarm: boolean, // in progress
+    // +canDestroyNoManFarm: boolean,  // will not be done // catapult can not destroy no man's farm
 
     // castle
-    +canOccupyEnemyCastle: boolean,
-    +canOccupyNoManCastle: boolean,
+    +canOccupyEnemyCastle: boolean, // in progress
+    +canOccupyNoManCastle: boolean, // in progress
 |};
+
+const defaultRawRate: RawRateType = {
+    attack: {
+        damageGiven: 0,
+        damageReceived: 0,
+        hitPoints: defaultUnitData.hitPoints,
+    },
+    placeArmor: 0,
+    availableDamageGiven: 0,
+    currentHitPoints: 0,
+    pathSizeToNearOccupyAbleBuilding: 0,
+    pathSizeToNearHealsBuilding: 0,
+    canRaiseSkeleton: false,
+    canFixFarm: false,
+    canOccupyEnemyFarm: false,
+    canOccupyNoManFarm: false,
+    canDestroyEnemyFarm: false,
+    canOccupyEnemyCastle: false,
+    canOccupyNoManCastle: false,
+};
 
 function getEndPoint(botResultActionData: BotResultActionDataType): PointType {
     const {unit, moveAction} = botResultActionData;
@@ -64,11 +86,42 @@ function getEndPoint(botResultActionData: BotResultActionDataType): PointType {
     };
 }
 
+function getRateBotResultAction(botResultActionData: BotResultActionDataType): RawRateType {
+    let rawRate: RawRateType = JSON.parse(JSON.stringify(defaultRawRate));
+    const {unitAction, unit} = botResultActionData;
+
+    rawRate = {
+        ...rawRate,
+        attack: {
+            ...rawRate.attack,
+            hitPoints: unit.getHitPoints(),
+        },
+    };
+
+    // attack
+    if (unitAction && unitAction.type === 'attack') {
+        rawRate = {
+            ...rawRate,
+            attack: {
+                damageGiven: unitAction.aggressor.damage.given,
+                damageReceived: unitAction.aggressor.damage.received,
+                hitPoints: unitAction.aggressor.hitPoints,
+            },
+        };
+    }
+
+    return rawRate;
+}
+
 function rateMoveAction(botResultActionData: BotResultActionDataType): number {
+    console.log(getRateBotResultAction(botResultActionData));
+
     return Math.random();
 }
 
 function rateMainAction(botResultActionData: BotResultActionDataType): number {
+    console.log(getRateBotResultAction(botResultActionData));
+
     return Math.random();
 }
 
