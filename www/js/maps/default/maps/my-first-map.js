@@ -201,12 +201,12 @@ export const myFirstMap: MapType = {
         },
     ],
     units: [
-        {
-            x: 0,
-            y: 0,
-            type: 'soldier',
-            userId: '0',
-        },
+        // {
+        //     x: 0,
+        //     y: 0,
+        //     type: 'soldier',
+        //     userId: '0',
+        // },
         {
             x: 3,
             y: 3,
@@ -349,6 +349,31 @@ export const myFirstMap: MapType = {
             x: 5,
             y: 4,
             type: 'dire-wolf',
+            userId: '1',
+        },
+
+        {
+            x: 0,
+            y: 0,
+            type: 'soldier',
+            userId: '1',
+        },
+        {
+            x: 9,
+            y: 0,
+            type: 'soldier',
+            userId: '1',
+        },
+        {
+            x: 9,
+            y: 14,
+            type: 'soldier',
+            userId: '1',
+        },
+        {
+            x: 0,
+            y: 14,
+            type: 'soldier',
             userId: '1',
         },
     ],

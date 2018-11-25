@@ -170,6 +170,11 @@ export type BotResultActionDataType = {|
         +actionsMap: UnitActionsMapType | null,
     |},
     +unitAction: UnitActionType | null,
+    +armorMap: {|
+        +walk: Array<Array<number>>,
+        +flow: Array<Array<number>>,
+        +fly: Array<Array<number>>,
+    |},
 |};
 
 type UnitAllAvailableActionsMapType = {|
@@ -178,9 +183,11 @@ type UnitAllAvailableActionsMapType = {|
 |};
 
 function getBotActionDataList(
-    unitAllActionsMapList: Array<UnitAllAvailableActionsMapType>
+    unitAllActionsMapList: Array<UnitAllAvailableActionsMapType>,
+    gameData: GameDataType
 ): Array<BotResultActionDataType> {
     const botResultActionDataList = [];
+    const {armorMap} = gameData;
 
     unitAllActionsMapList.forEach((unitAllActionsMap: UnitAllAvailableActionsMapType) => {
         const {unit, availableActionsMapList} = unitAllActionsMap;
@@ -194,7 +201,7 @@ function getBotActionDataList(
 
             // TODO: comment/uncomment it, for test only
             // this should be in production
-            botResultActionDataList.push({unit, moveAction, unitAction: null});
+            botResultActionDataList.push({unit, moveAction, unitAction: null, armorMap});
 
             if (actionsMap === null) {
                 return;
@@ -217,7 +224,7 @@ function getBotActionDataList(
                 //     return;
                 // }
 
-                botResultActionDataList.push({unit, moveAction, unitAction});
+                botResultActionDataList.push({unit, moveAction, unitAction, armorMap});
             });
         });
     });
@@ -251,7 +258,7 @@ export function getBotTurnDataList(map: MapType, gameData: GameDataType): Array<
 
     console.log('getBotTurnData unitAllActionsMapList', unitAllActionsMapList);
 
-    const bestBotActionDataList = getBotActionDataList(unitAllActionsMapList);
+    const bestBotActionDataList = getBotActionDataList(unitAllActionsMapList, gameData);
 
     if (bestBotActionDataList.length > 0) {
         return bestBotActionDataList;

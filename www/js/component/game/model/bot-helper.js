@@ -1,7 +1,7 @@
 // @flow
 
 import type {BotResultActionDataType} from './bot';
-import {defaultUnitData} from './unit/unit-guide';
+import {defaultUnitData, unitGuideData} from './unit/unit-guide';
 
 type PointType = {|
     +x: number,
@@ -16,7 +16,7 @@ export type RawRateType = {|
     |},
 
     // use together: placeArmor and availableDamageGiven
-    +placeArmor: number, // in progress
+    +placeArmor: number, // done
     +availableDamageGiven: number, // in progress // make enemy's damage map
 
     +currentHitPoints: number, // in progress // unit with bigger hp has priority, to attack and move on front
@@ -86,10 +86,23 @@ function getEndPoint(botResultActionData: BotResultActionDataType): PointType {
     };
 }
 
+function getPlaceArmor(botResultActionData: BotResultActionDataType): number {
+    const {unit, armorMap} = botResultActionData;
+    const unitAttr = unit.getAttr();
+    const currentUnitGuideData = unitGuideData[unitAttr.type];
+    const {moveType} = currentUnitGuideData;
+    const unitArmorMap =
+        moveType === 'walk' || moveType === 'fly' || moveType === 'flow' ? armorMap[moveType] : armorMap.walk;
+    const {x, y} = getEndPoint(botResultActionData);
+
+    return unitArmorMap[y][x];
+}
+
 function getRateBotResultAction(botResultActionData: BotResultActionDataType): RawRateType {
     let rawRate: RawRateType = JSON.parse(JSON.stringify(defaultRawRate));
     const {unitAction, unit} = botResultActionData;
 
+    // rawRate.attack.hitPoints
     rawRate = {
         ...rawRate,
         attack: {
@@ -98,7 +111,7 @@ function getRateBotResultAction(botResultActionData: BotResultActionDataType): R
         },
     };
 
-    // attack
+    // rawRate.attack
     if (unitAction && unitAction.type === 'attack') {
         rawRate = {
             ...rawRate,
@@ -109,6 +122,12 @@ function getRateBotResultAction(botResultActionData: BotResultActionDataType): R
             },
         };
     }
+
+    // rawRate.placeArmor
+    rawRate = {
+        ...rawRate,
+        placeArmor: getPlaceArmor(botResultActionData),
+    };
 
     return rawRate;
 }
