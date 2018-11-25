@@ -85,6 +85,7 @@ export class GameModel {
     graveList: Array<Grave>;
     mapState: MapType;
     emptyActionMap: Array<Array<[]>>;
+    emptyValueMap: Array<Array<number | string | boolean | null | void>>;
     roomId: string;
     model: MainModel;
     pathMap: {|
@@ -2154,6 +2155,7 @@ export class GameModel {
         const game = this;
 
         game.initializeEmptyActionMap();
+        game.initializeEmptyValueMap();
 
         game.initializePathMapWalk();
         game.initializePathMapFlow();
@@ -2294,6 +2296,21 @@ export class GameModel {
         });
 
         game.emptyActionMap = emptyActionMap;
+    }
+
+    initializeEmptyValueMap() {
+        const game = this;
+        const {map} = game.settings;
+        const emptyValueMap = [];
+
+        map.landscape.forEach((line: Array<LandscapeType>, tileY: number) => {
+            emptyValueMap.push([]);
+            line.forEach((landscapeItem: LandscapeType, tileX: number) => {
+                emptyValueMap[tileY].push(null);
+            });
+        });
+
+        game.emptyValueMap = emptyValueMap;
     }
 
     checkMapStateUnit(socketMapState: MapType) {
@@ -2474,6 +2491,7 @@ export class GameModel {
             pathMap: game.pathMap,
             armorMap: game.armorMap,
             emptyActionMap: game.emptyActionMap,
+            emptyValueMap: game.emptyValueMap,
         };
     }
 
@@ -2572,13 +2590,15 @@ export class GameModel {
 
         await game.executeBotResultAction(firstBotResultActionData);
 
-        await wait(2000);
+        // await for checkMapState - see card in trello
+        await wait(3000);
 
         await game.makeBotTurn();
     }
 
     // eslint-disable-next-line complexity
     async executeBotResultAction(botResultAction: BotResultActionDataType): Promise<void> {
+        // TODO: check for 'buy-unit' !!
         const game = this;
         const mapState = game.getMapState();
 

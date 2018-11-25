@@ -1,6 +1,6 @@
 // @flow
 
-import type {BotResultActionDataType} from './bot';
+import type {BotResultActionDataType, EnemyUnitAllAvailableActionsMapType} from './bot';
 import {defaultUnitData, unitGuideData} from './unit/unit-guide';
 
 type PointType = {|
@@ -9,15 +9,25 @@ type PointType = {|
 |};
 
 export type RawRateType = {|
+    // done
     +attack: {|
         +damageGiven: number, // done
         +damageReceived: number, // done
         +hitPoints: number, // done
     |},
 
+    // done
+    +unit: {|
+        // done
+        +endPosition: {|
+            +x: number, // done
+            +y: number, // done
+        |},
+    |},
+
     // use together: placeArmor and availableDamageGiven
     +placeArmor: number, // done
-    +availableDamageGiven: number, // in progress // make enemy's damage map
+    +availableGivenDamage: number, // done
 
     +currentHitPoints: number, // done // unit with bigger hp has priority, to attack and move on front
 
@@ -64,8 +74,14 @@ const defaultRawRate: RawRateType = {
         damageReceived: 0,
         hitPoints: defaultUnitData.hitPoints,
     },
+    unit: {
+        endPosition: {
+            x: -1,
+            y: -1,
+        },
+    },
     placeArmor: 0,
-    availableDamageGiven: 0,
+    availableGivenDamage: 0,
     currentHitPoints: defaultUnitData.hitPoints,
     pathSizeToNearOccupyAbleBuilding: 0,
     pathSizeToNearHealsBuilding: 0,
@@ -116,10 +132,47 @@ function getPlaceArmor(botResultActionData: BotResultActionDataType): number {
     return unitArmorMap[y][x];
 }
 
-function getRateBotResultAction(botResultActionData: BotResultActionDataType): RawRateType {
+function getAvailableGivenDamage(
+    botResultActionData: BotResultActionDataType,
+    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>
+): number {
+    const {x, y} = getEndPoint(botResultActionData);
+    let damage = 0;
+
+    // one unit can attack only one time
+    enemyUnitAllActionsMapList.forEach((enemyUnitAllAvailableActionsMap: EnemyUnitAllAvailableActionsMapType) => {
+        const {damageMap} = enemyUnitAllAvailableActionsMap;
+        const mapDamage = damageMap[y][x];
+
+        if (typeof mapDamage === 'number' && mapDamage > 0) {
+            damage += mapDamage;
+        }
+    });
+
+    return damage;
+}
+
+function getRateBotResultAction(
+    botResultActionData: BotResultActionDataType,
+    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>
+): RawRateType {
     let rawRate: RawRateType = JSON.parse(JSON.stringify(defaultRawRate));
     const {unitAction, unit} = botResultActionData;
     const currentHitPoints = unit.getHitPoints();
+    const {x, y} = getEndPoint(botResultActionData);
+
+    // rawRate.unit.endPosition
+    rawRate = {
+        ...rawRate,
+        unit: {
+            ...rawRate.unit,
+            endPosition: {
+                ...rawRate.unit.endPosition,
+                x,
+                y,
+            },
+        },
+    };
 
     // rawRate.attack.hitPoints
     rawRate = {
@@ -149,23 +202,40 @@ function getRateBotResultAction(botResultActionData: BotResultActionDataType): R
         placeArmor: getPlaceArmor(botResultActionData),
     };
 
+    // rawRate.availableGivenDamage
+    rawRate = {
+        ...rawRate,
+        availableGivenDamage: getAvailableGivenDamage(botResultActionData, enemyUnitAllActionsMapList),
+    };
+
     return rawRate;
 }
 
-function rateMoveAction(botResultActionData: BotResultActionDataType): number {
-    console.log(getRateBotResultAction(botResultActionData));
+function rateMoveAction(
+    botResultActionData: BotResultActionDataType,
+    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>
+): number {
+    console.log(getRateBotResultAction(botResultActionData, enemyUnitAllActionsMapList));
 
     return Math.random();
 }
 
-function rateMainAction(botResultActionData: BotResultActionDataType): number {
-    console.log(getRateBotResultAction(botResultActionData));
+function rateMainAction(
+    botResultActionData: BotResultActionDataType,
+    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>
+): number {
+    console.log(getRateBotResultAction(botResultActionData, enemyUnitAllActionsMapList));
 
     return Math.random();
 }
 
-export function rateBotResultActionData(botResultActionData: BotResultActionDataType): number {
+export function rateBotResultActionData(
+    botResultActionData: BotResultActionDataType,
+    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>
+): number {
     const {unitAction} = botResultActionData;
 
-    return unitAction === null ? rateMoveAction(botResultActionData) : rateMainAction(botResultActionData);
+    return unitAction === null ?
+        rateMoveAction(botResultActionData, enemyUnitAllActionsMapList) :
+        rateMainAction(botResultActionData, enemyUnitAllActionsMapList);
 }

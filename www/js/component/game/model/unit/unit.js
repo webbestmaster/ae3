@@ -174,6 +174,7 @@ export type GameDataType = {|
         +fly: Array<Array<number>>,
     |},
     +emptyActionMap: Array<Array<[]>>,
+    +emptyValueMap: Array<Array<number | string | boolean | null | void>>,
 |};
 
 /*
@@ -885,9 +886,32 @@ export class Unit {
         return getPath(x, y, currentUnitGuideData.move, pathMap, unit.getAllUnitsCoordinates(gameData));
     }
 
+    getAvailableDamageMap(gameData: GameDataType): Array<Array<number | null>> {
+        const unit = this;
+        const unitAttr = unit.getAttr();
+        const currentUnitGuideData = unitGuideData[unitAttr.type];
+        const isDisabledAfterMove = Boolean(currentUnitGuideData.isDisabledAfterMove);
+        const availablePath = isDisabledAfterMove ? [[unitAttr.x, unitAttr.y]] : unit.getAvailablePath(gameData);
+        const emptyValueMap = JSON.parse(JSON.stringify(gameData.emptyValueMap));
+        const averageAttack = (currentUnitGuideData.attack.min + currentUnitGuideData.attack.max) / 2;
+
+        availablePath.forEach((pathPoint: [number, number]) => {
+            const [unitX, unitY] = pathPoint;
+            const allAvailableAttackFromPosition = unit.getAllAvailableAttackFromPosition(gameData, unitX, unitY);
+
+            allAvailableAttackFromPosition.forEach((attackPoint: [number, number]) => {
+                const [attackX, attackY] = attackPoint;
+
+                emptyValueMap[attackY][attackX] = averageAttack;
+            });
+        });
+
+        return emptyValueMap;
+    }
+
     getAvailableAttack(gameData: GameDataType): AvailablePathMapType {
         const unit = this;
-        const {x, y, type} = unit.attr;
+        const {type} = unit.attr;
 
         if (!unitGuideData.hasOwnProperty(type)) {
             console.error('unitGuideData has no property:', type, unit);
@@ -905,6 +929,20 @@ export class Unit {
                 );
             }
         );
+    }
+
+    getAllAvailableAttackFromPosition(gameData: GameDataType, x: number, y: number): AvailablePathMapType {
+        const unit = this;
+        const {type} = unit.attr;
+
+        if (!unitGuideData.hasOwnProperty(type)) {
+            console.error('unitGuideData has no property:', type, unit);
+            return [];
+        }
+
+        const currentUnitGuideData = unitGuideData[type];
+
+        return getPath(x, y, currentUnitGuideData.attack.range, gameData.pathMap.fly, []);
     }
 
     getAllAvailableAttack(gameData: GameDataType): AvailablePathMapType {

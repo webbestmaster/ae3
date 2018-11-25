@@ -163,8 +163,15 @@ type UnitAllAvailableActionsMapType = {|
     +availableActionsMapList: Array<UnitAvailableActionsMapType> | null,
 |};
 
+export type EnemyUnitAllAvailableActionsMapType = {|
+    +unit: Unit,
+    +availableActionsMapList: Array<UnitAvailableActionsMapType> | null,
+    +damageMap: Array<Array<number | null>>,
+|};
+
 function getBotActionDataList(
     unitAllActionsMapList: Array<UnitAllAvailableActionsMapType>,
+    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>,
     gameData: GameDataType
 ): Array<BotResultActionDataType> {
     const botResultActionDataList = [];
@@ -212,7 +219,10 @@ function getBotActionDataList(
 
     return botResultActionDataList.sort(
         (botResultA: BotResultActionDataType, botResultB: BotResultActionDataType): number => {
-            return rateBotResultActionData(botResultB) - rateBotResultActionData(botResultA);
+            return (
+                rateBotResultActionData(botResultB, enemyUnitAllActionsMapList) -
+                rateBotResultActionData(botResultA, enemyUnitAllActionsMapList)
+            );
         }
     );
 }
@@ -227,11 +237,12 @@ export function getBotTurnDataList(map: MapType, gameData: GameDataType): Array<
     console.log('getBotTurnData enemyUnitList', enemyUnitList);
 
     const enemyUnitAllActionsMapList = enemyUnitList.map(
-        (unit: Unit): UnitAllAvailableActionsMapType => {
-            return {
-                unit,
-                availableActionsMapList: getEnemyUnitAvailableActionsMapList(unit, gameData),
-            };
+        (unit: Unit): EnemyUnitAllAvailableActionsMapType => {
+            const availableActionsMapList = getEnemyUnitAvailableActionsMapList(unit, gameData);
+
+            const damageMap = unit.getAvailableDamageMap({...gameData, unitList: [unit]});
+
+            return {unit, availableActionsMapList, damageMap};
         }
     );
 
@@ -250,7 +261,7 @@ export function getBotTurnDataList(map: MapType, gameData: GameDataType): Array<
 
     console.log('getBotTurnData unitAllActionsMapList', unitAllActionsMapList);
 
-    const bestBotActionDataList = getBotActionDataList(unitAllActionsMapList, gameData);
+    const bestBotActionDataList = getBotActionDataList(unitAllActionsMapList, enemyUnitAllActionsMapList, gameData);
 
     if (bestBotActionDataList.length > 0) {
         return bestBotActionDataList;
