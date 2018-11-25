@@ -42,7 +42,9 @@ export type RawRateType = {|
      *
      * */
     +pathSizeToNearOccupyAbleBuilding: number, // in progress
+    +isReachedNearOccupyAbleBuilding: boolean,
     +pathSizeToNearHealsBuilding: number, // in progress // use if unit has < 50hp
+    +isReachedToNearHealsBuilding: boolean, // in progress // use if unit has < 50hp
 
     +canRaiseSkeleton: boolean, // in progress
 
@@ -84,7 +86,9 @@ const defaultRawRate: RawRateType = {
     availableGivenDamage: 0,
     currentHitPoints: defaultUnitData.hitPoints,
     pathSizeToNearOccupyAbleBuilding: 0,
+    isReachedNearOccupyAbleBuilding: false,
     pathSizeToNearHealsBuilding: 0,
+    isReachedToNearHealsBuilding: false,
     canRaiseSkeleton: false,
     canFixFarm: false,
     canOccupyEnemyFarm: false,
