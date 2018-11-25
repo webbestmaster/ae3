@@ -9,7 +9,7 @@ function getUnitListByPlayerId(gameData: GameDataType, activeUserId: string): Ar
     return gameData.unitList.filter((unit: Unit): boolean => unit.getUserId() === activeUserId);
 }
 
-function getEnemyUnitListByPlayerId(gameData: GameDataType, activeUserId: string): Array<Unit> {
+function getEnemyUnitListForPlayerId(gameData: GameDataType, activeUserId: string): Array<Unit> {
     const playerData =
         gameData.userList.find((userData: MapUserType): boolean => userData.userId === activeUserId) || null;
 
@@ -136,32 +136,13 @@ function getUnitAvailableActionsMapList(unit: Unit, gameData: GameDataType): Arr
     return actionMapList;
 }
 
-// function getEnemyUnitActionMapList(
-//     unit: Unit,
-//     gameData: GameDataType
-// ): Array<[UnitActionMoveType | null, UnitActionsMapType]> | null {
-//     const actionMap = unit.getActions(gameData);
-//
-//     if (actionMap === null) {
-//         return null;
-//     }
-//
-//     const actionMapList = [[null, actionMap]];
-//
-//     getMoveActionList(unit, actionMap).forEach((actionMove: UnitActionMoveType) => {
-//         const emptyUnitListGameData = {...gameData, unitList: [unit]};
-//
-//         const actionMapAfterMove = getActionMapAfterMove(unit, actionMove, emptyUnitListGameData);
-//
-//         if (actionMapAfterMove === null) {
-//             return;
-//         }
-//
-//         actionMapList.push([actionMove, actionMapAfterMove]);
-//     });
-//
-//     return actionMapList;
-// }
+// eslint-disable-next-line id-length
+function getEnemyUnitAvailableActionsMapList(
+    unit: Unit,
+    gameData: GameDataType
+): Array<UnitAvailableActionsMapType> | null {
+    return getUnitAvailableActionsMapList(unit, {...gameData, unitList: [unit]});
+}
 
 export type BotResultActionDataType = {|
     +unit: Unit,
@@ -241,13 +222,24 @@ function getBotActionDataList(
 export function getBotTurnDataList(map: MapType, gameData: GameDataType): Array<BotResultActionDataType> | null {
     console.log('getBotTurnData map', map);
 
+    const enemyUnitList = getEnemyUnitListForPlayerId(gameData, map.activeUserId);
+
+    console.log('getBotTurnData enemyUnitList', enemyUnitList);
+
+    const enemyUnitAllActionsMapList = enemyUnitList.map(
+        (unit: Unit): UnitAllAvailableActionsMapType => {
+            return {
+                unit,
+                availableActionsMapList: getEnemyUnitAvailableActionsMapList(unit, gameData),
+            };
+        }
+    );
+
+    console.log('getBotTurnData enemyUnitAllActionsMapList', enemyUnitAllActionsMapList);
+
     const unitList = getUnitListByPlayerId(gameData, map.activeUserId);
 
     console.log('getBotTurnData unitList', unitList);
-
-    const enemyUnitList = getEnemyUnitListByPlayerId(gameData, map.activeUserId);
-
-    console.log('getBotTurnData enemyUnitList', enemyUnitList);
 
     const unitAllActionsMapList = unitList.map(
         (unit: Unit): UnitAllAvailableActionsMapType => ({
@@ -263,17 +255,6 @@ export function getBotTurnDataList(map: MapType, gameData: GameDataType): Array<
     if (bestBotActionDataList.length > 0) {
         return bestBotActionDataList;
     }
-
-    // const enemyUnitAllActionsMapList = enemyUnitList.map(
-    //     (unit: Unit): UnitAllAvailableActionsMapType => {
-    //         return {
-    //             unit,
-    //             availableActionsMapList: getEnemyUnitActionMapList(unit, gameData),
-    //         };
-    //     }
-    // );
-
-    // console.log('getBotTurnData enemyUnitAllActionsMapList', enemyUnitAllActionsMapList);
 
     return null;
 }

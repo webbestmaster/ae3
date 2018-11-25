@@ -35,21 +35,9 @@ function getItemOfLine(index: number, line: Array<Array<UnitActionType>>): Array
 }
 
 export class Catapult extends Unit {
-    getActions(gameData: GameDataType): UnitActionsMapType | null {
-        const unit = this;
-
-        if (unit.getDidMove()) {
-            return null;
-        }
-
-        return super.getActions(gameData);
-    }
-
     getAllAvailableAttack(gameData: GameDataType): AvailablePathMapType {
         const unit = this;
-        const {x, y, type} = unit.attr;
-
-        console.log('catapult');
+        const {x, y} = unit.attr;
 
         const disArray = [[0, -1], [-1, 0], [1, 0], [0, 1], [0, 0]].map(
             (coordinates: [number, number]): [number, number] => {

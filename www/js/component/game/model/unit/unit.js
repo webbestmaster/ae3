@@ -355,6 +355,12 @@ export class Unit {
     getActions(gameData: GameDataType): UnitActionsMapType | null {
         const unit = this;
 
+        const isDisabledAfterMove = Boolean(unitGuideData[unit.attr.type].isDisabledAfterMove);
+
+        if (unit.getDidMove() && isDisabledAfterMove) {
+            return null;
+        }
+
         if (
             unit.getDidAttack() ||
             unit.getDidFixBuilding() ||

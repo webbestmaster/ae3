@@ -51,6 +51,7 @@ export type UnitDataType = {|
     +canBeBuy?: boolean,
     +withoutGrave?: boolean,
     +isCommander?: boolean,
+    +isDisabledAfterMove?: boolean,
 |};
 
 type UnitGuideDataType = {+[key: UnitTypeAllType]: UnitDataType};
@@ -195,6 +196,8 @@ export const unitGuideData: UnitGuideDataType = {
         },
         canBeBuy: true,
         cost: 700,
+
+        isDisabledAfterMove: true,
 
         destroyBuildingList: [mapGuide.building.farm.name],
     },
