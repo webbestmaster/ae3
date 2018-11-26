@@ -2,6 +2,10 @@
 
 import type {BotResultActionDataType, EnemyUnitAllAvailableActionsMapType} from './bot';
 import {defaultUnitData, unitGuideData} from './unit/unit-guide';
+import {Building} from './building/building';
+import type {GameDataType} from './unit/unit';
+import type {MapUserType} from '../../../maps/type';
+import type {TeamIdType} from '../../../maps/map-guide';
 
 type PointType = {|
     +x: number,
@@ -38,10 +42,11 @@ export type RawRateType = {|
      * count diff - 14 - 9 = 5
      * direction (place) to nearest building has bigger diff
      * use this logic if building is NOT reached only
+     * not reached count in percent of whole path size
      *
      * */
-    +madePathToNearOccupyAbleBuilding: number, // in progress
-    +isReachedNearOccupyAbleBuilding: boolean, // in progress
+    +madePathToNearOccupyAbleBuilding: number, // done - NOT TESTED // if reached -> madePathSize, else -> percent of needed path
+    +isReachedNearOccupyAbleBuilding: boolean, // done - NOT TESTED
     +madePathToNearHealsBuilding: number, // in progress // use if unit has < 50hp
     +isReachedToNearHealsBuilding: boolean, // in progress // use if unit has < 50hp
 
@@ -104,6 +109,100 @@ const defaultRawRate: RawRateType = {
     canPreventEnemyOccupyMyTeamCastle: false,
 };
 
+function getTeamIdByUserId(userId: string, gameData: GameDataType): TeamIdType | null {
+    const playerData = gameData.userList.find((userData: MapUserType): boolean => userData.userId === userId) || null;
+
+    if (playerData === null) {
+        console.error('can not find user by id', userId);
+        return null;
+    }
+
+    return playerData.teamId;
+}
+
+// eslint-disable-next-line id-length, max-statements
+function getMadePathToNearOccupyAbleBuilding(
+    botResultActionData: BotResultActionDataType,
+    gameData: GameDataType
+): {|
+    +madePathToNearOccupyAbleBuilding: number,
+    +isReachedNearOccupyAbleBuilding: boolean,
+|} {
+    // get all building
+    // get all farm, destroyed farm and castle with no my team id
+    const defaultResult = {
+        madePathToNearOccupyAbleBuilding: 0,
+        isReachedNearOccupyAbleBuilding: false,
+    };
+
+    const endPoint = getEndPoint(botResultActionData);
+    const {unit} = botResultActionData;
+    const activeUserId = unit.getUserId();
+    const unitAttr = unit.getAttr();
+
+    if (activeUserId === null) {
+        console.error('unit has not user id', unit);
+        return defaultResult;
+    }
+
+    const unitTeamId = getTeamIdByUserId(activeUserId, gameData);
+
+    if (unitTeamId === null) {
+        console.error('can not find user by id', activeUserId);
+        return defaultResult;
+    }
+
+    const buildingList = gameData.buildingList
+        .filter(
+            (buildingInList: Building): boolean => {
+                const buildingTeamId = getTeamIdByUserId(buildingInList.attr.userId || '', gameData);
+
+                return (
+                    buildingTeamId !== unitTeamId &&
+                    ['farm-destroyed', 'castle', 'farm'].includes(buildingInList.attr.type)
+                );
+            }
+        )
+        // sort from near to far
+        .sort(
+            (buildingA: Building, buildingB: Building): number => {
+                const pathToA = ((buildingA.attr.x - endPoint.x) ** 2 + (buildingA.attr.y - endPoint.y) ** 2) ** 0.5;
+                const pathToB = ((buildingB.attr.x - endPoint.x) ** 2 + (buildingB.attr.y - endPoint.y) ** 2) ** 0.5;
+
+                return pathToA - pathToB;
+            }
+        );
+
+    if (buildingList.length === 0) {
+        return defaultResult;
+    }
+
+    const isReachedNearOccupyAbleBuilding = buildingList.some(
+        (buildingInList: Building): boolean => {
+            return buildingInList.attr.x === endPoint.x && buildingInList.attr.y === endPoint.y;
+        }
+    );
+
+    if (isReachedNearOccupyAbleBuilding) {
+        return {
+            madePathToNearOccupyAbleBuilding: ((unitAttr.x - endPoint.x) ** 2 + (unitAttr.y - endPoint.y) ** 2) ** 0.5,
+            isReachedNearOccupyAbleBuilding,
+        };
+    }
+
+    const nearestBuilding = buildingList[0];
+    const pathSizeBefore =
+        ((unitAttr.x - nearestBuilding.attr.x) ** 2 + (unitAttr.y - nearestBuilding.attr.y) ** 2) ** 0.5;
+    const pathSizeAfter =
+        ((endPoint.x - nearestBuilding.attr.x) ** 2 + (endPoint.y - nearestBuilding.attr.y) ** 2) ** 0.5;
+    const madePathToNearOccupyAbleBuilding = (pathSizeBefore - pathSizeAfter / pathSizeBefore) * 100;
+
+    return {
+        madePathToNearOccupyAbleBuilding,
+        isReachedNearOccupyAbleBuilding: false,
+    };
+}
+
 function getEndPoint(botResultActionData: BotResultActionDataType): PointType {
     const {unit, moveAction} = botResultActionData;
     const {action} = moveAction;
@@ -157,7 +256,8 @@ function getAvailableGivenDamage(
 
 function getRateBotResultAction(
     botResultActionData: BotResultActionDataType,
-    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>
+    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>,
+    gameData: GameDataType
 ): RawRateType {
     let rawRate: RawRateType = JSON.parse(JSON.stringify(defaultRawRate));
     const {unitAction, unit} = botResultActionData;
@@ -211,34 +311,44 @@ function getRateBotResultAction(
         availableGivenDamage: getAvailableGivenDamage(botResultActionData, enemyUnitAllActionsMapList),
     };
 
+    // rawRate.madePathToNearOccupyAbleBuilding
+    // rawRate.isReachedNearOccupyAbleBuilding
+    rawRate = {
+        ...rawRate,
+        ...getMadePathToNearOccupyAbleBuilding(botResultActionData, gameData),
+    };
+
     return rawRate;
 }
 
 function rateMoveAction(
     botResultActionData: BotResultActionDataType,
-    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>
+    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>,
+    gameData: GameDataType
 ): number {
-    console.log(getRateBotResultAction(botResultActionData, enemyUnitAllActionsMapList));
+    console.log(getRateBotResultAction(botResultActionData, enemyUnitAllActionsMapList, gameData));
 
     return Math.random();
 }
 
 function rateMainAction(
     botResultActionData: BotResultActionDataType,
-    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>
+    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>,
+    gameData: GameDataType
 ): number {
-    console.log(getRateBotResultAction(botResultActionData, enemyUnitAllActionsMapList));
+    console.log(getRateBotResultAction(botResultActionData, enemyUnitAllActionsMapList, gameData));
 
     return Math.random();
 }
 
 export function rateBotResultActionData(
     botResultActionData: BotResultActionDataType,
-    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>
+    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>,
+    gameData: GameDataType
 ): number {
     const {unitAction} = botResultActionData;
 
     return unitAction === null ?
-        rateMoveAction(botResultActionData, enemyUnitAllActionsMapList) :
-        rateMainAction(botResultActionData, enemyUnitAllActionsMapList);
+        rateMoveAction(botResultActionData, enemyUnitAllActionsMapList, gameData) :
+        rateMainAction(botResultActionData, enemyUnitAllActionsMapList, gameData);
 }

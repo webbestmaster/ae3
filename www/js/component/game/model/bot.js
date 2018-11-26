@@ -220,8 +220,8 @@ function getBotActionDataList(
     return botResultActionDataList.sort(
         (botResultA: BotResultActionDataType, botResultB: BotResultActionDataType): number => {
             return (
-                rateBotResultActionData(botResultB, enemyUnitAllActionsMapList) -
-                rateBotResultActionData(botResultA, enemyUnitAllActionsMapList)
+                rateBotResultActionData(botResultB, enemyUnitAllActionsMapList, gameData) -
+                rateBotResultActionData(botResultA, enemyUnitAllActionsMapList, gameData)
             );
         }
     );
