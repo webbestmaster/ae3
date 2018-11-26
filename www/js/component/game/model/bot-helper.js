@@ -23,13 +23,12 @@ export type RawRateType = {|
             +x: number, // done
             +y: number, // done
         |},
+        hitPoints: number, // done // unit with bigger hp has priority, to attack and move on front
     |},
 
     // use together: placeArmor and availableDamageGiven
     +placeArmor: number, // done
     +availableGivenDamage: number, // done
-
-    +currentHitPoints: number, // done // unit with bigger hp has priority, to attack and move on front
 
     /*
      *
@@ -81,10 +80,10 @@ const defaultRawRate: RawRateType = {
             x: -1,
             y: -1,
         },
+        hitPoints: defaultUnitData.hitPoints,
     },
     placeArmor: 0,
     availableGivenDamage: 0,
-    currentHitPoints: defaultUnitData.hitPoints,
     pathSizeToNearOccupyAbleBuilding: 0,
     isReachedNearOccupyAbleBuilding: false,
     pathSizeToNearHealsBuilding: 0,
@@ -165,7 +164,7 @@ function getRateBotResultAction(
     const currentHitPoints = unit.getHitPoints();
     const {x, y} = getEndPoint(botResultActionData);
 
-    // rawRate.unit.endPosition
+    // rawRate.unit.endPosition.x, rawRate.unit.endPosition.y, rawRate.unit.hitPoints
     rawRate = {
         ...rawRate,
         unit: {
@@ -175,6 +174,7 @@ function getRateBotResultAction(
                 x,
                 y,
             },
+            hitPoints: currentHitPoints,
         },
     };
 
@@ -185,7 +185,6 @@ function getRateBotResultAction(
             ...rawRate.attack,
             hitPoints: currentHitPoints,
         },
-        currentHitPoints,
     };
 
     // rawRate.attack
