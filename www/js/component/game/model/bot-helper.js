@@ -113,7 +113,7 @@ function getTeamIdByUserId(userId: string, gameData: GameDataType): TeamIdType |
     const playerData = gameData.userList.find((userData: MapUserType): boolean => userData.userId === userId) || null;
 
     if (playerData === null) {
-        console.error('can not find user by id', userId);
+        console.error('getTeamIdByUserId - can not find user by id', userId);
         return null;
     }
 
@@ -148,7 +148,7 @@ function getMadePathToNearOccupyAbleBuilding(
     const unitTeamId = getTeamIdByUserId(activeUserId, gameData);
 
     if (unitTeamId === null) {
-        console.error('can not find user by id', activeUserId);
+        console.error('getMadePathToNearOccupyAbleBuilding - can not find user by id', activeUserId);
         return defaultResult;
     }
 
@@ -200,6 +200,89 @@ function getMadePathToNearOccupyAbleBuilding(
     return {
         madePathToNearOccupyAbleBuilding,
         isReachedNearOccupyAbleBuilding: false,
+    };
+}
+
+// eslint-disable-next-line id-length, max-statements
+function getMadePathToNearHealsBuilding(
+    botResultActionData: BotResultActionDataType,
+    gameData: GameDataType
+): {|
+    +madePathToNearHealsBuilding: number,
+    +isReachedToNearHealsBuilding: boolean,
+|} {
+    // get all building
+    // get all farm, destroyed farm and castle with no my team id
+    const defaultResult = {
+        madePathToNearHealsBuilding: 0,
+        isReachedToNearHealsBuilding: false,
+    };
+
+    const endPoint = getEndPoint(botResultActionData);
+    const {unit} = botResultActionData;
+    const activeUserId = unit.getUserId();
+    const unitAttr = unit.getAttr();
+
+    if (activeUserId === null) {
+        console.error('unit has not user id', unit);
+        return defaultResult;
+    }
+
+    const unitTeamId = getTeamIdByUserId(activeUserId, gameData);
+
+    if (unitTeamId === null) {
+        console.error('getMadePathToNearHealsBuilding - can not find user by id', activeUserId);
+        return defaultResult;
+    }
+
+    const buildingList = gameData.buildingList
+        .filter(
+            (buildingInList: Building): boolean => {
+                const buildingTeamId = getTeamIdByUserId(buildingInList.attr.userId || '', gameData);
+
+                return (
+                    buildingTeamId !== unitTeamId &&
+                    ['farm-destroyed', 'castle', 'farm'].includes(buildingInList.attr.type)
+                );
+            }
+        )
+        // sort from near to far
+        .sort(
+            (buildingA: Building, buildingB: Building): number => {
+                const pathToA = ((buildingA.attr.x - endPoint.x) ** 2 + (buildingA.attr.y - endPoint.y) ** 2) ** 0.5;
+                const pathToB = ((buildingB.attr.x - endPoint.x) ** 2 + (buildingB.attr.y - endPoint.y) ** 2) ** 0.5;
+
+                return pathToA - pathToB;
+            }
+        );
+
+    if (buildingList.length === 0) {
+        return defaultResult;
+    }
+
+    const isReachedToNearHealsBuilding = buildingList.some(
+        (buildingInList: Building): boolean => {
+            return buildingInList.attr.x === endPoint.x && buildingInList.attr.y === endPoint.y;
+        }
+    );
+
+    if (isReachedToNearHealsBuilding) {
+        return {
+            madePathToNearHealsBuilding: ((unitAttr.x - endPoint.x) ** 2 + (unitAttr.y - endPoint.y) ** 2) ** 0.5,
+            isReachedToNearHealsBuilding,
+        };
+    }
+
+    const nearestBuilding = buildingList[0];
+    const pathSizeBefore =
+        ((unitAttr.x - nearestBuilding.attr.x) ** 2 + (unitAttr.y - nearestBuilding.attr.y) ** 2) ** 0.5;
+    const pathSizeAfter =
+        ((endPoint.x - nearestBuilding.attr.x) ** 2 + (endPoint.y - nearestBuilding.attr.y) ** 2) ** 0.5;
+    const madePathToNearHealsBuilding = (pathSizeBefore - pathSizeAfter / pathSizeBefore) * 100;
+
+    return {
+        madePathToNearHealsBuilding,
+        isReachedToNearHealsBuilding: false,
     };
 }
 
@@ -313,9 +396,12 @@ function getRateBotResultAction(
 
     // rawRate.madePathToNearOccupyAbleBuilding
     // rawRate.isReachedNearOccupyAbleBuilding
+    // rawRate.madePathToNearHealsBuilding
+    // rawRate.isReachedToNearHealsBuilding
     rawRate = {
         ...rawRate,
         ...getMadePathToNearOccupyAbleBuilding(botResultActionData, gameData),
+        ...getMadePathToNearHealsBuilding(botResultActionData, gameData),
     };
 
     return rawRate;
