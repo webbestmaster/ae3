@@ -54,7 +54,7 @@ export type RawRateType = {|
 
     // farm
     +canFixFarm: boolean, // done - NOT TESTED
-    +canOccupyEnemyFarm: boolean, // in progress
+    +canOccupyEnemyFarm: boolean, // done - NOT TESTED
     +canOccupyNoManFarm: boolean, // in progress
     +canDestroyEnemyFarm: boolean, // in progress
     // +canDestroyNoManFarm: boolean,  // will not be done // catapult can not destroy no man's farm
@@ -108,6 +108,51 @@ const defaultRawRate: RawRateType = {
     canPreventEnemyOccupyMyCastle: false,
     canPreventEnemyOccupyMyTeamCastle: false,
 };
+
+// eslint-disable-next-line complexity
+function getCanOccupyEnemyFarm(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
+    const {unitAction, unit} = botResultActionData;
+
+    if (!unitAction) {
+        return false;
+    }
+
+    if (unitAction.type !== 'occupy-building') {
+        return false;
+    }
+
+    const building =
+        gameData.buildingList.find(
+            (buildingInList: Building): boolean => {
+                return buildingInList.attr.x === unitAction.x && buildingInList.attr.y === unitAction.y;
+            }
+        ) || null;
+
+    if (building === null) {
+        console.error('can not find building with for', botResultActionData, gameData);
+        return false;
+    }
+
+    // check building is farm
+    if (building.attr.type !== 'farm') {
+        return false;
+    }
+
+    // check farm has owner
+    if (typeof building.attr.userId !== 'string') {
+        return false;
+    }
+
+    const buildingTeamId = getTeamIdByUserId(building.attr.userId, gameData);
+
+    if (buildingTeamId === null) {
+        return false;
+    }
+
+    const unitTeamId = getTeamIdByUserId(unit.getUserId() || '', gameData);
+
+    return unitTeamId !== buildingTeamId;
+}
 
 function getTeamIdByUserId(userId: string, gameData: GameDataType): TeamIdType | null {
     const playerData = gameData.userList.find((userData: MapUserType): boolean => userData.userId === userId) || null;
@@ -401,38 +446,24 @@ function getRateBotResultAction(
         };
     }
 
-    // rawRate.placeArmor
     rawRate = {
         ...rawRate,
+        // rawRate.placeArmor
         placeArmor: getPlaceArmor(botResultActionData),
-    };
-
-    // rawRate.availableGivenDamage
-    rawRate = {
-        ...rawRate,
+        // rawRate.availableGivenDamage
         availableGivenDamage: getAvailableGivenDamage(botResultActionData, enemyUnitAllActionsMapList),
-    };
-
-    // rawRate.madePathToNearOccupyAbleBuilding
-    // rawRate.isReachedNearOccupyAbleBuilding
-    // rawRate.madePathToNearHealsBuilding
-    // rawRate.isReachedToNearHealsBuilding
-    rawRate = {
-        ...rawRate,
+        // rawRate.madePathToNearOccupyAbleBuilding
+        // rawRate.isReachedNearOccupyAbleBuilding
         ...getMadePathToNearOccupyAbleBuilding(botResultActionData, gameData),
+        // rawRate.madePathToNearHealsBuilding
+        // rawRate.isReachedToNearHealsBuilding
         ...getMadePathToNearHealsBuilding(botResultActionData, gameData),
-    };
-
-    // rawRate.canRaiseSkeleton
-    rawRate = {
-        ...rawRate,
+        // rawRate.canRaiseSkeleton
         canRaiseSkeleton: getCanRaiseSkeleton(botResultActionData),
-    };
-
-    // rawRate.canFixFarm
-    rawRate = {
-        ...rawRate,
+        // rawRate.canFixFarm
         canFixFarm: getCanFixFarm(botResultActionData),
+        // rawRate.canOccupyEnemyFarm
+        canOccupyEnemyFarm: getCanOccupyEnemyFarm(botResultActionData, gameData),
     };
 
     return rawRate;
