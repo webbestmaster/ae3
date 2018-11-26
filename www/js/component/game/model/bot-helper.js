@@ -41,7 +41,7 @@ export type RawRateType = {|
      *
      * */
     +pathSizeToNearOccupyAbleBuilding: number, // in progress
-    +isReachedNearOccupyAbleBuilding: boolean,
+    +isReachedNearOccupyAbleBuilding: boolean, // in progress
     +pathSizeToNearHealsBuilding: number, // in progress // use if unit has < 50hp
     +isReachedToNearHealsBuilding: boolean, // in progress // use if unit has < 50hp
 
