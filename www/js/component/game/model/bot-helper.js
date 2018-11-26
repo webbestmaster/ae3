@@ -40,9 +40,9 @@ export type RawRateType = {|
      * use this logic if building is NOT reached only
      *
      * */
-    +pathSizeToNearOccupyAbleBuilding: number, // in progress
+    +madePathToNearOccupyAbleBuilding: number, // in progress
     +isReachedNearOccupyAbleBuilding: boolean, // in progress
-    +pathSizeToNearHealsBuilding: number, // in progress // use if unit has < 50hp
+    +madePathToNearHealsBuilding: number, // in progress // use if unit has < 50hp
     +isReachedToNearHealsBuilding: boolean, // in progress // use if unit has < 50hp
 
     +canRaiseSkeleton: boolean, // in progress
@@ -84,9 +84,9 @@ const defaultRawRate: RawRateType = {
     },
     placeArmor: 0,
     availableGivenDamage: 0,
-    pathSizeToNearOccupyAbleBuilding: 0,
+    madePathToNearOccupyAbleBuilding: 0,
     isReachedNearOccupyAbleBuilding: false,
-    pathSizeToNearHealsBuilding: 0,
+    madePathToNearHealsBuilding: 0,
     isReachedToNearHealsBuilding: false,
     canRaiseSkeleton: false,
     canFixFarm: false,
