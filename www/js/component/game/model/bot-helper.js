@@ -53,7 +53,7 @@ export type RawRateType = {|
     +canRaiseSkeleton: boolean, // done - NOT TESTED
 
     // farm
-    +canFixFarm: boolean, // in progress
+    +canFixFarm: boolean, // done - NOT TESTED
     +canOccupyEnemyFarm: boolean, // in progress
     +canOccupyNoManFarm: boolean, // in progress
     +canDestroyEnemyFarm: boolean, // in progress
@@ -299,6 +299,12 @@ function getCanRaiseSkeleton(botResultActionData: BotResultActionDataType): bool
     return Boolean(unitAction && unitAction.type === 'raise-skeleton');
 }
 
+function getCanFixFarm(botResultActionData: BotResultActionDataType): boolean {
+    const {unitAction} = botResultActionData;
+
+    return Boolean(unitAction && unitAction.type === 'fix-building');
+}
+
 function getEndPoint(botResultActionData: BotResultActionDataType): PointType {
     const {unit, moveAction} = botResultActionData;
     const {action} = moveAction;
@@ -421,6 +427,12 @@ function getRateBotResultAction(
     rawRate = {
         ...rawRate,
         canRaiseSkeleton: getCanRaiseSkeleton(botResultActionData),
+    };
+
+    // rawRate.canFixFarm
+    rawRate = {
+        ...rawRate,
+        canFixFarm: getCanFixFarm(botResultActionData),
     };
 
     return rawRate;
