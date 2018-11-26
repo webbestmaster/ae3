@@ -12,6 +12,11 @@ type PointType = {|
     +y: number,
 |};
 
+const actionTypeName = {
+    destroyBuilding: 'destroy-building',
+    occupyBuilding: 'occupy-building',
+};
+
 export type RawRateType = {|
     // done
     +attack: {|
@@ -56,12 +61,12 @@ export type RawRateType = {|
     +canFixFarm: boolean, // done - NOT TESTED
     +canOccupyEnemyFarm: boolean, // done - NOT TESTED
     +canOccupyNoManFarm: boolean, // done - NOT TESTED
-    +canDestroyEnemyFarm: boolean, // in progress
+    +canDestroyEnemyFarm: boolean, // done - NOT TESTED
     // +canDestroyNoManFarm: boolean,  // will not be done // catapult can not destroy no man's farm
 
     // castle
-    +canOccupyEnemyCastle: boolean, // in progress
-    +canOccupyNoManCastle: boolean, // in progress
+    +canOccupyEnemyCastle: boolean, // done - NOT TESTED
+    +canOccupyNoManCastle: boolean, // done - NOT TESTED
 
     +canPreventEnemyFixFarm: boolean, // in progress
 
@@ -117,7 +122,7 @@ function getCanOccupyEnemyFarm(botResultActionData: BotResultActionDataType, gam
         return false;
     }
 
-    if (unitAction.type !== 'occupy-building') {
+    if (unitAction.type !== actionTypeName.occupyBuilding) {
         return false;
     }
 
@@ -129,7 +134,7 @@ function getCanOccupyEnemyFarm(botResultActionData: BotResultActionDataType, gam
         ) || null;
 
     if (building === null) {
-        console.error('can not find building with for', botResultActionData, gameData);
+        console.error('getCanOccupyEnemyFarm - can not find building with for', botResultActionData, gameData);
         return false;
     }
 
@@ -162,7 +167,7 @@ function getCanOccupyNaManFarm(botResultActionData: BotResultActionDataType, gam
         return false;
     }
 
-    if (unitAction.type !== 'occupy-building') {
+    if (unitAction.type !== actionTypeName.occupyBuilding) {
         return false;
     }
 
@@ -174,7 +179,7 @@ function getCanOccupyNaManFarm(botResultActionData: BotResultActionDataType, gam
         ) || null;
 
     if (building === null) {
-        console.error('can not find building with for', botResultActionData, gameData);
+        console.error('getCanOccupyNaManFarm - can not find building with for', botResultActionData, gameData);
         return false;
     }
 
@@ -185,6 +190,131 @@ function getCanOccupyNaManFarm(botResultActionData: BotResultActionDataType, gam
 
     // check farm has owner
     return typeof building.attr.userId !== 'string' || building.attr.userId === '';
+}
+
+// eslint-disable-next-line complexity
+function getCanOccupyNaManCastle(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
+    const {unitAction} = botResultActionData;
+
+    if (!unitAction) {
+        return false;
+    }
+
+    if (unitAction.type !== actionTypeName.occupyBuilding) {
+        return false;
+    }
+
+    const building =
+        gameData.buildingList.find(
+            (buildingInList: Building): boolean => {
+                return buildingInList.attr.x === unitAction.x && buildingInList.attr.y === unitAction.y;
+            }
+        ) || null;
+
+    if (building === null) {
+        console.error('getCanOccupyNaManCastle - can not find building with for', botResultActionData, gameData);
+        return false;
+    }
+
+    // check building is farm
+    if (building.attr.type !== 'castle') {
+        return false;
+    }
+
+    // check farm has owner
+    return typeof building.attr.userId !== 'string' || building.attr.userId === '';
+}
+
+// eslint-disable-next-line complexity
+function getCanOccupyEnemyCastle(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
+    const {unitAction, unit} = botResultActionData;
+
+    if (!unitAction) {
+        return false;
+    }
+
+    if (unitAction.type !== actionTypeName.occupyBuilding) {
+        return false;
+    }
+
+    const building =
+        gameData.buildingList.find(
+            (buildingInList: Building): boolean => {
+                return buildingInList.attr.x === unitAction.x && buildingInList.attr.y === unitAction.y;
+            }
+        ) || null;
+
+    if (building === null) {
+        console.error('getCanOccupyEnemyCastle - can not find building with for', botResultActionData, gameData);
+        return false;
+    }
+
+    // check building is farm
+    if (building.attr.type !== 'castle') {
+        return false;
+    }
+
+    // check farm has owner
+    if (typeof building.attr.userId !== 'string') {
+        return false;
+    }
+
+    const buildingTeamId = getTeamIdByUserId(building.attr.userId, gameData);
+
+    if (buildingTeamId === null) {
+        return false;
+    }
+
+    const unitTeamId = getTeamIdByUserId(unit.getUserId() || '', gameData);
+
+    return unitTeamId !== buildingTeamId;
+}
+
+// eslint-disable-next-line complexity
+function getCanDestroyEnemyFarm(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
+    const {unitAction, unit} = botResultActionData;
+
+    if (!unitAction) {
+        return false;
+    }
+
+    if (unitAction.type !== actionTypeName.destroyBuilding) {
+        return false;
+    }
+
+    const building =
+        gameData.buildingList.find(
+            (buildingInList: Building): boolean => {
+                return (
+                    buildingInList.attr.x === unitAction.building.x && buildingInList.attr.y === unitAction.building.y
+                );
+            }
+        ) || null;
+
+    if (building === null) {
+        console.error('getCanDestroyEnemyFarm - can not find building with for', botResultActionData, gameData);
+        return false;
+    }
+
+    // check building is farm
+    if (building.attr.type !== 'farm') {
+        return false;
+    }
+
+    // check farm has owner
+    if (typeof building.attr.userId !== 'string') {
+        return false;
+    }
+
+    const buildingTeamId = getTeamIdByUserId(building.attr.userId, gameData);
+
+    if (buildingTeamId === null) {
+        return false;
+    }
+
+    const unitTeamId = getTeamIdByUserId(unit.getUserId() || '', gameData);
+
+    return unitTeamId !== buildingTeamId;
 }
 
 function getTeamIdByUserId(userId: string, gameData: GameDataType): TeamIdType | null {
@@ -499,6 +629,12 @@ function getRateBotResultAction(
         canOccupyEnemyFarm: getCanOccupyEnemyFarm(botResultActionData, gameData),
         // rawRate.canOccupyNoManFarm
         canOccupyNoManFarm: getCanOccupyNaManFarm(botResultActionData, gameData),
+        // rawRate.canDestroyEnemyFarm
+        canDestroyEnemyFarm: getCanDestroyEnemyFarm(botResultActionData, gameData),
+        // rawRate.canOccupyEnemyFarm
+        canOccupyEnemyCastle: getCanOccupyEnemyCastle(botResultActionData, gameData),
+        // rawRate.canOccupyNoManFarm
+        canOccupyNoManCastle: getCanOccupyNaManCastle(botResultActionData, gameData),
     };
 
     return rawRate;

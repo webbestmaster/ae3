@@ -10,6 +10,7 @@ import sha1 from 'sha1';
 import {messageConst} from './message-const';
 import {bindTimers} from './private';
 import Stopwatch from 'timer-stopwatch';
+import type {BuildingAttrTypeType} from '../../../maps/type';
 
 type PushedStatePayloadIsGameStartedType = {|
     +isGameStart: boolean,
@@ -85,7 +86,7 @@ export type PushedStatePayloadDestroyBuildingType = {|
     +building: {|
         +x: number,
         +y: number,
-        +type: mixed, // BuildingAttrTypeType,
+        +type: BuildingAttrTypeType,
         +id: string,
     |},
     +map: mixed, // MapType,
