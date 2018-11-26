@@ -47,8 +47,8 @@ export type RawRateType = {|
      * */
     +madePathToNearOccupyAbleBuilding: number, // done - NOT TESTED // if reached -> madePathSize, else -> percent of needed path
     +isReachedNearOccupyAbleBuilding: boolean, // done - NOT TESTED
-    +madePathToNearHealsBuilding: number, // in progress // use if unit has < 50hp
-    +isReachedToNearHealsBuilding: boolean, // in progress // use if unit has < 50hp
+    +madePathToNearHealsBuilding: number, // done - NOT TESTED // use if unit has < 50hp
+    +isReachedToNearHealsBuilding: boolean, // done - NOT TESTED // use if unit has < 50hp
 
     +canRaiseSkeleton: boolean, // in progress
 
@@ -165,9 +165,13 @@ function getMadePathToNearOccupyAbleBuilding(
         )
         // sort from near to far
         .sort(
-            (buildingA: Building, buildingB: Building): number => {
-                const pathToA = ((buildingA.attr.x - endPoint.x) ** 2 + (buildingA.attr.y - endPoint.y) ** 2) ** 0.5;
-                const pathToB = ((buildingB.attr.x - endPoint.x) ** 2 + (buildingB.attr.y - endPoint.y) ** 2) ** 0.5;
+            (buildingForOccupyA: Building, buildingForOccupyB: Building): number => {
+                const pathToA =
+                    ((buildingForOccupyA.attr.x - endPoint.x) ** 2 + (buildingForOccupyA.attr.y - endPoint.y) ** 2) **
+                    0.5;
+                const pathToB =
+                    ((buildingForOccupyB.attr.x - endPoint.x) ** 2 + (buildingForOccupyB.attr.y - endPoint.y) ** 2) **
+                    0.5;
 
                 return pathToA - pathToB;
             }
@@ -238,19 +242,22 @@ function getMadePathToNearHealsBuilding(
     const buildingList = gameData.buildingList
         .filter(
             (buildingInList: Building): boolean => {
-                const buildingTeamId = getTeamIdByUserId(buildingInList.attr.userId || '', gameData);
+                const buildingType = buildingInList.attr.type;
 
-                return (
-                    buildingTeamId !== unitTeamId &&
-                    ['farm-destroyed', 'castle', 'farm'].includes(buildingInList.attr.type)
-                );
+                if (['well', 'temple'].includes(buildingType)) {
+                    return true;
+                }
+
+                return ['castle', 'farm'].includes(buildingType) && buildingInList.attr.userId === activeUserId;
             }
         )
         // sort from near to far
         .sort(
-            (buildingA: Building, buildingB: Building): number => {
-                const pathToA = ((buildingA.attr.x - endPoint.x) ** 2 + (buildingA.attr.y - endPoint.y) ** 2) ** 0.5;
-                const pathToB = ((buildingB.attr.x - endPoint.x) ** 2 + (buildingB.attr.y - endPoint.y) ** 2) ** 0.5;
+            (buildingHealsA: Building, buildingHealsB: Building): number => {
+                const pathToA =
+                    ((buildingHealsA.attr.x - endPoint.x) ** 2 + (buildingHealsA.attr.y - endPoint.y) ** 2) ** 0.5;
+                const pathToB =
+                    ((buildingHealsB.attr.x - endPoint.x) ** 2 + (buildingHealsB.attr.y - endPoint.y) ** 2) ** 0.5;
 
                 return pathToA - pathToB;
             }
