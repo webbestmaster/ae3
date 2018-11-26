@@ -50,7 +50,7 @@ export type RawRateType = {|
     +madePathToNearHealsBuilding: number, // done - NOT TESTED // use if unit has < 50hp
     +isReachedToNearHealsBuilding: boolean, // done - NOT TESTED // use if unit has < 50hp
 
-    +canRaiseSkeleton: boolean, // in progress
+    +canRaiseSkeleton: boolean, // done - NOT TESTED
 
     // farm
     +canFixFarm: boolean, // in progress
@@ -293,6 +293,12 @@ function getMadePathToNearHealsBuilding(
     };
 }
 
+function getCanRaiseSkeleton(botResultActionData: BotResultActionDataType): boolean {
+    const {unitAction} = botResultActionData;
+
+    return Boolean(unitAction && unitAction.type === 'raise-skeleton');
+}
+
 function getEndPoint(botResultActionData: BotResultActionDataType): PointType {
     const {unit, moveAction} = botResultActionData;
     const {action} = moveAction;
@@ -409,6 +415,12 @@ function getRateBotResultAction(
         ...rawRate,
         ...getMadePathToNearOccupyAbleBuilding(botResultActionData, gameData),
         ...getMadePathToNearHealsBuilding(botResultActionData, gameData),
+    };
+
+    // rawRate.canRaiseSkeleton
+    rawRate = {
+        ...rawRate,
+        canRaiseSkeleton: getCanRaiseSkeleton(botResultActionData),
     };
 
     return rawRate;
