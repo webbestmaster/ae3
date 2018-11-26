@@ -55,7 +55,7 @@ export type RawRateType = {|
     // farm
     +canFixFarm: boolean, // done - NOT TESTED
     +canOccupyEnemyFarm: boolean, // done - NOT TESTED
-    +canOccupyNoManFarm: boolean, // in progress
+    +canOccupyNoManFarm: boolean, // done - NOT TESTED
     +canDestroyEnemyFarm: boolean, // in progress
     // +canDestroyNoManFarm: boolean,  // will not be done // catapult can not destroy no man's farm
 
@@ -152,6 +152,39 @@ function getCanOccupyEnemyFarm(botResultActionData: BotResultActionDataType, gam
     const unitTeamId = getTeamIdByUserId(unit.getUserId() || '', gameData);
 
     return unitTeamId !== buildingTeamId;
+}
+
+// eslint-disable-next-line complexity
+function getCanOccupyNaManFarm(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
+    const {unitAction} = botResultActionData;
+
+    if (!unitAction) {
+        return false;
+    }
+
+    if (unitAction.type !== 'occupy-building') {
+        return false;
+    }
+
+    const building =
+        gameData.buildingList.find(
+            (buildingInList: Building): boolean => {
+                return buildingInList.attr.x === unitAction.x && buildingInList.attr.y === unitAction.y;
+            }
+        ) || null;
+
+    if (building === null) {
+        console.error('can not find building with for', botResultActionData, gameData);
+        return false;
+    }
+
+    // check building is farm
+    if (building.attr.type !== 'farm') {
+        return false;
+    }
+
+    // check farm has owner
+    return typeof building.attr.userId !== 'string' || building.attr.userId === '';
 }
 
 function getTeamIdByUserId(userId: string, gameData: GameDataType): TeamIdType | null {
@@ -464,6 +497,8 @@ function getRateBotResultAction(
         canFixFarm: getCanFixFarm(botResultActionData),
         // rawRate.canOccupyEnemyFarm
         canOccupyEnemyFarm: getCanOccupyEnemyFarm(botResultActionData, gameData),
+        // rawRate.canOccupyNoManFarm
+        canOccupyNoManFarm: getCanOccupyNaManFarm(botResultActionData, gameData),
     };
 
     return rawRate;
