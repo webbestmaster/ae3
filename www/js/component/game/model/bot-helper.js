@@ -253,7 +253,7 @@ function getTeamIdByUserId(userId: string, gameData: GameDataType): TeamIdType |
     const playerData = gameData.userList.find((userData: MapUserType): boolean => userData.userId === userId) || null;
 
     if (playerData === null) {
-        console.error('getTeamIdByUserId - can not find user by id', userId);
+        console.log('getTeamIdByUserId - can not find user by id', userId);
         return null;
     }
 
