@@ -66,15 +66,15 @@ export type RawRateType = {|
     +canDestroyEnemyFarm: boolean, // done - NOT TESTED
     // +canDestroyNoManFarm: boolean,  // will not be done // catapult can not destroy no man's farm
 
-    +canPreventEnemyFixFarm: boolean, // in progress
+    +canPreventEnemyFixFarm: boolean, // not used yet - in progress
 
-    +canPreventEnemyOccupyNoManFarm: boolean, // in progress
-    +canPreventEnemyOccupyMyFarm: boolean, // in progress
-    +canPreventEnemyOccupyMyTeamFarm: boolean, // in progress
+    +canPreventEnemyOccupyNoManFarm: boolean, // not used yet - in progress
+    +canPreventEnemyOccupyMyFarm: boolean, // not used yet - in progress
+    +canPreventEnemyOccupyMyTeamFarm: boolean, // not used yet - in progress
 
-    +canPreventEnemyOccupyNoManCastle: boolean, // in progress
-    +canPreventEnemyOccupyMyCastle: boolean, // in progress
-    +canPreventEnemyOccupyMyTeamCastle: boolean, // in progress
+    +canPreventEnemyOccupyNoManCastle: boolean, // not used yet - in progress
+    +canPreventEnemyOccupyMyCastle: boolean, // not used yet - in progress
+    +canPreventEnemyOccupyMyTeamCastle: boolean, // not used yet - in progress
 |};
 
 const defaultRawRate: RawRateType = {
