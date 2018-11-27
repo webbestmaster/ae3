@@ -347,7 +347,7 @@ function getMadePathToNearOccupyAbleBuilding(
     };
 }
 
-// eslint-disable-next-line id-length, max-statements
+// eslint-disable-next-line complexity, max-statements, id-length
 function getMadePathToNearHealsBuilding(
     botResultActionData: BotResultActionDataType,
     gameData: GameDataType
@@ -377,6 +377,13 @@ function getMadePathToNearHealsBuilding(
     if (unitTeamId === null) {
         console.error('getMadePathToNearHealsBuilding - can not find user by id', activeUserId);
         return defaultResult;
+    }
+
+    if (unit.getHitPoints() > 65) {
+        return {
+            madePathToNearHealsBuilding: 0,
+            isReachedToNearHealsBuilding: false,
+        };
     }
 
     const buildingList = gameData.buildingList
@@ -508,6 +515,11 @@ function getRateBotResultAction(
 
     rawRate = {
         ...rawRate,
+        // rawRate.attack.hitPoints
+        attack: {
+            ...rawRate.attack,
+            hitPoints: currentHitPoints,
+        },
         // rawRate.unit.endPosition.x, rawRate.unit.endPosition.y, rawRate.unit.hitPoints
         unit: {
             ...rawRate.unit,
@@ -516,11 +528,6 @@ function getRateBotResultAction(
                 x,
                 y,
             },
-            hitPoints: currentHitPoints,
-        },
-        // rawRate.attack.hitPoints
-        attack: {
-            ...rawRate.attack,
             hitPoints: currentHitPoints,
         },
         // rawRate.placeArmor
@@ -565,6 +572,25 @@ function getRateBotResultAction(
     return rawRate;
 }
 
+const rateConfig = {
+    attack: 10,
+    hitPoints: 1,
+    placeArmor: 1,
+    availableGivenDamage: -1 / 100500, // TODO: make normal rating, -1 / 5
+    madePathToNearOccupyAbleBuilding: 2,
+    isReachedNearOccupyAbleBuilding: 1000,
+    madePathToNearHealsBuilding: 2,
+    isReachedToNearHealsBuilding: 500,
+    canRaiseSkeleton: 1000,
+    canFixFarm: 750,
+    canOccupyEnemyFarm: 2000,
+    canOccupyEnemyCastle: 3000,
+    canOccupyNoManFarm: 1500,
+    canOccupyNoManCastle: 2500,
+    canDestroyEnemyFarm: 100,
+};
+
+// eslint-disable-next-line complexity, max-statements
 export function rateBotResultActionData(
     botResultActionData: BotResultActionDataType,
     enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>,
@@ -572,7 +598,38 @@ export function rateBotResultActionData(
 ): number {
     const actionRawRate = getRateBotResultAction(botResultActionData, enemyUnitAllActionsMapList, gameData);
 
-    console.log(actionRawRate);
+    // unit with more hit points has more priority
+    let rate = actionRawRate.unit.hitPoints * rateConfig.hitPoints;
 
-    return Math.random();
+    const hasAttack = actionRawRate.attack.damageGiven !== 0 || actionRawRate.attack.damageReceived !== 0;
+
+    if (hasAttack) {
+        rate += (actionRawRate.attack.damageGiven - actionRawRate.attack.damageReceived) * rateConfig.attack;
+    }
+
+    rate += actionRawRate.placeArmor * rateConfig.placeArmor;
+
+    rate += actionRawRate.availableGivenDamage * rateConfig.availableGivenDamage;
+
+    rate += actionRawRate.madePathToNearOccupyAbleBuilding * rateConfig.madePathToNearOccupyAbleBuilding;
+    rate += actionRawRate.isReachedNearOccupyAbleBuilding ? rateConfig.isReachedNearOccupyAbleBuilding : 0;
+
+    rate += actionRawRate.madePathToNearHealsBuilding * rateConfig.madePathToNearHealsBuilding;
+    rate += actionRawRate.isReachedToNearHealsBuilding ? rateConfig.isReachedToNearHealsBuilding : 0;
+
+    rate += actionRawRate.canRaiseSkeleton ? rateConfig.canRaiseSkeleton : 0;
+
+    if (!hasAttack) {
+        rate += actionRawRate.canFixFarm ? rateConfig.canFixFarm : 0;
+        rate += actionRawRate.canDestroyEnemyFarm ? rateConfig.canDestroyEnemyFarm : 0;
+    }
+
+    rate += actionRawRate.canOccupyEnemyFarm ? rateConfig.canOccupyEnemyFarm : 0;
+    rate += actionRawRate.canOccupyEnemyCastle ? rateConfig.canOccupyEnemyCastle : 0;
+    rate += actionRawRate.canOccupyNoManFarm ? rateConfig.canOccupyNoManFarm : 0;
+    rate += actionRawRate.canOccupyNoManCastle ? rateConfig.canOccupyNoManCastle : 0;
+
+    console.log(actionRawRate, rate);
+
+    return rate;
 }
