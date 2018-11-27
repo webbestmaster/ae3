@@ -60,13 +60,11 @@ export type RawRateType = {|
     // farm
     +canFixFarm: boolean, // done - NOT TESTED
     +canOccupyEnemyFarm: boolean, // done - NOT TESTED
+    +canOccupyEnemyCastle: boolean, // done - NOT TESTED
     +canOccupyNoManFarm: boolean, // done - NOT TESTED
+    +canOccupyNoManCastle: boolean, // done - NOT TESTED
     +canDestroyEnemyFarm: boolean, // done - NOT TESTED
     // +canDestroyNoManFarm: boolean,  // will not be done // catapult can not destroy no man's farm
-
-    // castle
-    +canOccupyEnemyCastle: boolean, // done - NOT TESTED
-    +canOccupyNoManCastle: boolean, // done - NOT TESTED
 
     +canPreventEnemyFixFarm: boolean, // in progress
 
@@ -101,10 +99,10 @@ const defaultRawRate: RawRateType = {
     canRaiseSkeleton: false,
     canFixFarm: false,
     canOccupyEnemyFarm: false,
-    canOccupyNoManFarm: false,
-    canDestroyEnemyFarm: false,
     canOccupyEnemyCastle: false,
+    canOccupyNoManFarm: false,
     canOccupyNoManCastle: false,
+    canDestroyEnemyFarm: false,
     canPreventEnemyFixFarm: false,
     canPreventEnemyOccupyNoManFarm: false,
     canPreventEnemyOccupyMyFarm: false,
@@ -115,7 +113,11 @@ const defaultRawRate: RawRateType = {
 };
 
 // eslint-disable-next-line complexity
-function getCanOccupyEnemyFarm(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
+function getCanOccupyEnemyBuilding(
+    botResultActionData: BotResultActionDataType,
+    gameData: GameDataType,
+    buildingType: 'farm' | 'castle'
+): boolean {
     const {unitAction, unit} = botResultActionData;
 
     if (!unitAction) {
@@ -139,7 +141,7 @@ function getCanOccupyEnemyFarm(botResultActionData: BotResultActionDataType, gam
     }
 
     // check building is farm
-    if (building.attr.type !== 'farm') {
+    if (building.attr.type !== buildingType) {
         return false;
     }
 
@@ -160,7 +162,11 @@ function getCanOccupyEnemyFarm(botResultActionData: BotResultActionDataType, gam
 }
 
 // eslint-disable-next-line complexity
-function getCanOccupyNaManFarm(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
+function getCanOccupyNaManBuilding(
+    botResultActionData: BotResultActionDataType,
+    gameData: GameDataType,
+    buildingType: 'farm' | 'castle'
+): boolean {
     const {unitAction} = botResultActionData;
 
     if (!unitAction) {
@@ -184,7 +190,7 @@ function getCanOccupyNaManFarm(botResultActionData: BotResultActionDataType, gam
     }
 
     // check building is farm
-    if (building.attr.type !== 'farm') {
+    if (building.attr.type !== buildingType) {
         return false;
     }
 
@@ -193,85 +199,11 @@ function getCanOccupyNaManFarm(botResultActionData: BotResultActionDataType, gam
 }
 
 // eslint-disable-next-line complexity
-function getCanOccupyNaManCastle(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
-    const {unitAction} = botResultActionData;
-
-    if (!unitAction) {
-        return false;
-    }
-
-    if (unitAction.type !== actionTypeName.occupyBuilding) {
-        return false;
-    }
-
-    const building =
-        gameData.buildingList.find(
-            (buildingInList: Building): boolean => {
-                return buildingInList.attr.x === unitAction.x && buildingInList.attr.y === unitAction.y;
-            }
-        ) || null;
-
-    if (building === null) {
-        console.error('getCanOccupyNaManCastle - can not find building with for', botResultActionData, gameData);
-        return false;
-    }
-
-    // check building is farm
-    if (building.attr.type !== 'castle') {
-        return false;
-    }
-
-    // check farm has owner
-    return typeof building.attr.userId !== 'string' || building.attr.userId === '';
-}
-
-// eslint-disable-next-line complexity
-function getCanOccupyEnemyCastle(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
-    const {unitAction, unit} = botResultActionData;
-
-    if (!unitAction) {
-        return false;
-    }
-
-    if (unitAction.type !== actionTypeName.occupyBuilding) {
-        return false;
-    }
-
-    const building =
-        gameData.buildingList.find(
-            (buildingInList: Building): boolean => {
-                return buildingInList.attr.x === unitAction.x && buildingInList.attr.y === unitAction.y;
-            }
-        ) || null;
-
-    if (building === null) {
-        console.error('getCanOccupyEnemyCastle - can not find building with for', botResultActionData, gameData);
-        return false;
-    }
-
-    // check building is farm
-    if (building.attr.type !== 'castle') {
-        return false;
-    }
-
-    // check farm has owner
-    if (typeof building.attr.userId !== 'string') {
-        return false;
-    }
-
-    const buildingTeamId = getTeamIdByUserId(building.attr.userId, gameData);
-
-    if (buildingTeamId === null) {
-        return false;
-    }
-
-    const unitTeamId = getTeamIdByUserId(unit.getUserId() || '', gameData);
-
-    return unitTeamId !== buildingTeamId;
-}
-
-// eslint-disable-next-line complexity
-function getCanDestroyEnemyFarm(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
+function getCanDestroyEnemyBuilding(
+    botResultActionData: BotResultActionDataType,
+    gameData: GameDataType,
+    buildingType: 'farm' | 'castle'
+): boolean {
     const {unitAction, unit} = botResultActionData;
 
     if (!unitAction) {
@@ -297,7 +229,7 @@ function getCanDestroyEnemyFarm(botResultActionData: BotResultActionDataType, ga
     }
 
     // check building is farm
-    if (building.attr.type !== 'farm') {
+    if (building.attr.type !== buildingType) {
         return false;
     }
 
@@ -626,15 +558,15 @@ function getRateBotResultAction(
         // rawRate.canFixFarm
         canFixFarm: getCanFixFarm(botResultActionData),
         // rawRate.canOccupyEnemyFarm
-        canOccupyEnemyFarm: getCanOccupyEnemyFarm(botResultActionData, gameData),
-        // rawRate.canOccupyNoManFarm
-        canOccupyNoManFarm: getCanOccupyNaManFarm(botResultActionData, gameData),
-        // rawRate.canDestroyEnemyFarm
-        canDestroyEnemyFarm: getCanDestroyEnemyFarm(botResultActionData, gameData),
+        canOccupyEnemyFarm: getCanOccupyEnemyBuilding(botResultActionData, gameData, 'farm'),
         // rawRate.canOccupyEnemyFarm
-        canOccupyEnemyCastle: getCanOccupyEnemyCastle(botResultActionData, gameData),
+        canOccupyEnemyCastle: getCanOccupyEnemyBuilding(botResultActionData, gameData, 'castle'),
         // rawRate.canOccupyNoManFarm
-        canOccupyNoManCastle: getCanOccupyNaManCastle(botResultActionData, gameData),
+        canOccupyNoManFarm: getCanOccupyNaManBuilding(botResultActionData, gameData, 'farm'),
+        // rawRate.canOccupyNoManFarm
+        canOccupyNoManCastle: getCanOccupyNaManBuilding(botResultActionData, gameData, 'castle'),
+        // rawRate.canDestroyEnemyFarm
+        canDestroyEnemyFarm: getCanDestroyEnemyBuilding(botResultActionData, gameData, 'farm'),
     };
 
     return rawRate;
