@@ -565,34 +565,14 @@ function getRateBotResultAction(
     return rawRate;
 }
 
-function rateMoveAction(
-    botResultActionData: BotResultActionDataType,
-    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>,
-    gameData: GameDataType
-): number {
-    console.log(getRateBotResultAction(botResultActionData, enemyUnitAllActionsMapList, gameData));
-
-    return Math.random();
-}
-
-function rateMainAction(
-    botResultActionData: BotResultActionDataType,
-    enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>,
-    gameData: GameDataType
-): number {
-    console.log(getRateBotResultAction(botResultActionData, enemyUnitAllActionsMapList, gameData));
-
-    return Math.random();
-}
-
 export function rateBotResultActionData(
     botResultActionData: BotResultActionDataType,
     enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>,
     gameData: GameDataType
 ): number {
-    const {unitAction} = botResultActionData;
+    const actionRawRate = getRateBotResultAction(botResultActionData, enemyUnitAllActionsMapList, gameData);
 
-    return unitAction === null ?
-        rateMoveAction(botResultActionData, enemyUnitAllActionsMapList, gameData) :
-        rateMainAction(botResultActionData, enemyUnitAllActionsMapList, gameData);
+    console.log(actionRawRate);
+
+    return Math.random();
 }
