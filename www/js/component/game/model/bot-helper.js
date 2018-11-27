@@ -293,14 +293,18 @@ function getMadePathToNearOccupyAbleBuilding(
     }
 
     const buildingList = gameData.buildingList
+        // TODO: remove all building near (3 cell) of unit which can occupy it
         .filter(
             (buildingInList: Building): boolean => {
                 const buildingTeamId = getTeamIdByUserId(buildingInList.attr.userId || '', gameData);
 
-                return (
-                    buildingTeamId !== unitTeamId &&
-                    ['farm-destroyed', 'castle', 'farm'].includes(buildingInList.attr.type)
-                );
+                if (buildingTeamId === unitTeamId) {
+                    return false;
+                }
+
+                console.log('TODO: remove all building near (3 cell) of unit which can occupy it');
+
+                return ['farm-destroyed', 'castle', 'farm'].includes(buildingInList.attr.type);
             }
         )
         // sort from near to far
