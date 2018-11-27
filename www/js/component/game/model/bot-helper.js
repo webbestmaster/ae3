@@ -506,19 +506,6 @@ function getRateBotResultAction(
     const currentHitPoints = unit.getHitPoints();
     const {x, y} = getEndPoint(botResultActionData);
 
-    // rawRate.attack
-    if (unitAction && unitAction.type === 'attack') {
-        rawRate = {
-            ...rawRate,
-            attack: {
-                ...rawRate.attack,
-                damageGiven: unitAction.aggressor.damage.given,
-                damageReceived: unitAction.aggressor.damage.received,
-                hitPoints: unitAction.aggressor.hitPoints,
-            },
-        };
-    }
-
     rawRate = {
         ...rawRate,
         // rawRate.unit.endPosition.x, rawRate.unit.endPosition.y, rawRate.unit.hitPoints
@@ -561,6 +548,19 @@ function getRateBotResultAction(
         // rawRate.canDestroyEnemyFarm
         canDestroyEnemyFarm: getCanDestroyEnemyBuilding(botResultActionData, gameData, 'farm'),
     };
+
+    // rawRate.attack
+    if (unitAction && unitAction.type === 'attack') {
+        rawRate = {
+            ...rawRate,
+            attack: {
+                ...rawRate.attack,
+                damageGiven: unitAction.aggressor.damage.given,
+                damageReceived: unitAction.aggressor.damage.received,
+                hitPoints: unitAction.aggressor.hitPoints,
+            },
+        };
+    }
 
     return rawRate;
 }
