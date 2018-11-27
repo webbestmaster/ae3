@@ -506,34 +506,12 @@ function getRateBotResultAction(
     const currentHitPoints = unit.getHitPoints();
     const {x, y} = getEndPoint(botResultActionData);
 
-    // rawRate.unit.endPosition.x, rawRate.unit.endPosition.y, rawRate.unit.hitPoints
-    rawRate = {
-        ...rawRate,
-        unit: {
-            ...rawRate.unit,
-            endPosition: {
-                ...rawRate.unit.endPosition,
-                x,
-                y,
-            },
-            hitPoints: currentHitPoints,
-        },
-    };
-
-    // rawRate.attack.hitPoints
-    rawRate = {
-        ...rawRate,
-        attack: {
-            ...rawRate.attack,
-            hitPoints: currentHitPoints,
-        },
-    };
-
     // rawRate.attack
     if (unitAction && unitAction.type === 'attack') {
         rawRate = {
             ...rawRate,
             attack: {
+                ...rawRate.attack,
                 damageGiven: unitAction.aggressor.damage.given,
                 damageReceived: unitAction.aggressor.damage.received,
                 hitPoints: unitAction.aggressor.hitPoints,
@@ -543,6 +521,21 @@ function getRateBotResultAction(
 
     rawRate = {
         ...rawRate,
+        // rawRate.unit.endPosition.x, rawRate.unit.endPosition.y, rawRate.unit.hitPoints
+        unit: {
+            ...rawRate.unit,
+            endPosition: {
+                ...rawRate.unit.endPosition,
+                x,
+                y,
+            },
+            hitPoints: currentHitPoints,
+        },
+        // rawRate.attack.hitPoints
+        attack: {
+            ...rawRate.attack,
+            hitPoints: currentHitPoints,
+        },
         // rawRate.placeArmor
         placeArmor: getPlaceArmor(botResultActionData),
         // rawRate.availableGivenDamage
