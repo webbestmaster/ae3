@@ -11,18 +11,91 @@ Released under the MIT license. http://opensource.736cs.com/licenses/mit
 
 */
 
-html, body, div, span, applet, object, iframe,
-button, input, textarea, main,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, font, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, i, center, dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, audio, canvas, details, figcaption,
-figure, footer, header, hgroup, mark, menu, meter, nav,
-output, progress, section, summary, time, video,
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+button,
+input,
+textarea,
+main,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+audio,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+mark,
+menu,
+meter,
+nav,
+output,
+progress,
+section,
+summary,
+time,
+video,
 select {
     background-color: transparent;
     border: 0;
@@ -48,9 +121,17 @@ select {
     vertical-align: baseline;
 }
 
-canvas, article, aside, dialog,
-figure, footer, header,
-hgroup, nav, section, blockquote {
+canvas,
+article,
+aside,
+dialog,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+blockquote {
     display: block;
 }
 
@@ -70,7 +151,8 @@ ul ul {
     list-style: circle;
 }
 
-blockquote, q {
+blockquote,
+q {
     quotes: none;
 }
 
@@ -137,6 +219,8 @@ input[type='text'] {
     cursor: auto;
 }
 
-input, select, a img {
+input,
+select,
+a img {
     vertical-align: middle;
 }
