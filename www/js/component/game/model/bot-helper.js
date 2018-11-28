@@ -260,7 +260,7 @@ function getTeamIdByUserId(userId: string, gameData: GameDataType): TeamIdType |
     return playerData.teamId;
 }
 
-// eslint-disable-next-line id-length, max-statements
+// eslint-disable-next-line complexity, max-statements, id-length
 function getMadePathToNearOccupyAbleBuilding(
     botResultActionData: BotResultActionDataType,
     gameData: GameDataType
@@ -293,7 +293,6 @@ function getMadePathToNearOccupyAbleBuilding(
     }
 
     const buildingList = gameData.buildingList
-        // TODO: remove all building near (3 cell) of unit which can occupy it
         .filter(
             (buildingInList: Building): boolean => {
                 const buildingTeamId = getTeamIdByUserId(buildingInList.attr.userId || '', gameData);
@@ -301,8 +300,6 @@ function getMadePathToNearOccupyAbleBuilding(
                 if (buildingTeamId === unitTeamId) {
                     return false;
                 }
-
-                console.log('TODO: remove all building near (3 cell) of unit which can occupy it');
 
                 return ['farm-destroyed', 'castle', 'farm'].includes(buildingInList.attr.type);
             }
@@ -325,6 +322,10 @@ function getMadePathToNearOccupyAbleBuilding(
         return defaultResult;
     }
 
+    const currentUnitGuideData = unitGuideData[unit.attr.type];
+    const isLastBuilding = buildingList.length <= 1 && currentUnitGuideData.isCommander !== true;
+    const lastBuildingFactor = 2;
+
     const isReachedNearOccupyAbleBuilding = buildingList.some(
         (buildingInList: Building): boolean => {
             return buildingInList.attr.x === endPoint.x && buildingInList.attr.y === endPoint.y;
@@ -333,8 +334,10 @@ function getMadePathToNearOccupyAbleBuilding(
 
     if (isReachedNearOccupyAbleBuilding) {
         return {
-            madePathToNearOccupyAbleBuilding: ((unitAttr.x - endPoint.x) ** 2 + (unitAttr.y - endPoint.y) ** 2) ** 0.5,
-            isReachedNearOccupyAbleBuilding,
+            madePathToNearOccupyAbleBuilding:
+                ((unitAttr.x - endPoint.x) ** 2 + (unitAttr.y - endPoint.y) ** 2) ** 0.5 *
+                (isLastBuilding ? -lastBuildingFactor : 1),
+            isReachedNearOccupyAbleBuilding: !isLastBuilding,
         };
     }
 
@@ -346,7 +349,7 @@ function getMadePathToNearOccupyAbleBuilding(
     const madePathToNearOccupyAbleBuilding = (pathSizeBefore - pathSizeAfter / pathSizeBefore) * 100;
 
     return {
-        madePathToNearOccupyAbleBuilding,
+        madePathToNearOccupyAbleBuilding: madePathToNearOccupyAbleBuilding * (isLastBuilding ? -lastBuildingFactor : 1),
         isReachedNearOccupyAbleBuilding: false,
     };
 }
