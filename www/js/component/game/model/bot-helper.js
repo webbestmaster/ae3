@@ -636,7 +636,7 @@ export function rateBotResultActionData(
     rate += actionRawRate.canOccupyNoManFarm ? rateConfig.canOccupyNoManFarm : 0;
     rate += actionRawRate.canOccupyNoManCastle ? rateConfig.canOccupyNoManCastle : 0;
 
-    console.log(actionRawRate, rate);
+    // console.log(actionRawRate, rate);
 
     return rate;
 }

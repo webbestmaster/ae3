@@ -676,12 +676,20 @@ export function dropTurn(roomId: string, userId: string): Promise<DropTurnType> 
     function messageDropTurn(): Promise<DropTurnType> {
         if (isOnLineRoomType()) {
             return fetch(url + '/api/room/drop-turn/' + [roomId, userId].join('/')).then(
-                (blob: Response): Promise<DropTurnType> => blob.json()
+                async (blob: Response): Promise<DropTurnType> => {
+                    const result = await blob.json();
+
+                    return isString(result.roomId) ? result : {roomId: ''};
+                }
             );
         }
 
         return localGet(localServerUrl + '/api/room/drop-turn/' + [roomId, userId].join('/')).then(
-            (result: string): DropTurnType => JSON.parse(result)
+            (resultRaw: string): DropTurnType => {
+                const result = JSON.parse(resultRaw);
+
+                return isString(result.roomId) ? result : {roomId: ''};
+            }
         );
     }
 

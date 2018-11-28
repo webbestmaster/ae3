@@ -14,19 +14,21 @@
     "env": {
         "development": {
             "plugins": [
-                [
-                    "@babel/plugin-proposal-decorators",
-                    {
-                        "legacy": true
-                    }
-                ],
-                [
-                    "babel-plugin-flow-runtime",
-                    {
-                        "assert": true,
-                        "annotate": true
-                    }
-                ]
+                /*
+                    [
+                        "@babel/plugin-proposal-decorators",
+                        {
+                            "legacy": true
+                        }
+                    ],
+                    [
+                        "babel-plugin-flow-runtime",
+                        {
+                            "assert": true,
+                            "annotate": true
+                        }
+                    ]
+                */
             ]
         }
     }
