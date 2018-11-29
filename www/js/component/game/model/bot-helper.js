@@ -6,6 +6,7 @@ import {Building} from './building/building';
 import type {GameDataType} from './unit/unit';
 import type {MapUserType} from '../../../maps/type';
 import type {TeamIdType} from '../../../maps/map-guide';
+import {Unit} from './unit/unit';
 
 type PointType = {|
     +x: number,
@@ -64,7 +65,8 @@ export type RawRateType = {|
     +canOccupyNoManFarm: boolean, // done - NOT TESTED
     +canOccupyNoManCastle: boolean, // done - NOT TESTED
     +canDestroyEnemyFarm: boolean, // done - NOT TESTED
-    +isLastBuilding: boolean, // done - NOT TESTED
+    +canLeaveToOccupyBuilding: boolean, // done - NOT TESTED
+    // +isLastBuilding: boolean, // done - NOT TESTED
     +isAllBuildingsOccupied: boolean, // done - NOT TESTED
     // +canDestroyNoManFarm: boolean,  // will not be done // catapult can not destroy no man's farm
 
@@ -100,12 +102,13 @@ const defaultRawRate: RawRateType = {
     isReachedToNearHealsBuilding: false,
     canRaiseSkeleton: false,
     canFixFarm: false,
+    canLeaveToOccupyBuilding: false,
     canOccupyEnemyFarm: false,
     canOccupyEnemyCastle: false,
     canOccupyNoManFarm: false,
     canOccupyNoManCastle: false,
     canDestroyEnemyFarm: false,
-    isLastBuilding: false,
+    // isLastBuilding: false,
     isAllBuildingsOccupied: false,
     canPreventEnemyFixFarm: false,
     canPreventEnemyOccupyNoManFarm: false,
@@ -264,6 +267,69 @@ function getTeamIdByUserId(userId: string, gameData: GameDataType): TeamIdType |
     return playerData.teamId;
 }
 
+// eslint-disable-next-line complexity
+function getCanLeaveToOccupyBuilding(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
+    const {unit} = botResultActionData;
+    const {x, y} = unit.attr;
+
+    const endPoint = getEndPoint(botResultActionData);
+
+    // check unit leave from current position
+    if (endPoint.x === x && endPoint.y === y) {
+        return false;
+    }
+
+    const building =
+        gameData.buildingList.find(
+            (buildingInList: Building): boolean => buildingInList.attr.x === x && buildingInList.attr.y === y
+        ) || null;
+
+    if (building === null) {
+        console.log('getCanLeaveToOccupyBuilding - no building under unit');
+        return false;
+    }
+
+    const currentUnitGuideData = unitGuideData[unit.attr.type];
+
+    if (building.attr.userId === unit.attr.userId) {
+        console.log('getCanLeaveToOccupyBuilding - user (bot) already has this building');
+        return false;
+    }
+
+    if (
+        currentUnitGuideData.occupyBuildingList &&
+        currentUnitGuideData.occupyBuildingList.includes(building.attr.type)
+    ) {
+        console.log('getCanLeaveToOccupyBuilding - can occupy this building');
+        return false;
+    }
+
+    // find near unit to occupy this building
+    const nearUnitToOccupyBuildingList = gameData.unitList.filter(
+        (unitInList: Unit): boolean => {
+            if (unitInList.attr.userId !== unit.attr.userId) {
+                return false;
+            }
+
+            const currentUnitInListGuideData = unitGuideData[unitInList.attr.type];
+
+            // unit has no occupyBuildingList or not occupy building
+            if (
+                !currentUnitInListGuideData.occupyBuildingList ||
+                !currentUnitInListGuideData.occupyBuildingList.includes(building.attr.type)
+            ) {
+                return false;
+            }
+
+            const distanceToBuilding = ((x - unitInList.attr.x) ** 2 + (y - unitInList.attr.y) ** 2) ** 0.5;
+
+            return distanceToBuilding <= 2;
+        }
+    );
+
+    return nearUnitToOccupyBuildingList.length > 0;
+}
+
 // eslint-disable-next-line complexity, max-statements, id-length
 function getMadePathToNearOccupyAbleBuilding(
     botResultActionData: BotResultActionDataType,
@@ -271,16 +337,18 @@ function getMadePathToNearOccupyAbleBuilding(
 ): {|
     +madePathToNearOccupyAbleBuilding: number,
     +isReachedNearOccupyAbleBuilding: boolean,
-    +isLastBuilding: boolean,
+    // +isLastBuilding: boolean,
     +isAllBuildingsOccupied: boolean,
+    // +canLeaveToOccupyBuilding: boolean,
 |} {
     // get all building
     // get all farm, destroyed farm and castle with no my team id
     const defaultResult = {
         madePathToNearOccupyAbleBuilding: 0,
         isReachedNearOccupyAbleBuilding: false,
-        isLastBuilding: false,
+        // isLastBuilding: false,
         isAllBuildingsOccupied: false,
+        // canLeaveToOccupyBuilding: false,
     };
 
     const endPoint = getEndPoint(botResultActionData);
@@ -333,8 +401,9 @@ function getMadePathToNearOccupyAbleBuilding(
         };
     }
 
-    const currentUnitGuideData = unitGuideData[unit.attr.type];
-    const isLastBuilding = buildingList.length === 1 && currentUnitGuideData.isCommander !== true;
+    // const currentUnitGuideData = unitGuideData[unit.attr.type];
+    // const isLastBuilding = buildingList.length === 1 && currentUnitGuideData.isCommander !== true;
+    const nearestBuilding = buildingList[0];
 
     const isReachedNearOccupyAbleBuilding = buildingList.some(
         (buildingInList: Building): boolean => {
@@ -345,13 +414,13 @@ function getMadePathToNearOccupyAbleBuilding(
     if (isReachedNearOccupyAbleBuilding) {
         return {
             madePathToNearOccupyAbleBuilding: ((unitAttr.x - endPoint.x) ** 2 + (unitAttr.y - endPoint.y) ** 2) ** 0.5,
-            isReachedNearOccupyAbleBuilding: !isLastBuilding,
-            isLastBuilding,
+            isReachedNearOccupyAbleBuilding: true,
+            // isLastBuilding,
             isAllBuildingsOccupied: false,
+            // canLeaveToOccupyBuilding: false,
         };
     }
 
-    const nearestBuilding = buildingList[0];
     const pathSizeBefore =
         ((unitAttr.x - nearestBuilding.attr.x) ** 2 + (unitAttr.y - nearestBuilding.attr.y) ** 2) ** 0.5;
     const pathSizeAfter =
@@ -361,8 +430,9 @@ function getMadePathToNearOccupyAbleBuilding(
     return {
         madePathToNearOccupyAbleBuilding,
         isReachedNearOccupyAbleBuilding: false,
-        isLastBuilding,
+        // isLastBuilding,
         isAllBuildingsOccupied: false,
+        // canLeaveToOccupyBuilding: false,
     };
 }
 
@@ -563,6 +633,8 @@ function getRateBotResultAction(
         canRaiseSkeleton: getCanRaiseSkeleton(botResultActionData),
         // rawRate.canFixFarm
         canFixFarm: getCanFixFarm(botResultActionData),
+        // rawRate.canLeaveToOccupyBuilding
+        canLeaveToOccupyBuilding: getCanLeaveToOccupyBuilding(botResultActionData, gameData),
         // rawRate.canOccupyEnemyFarm
         canOccupyEnemyFarm: getCanOccupyEnemyBuilding(botResultActionData, gameData, 'farm'),
         // rawRate.canOccupyEnemyFarm
@@ -602,6 +674,7 @@ const rateConfig = {
     isReachedToNearHealsBuilding: 500,
     canRaiseSkeleton: 1000,
     canFixFarm: 750,
+    canLeaveToOccupyBuilding: 3000,
     canOccupyEnemyFarm: 2000,
     canOccupyEnemyCastle: 3000,
     canOccupyNoManFarm: 1500,
@@ -631,10 +704,7 @@ export function rateBotResultActionData(
     rate += actionRawRate.availableGivenDamage * rateConfig.availableGivenDamage;
 
     rate += actionRawRate.madePathToNearOccupyAbleBuilding * rateConfig.madePathToNearOccupyAbleBuilding;
-
-    if (actionRawRate.isReachedNearOccupyAbleBuilding) {
-        rate += (actionRawRate.isLastBuilding ? -1 : 1) * rateConfig.isReachedNearOccupyAbleBuilding;
-    }
+    rate += actionRawRate.isReachedNearOccupyAbleBuilding ? rateConfig.isReachedNearOccupyAbleBuilding : 0;
 
     rate += actionRawRate.madePathToNearHealsBuilding * rateConfig.madePathToNearHealsBuilding;
     rate += actionRawRate.isReachedToNearHealsBuilding ? rateConfig.isReachedToNearHealsBuilding : 0;
