@@ -56,21 +56,6 @@ export class Catapult extends Unit {
         );
     }
 
-    getMoviePath(
-        unitAction: UnitActionMoveType,
-        actionsList: UnitActionsMapType,
-        gameData?: GameDataType
-    ): PathType | null {
-        if (!gameData) {
-            console.error('gameData is needed');
-            return null;
-        }
-
-        const moveActionList = super.getMoveActions(gameData);
-
-        return getMoviePath(unitAction, moveActionList);
-    }
-
     canAttack(defender: Unit): boolean {
         const aggressor = this;
         const range = aggressor.getGuideData().attack.range;

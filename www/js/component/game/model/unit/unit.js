@@ -840,10 +840,24 @@ export class Unit {
         return raiseSkeletonMap;
     }
 
-    getAllUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {
+    getAllOtherUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {
+        const unit = this;
+        const unitUserId = unit.getUserId();
         const {unitList} = gameData;
 
-        return unitList.map((unit: Unit): [number, number] => [unit.attr.x, unit.attr.y]);
+        return unitList
+            .filter((unitInList: Unit): boolean => unitInList.getUserId() !== unitUserId)
+            .map((unitInList: Unit): [number, number] => [unitInList.attr.x, unitInList.attr.y]);
+    }
+
+    getAllUserUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {
+        const unit = this;
+        const unitUserId = unit.getUserId();
+        const {unitList} = gameData;
+
+        return unitList
+            .filter((unitInList: Unit): boolean => unitInList.getUserId() === unitUserId)
+            .map((unitInList: Unit): [number, number] => [unitInList.attr.x, unitInList.attr.y]);
     }
 
     getAllEnemyUnitsCoordinates(gameData: GameDataType): Array<[number, number]> {
@@ -883,7 +897,17 @@ export class Unit {
 
         const pathMap = moveType === null ? gameData.pathMap.walk : gameData.pathMap[moveType];
 
-        return getPath(x, y, currentUnitGuideData.move, pathMap, unit.getAllUnitsCoordinates(gameData));
+        const userUnitCoordinateList = unit.getAllUserUnitsCoordinates(gameData);
+
+        return getPath(x, y, currentUnitGuideData.move, pathMap, unit.getAllOtherUnitsCoordinates(gameData)).filter(
+            (pathPoint: [number, number]): boolean => {
+                return !userUnitCoordinateList.some(
+                    (unitPoint: [number, number]): boolean => {
+                        return unitPoint[0] === pathPoint[0] && unitPoint[1] === pathPoint[1];
+                    }
+                );
+            }
+        );
     }
 
     getAvailableDamageMap(gameData: GameDataType): Array<Array<number | null>> {
@@ -1672,12 +1696,13 @@ export class Unit {
         return hasWispAura;
     }
 
-    getMoviePath(
-        unitAction: UnitActionMoveType,
-        actionsList: UnitActionsMapType,
-        gameData?: GameDataType
-    ): PathType | null {
-        return getMoviePath(unitAction, actionsList);
+    getMoviePath(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType, gameData: GameDataType): PathType {
+        return (
+            getMoviePath(unitAction, actionsList) || [
+                [unitAction.from.x, unitAction.from.y],
+                [unitAction.to.x, unitAction.to.y],
+            ]
+        );
     }
 
     canAttack(defender: Unit): boolean {
