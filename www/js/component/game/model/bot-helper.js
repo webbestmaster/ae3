@@ -720,6 +720,7 @@ export function rateBotResultActionData(
     rate += actionRawRate.canOccupyEnemyCastle ? rateConfig.canOccupyEnemyCastle : 0;
     rate += actionRawRate.canOccupyNoManFarm ? rateConfig.canOccupyNoManFarm : 0;
     rate += actionRawRate.canOccupyNoManCastle ? rateConfig.canOccupyNoManCastle : 0;
+    rate += actionRawRate.canLeaveToOccupyBuilding ? rateConfig.canLeaveToOccupyBuilding : 0;
 
     // console.log(actionRawRate, rate);
 
