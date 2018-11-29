@@ -64,6 +64,8 @@ export type RawRateType = {|
     +canOccupyNoManFarm: boolean, // done - NOT TESTED
     +canOccupyNoManCastle: boolean, // done - NOT TESTED
     +canDestroyEnemyFarm: boolean, // done - NOT TESTED
+    +isLastBuilding: boolean, // done - NOT TESTED
+    +isAllBuildingsOccupied: boolean, // done - NOT TESTED
     // +canDestroyNoManFarm: boolean,  // will not be done // catapult can not destroy no man's farm
 
     +canPreventEnemyFixFarm: boolean, // not used yet - in progress
@@ -103,6 +105,8 @@ const defaultRawRate: RawRateType = {
     canOccupyNoManFarm: false,
     canOccupyNoManCastle: false,
     canDestroyEnemyFarm: false,
+    isLastBuilding: false,
+    isAllBuildingsOccupied: false,
     canPreventEnemyFixFarm: false,
     canPreventEnemyOccupyNoManFarm: false,
     canPreventEnemyOccupyMyFarm: false,
@@ -267,12 +271,16 @@ function getMadePathToNearOccupyAbleBuilding(
 ): {|
     +madePathToNearOccupyAbleBuilding: number,
     +isReachedNearOccupyAbleBuilding: boolean,
+    +isLastBuilding: boolean,
+    +isAllBuildingsOccupied: boolean,
 |} {
     // get all building
     // get all farm, destroyed farm and castle with no my team id
     const defaultResult = {
         madePathToNearOccupyAbleBuilding: 0,
         isReachedNearOccupyAbleBuilding: false,
+        isLastBuilding: false,
+        isAllBuildingsOccupied: false,
     };
 
     const endPoint = getEndPoint(botResultActionData);
@@ -319,12 +327,14 @@ function getMadePathToNearOccupyAbleBuilding(
         );
 
     if (buildingList.length === 0) {
-        return defaultResult;
+        return {
+            ...defaultResult,
+            isAllBuildingsOccupied: true,
+        };
     }
 
     const currentUnitGuideData = unitGuideData[unit.attr.type];
-    const isLastBuilding = buildingList.length <= 1 && currentUnitGuideData.isCommander !== true;
-    const lastBuildingFactor = 2;
+    const isLastBuilding = buildingList.length === 1 && currentUnitGuideData.isCommander !== true;
 
     const isReachedNearOccupyAbleBuilding = buildingList.some(
         (buildingInList: Building): boolean => {
@@ -334,10 +344,10 @@ function getMadePathToNearOccupyAbleBuilding(
 
     if (isReachedNearOccupyAbleBuilding) {
         return {
-            madePathToNearOccupyAbleBuilding:
-                ((unitAttr.x - endPoint.x) ** 2 + (unitAttr.y - endPoint.y) ** 2) ** 0.5 *
-                (isLastBuilding ? -lastBuildingFactor : 1),
+            madePathToNearOccupyAbleBuilding: ((unitAttr.x - endPoint.x) ** 2 + (unitAttr.y - endPoint.y) ** 2) ** 0.5,
             isReachedNearOccupyAbleBuilding: !isLastBuilding,
+            isLastBuilding,
+            isAllBuildingsOccupied: false,
         };
     }
 
@@ -349,8 +359,10 @@ function getMadePathToNearOccupyAbleBuilding(
     const madePathToNearOccupyAbleBuilding = (pathSizeBefore - pathSizeAfter / pathSizeBefore) * 100;
 
     return {
-        madePathToNearOccupyAbleBuilding: madePathToNearOccupyAbleBuilding * (isLastBuilding ? -lastBuildingFactor : 1),
+        madePathToNearOccupyAbleBuilding,
         isReachedNearOccupyAbleBuilding: false,
+        isLastBuilding,
+        isAllBuildingsOccupied: false,
     };
 }
 
@@ -597,7 +609,7 @@ const rateConfig = {
     canDestroyEnemyFarm: 100,
 };
 
-// eslint-disable-next-line complexity, max-statements
+// eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
 export function rateBotResultActionData(
     botResultActionData: BotResultActionDataType,
     enemyUnitAllActionsMapList: Array<EnemyUnitAllAvailableActionsMapType>,
@@ -619,7 +631,10 @@ export function rateBotResultActionData(
     rate += actionRawRate.availableGivenDamage * rateConfig.availableGivenDamage;
 
     rate += actionRawRate.madePathToNearOccupyAbleBuilding * rateConfig.madePathToNearOccupyAbleBuilding;
-    rate += actionRawRate.isReachedNearOccupyAbleBuilding ? rateConfig.isReachedNearOccupyAbleBuilding : 0;
+
+    if (actionRawRate.isReachedNearOccupyAbleBuilding) {
+        rate += (actionRawRate.isLastBuilding ? -1 : 1) * rateConfig.isReachedNearOccupyAbleBuilding;
+    }
 
     rate += actionRawRate.madePathToNearHealsBuilding * rateConfig.madePathToNearHealsBuilding;
     rate += actionRawRate.isReachedToNearHealsBuilding ? rateConfig.isReachedToNearHealsBuilding : 0;
