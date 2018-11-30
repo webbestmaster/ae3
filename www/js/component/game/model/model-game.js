@@ -787,7 +787,8 @@ export class GameModel {
             // if (isMyUnit) {
             //     return;
             // }
-            game.render.moveWorldTo(x, y);
+            console.log('game.render.moveWorldTo(x, y);');
+            // game.render.moveWorldTo(x, y);
         });
 
         await game.onUnitClick(unitModel);
@@ -1495,9 +1496,13 @@ export class GameModel {
             return;
         }
 
-        if (unitUserId !== user.getId() && canOpenStore(unitAttr.x, unitAttr.y, gameData)) {
-            console.log('open store under enemy unit');
-            await game.openStore(unitAttr.x, unitAttr.y);
+        if (unitUserId !== user.getId()) {
+            console.log('you click on NOT your unit');
+
+            if (canOpenStore(unitAttr.x, unitAttr.y, gameData)) {
+                console.log('open store under enemy unit');
+                await game.openStore(unitAttr.x, unitAttr.y);
+            }
             return;
         }
 
@@ -2485,6 +2490,7 @@ export class GameModel {
 
         return {
             userList: mapState === null ? [] : mapState.userList,
+            activeUserId: mapState === null ? '' : mapState.activeUserId,
             buildingList: game.buildingList,
             unitList: game.unitList,
             graveList: game.graveList,

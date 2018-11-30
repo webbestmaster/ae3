@@ -158,6 +158,7 @@ export type UnitConstructorType = {|
 
 export type GameDataType = {|
     +userList: Array<MapUserType>,
+    +activeUserId: string,
     +buildingList: Array<Building>,
     // eslint-disable-next-line no-use-before-define
     +unitList: Array<Unit>,

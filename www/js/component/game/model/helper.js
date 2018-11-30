@@ -23,6 +23,7 @@ import {storeViewId} from '../../store/c-store';
 import queryString from 'query-string';
 import type {RoomTypeType} from '../../../module/server-api';
 import {isNotNumber, isString} from '../../../lib/is/is';
+import {Building} from './building/building';
 
 type InteractionEventType = {
     +data: {
@@ -207,11 +208,21 @@ function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataFor
 
     const minDamage = 1;
     const aggressorScale = aggressor.hitPoints / defaultUnitData.hitPoints;
+
+    console.warn('getAttackDamage - return Math.random() instead of 0.5');
+    const aggressorSelfAttack =
+        0.5 * (aggressor.attack.max - aggressor.attack.min) +
+        aggressor.attack.min +
+        // level damage
+        aggressor.level / (defaultUnitData.level.max + 1) * ((aggressor.attack.max + aggressor.attack.min) / 2);
+
+    /*
     const aggressorSelfAttack =
         Math.random() * (aggressor.attack.max - aggressor.attack.min) +
         aggressor.attack.min +
         // level damage
         aggressor.level / (defaultUnitData.level.max + 1) * ((aggressor.attack.max + aggressor.attack.min) / 2);
+*/
     const aggressorAttackBonusWistAura = aggressor.hasWispAura ? additionalUnitData.wispAttackBonus : 0;
     const aggressorPoisonAttackReduce = aggressor.poisonCountdown > 0 ? additionalUnitData.poisonAttackReduce : 0;
     const aggressorEndAttack =
@@ -662,11 +673,28 @@ export function canOpenStore(x: number, y: number, gameData: GameDataType): bool
     }
 
     if (!hasPlaceForNewUnit(x, y, gameData)) {
-        console.log('? canOpenStore ---> has place for new unit');
+        console.log('? canOpenStore ---> NO place for new unit');
         return false;
     }
 
-    return true;
+    const {activeUserId} = gameData;
+
+    const buildingStore =
+        gameData.buildingList.find(
+            (buildingInList: Building): boolean => {
+                const buildingAttr = buildingInList.attr;
+
+                return (
+                    // eslint-disable-next-line lodash/prefer-matches
+                    buildingAttr.userId === activeUserId &&
+                    buildingAttr.x === x &&
+                    buildingAttr.y === y &&
+                    buildingAttr.type === 'castle'
+                );
+            }
+        ) || null;
+
+    return Boolean(buildingStore);
 }
 
 export type WrongStateTypeUnitOnUnitType = {|
