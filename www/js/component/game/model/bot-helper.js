@@ -66,12 +66,12 @@ export type RawRateType = {|
     +canOccupyNoManCastle: boolean, // done - NOT TESTED
     +canDestroyEnemyFarm: boolean, // done - NOT TESTED
     +canLeaveToOccupyBuilding: boolean, // done - NOT TESTED
+    +canLeaveFromUnitUnderUnit: boolean, // done - NOT TESTED
     // +isLastBuilding: boolean, // done - NOT TESTED
     +isAllBuildingsOccupied: boolean, // done - NOT TESTED
     // +canDestroyNoManFarm: boolean,  // will not be done // catapult can not destroy no man's farm
 
     +canPreventEnemyFixFarm: boolean, // not used yet - in progress
-
     +canPreventEnemyOccupyNoManFarm: boolean, // not used yet - in progress
     +canPreventEnemyOccupyMyFarm: boolean, // not used yet - in progress
     +canPreventEnemyOccupyMyTeamFarm: boolean, // not used yet - in progress
@@ -108,6 +108,7 @@ const defaultRawRate: RawRateType = {
     canOccupyNoManFarm: false,
     canOccupyNoManCastle: false,
     canDestroyEnemyFarm: false,
+    canLeaveFromUnitUnderUnit: false,
     // isLastBuilding: false,
     isAllBuildingsOccupied: false,
     canPreventEnemyFixFarm: false,
@@ -254,6 +255,34 @@ function getCanDestroyEnemyBuilding(
     const unitTeamId = getTeamIdByUserId(unit.getUserId() || '', gameData);
 
     return unitTeamId !== buildingTeamId;
+}
+
+function getCanLeaveFromUnitUnderUnit(botResultActionData: BotResultActionDataType, gameData: GameDataType): boolean {
+    const {unit} = botResultActionData;
+    const {x, y} = unit.attr;
+
+    const unitList = gameData.unitList.filter(
+        (unitInList: Unit): boolean => {
+            return unitInList.attr.x === x && unitInList.attr.y === y;
+        }
+    );
+
+    const unitLength = unitList.length;
+
+    // on current position only one (current) unit
+    if (unitLength === 0) {
+        console.error('unitList should contain at least one unit');
+        return false;
+    }
+
+    // on current position only one (current) unit
+    if (unitLength === 1) {
+        return false;
+    }
+
+    const endPoint = getEndPoint(botResultActionData);
+
+    return endPoint.x !== x || endPoint.y !== y;
 }
 
 function getTeamIdByUserId(userId: string, gameData: GameDataType): TeamIdType | null {
@@ -645,6 +674,8 @@ function getRateBotResultAction(
         canOccupyNoManCastle: getCanOccupyNaManBuilding(botResultActionData, gameData, 'castle'),
         // rawRate.canDestroyEnemyFarm
         canDestroyEnemyFarm: getCanDestroyEnemyBuilding(botResultActionData, gameData, 'farm'),
+        // rawRate.canLeaveFromUnitUnderUnit
+        canLeaveFromUnitUnderUnit: getCanLeaveFromUnitUnderUnit(botResultActionData, gameData),
     };
 
     // rawRate.attack
@@ -680,6 +711,7 @@ const rateConfig = {
     canOccupyNoManFarm: 1500,
     canOccupyNoManCastle: 2500,
     canDestroyEnemyFarm: 100,
+    canLeaveFromUnitUnderUnit: 100e3, // need really big rate to assure move unit from other unit
 };
 
 // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
@@ -721,6 +753,7 @@ export function rateBotResultActionData(
     rate += actionRawRate.canOccupyNoManFarm ? rateConfig.canOccupyNoManFarm : 0;
     rate += actionRawRate.canOccupyNoManCastle ? rateConfig.canOccupyNoManCastle : 0;
     rate += actionRawRate.canLeaveToOccupyBuilding ? rateConfig.canLeaveToOccupyBuilding : 0;
+    rate += actionRawRate.canLeaveFromUnitUnderUnit ? rateConfig.canLeaveFromUnitUnderUnit : 0;
 
     // console.log(actionRawRate, rate);
 
