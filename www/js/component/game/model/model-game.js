@@ -1480,9 +1480,10 @@ export class GameModel {
     // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
     async onUnitClick(unit: Unit): Promise<void> {
         const game = this;
-        const unitUserId = isString(unit.attr.userId) ? unit.attr.userId : null;
-
-        const wrongStateList = getWrongStateList(game.getGameData());
+        const unitAttr = unit.getAttr();
+        const unitUserId = isString(unitAttr.userId) ? unitAttr.userId : null;
+        const gameData = game.getGameData();
+        const wrongStateList = getWrongStateList(gameData);
 
         if (wrongStateList !== null) {
             await game.showWrongState(wrongStateList[0]);
@@ -1494,12 +1495,11 @@ export class GameModel {
             return;
         }
 
-        if (unitUserId !== user.getId()) {
-            console.warn('this is has different userId', unit);
+        if (unitUserId !== user.getId() && canOpenStore(unitAttr.x, unitAttr.y, gameData)) {
+            console.log('open store under enemy unit');
+            await game.openStore(unitAttr.x, unitAttr.y);
             return;
         }
-
-        const gameData = game.getGameData();
 
         // get unit's action
         const unitActionsList = unit.getActions(gameData);
