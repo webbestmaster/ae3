@@ -439,7 +439,7 @@ export class GameModel {
                 await game.syncMapWithServerUserList(message);
 
                 // TODO: check here map users and server users, only if your turn
-                console.warn('check here map users and server users, only if your turn');
+                console.warn('onMessage - check here map users and server users, only if your turn');
                 break;
 
             case messageConst.type.userDisconnected:
@@ -511,6 +511,105 @@ export class GameModel {
     async handleServerTakeTurn(message: SocketMessageTakeTurnType): Promise<void> {
         const game = this;
 
+        return isOnLineRoomType() ?
+            game.handleServerTakeTurnOnLine(message) :
+            game.handleServerTakeTurnOffLine(message);
+    }
+
+    // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
+    async handleServerTakeTurnOnLine(message: SocketMessageTakeTurnType): Promise<void> {
+        const game = this;
+
+        await game.render.cleanActionsList();
+
+        game.unitList.forEach((unitInList: Unit) => {
+            unitInList.setIsActionAvailable(true);
+        });
+
+        const getAllRoomUsersResult = await serverApi.getAllRoomUsers(game.roomId);
+
+        const {activeUserId} = message.states.last;
+
+        const isMyTurn = activeUserId === user.getId();
+
+        if (isMyTurn) {
+            console.log('---> take turn, and it\'s ME!!!');
+            // TODO: check here map users and server users, only if your turn
+            console.warn('handleServerTakeTurnOnLine - check here map users and server users, only if your turn');
+            await game.refreshUnitActionState(user.getId());
+            console.log('---> unit and users - refreshed');
+            // await game.refreshUnitPoisonCountdown();
+            // await game.refreshGraveCountdown();
+            return;
+        }
+
+        // try to defect bot
+        const activePlayerData = find(getAllRoomUsersResult.users, {userId: activeUserId}) || null;
+
+        if (activePlayerData === null) {
+            console.error('It is impossible active player should be in user list');
+            return;
+        }
+
+        if (activePlayerData.type === 'human') {
+            console.log('no any action needed');
+            return;
+        }
+
+        const firstHuman = find(getAllRoomUsersResult.users, {type: 'human'}) || null;
+
+        if (firstHuman === null) {
+            console.error('It is impossible room without human!');
+            return;
+        }
+
+        if (firstHuman.userId === user.getId()) {
+            await game.refreshUnitActionState(activeUserId);
+
+            // TODO: remove this, I do not know how to remove this :(
+            console.warn(
+                '---> handleServerTakeTurnOnLine ---> this is workaround to make sure game has actual map state'
+            );
+            // await new Promise((resolve: () => void): mixed => setTimeout(resolve, 10e3));
+            waitFor(
+                (): boolean => {
+                    const mapStateWaiting = game.getMapState();
+
+                    if (mapStateWaiting === null) {
+                        console.error('handleServerTakeTurnOnLine - mapStateWaiting for bot is undefined');
+                        return false;
+                    }
+
+                    return mapStateWaiting.activeUserId === activeUserId;
+                }
+            )
+                .then(
+                    (): Promise<mixed> => {
+                        // TODO: remove this, I do not know how to remove this :(
+                        console.warn(
+                            '---> handleServerTakeTurnOnLine-this is workaround to make sure game has actual map state'
+                        );
+                        return new Promise((resolve: () => void) => {
+                            // wait for all map state is update
+                            window.setTimeout(resolve, 2e3);
+                        });
+                    }
+                )
+                .then((): Promise<mixed> => game.makeBotTurn())
+                .catch(() => {
+                    // TODO: add here drop turn
+                    console.error('can not wait for activeUserId');
+                    console.error('add here drop turn');
+                });
+        }
+
+        console.log('---> handleServerTakeTurnOnLine ---- wait for other player ----');
+    }
+
+    // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
+    async handleServerTakeTurnOffLine(message: SocketMessageTakeTurnType): Promise<void> {
+        const game = this;
+
         await game.render.cleanActionsList();
 
         game.unitList.forEach((unitInList: Unit) => {
@@ -527,7 +626,7 @@ export class GameModel {
         if (isMyTurn) {
             console.log('---> take turn, and it\'s ME!!!');
             // TODO: check here map users and server users, only if your turn
-            console.warn('check here map users and server users, only if your turn');
+            console.warn('handleServerTakeTurnOffLine - check here map users and server users, only if your turn');
             await game.refreshUnitActionState(userId);
             console.log('---> unit and users - refreshed');
             // await game.refreshUnitPoisonCountdown();
@@ -543,62 +642,51 @@ export class GameModel {
             return;
         }
 
-        const firstHuman = find(getAllRoomUsersResult.users, {type: 'human'}) || null;
-
-        if (firstHuman === null) {
-            console.error('It is impossible room without human!');
-            return;
-        }
-
-        if (activePlayerData.type === 'bot') {
-            if (firstHuman.userId === userId) {
-                await game.refreshUnitActionState(activeUserId);
-
-                // TODO: remove this, I do not know how to remove this :(
-                console.warn(' ---> this is workaround to make sure game has actual map state');
-                // await new Promise((resolve: () => void): mixed => setTimeout(resolve, 10e3));
-
-                waitFor(
-                    (): boolean => {
-                        const mapStateWaiting = game.getMapState();
-
-                        if (mapStateWaiting === null) {
-                            console.error('mapStateWaiting for bot is undefined');
-                            return false;
-                        }
-
-                        return mapStateWaiting.activeUserId === activeUserId;
-                    }
-                )
-                    .then(
-                        (): Promise<mixed> => {
-                            // TODO: remove this, I do not know how to remove this :(
-                            console.warn(' ---> this is workaround to make sure game has actual map state');
-                            return new Promise((resolve: () => void) => {
-                                // wait for all map state is update
-                                window.setTimeout(resolve, 2e3);
-                            });
-                        }
-                    )
-                    .then((): Promise<mixed> => game.makeBotTurn())
-                    .catch(() => {
-                        // TODO: add here drop turn
-                        console.error('can not wait for activeUserId');
-                        console.error('add here drop turn');
-                    });
-            }
-            return;
-        }
+        await game.refreshUnitActionState(activeUserId);
 
         // you can add human only for offline game
         // but you can play with human in online game
-        if (activePlayerData.type === 'human' && !isOnLineRoomType()) {
+        if (activePlayerData.type === 'human') {
             user.setId(activeUserId);
-            await game.refreshUnitActionState(activeUserId);
             return;
         }
 
-        console.log('---- wait for other player ----');
+        // if (firstHuman.userId === userId) {
+        // TODO: remove this, I do not know how to remove this :(
+        console.warn(' ---> this is workaround to make sure game has actual map state');
+        // await new Promise((resolve: () => void): mixed => setTimeout(resolve, 10e3));
+
+        waitFor(
+            (): boolean => {
+                const mapStateWaiting = game.getMapState();
+
+                if (mapStateWaiting === null) {
+                    console.error('handleServerTakeTurnOffLine - mapStateWaiting for bot is undefined');
+                    return false;
+                }
+
+                return mapStateWaiting.activeUserId === activeUserId;
+            }
+        )
+            .then(
+                (): Promise<mixed> => {
+                    // TODO: remove this, I do not know how to remove this :(
+                    console.warn(' ---> this is workaround to make sure game has actual map state');
+                    return new Promise((resolve: () => void) => {
+                        // wait for all map state is update
+                        window.setTimeout(resolve, 2e3);
+                    });
+                }
+            )
+            .then((): Promise<mixed> => game.makeBotTurn())
+            .catch(() => {
+                // TODO: add here drop turn
+                console.error('can not wait for activeUserId');
+                console.error('add here drop turn');
+            });
+        // }
+
+        console.log('---> handleServerTakeTurnOffLine ---- wait for other player ----');
     }
 
     // eslint-disable-next-line complexity
@@ -1496,10 +1584,12 @@ export class GameModel {
             return;
         }
 
-        if (unitUserId !== user.getId()) {
+        const {activeUserId} = gameData;
+
+        if (unitUserId !== user.getId() || unitUserId !== activeUserId) {
             console.log('you click on NOT your unit');
 
-            if (canOpenStore(unitAttr.x, unitAttr.y, gameData)) {
+            if (canOpenStore(unitAttr.x, unitAttr.y, gameData) && !activeUserId.startsWith('bot')) {
                 console.log('open store under enemy unit');
                 await game.openStore(unitAttr.x, unitAttr.y);
             }
@@ -1538,34 +1628,32 @@ export class GameModel {
                         unitAction.container,
                         // eslint-disable-next-line complexity
                         async (): Promise<void> => {
-                            const activeUserId = user.getId();
-
                             switch (unitAction.type) {
                                 case 'move':
                                     if (unitActionsList !== null) {
-                                        await game.bindOnClickUnitActionMove(unitAction, unitActionsList, activeUserId);
+                                        await game.bindOnClickUnitActionMove(unitAction, unitActionsList, user.getId());
                                         game.gameView.setActiveLandscape(unitAction.to.x, unitAction.to.y);
                                     }
                                     break;
 
                                 case 'attack':
-                                    await game.bindOnClickUnitActionAttack(unitAction, activeUserId);
+                                    await game.bindOnClickUnitActionAttack(unitAction, user.getId());
                                     break;
 
                                 case 'fix-building':
-                                    await game.bindOnClickUnitActionFixBuilding(unitAction, activeUserId);
+                                    await game.bindOnClickUnitActionFixBuilding(unitAction, user.getId());
                                     break;
 
                                 case 'occupy-building':
-                                    await game.bindOnClickUnitActionOccupyBuilding(unitAction, activeUserId);
+                                    await game.bindOnClickUnitActionOccupyBuilding(unitAction, user.getId());
                                     break;
 
                                 case 'raise-skeleton':
-                                    await game.bindOnClickUnitActionRaiseSkeleton(unitAction, activeUserId);
+                                    await game.bindOnClickUnitActionRaiseSkeleton(unitAction, user.getId());
                                     break;
 
                                 case 'destroy-building':
-                                    await game.bindOnClickUnitActionDestroyBuilding(unitAction, activeUserId);
+                                    await game.bindOnClickUnitActionDestroyBuilding(unitAction, user.getId());
                                     break;
 
                                 case 'open-store':

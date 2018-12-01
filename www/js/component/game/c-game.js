@@ -353,6 +353,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
         return serverApi
             .dropTurn(roomId, user.getId())
+            .then((): void => console.log('---> dropTurn success'))
             .catch((error: Error) => {
                 console.error('Drop turn error');
                 console.log(error);
