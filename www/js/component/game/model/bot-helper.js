@@ -19,6 +19,7 @@ const actionTypeName = {
 };
 
 export type RawRateType = {|
+    hitPoints: number,
     // done
     +attack: {|
         +damageGiven: number, // done
@@ -51,25 +52,30 @@ export type RawRateType = {|
      * not reached count in percent of whole path size
      *
      * */
-    +madePathToNearOccupyAbleBuilding: number, // done - NOT TESTED // if reached -> madePathSize, else -> percent of needed path
-    +isReachedNearOccupyAbleBuilding: boolean, // done - NOT TESTED
-    +madePathToNearHealsBuilding: number, // done - NOT TESTED // use if unit has < 50hp
-    +isReachedToNearHealsBuilding: boolean, // done - NOT TESTED // use if unit has < 50hp
+    +madePathToNearOccupyAbleBuilding: number, // done // if reached -> madePathSize, else -> percent of needed path
+    +isReachedNearOccupyAbleBuilding: boolean, // done
+    +madePathToNearHealsBuilding: number, // done // use if unit has < 50hp
+    +isReachedToNearHealsBuilding: boolean, // done // use if unit has < 50hp
 
-    +canRaiseSkeleton: boolean, // done - NOT TESTED
+    +canRaiseSkeleton: boolean, // done
 
     // farm
-    +canFixFarm: boolean, // done - NOT TESTED
-    +canOccupyEnemyFarm: boolean, // done - NOT TESTED
-    +canOccupyEnemyCastle: boolean, // done - NOT TESTED
-    +canOccupyNoManFarm: boolean, // done - NOT TESTED
-    +canOccupyNoManCastle: boolean, // done - NOT TESTED
-    +canDestroyEnemyFarm: boolean, // done - NOT TESTED
-    +canLeaveToOccupyBuilding: boolean, // done - NOT TESTED
-    +canLeaveFromUnitUnderUnit: boolean, // done - NOT TESTED
-    // +isLastBuilding: boolean, // done - NOT TESTED
-    +isAllBuildingsOccupied: boolean, // done - NOT TESTED
+    +canFixFarm: boolean, // done
+    +canOccupyEnemyFarm: boolean, // done
+    +canOccupyEnemyCastle: boolean, // done
+    +canOccupyNoManFarm: boolean, // done
+    +canOccupyNoManCastle: boolean, // done
+    +canDestroyEnemyFarm: boolean, // done
+    +canLeaveToOccupyBuilding: boolean, // done
+    +canLeaveFromUnitUnderUnit: boolean, // done
+    // +isLastBuilding: boolean, // done
+    +isAllBuildingsOccupied: boolean, // done
     // +canDestroyNoManFarm: boolean,  // will not be done // catapult can not destroy no man's farm
+
+    +isOnHealsBuilding: boolean, // in progress
+    +isOnSelfBuilding: boolean, // in progress
+    +isOnTeamBuilding: boolean, // in progress
+    +isOnEnemyBuilding: boolean, // in progress
 
     +canPreventEnemyFixFarm: boolean, // not used yet - in progress
     +canPreventEnemyOccupyNoManFarm: boolean, // not used yet - in progress
@@ -82,6 +88,7 @@ export type RawRateType = {|
 |};
 
 const defaultRawRate: RawRateType = {
+    hitPoints: defaultUnitData.hitPoints, // do not use it, just for floe type
     attack: {
         damageGiven: 0,
         damageReceived: 0,
@@ -111,6 +118,12 @@ const defaultRawRate: RawRateType = {
     canLeaveFromUnitUnderUnit: false,
     // isLastBuilding: false,
     isAllBuildingsOccupied: false,
+
+    isOnHealsBuilding: false,
+    isOnSelfBuilding: false,
+    isOnTeamBuilding: false,
+    isOnEnemyBuilding: false,
+
     canPreventEnemyFixFarm: false,
     canPreventEnemyOccupyNoManFarm: false,
     canPreventEnemyOccupyMyFarm: false,
@@ -359,6 +372,80 @@ function getCanLeaveToOccupyBuilding(botResultActionData: BotResultActionDataTyp
     return nearUnitToOccupyBuildingList.length > 0;
 }
 
+// eslint-disable-next-line complexity, max-statements
+function getIsOnBuilding(
+    botResultActionData: BotResultActionDataType,
+    gameData: GameDataType
+): {|
+    +isOnHealsBuilding: boolean,
+    +isOnSelfBuilding: boolean,
+    +isOnTeamBuilding: boolean,
+    +isOnEnemyBuilding: boolean,
+|} {
+    const defaultResult = {
+        isOnHealsBuilding: false,
+        isOnSelfBuilding: false,
+        isOnTeamBuilding: false,
+        isOnEnemyBuilding: false,
+    };
+
+    const endPoint = getEndPoint(botResultActionData);
+    const {unit} = botResultActionData;
+    const activeUserId = unit.getUserId();
+
+    if (activeUserId === null) {
+        console.error('getIsOnBuilding - unit has not user id', unit);
+        return defaultResult;
+    }
+
+    const unitTeamId = getTeamIdByUserId(activeUserId, gameData);
+
+    if (unitTeamId === null) {
+        console.error('getIsOnBuilding - can not find user by id', activeUserId);
+        return defaultResult;
+    }
+
+    const building =
+        gameData.buildingList.find(
+            (buildingInList: Building): boolean => {
+                return buildingInList.attr.x === endPoint.x && buildingInList.attr.y === endPoint.y;
+            }
+        ) || null;
+
+    if (building === null) {
+        console.log('getIsOnBuilding - no building under unit');
+        return defaultResult;
+    }
+
+    if (['well', 'temple'].includes(building.attr.type)) {
+        return {
+            ...defaultResult,
+            isOnHealsBuilding: true,
+        };
+    }
+
+    if (building.getUserId() === activeUserId) {
+        return {
+            ...defaultResult,
+            isOnSelfBuilding: true,
+        };
+    }
+
+    const buildingTeamId = getTeamIdByUserId(building.attr.userId || '', gameData);
+
+    if (buildingTeamId === activeUserId) {
+        return {
+            ...defaultResult,
+            isOnTeamBuilding: true,
+        };
+    }
+
+    return {
+        ...defaultResult,
+        isOnEnemyBuilding: true,
+    };
+}
+
 // eslint-disable-next-line complexity, max-statements, id-length
 function getMadePathToNearOccupyAbleBuilding(
     botResultActionData: BotResultActionDataType,
@@ -386,7 +473,7 @@ function getMadePathToNearOccupyAbleBuilding(
     const unitAttr = unit.getAttr();
 
     if (activeUserId === null) {
-        console.error('unit has not user id', unit);
+        console.error('getMadePathToNearOccupyAbleBuilding - unit has not user id', unit);
         return defaultResult;
     }
 
@@ -632,6 +719,7 @@ function getRateBotResultAction(
     const {x, y} = getEndPoint(botResultActionData);
 
     rawRate = {
+        hitPoints: currentHitPoints,
         ...rawRate,
         // rawRate.attack.hitPoints
         attack: {
@@ -658,6 +746,11 @@ function getRateBotResultAction(
         // rawRate.madePathToNearHealsBuilding
         // rawRate.isReachedToNearHealsBuilding
         ...getMadePathToNearHealsBuilding(botResultActionData, gameData),
+        // rawRate.isOnHealsBuilding: false,
+        // rawRate.isOnSelfBuilding: false,
+        // rawRate.isOnTeamBuilding: false,
+        // rawRate.isOnEnemyBuilding: false,
+        ...getIsOnBuilding(botResultActionData, gameData),
         // rawRate.canRaiseSkeleton
         canRaiseSkeleton: getCanRaiseSkeleton(botResultActionData),
         // rawRate.canFixFarm
@@ -694,7 +787,7 @@ function getRateBotResultAction(
     return rawRate;
 }
 
-const rateConfig = {
+const rateConfig: {[fieldName: $Keys<RawRateType>]: number} = {
     attack: 10,
     hitPoints: 1,
     placeArmor: 1,
@@ -712,6 +805,17 @@ const rateConfig = {
     canOccupyNoManCastle: 2500,
     canDestroyEnemyFarm: 100,
     canLeaveFromUnitUnderUnit: 100e3, // need really big rate to assure move unit from other unit
+    isOnHealsBuilding: 10,
+    isOnTeamBuilding: 20,
+    isOnEnemyBuilding: 30,
+    isOnSelfBuilding: 40,
+    canPreventEnemyFixFarm: 0,
+    canPreventEnemyOccupyNoManFarm: 0,
+    canPreventEnemyOccupyMyFarm: 0,
+    canPreventEnemyOccupyMyTeamFarm: 0,
+    canPreventEnemyOccupyNoManCastle: 0,
+    canPreventEnemyOccupyMyCastle: 0,
+    canPreventEnemyOccupyMyTeamCastle: 0,
 };
 
 // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
@@ -729,6 +833,12 @@ export function rateBotResultActionData(
 
     if (hasAttack) {
         rate += (actionRawRate.attack.damageGiven - actionRawRate.attack.damageReceived) * rateConfig.attack;
+
+        ['isOnHealsBuilding', 'isOnTeamBuilding', 'isOnEnemyBuilding', 'isOnSelfBuilding'].forEach(
+            (fieldName: $Keys<RawRateType>) => {
+                rate += actionRawRate[fieldName] ? rateConfig[fieldName] : 0;
+            }
+        );
     }
 
     rate += actionRawRate.placeArmor * rateConfig.placeArmor;
@@ -748,12 +858,16 @@ export function rateBotResultActionData(
         rate += actionRawRate.canDestroyEnemyFarm ? rateConfig.canDestroyEnemyFarm : 0;
     }
 
-    rate += actionRawRate.canOccupyEnemyFarm ? rateConfig.canOccupyEnemyFarm : 0;
-    rate += actionRawRate.canOccupyEnemyCastle ? rateConfig.canOccupyEnemyCastle : 0;
-    rate += actionRawRate.canOccupyNoManFarm ? rateConfig.canOccupyNoManFarm : 0;
-    rate += actionRawRate.canOccupyNoManCastle ? rateConfig.canOccupyNoManCastle : 0;
-    rate += actionRawRate.canLeaveToOccupyBuilding ? rateConfig.canLeaveToOccupyBuilding : 0;
-    rate += actionRawRate.canLeaveFromUnitUnderUnit ? rateConfig.canLeaveFromUnitUnderUnit : 0;
+    [
+        'canOccupyEnemyFarm',
+        'canOccupyEnemyCastle',
+        'canOccupyNoManFarm',
+        'canOccupyNoManCastle',
+        'canLeaveToOccupyBuilding',
+        'canLeaveFromUnitUnderUnit',
+    ].forEach((fieldName: $Keys<RawRateType>) => {
+        rate += actionRawRate[fieldName] ? rateConfig[fieldName] : 0;
+    });
 
     // console.log(actionRawRate, rate);
 
