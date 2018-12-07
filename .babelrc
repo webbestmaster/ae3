@@ -5,6 +5,7 @@
         "@babel/preset-flow"
     ],
     "plugins": [
+        "@babel/plugin-transform-strict-mode",
         "@babel/plugin-transform-runtime",
         "babel-plugin-transform-class-properties",
         "@babel/plugin-proposal-export-namespace-from",
