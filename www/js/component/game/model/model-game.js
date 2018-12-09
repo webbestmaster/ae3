@@ -58,6 +58,7 @@ import type {BotResultActionDataType} from './bot';
 import {getBotTurnDataList} from './bot';
 import {waitFor} from '../../../lib/wait-for';
 import {wait} from '../../../lib/sleep';
+import {onPushStateDone, subscribeOnPushStateDone} from '../../../lib/on-message-done';
 
 type RenderSettingType = {|
     width: number,
@@ -454,6 +455,8 @@ export class GameModel {
 
                 await game.syncMapWithServerUserList(message);
 
+                await onPushStateDone(message);
+
                 break;
 
             default:
@@ -656,35 +659,36 @@ export class GameModel {
         console.warn(' ---> this is workaround to make sure game has actual map state');
         // await new Promise((resolve: () => void): mixed => setTimeout(resolve, 10e3));
 
-        waitFor(
-            (): boolean => {
-                const mapStateWaiting = game.getMapState();
+        /*
+            const checkCanBotDoTurn = (message: SocketMessageType) => {
+                if (message.type !== 'room__push-state') {
+                    return;
+                }
+            };
+        */
 
-                if (mapStateWaiting === null) {
-                    console.error('handleServerTakeTurnOffLine - mapStateWaiting for bot is undefined');
-                    return false;
+        subscribeOnPushStateDone(
+            async (socketMessage: SocketMessageType): Promise<boolean> => {
+                console.log('---- subscribeOnPushStateDone ----');
+                console.log(socketMessage);
+
+                if (
+                    socketMessage.type === 'room__push-state' &&
+                    // socketMessage.states &&
+                    // socketMessage.states.last &&
+                    // socketMessage.states.last.state &&
+                    socketMessage.states.last.state.activeUserId !== activeUserId
+                ) {
+                    return true;
                 }
 
-                return mapStateWaiting.activeUserId === activeUserId;
+                game.makeBotTurn()
+                    .then((): void => console.log('Bot Done turn - Successful'))
+                    .catch((): void => console.error('Bot Done turn - Error'));
+
+                return false;
             }
-        )
-            .then(
-                (): Promise<mixed> => {
-                    // TODO: remove this, I do not know how to remove this :(
-                    console.warn(' ---> this is workaround to make sure game has actual map state');
-                    return new Promise((resolve: () => void) => {
-                        // wait for all map state is update
-                        window.setTimeout(resolve, 2e3);
-                    });
-                }
-            )
-            .then((): Promise<mixed> => game.makeBotTurn())
-            .catch(() => {
-                // TODO: add here drop turn
-                console.error('can not wait for activeUserId');
-                console.error('add here drop turn');
-            });
-        // }
+        );
 
         console.log('---> handleServerTakeTurnOffLine ---- wait for other player ----');
     }
@@ -2684,8 +2688,8 @@ export class GameModel {
 
         await game.executeBotResultAction(firstBotResultActionData);
 
-        // await for checkMapState - see card in trello
-        await wait(3000);
+        // just for some smooth
+        await wait(1e3);
 
         await game.makeBotTurn();
     }
