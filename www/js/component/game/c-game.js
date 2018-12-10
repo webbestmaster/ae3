@@ -356,12 +356,12 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             .then((): void => console.log('---> dropTurn success'))
             .catch((error: Error) => {
                 console.error('Drop turn error');
-                console.log(error);
+                console.error(error);
             })
             .then((): void => view.removeDisableReason('client-drop-turn'))
             .catch((error: Error) => {
                 console.error('client-drop-turn error');
-                console.log(error);
+                console.error(error);
             });
     }
 

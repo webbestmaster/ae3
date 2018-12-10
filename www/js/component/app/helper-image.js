@@ -26,7 +26,7 @@ allImageReqContext.keys().forEach((fileName: string) => {
     const image = allImageReqContext(fileName);
 
     if (imageList.includes(image)) {
-        console.log('duplicate image', image);
+        // console.log('duplicate image', image);
         return;
     }
 
@@ -115,7 +115,7 @@ async function scaleImage(src: string, multiple: number): Promise<ScaledImageDat
     const maxImageSideSize = 128;
 
     if (naturalWidth > maxImageSideSize || naturalHeight > maxImageSideSize) {
-        console.log('too big for cache', src);
+        // console.log('too big for cache', src);
         return null;
     }
 
@@ -172,7 +172,7 @@ export async function initImages(methodMap: LoadAppPassedMethodMapType): Promise
                 const imageScale2 = await scaleImage(imageSrc, 2);
 
                 if (imageScale1 === null || imageScale2 === null) {
-                    console.log('error with image scaling', imageSrc);
+                    console.error('error with image scaling', imageSrc);
                     return;
                 }
 

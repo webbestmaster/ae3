@@ -403,7 +403,7 @@ export class GameModel {
             .then((response: mixed): void => console.log('---> refresh unit list pushed', response))
             .catch((error: Error) => {
                 console.error('error with refresh unit list pushed');
-                console.log(error);
+                console.error(error);
             })
             .then((): void => game.gameView.removeDisableReason('client-push-state'))
             .catch((error: Error) => {
@@ -2719,27 +2719,57 @@ export class GameModel {
         switch (unitAction.type) {
             case 'attack':
                 await game.bindOnClickUnitActionAttack(unitAction, activeUserId);
+
+                // TODO: BOT: subscribe for push state move and move end
+                // wait for apply move
+                await wait(5000);
+
                 break;
 
             case 'fix-building':
                 await game.bindOnClickUnitActionFixBuilding(unitAction, activeUserId);
+
+                // TODO: BOT: subscribe for push state move and move end
+                // wait for apply move
+                await wait(3000);
+
                 break;
 
             case 'occupy-building':
                 await game.bindOnClickUnitActionOccupyBuilding(unitAction, activeUserId);
+
+                // TODO: BOT: subscribe for push state move and move end
+                // wait for apply move
+                await wait(3000);
+
                 break;
 
             case 'raise-skeleton':
                 await game.bindOnClickUnitActionRaiseSkeleton(unitAction, activeUserId);
+
+                // TODO: BOT: subscribe for push state move and move end
+                // wait for apply move
+                await wait(3000);
+
                 break;
 
             case 'destroy-building':
                 await game.bindOnClickUnitActionDestroyBuilding(unitAction, activeUserId);
+
+                // TODO: BOT: subscribe for push state move and move end
+                // wait for apply move
+                await wait(3000);
+
                 break;
 
             default:
                 console.error('---> NO bot\'s support action, drop turn', botResultAction);
                 await serverApi.dropTurn(game.roomId, activeUserId);
+
+                // TODO: BOT: subscribe for push state move and move end
+                // wait for apply move
+                await wait(3000);
+
                 return;
         }
 
@@ -2788,7 +2818,9 @@ export class GameModel {
             botResultAction.unit.setIsActionAvailable(false);
         }
 
-        await wait(2000);
+        // TODO: BOT: subscribe for push state move and move end
+        // wait for apply move
+        await wait(3000);
     }
 
     destroy() {

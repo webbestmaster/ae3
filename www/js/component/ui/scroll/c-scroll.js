@@ -73,7 +73,7 @@ export class Scroll extends Component<StateType, PropsType> {
         const view = this;
 
         view.initSwiper()
-            .then((): void => console.log('swiper initialized'))
+            // .then((): void => console.log('swiper initialized'))
             .catch((error: Error) => {
                 console.error('error with view.initSwiper()');
                 console.error(error);
@@ -84,7 +84,7 @@ export class Scroll extends Component<StateType, PropsType> {
         const view = this;
 
         view.recount()
-            .then((): void => console.log('swiper recounted'))
+            // .then((): void => console.log('swiper recounted'))
             .catch((error: Error) => {
                 console.error('error with swiper recounted');
                 console.error(error);

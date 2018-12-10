@@ -1,6 +1,6 @@
 // @flow
 
-/* global setTimeout */
+/* global setTimeout, requestAnimationFrame */
 
 /* eslint consistent-this: ["error", "localRequest"] */
 import {localMaster} from '../local-master/local-master';
@@ -15,7 +15,9 @@ function request(
     form: PushedStateType,
     requestCallBack: RequestCallBackType
 ) {
-    setTimeout((): void => localMaster.triggerHttp(requestType, url, form, requestCallBack), 0);
+    requestAnimationFrame(() => {
+        setTimeout((): void => localMaster.triggerHttp(requestType, url, form, requestCallBack), 0);
+    });
 }
 
 export function get(url: string, form: PushedStateType, requestCallBack: RequestCallBackType) {

@@ -619,6 +619,11 @@ export class Render {
             )
         );
 
+        attackSprite.position.set(
+            aggressorUnit.attr.x * mapGuide.size.square,
+            aggressorUnit.attr.y * mapGuide.size.square
+        );
+
         attackSprite.animationSpeed = defaultUnitData.render.spriteAnimatedSpeed;
 
         attackSprite.play();
