@@ -34,7 +34,7 @@ export type RawRateType = {|
             +x: number, // done
             +y: number, // done
         |},
-        hitPoints: number, // done // unit with bigger hp has priority, to attack and move on front
+        // hitPoints: number, // done // unit with bigger hp has priority, to attack and move on front
     |},
 
     // use together: placeArmor and availableDamageGiven
@@ -99,7 +99,7 @@ const defaultRawRate: RawRateType = {
             x: -1,
             y: -1,
         },
-        hitPoints: defaultUnitData.hitPoints,
+        // hitPoints: defaultUnitData.hitPoints,
     },
     placeArmor: 0,
     availableGivenDamage: 0,
@@ -734,7 +734,7 @@ function getRateBotResultAction(
                 x,
                 y,
             },
-            hitPoints: currentHitPoints,
+            // hitPoints: currentHitPoints,
         },
         // rawRate.placeArmor
         placeArmor: getPlaceArmor(botResultActionData),
@@ -827,7 +827,7 @@ export function rateBotResultActionData(
     const actionRawRate = getRateBotResultAction(botResultActionData, enemyUnitAllActionsMapList, gameData);
 
     // unit with more hit points has more priority
-    let rate = actionRawRate.unit.hitPoints * rateConfig.hitPoints;
+    let rate = actionRawRate.hitPoints * rateConfig.hitPoints;
 
     const hasAttack = actionRawRate.attack.damageGiven !== 0 || actionRawRate.attack.damageReceived !== 0;
 
@@ -870,6 +870,8 @@ export function rateBotResultActionData(
     });
 
     // console.log(actionRawRate, rate);
+
+    console.log(rate);
 
     return rate;
 }
