@@ -55,7 +55,7 @@ import {localSocketIoClient} from '../../../module/socket-local';
 import {isNotFunction, isNotNumber, isNotString, isNumber, isString} from '../../../lib/is/is';
 import {messageConst} from '../../../lib/local-server/room/message-const';
 import type {BotResultActionDataType} from './bot';
-import {getBotTurnDataList} from './bot';
+import {getBotTurnDataList, canPlayerBuyUnit} from './bot';
 import {waitFor} from '../../../lib/wait-for';
 import {wait} from '../../../lib/sleep';
 import {onPushStateDone, subscribeOnPushStateDone} from '../../../lib/on-message-done';
@@ -2567,6 +2567,7 @@ export class GameModel {
             buildingList: game.buildingList,
             unitList: game.unitList,
             graveList: game.graveList,
+            unitLimit: mapState === null ? mapGuide.defaultUnitLimitList[0] : mapState.unitLimit,
             pathMap: game.pathMap,
             armorMap: game.armorMap,
             emptyActionMap: game.emptyActionMap,
@@ -2638,7 +2639,7 @@ export class GameModel {
         await game.render.cleanActionsList();
     }
 
-    // eslint-disable-next-line complexity
+    // eslint-disable-next-line complexity, max-statements
     async makeBotTurn(): Promise<void> {
         const game = this;
         const mapState = game.getMapState();
@@ -2649,6 +2650,12 @@ export class GameModel {
         }
 
         const {activeUserId} = mapState;
+
+        const gameData = game.getGameData();
+
+        if (getWrongStateList(gameData) === null && canPlayerBuyUnit(activeUserId, gameData)) {
+            return;
+        }
 
         const botTurnData = getBotTurnDataList(mapState, game.getGameData());
 

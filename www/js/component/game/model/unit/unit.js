@@ -164,6 +164,7 @@ export type GameDataType = {|
     +unitList: Array<Unit>,
     // eslint-disable-next-line no-use-before-define
     +graveList: Array<Grave>,
+    +unitLimit: number,
     +pathMap: {|
         +walk: Array<Array<number>>,
         +flow: Array<Array<number>>,

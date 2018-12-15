@@ -4,6 +4,8 @@ import type {MapType, MapUserType} from '../../../maps/type';
 import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './unit/unit';
 import {Unit} from './unit/unit';
 import {rateBotResultActionData} from './bot-helper';
+import {Building} from './building/building';
+import {canOpenStore} from './helper';
 
 function getUnitListByPlayerId(gameData: GameDataType, activeUserId: string): Array<Unit> {
     return gameData.unitList.filter((unit: Unit): boolean => unit.getUserId() === activeUserId);
@@ -268,4 +270,48 @@ export function getBotTurnDataList(map: MapType, gameData: GameDataType): Array<
     }
 
     return null;
+}
+
+function getStoreList(activeUserId: string, gameData: GameDataType): Array<Building> | null {
+    const castleList = gameData.buildingList.filter(
+        (buildingInList: Building): boolean => {
+            const buildingInListAttr = buildingInList.attr;
+
+            if (buildingInListAttr.type !== 'castle') {
+                return false;
+            }
+
+            if (buildingInListAttr.userId !== activeUserId) {
+                return false;
+            }
+
+            return canOpenStore(buildingInListAttr.x, buildingInListAttr.y, gameData);
+        }
+    );
+
+    return castleList.length === 0 ? null : castleList;
+}
+
+export function canPlayerBuyUnit(activeUserId: string, gameData: GameDataType): boolean {
+    // get players castle list
+    // get castle list to open
+    // check unit limit
+
+    const playerData =
+        gameData.userList.find((userInList: MapUserType): boolean => userInList.userId === activeUserId) || null;
+
+    if (playerData === null) {
+        console.error('can not find user with id:', activeUserId, gameData);
+        return false;
+    }
+
+    if (getStoreList(activeUserId, gameData) === null) {
+        return false;
+    }
+
+    const playerUnitList = gameData.unitList.filter(
+        (unitInList: Unit): boolean => unitInList.attr.userId === activeUserId
+    );
+
+    return playerUnitList.length < gameData.unitLimit;
 }
