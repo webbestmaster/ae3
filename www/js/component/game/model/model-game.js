@@ -2667,7 +2667,7 @@ export class GameModel {
             // if botUnitResult === null - unit did NOT buy
             if (botUnitResult !== null) {
                 // just for some smooth
-                await wait(3e3);
+                await wait(1e3);
 
                 await game.makeBotTurn();
                 return;
@@ -2726,7 +2726,13 @@ export class GameModel {
 
                 // TODO: BOT: subscribe for push state move and move end
                 // wait for apply move
-                await wait(5000);
+                await wait(
+                    (defaultUnitData.animation.attack +
+                        defaultUnitData.animation.deltaHitPoints +
+                        defaultUnitData.animation.levelUp) *
+                        2 +
+                        500
+                );
 
                 break;
 
@@ -2735,7 +2741,7 @@ export class GameModel {
 
                 // TODO: BOT: subscribe for push state move and move end
                 // wait for apply move
-                await wait(3000);
+                await wait(500);
 
                 break;
 
@@ -2744,7 +2750,7 @@ export class GameModel {
 
                 // TODO: BOT: subscribe for push state move and move end
                 // wait for apply move
-                await wait(3000);
+                await wait(500);
 
                 break;
 
@@ -2753,7 +2759,7 @@ export class GameModel {
 
                 // TODO: BOT: subscribe for push state move and move end
                 // wait for apply move
-                await wait(3000);
+                await wait(500);
 
                 break;
 
@@ -2762,7 +2768,7 @@ export class GameModel {
 
                 // TODO: BOT: subscribe for push state move and move end
                 // wait for apply move
-                await wait(3000);
+                await wait(3e3);
 
                 break;
 
@@ -2770,7 +2776,7 @@ export class GameModel {
                 // this code will never execute, but needed to detect bot's actions
                 console.log('bot buy unit');
 
-                await wait(1000);
+                await wait(500);
                 break;
 
             default:
@@ -2821,6 +2827,10 @@ export class GameModel {
 
         await game.bindOnClickUnitActionMove(action, actionsMap, activeUserId);
 
+        // TODO: BOT: subscribe for push state move and move end
+        // wait for apply move
+        await wait(1e3);
+
         // get unit's action
         const unitActionsList = botResultAction.unit.getActions(game.getGameData());
 
@@ -2828,10 +2838,6 @@ export class GameModel {
             console.log('---> executeBotResultActionMove - unit already done - set unit GRAY state');
             botResultAction.unit.setIsActionAvailable(false);
         }
-
-        // TODO: BOT: subscribe for push state move and move end
-        // wait for apply move
-        await wait(3000);
     }
 
     destroy() {
