@@ -569,11 +569,6 @@ export class GameModel {
         if (firstHuman.userId === user.getId()) {
             await game.refreshUnitActionState(activeUserId);
 
-            // TODO: remove this, I do not know how to remove this :(
-            console.warn(
-                '---> handleServerTakeTurnOnLine ---> this is workaround to make sure game has actual map state'
-            );
-            // await new Promise((resolve: () => void): mixed => setTimeout(resolve, 10e3));
             waitFor(
                 (): boolean => {
                     const mapStateWaiting = game.getMapState();
@@ -587,18 +582,17 @@ export class GameModel {
                 }
             )
                 .then(
-                    (): Promise<mixed> => {
+                    async (): Promise<void> => {
                         // TODO: remove this, I do not know how to remove this :(
                         console.warn(
-                            '---> handleServerTakeTurnOnLine-this is workaround to make sure game has actual map state'
+                            '---> handleServerTakeTurnOnLine - workaround to make sure game has actual map state'
                         );
-                        return new Promise((resolve: () => void) => {
-                            // wait for all map state is update
-                            window.setTimeout(resolve, 2e3);
-                        });
+
+                        await wait(3e3);
+
+                        return await game.makeBotTurn();
                     }
                 )
-                .then((): Promise<mixed> => game.makeBotTurn())
                 .catch(() => {
                     // TODO: add here drop turn
                     console.error('can not wait for activeUserId');
@@ -653,19 +647,6 @@ export class GameModel {
             user.setId(activeUserId);
             return;
         }
-
-        // if (firstHuman.userId === userId) {
-        // TODO: remove this, I do not know how to remove this :(
-        console.warn(' ---> this is workaround to make sure game has actual map state');
-        // await new Promise((resolve: () => void): mixed => setTimeout(resolve, 10e3));
-
-        /*
-            const checkCanBotDoTurn = (message: SocketMessageType) => {
-                if (message.type !== 'room__push-state') {
-                    return;
-                }
-            };
-        */
 
         subscribeOnPushStateDone(
             async (socketMessage: SocketMessageType): Promise<boolean> => {
