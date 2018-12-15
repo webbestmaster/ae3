@@ -5,44 +5,39 @@
 $bottom-bar--border-color: #404757;
 
 .end_turn__wrapper {
-    background-color: #f9f9f9;
-    border-radius: 4px;
-    box-shadow: -4px 4px 2px rgba(0, 0, 0, 0.5);
-    box-sizing: border-box;
-    color: $main-text-color;
+    background-image: url('./i/end-turn-button/normal.png');
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: auto 58px;
     display: block;
-    font-family: $main-font-family;
-    font-size: 40px;
-    font-weight: bold;
-    height: 48px;
-    overflow: hidden;
-    padding: 3px 5px 3px 14px;
+    height: 56px;
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: 1px;
+    top: 1px;
     user-select: none;
-    width: 67px;
+    width: 77px;
 
     &:hover {
-        box-shadow: none;
+        background-image: url('./i/end-turn-button/hover.png');
     }
 
     &:active {
-        box-shadow: none;
-        opacity: 0.5;
+        background-image: url('./i/end-turn-button/active.png');
+    }
+
+    &.end_turn__wrapper__disabled {
+        background-image: url('./i/end-turn-button/disable.png');
+        pointer-events: none;
     }
 }
 
 .end_turn__button {
-    color: #333;
-    font: inherit;
-    font-size: 46px;
-    left: 0;
-    line-height: 38px;
+    height: 45px;
     outline: none;
     position: absolute;
-    top: 0;
-    width: 100%;
+    right: 6px;
+    top: 5px;
+    width: 67px;
 }
 
 .game_page {

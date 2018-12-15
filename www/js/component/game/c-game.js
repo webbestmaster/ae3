@@ -751,15 +751,17 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                 {mapState ? <ReactJson src={mapState.userList}/> : <h1>no map</h1>}
                 */}
 
-                <div className={classNames(style.end_turn__wrapper, {[serviceStyle.disabled]: isCanvasDisabled})}>
+                <div
+                    className={classNames(style.end_turn__wrapper, {
+                        [style.end_turn__wrapper__disabled]: isCanvasDisabled,
+                    })}
+                >
                     <button
                         type="button"
                         className={style.end_turn__button}
                         onClick={view.handleOnClickEndTurn}
                         onKeyPress={view.handleOnClickEndTurn}
-                    >
-                        &rarr;
-                    </button>
+                    />
                 </div>
 
                 {/* <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>*/}
