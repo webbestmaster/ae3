@@ -5,9 +5,11 @@ import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionTyp
 import {Unit} from './unit/unit';
 import {rateBotResultActionData} from './bot-helper';
 import {Building} from './building/building';
-import {canOpenStore} from './helper';
+import {canOpenStore, isCommanderLive} from './helper';
 import * as serverApi from '../../../module/server-api';
 import {messageConst} from '../../../lib/local-server/room/message-const';
+import {unitGuideData} from './unit/unit-guide';
+import type {UnitTypeCommanderType, UnitTypeCommonType} from './unit/unit-guide';
 
 function getUnitListByPlayerId(gameData: GameDataType, activeUserId: string): Array<Unit> {
     return gameData.unitList.filter((unit: Unit): boolean => unit.getUserId() === activeUserId);
@@ -294,6 +296,63 @@ function getStoreList(activeUserId: string, gameData: GameDataType): Array<Build
     return castleList.length === 0 ? null : castleList;
 }
 
+function getStoreToBuyUnit(activeUserId: string, gameData: GameDataType): Building | null {
+    const storeList = getStoreList(activeUserId, gameData);
+
+    if (storeList === null) {
+        return null;
+    }
+
+    return storeList.sort((): number => Math.random() - 0.5)[0];
+}
+
+// eslint-disable-next-line complexity
+function getUnitTypeToBuy(
+    activeUserId: string,
+    gameData: GameDataType,
+    mapState: MapType
+): UnitTypeCommonType | UnitTypeCommanderType | null {
+    const playerData =
+        gameData.userList.find((userInList: MapUserType): boolean => userInList.userId === activeUserId) || null;
+
+    if (playerData === null) {
+        console.error('getUnitTypeToBuy - can not find user with id:', activeUserId, gameData);
+        return null;
+    }
+
+    const hasCommander = isCommanderLive(playerData.userId, mapState);
+
+    if (hasCommander === false) {
+        return playerData.commander ? playerData.commander.type : 'galamar';
+    }
+
+    const soldierList = gameData.unitList.filter(
+        (unitInList: Unit): boolean => {
+            const {userId, type} = unitInList.attr;
+
+            return type === 'soldier' && userId === activeUserId;
+        }
+    );
+
+    if (soldierList.length < 2) {
+        return 'soldier';
+    }
+
+    const archerList = gameData.unitList.filter(
+        (unitInList: Unit): boolean => {
+            const {userId, type} = unitInList.attr;
+
+            return type === 'archer' && userId === activeUserId;
+        }
+    );
+
+    if (archerList.length < 2) {
+        return 'archer';
+    }
+
+    return ['sorceress', 'golem', 'catapult', 'dire-wolf', 'wisp'].sort((): number => Math.random() - 0.5)[0];
+}
+
 export function canPlayerBuyUnit(activeUserId: string, gameData: GameDataType): boolean {
     // get players castle list
     // get castle list to open
@@ -303,7 +362,7 @@ export function canPlayerBuyUnit(activeUserId: string, gameData: GameDataType): 
         gameData.userList.find((userInList: MapUserType): boolean => userInList.userId === activeUserId) || null;
 
     if (playerData === null) {
-        console.error('can not find user with id:', activeUserId, gameData);
+        console.error('canPlayerBuyUnit - can not find user with id:', activeUserId, gameData);
         return false;
     }
 
@@ -318,6 +377,7 @@ export function canPlayerBuyUnit(activeUserId: string, gameData: GameDataType): 
     return playerUnitList.length < gameData.unitLimit;
 }
 
+// eslint-disable-next-line complexity
 export async function botBuyUnit(
     activeUserId: string,
     gameData: GameDataType,
@@ -329,28 +389,39 @@ export async function botBuyUnit(
         newMapState.userList.find((userInList: MapUserType): boolean => userInList.userId === activeUserId) || null;
 
     if (playerData === null) {
-        console.error('can not find user with id:', activeUserId, gameData);
+        console.error('botBuyUnit - can not find user with id:', activeUserId, gameData);
         return null;
     }
 
-    const storeList = getStoreList(activeUserId, gameData);
+    const storeToBuyUnit = getStoreToBuyUnit(activeUserId, gameData);
 
-    if (storeList === null) {
+    if (storeToBuyUnit === null) {
         return null;
     }
 
-    if (playerData.money < 150) {
+    const newUnitX = storeToBuyUnit.attr.x;
+    const newUnitY = storeToBuyUnit.attr.y;
+
+    const newUnitType = getUnitTypeToBuy(activeUserId, gameData, newMapState);
+
+    if (newUnitType === null) {
         return null;
     }
 
-    playerData.money -= 150;
+    const unitData = unitGuideData[newUnitType];
+
+    if (playerData.money < unitData.cost) {
+        return null;
+    }
+
+    playerData.money -= unitData.cost;
 
     const newMapUnitData: UnitType = {
-        type: 'soldier',
-        x: storeList[0].attr.x,
-        y: storeList[0].attr.y,
+        type: newUnitType,
+        x: newUnitX,
+        y: newUnitY,
         userId: activeUserId,
-        id: [storeList[0].attr.x, storeList[0].attr.y, Math.random()].join('-'),
+        id: [newUnitX, newUnitY, Math.random()].join('-'),
     };
 
     newMapState.units.push(newMapUnitData);

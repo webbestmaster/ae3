@@ -58,7 +58,7 @@ class Home extends Component<ReduxPropsType, PassedPropsType, StateType> {
         return (
             <div className={serviceStyle.two_blocks_container}>
                 <ButtonListWrapper className={buttonListWrapperStyle.button_list_wrapper_single}>
-                    <ButtonLink to={routes.multiPlayer}>
+                    <ButtonLink to={routes.multiPlayer} className={serviceStyle.disabled}>
                         <Locale stringKey={('ONLINE_GAME': LangKeyType)}/>
                     </ButtonLink>
 
