@@ -40,6 +40,15 @@ declare module '@material-ui/core/TextField' {
     declare module.exports: $Exports<'material-ui/TextField/TextField'>;
 }
 
+declare module '@material-ui/core/CircularProgress' {
+    declare module.exports: $Exports<'material-ui/Progress/CircularProgress'>;
+}
+
+declare module '@material-ui/core/Snackbar' {
+    declare module.exports: $Exports<'material-ui/Snackbar/Snackbar'>;
+}
+
+
 // Filename aliases (copy from original file)
 
 /*

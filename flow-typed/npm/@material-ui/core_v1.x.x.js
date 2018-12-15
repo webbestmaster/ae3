@@ -1552,7 +1552,7 @@ declare module 'material-ui/styles/getStylesCreator' {
 declare module 'material-ui/styles' {
     declare module.exports: {
         MuiThemeProvider: $Exports<'material-ui/styles/MuiThemeProvider'>,
-        withStyles: $Exports<'material-ui/styles/withStyles'>,
+        // withStyles: $Exports<'material-ui/styles/withStyles'>,
         withTheme: $Exports<'material-ui/styles/withTheme'>,
         createMuiTheme: $Exports<'material-ui/styles/createMuiTheme'>,
         jssPreset: $Exports<'material-ui/styles/jssPreset'>
@@ -1585,6 +1585,7 @@ declare module 'material-ui/styles/transitions' {
     declare export default Object;
 }
 
+/*
 declare module 'material-ui/styles/withStyles' {
     declare type Options = {
         flip?: boolean,
@@ -1613,6 +1614,7 @@ declare module 'material-ui/styles/withStyles' {
         Component: React$ComponentType<Props>
     ) => React$ComponentType<OwnProps>;
 }
+*/
 
 declare module 'material-ui/styles/withTheme' {
     declare module.exports: () => <Props: {}>(Component: React$ComponentType<Props>) => React$ComponentType<Props>;
@@ -2236,11 +2238,9 @@ declare module 'material-ui/Button/index.js' {
 declare module 'material-ui/ButtonBase/ButtonBase.js' {
     declare module.exports: $Exports<'material-ui/ButtonBase/ButtonBase'>;
 }
-/*
-declare module 'material-ui/ButtonBase/createRippleHandler.js' {
-    declare module.exports: $Exports<'material-ui/ButtonBase/createRippleHandler'>;
-}
-*/
+// declare module 'material-ui/ButtonBase/createRippleHandler.js' {
+//     declare module.exports: $Exports<'material-ui/ButtonBase/createRippleHandler'>;
+// }
 declare module 'material-ui/ButtonBase/index.js' {
     declare module.exports: $Exports<'material-ui/ButtonBase'>;
 }
@@ -2652,9 +2652,11 @@ declare module 'material-ui/styles/themeListener.js' {
 declare module 'material-ui/styles/transitions.js' {
     declare module.exports: $Exports<'material-ui/styles/transitions'>;
 }
+/*
 declare module 'material-ui/styles/withStyles.js' {
     declare module.exports: $Exports<'material-ui/styles/withStyles'>;
 }
+*/
 declare module 'material-ui/styles/withTheme.js' {
     declare module.exports: $Exports<'material-ui/styles/withTheme'>;
 }
@@ -2893,7 +2895,7 @@ declare module 'material-ui' {
     declare export var StepContent: $Exports<'material-ui/Stepper/StepContent'>;
     declare export var StepLabel: $Exports<'material-ui/Stepper/StepLabel'>;
     declare export var MuiThemeProvider: $Exports<'material-ui/styles/MuiThemeProvider'>;
-    declare export var withStyles: $Exports<'material-ui/styles/withStyles'>;
+    // declare export var withStyles: $Exports<'material-ui/styles/withStyles'>;
     declare export var withTheme: $Exports<'material-ui/styles/withTheme'>;
     declare export var createMuiTheme: $Exports<'material-ui/styles/createMuiTheme'>;
     declare export var jssPreset: $Exports<'material-ui/styles/jssPreset'>;
