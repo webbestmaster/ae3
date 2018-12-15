@@ -4,9 +4,9 @@ import type {BotResultActionDataType, EnemyUnitAllAvailableActionsMapType} from 
 import {defaultUnitData, unitGuideData} from './unit/unit-guide';
 import {Building} from './building/building';
 import type {GameDataType} from './unit/unit';
+import {Unit} from './unit/unit';
 import type {MapUserType} from '../../../maps/type';
 import type {TeamIdType} from '../../../maps/map-guide';
-import {Unit} from './unit/unit';
 
 type PointType = {|
     +x: number,

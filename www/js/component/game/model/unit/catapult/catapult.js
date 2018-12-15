@@ -2,10 +2,8 @@
 
 /* eslint consistent-this: ["error", "unit", "aggressor"] */
 
-import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from '../unit';
+import type {GameDataType, UnitActionsMapType, UnitActionType} from '../unit';
 import {Unit} from '../unit';
-import {getMoviePath} from '../../helper';
-import type {PathType} from '../../../../../lib/a-star-finder/a-star-finder';
 import type {AvailablePathMapType} from '../path-master';
 
 function getCell(x: number, y: number, map: UnitActionsMapType): Array<UnitActionType> | null {

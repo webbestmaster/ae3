@@ -1,11 +1,13 @@
 // @flow
 
-import type {MapType, MapUserType} from '../../../maps/type';
+import type {MapType, MapUserType, UnitType} from '../../../maps/type';
 import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './unit/unit';
 import {Unit} from './unit/unit';
 import {rateBotResultActionData} from './bot-helper';
 import {Building} from './building/building';
 import {canOpenStore} from './helper';
+import * as serverApi from '../../../module/server-api';
+import {messageConst} from '../../../lib/local-server/room/message-const';
 
 function getUnitListByPlayerId(gameData: GameDataType, activeUserId: string): Array<Unit> {
     return gameData.unitList.filter((unit: Unit): boolean => unit.getUserId() === activeUserId);
@@ -314,4 +316,68 @@ export function canPlayerBuyUnit(activeUserId: string, gameData: GameDataType): 
     );
 
     return playerUnitList.length < gameData.unitLimit;
+}
+
+export async function botBuyUnit(
+    activeUserId: string,
+    gameData: GameDataType,
+    mapState: MapType,
+    roomId: string
+): Promise<UnitType | Error | null> {
+    const newMapState: MapType = JSON.parse(JSON.stringify(mapState));
+    const playerData =
+        newMapState.userList.find((userInList: MapUserType): boolean => userInList.userId === activeUserId) || null;
+
+    if (playerData === null) {
+        console.error('can not find user with id:', activeUserId, gameData);
+        return null;
+    }
+
+    const storeList = getStoreList(activeUserId, gameData);
+
+    if (storeList === null) {
+        return null;
+    }
+
+    if (playerData.money < 150) {
+        return null;
+    }
+
+    playerData.money -= 150;
+
+    const newMapUnitData: UnitType = {
+        type: 'soldier',
+        x: storeList[0].attr.x,
+        y: storeList[0].attr.y,
+        userId: activeUserId,
+        id: [storeList[0].attr.x, storeList[0].attr.y, Math.random()].join('-'),
+    };
+
+    newMapState.units.push(newMapUnitData);
+
+    return serverApi
+        .pushState(roomId, activeUserId, {
+            type: messageConst.type.pushState,
+            state: {
+                type: 'buy-unit',
+                newMapUnit: newMapUnitData,
+                map: newMapState,
+                activeUserId,
+            },
+        })
+        .then(
+            (response: mixed): UnitType => {
+                console.log('---> user action buy unit', response);
+
+                return newMapUnitData;
+            }
+        )
+        .catch(
+            (error: Error): Error => {
+                console.error('store-push-state error');
+                console.log(error);
+
+                return error;
+            }
+        );
 }

@@ -55,7 +55,7 @@ import {localSocketIoClient} from '../../../module/socket-local';
 import {isNotFunction, isNotNumber, isNotString, isNumber, isString} from '../../../lib/is/is';
 import {messageConst} from '../../../lib/local-server/room/message-const';
 import type {BotResultActionDataType} from './bot';
-import {getBotTurnDataList, canPlayerBuyUnit} from './bot';
+import {botBuyUnit, canPlayerBuyUnit, getBotTurnDataList} from './bot';
 import {waitFor} from '../../../lib/wait-for';
 import {wait} from '../../../lib/sleep';
 import {onPushStateDone, subscribeOnPushStateDone} from '../../../lib/on-message-done';
@@ -2653,8 +2653,25 @@ export class GameModel {
 
         const gameData = game.getGameData();
 
+        // buy unit by bot
         if (getWrongStateList(gameData) === null && canPlayerBuyUnit(activeUserId, gameData)) {
-            return;
+            const botUnitResult = await botBuyUnit(activeUserId, gameData, mapState, game.roomId);
+
+            if (botUnitResult instanceof Error) {
+                console.error('Error with buy unit, drop turn');
+
+                await serverApi.dropTurn(game.roomId, activeUserId);
+                return;
+            }
+
+            // if botUnitResult === null - unit did NOT buy
+            if (botUnitResult !== null) {
+                // just for some smooth
+                await wait(3e3);
+
+                await game.makeBotTurn();
+                return;
+            }
         }
 
         const botTurnData = getBotTurnDataList(mapState, game.getGameData());
@@ -2684,7 +2701,6 @@ export class GameModel {
 
     // eslint-disable-next-line complexity
     async executeBotResultAction(botResultAction: BotResultActionDataType): Promise<void> {
-        // TODO: check for 'buy-unit' !!
         const game = this;
         const mapState = game.getMapState();
 
@@ -2748,6 +2764,13 @@ export class GameModel {
                 // wait for apply move
                 await wait(3000);
 
+                break;
+
+            case 'buy-unit':
+                // this code will never execute, but needed to detect bot's actions
+                console.log('bot buy unit');
+
+                await wait(1000);
                 break;
 
             default:
