@@ -365,18 +365,10 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             });
     }
 
-    handleOnClickEndTurn = () => {
+    handleOnClickEndTurn = async (): Promise<void> => {
         const view = this;
 
-        view.endTurn()
-            .then((): void => console.log('end turn - success'))
-            .catch(
-                (error: Error): Error => {
-                    console.error('end turn - failed');
-                    console.error(error);
-                    return error;
-                }
-            );
+        await view.endTurn();
     };
 
     addDisableReason(reason: DisabledByItemType) {

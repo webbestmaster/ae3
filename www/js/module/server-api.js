@@ -631,7 +631,7 @@ function waitForSocketMessageDropTurn(userId: string): Promise<void> {
             }
 
             if (message.states.last.activeUserId === userId) {
-                console.warn('waitForSocketMessageDropTurn - checkMessageCallBack - activeUserId is wrong');
+                console.log('waitForSocketMessageDropTurn - checkMessageCallBack - activeUserId is wrong');
                 return;
             }
 
