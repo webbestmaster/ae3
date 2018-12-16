@@ -1,5 +1,6 @@
 // @flow
-/* global window */
+
+/* global document */
 
 import {initializeEnvironment} from './component/app/helper.js';
 import React from 'react';
@@ -8,13 +9,17 @@ import {App} from './component/app/c-app';
 import {AppLoader, type LoadAppPassedMethodMapType} from './component/app-loader/c-app-loader';
 import {ReduxStoreProvider} from './redux-store-provider/provider';
 
-const wrapperNode = window.document.querySelector('.js-app-wrapper');
+const wrapperNode = document.querySelector('.js-app-wrapper');
 
 function loadApp(methodMap: LoadAppPassedMethodMapType) {
     initializeEnvironment(methodMap)
         .then(
             (): void => {
                 console.log('Environment is initialized!');
+
+                if (wrapperNode === null) {
+                    return console.error('can not find nodeWrapper for render app');
+                }
 
                 render(<App/>, wrapperNode);
 
@@ -27,9 +32,13 @@ function loadApp(methodMap: LoadAppPassedMethodMapType) {
         });
 }
 
-render(
-    <ReduxStoreProvider>
-        <AppLoader load={loadApp}/>
-    </ReduxStoreProvider>,
-    wrapperNode
-);
+if (wrapperNode) {
+    render(
+        <ReduxStoreProvider>
+            <AppLoader load={loadApp}/>
+        </ReduxStoreProvider>,
+        wrapperNode
+    );
+} else {
+    console.error('can not find nodeWrapper for load app');
+}

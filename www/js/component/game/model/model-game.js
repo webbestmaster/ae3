@@ -1,6 +1,6 @@
 // @flow
 
-/* global window */
+/* global window, requestAnimationFrame, location */
 
 /* eslint consistent-this: ["error", "game"] */
 
@@ -202,7 +202,7 @@ export class GameModel {
 
         // FIXME: remove extra dispatch
         window.dispatchEvent(new window.Event('resize'));
-        window.requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
             window.dispatchEvent(new window.Event('resize'));
         });
     }
@@ -1448,7 +1448,7 @@ export class GameModel {
                 }
 
                 if (isStoreOpen()) {
-                    console.error('store already open', window.location.search);
+                    console.error('store already open', location.search);
                     return;
                 }
 

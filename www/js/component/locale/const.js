@@ -13,8 +13,8 @@ export const localeNameReference: {[key: string]: LocaleNameType} = {
 };
 
 export const allLocales = {
-    'en-US': enUs,
-    'ru-RU': ruRu,
+    [localeNameReference.enUs]: enUs,
+    [localeNameReference.ruRu]: ruRu,
 };
 
 const localeNameList: Array<LocaleNameType> = Object.keys(localeNameReference).map(
@@ -38,7 +38,7 @@ export const localeConst = {
     },
     localeNameList,
     langName: {
-        'ru-RU': 'Русский',
-        'en-US': 'English',
+        [localeNameReference.enUs]: 'Русский',
+        [localeNameReference.ruRu]: 'English',
     },
 };

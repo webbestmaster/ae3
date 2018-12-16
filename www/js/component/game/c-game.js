@@ -1,6 +1,6 @@
 // @flow
 
-/* global window */
+/* global alert */
 
 /* eslint consistent-this: ["error", "view"] */
 
@@ -345,7 +345,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             await game.showWrongState(wrongStateList[0]);
             // TODO: add snack bar with error state;
             // eslint-disable-next-line no-alert
-            window.alert('Please, resolve a problem:' + JSON.stringify(wrongStateList[0]));
+            alert('Please, resolve a problem:' + JSON.stringify(wrongStateList[0]));
             return Promise.resolve();
         }
 

@@ -1,5 +1,6 @@
 // @flow
-/* global document, window */
+
+/* global document, location */
 
 import {mapGuide, type TeamIdType, type UserColorType} from '../../../maps/map-guide';
 import type {UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
@@ -624,7 +625,7 @@ export function mergeActionList(
 }
 
 export function isStoreOpen(): boolean {
-    return queryString.parse(window.location.search).viewId === storeViewId;
+    return queryString.parse(location.search).viewId === storeViewId;
 }
 
 type PlaceForNewUnitType = {|
@@ -748,7 +749,7 @@ export function getWrongStateList(gameData: GameDataType): Array<WrongStateType>
 }
 
 export function isOnLineRoomType(): boolean {
-    return window.location.href.includes('/on-line/');
+    return location.href.includes('/on-line/');
 }
 
 export function getRoomType(): RoomTypeType {

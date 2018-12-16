@@ -1,6 +1,6 @@
 // @flow
 
-/* global window */
+/* global window, requestAnimationFrame */
 
 /* eslint consistent-this: ["error", "render"] */
 
@@ -594,7 +594,7 @@ export class Render {
         const render = this;
 
         await new Promise((resolve: () => void) => {
-            window.requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
                 render.layer.actions.removeChildren();
                 resolve();
             });

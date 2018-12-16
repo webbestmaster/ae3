@@ -1,6 +1,6 @@
 // @flow
 
-/* global window */
+/* global localStorage, navigator */
 
 import {combineReducers} from 'redux';
 import type {LocaleNameType} from './const';
@@ -8,14 +8,14 @@ import {localeConst} from './const';
 import type {ActionDataType} from '../../redux-store-provider/type';
 
 function getLocaleName(): LocaleNameType {
-    const savedLocaleName = window.localStorage.getItem(localeConst.key.localStorage.localeName);
+    const savedLocaleName = localStorage.getItem(localeConst.key.localStorage.localeName);
     const localeNameList: Array<LocaleNameType> = localeConst.localeNameList;
 
-    if (localeNameList.includes(savedLocaleName)) {
+    if (savedLocaleName === 'en-US' || savedLocaleName === 'ru-RU') {
         return savedLocaleName;
     }
 
-    const navigatorLanguages = window.navigator.languages;
+    const navigatorLanguages = navigator.languages;
 
     if (!Array.isArray(navigatorLanguages)) {
         return localeConst.defaults.localeName;
@@ -39,7 +39,7 @@ function getLocaleName(): LocaleNameType {
 
 const initialLocaleName = getLocaleName();
 
-window.localStorage.setItem(localeConst.key.localStorage.localeName, initialLocaleName);
+localStorage.setItem(localeConst.key.localStorage.localeName, initialLocaleName);
 
 export type LocaleType = {|
     +name: LocaleNameType,

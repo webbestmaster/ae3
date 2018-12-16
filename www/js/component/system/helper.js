@@ -1,11 +1,17 @@
 // @flow
 
-/* global window */
+/* global document */
 
 import style from './style.css';
 
 export function setIsGlobalScrollEnable(isEnable: boolean) {
-    const {body} = window.document;
+    const {body} = document;
+
+    if (body === null) {
+        console.log('body is not defined');
+        return;
+    }
+
     const {classList} = body;
 
     if (isEnable) {

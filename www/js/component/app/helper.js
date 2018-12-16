@@ -64,7 +64,7 @@ export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapTyp
 
     // run Tween.js updater
     (function animate() {
-        window.requestAnimationFrame(animate);
+        requestAnimationFrame(animate);
         TWEEN.update();
     })();
 

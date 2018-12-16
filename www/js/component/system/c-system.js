@@ -1,6 +1,6 @@
 // @flow
 
-/* global window */
+/* global window, document */
 
 /* eslint consistent-this: ["error", "view"] */
 
@@ -64,11 +64,9 @@ class System extends Component<ReduxPropsType, PassedPropsType, StateType> {
         window.addEventListener(
             'resize',
             () => {
-                const {documentElement} = window.document;
-                const width = documentElement.clientWidth;
-                const height = documentElement.clientHeight;
+                const {clientWidth, clientHeight} = document.documentElement || {clientWidth: 800, clientHeight: 600};
 
-                props.onResize(width, height);
+                props.onResize(clientWidth, clientHeight);
             },
             false
         );

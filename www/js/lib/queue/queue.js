@@ -1,5 +1,6 @@
 // @flow
-/* global window */
+
+/* global window, requestAnimationFrame, setTimeout */
 
 /* eslint consistent-this: ["error", "queue"] */
 
@@ -7,8 +8,8 @@ type CallBackType = () => Promise<void> | void;
 import {isFunction} from '../is/is';
 
 function requestIdleCallbackPolyfill(callback: () => {}) {
-    window.requestAnimationFrame(() => {
-        window.setTimeout(callback, 0);
+    requestAnimationFrame(() => {
+        setTimeout(callback, 0);
     });
 }
 
@@ -63,10 +64,10 @@ export class Queue {
     }
 
     runCallBack() {
-        // window.setTimeout(() => this.run(), 0);
+        // setTimeout(() => this.run(), 0);
         const queue = this;
 
-        window.requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
             window.requestIdleCallback(() => {
                 queue.run();
             });

@@ -1,6 +1,6 @@
 // @flow
 
-/* global window */
+/* global setTimeout */
 
 /* eslint consistent-this: ["error", "view"] */
 
@@ -75,7 +75,7 @@ class JoinRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
         return new Promise((resolve: () => void) => {
             view.setState({isRoomsFetching: true}, () => {
                 // user have to see spinner
-                window.setTimeout(resolve, 1e3);
+                setTimeout(resolve, 1e3);
             });
         });
     }
