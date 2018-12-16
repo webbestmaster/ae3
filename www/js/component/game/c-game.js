@@ -52,6 +52,10 @@ import type {SetOpenFromGameType} from '../store/action';
 import {setOpenFromGame} from '../store/action';
 import {messageConst} from '../../lib/local-server/room/message-const';
 import {Queue} from '../../lib/queue/queue';
+import {getConfirm} from '../ui/confirm/action';
+import type {MapUserType} from '../../maps/type';
+import {Unit} from './model/unit/unit';
+import {unitGuideData} from './model/unit/unit-guide';
 
 const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,
@@ -369,10 +373,52 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             });
     }
 
+    hasPlayerAvailableAction(): boolean {
+        const view = this;
+        const {state} = view;
+        const {game} = state;
+        const mapState = game.getMapState();
+
+        if (mapState === null) {
+            console.error('in this state we should be has the map state');
+            return false;
+        }
+
+        const gameData = game.getGameData();
+
+        const activeUserId = mapState.activeUserId;
+
+        const playerData =
+            gameData.userList.find((userData: MapUserType): boolean => userData.userId === activeUserId) || null;
+
+        if (playerData === null) {
+            console.error('user was not find, user id', activeUserId);
+            return false;
+        }
+
+        if (playerData.money >= unitGuideData.soldier.cost) {
+            return true;
+        }
+
+        const unitList = gameData.unitList.filter(
+            (unitInList: Unit): boolean => unitInList.attr.userId === activeUserId
+        );
+
+        return unitList.some((unitInList: Unit): boolean => unitInList.getActions(gameData) !== null);
+    }
+
     handleOnClickEndTurn = async (): Promise<void> => {
         const view = this;
 
-        await view.endTurn();
+        // no available action (unit's action or not enough money)? -> just drop turn
+        if (!view.hasPlayerAvailableAction()) {
+            await view.endTurn();
+            return;
+        }
+
+        if (await getConfirm('% Do you want to drop turn? %')) {
+            await view.endTurn();
+        }
     };
 
     addDisableReason(reason: DisabledByItemType) {
