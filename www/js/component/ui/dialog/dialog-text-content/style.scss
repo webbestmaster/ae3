@@ -1,4 +1,7 @@
+@import './../../../../../css/var';
+
 .text_content {
+    font-family: $main-font-family;
     font-size: 16px;
     text-align: left;
 }

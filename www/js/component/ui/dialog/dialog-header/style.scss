@@ -1,6 +1,9 @@
+@import './../../../../../css/var';
+
 .dialog_header {
     color: #fff;
-    font-size: 32px;
+    font-family: $main-font-family;
+    font-size: 26px;
     padding-bottom: 16px;
     text-align: center;
     text-shadow: 2px 2px 0 #333;

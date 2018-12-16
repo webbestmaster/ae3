@@ -9,6 +9,7 @@ import React, {Component} from 'react';
 import type {GetConfirmDetailType} from './action';
 import {defaultEventName} from './action';
 import {Dialog} from '../dialog/c-dialog';
+import style from './style.scss';
 
 type PropsType = {|
     eventName?: string,
@@ -126,12 +127,22 @@ export class Confirm extends Component<PropsType, StateType> {
 
         return (
             <Dialog isOpen={isOpen}>
-                <div>{content}</div>
-                <div>
-                    <button type="button" onKeyPress={view.handleApplyCallBack} onClick={view.handleApplyCallBack}>
+                {content}
+                <div className={style.dialog_action_wrapper}>
+                    <button
+                        className={style.dialog_action_button}
+                        type="button"
+                        onKeyPress={view.handleApplyCallBack}
+                        onClick={view.handleApplyCallBack}
+                    >
                         % Apply %
                     </button>
-                    <button type="button" onKeyPress={view.handleCancelCallBack} onClick={view.handleCancelCallBack}>
+                    <button
+                        className={style.dialog_action_button}
+                        type="button"
+                        onKeyPress={view.handleCancelCallBack}
+                        onClick={view.handleCancelCallBack}
+                    >
                         % Cancel %
                     </button>
                 </div>

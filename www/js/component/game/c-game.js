@@ -56,6 +56,9 @@ import {getConfirm} from '../ui/confirm/action';
 import type {MapUserType} from '../../maps/type';
 import {Unit} from './model/unit/unit';
 import {unitGuideData} from './model/unit/unit-guide';
+import {Confirm} from '../ui/confirm/c-confirm';
+
+const gameConfirmEventName = 'game-confirm-event-name';
 
 const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,
@@ -416,7 +419,12 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             return;
         }
 
-        if (await getConfirm('% Do you want to drop turn? %')) {
+        const isConfirm = await getConfirm(
+            <DialogHeader>% Do you want to drop turn? %</DialogHeader>,
+            gameConfirmEventName
+        );
+
+        if (isConfirm) {
             await view.endTurn();
         }
     };
@@ -777,6 +785,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
         return [
             view.renderStore(),
+            <Confirm eventName={gameConfirmEventName} key={gameConfirmEventName}/>,
             <Page className={classNames(style.game_page, {[serviceStyle.hidden]: storeState.isOpen})} key="game-page">
                 {view.renderEndGameDialog()}
                 {view.renderPopupChangeActiveUserDialog()}
