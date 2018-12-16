@@ -1,3 +1,5 @@
+@import './../../../../css/var';
+
 .dialog_wrapper {
     background-color: rgba(0, 0, 0, 0.5);
     display: block;
@@ -10,10 +12,17 @@
 }
 
 .dialog_content {
+    background-image: linear-gradient(0deg, $main-gradient-begin, $main-gradient-end);
+    background-position: 0 50%;
+    background-size: 100% 150%;
+    border: 5px solid #eee;
+    box-shadow: 5px 5px 0 #000;
     box-sizing: border-box;
     left: 50%;
     max-height: 90%;
     max-width: 90%;
+    outline: none;
+    padding: 14px 40px 17px;
     position: absolute;
     top: 50%;
     transform: translate3d(-50%, -50%, 0);

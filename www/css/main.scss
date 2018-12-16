@@ -4,7 +4,7 @@
 
 html,
 body {
-    background-image: linear-gradient(180deg, #7f8598, #333c57);
+    background-image: linear-gradient(0deg, $main-gradient-begin, $main-gradient-end);
     height: 100%;
     overflow: hidden;
     position: fixed;

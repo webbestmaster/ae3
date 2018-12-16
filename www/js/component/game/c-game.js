@@ -67,7 +67,7 @@ const bottomBarColorMap: {[key: UserColorType]: string} = {
     black: style.bottom_bar__color_black,
 };
 
-const tapToContinueDialogHint = <DialogHintText>Tap to continue</DialogHintText>;
+const tapToContinueDialogHint = <DialogHintText>Tap to continue...</DialogHintText>;
 
 // function Transition(props: mixed): Node {
 //     return <Slide direction="up" {...props} />;
