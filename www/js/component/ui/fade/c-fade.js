@@ -6,7 +6,7 @@ import {CSSTransition, TransitionGroup} from 'react-transition-group';
 
 import style from './style.scss';
 
-const fadeTimeOut = 500;
+const fadeTimeOut = 300;
 
 const fadeClassNames = {
     enter: style.fade__enter,
