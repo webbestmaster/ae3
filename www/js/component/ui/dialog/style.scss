@@ -1,0 +1,20 @@
+.dialog_wrapper {
+    background-color: rgba(0, 0, 0, 0.5);
+    display: block;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.dialog_content {
+    box-sizing: border-box;
+    left: 50%;
+    max-height: 90%;
+    max-width: 90%;
+    position: absolute;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+}

@@ -31,8 +31,10 @@ import {
 import style from './style.scss';
 import classNames from 'classnames';
 import serviceStyle from '../../../css/service.scss';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import {Dialog} from '../ui/dialog/c-dialog';
+import {DialogHeader} from '../ui/dialog/dialog-header/c-dialog-header';
+// import {DialogTextContent} from '../ui/dialog/dialog-text-content/c-dialog-text-content';
+import {DialogHintText} from '../ui/dialog/dialog-hint-text/c-dialog-hint-text';
 import {Page} from '../ui/page/c-page';
 import {BottomBar} from '../ui/bottom-bar/c-bottom-bar';
 import find from 'lodash/find';
@@ -64,6 +66,8 @@ const bottomBarColorMap: {[key: UserColorType]: string} = {
     green: style.bottom_bar__color_green,
     black: style.bottom_bar__color_black,
 };
+
+const tapToContinueDialogHint = <DialogHintText>Tap to continue</DialogHintText>;
 
 // function Transition(props: mixed): Node {
 //     return <Slide direction="up" {...props} />;
@@ -458,7 +462,10 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
         if (isCurrentUserDefeat) {
             return view.renderEndGameDialogWrapper(
-                <DialogTitle id="alert-dialog-slide-title">You loose :(</DialogTitle>
+                <>
+                    <DialogHeader>You loose :(</DialogHeader>
+                    {tapToContinueDialogHint}
+                </>
             );
         }
 
@@ -476,9 +483,20 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             return null;
         }
 
-        return matchResult.winner.teamId === mapUser.teamId ?
-            view.renderEndGameDialogWrapper(<DialogTitle id="alert-dialog-slide-title">You win!</DialogTitle>) :
-            view.renderEndGameDialogWrapper(<DialogTitle id="alert-dialog-slide-title">You loose :(</DialogTitle>);
+        const dialogContent =
+            matchResult.winner.teamId === mapUser.teamId ?
+                <>
+                    <DialogHeader>You win!</DialogHeader>
+                    {tapToContinueDialogHint}
+                </> :
+                <>
+                    <DialogHeader>You loose :(</DialogHeader>
+                    {tapToContinueDialogHint}
+                </>
+
+            ;
+
+        return view.renderEndGameDialogWrapper(dialogContent);
     }
 
     renderEndGameDialogWrapper(endGameDialogContent: Node | Array<Node>): Node {
@@ -487,15 +505,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         const {popup} = state;
 
         return (
-            <Dialog
-                open={popup.endGame.isOpen}
-                // transition={Transition}
-                keepMounted
-                onClose={view.handleLeaveGame}
-                onClick={view.handleLeaveGame}
-                aria-labelledby="alert-dialog-slide-title"
-                aria-describedby="alert-dialog-slide-description"
-            >
+            <Dialog key="end-game-dialog" isOpen={popup.endGame.isOpen} onClick={view.handleLeaveGame}>
                 {endGameDialogContent}
             </Dialog>
         );
@@ -602,19 +612,14 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
         return (
             <Dialog
-                open={popup.changeActiveUser.isOpen}
-                // transition={Transition}
-                keepMounted
-                // onClose={() => {
-                //     view.popupChangeActiveUser({isOpen: false});
-                // }}
+                key="change-active-user-dialog"
+                isOpen={popup.changeActiveUser.isOpen}
                 onClick={view.handleOnClickChangeActiveUserPopup}
-                aria-labelledby="alert-dialog-slide-title"
-                aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle id="alert-dialog-slide-title">
+                <DialogHeader>
                     {activeUserId === userId ? 'your turn' + earnedString : 'wait for: ' + activeUserColor}
-                </DialogTitle>
+                </DialogHeader>
+                {tapToContinueDialogHint}
             </Dialog>
         );
     }
@@ -730,19 +735,6 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                 {view.renderEndGameDialog()}
                 {view.renderPopupChangeActiveUserDialog()}
 
-                {/*
-                <h2>server activeUserId: {state.activeUserId}</h2>
-                <h3>mapActiveUser: {mapActiveUserId}</h3>
-
-                <h2>server user list:</h2>
-
-                <ReactJson src={state.userList}/>
-
-                <h2>map user list:</h2>
-
-                {mapState ? <ReactJson src={mapState.userList}/> : <h1>no map</h1>}
-                */}
-
                 <div
                     className={classNames(style.end_turn__wrapper, {
                         [style.end_turn__wrapper__disabled]: isCanvasDisabled,
@@ -755,15 +747,6 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                         onKeyPress={view.handleOnClickEndTurn}
                     />
                 </div>
-
-                {/* <div>{state.activeUserId === user.getId() ? 'YOUR' : 'NOT your'} turn</div>*/}
-
-                {/*
-                <div>mapActiveUserId === state(server).activeUserId :
-                    {mapActiveUserId === state.activeUserId ? ' YES' : ' NO'}</div>
-                */}
-
-                {/* <div>{JSON.stringify(state.disabledByList)}</div> */}
 
                 <canvas
                     key="canvas"
