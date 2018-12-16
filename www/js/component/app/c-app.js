@@ -17,29 +17,25 @@ import {Room} from '../../page/room/p-room';
 import {Settings} from '../../page/settings/p-settings';
 import {routes} from './routes';
 import {ReduxStoreProvider} from '../../redux-store-provider/provider';
-import {muiTheme} from '../ui/mui-theme/mui-theme';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 export function App(): Node {
     return (
         <ReduxStoreProvider>
-            <MuiThemeProvider theme={muiTheme}>
-                <Auth key="auth"/>
-                <System key="system">
-                    <BrowserRouter>
-                        <Switch key="switch">
-                            <Route component={Home} path={routes.index} exact/>
-                            <Route component={MultiPlayer} path={routes.multiPlayer} exact/>
-                            <Route component={CreateRoom} path={routes.createRoomOnline} exact/>
-                            <Route component={CreateRoom} path={routes.createRoomOffline} exact/>
-                            <Route component={JoinRoom} path={routes.joinRoom} exact/>
-                            <Route component={Room} path={routes.roomOnLine} exact/>
-                            <Route component={Room} path={routes.roomOffLine} exact/>
-                            <Route component={Settings} path={routes.settings} exact/>
-                        </Switch>
-                    </BrowserRouter>
-                </System>
-            </MuiThemeProvider>
+            <Auth key="auth"/>
+            <System key="system">
+                <BrowserRouter>
+                    <Switch key="switch">
+                        <Route component={Home} path={routes.index} exact/>
+                        <Route component={MultiPlayer} path={routes.multiPlayer} exact/>
+                        <Route component={CreateRoom} path={routes.createRoomOnline} exact/>
+                        <Route component={CreateRoom} path={routes.createRoomOffline} exact/>
+                        <Route component={JoinRoom} path={routes.joinRoom} exact/>
+                        <Route component={Room} path={routes.roomOnLine} exact/>
+                        <Route component={Room} path={routes.roomOffLine} exact/>
+                        <Route component={Settings} path={routes.settings} exact/>
+                    </Switch>
+                </BrowserRouter>
+            </System>
         </ReduxStoreProvider>
     );
 }

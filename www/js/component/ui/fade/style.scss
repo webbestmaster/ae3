@@ -1,0 +1,15 @@
+$fade-time-out: 500;
+
+.fade__enter {
+    opacity: 0;
+}
+
+.fade__enter__active {
+    opacity: 1;
+    transition: opacity #{$fade-time-out}ms ease-in;
+}
+
+.fade__exit {
+    opacity: 0;
+    transition: opacity #{$fade-time-out}ms ease-in;
+}

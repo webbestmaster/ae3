@@ -8,8 +8,8 @@ import {Building} from './building/building';
 import {canOpenStore, isCommanderLive} from './helper';
 import * as serverApi from '../../../module/server-api';
 import {messageConst} from '../../../lib/local-server/room/message-const';
-import {unitGuideData} from './unit/unit-guide';
 import type {UnitTypeCommanderType, UnitTypeCommonType} from './unit/unit-guide';
+import {unitGuideData} from './unit/unit-guide';
 
 function getUnitListByPlayerId(gameData: GameDataType, activeUserId: string): Array<Unit> {
     return gameData.unitList.filter((unit: Unit): boolean => unit.getUserId() === activeUserId);
