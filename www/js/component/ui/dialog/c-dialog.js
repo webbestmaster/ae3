@@ -13,13 +13,21 @@ type PropsType = {|
     +isModal?: boolean, // default false, if isModal: true, fade is disabled to click
 |};
 
-export function Dialog({isOpen, children, onClick, isModal}: PropsType): Node {
-    const handleOnClick = onClick || ((): null => null);
+export function Dialog({isOpen, children, onClick: handleOnClick, isModal}: PropsType): Node {
+    if (!handleOnClick) {
+        return (
+            <Fade isShow={isOpen}>
+                <div className={style.dialog_wrapper}>
+                    <div className={style.dialog_content}>{children}</div>
+                </div>
+            </Fade>
+        );
+    }
 
     if (isModal === true) {
         return (
             <Fade isShow={isOpen}>
-                <button type="button" className={style.dialog_wrapper}>
+                <div className={style.dialog_wrapper}>
                     <button
                         className={style.dialog_content}
                         type="button"
@@ -28,7 +36,7 @@ export function Dialog({isOpen, children, onClick, isModal}: PropsType): Node {
                     >
                         {children}
                     </button>
-                </button>
+                </div>
             </Fade>
         );
     }
@@ -36,9 +44,7 @@ export function Dialog({isOpen, children, onClick, isModal}: PropsType): Node {
     return (
         <Fade isShow={isOpen}>
             <button type="button" onClick={handleOnClick} onKeyPress={handleOnClick} className={style.dialog_wrapper}>
-                <button className={style.dialog_content} type="button">
-                    {children}
-                </button>
+                <div className={style.dialog_content}>{children}</div>
             </button>
         </Fade>
     );

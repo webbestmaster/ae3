@@ -17,12 +17,14 @@ import {Room} from '../../page/room/p-room';
 import {Settings} from '../../page/settings/p-settings';
 import {routes} from './routes';
 import {ReduxStoreProvider} from '../../redux-store-provider/provider';
+import {Confirm} from '../ui/confirm/c-confirm';
 
 export function App(): Node {
     return (
         <ReduxStoreProvider>
             <Auth key="auth"/>
             <System key="system">
+                <Confirm/>
                 <BrowserRouter>
                     <Switch key="switch">
                         <Route component={Home} path={routes.index} exact/>
