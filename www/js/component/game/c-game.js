@@ -416,7 +416,9 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         }
 
         const isConfirm = await getConfirm(
-            <DialogHeader>% Do you want to drop turn? %</DialogHeader>,
+            <DialogHeader>
+                <Locale stringKey={('DROP_TURN_CONFIRM_QUESTION': LangKeyType)}/>
+            </DialogHeader>,
             gameConfirmEventName
         );
 

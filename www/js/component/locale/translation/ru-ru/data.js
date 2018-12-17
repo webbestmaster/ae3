@@ -91,6 +91,7 @@ export const ruRu: LangDataType = {
     TAP_ANYWHERE_TO_CONTINUE: 'Нажмите где угодно чтобы продолжить...',
     YOU_WIN: 'Победа!',
     YOU_DEFEAT: 'Поражение',
+    DROP_TURN_CONFIRM_QUESTION: 'Хотите закончить ход?',
 
     // spec symbols
     SPACE: ' ',

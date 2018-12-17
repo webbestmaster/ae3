@@ -91,6 +91,7 @@ export const enUs: LangDataType = {
     TAP_ANYWHERE_TO_CONTINUE: 'Tap anywhere to continue...',
     YOU_WIN: 'You Win!',
     YOU_DEFEAT: 'Defeat',
+    DROP_TURN_CONFIRM_QUESTION: 'Do you want to drop turn?',
 
     // spec symbols
     SPACE: ' ',

@@ -76,6 +76,7 @@ export type LangDataType = {|
     +TAP_ANYWHERE_TO_CONTINUE: string,
     +YOU_WIN: string,
     +YOU_DEFEAT: string,
+    +DROP_TURN_CONFIRM_QUESTION: string,
 
     // spec symbols
     +SPACE: ' ',
