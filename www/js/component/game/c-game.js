@@ -60,6 +60,7 @@ import type {LangKeyType} from '../locale/translation/type';
 import {Locale} from '../locale/c-locale';
 import {TapToContinueDialogHint} from './ui/tap-to-continue-dialog-hint';
 import {getWaitForLangKey} from './ui/helper';
+import type {UserType} from '../auth/reducer';
 
 const gameConfirmEventName = 'game-confirm-event-name';
 
@@ -331,6 +332,9 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         const {model, game, socketMessageQueue} = state;
         const {roomId} = props;
 
+        const gameData = game.getGameData();
+        const {userList} = gameData;
+
         game.destroy();
 
         model.destroy();
@@ -339,7 +343,22 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
         localSocketIoClient.removeAllListeners();
 
-        const leaveRoomResult = await serverApi.leaveRoom(roomId, user.getId());
+        if (isOnLineRoomType()) {
+            await serverApi.leaveRoom(roomId, user.getId());
+            return;
+        }
+
+        // return to user original id
+        user.setId(userList[0].userId);
+
+        await serverApi.leaveRoom(roomId, user.getId());
+        await Promise.all(
+            userList.map(
+                async (userInList: MapUserType): Promise<void> => {
+                    await serverApi.leaveRoom(roomId, userInList.userId);
+                }
+            )
+        );
     }
 
     async endTurn(): Promise<void> {

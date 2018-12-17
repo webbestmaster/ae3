@@ -204,7 +204,15 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         const {state} = view;
         const {userList} = state;
 
-        return userList.map((userData: ServerUserType): string => userData.userId).indexOf(user.getId());
+        const idList = userList.map((userData: ServerUserType): string => userData.userId);
+
+        if (idList.includes(user.getId())) {
+            return idList.indexOf(user.getId());
+        }
+
+        console.error('can not find user with id', idList, user.getId());
+
+        return -1;
     }
 
     async showSpinner(): Promise<void> {
