@@ -88,6 +88,9 @@ export const ruRu: LangDataType = {
     // popup
     DIALOG_CONFIRM_APPLY: 'Подтвердить',
     DIALOG_CONFIRM_CANCEL: 'Отмена',
+    TAP_ANYWHERE_TO_CONTINUE: 'Нажмите где угодно чтобы продолжить...',
+    YOU_WIN: 'Победа!',
+    YOU_DEFEAT: 'Поражение',
 
     // spec symbols
     SPACE: ' ',

@@ -88,6 +88,9 @@ export const enUs: LangDataType = {
     // popup
     DIALOG_CONFIRM_APPLY: 'Apply',
     DIALOG_CONFIRM_CANCEL: 'Cancel',
+    TAP_ANYWHERE_TO_CONTINUE: 'Tap anywhere to continue...',
+    YOU_WIN: 'You Win!',
+    YOU_DEFEAT: 'Defeat',
 
     // spec symbols
     SPACE: ' ',

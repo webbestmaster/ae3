@@ -34,7 +34,6 @@ import serviceStyle from '../../../css/service.scss';
 import {Dialog} from '../ui/dialog/c-dialog';
 import {DialogHeader} from '../ui/dialog/dialog-header/c-dialog-header';
 // import {DialogTextContent} from '../ui/dialog/dialog-text-content/c-dialog-text-content';
-import {DialogHintText} from '../ui/dialog/dialog-hint-text/c-dialog-hint-text';
 import {Page} from '../ui/page/c-page';
 import {BottomBar} from '../ui/bottom-bar/c-bottom-bar';
 import find from 'lodash/find';
@@ -57,6 +56,9 @@ import type {MapUserType} from '../../maps/type';
 import {Unit} from './model/unit/unit';
 import {unitGuideData} from './model/unit/unit-guide';
 import {Confirm} from '../ui/confirm/c-confirm';
+import type {LangKeyType} from '../locale/translation/type';
+import {Locale} from '../locale/c-locale';
+import {TapToContinueDialogHint} from './ui/tap-to-continue-dialog-hint';
 
 const gameConfirmEventName = 'game-confirm-event-name';
 
@@ -73,12 +75,6 @@ const bottomBarColorMap: {[key: UserColorType]: string} = {
     green: style.bottom_bar__color_green,
     black: style.bottom_bar__color_black,
 };
-
-const tapToContinueDialogHint = <DialogHintText>Tap to anywhere continue...</DialogHintText>;
-
-// function Transition(props: mixed): Node {
-//     return <Slide direction="up" {...props} />;
-// }
 
 export const bottomBarData = {
     height: 53, // $bar-height: 52px; + 1 top border
@@ -431,7 +427,6 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
     addDisableReason(reason: DisabledByItemType) {
         const view = this;
-        const {props, state} = view;
 
         view.setState(
             (prevState: StateType): StateType => {
@@ -454,7 +449,6 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
     removeDisableReason(reason: DisabledByItemType) {
         const view = this;
-        const {props, state} = view;
 
         view.setState(
             (prevState: StateType): StateType => {
@@ -478,7 +472,6 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
     showEndGame() {
         const view = this;
-        const {props, state} = view;
 
         view.addDisableReason('end-game-popup');
 
@@ -517,8 +510,10 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         if (isCurrentUserDefeat) {
             return view.renderEndGameDialogWrapper(
                 <>
-                    <DialogHeader>You loose :(</DialogHeader>
-                    {tapToContinueDialogHint}
+                    <DialogHeader>
+                        <Locale stringKey={('YOU_DEFEAT': LangKeyType)}/>
+                    </DialogHeader>
+                    <TapToContinueDialogHint/>
                 </>
             );
         }
@@ -540,12 +535,16 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         const dialogContent =
             matchResult.winner.teamId === mapUser.teamId ?
                 <>
-                    <DialogHeader>You win!</DialogHeader>
-                    {tapToContinueDialogHint}
+                    <DialogHeader>
+                        <Locale stringKey={('YOU_WIN': LangKeyType)}/>
+                    </DialogHeader>
+                    <TapToContinueDialogHint/>
                 </> :
                 <>
-                    <DialogHeader>You loose :(</DialogHeader>
-                    {tapToContinueDialogHint}
+                    <DialogHeader>
+                        <Locale stringKey={('YOU_DEFEAT': LangKeyType)}/>
+                    </DialogHeader>
+                    <TapToContinueDialogHint/>
                 </>
 
             ;
@@ -673,7 +672,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                 <DialogHeader>
                     {activeUserId === userId ? 'your turn' + earnedString : 'wait for: ' + activeUserColor}
                 </DialogHeader>
-                {tapToContinueDialogHint}
+                <TapToContinueDialogHint/>
             </Dialog>
         );
     }

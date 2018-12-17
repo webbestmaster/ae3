@@ -1,5 +1,7 @@
 // @flow
 
+import React from 'react';
+
 export type LangDataType = {|
     /* eslint-disable id-match */
     +ONLINE_GAME: string,
@@ -71,6 +73,9 @@ export type LangDataType = {|
     // popup
     +DIALOG_CONFIRM_APPLY: string,
     +DIALOG_CONFIRM_CANCEL: string,
+    +TAP_ANYWHERE_TO_CONTINUE: string,
+    +YOU_WIN: string,
+    +YOU_DEFEAT: string,
 
     // spec symbols
     +SPACE: ' ',
