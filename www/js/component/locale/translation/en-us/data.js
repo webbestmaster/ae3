@@ -6,6 +6,7 @@ export const enUs: LangDataType = {
     /* eslint-disable id-match, max-len, id-length */
     ONLINE_GAME: 'Online Game',
     OFFLINE_GAME: 'Offline Game',
+    COMPANIES: 'Companies',
     SETTINGS: 'Settings',
     LANGUAGE: 'Language',
     CREATE_GAME: 'Create Game',
@@ -83,6 +84,10 @@ export const enUs: LangDataType = {
     SETTING_UP_CONNECTIONS: 'Setting up connections',
     LOADING_TEXTURES: 'Loading textures',
     PREPARATION_OF_IMAGES: 'Preparation of images',
+
+    // popup
+    DIALOG_CONFIRM_APPLY: 'Apply',
+    DIALOG_CONFIRM_CANCEL: 'Cancel',
 
     // spec symbols
     SPACE: ' ',

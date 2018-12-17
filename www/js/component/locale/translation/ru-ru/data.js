@@ -6,6 +6,7 @@ export const ruRu: LangDataType = {
     /* eslint-disable id-match, max-len, id-length */
     ONLINE_GAME: 'Сетевая Игра',
     OFFLINE_GAME: 'Локальная Игра',
+    COMPANIES: 'Компании',
     SETTINGS: 'Настройки',
     LANGUAGE: 'Язык',
     CREATE_GAME: 'Создать Игру',
@@ -83,6 +84,10 @@ export const ruRu: LangDataType = {
     SETTING_UP_CONNECTIONS: 'Настройка соединений',
     LOADING_TEXTURES: 'Загрузка текстур',
     PREPARATION_OF_IMAGES: 'Подготовка изображений',
+
+    // popup
+    DIALOG_CONFIRM_APPLY: 'Подтвердить',
+    DIALOG_CONFIRM_CANCEL: 'Отмена',
 
     // spec symbols
     SPACE: ' ',

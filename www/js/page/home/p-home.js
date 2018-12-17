@@ -66,7 +66,9 @@ class Home extends Component<ReduxPropsType, PassedPropsType, StateType> {
                         <Locale stringKey={('OFFLINE_GAME': LangKeyType)}/>
                     </ButtonLink>
 
-                    <Button className={serviceStyle.disabled}>%companies%</Button>
+                    <Button className={serviceStyle.disabled}>
+                        <Locale stringKey={('COMPANIES': LangKeyType)}/>
+                    </Button>
 
                     <ButtonLink to={routes.settings}>
                         <Locale stringKey={('SETTINGS': LangKeyType)}/>

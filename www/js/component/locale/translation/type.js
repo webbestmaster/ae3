@@ -4,6 +4,7 @@ export type LangDataType = {|
     /* eslint-disable id-match */
     +ONLINE_GAME: string,
     +OFFLINE_GAME: string,
+    +COMPANIES: string,
     +SETTINGS: string,
     +LANGUAGE: string,
     +CREATE_GAME: string,
@@ -66,6 +67,10 @@ export type LangDataType = {|
     +SETTING_UP_CONNECTIONS: string,
     +LOADING_TEXTURES: string,
     +PREPARATION_OF_IMAGES: string,
+
+    // popup
+    +DIALOG_CONFIRM_APPLY: string,
+    +DIALOG_CONFIRM_CANCEL: string,
 
     // spec symbols
     +SPACE: ' ',

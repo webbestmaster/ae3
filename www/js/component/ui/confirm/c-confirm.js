@@ -10,6 +10,8 @@ import type {GetConfirmDetailType} from './action';
 import {defaultEventName} from './action';
 import {Dialog} from '../dialog/c-dialog';
 import style from './style.scss';
+import type {LangKeyType} from '../../locale/translation/type';
+import {Locale} from '../../locale/c-locale';
 
 type PropsType = {|
     eventName?: string,
@@ -135,7 +137,7 @@ export class Confirm extends Component<PropsType, StateType> {
                         onKeyPress={view.handleApplyCallBack}
                         onClick={view.handleApplyCallBack}
                     >
-                        % Apply %
+                        <Locale stringKey={('DIALOG_CONFIRM_APPLY': LangKeyType)}/>
                     </button>
                     <button
                         className={style.dialog_action_button}
@@ -143,7 +145,7 @@ export class Confirm extends Component<PropsType, StateType> {
                         onKeyPress={view.handleCancelCallBack}
                         onClick={view.handleCancelCallBack}
                     >
-                        % Cancel %
+                        <Locale stringKey={('DIALOG_CONFIRM_CANCEL': LangKeyType)}/>
                     </button>
                 </div>
             </Dialog>
