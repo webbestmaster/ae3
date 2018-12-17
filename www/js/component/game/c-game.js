@@ -59,6 +59,7 @@ import {Confirm} from '../ui/confirm/c-confirm';
 import type {LangKeyType} from '../locale/translation/type';
 import {Locale} from '../locale/c-locale';
 import {TapToContinueDialogHint} from './ui/tap-to-continue-dialog-hint';
+import {getWaitForLangKey} from './ui/helper';
 
 const gameConfirmEventName = 'game-confirm-event-name';
 
@@ -663,7 +664,26 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             return null;
         }
 
-        const earnedString = popup.changeActiveUser.showMoney ? ', earned: ' + earnedMoney : '';
+        const incomeString = popup.changeActiveUser.showMoney ?
+            <Locale stringKey={('INCOME': LangKeyType)} valueMap={{value: earnedMoney}}/> :
+            null;
+
+        if (activeUserId === userId) {
+            return (
+                <Dialog
+                    key="change-active-user-dialog"
+                    isOpen={popup.changeActiveUser.isOpen}
+                    onClick={view.handleOnClickChangeActiveUserPopup}
+                >
+                    <DialogHeader>
+                        <Locale stringKey={('YOUR_TURN': LangKeyType)}/>
+                        <br/>
+                        {incomeString}
+                    </DialogHeader>
+                    <TapToContinueDialogHint/>
+                </Dialog>
+            );
+        }
 
         return (
             <Dialog
@@ -672,7 +692,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                 onClick={view.handleOnClickChangeActiveUserPopup}
             >
                 <DialogHeader>
-                    {activeUserId === userId ? 'your turn' + earnedString : 'wait for: ' + activeUserColor}
+                    <Locale stringKey={getWaitForLangKey(activeUserColor)}/>
                 </DialogHeader>
                 <TapToContinueDialogHint/>
             </Dialog>

@@ -77,6 +77,12 @@ export type LangDataType = {|
     +YOU_WIN: string,
     +YOU_DEFEAT: string,
     +DROP_TURN_CONFIRM_QUESTION: string,
+    +INCOME: string,
+    +YOUR_TURN: string,
+    +WAIT_FOR_RED: string,
+    +WAIT_FOR_BLUE: string,
+    +WAIT_FOR_GREEN: string,
+    +WAIT_FOR_BLACK: string,
 
     // spec symbols
     +SPACE: ' ',
