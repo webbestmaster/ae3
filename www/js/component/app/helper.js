@@ -52,7 +52,7 @@ export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapTyp
     methodMap.addItem(loadSteps.loadingTextures.id, loadSteps.loadingTextures.langKey);
     // methodMap.addItem(loadSteps.preparationOfImages.id, loadSteps.preparationOfImages.langKey);
 
-    if (body !== null) {
+    if (body) {
         // reduce 300ms delay
         FastClick.attach(body);
     } else {
@@ -78,13 +78,7 @@ export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapTyp
     methodMap.increaseItem(loadSteps.environmentSetting.id);
 
     // disable extra scroll on iOS, use Scroll component
-    document.addEventListener(
-        'touchmove',
-        (evt: Event) => {
-            evt.preventDefault();
-        },
-        false
-    );
+    document.addEventListener('touchmove', (evt: Event): void => evt.preventDefault(), false);
 
     methodMap.increaseItem(loadSteps.environmentSetting.id);
     methodMap.onLoadItem(loadSteps.environmentSetting.id);

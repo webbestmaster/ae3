@@ -14,6 +14,30 @@
 
 </head>
 <body>
+
+<div class="js-image-scale-progress-bar image-scale-progress-bar">
+    <div class="js-image-scale-progress-bar--line image-scale-progress-bar--line"></div>
+    <style>
+        .image-scale-progress-bar {
+            display: none;
+            width: 100%;
+            height: 4px;
+            position: absolute;
+            z-index: 10;
+            background-color: #7f8598;
+            left: 0;
+            top: 0;
+        }
+
+        .image-scale-progress-bar--line {
+            width: 50%;
+            display: none;
+            background-color: #333c57;
+            height: 100%;
+        }
+    </style>
+</div>
+
 <div class="js-app-wrapper app-wrapper">
     <div class="loading-preview">
         <style>

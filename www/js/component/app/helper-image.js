@@ -164,22 +164,44 @@ export async function initImages(methodMap: LoadAppPassedMethodMapType): Promise
     await loadImagesToTextures(imageList, methodMap);
 
     const queue = new Queue();
+    const progressBar = document.querySelector('.js-image-scale-progress-bar');
+    const progressLine = document.querySelector('.js-image-scale-progress-bar--line');
 
-    imageList.forEach((imageSrc: string) => {
+    if (progressBar && progressLine) {
+        progressBar.style.display = 'block';
+    } else {
+        console.error('can not find bar', progressBar, progressLine);
+    }
+
+    const listLength = imageList.length;
+
+    imageList.forEach((imageSrc: string, index: number) => {
         queue.push(
             async (): Promise<void> => {
                 const imageScale1 = await scaleImage(imageSrc, 1);
                 const imageScale2 = await scaleImage(imageSrc, 2);
+
+                if (progressLine) {
+                    progressLine.style.width = index / listLength * 100 + '%';
+                    progressLine.style.display = 'block';
+                }
 
                 if (imageScale1 === null || imageScale2 === null) {
                     console.error('error with image scaling', imageSrc);
                     return;
                 }
 
-                // console.log('image scaled');
-
                 imageCache.push(imageScale1, imageScale2);
             }
         );
+    });
+
+    queue.push(() => {
+        if (progressBar && progressBar.parentNode) {
+            progressBar.parentNode.removeChild(progressBar);
+            return;
+        }
+
+        console.error('can not find progressBar');
     });
 }
