@@ -846,8 +846,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                     key="canvas"
                     ref={view.node.canvas}
                     style={{
-                        // TODO: uncomment this for production
-                        // pointerEvents: isCanvasDisabled ? 'none' : 'auto',
+                        pointerEvents: isCanvasDisabled ? 'none' : 'auto',
                         width: props.system.screen.width,
                         height: props.system.screen.height - bottomBarData.height,
                     }}
