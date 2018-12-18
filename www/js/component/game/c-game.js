@@ -60,7 +60,6 @@ import type {LangKeyType} from '../locale/translation/type';
 import {Locale} from '../locale/c-locale';
 import {TapToContinueDialogHint} from './ui/tap-to-continue-dialog-hint';
 import {getWaitForLangKey} from './ui/helper';
-import type {UserType} from '../auth/reducer';
 
 const gameConfirmEventName = 'game-confirm-event-name';
 

@@ -4,6 +4,7 @@ import type {Node} from 'react';
 import React from 'react';
 import {Fade} from '../fade/c-fade';
 import style from './style.scss';
+import {forceWindowUpdate} from '../fade/helper';
 
 type PropsType = {|
     +isOpen: boolean,
@@ -14,9 +15,19 @@ type PropsType = {|
 |};
 
 export function Dialog({isOpen, children, onClick: handleOnClick, isModal}: PropsType): Node {
+    const fadeProps = {
+        isShow: isOpen,
+        onEnter: forceWindowUpdate,
+        // onEntering={() => console.log('onEntering')}
+        onEntered: forceWindowUpdate,
+        onExit: forceWindowUpdate,
+        // onExiting={() => console.log('onExiting')}
+        onExited: forceWindowUpdate,
+    };
+
     if (!handleOnClick) {
         return (
-            <Fade isShow={isOpen}>
+            <Fade {...fadeProps}>
                 <div className={style.dialog_wrapper}>
                     <div className={style.dialog_content}>{children}</div>
                 </div>
@@ -26,7 +37,7 @@ export function Dialog({isOpen, children, onClick: handleOnClick, isModal}: Prop
 
     if (isModal === true) {
         return (
-            <Fade isShow={isOpen}>
+            <Fade {...fadeProps}>
                 <div className={style.dialog_wrapper}>
                     <button
                         className={style.dialog_content}
@@ -42,7 +53,7 @@ export function Dialog({isOpen, children, onClick: handleOnClick, isModal}: Prop
     }
 
     return (
-        <Fade isShow={isOpen}>
+        <Fade {...fadeProps}>
             <button type="button" onClick={handleOnClick} onKeyPress={handleOnClick} className={style.dialog_wrapper}>
                 <div className={style.dialog_content}>{children}</div>
             </button>
