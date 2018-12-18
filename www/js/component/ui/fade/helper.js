@@ -12,15 +12,15 @@ export function forceWindowUpdate() {
         return;
     }
 
-    body.style.cssText = ';-webkit-transform: rotateZ(0deg);';
-    body.offsetHeight;
+    body.style.cssText += ';-webkit-transform: rotateZ(0deg);';
+    Math.max(body.offsetHeight, body.offsetWidth);
     body.style.cssText += ';-webkit-transform: none;';
 
     requestAnimationFrame(() => {
         window.dispatchEvent(new Event('resize'));
 
-        body.style.cssText = '-webkit-transform: rotateZ(0deg)';
-        body.offsetHeight;
-        body.style.cssText += ';-webkit-transform: none';
+        body.style.cssText += ';-webkit-transform: rotateZ(0deg);';
+        Math.max(body.offsetHeight, body.offsetWidth);
+        body.style.cssText += ';-webkit-transform: none;';
     });
 }
