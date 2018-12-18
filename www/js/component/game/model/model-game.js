@@ -59,6 +59,7 @@ import {botBuyUnit, canPlayerBuyUnit, getBotTurnDataList} from './bot';
 import {waitFor} from '../../../lib/wait-for';
 import {wait} from '../../../lib/sleep';
 import {onPushStateDone, subscribeOnPushStateDone} from '../../../lib/on-message-done';
+import {forceWindowUpdate} from '../../ui/fade/helper';
 
 type RenderSettingType = {|
     width: number,
@@ -200,11 +201,7 @@ export class GameModel {
 
         game.refreshWispAura();
 
-        // FIXME: remove extra dispatch
-        window.dispatchEvent(new window.Event('resize'));
-        requestAnimationFrame(() => {
-            window.dispatchEvent(new window.Event('resize'));
-        });
+        forceWindowUpdate();
     }
 
     bindEventListeners() {
