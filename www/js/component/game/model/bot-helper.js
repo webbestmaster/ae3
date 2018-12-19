@@ -791,7 +791,8 @@ const rateConfig: {[fieldName: $Keys<RawRateType>]: number} = {
     attack: 10,
     hitPoints: 1,
     placeArmor: 1,
-    availableGivenDamage: -1 / 100500, // TODO: make normal rating, -1 / 5
+    // availableGivenDamage: -1 / 100500, // TODO: make normal rating, -1 / 5
+    availableGivenDamage: 0, // TODO: make normal rating, -1 / 5
     madePathToNearOccupyAbleBuilding: 2,
     isReachedNearOccupyAbleBuilding: 1000,
     madePathToNearHealsBuilding: 2,
