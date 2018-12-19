@@ -507,7 +507,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
     }
 
     // eslint-disable-next-line complexity, max-statements
-    renderEndGameDialog(): Node | null {
+    renderEndGameDialog(): Node {
         const view = this;
         const {state} = view;
         const {popup} = state;
@@ -516,71 +516,50 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         const storeState = view.getStoreState();
 
         if (popup.endGame.isOpen === false || storeState.isOpen) {
-            return null;
+            return view.renderEndGameDialogWrapper(null);
         }
 
         const mapState = game.getMapState();
 
         if (mapState === null) {
             console.error('No mapState for renderEndGameDialog');
-            return null;
+            return view.renderEndGameDialogWrapper(null);
         }
 
         const isCurrentUserDefeat = isUserDefeat(userId, mapState);
 
         if (isCurrentUserDefeat) {
-            return view.renderEndGameDialogWrapper(
-                <>
-                    <DialogHeader>
-                        <Locale stringKey={('YOU_DEFEAT': LangKeyType)}/>
-                    </DialogHeader>
-                    <TapToContinueDialogHint/>
-                </>
-            );
+            return view.renderEndGameDialogWrapper(<Locale stringKey={('YOU_DEFEAT': LangKeyType)}/>);
         }
 
         const matchResult = getMatchResult(mapState);
 
         if (matchResult === null) {
             console.error('to show end game popup game has to have winner');
-            return null;
+            return view.renderEndGameDialogWrapper(null);
         }
 
         const mapUser = find(mapState.userList, {userId}) || null;
 
         if (mapUser === null) {
             console.error('can not find mapUser with userId', userId, mapState);
-            return null;
+            return view.renderEndGameDialogWrapper(null);
         }
 
-        const dialogContent =
-            matchResult.winner.teamId === mapUser.teamId ?
-                <>
-                    <DialogHeader>
-                        <Locale stringKey={('YOU_WIN': LangKeyType)}/>
-                    </DialogHeader>
-                    <TapToContinueDialogHint/>
-                </> :
-                <>
-                    <DialogHeader>
-                        <Locale stringKey={('YOU_DEFEAT': LangKeyType)}/>
-                    </DialogHeader>
-                    <TapToContinueDialogHint/>
-                </>
+        const langKeyResult = matchResult.winner.teamId === mapUser.teamId ? 'YOU_WIN' : 'YOU_DEFEAT';
 
-            ;
-
-        return view.renderEndGameDialogWrapper(dialogContent);
+        return view.renderEndGameDialogWrapper(<Locale stringKey={(langKeyResult: LangKeyType)}/>);
     }
 
-    renderEndGameDialogWrapper(endGameDialogContent: Node | Array<Node>): Node {
+    renderEndGameDialogWrapper(endGameDialogHeader: Node): Node {
         const view = this;
         const {state} = view;
         const {popup} = state;
 
         return (
             <Dialog key="end-game-dialog" isOpen={popup.endGame.isOpen} onClick={view.handleLeaveGame}>
-                {endGameDialogContent}
+                <DialogHeader>{endGameDialogHeader}</DialogHeader>
+                <TapToContinueDialogHint/>
             </Dialog>
         );
     }
