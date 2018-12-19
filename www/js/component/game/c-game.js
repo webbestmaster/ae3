@@ -107,6 +107,7 @@ type PropsType = $ReadOnly<$Exact<{|
 export type PopupParameterType = {|
     isOpen: boolean,
     showMoney?: boolean,
+    activeUserId: string,
 |};
 
 export type DisabledByItemType =
@@ -133,6 +134,7 @@ type StateType = {|
         changeActiveUser: {|
             isOpen: boolean,
             showMoney: boolean,
+            activeUserId: string,
         |},
     |},
     activeLandscapeTile: {|
@@ -175,6 +177,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                 changeActiveUser: {
                     isOpen: false,
                     showMoney: true,
+                    activeUserId: '',
                 },
             },
             activeLandscapeTile: {
@@ -221,6 +224,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         view.popupChangeActiveUser({
             isOpen: true,
             showMoney: false,
+            activeUserId: settings.map.activeUserId,
         });
 
         /*
@@ -283,12 +287,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         let allUserResponse = null;
 
         // need just for debug
-        view.setState(
-            (prevState: StateType): StateType => {
-                prevState.socketMessageList.push(message);
-                return prevState;
-            }
-        );
+        view.setState({socketMessageList: [...state.socketMessageList, message]});
 
         switch (message.type) {
             case messageConst.type.takeTurn:
@@ -594,6 +593,8 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         view.setState(
             (prevState: StateType): StateType => {
                 // eslint-disable-next-line no-param-reassign
+                prevState.popup.changeActiveUser.activeUserId = state.activeUserId;
+                // eslint-disable-next-line no-param-reassign
                 prevState.popup.changeActiveUser.isOpen = state.isOpen;
                 // eslint-disable-next-line no-param-reassign
                 prevState.popup.changeActiveUser.showMoney = isBoolean(state.showMoney) ? state.showMoney : true;
@@ -612,18 +613,34 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             return;
         }
 
-        view.popupChangeActiveUser({isOpen: false});
+        view.popupChangeActiveUser({
+            isOpen: false,
+            activeUserId: popup.changeActiveUser.activeUserId,
+        });
     };
 
+    // eslint-disable-next-line id-length, id-match
+    renderPopupChangeActiveUserDialogContent(isOpen: boolean, children: React$Node): Node {
+        const view = this;
+
+        return (
+            <Dialog onClick={view.handleOnClickChangeActiveUserPopup} key="change-active-user-dialog" isOpen={isOpen}>
+                {children}
+                <TapToContinueDialogHint/>
+            </Dialog>
+        );
+    }
+
     // eslint-disable-next-line complexity, max-statements
-    renderPopupChangeActiveUserDialog(): Node | null {
+    renderPopupChangeActiveUserDialog(): Node {
         const view = this;
         const {props, state} = view;
         const {popup} = state;
         const {game} = state;
+        const closedDialog = this.renderPopupChangeActiveUserDialogContent(false, null);
 
         if (popup.endGame.isOpen === true) {
-            return null;
+            return closedDialog;
         }
 
         const mapState = game.getMapState();
@@ -631,68 +648,52 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         if (mapState === null) {
             if (popup.changeActiveUser.isOpen) {
                 console.error('No show popup for change ActiveUser');
-                return null;
+                return closedDialog;
             }
             console.log('No show popup for change ActiveUser');
-            return null;
+            return closedDialog;
         }
 
-        const activeUserId = mapState.activeUserId;
+        const activeUserId = popup.changeActiveUser.activeUserId;
         const userId = user.getId();
 
         const mapActiveUser = find(mapState.userList, {userId: activeUserId}) || null;
 
         if (mapActiveUser === null) {
             console.error('No ActiveUser for renderPopupChangeActiveUserDialog', activeUserId, mapState);
-            return null;
+            return closedDialog;
         }
 
         const earnedMoney = game.getEarnedMoney(activeUserId);
 
         if (earnedMoney === null) {
             console.error('no earnedMoney for renderPopupChangeActiveUserDialog', game);
-            return null;
+            return closedDialog;
         }
 
         const activeUserColor = getUserColor(activeUserId, mapState.userList);
 
         if (activeUserColor === null) {
             console.error('no activeUserColor for renderPopupChangeActiveUserDialog', game);
-            return null;
+            return closedDialog;
         }
 
-        const incomeString = popup.changeActiveUser.showMoney ?
-            <Locale stringKey={('INCOME': LangKeyType)} valueMap={{value: earnedMoney}}/> :
-            null;
-
         if (activeUserId === userId) {
-            return (
-                <Dialog
-                    key="change-active-user-dialog"
-                    isOpen={popup.changeActiveUser.isOpen}
-                    onClick={view.handleOnClickChangeActiveUserPopup}
-                >
-                    <DialogHeader>
-                        <Locale stringKey={('YOUR_TURN': LangKeyType)}/>
-                        <br/>
-                        {incomeString}
-                    </DialogHeader>
-                    <TapToContinueDialogHint/>
-                </Dialog>
+            return this.renderPopupChangeActiveUserDialogContent(
+                popup.changeActiveUser.isOpen,
+                <DialogHeader>
+                    <Locale stringKey={('YOUR_TURN': LangKeyType)}/>
+                    <br/>
+                    <Locale stringKey={('INCOME': LangKeyType)} valueMap={{value: earnedMoney}}/>
+                </DialogHeader>
             );
         }
 
-        return (
-            <Dialog
-                key="change-active-user-dialog"
-                isOpen={popup.changeActiveUser.isOpen}
-                onClick={view.handleOnClickChangeActiveUserPopup}
-            >
-                <DialogHeader>
-                    <Locale stringKey={getWaitForLangKey(activeUserColor)}/>
-                </DialogHeader>
-                <TapToContinueDialogHint/>
-            </Dialog>
+        return this.renderPopupChangeActiveUserDialogContent(
+            popup.changeActiveUser.isOpen,
+            <DialogHeader>
+                <Locale stringKey={getWaitForLangKey(activeUserColor)}/>
+            </DialogHeader>
         );
     }
 

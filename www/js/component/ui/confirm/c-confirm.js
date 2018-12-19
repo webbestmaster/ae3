@@ -19,6 +19,7 @@ type PropsType = {|
 
 type StateType = {|
     +isOpen: boolean,
+    +id: number,
     // eslint-disable-next-line id-match
     +content: React$Node,
     +applyCallBack: () => mixed,
@@ -37,6 +38,7 @@ export class Confirm extends Component<PropsType, StateType> {
         view.state = {
             isOpen: false,
             content: '',
+            id: Math.random(),
             applyCallBack: (): null => null,
             cancelCallBack: (): null => null,
         };
@@ -128,7 +130,7 @@ export class Confirm extends Component<PropsType, StateType> {
         const {content, isOpen} = state;
 
         return (
-            <Dialog isOpen={isOpen}>
+            <Dialog isOpen={isOpen} key={state.id}>
                 {content}
                 <div className={style.dialog_action_wrapper}>
                     <button
