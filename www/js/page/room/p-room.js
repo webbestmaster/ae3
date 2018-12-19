@@ -454,12 +454,12 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         const {props, state} = view;
         const {userList} = state;
         const {match} = props;
-        const myPlayerIndex = view.getMyPlayerIndex();
-        const roomId = match.params.roomId || '';
 
         if (userList.length === 0) {
             return null;
         }
+
+        const myPlayerIndex = view.getMyPlayerIndex();
 
         return (
             <div className={style.user_list__wrapper}>
@@ -602,11 +602,12 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         const {props, state} = view;
         const {settings, userList, isGameStart, isRoomDataFetching} = state;
         const roomId = props.match.params.roomId || '';
-        const myPlayerIndex = view.getMyPlayerIndex();
 
         if (isGameStart === true) {
             return <Game roomId={roomId}/>;
         }
+
+        const myPlayerIndex = view.getMyPlayerIndex();
 
         return (
             <Page>
