@@ -48,7 +48,7 @@ import {socket} from '../../../module/socket';
 import MainModel from 'main-model';
 import * as unitMaster from './unit/master';
 import {defaultUnitData} from './unit/unit-guide';
-import {bottomBarData, GameView} from '../c-game';
+import {bottomBarData, disableReasonKeyMap, GameView} from '../c-game';
 import {storeViewId} from '../../store/c-store';
 import {Queue} from '../../../lib/queue/queue';
 import {localSocketIoClient} from '../../../module/socket-local';
@@ -385,7 +385,7 @@ export class GameModel {
         mapUser.money += earnedMoney;
 
         // eslint-disable-next-line sonarjs/no-duplicate-string
-        game.gameView.addDisableReason('client-push-state');
+        game.gameView.addDisableReason(disableReasonKeyMap.clientPushState);
 
         await serverApi
             .pushState(game.roomId, userId, {
@@ -402,7 +402,7 @@ export class GameModel {
                 console.error('error with refresh unit list pushed');
                 console.error(error);
             })
-            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .then((): void => game.gameView.removeDisableReason(disableReasonKeyMap.clientPushState))
             .catch((error: Error) => {
                 // eslint-disable-next-line sonarjs/no-duplicate-string
                 console.error('error with removeDisableReason client-push-state');
@@ -662,6 +662,9 @@ export class GameModel {
                 ) {
                     return true;
                 }
+
+                // wait for refreshUnitActionState is applied
+                await wait(1e3);
 
                 game.makeBotTurn()
                     .then((): void => console.log('Bot Done turn - Successful'))
@@ -1755,7 +1758,7 @@ export class GameModel {
         movedUnit.action = movedUnit.action || {};
         movedUnit.action.didMove = true;
 
-        game.gameView.addDisableReason('client-push-state');
+        game.gameView.addDisableReason(disableReasonKeyMap.clientPushState);
 
         await serverApi
             .pushState(game.roomId, activeUserId, {
@@ -1783,7 +1786,7 @@ export class GameModel {
                 console.error('error with refresh unit action move pushed');
                 console.log(error);
             })
-            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .then((): void => game.gameView.removeDisableReason(disableReasonKeyMap.clientPushState))
             .catch((error: Error) => {
                 console.error('error with removeDisableReason client-push-state');
                 console.error(error);
@@ -1871,7 +1874,7 @@ export class GameModel {
             console.log('defenderUnitAction can NOT strike back');
         }
 
-        game.gameView.addDisableReason('client-push-state');
+        game.gameView.addDisableReason(disableReasonKeyMap.clientPushState);
 
         serverApi
             .pushState(game.roomId, activeUserId, {
@@ -1889,7 +1892,7 @@ export class GameModel {
                 console.error('error with unit action attack pushed');
                 console.log(error);
             })
-            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .then((): void => game.gameView.removeDisableReason(disableReasonKeyMap.clientPushState))
             .catch((error: Error) => {
                 console.error('error with removeDisableReason client-push-state');
                 console.log(error);
@@ -1929,7 +1932,7 @@ export class GameModel {
 
         building.type = mapGuide.building.farm.name;
 
-        game.gameView.addDisableReason('client-push-state');
+        game.gameView.addDisableReason(disableReasonKeyMap.clientPushState);
 
         await serverApi
             .pushState(game.roomId, activeUserId, {
@@ -1946,7 +1949,7 @@ export class GameModel {
                 console.error('error with unit action fix building pushed');
                 console.log(error);
             })
-            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .then((): void => game.gameView.removeDisableReason(disableReasonKeyMap.clientPushState))
             .catch((error: Error) => {
                 console.error('error with removeDisableReason client-push-state');
                 console.log(error);
@@ -1997,7 +2000,7 @@ export class GameModel {
 
         building.userId = unitAction.userId;
 
-        game.gameView.addDisableReason('client-push-state');
+        game.gameView.addDisableReason(disableReasonKeyMap.clientPushState);
 
         await serverApi
             .pushState(game.roomId, activeUserId, {
@@ -2014,7 +2017,7 @@ export class GameModel {
                 console.error('error with unit action occupy building pushed');
                 console.log(error);
             })
-            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .then((): void => game.gameView.removeDisableReason(disableReasonKeyMap.clientPushState))
             .catch((error: Error) => {
                 console.error('error with removeDisableReason client-push-state');
                 console.log(error);
@@ -2073,7 +2076,7 @@ export class GameModel {
             },
         });
 
-        game.gameView.addDisableReason('client-push-state');
+        game.gameView.addDisableReason(disableReasonKeyMap.clientPushState);
 
         await serverApi
             .pushState(game.roomId, activeUserId, {
@@ -2091,7 +2094,7 @@ export class GameModel {
                 console.error('error with unit action raise skeleton pushed');
                 console.log(error);
             })
-            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .then((): void => game.gameView.removeDisableReason(disableReasonKeyMap.clientPushState))
             .catch((error: Error) => {
                 console.error('error with removeDisableReason client-push-state');
                 console.log(error);
@@ -2158,7 +2161,7 @@ export class GameModel {
         mapUnit.damage.given = mapUnit.damage.given || 0;
         mapUnit.damage.given += defaultUnitData.experience.destroyBuilding;
 
-        game.gameView.addDisableReason('client-push-state');
+        game.gameView.addDisableReason(disableReasonKeyMap.clientPushState);
 
         await serverApi
             .pushState(game.roomId, activeUserId, {
@@ -2176,7 +2179,7 @@ export class GameModel {
                 console.error('error with unit action destroy building pushed');
                 console.log(error);
             })
-            .then((): void => game.gameView.removeDisableReason('client-push-state'))
+            .then((): void => game.gameView.removeDisableReason(disableReasonKeyMap.clientPushState))
             .catch((error: Error) => {
                 console.error('error with removeDisableReason client-push-state');
                 console.log(error);

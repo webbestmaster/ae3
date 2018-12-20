@@ -116,7 +116,12 @@ export type DisabledByItemType =
     | 'client-drop-turn'
     | 'end-game-popup'
     | 'change-active-user-popup'
-    | 'sync-map-with-server-user-list';
+    | 'sync-map-with-server-user-list'
+    | 'client-push-state--refresh-unit-list-state';
+
+export const disableReasonKeyMap: {[key: string]: DisabledByItemType} = {
+    clientPushState: 'client-push-state',
+};
 
 type StateType = {|
     // settings?: AllRoomSettingsType,
