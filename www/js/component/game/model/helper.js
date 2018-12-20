@@ -656,13 +656,17 @@ function hasPlaceForNewUnit(x: number, y: number, gameData: GameDataType): boole
             }
 
             // check unit free place
-            // if (find(gameData.unitList, (unit: Unit): boolean => unit.attr.x === placeX && unit.attr.y === placeY)) {
-            if (find(gameData.unitList, {attr: {x: placeX, y: placeY}})) {
-                console.log('?hasPlaceForNewUnit ---> unit on:', 'x:', placeX, 'y:', placeY);
-                return false;
+            const unitOnPlace =
+                gameData.unitList.find(
+                    (unitInList: Unit): boolean => unitInList.attr.x === placeX && unitInList.attr.y === placeY
+                ) || null;
+
+            if (unitOnPlace === null) {
+                return true;
             }
 
-            return true;
+            console.log('?hasPlaceForNewUnit ---> unit on:', 'x:', placeX, 'y:', placeY);
+            return false;
         }
     );
 }

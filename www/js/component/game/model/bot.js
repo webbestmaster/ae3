@@ -5,7 +5,7 @@ import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionTyp
 import {Unit} from './unit/unit';
 import {rateBotResultActionData} from './bot-helper';
 import {Building} from './building/building';
-import {canOpenStore, isCommanderLive} from './helper';
+import {isCommanderLive} from './helper';
 import * as serverApi from '../../../module/server-api';
 import {messageConst} from '../../../lib/local-server/room/message-const';
 import type {UnitTypeCommanderType, UnitTypeCommonType} from './unit/unit-guide';
@@ -289,7 +289,15 @@ function getStoreList(activeUserId: string, gameData: GameDataType): Array<Build
                 return false;
             }
 
-            return canOpenStore(buildingInListAttr.x, buildingInListAttr.y, gameData);
+            const unitOnStore =
+                gameData.unitList.find(
+                    (unitInList: Unit): boolean => {
+                        return unitInList.attr.x === buildingInListAttr.x && unitInList.attr.y === buildingInListAttr.y;
+                    }
+                ) || null;
+
+            // if on store stay NO unit - buy unit
+            return unitOnStore === null;
         }
     );
 
