@@ -27,6 +27,7 @@ import number7 from './i/font/7.png';
 import number8 from './i/font/8.png';
 import number9 from './i/font/9.png';
 import space from './i/font/space.png';
+import {landscapeImageMap} from './landscape-image-map';
 
 const numberList = [number0, number1, number2, number3, number4, number5, number6, number7, number8, number9];
 
@@ -87,7 +88,7 @@ export class LandscapeInfo extends Component<PropsType, StateType> {
         const buildingOnPlace = find(props.gameData.buildingList, {attr: {x, y}}) || null;
 
         if (buildingOnPlace === null) {
-            return imageMap.landscape[map.landscape[y][x]];
+            return map.landscape[y][x];
         }
 
         const buildingAttr = buildingOnPlace.attr;
@@ -98,25 +99,23 @@ export class LandscapeInfo extends Component<PropsType, StateType> {
                 buildingType
             )
         ) {
-            return imageMap.building[mapGuide.building[buildingType].spriteName];
+            return buildingType;
         }
 
         const buildingUserId = buildingAttr.userId;
 
-        const castlePostfix = buildingType === mapGuide.building.castle.name ? '-square' : '';
-
         if (isNotString(buildingUserId)) {
-            return imageMap.building[buildingType + '-gray' + castlePostfix];
+            return buildingType + '-gray';
         }
 
         const userColor = getUserColor(buildingUserId, props.gameData.userList);
 
         if (userColor === null) {
             console.error('User color is not defined');
-            return imageMap.building[buildingType + '-gray' + castlePostfix];
+            return buildingType + '-gray';
         }
 
-        return imageMap.building[buildingType + '-' + userColor + castlePostfix];
+        return buildingType + '-' + userColor;
     }
 
     render(): Node {
@@ -124,7 +123,7 @@ export class LandscapeInfo extends Component<PropsType, StateType> {
 
         return (
             <div className={style.wrapper}>
-                <Canvas className={style.image} width={48} height={48} src={view.getImageSrc()}/>
+                <img alt="" className={style.image} src={landscapeImageMap[view.getImageSrc()]}/>
                 {view.renderArmorData()}
                 <div className={style.frame}/>
             </div>
