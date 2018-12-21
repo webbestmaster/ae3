@@ -8,14 +8,10 @@ import style from './style.scss';
 import type {GameDataType} from '../../model/unit/unit';
 import type {MapType} from '../../../../maps/type';
 import find from 'lodash/find';
-import {Canvas} from '../../../ui/canvas/c-canvas';
-import {imageMap} from '../../image/image-map';
-
 import armorImage from './i/armor.png';
 import {isNotString} from '../../../../lib/is/is';
 import {getUserColor} from '../../model/helper';
 import {mapGuide} from '../../../../maps/map-guide';
-
 import number0 from './i/font/0.png';
 import number1 from './i/font/1.png';
 import number2 from './i/font/2.png';
