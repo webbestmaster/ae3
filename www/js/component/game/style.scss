@@ -64,9 +64,18 @@ $bottom-bar--border-color: #404757;
     width: auto;
 }
 
-.bottom_bar__icon {
+.bottom_bar__unit {
     float: left;
+    height: 24px;
     margin: 1px 5px 0 0;
+    width: 24px;
+}
+
+.bottom_bar__money {
+    float: left;
+    height: 24px;
+    margin: 1px 5px 0 0;
+    width: 16px;
 }
 
 .bottom_bar__text {

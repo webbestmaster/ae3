@@ -41,12 +41,11 @@ import {localSocketIoClient} from '../../module/socket-local';
 import type {UserColorType} from '../../maps/map-guide';
 import {LandscapeInfo} from './ui/landscape-info/c-landscape-info';
 import {isBoolean} from '../../lib/is/is';
-import iconMoney from './ui/icon/money.png';
-import iconUnitRed from './image/unit/soldier-red-1.png';
-import iconUnitBlue from './image/unit/soldier-blue-1.png';
-import iconUnitGreen from './image/unit/soldier-green-1.png';
-import iconUnitBlack from './image/unit/soldier-black-1.png';
-import {Canvas} from '../ui/canvas/c-canvas';
+import iconMoney from './i/bottom-bar/money.png';
+import iconUnitRed from './i/bottom-bar/unit-red.png';
+import iconUnitBlue from './i/bottom-bar/unit-blue.png';
+import iconUnitGreen from './i/bottom-bar/unit-green.png';
+import iconUnitBlack from './i/bottom-bar/unit-black.png';
 import type {SetOpenFromGameType} from '../store/action';
 import {setOpenFromGame} from '../store/action';
 import {messageConst} from '../../lib/local-server/room/message-const';
@@ -775,16 +774,11 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                     y={state.activeLandscapeTile.y}
                 />
                 <BottomBar className={classNames(style.bottom_bar, bottomBarColorMap[activeUserColor])}>
-                    <Canvas
-                        className={style.bottom_bar__icon}
-                        width={24}
-                        height={24}
-                        src={unitIconMap[activeUserColor]}
-                    />
+                    <img className={style.bottom_bar__unit} src={unitIconMap[activeUserColor]} alt=""/>
                     <span className={style.bottom_bar__text}>
                         {supplyState.unitCount + '/' + supplyState.unitLimit}
                     </span>
-                    <Canvas className={style.bottom_bar__icon} width={16} height={24} src={iconMoney}/>
+                    <img className={style.bottom_bar__money} src={iconMoney} alt=""/>
                     <span className={style.bottom_bar__text}>
                         {mapUserData.money}
                         &nbsp;
