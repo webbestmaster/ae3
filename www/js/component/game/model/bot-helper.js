@@ -363,9 +363,11 @@ function getCanLeaveToOccupyBuilding(botResultActionData: BotResultActionDataTyp
                 return false;
             }
 
-            const distanceToBuilding = ((x - unitInList.attr.x) ** 2 + (y - unitInList.attr.y) ** 2) ** 0.5;
+            const deltaX = Math.abs(x - unitInList.attr.x);
+            const deltaY = Math.abs(y - unitInList.attr.y);
+            const minPathToBuilding = 3;
 
-            return distanceToBuilding <= 2;
+            return deltaX <= minPathToBuilding && deltaY <= minPathToBuilding;
         }
     );
 
