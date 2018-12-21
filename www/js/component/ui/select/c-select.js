@@ -10,7 +10,6 @@ import style from './style.scss';
 import type {SelectIconNameType} from './icon/c-icon';
 import {icon} from './icon/c-icon';
 import {isString} from '../../../lib/is/is';
-import {Canvas} from '../canvas/c-canvas';
 
 type PropsType = {|
     +children: Node,
@@ -61,15 +60,7 @@ export class Select extends Component<PropsType, StateType> {
             return null;
         }
 
-        // eslint-disable-next-line id-match
-        if (!IS_PRODUCTION) {
-            if (!icon.hasOwnProperty(iconPath)) {
-                console.error('unsupported iconPath', iconPath);
-                return null;
-            }
-        }
-
-        return <Canvas width={24} height={24} className={style.icon} src={icon[iconPath]}/>;
+        return <img className={style.icon} src={icon[iconPath]} alt=""/>;
     }
 
     handleOnChangeSelect = () => {

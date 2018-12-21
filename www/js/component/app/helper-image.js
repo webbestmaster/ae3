@@ -3,7 +3,7 @@
 /* global window, document, fetch, URL, IS_PRODUCTION */
 
 import * as PIXI from 'pixi.js';
-import {Queue} from '../../lib/queue/queue';
+// import {Queue} from '../../lib/queue/queue';
 import type {LoadAppPassedMethodMapType} from '../app-loader/c-app-loader';
 import {loadSteps} from './helper';
 
@@ -57,6 +57,7 @@ async function loadImagesToTextures(
     });
 }
 
+/*
 function loadImage(src: string): Promise<Image | null> {
     return new Promise((resolve: (image: Image) => void, reject: () => void) => {
         const image = new Image();
@@ -87,7 +88,9 @@ function loadImage(src: string): Promise<Image | null> {
         }
     );
 }
+*/
 
+/*
 const pixiApplication = new PIXI.Application(1, 1, {
     view: document.createElement('canvas'),
     autoStart: false,
@@ -98,8 +101,10 @@ const pixiApplication = new PIXI.Application(1, 1, {
     preserveDrawingBuffer: true,
     resolution: window.devicePixelRatio || 1,
 });
+*/
 
 // eslint-disable-next-line complexity, max-statements
+/*
 async function scaleImage(src: string, multiple: number): Promise<ScaledImageDataType | null> {
     const image = await loadImage(src);
 
@@ -120,7 +125,7 @@ async function scaleImage(src: string, multiple: number): Promise<ScaledImageDat
     }
 
     // eslint-disable-next-line id-match
-    /*
+    /!*
     if (!IS_PRODUCTION) {
         return {
             src,
@@ -129,7 +134,7 @@ async function scaleImage(src: string, multiple: number): Promise<ScaledImageDat
             blobUrl: src
         };
     }
-*/
+*!/
 
     const {stage, renderer} = pixiApplication;
 
@@ -159,10 +164,12 @@ async function scaleImage(src: string, multiple: number): Promise<ScaledImageDat
         blobUrl,
     };
 }
+*/
 
 export async function initImages(methodMap: LoadAppPassedMethodMapType): Promise<void> {
     await loadImagesToTextures(imageList, methodMap);
 
+    /*
     const queue = new Queue();
     const progressBar = document.querySelector('.js-image-scale-progress-bar');
     const progressLine = document.querySelector('.js-image-scale-progress-bar--line');
@@ -204,4 +211,5 @@ export async function initImages(methodMap: LoadAppPassedMethodMapType): Promise
 
         console.error('can not find progressBar');
     });
+*/
 }
