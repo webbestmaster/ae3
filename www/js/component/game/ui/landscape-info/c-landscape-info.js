@@ -16,6 +16,20 @@ import {isNotString} from '../../../../lib/is/is';
 import {getUserColor} from '../../model/helper';
 import {mapGuide} from '../../../../maps/map-guide';
 
+import number0 from './i/font/0.png';
+import number1 from './i/font/1.png';
+import number2 from './i/font/2.png';
+import number3 from './i/font/3.png';
+import number4 from './i/font/4.png';
+import number5 from './i/font/5.png';
+import number6 from './i/font/6.png';
+import number7 from './i/font/7.png';
+import number8 from './i/font/8.png';
+import number9 from './i/font/9.png';
+import space from './i/font/space.png';
+
+const numberList = [number0, number1, number2, number3, number4, number5, number6, number7, number8, number9];
+
 type StateType = {};
 type PropsType = {|
     x: number,
@@ -50,17 +64,16 @@ export class LandscapeInfo extends Component<PropsType, StateType> {
                 {armorValue.map(
                     (char: string, index: number): Node => {
                         return (
-                            <Canvas
+                            <img
                                 key={char + '/' + String(index)}
-                                width={12}
-                                height={14}
                                 className={style.armor_symbol}
-                                src={imageMap.font.unit[char]}
+                                src={numberList[parseInt(char, 10)] || space}
+                                alt=""
                             />
                         );
                     }
                 )}
-                <Canvas width={12} height={14} className={style.armor_symbol} src={armorImage}/>
+                <img className={style.armor_symbol} src={armorImage} alt=""/>
             </div>
         );
     }
