@@ -27,14 +27,13 @@ import type {LocaleType} from '../../locale/reducer';
 import {getLocalizedString, Locale} from '../../locale/c-locale';
 import type {UserColorType} from '../../../maps/map-guide';
 import {mapGuide} from '../../../maps/map-guide';
-import {Canvas} from '../../ui/canvas/c-canvas';
-import {imageMap} from '../../game/image/image-map';
 import iconUnitInfoAttack from './i/icon-unit-info-attack.png';
 import iconUnitInfoMove from './i/icon-unit-info-move.png';
 import iconUnitInfoDefence from './i/icon-unit-info-defence.png';
 import iconUnitInfoDescription from './i/icon-unit-info-description.png';
 import iconUnitInfoDescriptionOpen from './i/icon-unit-info-description-open.png';
 import {messageConst} from '../../../lib/local-server/room/message-const';
+import {unitImageMap} from './unit-image-map';
 
 type ReduxPropsType = {|
     +locale: LocaleType,
@@ -271,8 +270,6 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
 
         const supplyState = getSupplyState(props.mapState, user.getId());
 
-        const unitImageScr = imageMap.unit[unitType + '-' + unitColor + '-1'];
-
         return (
             <div key={unitType} className={style.unit_sell_position}>
                 <h3 className={style.unit_name}>
@@ -280,7 +277,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
                 </h3>
 
                 <div className={style.unit_data}>
-                    <Canvas width={48} height={48} className={style.unit_preview} src={unitImageScr}/>
+                    <img className={style.unit_preview} src={unitImageMap[`${unitType}-${unitColor}`]} alt=""/>
 
                     <Button
                         className={classNames(style.buy_button, {
