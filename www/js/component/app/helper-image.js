@@ -7,6 +7,7 @@ import * as PIXI from 'pixi.js';
 import type {LoadAppPassedMethodMapType} from '../app-loader/c-app-loader';
 import {loadSteps} from './helper';
 
+/*
 export type ScaledImageDataType = {|
     src: string,
     width: number,
@@ -14,13 +15,14 @@ export type ScaledImageDataType = {|
     // base64Image: string,
     blobUrl: string,
 |};
+*/
 
-export const imageCache: Array<ScaledImageDataType> = [];
+// export const imageCache: Array<ScaledImageDataType> = [];
 
 const imageList: Array<string> = [];
 const loader = PIXI.loader;
 
-const allImageReqContext = require.context('./../../', true, /\.png$/);
+const allImageReqContext = require.context('./../game/', true, /\.png$/);
 
 allImageReqContext.keys().forEach((fileName: string) => {
     const image = allImageReqContext(fileName);
