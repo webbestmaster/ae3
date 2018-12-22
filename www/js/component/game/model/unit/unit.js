@@ -5,7 +5,15 @@
 import * as PIXI from 'pixi.js';
 import type {MapType, MapUserType, UnitActionStateType, UnitType} from '../../../../maps/type';
 import type {AttackResultUnitType} from '../helper';
-import {bindClick, canOpenStore, getAttackResult, getLevel, getMoviePath, getUserColor} from '../helper';
+import {
+    bindClick,
+    canOpenStore,
+    getAttackResult,
+    getLevel,
+    getMoviePath,
+    getMovieWidePath,
+    getUserColor,
+} from '../helper';
 import {mapGuide} from '../../../../maps/map-guide';
 import type {UnitDataType} from './unit-guide';
 import {defaultUnitData, unitGuideData} from './unit-guide';
@@ -1699,12 +1707,22 @@ export class Unit {
     }
 
     getMoviePath(unitAction: UnitActionMoveType, actionsList: UnitActionsMapType, gameData: GameDataType): PathType {
-        return (
-            getMoviePath(unitAction, actionsList) || [
-                [unitAction.from.x, unitAction.from.y],
-                [unitAction.to.x, unitAction.to.y],
-            ]
-        );
+        const unit = this;
+        const resultPath = getMoviePath(unitAction, actionsList);
+
+        if (resultPath !== null) {
+            return resultPath;
+        }
+
+        const resultWidePath = getMovieWidePath(unitAction, gameData, unit);
+
+        if (resultWidePath === null) {
+            console.error('Wide path must exists!!');
+
+            return [[unitAction.from.x, unitAction.from.y], [unitAction.to.x, unitAction.to.y]];
+        }
+
+        return resultWidePath;
     }
 
     canAttack(defender: Unit): boolean {

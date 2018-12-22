@@ -64,11 +64,13 @@ export function getUserColor(userId: string, userList: Array<MapUserType>): User
     return mapGuide.colorList[userIndex] || null;
 }
 
+const hasPath = '.';
+
 function unitActionMapToPathMap(actionsList: UnitActionsMapType): Array<string> {
     const noPath = isString(defaultOptions.noPath) ? defaultOptions.noPath : null;
 
     if (noPath === null) {
-        console.error('noPath is not defined');
+        console.error('unitActionMapToPathMap - noPath is not defined');
         return [];
     }
 
@@ -83,7 +85,7 @@ function unitActionMapToPathMap(actionsList: UnitActionsMapType): Array<string> 
                             }
                         );
 
-                        return hasMoveType ? '.' : noPath;
+                        return hasMoveType ? hasPath : noPath;
                     }
                 );
             }
@@ -95,6 +97,54 @@ export function getMoviePath(unitAction: UnitActionMoveType, actionsList: UnitAc
     const unitPathMap = unitActionMapToPathMap(actionsList);
 
     return getPath(unitPathMap, [unitAction.from.x, unitAction.from.y], [unitAction.to.x, unitAction.to.y]);
+}
+
+export function getMovieWidePath(unitAction: UnitActionMoveType, gameData: GameDataType, unit: Unit): PathType | null {
+    const unitPathMap = gameDataToToPathMap(gameData, unit);
+
+    return getPath(unitPathMap, [unitAction.from.x, unitAction.from.y], [unitAction.to.x, unitAction.to.y]);
+}
+
+export function gameDataToToPathMap(gameData: GameDataType, unit: Unit): Array<string> {
+    const noPath = isString(defaultOptions.noPath) ? defaultOptions.noPath : null;
+
+    if (noPath === null) {
+        console.error('gameDataToToPathMap - noPath is not defined');
+        return [];
+    }
+
+    const walkMap = gameData.pathMap.walk;
+
+    return walkMap.map(
+        (line: Array<number>, cellY: number): string => {
+            const pathStateList = line.map(
+                (walkPay: number, cellX: number): string => {
+                    const {unitList} = gameData;
+
+                    const unitOnCell =
+                        unitList.find(
+                            (unitInLint: Unit): boolean => {
+                                const unitAttr = unitInLint.attr;
+
+                                return unitAttr.x === cellX && unitAttr.y === cellY;
+                            }
+                        ) || null;
+
+                    if (unitOnCell === null) {
+                        return hasPath;
+                    }
+
+                    if (unitOnCell.attr.userId === unit.attr.userId) {
+                        return hasPath;
+                    }
+
+                    return noPath;
+                }
+            );
+
+            return pathStateList.join('');
+        }
+    );
 }
 
 export type UnitDataForAttackType = {|
