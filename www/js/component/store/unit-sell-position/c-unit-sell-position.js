@@ -230,38 +230,22 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         return (
             <div className={style.unit_sell_position__short_info}>
                 <Button className={style.show_info_button} onClick={view.handleToggleFullInfo}>
-                    <Canvas
+                    <img
                         className={style.show_info_description_icon}
-                        width={15}
-                        height={20}
                         src={isFullInfoShow ? iconUnitInfoDescriptionOpen : iconUnitInfoDescription}
+                        alt=""
                     />
                 </Button>
                 <div className={style.unit_sell_position__short_info__line}>
-                    <Canvas
-                        className={style.unit_sell_position__short_info__line_icon}
-                        width={20}
-                        height={21}
-                        src={iconUnitInfoAttack}
-                    />
+                    <img className={style.unit_sell_position__short_info__line_icon} src={iconUnitInfoAttack} alt=""/>
                     <p className={style.unit_sell_position__short_info__line_text}>
                         {unitData.attack.min}-{unitData.attack.max}
                     </p>
                 </div>
                 <div className={style.unit_sell_position__short_info__line}>
-                    <Canvas
-                        className={style.unit_sell_position__short_info__line_icon}
-                        width={20}
-                        height={21}
-                        src={iconUnitInfoMove}
-                    />
+                    <img className={style.unit_sell_position__short_info__line_icon} src={iconUnitInfoMove} alt=""/>
                     <p className={style.unit_sell_position__short_info__line_text}>{unitData.move}</p>
-                    <Canvas
-                        className={style.unit_sell_position__short_info__line_icon}
-                        width={20}
-                        height={21}
-                        src={iconUnitInfoDefence}
-                    />
+                    <img className={style.unit_sell_position__short_info__line_icon} src={iconUnitInfoDefence} alt=""/>
                     <p className={style.unit_sell_position__short_info__line_text}>{unitData.armor}</p>
                 </div>
             </div>
