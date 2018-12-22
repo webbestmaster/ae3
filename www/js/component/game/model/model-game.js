@@ -2848,7 +2848,6 @@ export class GameModel {
 
         game.model.destroy();
 
-        game.render.destroy();
         localSocketIoClient.removeAllListeners();
     }
 }

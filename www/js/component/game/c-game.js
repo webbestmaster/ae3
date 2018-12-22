@@ -337,6 +337,8 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         const gameData = game.getGameData();
         const {userList} = gameData;
 
+        game.render.destroy();
+
         game.destroy();
 
         model.destroy();

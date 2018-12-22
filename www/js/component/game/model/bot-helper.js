@@ -541,6 +541,17 @@ function getMadePathToNearOccupyAbleBuilding(
 
     const pathSizeBefore =
         ((unitAttr.x - nearestBuilding.attr.x) ** 2 + (unitAttr.y - nearestBuilding.attr.y) ** 2) ** 0.5;
+
+    if (pathSizeBefore === 0) {
+        return {
+            madePathToNearOccupyAbleBuilding: 100,
+            isReachedNearOccupyAbleBuilding: true,
+            // isLastBuilding,
+            isAllBuildingsOccupied: false,
+            // canLeaveToOccupyBuilding: false,
+        };
+    }
+
     const pathSizeAfter =
         ((endPoint.x - nearestBuilding.attr.x) ** 2 + (endPoint.y - nearestBuilding.attr.y) ** 2) ** 0.5;
     const madePathToNearOccupyAbleBuilding = (pathSizeBefore - pathSizeAfter / pathSizeBefore) * 100;
@@ -872,9 +883,7 @@ export function rateBotResultActionData(
         rate += actionRawRate[fieldName] ? rateConfig[fieldName] : 0;
     });
 
-    // console.log(actionRawRate, rate);
-
-    console.log(rate);
+    console.log(actionRawRate, rate);
 
     return rate;
 }

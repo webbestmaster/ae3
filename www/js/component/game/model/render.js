@@ -246,6 +246,11 @@ export class Render {
 
         const worldSize = render.getWorldSize();
 
+        if (!render.app.renderer) {
+            console.log('render is not define, probably pixi.app is destroyed');
+            return;
+        }
+
         render.app.renderer.resize(width, height);
         viewport.resize(width, height, worldSize.width, worldSize.height);
 
