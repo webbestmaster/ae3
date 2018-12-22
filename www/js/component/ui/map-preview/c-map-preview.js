@@ -211,6 +211,12 @@ export class MapPreview extends Component<PropsType, StateType> {
         view.app.render();
     }
 
+    componentWillUnmount() {
+        const view = this;
+
+        view.app.destroy();
+    }
+
     render(): Node {
         const view = this;
         const {props, node} = view;

@@ -742,5 +742,8 @@ export class Render {
         const render = this;
 
         render.stopViewportPluginList();
+
+        render.app.stop();
+        render.app.destroy();
     }
 }
