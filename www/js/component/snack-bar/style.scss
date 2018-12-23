@@ -2,7 +2,7 @@ $fade-time-out: 300;
 $layer-index: 10;
 
 .screen_disable {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(0, 0, 0, 0.25);
     height: 100%;
     left: 0;
     position: fixed;
@@ -16,6 +16,7 @@ $layer-index: 10;
     left: 50%;
     position: fixed;
     transform: translate3d(-50%, 0, 0);
+    width: 100%;
     z-index: $layer-index;
 }
 

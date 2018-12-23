@@ -1,0 +1,40 @@
+@import './../../../../../css/var';
+
+.snack_bar__wrapper {
+    background-image: linear-gradient(0deg, $main-gradient-begin, $main-gradient-end);
+    border-top: 3px solid #fff;
+    box-shadow: 0 -1px 0 #212121;
+    box-sizing: border-box;
+    display: block;
+    //background-color: #c00;
+    width: 100%;
+}
+
+.snack_bar__children_wrapper {
+    align-items: center;
+    box-sizing: border-box;
+    color: #fff;
+    //min-height: 50px;
+    display: flex;
+    flex-direction: row;
+    font-size: 18px;
+    justify-content: left;
+    line-height: 23px;
+    min-height: 57px;
+    padding: 7px 15px;
+}
+
+.snack_bar__commander_face {
+    //background-color: #0c0;
+    float: left;
+    height: 89px;
+    //margin-right: 15px;
+
+    margin-top: -28px;
+    width: 84px;
+}
+
+.snack_bar__income_money {
+    background-color: #00c;
+    display: block;
+}

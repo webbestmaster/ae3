@@ -93,11 +93,11 @@ export const enUs: LangDataType = {
     YOU_DEFEAT: 'Defeat',
     DROP_TURN_CONFIRM_QUESTION: 'Do you want to drop turn?',
     INCOME: 'Income: {value}',
-    YOUR_TURN: 'Your Turn!',
-    WAIT_FOR_RED: 'Wait for Red',
-    WAIT_FOR_BLUE: 'Wait for Blue',
-    WAIT_FOR_GREEN: 'Wait for Green',
-    WAIT_FOR_BLACK: 'Wait for Black',
+    YOUR_TURN: 'Your Turn, Commander!',
+    WAIT_FOR_RED: 'Red Army, Fight!',
+    WAIT_FOR_BLUE: 'Blue Army, Fight!',
+    WAIT_FOR_GREEN: 'Green Army, Fight!',
+    WAIT_FOR_BLACK: 'Black Army, Fight!',
 
     // spec symbols
     SPACE: ' ',

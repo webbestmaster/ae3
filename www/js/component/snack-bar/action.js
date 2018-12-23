@@ -13,7 +13,7 @@ type OptionsType = {|
 |};
 
 export const defaultSnackbarOptions: OptionsType = {
-    timer: 3e3,
+    timer: 6e3,
     isModal: false,
     id: Math.random(),
 };

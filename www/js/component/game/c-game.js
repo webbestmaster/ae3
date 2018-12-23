@@ -33,14 +33,12 @@ import classNames from 'classnames';
 import serviceStyle from '../../../css/service.scss';
 import {Dialog} from '../ui/dialog/c-dialog';
 import {DialogHeader} from '../ui/dialog/dialog-header/c-dialog-header';
-// import {DialogTextContent} from '../ui/dialog/dialog-text-content/c-dialog-text-content';
 import {Page} from '../ui/page/c-page';
 import {BottomBar} from '../ui/bottom-bar/c-bottom-bar';
 import find from 'lodash/find';
 import {localSocketIoClient} from '../../module/socket-local';
 import type {UserColorType} from '../../maps/map-guide';
 import {LandscapeInfo} from './ui/landscape-info/c-landscape-info';
-import {isBoolean} from '../../lib/is/is';
 import iconMoney from './i/bottom-bar/money.png';
 import iconUnitRed from './i/bottom-bar/unit-red.png';
 import iconUnitBlue from './i/bottom-bar/unit-blue.png';
@@ -60,9 +58,12 @@ import {Locale} from '../locale/c-locale';
 import {TapToContinueDialogHint} from './ui/tap-to-continue-dialog-hint';
 import {getWaitForLangKey} from './ui/helper';
 import {SnackBar} from '../snack-bar/c-snack-bar';
+import {defaultSnackbarOptions, hideSnackBar, showSnackBar} from '../snack-bar/action';
+import {ChangeTurnSnackBar} from './ui/change-turn-snack-bar/c-change-turn-snack-bar';
 
 const gameConfirmEventName = 'game-confirm-event-name';
 const gameChangeTurnEventName = 'game-change-turn-event-name';
+const gameChangeTurnSnackBarId = `game-change-turn-snack-bar-id-${Math.random()}`;
 
 const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,
@@ -122,6 +123,7 @@ export type DisabledByItemType =
 
 export const disableReasonKeyMap: {[key: string]: DisabledByItemType} = {
     clientPushState: 'client-push-state',
+    changeActiveUserPopup: 'change-active-user-popup',
 };
 
 type StateType = {|
@@ -136,11 +138,6 @@ type StateType = {|
     popup: {|
         endGame: {|
             isOpen: boolean,
-        |},
-        changeActiveUser: {|
-            isOpen: boolean,
-            showMoney: boolean,
-            activeUserId: string,
         |},
     |},
     activeLandscapeTile: {|
@@ -179,11 +176,6 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             popup: {
                 endGame: {
                     isOpen: false,
-                },
-                changeActiveUser: {
-                    isOpen: false,
-                    showMoney: true,
-                    activeUserId: '',
                 },
             },
             activeLandscapeTile: {
@@ -592,116 +584,110 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
     popupChangeActiveUser(state: PopupParameterType) {
         const view = this;
 
-        if (state.isOpen) {
-            view.addDisableReason('change-active-user-popup');
-        } else {
-            view.removeDisableReason('change-active-user-popup');
+        hideSnackBar(gameChangeTurnSnackBarId, gameChangeTurnEventName);
+
+        if (state.isOpen === false) {
+            hideSnackBar(gameChangeTurnSnackBarId, gameChangeTurnEventName);
+            // view.removeDisableReason(disableReasonKeyMap.changeActiveUserPopup);
+            return;
         }
 
-        view.setState(
-            (prevState: StateType): StateType => {
-                // eslint-disable-next-line no-param-reassign
-                prevState.popup.changeActiveUser.activeUserId = state.activeUserId;
-                // eslint-disable-next-line no-param-reassign
-                prevState.popup.changeActiveUser.isOpen = state.isOpen;
-                // eslint-disable-next-line no-param-reassign
-                prevState.popup.changeActiveUser.showMoney = isBoolean(state.showMoney) ? state.showMoney : true;
-                return prevState;
-            }
-        );
+        const snackBarContent = view.getChangeActiveUserSnackBar(state);
+
+        if (snackBarContent === null) {
+            console.log('then snack bar content is null');
+            return;
+        }
+
+        view.addDisableReason(disableReasonKeyMap.changeActiveUserPopup);
+
+        showSnackBar(
+            snackBarContent,
+            {
+                id: gameChangeTurnSnackBarId,
+                timer: 1.5e3,
+                isModal: true,
+            },
+            gameChangeTurnEventName
+        )
+            .then((): void => view.removeDisableReason(disableReasonKeyMap.changeActiveUserPopup))
+            .catch(
+                (error: Error): Error => {
+                    console.error('can not hide popup! How?!');
+                    console.error(error);
+
+                    return error;
+                }
+            );
     }
 
     handleOnClickChangeActiveUserPopup = () => {
         const view = this;
-        const {state} = view;
-        const {popup} = state;
-
-        if (popup.changeActiveUser.isOpen === false) {
-            console.warn('popup.changeActiveUser.isOpen is already CLOSED, you click on popup too fast :)');
-            return;
-        }
 
         view.popupChangeActiveUser({
             isOpen: false,
-            activeUserId: popup.changeActiveUser.activeUserId,
+            activeUserId: '',
         });
     };
 
-    // eslint-disable-next-line id-length, id-match
-    renderPopupChangeActiveUserDialogContent(isOpen: boolean, children: React$Node): Node {
-        const view = this;
-
-        return (
-            <Dialog onClick={view.handleOnClickChangeActiveUserPopup} key="change-active-user-dialog" isOpen={isOpen}>
-                {children}
-                <TapToContinueDialogHint/>
-            </Dialog>
-        );
-    }
-
     // eslint-disable-next-line complexity, max-statements
-    renderPopupChangeActiveUserDialog(): Node {
+    getChangeActiveUserSnackBar(changeActiveUser: PopupParameterType): Node {
         const view = this;
-        const {props, state} = view;
+        const {state} = view;
         const {popup} = state;
         const {game} = state;
-        const closedDialog = this.renderPopupChangeActiveUserDialogContent(false, null);
 
         if (popup.endGame.isOpen === true) {
-            return closedDialog;
+            return null;
         }
 
         const mapState = game.getMapState();
 
         if (mapState === null) {
-            if (popup.changeActiveUser.isOpen) {
-                console.error('No show popup for change ActiveUser');
-                return closedDialog;
-            }
             console.log('No show popup for change ActiveUser');
-            return closedDialog;
+            return null;
         }
 
-        const activeUserId = popup.changeActiveUser.activeUserId;
+        const activeUserId = changeActiveUser.activeUserId;
         const userId = user.getId();
 
         const mapActiveUser = find(mapState.userList, {userId: activeUserId}) || null;
 
         if (mapActiveUser === null) {
-            console.error('No ActiveUser for renderPopupChangeActiveUserDialog', activeUserId, mapState);
-            return closedDialog;
+            console.error('No ActiveUser for getChangeActiveUserSnackBar', activeUserId, mapState);
+            return null;
         }
 
         const earnedMoney = game.getEarnedMoney(activeUserId);
 
         if (earnedMoney === null) {
-            console.error('no earnedMoney for renderPopupChangeActiveUserDialog', game);
-            return closedDialog;
+            console.error('no earnedMoney for getChangeActiveUserSnackBar', game);
+            return null;
         }
 
         const activeUserColor = getUserColor(activeUserId, mapState.userList);
 
         if (activeUserColor === null) {
-            console.error('no activeUserColor for renderPopupChangeActiveUserDialog', game);
-            return closedDialog;
+            console.error('no activeUserColor for getChangeActiveUserSnackBar', game);
+            return null;
         }
 
         if (activeUserId === userId) {
-            return this.renderPopupChangeActiveUserDialogContent(
-                popup.changeActiveUser.isOpen,
-                <DialogHeader>
+            return (
+                <ChangeTurnSnackBar
+                    onClick={view.handleOnClickChangeActiveUserPopup}
+                    color={activeUserColor}
+                    money={changeActiveUser.showMoney !== false ? earnedMoney : null}
+                >
                     <Locale stringKey={('YOUR_TURN': LangKeyType)}/>
-                    <br/>
-                    <Locale stringKey={('INCOME': LangKeyType)} valueMap={{value: earnedMoney}}/>
-                </DialogHeader>
+                </ChangeTurnSnackBar>
             );
         }
 
-        return this.renderPopupChangeActiveUserDialogContent(
-            popup.changeActiveUser.isOpen,
-            <DialogHeader>
+        return (
+            <ChangeTurnSnackBar onClick={view.handleOnClickChangeActiveUserPopup} color={activeUserColor} money={null}>
                 <Locale stringKey={getWaitForLangKey(activeUserColor)}/>
-            </DialogHeader>
+            </ChangeTurnSnackBar>
         );
     }
 
@@ -811,7 +797,6 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
             <SnackBar key="change-turn-snack-bar" eventName={gameChangeTurnEventName}/>,
             <Page className={classNames(style.game_page, {[serviceStyle.hidden]: storeState.isOpen})} key="game-page">
                 {view.renderEndGameDialog()}
-                {view.renderPopupChangeActiveUserDialog()}
 
                 <div
                     className={classNames(style.end_turn__wrapper, {

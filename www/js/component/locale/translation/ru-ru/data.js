@@ -93,11 +93,11 @@ export const ruRu: LangDataType = {
     YOU_DEFEAT: 'Поражение',
     DROP_TURN_CONFIRM_QUESTION: 'Хотите закончить ход?',
     INCOME: 'Доход: {value}',
-    YOUR_TURN: 'Ваш Ход!',
-    WAIT_FOR_RED: 'Ждите ход красных',
-    WAIT_FOR_BLUE: 'Ждите ход синих',
-    WAIT_FOR_GREEN: 'Ждите ход зелёных',
-    WAIT_FOR_BLACK: 'Ждите ход чёрных',
+    YOUR_TURN: 'Ваш Ход, Командир!',
+    WAIT_FOR_RED: 'Армия Красных, в бой!',
+    WAIT_FOR_BLUE: 'Армия Синих, в бой!',
+    WAIT_FOR_GREEN: 'Армия Зелёных, в бой!',
+    WAIT_FOR_BLACK: 'Армия Чёрных, в бой!',
 
     // spec symbols
     SPACE: ' ',
