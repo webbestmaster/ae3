@@ -59,8 +59,10 @@ import type {LangKeyType} from '../locale/translation/type';
 import {Locale} from '../locale/c-locale';
 import {TapToContinueDialogHint} from './ui/tap-to-continue-dialog-hint';
 import {getWaitForLangKey} from './ui/helper';
+import {SnackBar} from '../snack-bar/c-snack-bar';
 
 const gameConfirmEventName = 'game-confirm-event-name';
+const gameChangeTurnEventName = 'game-change-turn-event-name';
 
 const unitIconMap: {[key: UserColorType]: string} = {
     red: iconUnitRed,
@@ -806,6 +808,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         return [
             view.renderStore(),
             <Confirm eventName={gameConfirmEventName} key={gameConfirmEventName}/>,
+            <SnackBar key="change-turn-snack-bar" eventName={gameChangeTurnEventName}/>,
             <Page className={classNames(style.game_page, {[serviceStyle.hidden]: storeState.isOpen})} key="game-page">
                 {view.renderEndGameDialog()}
                 {view.renderPopupChangeActiveUserDialog()}

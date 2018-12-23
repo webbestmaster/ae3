@@ -1,0 +1,34 @@
+$fade-time-out: 300;
+$layer-index: 10;
+
+.screen_disable {
+    background-color: rgba(255, 255, 255, 0.5);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: $layer-index;
+}
+
+.list_wrapper {
+    bottom: 0;
+    left: 50%;
+    position: fixed;
+    transform: translate3d(-50%, 0, 0);
+    z-index: $layer-index;
+}
+
+.fade__enter {
+    opacity: 0;
+}
+
+.fade__enter__active {
+    opacity: 1;
+    transition: opacity #{$fade-time-out}ms ease-in;
+}
+
+.fade__exit {
+    opacity: 0;
+    transition: opacity #{$fade-time-out}ms ease-in;
+}
