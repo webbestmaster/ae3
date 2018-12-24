@@ -13,7 +13,6 @@ import type {UnitTypeAllType} from '../../game/model/unit/unit-guide';
 import {additionalUnitData, unitGuideData} from '../../game/model/unit/unit-guide';
 import {isBoolean, isNumber} from '../../../lib/is/is';
 import {getSupplyState, getUserColor, isCommanderLive} from '../../game/model/helper';
-import {user} from '../../../module/user';
 import find from 'lodash/find';
 import * as serverApi from '../../../module/server-api';
 import type {MapType, MapUserType} from '../../../maps/type';
@@ -83,7 +82,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         const view = this;
 
         view.state = {
-            mapUserData: find(props.mapState.userList, {userId: user.getId()}) || {
+            mapUserData: find(props.mapState.userList, {userId: props.mapState.activeUserId}) || {
                 userId: 'no-user-id-in-store',
                 money: 0,
                 teamId: mapGuide.teamIdList[0],
@@ -112,9 +111,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
             return null;
         }
 
-        const isCommander = isBoolean(unitData.isCommander) && unitData.isCommander;
-
-        if (!isCommander) {
+        if (!view.isCommander()) {
             return cost;
         }
 
@@ -130,11 +127,20 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         }
 
         // detect user's commander on map
-        if (isCommanderLive(user.getId(), mapState)) {
+        if (isCommanderLive(mapState.activeUserId, mapState)) {
             return null;
         }
 
         return cost + userCommander.buyCount * additionalUnitData.additionalCommanderCost;
+    }
+
+    isCommander(): boolean {
+        const view = this;
+        const {props} = view;
+        const {unitType} = props;
+        const unitData = unitGuideData[unitType];
+
+        return isBoolean(unitData.isCommander) && unitData.isCommander;
     }
 
     getUnitColor(): UserColorType | null {
@@ -142,19 +148,20 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         const {props} = view;
         const {mapState} = props;
 
-        return getUserColor(user.getId(), mapState.userList);
+        return getUserColor(mapState.activeUserId, mapState.userList);
     }
 
-    // eslint-disable-next-line max-statements
+    // eslint-disable-next-line complexity, max-statements
     handleOnClickBuyUnit = (): Promise<void> => {
         const view = this;
-        const {props, state} = view;
-        const newMap = JSON.parse(JSON.stringify(props.mapState));
-        const newMapUserData = find(newMap.userList, {userId: user.getId()}) || null;
+        const {props} = view;
+        const {mapState} = props;
+        const newMap = JSON.parse(JSON.stringify(mapState));
+        const newMapUserData = find(newMap.userList, {userId: mapState.activeUserId}) || null;
         // const newUnitData = unitGuideData[unitType];
 
         if (newMapUserData === null) {
-            console.error('can not find map user with id', user.getId(), newMap);
+            console.error('can not find map user with id', mapState.activeUserId, newMap);
             return Promise.resolve();
         }
 
@@ -172,13 +179,15 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
             return Promise.resolve();
         }
 
-        newMapUserData.commander.buyCount += 1;
+        if (view.isCommander()) {
+            newMapUserData.commander.buyCount += 1;
+        }
 
         const newMapUnitData = {
             type: props.unitType,
             x: props.x,
             y: props.y,
-            userId: user.getId(),
+            userId: mapState.activeUserId,
             id: [props.x, props.y, Math.random()].join('-'),
         };
 
@@ -187,13 +196,13 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         view.setState({isInProgress: true});
 
         return serverApi
-            .pushState(props.match.params.roomId, user.getId(), {
+            .pushState(props.match.params.roomId, mapState.activeUserId, {
                 type: messageConst.type.pushState,
                 state: {
                     type: 'buy-unit',
                     newMapUnit: newMapUnitData,
                     map: newMap,
-                    activeUserId: user.getId(),
+                    activeUserId: mapState.activeUserId,
                 },
             })
             .then((response: mixed): void => console.log('---> user action buy unit', response))
@@ -268,7 +277,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
 
         const unitData = unitGuideData[unitType];
 
-        const supplyState = getSupplyState(props.mapState, user.getId());
+        const supplyState = getSupplyState(props.mapState, props.mapState.activeUserId);
 
         return (
             <div key={unitType} className={style.unit_sell_position}>

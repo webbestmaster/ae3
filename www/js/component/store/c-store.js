@@ -22,6 +22,7 @@ import type {GlobalStateType} from '../../redux-store-provider/reducer';
 import type {SetOpenFromGameType} from './action';
 import {setOpenFromGame} from './action';
 import type {StoreType} from './reducer';
+import scrollStyle from '../ui/scroll/scroll.style.scss';
 
 const storeViewId = 'store';
 
@@ -114,7 +115,7 @@ class Store extends Component<ReduxPropsType, PassedPropsType, StateType> {
                     <Locale stringKey={('CASTLE': LangKeyType)}/>
                 </Header>
 
-                <Scroll>{view.renderUnitList()}</Scroll>
+                <Scroll slideClassName={scrollStyle.swiper_slide__bottom_padding}>{view.renderUnitList()}</Scroll>
 
                 {props.children}
             </Page>

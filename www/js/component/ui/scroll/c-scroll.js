@@ -8,12 +8,13 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import Swiper from 'swiper';
 import classNames from 'classnames';
-import style from './style.scss';
+import style from './scroll.style.scss';
 
 type StateType = void;
 
 type PropsType = {|
     +className?: string,
+    +slideClassName?: string,
     +children: Node | Array<Node>,
 |};
 
@@ -107,7 +108,9 @@ export class Scroll extends Component<StateType, PropsType> {
         return (
             <div className={classNames('swiper-container', style.swiper_container)} ref={view.node.wrapper}>
                 <div className={classNames('swiper-wrapper', style.swiper_wrapper)}>
-                    <div className={classNames('swiper-slide', style.swiper_slide)}>{props.children}</div>
+                    <div className={classNames('swiper-slide', style.swiper_slide, props.slideClassName)}>
+                        {props.children}
+                    </div>
                 </div>
                 <div className="swiper-scrollbar"/>
             </div>
