@@ -403,6 +403,23 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
             containerEvent.startTouch.y = NaN;
             smthWrongCallbackFunction();
         }
+
+        wait(0.3e3)
+            .then(
+                (): Promise<void> => {
+                    containerEvent.startTouch.x = NaN;
+                    containerEvent.startTouch.y = NaN;
+
+                    return Promise.resolve();
+                }
+            )
+            .catch(
+                (error: Error): Error => {
+                    console.error('bindClick() end with error!');
+                    console.error(error);
+                    return error;
+                }
+            );
     });
 
     // eslint-disable-next-line complexity
