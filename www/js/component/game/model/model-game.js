@@ -1664,8 +1664,9 @@ export class GameModel {
     }
 
     async onUnitHold(unit: Unit): Promise<void> {
-        console.log('on unit hold');
-        console.log(unit);
+        const game = this;
+
+        game.gameView.showUnitInfoPopup(unit);
     }
 
     async showWrongState(wrongState: WrongStateType): Promise<void> {

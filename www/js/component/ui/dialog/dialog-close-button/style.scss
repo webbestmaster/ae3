@@ -1,0 +1,11 @@
+@import './../../../../../css/var';
+
+.dialog_close_button {
+    background-color: #c00;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+    z-index: 5;
+}

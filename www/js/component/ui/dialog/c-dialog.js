@@ -1,20 +1,23 @@
 // @flow
 
 import type {Node} from 'react';
-import React from 'react';
+import React, {Fragment} from 'react';
 import {Fade} from '../fade/c-fade';
 import style from './style.scss';
 import {forceWindowUpdate} from '../fade/helper';
+import {DialogCloseButton} from './dialog-close-button/c-dialog-close-button';
+import {Scroll} from '../scroll/c-scroll';
 
 type PropsType = {|
     +isOpen: boolean,
     // eslint-disable-next-line id-match
     +children: React$Node,
     +onClick?: () => mixed | Promise<mixed>,
+    +hasCloseButton?: boolean,
     +isModal?: boolean, // default false, if isModal: true, fade is disabled to click
 |};
 
-export function Dialog({isOpen, children, onClick: handleOnClick, isModal}: PropsType): Node {
+export function Dialog({isOpen, children, onClick: handleOnClick, isModal, hasCloseButton}: PropsType): Node {
     const fadeProps = {
         isShow: isOpen,
         onEnter: forceWindowUpdate,
@@ -25,11 +28,31 @@ export function Dialog({isOpen, children, onClick: handleOnClick, isModal}: Prop
         onExited: forceWindowUpdate,
     };
 
+    const dialogContentVisible = <Scroll className={style.dialog_content__visible}>{children}</Scroll>;
+    const dialogContentHidden = <div className={style.dialog_content__hidden}>{children}</div>;
+
+    if (hasCloseButton === true && handleOnClick) {
+        return (
+            <Fade {...fadeProps}>
+                <div className={style.dialog_wrapper}>
+                    <div className={style.dialog_content}>
+                        <DialogCloseButton onClick={handleOnClick}/>
+                        {dialogContentHidden}
+                        {dialogContentVisible}
+                    </div>
+                </div>
+            </Fade>
+        );
+    }
+
     if (!handleOnClick) {
         return (
             <Fade {...fadeProps}>
                 <div className={style.dialog_wrapper}>
-                    <div className={style.dialog_content}>{children}</div>
+                    <div className={style.dialog_content}>
+                        {dialogContentHidden}
+                        {dialogContentVisible}
+                    </div>
                 </div>
             </Fade>
         );
@@ -45,7 +68,8 @@ export function Dialog({isOpen, children, onClick: handleOnClick, isModal}: Prop
                         onClick={handleOnClick}
                         onKeyPress={handleOnClick}
                     >
-                        {children}
+                        {dialogContentHidden}
+                        {dialogContentVisible}
                     </button>
                 </div>
             </Fade>
@@ -55,7 +79,10 @@ export function Dialog({isOpen, children, onClick: handleOnClick, isModal}: Prop
     return (
         <Fade {...fadeProps}>
             <button type="button" onClick={handleOnClick} onKeyPress={handleOnClick} className={style.dialog_wrapper}>
-                <div className={style.dialog_content}>{children}</div>
+                <div className={style.dialog_content}>
+                    {dialogContentHidden}
+                    {dialogContentVisible}
+                </div>
             </button>
         </Fade>
     );

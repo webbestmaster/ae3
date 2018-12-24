@@ -60,8 +60,11 @@ import {getWaitForLangKey} from './ui/helper';
 import {SnackBar} from '../snack-bar/c-snack-bar';
 import {hideSnackBar, showSnackBar} from '../snack-bar/action';
 import {ChangeTurnSnackBar} from './ui/change-turn-snack-bar/c-change-turn-snack-bar';
+import {Popup} from '../ui/popup/popup';
+import {showPopup} from '../ui/popup/action';
 
 const gameConfirmEventName = 'game-confirm-event-name';
+const gameShowPopupEventName = 'game-show-popup-event-name';
 const gameChangeTurnEventName = 'game-change-turn-event-name';
 const gameChangeTurnSnackBarId = `game-change-turn-snack-bar-id-${Math.random()}`;
 
@@ -497,6 +500,18 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         );
     }
 
+    showUnitInfoPopup(unit: Unit) {
+        showPopup(<div>{JSON.stringify(unit.attr).replace(/,/gi, ' ')}</div>, gameShowPopupEventName)
+            .then((): void => console.log('popup hidden'))
+            .catch(
+                (error: Error): Error => {
+                    console.error('error with hide popup');
+                    console.error(error);
+                    return error;
+                }
+            );
+    }
+
     // eslint-disable-next-line complexity, max-statements
     renderEndGameDialog(): Node {
         const view = this;
@@ -775,6 +790,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         return [
             view.renderStore(),
             <Confirm eventName={gameConfirmEventName} key={gameConfirmEventName}/>,
+            <Popup eventName={gameShowPopupEventName} key={gameShowPopupEventName}/>,
             <SnackBar key="change-turn-snack-bar" eventName={gameChangeTurnEventName}/>,
             <Page className={classNames(style.game_page, {[serviceStyle.hidden]: storeState.isOpen})} key="game-page">
                 {view.renderEndGameDialog()}
