@@ -3,11 +3,13 @@
 .snack_bar__wrapper {
     background-image: linear-gradient(0deg, $main-gradient-begin, $main-gradient-end);
     border-top: 3px solid #fff;
+    bottom: 52px;
     box-shadow: 0 -1px 0 #212121;
     box-sizing: border-box;
     display: block;
-    //background-color: #c00;
+    position: absolute;
     width: 100%;
+    z-index: 0;
 }
 
 .snack_bar__children_wrapper {

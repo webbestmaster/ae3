@@ -3,18 +3,17 @@
 /* eslint consistent-this: ["error", "view"] */
 
 import type {Node} from 'react';
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 // import type {ContextRouterType} from '../../type/react-router-dom-v4';
 import style from './style.scss';
 import type {UserColorType} from '../../../../maps/map-guide';
-
 // import commader from './i/commander/commader.png';
 // import templar from './i/commander/templar.png';
 import demonLord from './i/commander/demon-lord.png';
 import galamar from './i/commander/galamar.png';
 import saeth from './i/commander/saeth.png';
 import valadorn from './i/commander/valadorn.png';
-import {isNotNumber, isNumber} from '../../../../lib/is/is';
+import {isNotNumber} from '../../../../lib/is/is';
 import type {LangKeyType} from '../../../locale/translation/type';
 import {Locale} from '../../../locale/c-locale';
 

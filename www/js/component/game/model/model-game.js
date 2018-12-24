@@ -422,7 +422,7 @@ export class GameModel {
             case messageConst.type.takeTurn:
                 await game.handleServerTakeTurn(message);
                 game.gameView.popupChangeActiveUser({
-                    isOpen: true,
+                    // isOpen: true,
                     activeUserId: message.states.last.activeUserId,
                 });
 
