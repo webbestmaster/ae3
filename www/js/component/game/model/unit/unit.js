@@ -7,6 +7,7 @@ import type {MapType, MapUserType, UnitActionStateType, UnitType} from '../../..
 import type {AttackResultUnitType} from '../helper';
 import {
     bindClick,
+    bindHold,
     canOpenStore,
     getAttackResult,
     getLevel,
@@ -150,6 +151,8 @@ type UnitGameAttrType = {|
     event: {|
         // eslint-disable-next-line no-use-before-define
         click: (unit: Unit) => Promise<void>,
+        // eslint-disable-next-line no-use-before-define
+        hold: (unit: Unit) => Promise<void>,
     |},
     hasWispAura: boolean,
     isActionAvailable: boolean,
@@ -161,6 +164,8 @@ export type UnitConstructorType = {|
     event: {|
         // eslint-disable-next-line no-use-before-define
         click: (unit: Unit) => Promise<void>,
+        // eslint-disable-next-line no-use-before-define
+        hold: (unit: Unit) => Promise<void>,
     |},
 |};
 
@@ -242,6 +247,7 @@ export class Unit {
             userList: JSON.parse(JSON.stringify(unitConstructor.userList)),
             event: {
                 click: unitConstructor.event.click,
+                hold: unitConstructor.event.hold,
             },
             hasWispAura: false,
             isActionAvailable: false,
@@ -1009,6 +1015,14 @@ export class Unit {
             async (): Promise<void> => {
                 console.log('click on unit', unit);
                 await unit.gameAttr.event.click(unit);
+            }
+        );
+
+        bindHold(
+            unitContainer,
+            async (): Promise<void> => {
+                console.log('hold on unit', unit);
+                await unit.gameAttr.event.hold(unit);
             }
         );
     }

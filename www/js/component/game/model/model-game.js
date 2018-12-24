@@ -1521,6 +1521,9 @@ export class GameModel {
 
                     await game.onUnitClick(clickedUnit);
                 },
+                hold: async (clickedUnit: Unit): Promise<void> => {
+                    await game.onUnitHold(clickedUnit);
+                },
             },
         });
 
@@ -1658,6 +1661,11 @@ export class GameModel {
                 });
             });
         });
+    }
+
+    async onUnitHold(unit: Unit): Promise<void> {
+        console.log('on unit hold');
+        console.log(unit);
     }
 
     async showWrongState(wrongState: WrongStateType): Promise<void> {

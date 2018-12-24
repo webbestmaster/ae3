@@ -25,6 +25,7 @@ import queryString from 'query-string';
 import type {RoomTypeType} from '../../../module/server-api';
 import {isNotNumber, isString} from '../../../lib/is/is';
 import {Building} from './building/building';
+import {wait} from '../../../lib/sleep';
 
 type InteractionEventType = {
     +data: {
@@ -430,6 +431,61 @@ export function bindClick(container: PIXI.Container, callback: () => Promise<voi
         }
 
         callback();
+    });
+}
+
+export function bindHold(container: PIXI.Container, callback: () => Promise<void>, smthWrongCallback?: () => void) {
+    const containerEvent = {
+        startTouch: {
+            x: NaN,
+            y: NaN,
+        },
+    };
+
+    const smthWrongCallbackFunction = smthWrongCallback || noop;
+
+    container.on(getEventName('mousedown'), (interactionEvent: InteractionEventType) => {
+        containerEvent.startTouch.x = interactionEvent.data.global.x;
+        containerEvent.startTouch.y = interactionEvent.data.global.y;
+
+        const {originalEvent} = interactionEvent.data;
+
+        const beforeX = containerEvent.startTouch.x;
+        const beforeY = containerEvent.startTouch.y;
+
+        wait(0.5e3)
+            .then(
+                (): Promise<void> => {
+                    if (
+                        Math.abs(beforeX - containerEvent.startTouch.x) < 10 &&
+                        Math.abs(beforeY - containerEvent.startTouch.y) < 10
+                    ) {
+                        // eslint-disable-next-line promise/no-callback-in-promise
+                        return callback();
+                    }
+                    return Promise.resolve();
+                }
+            )
+            .catch(
+                (error: Error): Error => {
+                    console.error('bindHold() end with error!');
+                    console.error(error);
+                    return error;
+                }
+            );
+
+        // this is not fix problem, but make problem more hard reproducible
+        if (originalEvent.touches && originalEvent.touches.length > 1) {
+            containerEvent.startTouch.x = NaN;
+            containerEvent.startTouch.y = NaN;
+            smthWrongCallbackFunction();
+        }
+    });
+
+    // eslint-disable-next-line complexity
+    container.on(getEventName('mouseup'), () => {
+        containerEvent.startTouch.x = NaN;
+        containerEvent.startTouch.y = NaN;
     });
 }
 
