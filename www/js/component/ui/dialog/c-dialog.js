@@ -1,7 +1,7 @@
 // @flow
 
 import type {Node} from 'react';
-import React, {Fragment} from 'react';
+import React from 'react';
 import {Fade} from '../fade/c-fade';
 import style from './style.scss';
 import {forceWindowUpdate} from '../fade/helper';

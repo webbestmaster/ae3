@@ -23,7 +23,7 @@ import {Button} from '../../ui/button/c-button';
 import withRouter from 'react-router-dom/withRouter';
 import style from './style.scss';
 import type {LocaleType} from '../../locale/reducer';
-import {getLocalizedString, Locale} from '../../locale/c-locale';
+import {Locale} from '../../locale/c-locale';
 import type {UserColorType} from '../../../maps/map-guide';
 import {mapGuide} from '../../../maps/map-guide';
 import iconUnitInfoAttack from './i/icon-unit-info-attack.png';
@@ -33,6 +33,7 @@ import iconUnitInfoDescription from './i/icon-unit-info-description.png';
 import iconUnitInfoDescriptionOpen from './i/icon-unit-info-description-open.png';
 import {messageConst} from '../../../lib/local-server/room/message-const';
 import {unitImageMap} from './unit-image-map';
+import type {LangKeyType} from '../../locale/translation/type';
 
 type ReduxPropsType = {|
     +locale: LocaleType,
@@ -301,7 +302,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
 
                     {isFullInfoShow ?
                         <div className={style.full_info}>
-                            {getLocalizedString(unitData.langKey.description, locale.name)}
+                            <Locale stringKey={(unitData.langKey.description: LangKeyType)}/>
                         </div> :
                         null}
                 </div>

@@ -9,9 +9,6 @@ import React, {Component} from 'react';
 import type {ShowPopupDetailType} from './action';
 import {defaultEventName} from './action';
 import {Dialog} from '../dialog/c-dialog';
-import style from './popup.style.scss';
-import type {LangKeyType} from '../../locale/translation/type';
-import {Locale} from '../../locale/c-locale';
 
 type PropsType = {|
     eventName?: string,
