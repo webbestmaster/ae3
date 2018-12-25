@@ -34,7 +34,7 @@
     max-width: 50%;
     min-width: 300px;
     outline: none;
-    overflow: hidden;
+    //overflow: hidden;
     //padding: 14px 10px 17px;
     position: relative;
     z-index: 1;
@@ -54,6 +54,8 @@
 }
 
 .dialog_content__hidden {
+    max-height: 100%;
+    overflow: hidden;
     pointer-events: none;
     visibility: hidden;
 }

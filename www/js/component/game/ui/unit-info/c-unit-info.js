@@ -16,6 +16,7 @@ import levelImage from './i/level.png';
 import iconUnitInfoAttack from '../../../store/unit-sell-position/i/icon-unit-info-attack.png';
 import iconUnitInfoMove from '../../../store/unit-sell-position/i/icon-unit-info-move.png';
 import iconUnitInfoDefence from '../../../store/unit-sell-position/i/icon-unit-info-defence.png';
+import sellPositionStyle from '../../../store/unit-sell-position/style.scss';
 
 type PassedPropsType = {|
     +unit: Unit,
@@ -59,6 +60,44 @@ export class UnitInfo extends Component<PropsType, StateType> {
         );
     }
 
+    renderShortInfo(): Node {
+        const view = this;
+        const {props, state} = view;
+        const {unit} = props;
+        const unitType = unit.attr.type;
+
+        const unitData = unitGuideData[unitType];
+
+        return (
+            <div className={sellPositionStyle.unit_sell_position__short_info}>
+                <div className={sellPositionStyle.unit_sell_position__short_info__line}>
+                    <img
+                        className={sellPositionStyle.unit_sell_position__short_info__line_icon}
+                        src={iconUnitInfoAttack}
+                        alt=""
+                    />
+                    <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>
+                        {unitData.attack.min}-{unitData.attack.max}
+                    </p>
+                </div>
+                <div className={sellPositionStyle.unit_sell_position__short_info__line}>
+                    <img
+                        className={sellPositionStyle.unit_sell_position__short_info__line_icon}
+                        src={iconUnitInfoMove}
+                        alt=""
+                    />
+                    <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>{unitData.move}</p>
+                    <img
+                        className={sellPositionStyle.unit_sell_position__short_info__line_icon}
+                        src={iconUnitInfoDefence}
+                        alt=""
+                    />
+                    <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>{unitData.armor}</p>
+                </div>
+            </div>
+        );
+    }
+
     render(): Node {
         const view = this;
         const {props, state} = view;
@@ -75,15 +114,14 @@ export class UnitInfo extends Component<PropsType, StateType> {
                     <Locale stringKey={(unitData.langKey.name: LangKeyType)}/>
                 </h1>
 
-                <img className={unitInfoStyle.unit_preview} src={unitImageSrc} alt=""/>
+                <img className={sellPositionStyle.unit_preview} src={unitImageSrc} alt=""/>
 
                 {view.renderLevel()}
 
-                <img src={iconUnitInfoAttack} alt=""/>
-                <img src={iconUnitInfoMove} alt=""/>
-                <img src={iconUnitInfoDefence} alt=""/>
-
                 <hr/>
+
+                {view.renderShortInfo()}
+
                 <hr/>
 
                 {JSON.stringify(unit.attr)}
