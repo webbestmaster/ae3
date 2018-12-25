@@ -681,25 +681,71 @@ export function isUserDefeat(userId: string, map: MapType): boolean {
     return false;
 }
 
-export function getLevel(damageGiven: number): number {
-    const maxLevelForCount = defaultUnitData.level.max;
-    const levelScale = defaultUnitData.level.scale;
-    const base = defaultUnitData.level.base;
+export type LevelDataType = {|
+    +level: number,
+    +experience: {|
+        +value: number,
+        +from: number,
+        +part: number,
+        +to: number,
+        +size: number,
+        +percent: number,
+    |},
+|};
+
+export function getLevelData(damageGiven: number): LevelDataType {
+    const experience = damageGiven;
+    const maxLevel = defaultUnitData.level.max;
+    const levelBase = defaultUnitData.level.base;
+
+    let experienceFrom = 0;
+    let experienceTo = 0;
 
     let level = 0;
-    let levelSize = base;
 
     // eslint-disable-next-line no-loops/no-loops
-    for (; level < maxLevelForCount; level += 1) {
-        if (levelSize > damageGiven) {
-            return level;
-        }
+    for (; level < maxLevel; level += 1) {
+        experienceFrom = level * (level + 1) / 2 * levelBase;
+        experienceTo = (level + 1) * (level + 2) / 2 * levelBase;
 
-        levelSize += base * levelScale ** level;
+        if (experience >= experienceFrom && experience < experienceTo) {
+            return {
+                level,
+                experience: {
+                    value: experience,
+                    from: experienceFrom,
+                    part: experience - experienceFrom,
+                    to: experienceTo,
+                    size: experienceTo - experienceFrom,
+                    percent: (experience - experienceFrom) / (experienceTo - experienceFrom) * 100,
+                },
+            };
+        }
     }
 
-    return level;
+    experienceFrom = (maxLevel - 1) * maxLevel / 2 * levelBase;
+    experienceTo = maxLevel * (maxLevel + 1) / 2 * levelBase;
+
+    console.log('--- max level ---');
+
+    return {
+        level: defaultUnitData.level.max,
+        experience: {
+            value: experience,
+            from: experienceFrom,
+            part: experience - experienceFrom,
+            to: experienceTo,
+            size: experienceTo - experienceFrom,
+            percent: (experience - experienceFrom) / (experienceTo - experienceFrom) * 100,
+        },
+    };
 }
+
+/*
+for (let i = 0; i < 7000; i++) {
+    console.log(i, getLevelData(i));
+}
+*/
 
 /*
 console.log('getLevel test: begin');

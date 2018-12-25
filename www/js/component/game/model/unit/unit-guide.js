@@ -380,8 +380,8 @@ export const defaultUnitData = {
     level: {
         min: 0,
         max: 9,
-        base: 90,
-        scale: 1.05,
+        base: 100,
+        // scale: 1.05,
     },
     experience: {
         destroyBuilding: 60,

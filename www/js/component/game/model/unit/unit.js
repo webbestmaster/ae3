@@ -4,13 +4,13 @@
 
 import * as PIXI from 'pixi.js';
 import type {MapType, MapUserType, UnitActionStateType, UnitType} from '../../../../maps/type';
-import type {AttackResultUnitType} from '../helper';
+import type {AttackResultUnitType, LevelDataType} from '../helper';
 import {
     bindClick,
     bindHold,
     canOpenStore,
     getAttackResult,
-    getLevel,
+    getLevelData,
     getMoviePath,
     getMovieWidePath,
     getUserColor,
@@ -1385,9 +1385,15 @@ export class Unit {
 
     getLevel(): number {
         const unit = this;
+
+        return unit.getLevelData().level;
+    }
+
+    getLevelData(): LevelDataType {
+        const unit = this;
         const damageGiven = unit.getDamageGiven();
 
-        return getLevel(damageGiven);
+        return getLevelData(damageGiven);
     }
 
     async showLevelUp(): Promise<void> {

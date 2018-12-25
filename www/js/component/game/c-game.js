@@ -62,6 +62,7 @@ import {hideSnackBar, showSnackBar} from '../snack-bar/action';
 import {ChangeTurnSnackBar} from './ui/change-turn-snack-bar/c-change-turn-snack-bar';
 import {Popup} from '../ui/popup/popup';
 import {showPopup} from '../ui/popup/action';
+import {UnitInfo} from './ui/unit-info/c-unit-info';
 
 const gameConfirmEventName = 'game-confirm-event-name';
 const gameShowPopupEventName = 'game-show-popup-event-name';
@@ -501,7 +502,11 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
     }
 
     showUnitInfoPopup(unit: Unit) {
-        showPopup(<div>{JSON.stringify(unit.attr).replace(/,/gi, ' ')}</div>, gameShowPopupEventName)
+        const view = this;
+        const {state} = view;
+        const {game} = state;
+
+        showPopup(<UnitInfo unit={unit} gameData={game.getGameData()}/>, gameShowPopupEventName)
             .then((): void => console.log('popup hidden'))
             .catch(
                 (error: Error): Error => {
