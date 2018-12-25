@@ -44,8 +44,8 @@ type InteractionEventType = {
     },
 };
 
-type MouseEventNameType = 'click' | 'mousedown' | 'mouseup';
-type TouchEventNameType = 'tap' | 'touchstart' | 'touchend';
+type MouseEventNameType = 'click' | 'mousedown' | 'mouseup' | 'mousemove';
+type TouchEventNameType = 'tap' | 'touchstart' | 'touchend' | 'touchmove';
 
 declare module 'pixi.js' {
     // eslint-disable-next-line id-match

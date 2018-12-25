@@ -358,8 +358,8 @@ function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender
     };
 }
 
-type MouseEventNameType = 'click' | 'mousedown' | 'mouseup';
-type TouchEventNameType = 'tap' | 'touchstart' | 'touchend';
+type MouseEventNameType = 'click' | 'mousedown' | 'mouseup' | 'mousemove';
+type TouchEventNameType = 'tap' | 'touchstart' | 'touchend' | 'touchmove';
 type EventNameMapType = {+[key: MouseEventNameType]: TouchEventNameType};
 
 export function getEventName(MouseEventName: MouseEventNameType): MouseEventNameType | TouchEventNameType {
@@ -367,6 +367,7 @@ export function getEventName(MouseEventName: MouseEventNameType): MouseEventName
         click: 'tap',
         mousedown: 'touchstart',
         mouseup: 'touchend',
+        mousemove: 'touchmove',
     };
 
     const hasInMap = isString(eventNameMap[MouseEventName]);
@@ -503,6 +504,20 @@ export function bindHold(container: PIXI.Container, callback: () => Promise<void
     container.on(getEventName('mouseup'), () => {
         containerEvent.startTouch.x = NaN;
         containerEvent.startTouch.y = NaN;
+    });
+
+    container.on(getEventName('mousemove'), (interactionEvent: InteractionEventType) => {
+        const beforeX = containerEvent.startTouch.x;
+        const beforeY = containerEvent.startTouch.y;
+
+        if (
+            Math.abs(beforeX - containerEvent.startTouch.x) < 10 &&
+            Math.abs(beforeY - containerEvent.startTouch.y) < 10
+        ) {
+            // eslint-disable-next-line promise/no-callback-in-promise
+            containerEvent.startTouch.x = NaN;
+            containerEvent.startTouch.y = NaN;
+        }
     });
 }
 
