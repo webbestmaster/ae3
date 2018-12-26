@@ -46,64 +46,86 @@ export class UnitInfo extends Component<PropsType, StateType> {
         };
     }
 
+    renderShortInfoFirstLine(): Node {
+        const view = this;
+        const {props} = view;
+        const {unit} = props;
+        const unitType = unit.attr.type;
+        const unitData = unitGuideData[unitType];
+        const unitLevelData = unit.getLevelData();
+
+        return (
+            <div className={sellPositionStyle.unit_sell_position__short_info__line}>
+                <div className={serviceStyle.fl_l}>
+                    <img
+                        className={sellPositionStyle.unit_sell_position__short_info__line_icon}
+                        src={levelImage}
+                        alt=""
+                    />
+                    <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>{unitLevelData.level}</p>
+                    <img
+                        className={sellPositionStyle.unit_sell_position__short_info__line_icon}
+                        src={iconUnitInfoAttack}
+                        alt=""
+                    />
+                    <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>
+                        {unitData.attack.min}-{unitData.attack.max}
+                    </p>
+                </div>
+                <div className={serviceStyle.fl_l}>
+                    <img
+                        className={sellPositionStyle.unit_sell_position__short_info__line_icon}
+                        src={iconUnitInfoMove}
+                        alt=""
+                    />
+                    <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>{unitData.move}</p>
+                    <img
+                        className={sellPositionStyle.unit_sell_position__short_info__line_icon}
+                        src={iconUnitInfoDefence}
+                        alt=""
+                    />
+                    <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>{unitData.armor}</p>
+                </div>
+            </div>
+        );
+    }
+
+    renderShortInfoSecondLine(): Node {
+        const view = this;
+        const {props} = view;
+        const {unit} = props;
+        const unitLevelData = unit.getLevelData();
+
+        return (
+            <div className={sellPositionStyle.unit_sell_position__short_info__line}>
+                <div className={serviceStyle.clear_self}/>
+                <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>
+                    <span className={unitInfoStyle.hit_points_text}>HP&nbsp;</span>
+                    {unit.getHitPoints()} / {defaultUnitData.hitPoints}
+                </p>
+                <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>
+                    <span className={unitInfoStyle.experience_text}>XP&nbsp;</span>
+                    {unitLevelData.experience.part} / {unitLevelData.experience.to}
+                </p>
+            </div>
+        );
+    }
+
     renderShortInfo(): Node {
         const view = this;
-        const {props, state} = view;
+        const {props} = view;
         const {unit, gameData} = props;
         const unitType = unit.attr.type;
-
-        const unitData = unitGuideData[unitType];
-
         const unitColor = getUserColor(unit.getUserId() || '', gameData.userList) || 'gray';
-
         const unitImageSrc = unitImageMap[`${unitType}-${unitColor}`];
-
-        const unitLevelData = unit.getLevelData();
 
         return (
             <div className={unitInfoStyle.unit__short_info}>
                 <img className={sellPositionStyle.unit_preview} src={unitImageSrc} alt=""/>
 
                 <div className={unitInfoStyle.unit_sell_position__short_info}>
-                    <div className={sellPositionStyle.unit_sell_position__short_info__line}>
-                        <img
-                            className={sellPositionStyle.unit_sell_position__short_info__line_icon}
-                            src={levelImage}
-                            alt=""
-                        />
-                        <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>
-                            {unitLevelData.level}
-                        </p>
-                        <img
-                            className={sellPositionStyle.unit_sell_position__short_info__line_icon}
-                            src={iconUnitInfoAttack}
-                            alt=""
-                        />
-                        <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>
-                            {unitData.attack.min}-{unitData.attack.max}
-                        </p>
-                        <img
-                            className={sellPositionStyle.unit_sell_position__short_info__line_icon}
-                            src={iconUnitInfoMove}
-                            alt=""
-                        />
-                        <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>{unitData.move}</p>
-                        <img
-                            className={sellPositionStyle.unit_sell_position__short_info__line_icon}
-                            src={iconUnitInfoDefence}
-                            alt=""
-                        />
-                        <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>{unitData.armor}</p>
-                    </div>
-                    <div className={sellPositionStyle.unit_sell_position__short_info__line}>
-                        <div className={serviceStyle.clear_self}/>
-                        <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>
-                            HP: {unit.getHitPoints()} / {defaultUnitData.hitPoints}
-                        </p>
-                        <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>
-                            XP: {unitLevelData.experience.part} / {unitLevelData.experience.to}
-                        </p>
-                    </div>
+                    {view.renderShortInfoFirstLine()}
+                    {view.renderShortInfoSecondLine()}
                 </div>
             </div>
         );

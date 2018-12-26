@@ -1,4 +1,4 @@
-//
+@import './../../../../../css/var';
 
 .unit__wrapper {
     padding: 12px 15px 16px;
@@ -27,4 +27,17 @@
     margin: 0 0 0 58px;
     overflow: hidden;
     //width: 147px;
+}
+
+.experience_text,
+.hit_points_text {
+    text-shadow: 2px 2px 0 $main-text-shadow-color;
+}
+
+.experience_text {
+    color: $experience-text-color;
+}
+
+.hit_points_text {
+    color: $hit-points-text-color;
 }
