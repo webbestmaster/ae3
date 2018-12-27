@@ -105,7 +105,7 @@ export class UnitInfo extends Component<PropsType, StateType> {
                 </p>
                 <p className={sellPositionStyle.unit_sell_position__short_info__line_text}>
                     <span className={unitInfoStyle.experience_text}>XP&nbsp;</span>
-                    {unitLevelData.experience.part} / {unitLevelData.experience.to}
+                    {unitLevelData.experience.part} / {unitLevelData.experience.size}
                 </p>
             </div>
         );
