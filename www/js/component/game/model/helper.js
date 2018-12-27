@@ -264,29 +264,30 @@ function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataFor
 
     // TODO: add Math.random() * instead of 0.5 *
     console.warn('getAttackDamage - return Math.random() instead of 0.5');
-    const aggressorSelfAttack =
-        0.5 * (aggressor.attack.max - aggressor.attack.min) + aggressor.attack.min + aggressor.level.attack;
+    const aggressorSelfAttack = 0.5 * (aggressor.attack.max - aggressor.attack.min) + aggressor.attack.min;
 
+    const aggressorAttackLevelBonus = aggressor.level.attack;
     const aggressorAttackBonusWistAura = aggressor.hasWispAura ? additionalUnitData.wispAttackBonus : 0;
     const aggressorPoisonAttackReduce = aggressor.poisonCountdown > 0 ? additionalUnitData.poisonAttackReduce : 0;
     const aggressorVersusFlyAttackBonus = defender.moveType === 'fly' ? aggressor.bonusAtkAgainstFly : 0;
     const aggressorVersusSkeletonAttackBonus = defender.type === 'skeleton' ? aggressor.bonusAtkAgainstSkeleton : 0;
 
     const aggressorEndAttack =
-        aggressorScale *
-        (aggressorSelfAttack +
-            aggressorAttackBonusWistAura +
-            aggressorVersusFlyAttackBonus +
-            aggressorVersusSkeletonAttackBonus -
-            aggressorPoisonAttackReduce);
+        aggressorSelfAttack +
+        aggressorAttackLevelBonus +
+        aggressorAttackBonusWistAura +
+        aggressorVersusFlyAttackBonus +
+        aggressorVersusSkeletonAttackBonus -
+        aggressorPoisonAttackReduce;
 
-    const defenderScale = defender.hitPoints / defaultUnitData.hitPoints;
-    const defenderSelfArmor = defender.armor + defender.level.armor;
-    const defenderPoisonArmorReduce = defender.poisonCountdown > 0 ? additionalUnitData.poisonArmorReduce : 0;
+    // const defenderScale = defender.hitPoints / defaultUnitData.hitPoints;
+    const defenderSelfArmor = defender.armor;
+    const defenderLevelArmor = defender.level.armor;
     const defenderPlaceArmor = defender.placeArmor;
-    const defenderEndArmor = defenderScale * (defenderSelfArmor - defenderPoisonArmorReduce) + defenderPlaceArmor;
+    const defenderPoisonArmorReduce = defender.poisonCountdown > 0 ? additionalUnitData.poisonArmorReduce : 0;
+    const defenderEndArmor = defenderSelfArmor + defenderLevelArmor + defenderPlaceArmor - defenderPoisonArmorReduce;
 
-    return Math.max(Math.round(aggressorEndAttack - defenderEndArmor), minDamage);
+    return Math.max(Math.floor((aggressorEndAttack - defenderEndArmor) * aggressorScale), minDamage);
 }
 
 // eslint-disable-next-line complexity
