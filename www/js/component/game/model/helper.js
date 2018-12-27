@@ -156,6 +156,7 @@ export type UnitDataForAttackType = {|
     |},
     +moveType: UnitMoveType,
     +bonusAtkAgainstFly: number,
+    +bonusAtkAgainstSkeleton: number,
     +poisonAttack: number,
     +type: UnitTypeAllType,
     +id: string,
@@ -256,11 +257,8 @@ type UnitsDataForAttackType = {|
     +defender: UnitDataForAttackType,
 |};
 
+// eslint-disable-next-line complexity
 function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataForAttackType): number {
-    // 1 - add bonus damage archer vs fly unit
-    // 2 - add bonus damage wisp vs skeleton
-    // 3 - add bonus damage by unit level, count unit level from damage given/received
-
     const minDamage = 1;
     const aggressorScale = aggressor.hitPoints / defaultUnitData.hitPoints;
 
@@ -269,23 +267,17 @@ function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataFor
     const aggressorSelfAttack =
         0.5 * (aggressor.attack.max - aggressor.attack.min) + aggressor.attack.min + aggressor.level.attack;
 
-    /*
-    const aggressorSelfAttack =
-        Math.random() * (aggressor.attack.max - aggressor.attack.min) +
-        aggressor.attack.min +
-        // level damage
-        aggressor.level / (defaultUnitData.level.max + 1) * ((aggressor.attack.max + aggressor.attack.min) / 2);
-    */
-
     const aggressorAttackBonusWistAura = aggressor.hasWispAura ? additionalUnitData.wispAttackBonus : 0;
     const aggressorPoisonAttackReduce = aggressor.poisonCountdown > 0 ? additionalUnitData.poisonAttackReduce : 0;
     const aggressorVersusFlyAttackBonus = defender.moveType === 'fly' ? aggressor.bonusAtkAgainstFly : 0;
+    const aggressorVersusSkeletonAttackBonus = defender.type === 'skeleton' ? aggressor.bonusAtkAgainstSkeleton : 0;
 
     const aggressorEndAttack =
         aggressorScale *
         (aggressorSelfAttack +
             aggressorAttackBonusWistAura +
-            aggressorVersusFlyAttackBonus -
+            aggressorVersusFlyAttackBonus +
+            aggressorVersusSkeletonAttackBonus -
             aggressorPoisonAttackReduce);
 
     const defenderScale = defender.hitPoints / defaultUnitData.hitPoints;
@@ -311,6 +303,7 @@ function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender
         },
         moveType: aggressorMoveType,
         bonusAtkAgainstFly: aggressorGuideData.bonusAtkAgainstFly,
+        bonusAtkAgainstSkeleton: aggressorGuideData.bonusAtkAgainstSkeleton,
         poisonAttack: aggressor.getPoisonAttack(),
         type: aggressor.attr.type,
         id: isString(aggressor.attr.id) ? aggressor.attr.id : 'no-aggressor-id-' + Math.random(),
@@ -346,6 +339,7 @@ function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender
         },
         moveType: defenderMoveType,
         bonusAtkAgainstFly: defenderGuideData.bonusAtkAgainstFly,
+        bonusAtkAgainstSkeleton: defenderGuideData.bonusAtkAgainstSkeleton,
         poisonAttack: defender.getPoisonAttack(),
         type: defender.attr.type,
         id: isString(defender.attr.id) ? defender.attr.id : 'no-defender-id-' + Math.random(),

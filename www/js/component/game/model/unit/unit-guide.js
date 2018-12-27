@@ -43,7 +43,7 @@ export type UnitDataType = {|
 
     +canFixBuilding?: boolean,
     +occupyBuildingList?: Array<string>,
-    +bonusAtkAgainstSkeleton?: number,
+    +bonusAtkAgainstSkeleton: number,
     +bonusAtkAgainstFly: number,
     +poisonAttack?: number,
 
@@ -84,6 +84,7 @@ export const unitGuideData: UnitGuideDataType = {
         occupyBuildingList: [mapGuide.building.farm.name],
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     archer: {
         attack: {
@@ -102,6 +103,7 @@ export const unitGuideData: UnitGuideDataType = {
 
         bonusAtkAgainstFly: 30,
         moveType: 'walk',
+        bonusAtkAgainstSkeleton: 0,
     },
     elemental: {
         attack: {
@@ -120,6 +122,7 @@ export const unitGuideData: UnitGuideDataType = {
 
         moveType: 'flow',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     sorceress: {
         attack: {
@@ -139,6 +142,7 @@ export const unitGuideData: UnitGuideDataType = {
         raiseSkeletonRange: 1,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     wisp: {
         attack: {
@@ -178,6 +182,7 @@ export const unitGuideData: UnitGuideDataType = {
         poisonAttack: 3,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     golem: {
         attack: {
@@ -195,6 +200,7 @@ export const unitGuideData: UnitGuideDataType = {
         cost: 600,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     catapult: {
         attack: {
@@ -216,6 +222,7 @@ export const unitGuideData: UnitGuideDataType = {
         destroyBuildingList: [mapGuide.building.farm.name],
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     dragon: {
         attack: {
@@ -234,6 +241,7 @@ export const unitGuideData: UnitGuideDataType = {
 
         moveType: 'fly',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     skeleton: {
         attack: {
@@ -252,6 +260,7 @@ export const unitGuideData: UnitGuideDataType = {
         withoutGrave: true,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     crystal: {
         attack: {
@@ -268,6 +277,7 @@ export const unitGuideData: UnitGuideDataType = {
         cost: 0,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     galamar: {
         attack: {
@@ -290,6 +300,7 @@ export const unitGuideData: UnitGuideDataType = {
         isCommander: true,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     valadorn: {
         attack: {
@@ -312,6 +323,7 @@ export const unitGuideData: UnitGuideDataType = {
         isCommander: true,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     'demon-lord': {
         attack: {
@@ -334,6 +346,7 @@ export const unitGuideData: UnitGuideDataType = {
         isCommander: true,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     saeth: {
         attack: {
@@ -356,6 +369,7 @@ export const unitGuideData: UnitGuideDataType = {
         isCommander: true,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
     'saeth-heavens-fury': {
         attack: {
@@ -374,6 +388,7 @@ export const unitGuideData: UnitGuideDataType = {
         withoutGrave: true,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        bonusAtkAgainstSkeleton: 0,
     },
 };
 
