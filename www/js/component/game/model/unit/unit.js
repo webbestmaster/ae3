@@ -879,7 +879,6 @@ export class Unit {
     }
 
     getAvailablePath(gameData: GameDataType): AvailablePathMapType {
-        console.warn('---> reduce path if unit poisoned!');
         const unit = this;
         const {x, y, type} = unit.attr;
 
@@ -889,15 +888,22 @@ export class Unit {
             return [];
         }
 
-        const currentUnitGuideData = unitGuideData[type];
+        const currentUnitGuideData = unit.getGuideData();
 
-        const moveType = isString(currentUnitGuideData.moveType) ? currentUnitGuideData.moveType : null;
-
-        const pathMap = moveType === null ? gameData.pathMap.walk : gameData.pathMap[moveType];
+        const pathMap = gameData.pathMap[currentUnitGuideData.moveType];
 
         const userUnitCoordinateList = unit.getAllUserUnitsCoordinates(gameData);
 
-        return getPath(x, y, currentUnitGuideData.move, pathMap, unit.getAllOtherUnitsCoordinates(gameData)).filter(
+        const unitPoisonCountdown = unit.getPoisonCountdown();
+
+        const defaultMoveSize = currentUnitGuideData.move;
+
+        const moveSize =
+            unitPoisonCountdown > 0 && defaultMoveSize > 0 ?
+                defaultMoveSize - defaultUnitData.move.reduceByPoison :
+                defaultMoveSize;
+
+        return getPath(x, y, moveSize, pathMap, unit.getAllOtherUnitsCoordinates(gameData)).filter(
             (pathPoint: [number, number]): boolean => {
                 return !userUnitCoordinateList.some(
                     (unitPoint: [number, number]): boolean => {

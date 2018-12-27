@@ -435,12 +435,9 @@ export const defaultUnitData = {
     experience: {
         destroyBuilding: 60,
     },
-
-    /*
-    armor: {
-        perLevel: 5,
+    move: {
+        reduceByPoison: 1,
     },
-*/
     animation: {
         moveStep: 100,
         attack: 500,
