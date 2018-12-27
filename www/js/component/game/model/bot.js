@@ -193,8 +193,6 @@ function getBotActionDataList(
         availableActionsMapList.forEach((unitActionsMap: UnitAvailableActionsMapType) => {
             const {actionsMap, moveAction} = unitActionsMap;
 
-            // TODO: comment/uncomment it, for test only
-            // this should be in production
             botResultActionDataList.push({unit, moveAction, unitAction: null, armorMap});
 
             if (actionsMap === null) {
@@ -211,12 +209,6 @@ function getBotActionDataList(
                 if (unitAction.type === 'move') {
                     return;
                 }
-
-                // TODO: remove/leave it, for test only
-                // this should NOT be in production
-                // if (unitAction.type !== 'attack') {
-                //     return;
-                // }
 
                 botResultActionDataList.push({unit, moveAction, unitAction, armorMap});
             });

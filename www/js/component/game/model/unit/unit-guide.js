@@ -21,6 +21,8 @@ export type UnitTypeExtraType = 'crystal' | 'saeth-heavens-fury';
 
 export type UnitTypeAllType = UnitTypeCommonType | UnitTypeCommanderType | UnitTypeExtraType;
 
+export type UnitMoveType = 'walk' | 'fly' | 'flow';
+
 export type UnitDataType = {|
     +attack: {|
         +min: number,
@@ -37,12 +39,12 @@ export type UnitDataType = {|
 
     +auraRange?: number,
 
-    +moveType?: string,
+    +moveType: UnitMoveType,
 
     +canFixBuilding?: boolean,
     +occupyBuildingList?: Array<string>,
     +bonusAtkAgainstSkeleton?: number,
-    +bonusAtkAgainstFly?: number,
+    +bonusAtkAgainstFly: number,
     +poisonAttack?: number,
 
     +destroyBuildingList?: Array<string>,
@@ -80,6 +82,8 @@ export const unitGuideData: UnitGuideDataType = {
 
         canFixBuilding: true,
         occupyBuildingList: [mapGuide.building.farm.name],
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     archer: {
         attack: {
@@ -97,6 +101,7 @@ export const unitGuideData: UnitGuideDataType = {
         cost: 250,
 
         bonusAtkAgainstFly: 30,
+        moveType: 'walk',
     },
     elemental: {
         attack: {
@@ -114,6 +119,7 @@ export const unitGuideData: UnitGuideDataType = {
         cost: 300,
 
         moveType: 'flow',
+        bonusAtkAgainstFly: 0,
     },
     sorceress: {
         attack: {
@@ -131,6 +137,8 @@ export const unitGuideData: UnitGuideDataType = {
         cost: 400,
 
         raiseSkeletonRange: 1,
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     wisp: {
         attack: {
@@ -149,6 +157,8 @@ export const unitGuideData: UnitGuideDataType = {
 
         auraRange: 2,
         bonusAtkAgainstSkeleton: 30,
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     'dire-wolf': {
         attack: {
@@ -166,6 +176,8 @@ export const unitGuideData: UnitGuideDataType = {
         cost: 600,
 
         poisonAttack: 3,
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     golem: {
         attack: {
@@ -181,6 +193,8 @@ export const unitGuideData: UnitGuideDataType = {
         },
         canBeBuy: true,
         cost: 600,
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     catapult: {
         attack: {
@@ -200,6 +214,8 @@ export const unitGuideData: UnitGuideDataType = {
         isDisabledAfterMove: true,
 
         destroyBuildingList: [mapGuide.building.farm.name],
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     dragon: {
         attack: {
@@ -217,6 +233,7 @@ export const unitGuideData: UnitGuideDataType = {
         cost: 1000,
 
         moveType: 'fly',
+        bonusAtkAgainstFly: 0,
     },
     skeleton: {
         attack: {
@@ -233,6 +250,8 @@ export const unitGuideData: UnitGuideDataType = {
         cost: 0,
 
         withoutGrave: true,
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     crystal: {
         attack: {
@@ -247,6 +266,8 @@ export const unitGuideData: UnitGuideDataType = {
             description: 'UNIT__CRYSTAL__DESCRIPTION',
         },
         cost: 0,
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     galamar: {
         attack: {
@@ -267,6 +288,8 @@ export const unitGuideData: UnitGuideDataType = {
         canFixBuilding: true,
         occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true,
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     valadorn: {
         attack: {
@@ -287,6 +310,8 @@ export const unitGuideData: UnitGuideDataType = {
         canFixBuilding: true,
         occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true,
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     'demon-lord': {
         attack: {
@@ -307,6 +332,8 @@ export const unitGuideData: UnitGuideDataType = {
         canFixBuilding: true,
         occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true,
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     saeth: {
         attack: {
@@ -327,6 +354,8 @@ export const unitGuideData: UnitGuideDataType = {
         canFixBuilding: true,
         occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true,
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
     'saeth-heavens-fury': {
         attack: {
@@ -343,6 +372,8 @@ export const unitGuideData: UnitGuideDataType = {
         },
 
         withoutGrave: true,
+        moveType: 'walk',
+        bonusAtkAgainstFly: 0,
     },
 };
 
@@ -381,14 +412,20 @@ export const defaultUnitData = {
         min: 0,
         max: 9,
         base: 100,
-        // scale: 1.05,
+        additional: {
+            attack: 5,
+            armor: 5,
+        },
     },
     experience: {
         destroyBuilding: 60,
     },
+
+    /*
     armor: {
         perLevel: 5,
     },
+*/
     animation: {
         moveStep: 100,
         attack: 500,

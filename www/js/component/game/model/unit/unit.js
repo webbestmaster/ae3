@@ -30,21 +30,21 @@ import {fillActionMap} from './helper';
 import {isNotNumber, isNotString, isNumber, isString} from '../../../../lib/is/is';
 
 type LevelUpAnimationDataType = {|
-    x: number,
-    y: number,
-    alpha: number,
+    +x: number,
+    +y: number,
+    +alpha: number,
 |};
 
 export type UnitActionMoveType = {|
     type: 'move',
-    from: {
+    from: {|
         x: number,
         y: number,
-    },
-    to: {
+    |},
+    to: {|
         x: number,
         y: number,
-    },
+    |},
     id: string,
     container: PIXI.Container,
 |};
@@ -191,24 +191,6 @@ export type GameDataType = {|
     +emptyActionMap: Array<Array<[]>>,
     +emptyValueMap: Array<Array<number | string | boolean | null | void>>,
 |};
-
-/*
-const textStyle = new PIXI.TextStyle({
-    fontFamily: 'monospace',
-    fill: '#cccc00',
-    fontSize: 8,
-    stroke: '#000000',
-    strokeThickness: 4
-});
-*/
-
-const textStyleRed = new PIXI.TextStyle({
-    fontFamily: 'monospace',
-    fill: '#cc0000',
-    fontSize: 8,
-    stroke: '#000000',
-    strokeThickness: 4,
-});
 
 export class Unit {
     attr: UnitAttrType;

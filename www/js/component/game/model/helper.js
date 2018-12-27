@@ -3,7 +3,7 @@
 /* global document, location */
 
 import {mapGuide, type TeamIdType, type UserColorType} from '../../../maps/map-guide';
-import type {UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
+import type {UnitMoveType, UnitTypeAllType, UnitTypeCommanderType} from './unit/unit-guide';
 import {additionalUnitData, defaultUnitData, unitGuideData} from './unit/unit-guide';
 import type {GameDataType, UnitActionMoveType, UnitActionsMapType, UnitActionType} from './unit/unit';
 import {Unit} from './unit/unit';
@@ -154,6 +154,8 @@ export type UnitDataForAttackType = {|
         +max: number,
         +range: number,
     |},
+    +moveType: UnitMoveType,
+    +bonusAtkAgainstFly: number,
     +poisonAttack: number,
     +type: UnitTypeAllType,
     +id: string,
@@ -167,10 +169,14 @@ export type UnitDataForAttackType = {|
     +hasWispAura: boolean,
     +damage: {|
         // need to count level
-        given: number, // will rewrite in getAttackDamage
-        received: number, // will rewrite in getAttackDamage
+        +given: number, // will rewrite in getAttackDamage
+        +received: number, // will rewrite in getAttackDamage
     |},
-    +level: number,
+    +level: {|
+        +value: number,
+        +attack: number,
+        +armor: number,
+    |},
     +placeArmor: number,
 |};
 
@@ -251,22 +257,17 @@ type UnitsDataForAttackType = {|
 |};
 
 function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataForAttackType): number {
-    // TODO:
     // 1 - add bonus damage archer vs fly unit
     // 2 - add bonus damage wisp vs skeleton
     // 3 - add bonus damage by unit level, count unit level from damage given/received
-    console.warn('getAttackDamage - 1 - add bonus damage archer vs fly unit');
-    console.warn('getAttackDamage - 2 - add bonus damage wisp vs skeleton');
 
     const minDamage = 1;
     const aggressorScale = aggressor.hitPoints / defaultUnitData.hitPoints;
 
+    // TODO: add Math.random() * instead of 0.5 *
     console.warn('getAttackDamage - return Math.random() instead of 0.5');
     const aggressorSelfAttack =
-        0.5 * (aggressor.attack.max - aggressor.attack.min) +
-        aggressor.attack.min +
-        // level damage
-        aggressor.level / (defaultUnitData.level.max + 1) * ((aggressor.attack.max + aggressor.attack.min) / 2);
+        0.5 * (aggressor.attack.max - aggressor.attack.min) + aggressor.attack.min + aggressor.level.attack;
 
     /*
     const aggressorSelfAttack =
@@ -274,17 +275,21 @@ function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataFor
         aggressor.attack.min +
         // level damage
         aggressor.level / (defaultUnitData.level.max + 1) * ((aggressor.attack.max + aggressor.attack.min) / 2);
-*/
+    */
+
     const aggressorAttackBonusWistAura = aggressor.hasWispAura ? additionalUnitData.wispAttackBonus : 0;
     const aggressorPoisonAttackReduce = aggressor.poisonCountdown > 0 ? additionalUnitData.poisonAttackReduce : 0;
+    const aggressorVersusFlyAttackBonus = defender.moveType === 'fly' ? aggressor.bonusAtkAgainstFly : 0;
+
     const aggressorEndAttack =
-        aggressorScale * (aggressorSelfAttack + aggressorAttackBonusWistAura - aggressorPoisonAttackReduce);
+        aggressorScale *
+        (aggressorSelfAttack +
+            aggressorAttackBonusWistAura +
+            aggressorVersusFlyAttackBonus -
+            aggressorPoisonAttackReduce);
 
     const defenderScale = defender.hitPoints / defaultUnitData.hitPoints;
-    const defenderSelfArmor =
-        defender.armor +
-        // level armor
-        defender.level * defaultUnitData.armor.perLevel;
+    const defenderSelfArmor = defender.armor + defender.level.armor;
     const defenderPoisonArmorReduce = defender.poisonCountdown > 0 ? additionalUnitData.poisonArmorReduce : 0;
     const defenderPlaceArmor = defender.placeArmor;
     const defenderEndArmor = defenderScale * (defenderSelfArmor - defenderPoisonArmorReduce) + defenderPlaceArmor;
@@ -296,12 +301,16 @@ function getAttackDamage(aggressor: UnitDataForAttackType, defender: UnitDataFor
 function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender: Unit): UnitsDataForAttackType {
     const aggressorGuideData = aggressor.getGuideData();
 
+    const aggressorMoveType = isString(aggressorGuideData.moveType) ? aggressorGuideData.moveType : 'walk';
+
     const aggressorData: UnitDataForAttackType = {
         attack: {
             min: aggressorGuideData.attack.min,
             max: aggressorGuideData.attack.max,
             range: aggressorGuideData.attack.range,
         },
+        moveType: aggressorMoveType,
+        bonusAtkAgainstFly: aggressorGuideData.bonusAtkAgainstFly,
         poisonAttack: aggressor.getPoisonAttack(),
         type: aggressor.attr.type,
         id: isString(aggressor.attr.id) ? aggressor.attr.id : 'no-aggressor-id-' + Math.random(),
@@ -317,13 +326,17 @@ function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender
             given: aggressor.getDamageGiven(),
             received: aggressor.getDamageReceived(),
         },
-        level: aggressor.getLevel(),
-        placeArmor: isString(aggressorGuideData.moveType) ?
-            gameData.armorMap[aggressorGuideData.moveType][aggressor.attr.y][aggressor.attr.x] :
-            gameData.armorMap.walk[aggressor.attr.y][aggressor.attr.x],
+        level: {
+            value: aggressor.getLevel(),
+            armor: aggressor.getLevel() * defaultUnitData.level.additional.armor,
+            attack: aggressor.getLevel() * defaultUnitData.level.additional.attack,
+        },
+        placeArmor: gameData.armorMap[aggressorMoveType][aggressor.attr.y][aggressor.attr.x],
     };
 
     const defenderGuideData = defender.getGuideData();
+
+    const defenderMoveType = isString(defenderGuideData.moveType) ? defenderGuideData.moveType : 'walk';
 
     const defenderData: UnitDataForAttackType = {
         attack: {
@@ -331,6 +344,8 @@ function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender
             max: defenderGuideData.attack.max,
             range: defenderGuideData.attack.range,
         },
+        moveType: defenderMoveType,
+        bonusAtkAgainstFly: defenderGuideData.bonusAtkAgainstFly,
         poisonAttack: defender.getPoisonAttack(),
         type: defender.attr.type,
         id: isString(defender.attr.id) ? defender.attr.id : 'no-defender-id-' + Math.random(),
@@ -346,7 +361,11 @@ function getUnitsDataForAttack(gameData: GameDataType, aggressor: Unit, defender
             given: defender.getDamageGiven(),
             received: defender.getDamageReceived(),
         },
-        level: defender.getLevel(),
+        level: {
+            value: defender.getLevel(),
+            armor: defender.getLevel() * defaultUnitData.level.additional.armor,
+            attack: defender.getLevel() * defaultUnitData.level.additional.attack,
+        },
         placeArmor: isString(defenderGuideData.moveType) ?
             gameData.armorMap[defenderGuideData.moveType][defender.attr.y][defender.attr.x] :
             gameData.armorMap.walk[defender.attr.y][defender.attr.x],
