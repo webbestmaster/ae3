@@ -142,10 +142,10 @@ export class SnackBar extends Component<PropsType, StateType> {
         const {list} = this.state;
 
         return (
-            <Fragment>
+            <>
                 <TransitionGroup>{this.renderScreenDisable()}</TransitionGroup>
                 <TransitionGroup className={style.list_wrapper}>{list.map(this.renderListItem)}</TransitionGroup>
-            </Fragment>
+            </>
         );
     }
 }
