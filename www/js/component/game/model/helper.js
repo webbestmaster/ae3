@@ -538,7 +538,7 @@ export function bindHold(container: PIXI.Container, callback: () => Promise<void
 export function procedureMakeGraveForMapUnit(newMap: MapType, mapUnit: AttackResultUnitType) {
     const actionUnitGuideData = unitGuideData[mapUnit.type];
 
-    if (actionUnitGuideData.withoutGrave === true) {
+    if (actionUnitGuideData.hasGrave === false) {
         console.log('unit without grave', mapUnit);
         return;
     }

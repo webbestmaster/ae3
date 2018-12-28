@@ -338,10 +338,7 @@ function getCanLeaveToOccupyBuilding(botResultActionData: BotResultActionDataTyp
         return false;
     }
 
-    if (
-        currentUnitGuideData.occupyBuildingList &&
-        currentUnitGuideData.occupyBuildingList.includes(building.attr.type)
-    ) {
+    if (currentUnitGuideData.occupyBuildingList.includes(building.attr.type)) {
         console.log('getCanLeaveToOccupyBuilding - can occupy this building');
         return false;
     }
@@ -356,10 +353,7 @@ function getCanLeaveToOccupyBuilding(botResultActionData: BotResultActionDataTyp
             const currentUnitInListGuideData = unitGuideData[unitInList.attr.type];
 
             // unit has no occupyBuildingList or not occupy building
-            if (
-                !currentUnitInListGuideData.occupyBuildingList ||
-                !currentUnitInListGuideData.occupyBuildingList.includes(building.attr.type)
-            ) {
+            if (!currentUnitInListGuideData.occupyBuildingList.includes(building.attr.type)) {
                 return false;
             }
 

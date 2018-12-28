@@ -918,7 +918,7 @@ export class GameModel {
             // defenderUnit.setHitPoints(0);
             const defenderUnitGuideData = defenderUnit.getGuideData();
 
-            if (defenderUnitGuideData.withoutGrave !== true) {
+            if (defenderUnitGuideData.hasGrave === true) {
                 const currentDefenderGrave =
                     find(game.graveList, {
                         attr: {x: defenderUnit.attr.x, y: defenderUnit.attr.y},
@@ -967,7 +967,7 @@ export class GameModel {
             // aggressorUnit.setHitPoints(0);
             const aggressorUnitGuideData = aggressorUnit.getGuideData();
 
-            if (aggressorUnitGuideData.withoutGrave !== true) {
+            if (aggressorUnitGuideData.hasGrave === true) {
                 const currentAggressorGrave =
                     find(game.graveList, {
                         attr: {x: aggressorUnit.attr.x, y: aggressorUnit.attr.y},

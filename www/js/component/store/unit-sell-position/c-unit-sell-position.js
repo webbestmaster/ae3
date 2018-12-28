@@ -101,7 +101,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         const {unitType, mapState} = props;
         const unitData = unitGuideData[unitType];
 
-        if (unitData.canBeBuy !== true) {
+        if (unitData.canBeBuy === false) {
             return null;
         }
 
@@ -141,7 +141,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         const {unitType} = props;
         const unitData = unitGuideData[unitType];
 
-        return isBoolean(unitData.isCommander) && unitData.isCommander;
+        return unitData.isCommander;
     }
 
     getUnitColor(): UserColorType | null {

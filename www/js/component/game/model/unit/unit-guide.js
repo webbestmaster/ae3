@@ -37,23 +37,23 @@ export type UnitDataType = {|
     |},
     +cost: number,
 
-    +auraRange?: number,
+    +wispAuraRange: number,
 
     +moveType: UnitMoveType,
 
-    +canFixBuilding?: boolean,
-    +occupyBuildingList?: Array<string>,
+    +canFixBuilding: boolean,
+    +occupyBuildingList: Array<string>,
     +bonusAtkAgainstSkeleton: number,
     +bonusAtkAgainstFly: number,
-    +poisonAttack?: number,
+    +poisonAttack: number,
 
-    +destroyBuildingList?: Array<string>,
+    +destroyBuildingList: Array<string>,
 
-    +raiseSkeletonRange?: number,
-    +canBeBuy?: boolean,
-    +withoutGrave?: boolean,
-    +isCommander?: boolean,
-    +isDisabledAfterMove?: boolean,
+    +raiseSkeletonRange: number,
+    +canBeBuy: boolean,
+    +hasGrave: boolean,
+    +isCommander: boolean,
+    +isDisabledAfterMove: boolean,
 |};
 
 type UnitGuideDataType = {+[key: UnitTypeAllType]: UnitDataType};
@@ -80,11 +80,18 @@ export const unitGuideData: UnitGuideDataType = {
         canBeBuy: true,
         cost: 150,
 
+        wispAuraRange: 0,
         canFixBuilding: true,
         occupyBuildingList: [mapGuide.building.farm.name],
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        hasGrave: true,
+        isCommander: false,
+        isDisabledAfterMove: false,
     },
     archer: {
         attack: {
@@ -101,9 +108,18 @@ export const unitGuideData: UnitGuideDataType = {
         canBeBuy: true,
         cost: 250,
 
+        wispAuraRange: 0,
         bonusAtkAgainstFly: 30,
         moveType: 'walk',
         bonusAtkAgainstSkeleton: 0,
+        canFixBuilding: false,
+        occupyBuildingList: [],
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        hasGrave: true,
+        isCommander: false,
+        isDisabledAfterMove: false,
     },
     elemental: {
         attack: {
@@ -120,9 +136,18 @@ export const unitGuideData: UnitGuideDataType = {
         canBeBuy: true,
         cost: 300,
 
+        wispAuraRange: 0,
         moveType: 'flow',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        canFixBuilding: false,
+        occupyBuildingList: [],
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        hasGrave: true,
+        isCommander: false,
+        isDisabledAfterMove: false,
     },
     sorceress: {
         attack: {
@@ -139,10 +164,18 @@ export const unitGuideData: UnitGuideDataType = {
         canBeBuy: true,
         cost: 400,
 
+        wispAuraRange: 0,
         raiseSkeletonRange: 1,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        canFixBuilding: false,
+        occupyBuildingList: [],
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        hasGrave: true,
+        isCommander: false,
+        isDisabledAfterMove: false,
     },
     wisp: {
         attack: {
@@ -159,10 +192,18 @@ export const unitGuideData: UnitGuideDataType = {
         canBeBuy: true,
         cost: 500,
 
-        auraRange: 2,
+        wispAuraRange: 2,
         bonusAtkAgainstSkeleton: 30,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
+        canFixBuilding: false,
+        occupyBuildingList: [],
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        hasGrave: true,
+        isCommander: false,
+        isDisabledAfterMove: false,
     },
     'dire-wolf': {
         attack: {
@@ -179,10 +220,18 @@ export const unitGuideData: UnitGuideDataType = {
         canBeBuy: true,
         cost: 600,
 
+        wispAuraRange: 0,
         poisonAttack: 3,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        canFixBuilding: false,
+        occupyBuildingList: [],
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        hasGrave: true,
+        isCommander: false,
+        isDisabledAfterMove: false,
     },
     golem: {
         attack: {
@@ -198,9 +247,18 @@ export const unitGuideData: UnitGuideDataType = {
         },
         canBeBuy: true,
         cost: 600,
+        wispAuraRange: 0,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        canFixBuilding: false,
+        occupyBuildingList: [],
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        hasGrave: true,
+        isCommander: false,
+        isDisabledAfterMove: false,
     },
     catapult: {
         attack: {
@@ -218,11 +276,17 @@ export const unitGuideData: UnitGuideDataType = {
         cost: 700,
 
         isDisabledAfterMove: true,
-
+        wispAuraRange: 0,
         destroyBuildingList: [mapGuide.building.farm.name],
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        canFixBuilding: false,
+        occupyBuildingList: [],
+        poisonAttack: 0,
+        raiseSkeletonRange: 0,
+        hasGrave: true,
+        isCommander: false,
     },
     dragon: {
         attack: {
@@ -238,10 +302,18 @@ export const unitGuideData: UnitGuideDataType = {
         },
         canBeBuy: true,
         cost: 1000,
-
+        wispAuraRange: 0,
         moveType: 'fly',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        canFixBuilding: false,
+        occupyBuildingList: [],
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        hasGrave: true,
+        isCommander: false,
+        isDisabledAfterMove: false,
     },
     skeleton: {
         attack: {
@@ -256,11 +328,19 @@ export const unitGuideData: UnitGuideDataType = {
             description: 'UNIT__SKELETON__DESCRIPTION',
         },
         cost: 0,
-
-        withoutGrave: true,
+        wispAuraRange: 0,
+        hasGrave: false,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        canFixBuilding: false,
+        occupyBuildingList: [],
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        canBeBuy: false,
+        isCommander: false,
+        isDisabledAfterMove: false,
     },
     crystal: {
         attack: {
@@ -275,9 +355,19 @@ export const unitGuideData: UnitGuideDataType = {
             description: 'UNIT__CRYSTAL__DESCRIPTION',
         },
         cost: 0,
+        wispAuraRange: 0,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        canFixBuilding: false,
+        occupyBuildingList: [],
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        canBeBuy: false,
+        hasGrave: false,
+        isCommander: false,
+        isDisabledAfterMove: false,
     },
     galamar: {
         attack: {
@@ -293,14 +383,18 @@ export const unitGuideData: UnitGuideDataType = {
         },
         canBeBuy: true,
         cost: 200,
-
-        withoutGrave: true,
+        wispAuraRange: 0,
+        hasGrave: false,
         canFixBuilding: true,
         occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        isDisabledAfterMove: false,
     },
     valadorn: {
         attack: {
@@ -316,14 +410,18 @@ export const unitGuideData: UnitGuideDataType = {
         },
         canBeBuy: true,
         cost: 200,
-
-        withoutGrave: true,
+        wispAuraRange: 0,
+        hasGrave: false,
         canFixBuilding: true,
         occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        isDisabledAfterMove: false,
     },
     'demon-lord': {
         attack: {
@@ -339,14 +437,18 @@ export const unitGuideData: UnitGuideDataType = {
         },
         canBeBuy: true,
         cost: 200,
-
-        withoutGrave: true,
+        wispAuraRange: 0,
+        hasGrave: false,
         canFixBuilding: true,
         occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        isDisabledAfterMove: false,
     },
     saeth: {
         attack: {
@@ -362,14 +464,18 @@ export const unitGuideData: UnitGuideDataType = {
         },
         canBeBuy: true,
         cost: 200,
-
-        withoutGrave: true,
+        wispAuraRange: 0,
+        hasGrave: false,
         canFixBuilding: true,
         occupyBuildingList: [mapGuide.building.farm.name, mapGuide.building.castle.name],
         isCommander: true,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        isDisabledAfterMove: false,
     },
     'saeth-heavens-fury': {
         attack: {
@@ -384,11 +490,19 @@ export const unitGuideData: UnitGuideDataType = {
             name: 'UNIT__SAETH_HEAVENS_FURY__NAME',
             description: 'UNIT__SAETH_HEAVENS_FURY__DESCRIPTION',
         },
-
-        withoutGrave: true,
+        wispAuraRange: 0,
+        hasGrave: false,
         moveType: 'walk',
         bonusAtkAgainstFly: 0,
         bonusAtkAgainstSkeleton: 0,
+        canFixBuilding: false,
+        occupyBuildingList: [],
+        poisonAttack: 0,
+        destroyBuildingList: [],
+        raiseSkeletonRange: 0,
+        canBeBuy: false,
+        isCommander: false,
+        isDisabledAfterMove: false,
     },
 };
 

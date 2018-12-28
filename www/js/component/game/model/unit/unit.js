@@ -354,7 +354,7 @@ export class Unit {
     getActions(gameData: GameDataType): UnitActionsMapType | null {
         const unit = this;
 
-        const isDisabledAfterMove = Boolean(unitGuideData[unit.attr.type].isDisabledAfterMove);
+        const isDisabledAfterMove = unitGuideData[unit.attr.type].isDisabledAfterMove;
 
         if (unit.getDidMove() && isDisabledAfterMove) {
             return null;
@@ -564,7 +564,7 @@ export class Unit {
 
         const currentUnitGuideData = unit.getGuideData();
 
-        if (currentUnitGuideData.canFixBuilding !== true) {
+        if (currentUnitGuideData.canFixBuilding === false) {
             console.log('unit can not fix building');
             return [];
         }
@@ -611,10 +611,12 @@ export class Unit {
 
         const currentUnitGuideData = unit.getGuideData();
 
+        /*
         if (!Array.isArray(currentUnitGuideData.occupyBuildingList)) {
             console.log('unit can not occupy building');
             return [];
         }
+*/
 
         // find building for occupy
         const unitX = attr.x;
@@ -628,7 +630,6 @@ export class Unit {
                         buildingInList.attr.x === unitX &&
                         buildingInList.attr.y === unitY &&
                         buildingInList.attr.userId !== userId &&
-                        Array.isArray(currentUnitGuideData.occupyBuildingList) &&
                         currentUnitGuideData.occupyBuildingList.includes(buildingInList.attr.type)
                     );
                 }
@@ -716,7 +717,7 @@ export class Unit {
 
         const currentUnitGuideData = unit.getGuideData();
 
-        if (!currentUnitGuideData.destroyBuildingList || currentUnitGuideData.destroyBuildingList.length === 0) {
+        if (currentUnitGuideData.destroyBuildingList.length === 0) {
             console.log('unit can not destroy building');
             return destroyBuildingMap;
         }
@@ -787,7 +788,7 @@ export class Unit {
 
         const currentUnitGuideData = unit.getGuideData();
 
-        if (isNotNumber(currentUnitGuideData.raiseSkeletonRange)) {
+        if (currentUnitGuideData.raiseSkeletonRange === 0) {
             console.log('unit can not raise skeleton');
             return raiseSkeletonMap;
         }
@@ -918,7 +919,7 @@ export class Unit {
         const unit = this;
         const unitAttr = unit.getAttr();
         const currentUnitGuideData = unitGuideData[unitAttr.type];
-        const isDisabledAfterMove = Boolean(currentUnitGuideData.isDisabledAfterMove);
+        const isDisabledAfterMove = currentUnitGuideData.isDisabledAfterMove;
         const availablePath = isDisabledAfterMove ? [[unitAttr.x, unitAttr.y]] : unit.getAvailablePath(gameData);
         const emptyValueMap = JSON.parse(JSON.stringify(gameData.emptyValueMap));
         const averageAttack = (currentUnitGuideData.attack.min + currentUnitGuideData.attack.max) / 2;
@@ -1431,7 +1432,7 @@ export class Unit {
         const unit = this;
         const guideData = unit.getGuideData();
 
-        return isNumber(guideData.poisonAttack) ? guideData.poisonAttack : 0;
+        return guideData.poisonAttack;
     }
 
     /*
@@ -1674,7 +1675,7 @@ export class Unit {
             const wispAuraCoordinates = getPath(
                 unitWisp.attr.x,
                 unitWisp.attr.y,
-                unitWisp.getGuideData().auraRange || 0,
+                unitWisp.getGuideData().wispAuraRange,
                 gameData.pathMap.fly,
                 []
             );
