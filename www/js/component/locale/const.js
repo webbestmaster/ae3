@@ -38,7 +38,7 @@ export const localeConst = {
     },
     localeNameList,
     langName: {
-        [localeNameReference.enUs]: 'Русский',
-        [localeNameReference.ruRu]: 'English',
+        [localeNameReference.ruRu]: 'Русский',
+        [localeNameReference.enUs]: 'English',
     },
 };

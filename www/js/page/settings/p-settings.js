@@ -20,8 +20,12 @@ import {FormHeader} from '../../component/ui/form-header/c-form-header';
 import {ButtonListWrapper} from '../../component/ui/button-list-wrapper/c-button-list-wrapper';
 import serviceStyle from '../../../css/service.scss';
 import type {ContextRouterType} from '../../type/react-router-dom-v4';
+import type {GlobalStateType} from '../../redux-store-provider/reducer';
+import type {LocaleType} from '../../component/locale/reducer';
 
-type ReduxPropsType = {};
+type ReduxPropsType = {|
+    +locale: LocaleType,
+|};
 
 type ReduxActionType = {|
     +setLocale: (localeName: LocaleNameType) => SetLocaleType,
@@ -57,6 +61,7 @@ class Settings extends Component<ReduxPropsType, PassedPropsType, StateType> {
 
     renderLanguageList(): Node {
         const view = this;
+        const {props} = view;
 
         const headerString = localeConst.localeNameList
             .map((localeName: LocaleNameType): string => allLocales[localeName].LANGUAGE)
@@ -74,7 +79,10 @@ class Settings extends Component<ReduxPropsType, PassedPropsType, StateType> {
                         (localeName: LocaleNameType): Node => {
                             return (
                                 <Button onClick={view.makeHandlerSetLocale(localeName)} key={localeName}>
+                                    {props.locale.name === localeName ? '->' : '\u00A0\u00A0'}
+                                    &nbsp;
                                     {localeConst.langName[localeName]}
+                                    &nbsp;&nbsp;&nbsp;
                                 </Button>
                             );
                         }
@@ -99,8 +107,8 @@ class Settings extends Component<ReduxPropsType, PassedPropsType, StateType> {
 }
 
 const ConnectedComponent = connect<ComponentType<Settings>, PassedPropsType, ReduxPropsType, ReduxActionType>(
-    (state: {}): ReduxPropsType => ({
-        // app: state.app
+    (state: GlobalStateType): ReduxPropsType => ({
+        locale: state.locale,
     }),
     reduxAction
 )(Settings);
