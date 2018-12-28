@@ -839,14 +839,17 @@ export function rateBotResultActionData(
 
     const hasAttack = actionRawRate.attack.damageGiven !== 0 || actionRawRate.attack.damageReceived !== 0;
 
+    let buildingBonusRate = 0;
+
+    ['isOnHealsBuilding', 'isOnTeamBuilding', 'isOnEnemyBuilding', 'isOnSelfBuilding'].forEach(
+        (fieldName: $Keys<RawRateType>) => {
+            buildingBonusRate += actionRawRate[fieldName] ? rateConfig[fieldName] : 0;
+        }
+    );
+
     if (hasAttack) {
         rate += (actionRawRate.attack.damageGiven - actionRawRate.attack.damageReceived) * rateConfig.attack;
-
-        ['isOnHealsBuilding', 'isOnTeamBuilding', 'isOnEnemyBuilding', 'isOnSelfBuilding'].forEach(
-            (fieldName: $Keys<RawRateType>) => {
-                rate += actionRawRate[fieldName] ? rateConfig[fieldName] : 0;
-            }
-        );
+        rate += buildingBonusRate;
     }
 
     rate += actionRawRate.placeArmor * rateConfig.placeArmor;
@@ -874,7 +877,7 @@ export function rateBotResultActionData(
         'canLeaveToOccupyBuilding',
         'canLeaveFromUnitUnderUnit',
     ].forEach((fieldName: $Keys<RawRateType>) => {
-        rate += actionRawRate[fieldName] ? rateConfig[fieldName] : 0;
+        rate += actionRawRate[fieldName] ? rateConfig[fieldName] + buildingBonusRate : 0;
     });
 
     console.log(actionRawRate, rate);
