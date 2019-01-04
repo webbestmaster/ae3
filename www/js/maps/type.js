@@ -45,7 +45,7 @@ export type UnitActionStateType = {|
     didRaiseSkeleton?: boolean,
 |};
 
-const unitActionStateDefaultValue: UnitActionStateType = {
+export const unitActionStateDefaultValue: UnitActionStateType = {
     didMove: false,
     didAttack: false,
 
@@ -55,8 +55,6 @@ const unitActionStateDefaultValue: UnitActionStateType = {
 
     didRaiseSkeleton: false,
 };
-
-export {unitActionStateDefaultValue};
 
 export type UnitType = {|
     x: number,

@@ -4,7 +4,7 @@
 
 /* global window, setTimeout */
 
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import type {HideSnackBarEventDetailType, ShowSnackBarEventDetailType} from './action';
 import style from './style.scss';

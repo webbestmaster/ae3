@@ -11,7 +11,7 @@ import type {GlobalStateType} from '../../../redux-store-provider/reducer';
 import type {ContextRouterType} from '../../../type/react-router-dom-v4';
 import type {UnitTypeAllType} from '../../game/model/unit/unit-guide';
 import {additionalUnitData, unitGuideData} from '../../game/model/unit/unit-guide';
-import {isBoolean, isNumber} from '../../../lib/is/is';
+import {isNumber} from '../../../lib/is/is';
 import {getSupplyState, getUserColor, isCommanderLive} from '../../game/model/helper';
 import find from 'lodash/find';
 import * as serverApi from '../../../module/server-api';

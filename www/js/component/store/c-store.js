@@ -24,9 +24,7 @@ import {setOpenFromGame} from './action';
 import type {StoreType} from './reducer';
 import scrollStyle from '../ui/scroll/scroll.style.scss';
 
-const storeViewId = 'store';
-
-export {storeViewId};
+export const storeViewId = 'store';
 
 type PassedPropsType = {|
     +x: number,

@@ -17,9 +17,7 @@ type ReduceMapType = {|
     +scroll: (scrollState: ScrollType, actionData: ActionDataType) => ScrollType,
 |};
 
-const system = combineReducers<ReduceMapType, SystemType>({
+export const system = combineReducers<ReduceMapType, SystemType>({
     screen,
     scroll,
 });
-
-export {system};

@@ -27,7 +27,7 @@ import {tweenList} from '../../../../lib/tween/tween';
 import find from 'lodash/find';
 import {Grave} from '../grave/grave';
 import {fillActionMap} from './helper';
-import {isNotNumber, isNotString, isNumber, isString} from '../../../../lib/is/is';
+import {isNotString, isNumber, isString} from '../../../../lib/is/is';
 
 type LevelUpAnimationDataType = {|
     +x: number,
