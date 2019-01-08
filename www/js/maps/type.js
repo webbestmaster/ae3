@@ -87,7 +87,7 @@ export type MapUserType = {|
         type: UnitTypeCommanderType,
         buyCount: number,
     |},
-    isLeaved?: boolean,
+    isLeaved: boolean,
 |};
 
 export type MapType = {|

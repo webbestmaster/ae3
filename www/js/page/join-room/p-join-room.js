@@ -88,7 +88,7 @@ class JoinRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
         });
     }
 
-    async componentDidMount(): Promise<void> {
+    async componentDidMount() {
         const view = this;
 
         await view.showSpinner();
@@ -119,7 +119,7 @@ class JoinRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
             );
     };
 
-    async joinRoom(roomId: string): Promise<void> {
+    async joinRoom(roomId: string) {
         const view = this;
         const {props, state} = view;
         const {auth, history} = props;
@@ -183,7 +183,7 @@ class JoinRoom extends Component<ReduxPropsType, PassedPropsType, StateType> {
     makeJoinFunction(roomId: string): () => Promise<void> {
         const view = this;
 
-        return async (): Promise<void> => {
+        return async () => {
             await view.showSpinner();
             await view.joinRoom(roomId);
             await view.hideSpinner();

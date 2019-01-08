@@ -94,7 +94,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         };
     }
 
-    async componentDidMount(): Promise<void> {
+    async componentDidMount() {
         const view = this;
         const {props, state} = view;
         const {match, history} = props;
@@ -138,7 +138,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         await serverApi.takeTurn(roomId, user.getId());
     }
 
-    async componentWillUnmount(): Promise<void> {
+    async componentWillUnmount() {
         const view = this;
         const {props, state} = view;
         const {model, socketMessageQueue} = state;
@@ -160,7 +160,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
     createMessageCallBack(message: SocketMessageType | void): () => Promise<void> {
         const view = this;
 
-        return async (): Promise<void> => {
+        return async () => {
             if (!message) {
                 console.error('SocketMessage is not define');
                 return;
@@ -231,7 +231,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         });
     }
 
-    async removeUser(userId: string): Promise<void> {
+    async removeUser(userId: string) {
         const view = this;
         const {props, state} = view;
         const {match} = props;
@@ -286,6 +286,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
                         type: getCommanderDataByUserIndex(userIndex),
                         buyCount: 0,
                     },
+                    isLeaved: false,
                 };
             }
         );
@@ -369,7 +370,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         return Promise.resolve();
     }
 
-    async startGame(): Promise<void> {
+    async startGame() {
         const view = this;
         const {props, state} = view;
         const {match} = props;
@@ -442,7 +443,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
     makeHandlerRemoveUser(userId: string): () => Promise<void> {
         const view = this;
 
-        return async (): Promise<void> => {
+        return async () => {
             await view.showSpinner();
             await view.removeUser(userId);
             await view.hideSpinner();
@@ -537,7 +538,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
         );
     }
 
-    handleStartGame = async (): Promise<void> => {
+    handleStartGame = async () => {
         const view = this;
 
         await view.showSpinner();
@@ -548,7 +549,7 @@ class Room extends Component<ReduxPropsType, PassedPropsType, StateType> {
     makeHandlerCreateUser(type: 'human' | 'bot', roomId: string): () => Promise<void> {
         const view = this;
 
-        return async (): Promise<void> => {
+        return async () => {
             await view.showSpinner();
             await serverApi.makeUser(type, roomId);
             await view.hideSpinner();

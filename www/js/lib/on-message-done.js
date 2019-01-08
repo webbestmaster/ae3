@@ -28,19 +28,17 @@ export function unSubscribeOnPushStateDone(callBack: CallBackType) {
     callBackList.splice(subscriberIndex, 1);
 }
 
-export async function onPushStateDone(message: SocketMessageType): Promise<void> {
+export async function onPushStateDone(message: SocketMessageType) {
     const queue = new Queue();
 
     callBackList.forEach((callBack: CallBackType) => {
-        queue.push(
-            async (): Promise<void> => {
-                const result = await callBack(message);
+        queue.push(async () => {
+            const result = await callBack(message);
 
-                if (result === false) {
-                    unSubscribeOnPushStateDone(callBack);
-                }
+            if (result === false) {
+                unSubscribeOnPushStateDone(callBack);
             }
-        );
+        });
     });
 
     await queue.push(() => {

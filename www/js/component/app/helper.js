@@ -39,7 +39,7 @@ export const loadSteps: LoadStepsType = {
 };
 
 // eslint-disable-next-line max-statements
-export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapType): Promise<void> {
+export async function initializeEnvironment(methodMap: LoadAppPassedMethodMapType) {
     const {body} = document;
 
     // add all loaders

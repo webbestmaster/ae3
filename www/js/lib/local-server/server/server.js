@@ -34,6 +34,7 @@ type AttrType = {|
 export class Server {
     // eslint-disable-next-line no-underscore-dangle, id-match
     _attr: AttrType;
+
     constructor(options: ServerConstructorOptionsType) {
         const server = this;
 

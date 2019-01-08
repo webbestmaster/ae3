@@ -99,7 +99,7 @@ export class Popup extends Component<PropsType, StateType> {
         view.setState({isOpen: false});
     }
 
-    handleHideCallBack = async (): Promise<void> => {
+    handleHideCallBack = async () => {
         const view = this;
         const {state} = view;
         const {hideCallBack} = state;

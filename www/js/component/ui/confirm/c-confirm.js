@@ -104,7 +104,7 @@ export class Confirm extends Component<PropsType, StateType> {
         view.setState({isOpen: false});
     }
 
-    handleApplyCallBack = async (): Promise<void> => {
+    handleApplyCallBack = async () => {
         const view = this;
         const {state} = view;
         const {applyCallBack} = state;
@@ -114,7 +114,7 @@ export class Confirm extends Component<PropsType, StateType> {
         view.close();
     };
 
-    handleCancelCallBack = async (): Promise<void> => {
+    handleCancelCallBack = async () => {
         const view = this;
         const {state} = view;
         const {cancelCallBack} = state;

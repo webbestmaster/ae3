@@ -168,7 +168,7 @@ async function scaleImage(src: string, multiple: number): Promise<ScaledImageDat
 }
 */
 
-export async function initImages(methodMap: LoadAppPassedMethodMapType): Promise<void> {
+export async function initImages(methodMap: LoadAppPassedMethodMapType) {
     await loadImagesToTextures(imageList, methodMap);
 
     /*
@@ -186,7 +186,7 @@ export async function initImages(methodMap: LoadAppPassedMethodMapType): Promise
 
     imageList.forEach((imageSrc: string, index: number) => {
         queue.push(
-            async (): Promise<void> => {
+            async () => {
                 const imageScale1 = await scaleImage(imageSrc, 1);
                 const imageScale2 = await scaleImage(imageSrc, 2);
 

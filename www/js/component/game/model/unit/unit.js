@@ -999,21 +999,15 @@ export class Unit {
         unitContainer.interactive = true;
         unitContainer.buttonMode = true;
 
-        bindClick(
-            unitContainer,
-            async (): Promise<void> => {
-                console.log('click on unit', unit);
-                await unit.gameAttr.event.click(unit);
-            }
-        );
+        bindClick(unitContainer, async () => {
+            console.log('click on unit', unit);
+            await unit.gameAttr.event.click(unit);
+        });
 
-        bindHold(
-            unitContainer,
-            async (): Promise<void> => {
-                console.log('hold on unit', unit);
-                await unit.gameAttr.event.hold(unit);
-            }
-        );
+        bindHold(unitContainer, async () => {
+            console.log('hold on unit', unit);
+            await unit.gameAttr.event.hold(unit);
+        });
     }
 
     move(x: number, y: number, movePath: PathType, callback?: (x: number, y: number) => void): Promise<void> {
@@ -1333,7 +1327,7 @@ export class Unit {
     }
 
     // eslint-disable-next-line complexity
-    async setLevel(level: number): Promise<void> {
+    async setLevel(level: number) {
         const unit = this;
         const {attr, gameAttr} = unit;
         const currentSpriteNumber = gameAttr.sprite.level.getChildAt(0) || null;
@@ -1366,7 +1360,7 @@ export class Unit {
         currentSpriteNumber.texture = newSpriteNumber.texture;
     }
 
-    async actualizeLevel(): Promise<void> {
+    async actualizeLevel() {
         const unit = this;
 
         await unit.setLevel(unit.getLevel());
@@ -1385,7 +1379,7 @@ export class Unit {
         return getLevelData(damageGiven);
     }
 
-    async showLevelUp(): Promise<void> {
+    async showLevelUp() {
         const unit = this;
         const {attr, gameAttr} = unit;
         const {square} = mapGuide.size;
@@ -1455,7 +1449,7 @@ export class Unit {
     */
 
     // eslint-disable-next-line complexity, max-statements
-    async setHitPoints(hitPoints: number): Promise<void> {
+    async setHitPoints(hitPoints: number) {
         const unit = this;
         const {attr, gameAttr} = unit;
 
@@ -1524,7 +1518,7 @@ export class Unit {
     }
 
     // eslint-disable-next-line complexity, max-statements
-    async showDeltaHitPoints(hitPointsDelta: number): Promise<void> {
+    async showDeltaHitPoints(hitPointsDelta: number) {
         if (hitPointsDelta === 0) {
             console.log('hitPointsDelta is === 0');
             return;

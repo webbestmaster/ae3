@@ -149,26 +149,23 @@ export class GameModel {
         game.render.initialize(renderSetting);
 
         // draw landscape
-        game.render.drawLandscape(
-            map,
-            async (x: number, y: number): Promise<void> => {
-                game.gameView.setActiveLandscape(x, y);
+        game.render.drawLandscape(map, async (x: number, y: number) => {
+            game.gameView.setActiveLandscape(x, y);
 
-                if (!game.isMyTurn()) {
-                    console.log('click on landscape: not your turn');
-                    return;
-                }
-
-                await game.render.cleanActionsList();
-
-                const wrongStateList = getWrongStateList(game.getGameData());
-
-                if (wrongStateList !== null) {
-                    await game.showWrongState(wrongStateList[0]);
-                    return;
-                }
+            if (!game.isMyTurn()) {
+                console.log('click on landscape: not your turn');
+                return;
             }
-        );
+
+            await game.render.cleanActionsList();
+
+            const wrongStateList = getWrongStateList(game.getGameData());
+
+            if (wrongStateList !== null) {
+                await game.showWrongState(wrongStateList[0]);
+                return;
+            }
+        });
 
         // add buildings
         map.buildings
@@ -273,7 +270,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
-    async refreshUnitActionState(userId: string): Promise<void> {
+    async refreshUnitActionState(userId: string) {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -411,7 +408,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity
-    async onMessage(message: SocketMessageType): Promise<void> {
+    async onMessage(message: SocketMessageType) {
         const game = this;
 
         if (message.type === messageConst.type.pushState && message.states.last.state) {
@@ -483,12 +480,10 @@ export class GameModel {
             );
 
             if (messageMap !== null) {
-                game.onMessageQueue.push(
-                    async (): Promise<void> => {
-                        await game.loadMapState(messageMap);
-                        game.message.list.push(message);
-                    }
-                );
+                game.onMessageQueue.push(async () => {
+                    await game.loadMapState(messageMap);
+                    game.message.list.push(message);
+                });
             } else {
                 console.error('message has no map to loadMapState, wait for map', message);
             }
@@ -497,17 +492,15 @@ export class GameModel {
 
         game.message.list.push(message);
 
-        game.onMessageQueue.push(
-            async (): Promise<void> => {
-                game.gameView.addDisableReason('server-receive-message');
+        game.onMessageQueue.push(async () => {
+            game.gameView.addDisableReason('server-receive-message');
 
-                await game.onMessage(message);
+            await game.onMessage(message);
 
-                game.gameView.removeDisableReason('server-receive-message');
+            game.gameView.removeDisableReason('server-receive-message');
 
-                await game.detectAndHandleEndGame();
-            }
-        );
+            await game.detectAndHandleEndGame();
+        });
     }
 
     // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
@@ -520,7 +513,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
-    async handleServerTakeTurnOnLine(message: SocketMessageTakeTurnType): Promise<void> {
+    async handleServerTakeTurnOnLine(message: SocketMessageTakeTurnType) {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -604,7 +597,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
-    async handleServerTakeTurnOffLine(message: SocketMessageTakeTurnType): Promise<void> {
+    async handleServerTakeTurnOffLine(message: SocketMessageTakeTurnType) {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -678,7 +671,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity
-    async syncMapWithServerUserList(message: SocketMessageType): Promise<void> {
+    async syncMapWithServerUserList(message: SocketMessageType) {
         const game = this;
 
         const newMap = game.getMapState();
@@ -709,16 +702,13 @@ export class GameModel {
 
         mapUserList.forEach((mapUser: MapUserType) => {
             const serverUser = find(getAllRoomUsersResult.users, {userId: mapUser.userId}) || null;
-            const isLeaved = serverUser === null;
 
-            if (isLeaved) {
-                // eslint-disable-next-line no-param-reassign
-                mapUser.isLeaved = true;
-            }
+            // eslint-disable-next-line no-param-reassign
+            mapUser.isLeaved = serverUser === null;
         });
 
         mapUserList.forEach((mapUser: MapUserType) => {
-            if (mapUser.isLeaved !== true) {
+            if (mapUser.isLeaved === false) {
                 return;
             }
 
@@ -770,7 +760,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity, max-statements
-    async handleServerPushState(message: SocketMessagePushStateType): Promise<void> {
+    async handleServerPushState(message: SocketMessagePushStateType) {
         const game = this;
 
         if (typeof message.states.last.state.type !== 'string') {
@@ -1281,7 +1271,7 @@ export class GameModel {
         const mapState = state.map;
 
         mapState.userList.forEach((mapUser: MapUserType) => {
-            if (mapUser.isLeaved !== true) {
+            if (mapUser.isLeaved === false) {
                 return;
             }
 
@@ -1304,7 +1294,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line sonarjs/cognitive-complexity
-    async handleServerRefreshUnitList(message: SocketMessagePushStateType): Promise<void> {
+    async handleServerRefreshUnitList(message: SocketMessagePushStateType) {
         const game = this;
         const {unitList} = game;
         const socketMapState = message.states.last.state.map;
@@ -1418,7 +1408,7 @@ export class GameModel {
         bindClick(
             building.gameAttr.container,
             // eslint-disable-next-line complexity, max-statements
-            async (): Promise<void> => {
+            async () => {
                 game.gameView.setActiveLandscape(buildingData.x, buildingData.y);
 
                 if (!game.isMyTurn()) {
@@ -1511,7 +1501,7 @@ export class GameModel {
             unitData,
             userList: mapState === null ? [] : mapState.userList,
             event: {
-                click: async (clickedUnit: Unit): Promise<void> => {
+                click: async (clickedUnit: Unit) => {
                     game.gameView.setActiveLandscape(clickedUnit.attr.x, clickedUnit.attr.y);
 
                     if (!game.isMyTurn()) {
@@ -1521,7 +1511,7 @@ export class GameModel {
 
                     await game.onUnitClick(clickedUnit);
                 },
-                hold: async (clickedUnit: Unit): Promise<void> => {
+                hold: async (clickedUnit: Unit) => {
                     await game.onUnitHold(clickedUnit);
                 },
             },
@@ -1558,7 +1548,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
-    async onUnitClick(unit: Unit): Promise<void> {
+    async onUnitClick(unit: Unit) {
         const game = this;
         const unitAttr = unit.getAttr();
         const unitUserId = isString(unitAttr.userId) ? unitAttr.userId : null;
@@ -1618,7 +1608,7 @@ export class GameModel {
                     bindClick(
                         unitAction.container,
                         // eslint-disable-next-line complexity
-                        async (): Promise<void> => {
+                        async () => {
                             switch (unitAction.type) {
                                 case 'move':
                                     if (unitActionsList !== null) {
@@ -1663,13 +1653,13 @@ export class GameModel {
         });
     }
 
-    async onUnitHold(unit: Unit): Promise<void> {
+    async onUnitHold(unit: Unit) {
         const game = this;
 
         game.gameView.showUnitInfoPopup(unit);
     }
 
-    async showWrongState(wrongState: WrongStateType): Promise<void> {
+    async showWrongState(wrongState: WrongStateType) {
         const game = this;
 
         if (wrongState.type === 'unit-on-unit') {
@@ -1680,7 +1670,7 @@ export class GameModel {
         console.error('unknow wrong state', wrongState);
     }
 
-    async showWrongStateUnitOnUnit(wrongState: WrongStateTypeUnitOnUnitType): Promise<void> {
+    async showWrongStateUnitOnUnit(wrongState: WrongStateTypeUnitOnUnitType) {
         const game = this;
 
         console.log('show wrong state', wrongState);
@@ -1708,15 +1698,12 @@ export class GameModel {
                         return;
                     }
 
-                    bindClick(
-                        unitAction.container,
-                        async (): Promise<void> => {
-                            if (unitAction.type !== 'move') {
-                                return;
-                            }
-                            await game.bindOnClickUnitActionMove(unitAction, moveActionList, user.getId());
+                    bindClick(unitAction.container, async () => {
+                        if (unitAction.type !== 'move') {
+                            return;
                         }
-                    );
+                        await game.bindOnClickUnitActionMove(unitAction, moveActionList, user.getId());
+                    });
                 });
             });
         });
@@ -1727,7 +1714,7 @@ export class GameModel {
         unitAction: UnitActionMoveType,
         actionsList: UnitActionsMapType,
         activeUserId: string
-    ): Promise<void> {
+    ) {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -1803,7 +1790,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity, max-statements, sonarjs/cognitive-complexity
-    async bindOnClickUnitActionAttack(unitAction: UnitActionAttackType, activeUserId: string): Promise<void> {
+    async bindOnClickUnitActionAttack(unitAction: UnitActionAttackType, activeUserId: string) {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -1909,7 +1896,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line max-statements, complexity
-    async bindOnClickUnitActionFixBuilding(unitAction: UnitActionFixBuildingType, activeUserId: string): Promise<void> {
+    async bindOnClickUnitActionFixBuilding(unitAction: UnitActionFixBuildingType, activeUserId: string) {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -1966,7 +1953,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line max-statements, complexity
-    async bindOnClickUnitActionOpenStore(unitAction: UnitActionOpenStoreType): Promise<void> {
+    async bindOnClickUnitActionOpenStore(unitAction: UnitActionOpenStoreType) {
         const game = this;
 
         console.log('---> open store by bindOnClickUnitActionOpenStore');
@@ -1975,10 +1962,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line max-statements, complexity, id-length
-    async bindOnClickUnitActionOccupyBuilding(
-        unitAction: UnitActionOccupyBuildingType,
-        activeUserId: string
-    ): Promise<void> {
+    async bindOnClickUnitActionOccupyBuilding(unitAction: UnitActionOccupyBuildingType, activeUserId: string) {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -2034,10 +2018,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line max-statements, complexity, id-length
-    async bindOnClickUnitActionRaiseSkeleton(
-        unitAction: UnitActionRaiseSkeletonType,
-        activeUserId: string
-    ): Promise<void> {
+    async bindOnClickUnitActionRaiseSkeleton(unitAction: UnitActionRaiseSkeletonType, activeUserId: string) {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -2111,10 +2092,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line max-statements, complexity, id-length
-    async bindOnClickUnitActionDestroyBuilding(
-        unitAction: UnitActionDestroyBuildingType,
-        activeUserId: string
-    ): Promise<void> {
+    async bindOnClickUnitActionDestroyBuilding(unitAction: UnitActionDestroyBuildingType, activeUserId: string) {
         const game = this;
 
         await game.render.cleanActionsList();
@@ -2588,7 +2566,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity, max-statements
-    async detectAndHandleEndGame(): Promise<void> {
+    async detectAndHandleEndGame() {
         const game = this;
         const mapState = game.getMapState();
         const userId = user.getId();
@@ -2620,7 +2598,7 @@ export class GameModel {
         await game.makeEndGame();
     }
 
-    async makeEndGame(): Promise<void> {
+    async makeEndGame() {
         const game = this;
         const {roomId} = game;
         const userId = user.getId();
@@ -2632,12 +2610,12 @@ export class GameModel {
         game.gameView.showEndGame();
     }
 
-    async loadMapState(map: MapType): Promise<void> {
+    async loadMapState(map: MapType) {
         // TODO: implement load map state
         console.error('implement load map state');
     }
 
-    async openStore(x: number, y: number): Promise<void> {
+    async openStore(x: number, y: number) {
         const game = this;
 
         if (!canOpenStore(x, y, game.getGameData())) {
@@ -2652,7 +2630,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity, max-statements
-    async makeBotTurn(): Promise<void> {
+    async makeBotTurn() {
         const game = this;
         const mapState = game.getMapState();
 
@@ -2712,7 +2690,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line complexity
-    async executeBotResultAction(botResultAction: BotResultActionDataType): Promise<void> {
+    async executeBotResultAction(botResultAction: BotResultActionDataType) {
         const game = this;
         const mapState = game.getMapState();
 
@@ -2812,7 +2790,7 @@ export class GameModel {
     }
 
     // eslint-disable-next-line max-statements
-    async executeBotResultActionMove(botResultAction: BotResultActionDataType): Promise<void> {
+    async executeBotResultActionMove(botResultAction: BotResultActionDataType) {
         const game = this;
         const mapState = game.getMapState();
 

@@ -146,34 +146,25 @@ export class Render {
     fixBugWithExtraTouch(wrapper: HTMLElement) {
         const render = this;
 
-        wrapper.addEventListener(
-            'touchstart',
-            async (evt: TouchEvent): Promise<void> => {
-                const {touches} = evt;
+        wrapper.addEventListener('touchstart', async (evt: TouchEvent) => {
+            const {touches} = evt;
 
-                if (touches.length > 1) {
-                    await render.cleanActionsList();
-                }
-            }
-        );
-
-        wrapper.addEventListener(
-            'touchend',
-            async (evt: TouchEvent): Promise<void> => {
-                const {touches} = evt;
-
-                if (touches.length !== 0) {
-                    await render.cleanActionsList();
-                }
-            }
-        );
-
-        wrapper.addEventListener(
-            'touchcancel',
-            async (): Promise<void> => {
+            if (touches.length > 1) {
                 await render.cleanActionsList();
             }
-        );
+        });
+
+        wrapper.addEventListener('touchend', async (evt: TouchEvent) => {
+            const {touches} = evt;
+
+            if (touches.length !== 0) {
+                await render.cleanActionsList();
+            }
+        });
+
+        wrapper.addEventListener('touchcancel', async () => {
+            await render.cleanActionsList();
+        });
     }
 
     moveCenterTo(x: number, y: number) {
@@ -197,7 +188,7 @@ export class Render {
     }
 
     // x, y - game world coordinates
-    async moveWorldTo(x: number, y: number): Promise<void> {
+    async moveWorldTo(x: number, y: number) {
         const render = this;
         const {square} = mapGuide.size;
         const halfSquare = square / 2;
@@ -285,12 +276,9 @@ export class Render {
                 container.buttonMode = true;
                 container.interactive = true;
 
-                bindClick(
-                    container,
-                    async (): Promise<void> => {
-                        await onClick(tileX, tileY);
-                    }
-                );
+                bindClick(container, async () => {
+                    await onClick(tileX, tileY);
+                });
 
                 render.addAngles(container, map, tileX, tileY);
             });
@@ -425,7 +413,7 @@ export class Render {
         render.layer.graves.addChild(container);
     }
 
-    async drawActionsList(actionsList: UnitActionsMapType): Promise<void> {
+    async drawActionsList(actionsList: UnitActionsMapType) {
         const render = this;
 
         await render.cleanActionsList();
@@ -595,7 +583,7 @@ export class Render {
         render.layer.actions.addChild(unitAction.container);
     }
 
-    async cleanActionsList(): Promise<void> {
+    async cleanActionsList() {
         const render = this;
 
         await new Promise((resolve: () => void) => {
@@ -612,7 +600,7 @@ export class Render {
         render.layer.actions.removeChildren();
     }
 
-    async drawAttack(aggressorUnit: Unit, defenderUnit: Unit | Building): Promise<void> {
+    async drawAttack(aggressorUnit: Unit, defenderUnit: Unit | Building) {
         const deltaPosition = (mapGuide.size.square - mapGuide.size.attackAnimation.square) / 2;
         const render = this;
 
@@ -650,7 +638,7 @@ export class Render {
         render.layer.actions.removeChild(attackSprite);
     }
 
-    async drawBuildingAttack(destroyerUnit: Unit, building: Building): Promise<void> {
+    async drawBuildingAttack(destroyerUnit: Unit, building: Building) {
         const render = this;
 
         await render.drawAttack(destroyerUnit, building);

@@ -9,6 +9,7 @@ export function getDefaultUserList(): Array<MapUserType> {
             userId: String(index),
             money: 0,
             teamId: mapGuide.teamIdList[index],
+            isLeaved: false,
         })
     );
 }

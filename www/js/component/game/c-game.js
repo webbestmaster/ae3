@@ -247,7 +247,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
     createMessageCallBack(message: SocketMessageType | void): () => Promise<void> {
         const view = this;
 
-        return async (): Promise<void> => {
+        return async () => {
             if (!message) {
                 console.error('SocketMessage is not define');
                 return;
@@ -273,7 +273,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
     }
 
     // eslint-disable-next-line complexity
-    async onMessage(message: SocketMessageType): Promise<void> {
+    async onMessage(message: SocketMessageType) {
         const view = this;
         const {props, state} = view;
         const {model} = state;
@@ -318,7 +318,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         }
     }
 
-    async componentWillUnmount(): Promise<void> {
+    async componentWillUnmount() {
         const view = this;
         const {props, state} = view;
         const {model, game, socketMessageQueue} = state;
@@ -347,11 +347,9 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
 
         await serverApi.leaveRoom(roomId, user.getId());
         await Promise.all(
-            userList.map(
-                async (userInList: MapUserType): Promise<void> => {
-                    await serverApi.leaveRoom(roomId, userInList.userId);
-                }
-            )
+            userList.map(async (userInList: MapUserType) => {
+                await serverApi.leaveRoom(roomId, userInList.userId);
+            })
         );
     }
 
@@ -420,7 +418,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
         return unitList.some((unitInList: Unit): boolean => unitInList.getActions(gameData) !== null);
     }
 
-    handleOnClickEndTurn = async (): Promise<void> => {
+    handleOnClickEndTurn = async () => {
         const view = this;
 
         // no available action (unit's action or not enough money)? -> just drop turn

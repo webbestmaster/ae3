@@ -87,6 +87,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
                 userId: 'no-user-id-in-store',
                 money: 0,
                 teamId: mapGuide.teamIdList[0],
+                isLeaved: false,
             },
             isInProgress: false,
             isFullInfoShow: false,

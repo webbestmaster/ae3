@@ -20,11 +20,13 @@ export const myFirstMap: MapType = {
             userId: '0',
             money: 0,
             teamId: 'team-0',
+            isLeaved: false,
         },
         {
             userId: '1',
             money: 0,
             teamId: 'team-1',
+            isLeaved: false,
         },
     ],
     activeUserId: '0',
