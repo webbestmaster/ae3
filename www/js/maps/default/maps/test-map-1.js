@@ -4,6 +4,7 @@
 /* eslint id-length: [ "error", { "min": 3, "max": 34, "exceptions": ["x", "y", "en", "ru"] } ] */
 
 import type {MapType} from '../../type';
+import type {UnitTypeCommanderType} from '../../../component/game/model/unit/unit-guide';
 
 export const testMap1: MapType = {
     meta: {
@@ -21,24 +22,40 @@ export const testMap1: MapType = {
             money: 0,
             teamId: 'team-0',
             isLeaved: false,
+            commander: {
+                type: 'galamar',
+                buyCount: 0,
+            },
         },
         {
             userId: '1',
             money: 0,
             teamId: 'team-1',
             isLeaved: false,
+            commander: {
+                type: 'valadorn',
+                buyCount: 0,
+            },
         },
         {
             userId: '2',
             money: 0,
             teamId: 'team-2',
             isLeaved: false,
+            commander: {
+                type: 'demon-lord',
+                buyCount: 0,
+            },
         },
         {
             userId: '3',
             money: 0,
             teamId: 'team-3',
             isLeaved: false,
+            commander: {
+                type: 'saeth',
+                buyCount: 0,
+            },
         },
     ],
     activeUserId: '0',

@@ -557,8 +557,8 @@ export function procedureMakeGraveForMapUnit(newMap: MapType, mapUnit: AttackRes
     unitGrave.removeCountdown = defaultUnitData.graveRemoveCountdown;
 }
 
-export function getCommanderDataByUserIndex(userIndex: number): UnitTypeCommanderType {
-    return ['galamar', 'valadorn', 'demon-lord', 'saeth'][userIndex];
+export function getCommanderTypeByUserIndex(userIndex: number): UnitTypeCommanderType {
+    return mapGuide.commanderList[userIndex];
 }
 
 // return additional hit points or null if no changes

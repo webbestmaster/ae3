@@ -7,6 +7,7 @@ type MapGuideType = {|
     +defaultMoneyList: Array<number>,
     +defaultUnitLimitList: Array<number>,
     // userIdList: Array<string>,
+    +commanderList: ['galamar', 'valadorn', 'demon-lord', 'saeth'],
     +teamIdList: ['team-0', 'team-1', 'team-2', 'team-3'],
     +colorList: ['red', 'blue', 'green', 'black'],
     +size: {|
@@ -93,7 +94,7 @@ type MapGuideType = {|
 export const mapGuide: MapGuideType = {
     defaultMoneyList: [500, 1000, 2000, 5000],
     defaultUnitLimitList: [10, 15, 20, 25, 50, 99],
-
+    commanderList: ['galamar', 'valadorn', 'demon-lord', 'saeth'],
     teamIdList: ['team-0', 'team-1', 'team-2', 'team-3'],
     colorList: ['red', 'blue', 'green', 'black'],
     size: {

@@ -21,24 +21,40 @@ export const gibraltar: MapType = {
             money: 0,
             teamId: 'team-0',
             isLeaved: false,
+            commander: {
+                type: 'galamar',
+                buyCount: 0,
+            },
         },
         {
             userId: '1',
             money: 0,
             teamId: 'team-1',
             isLeaved: false,
+            commander: {
+                type: 'valadorn',
+                buyCount: 0,
+            },
         },
         {
             userId: '2',
             money: 0,
             teamId: 'team-2',
             isLeaved: false,
+            commander: {
+                type: 'demon-lord',
+                buyCount: 0,
+            },
         },
         {
             userId: '3',
             money: 0,
             teamId: 'team-3',
             isLeaved: false,
+            commander: {
+                type: 'saeth',
+                buyCount: 0,
+            },
         },
     ],
     activeUserId: '0',

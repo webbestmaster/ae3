@@ -323,7 +323,8 @@ function getUnitTypeToBuy(
     const hasCommander = isCommanderLive(playerData.userId, mapState);
 
     if (hasCommander === false) {
-        return playerData.commander ? playerData.commander.type : 'galamar';
+        // return playerData.commander ? playerData.commander.type : 'galamar';
+        return playerData.commander.type;
     }
 
     const soldierList = gameData.unitList.filter(

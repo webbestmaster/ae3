@@ -21,12 +21,20 @@ export const myFirstMap: MapType = {
             money: 0,
             teamId: 'team-0',
             isLeaved: false,
+            commander: {
+                type: 'galamar',
+                buyCount: 0,
+            },
         },
         {
             userId: '1',
             money: 0,
             teamId: 'team-1',
             isLeaved: false,
+            commander: {
+                type: 'valadorn',
+                buyCount: 0,
+            },
         },
     ],
     activeUserId: '0',

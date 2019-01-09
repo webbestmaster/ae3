@@ -83,7 +83,7 @@ export type MapUserType = {|
     userId: string,
     money: number,
     teamId: TeamIdType,
-    commander?: {|
+    commander: {|
         type: UnitTypeCommanderType,
         buyCount: number,
     |},

@@ -73,6 +73,17 @@ type StateType = {|
     +isFullInfoShow: boolean,
 |};
 
+const defaultMapUserData: MapUserType = {
+    userId: 'no-user-id-in-store',
+    money: 0,
+    teamId: mapGuide.teamIdList[0],
+    isLeaved: false,
+    commander: {
+        type: mapGuide.commanderList[0],
+        buyCount: 0,
+    },
+};
+
 class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateType> {
     props: PropsType;
     state: StateType;
@@ -83,12 +94,7 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
         const view = this;
 
         view.state = {
-            mapUserData: find(props.mapState.userList, {userId: props.mapState.activeUserId}) || {
-                userId: 'no-user-id-in-store',
-                money: 0,
-                teamId: mapGuide.teamIdList[0],
-                isLeaved: false,
-            },
+            mapUserData: find(props.mapState.userList, {userId: props.mapState.activeUserId}) || defaultMapUserData,
             isInProgress: false,
             isFullInfoShow: false,
         };
@@ -117,23 +123,12 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
             return cost;
         }
 
-        const userCommander = mapUserData.commander || null;
-
-        if (userCommander === null) {
-            console.error('userCommander is not define');
-            return null;
-        }
-
-        if (userCommander.type !== unitType) {
-            return null;
-        }
-
         // detect user's commander on map
         if (isCommanderLive(mapState.activeUserId, mapState)) {
             return null;
         }
 
-        return cost + userCommander.buyCount * additionalUnitData.additionalCommanderCost;
+        return cost + mapUserData.commander.buyCount * additionalUnitData.additionalCommanderCost;
     }
 
     isCommander(): boolean {
@@ -176,11 +171,13 @@ class UnitSellPosition extends Component<ReduxPropsType, PassedPropsType, StateT
 
         newMapUserData.money -= unitCost;
 
+        /*
         if (!newMapUserData.commander) {
             console.error('User has no Commander');
             return Promise.resolve();
         }
 
+*/
         if (view.isCommander()) {
             newMapUserData.commander.buyCount += 1;
         }
