@@ -85,7 +85,7 @@
     "eslint-plugin-react": "^7.12.3",
     "eslint-plugin-sonarjs": "^0.2.0",
     "eslint-plugin-unicorn": "^6.0.1",
-    "flow-bin": "^0.89.0",
+    "flow-bin": "^0.90.0",
     "flow-coverage-report": "^0.6.1",
     "flow-runtime": "^0.17.0",
     "flow-typed": "^2.5.1",
@@ -106,7 +106,7 @@
     "stylelint-config-standard": "^18.2.0",
     "stylelint-scss": "^3.4.4",
     "terser-webpack-plugin": "^1.2.1",
-    "webpack": "^4.28.3",
+    "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14"
