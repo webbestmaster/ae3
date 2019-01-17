@@ -457,7 +457,7 @@ export class GameModel {
                 break;
 
             default:
-                console.error('---> view - game - unsupported message type: ', message);
+                console.error('---> view - game - unsupported message type:', message);
         }
     }
 
@@ -818,7 +818,7 @@ export class GameModel {
                 break;
 
             default:
-                console.error('---> view - game - unsupported push state type: ', message);
+                console.error('---> view - game - unsupported push state type:', message);
         }
     }
 
@@ -1367,7 +1367,7 @@ export class GameModel {
 
             if (!mapGrave) {
                 if (grave.attr.removeCountdown === 1) {
-                    console.log('grave ', grave, 'will remove');
+                    console.log('grave', grave, 'will remove');
                     graveListToRemove.push(grave);
                     return;
                 }

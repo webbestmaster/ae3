@@ -314,7 +314,7 @@ export class GameView extends Component<ReduxPropsType, PassedPropsType, StateTy
                 break;
 
             default:
-                console.error('---> view - game - unsupported message type: ', message);
+                console.error('---> view - game - unsupported message type:', message);
         }
     }
 
