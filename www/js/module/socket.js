@@ -130,10 +130,7 @@ export class Socket {
                 'force new connection': true,
             };
 
-            const socketIo = socketIoClient.connect(
-                appConst.api.url,
-                options
-            );
+            const socketIo = socketIoClient.connect(appConst.api.url, options);
 
             socketIo.on('message', (message?: SocketMessageType) => {
                 console.log('---> SW:', message);
